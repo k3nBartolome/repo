@@ -43,9 +43,15 @@ class RoleController extends Controller
     {
         $role=Role::create([    
             
-            'name'=>$request->name
+            'name'=>$request->name,
+            
         ]);
+        $role_permission = $request->input('permission', []);
+
+        // Sync the permissions to the role
+        $role->syncPermissions($role_permission);
             return new RoleResource($role);
+
     }
 
     /**
@@ -78,9 +84,18 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
-        //
+    public function update(RoleRequest $request, $id)
+    {   
+        $role=Role::FindOrFail($id);
+        $role->update([    
+            'name'=>$request->name,
+        ]);
+        $role_permission = $request->input('permission');
+        // Sync the permissions to the role
+        if($role_permission){
+        $role->GivePermissionTo($role_permission);
+        }
+            return new RoleResource($role);
     }
 
     /**

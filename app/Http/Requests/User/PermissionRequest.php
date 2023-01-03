@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Requests\User;
-use App\Http\Helpers\Helper;
-use Illuminate\Contracts\Validation\Validator;
+
 use Illuminate\Foundation\Http\FormRequest;
 
-class RoleRequest extends FormRequest
+class PermissionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,7 +13,7 @@ class RoleRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return false;
     }
 
     /**
@@ -26,7 +25,6 @@ class RoleRequest extends FormRequest
     {
         return [
             'name'=>'required',
-            'permission'=>'required'
         ];
     }
     public function failedValidation(Validator $validator)
