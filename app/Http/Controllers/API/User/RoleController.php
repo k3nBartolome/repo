@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\User\RoleRequest;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Http\Resources\RoleResource;
@@ -55,7 +56,8 @@ class RoleController extends Controller
      */
     public function show($id)
     {
-        //
+        $role=Role::FindOrFail($id);
+        return new RoleResource($role);
     }
 
     /**
@@ -66,9 +68,9 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $role = Role::find($id);
+        return response()->json($role);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -89,6 +91,9 @@ class RoleController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $role=Role::FindOrFail($id);
+        if($role->delete()){
+        return new RoleResource($role);
+        }
     }
 }

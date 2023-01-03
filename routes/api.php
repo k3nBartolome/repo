@@ -33,3 +33,6 @@ Route::get('/list_user',[UserController::class,'index'])->name('user.list');
 //Role Routes
 Route::get('/list_role',[RoleController::class,'index'])->name('role.list');
 Route::post('/create_role',[RoleController::class,'store'])->name('role.create');
+Route::put('/update_role/{id}',[RoleController::class,'update'])->name('role.update');
+Route::delete('/delete_role/{id}',[RoleController::class,'destroy'])->name('role.delete');
+Route::get('/show_role/{id}',[RoleController::class,'show'])->name('role.show');
