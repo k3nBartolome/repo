@@ -19499,14 +19499,14 @@ var _hoisted_1 = {
   "class": "relative flex flex-col justify-center min-h-screen overflow-hidden"
 };
 var _hoisted_2 = {
-  "class": "w-full p-6 m-auto rounded-md border-2 border-solid border-orange-500 lg:max-w-md"
+  "class": "w-full p-6 m-auto border-2 border-orange-500 border-solid rounded-md lg:max-w-md"
 };
 var _hoisted_3 = ["src"];
-var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<form class=\"mt-6\" autocomplete=\"off\"><div><label for=\"email\" class=\"block text-sm font-bold text-black\">Email:</label><input type=\"email\" placeholder=\"Enter your Email\" class=\"placeholder-gray-500 placeholder-opacity-75 block w-full px-4 py-2 mt-2 text-orange-700 bg-white border-2 border-solid border-black rounded-md focus:border-orange-400 focus:ring-orange-300 focus:outline-none focus:ring focus:ring-opacity-40\"></div><div class=\"mt-4\"><div><label for=\"password\" class=\"block text-sm font-bold text-black\">Password:</label><input type=\"password\" placeholder=\"Enter your Password\" class=\"placeholder-gray-500 placeholder-opacity-75 block w-full px-4 py-2 mt-2 text-orange-700 bg-white border-2 border-solid border-black rounded-md focus:border-orange-400 focus:ring-orange-300 focus:outline-none focus:ring focus:ring-opacity-40\"></div><div class=\"mt-6\"><button class=\"w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-orange-500 rounded-md hover:bg-orange-600 focus:outline-none focus:bg-orange-600\"> Login </button></div></div></form>", 1);
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createStaticVNode)("<form class=\"mt-6\" autocomplete=\"off\"><div><label for=\"email\" class=\"block text-sm font-bold text-black\">Email:</label><input type=\"email\" placeholder=\"Enter your Email\" class=\"block w-full px-4 py-2 mt-2 text-orange-700 placeholder-gray-500 placeholder-opacity-75 bg-white border-2 border-black border-solid rounded-md focus:border-orange-400 focus:ring-orange-300 focus:outline-none focus:ring focus:ring-opacity-40\"></div><div class=\"mt-4\"><div><label for=\"password\" class=\"block text-sm font-bold text-black\">Password:</label><input type=\"password\" placeholder=\"Enter your Password\" class=\"block w-full px-4 py-2 mt-2 text-orange-700 placeholder-gray-500 placeholder-opacity-75 bg-white border-2 border-black border-solid rounded-md focus:border-orange-400 focus:ring-orange-300 focus:outline-none focus:ring focus:ring-opacity-40\"></div><div class=\"mt-6\"><button class=\"w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-orange-500 rounded-md hover:bg-orange-600 focus:outline-none focus:bg-orange-600\"> Login </button></div></div></form>", 1);
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("img", {
     src: '/storage/vxi.jpg',
-    "class": "logo mx-auto h-20 w-30"
+    "class": "h-20 mx-auto logo w-30"
   }, null, 8 /* PROPS */, _hoisted_3), _hoisted_4])]);
 }
 
