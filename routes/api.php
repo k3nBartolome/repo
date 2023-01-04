@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource($request->user());
 });
 Route::post('login',[AuthController::class,'login'])->name('login');
+Route::post('logout',[AuthController::class,'logout'])->name('logout');
 
 //User Routes
 Route::post('/create_user',[UserController::class,'store'])->name('users.create');
