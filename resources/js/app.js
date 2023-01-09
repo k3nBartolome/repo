@@ -1,10 +1,10 @@
-require('./bootstrap')
+require('./bootstrap');
 
-import { createApp } from 'vue'
-import Login from './components/auth/login'
+import { createApp } from 'vue';
 
 const app = createApp({})
 
-app.component('login', Login)
 
-app.mount('#app')
+app.component('login', require('./components/auth/login.vue').default);
+
+app.mount("#app");
