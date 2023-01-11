@@ -13,55 +13,30 @@ use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
-    public function Login(Request $request)
-    {
-
-        $credentials = $request->validate([
-            'email'=>'required|email|exists:users,email',
-            'password'=>'required|min:8'
-        ]);
-
-        if($this->guard()->attempt($credentials)) {
-            if ($this->guard()->user()->hasRole('admin')) {
-                $token = $this->guard()->user()->createToken('auth-token')->plainTextToken;
+        public function login(Request $request)
+        {
+            $request->validate([
+                'email'=>'required|email|exists:users,email',
+                'password'=>'required|min:8'
+            ]);
+            
+            $credentials = $request->only(['email', 'password']);
+    
+            if (Auth::attempt($credentials)) {
+                $user = Auth::user();
+                $token = $user->createToken('Personal Token')->plainTextToken;
+                $role = $user->roles->first()->name;
+    
                 return response()->json([
-                    'access_token' => $token,
-                    'token_type' => 'Bearer',
-                ], 200);
-            }elseif($this->guard()->user()->hasRole('manager')) {
-            $token = $this->guard()->user()->createToken('auth-token')->plainTextToken;
-                return response()->json([
-                    'access_token' => $token,
-                    'token_type' => 'Bearer',
-                ], 200);
-            }else {
-                $token = $this->guard()->user()->createToken('auth-token')->plainTextToken;
-                return response()->json([
-                    'access_token' => $token,
-                    'token_type' => 'Bearer',
+                    'status' => 'success',
+                    'token' => $token,
+                    'role'  => $role
                 ], 200);
             }
-        }else{
+    
             return response()->json([
-                'message' => 'Credentials not Valid'
-            ]);
+                'status' => 'error',
+                'message' => 'Invalid Credentials'
+            ], 401);
         }
-    }
-
-
-    public function logout(Request $request)
-    {
-        $user = $request->user();
-        $user->tokens()->delete();
-        $this->guard()->logout();
-        return response()->json([
-            'status_code' => '200',
-            'message' => 'logged out successfully'
-        ]);
-    }
-
-    public function guard($guard = 'web')
-    {
-        return Auth::guard($guard);
-    }
 }
