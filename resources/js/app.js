@@ -2,9 +2,8 @@ require('./bootstrap');
 
 import { createApp } from 'vue';
 import router from './router/routes';
+import App from './pages/auth/login.vue'
 
-const app = createApp({
-})
-app.use(router)
-app.component('index', require('./pages/auth/login.vue').default)
-app.mount("#app");
+const myApp = createApp(App)
+myApp.use(router)
+myApp.mount('#app')
