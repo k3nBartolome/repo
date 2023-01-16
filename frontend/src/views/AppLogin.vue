@@ -42,36 +42,46 @@
 </template>
 <script>
 import axios from "axios";
-
+import { mapMutations } from "vuex";
 export default {
-  data() {
+  data: () => {
     return {
       email: "",
       password: "",
+      form: {
+        message: " ",
+      }
     };
   },
   methods: {
-    login() {
-      axios
-        .post("http://127.0.0.1:8000/api/login", {
-          email: this.email,
-          password: this.password,
+    ...mapMutations(["setUser", "setToken"]),
+    async login(e) {
+      e.preventDefault();
+      let user;
+      let token;
+      let isLogin;
+      await axios.post('http://127.0.0.1:8000/api/login', {
+        email: this.email,
+        password: this.password
+      })
+        .then(function (response) {
+          isLogin = true;
+          user = response.data.data
+          token = response.data.token
+          console.log(response.data);
         })
-        .then((response) => {
-          localStorage.setItem("token", response.data.access_token);
-          localStorage.setItem("role", response.data.access_role);
-          this.$router.push({ path: '/dashboard' });
-        })
-        .catch((error) => {
+        .catch(function (error) {
           console.log(error);
+          isLogin = false;
         });
+      if (isLogin) {
+        this.setUser(user);
+        this.setToken(token);
+        this.$router.push("/dashboard");
+      } else {
+        this.form.message = "Invalid Credentials";
+      }
     },
   },
-  created() {
-    axios.interceptors.request.use(config => {
-      config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`
-      return config
-    });
-  }
 };
 </script>

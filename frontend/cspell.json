@@ -5,7 +5,10 @@
     "dictionaries": [],
     "words": [
         "axios",
+        "persistedstate",
         "rememberme",
+        "vuex",
+        "vxilogo",
         "websanova"
     ],
     "ignoreWords": [],

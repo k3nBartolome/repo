@@ -1,21 +1,30 @@
-import {
-    createStore
-  } from "vuex";
-  
-  const store = createStore({
+import { createStore } from 'vuex'
+import createPersistedState from "vuex-persistedstate"
+
+export default createStore({
+    plugins: [createPersistedState({
+        storage: window.sessionStorage
+    })],
     state: {
-      user: {
-        data: {
-          name: 'test',
-          token: null,
-        }
-      }
+        user: null,
+        token: null,
     },
-    getters: {},
+    mutations: {
+        setUser(state, user) {
+            state.user = user;
+        },
+        setToken(state, token) {
+            state.token = token;
+        },
+        setLogout(state) {
+            state.user = false;
+            state.token = false;
+        },
+    },
     actions: {},
-    mutations: {},
-    modules: {},
-  })
-  
-  export default store;
-  
+    getters: {
+        isLoggedIn(state) {
+            return !!state.token;
+        },
+    },
+})

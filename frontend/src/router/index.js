@@ -6,14 +6,21 @@ import store from '../store';
 import AppLogin from '@/views/AppLogin';
 import AppDashboard from '@/views/AppDashboard';
 import ContactUs from '@/views/ContactUs';
+import AppLayout from '@/components/AppLayout'
 
 const routes = [{
-    path: '/dashboard',
-    component: AppDashboard,
-    name: 'dashboard',
+    path: "/",
+    redirect: "/dashboard",
+    component: AppLayout,
     meta: {
-      requiresAuth: true
-    }
+      requiresAuth: true  
+    },
+    children: [{
+        path: "/dashboard",
+        name: "Dashboard",
+        component: AppDashboard
+      },
+    ],
   },
   {
     path: '/login',
@@ -39,12 +46,17 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !store.state.user.token) {
-    next({ name: "login" });
-  } else if (store.state.user.token && to.meta.isGuest) {
-    next({ name: "dashboard" });
-  } else {
-    next();
+  if (to.name == 'login' && store.getters.isLoggedIn) {
+      next({ name: from.name })
   }
-});
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+      if (!store.getters.isLoggedIn) {
+          next({ name: 'login' })
+      } else {
+          next()
+      }
+  } else {
+      next()
+  }
+})
 export default router;
