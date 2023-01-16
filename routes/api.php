@@ -39,7 +39,7 @@ Route::put('/update_role/{id}',[RoleController::class,'update'])->name('roles.up
 Route::delete('/delete_role/{id}',[RoleController::class,'destroy'])->name('roles.delete');
 Route::get('/show_role/{id}',[RoleController::class,'show'])->name('roles.show');
 
-//Permission ROutes
+//Permission Routes
 Route::get('/list_permission',[PermissionController::class,'index'])->name('permissions.list');
 Route::post('/create_permission',[PermissionController::class,'store'])->name('permissions.create');
 Route::put('/update_permission/{id}',[PermissionController::class,'update'])->name('permissions.update');
