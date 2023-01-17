@@ -27,7 +27,7 @@ const routes = [{
     component: AppLogin,
     name: 'login',
     meta: {
-      guest: true
+      requiresAuth: false
     }
   },
   {
@@ -35,7 +35,7 @@ const routes = [{
     component: ContactUs,
     name: 'contact',
     meta: {
-      guest: true
+      requiresAuth: false
     }
   },
 ];
@@ -46,17 +46,20 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  if (to.name == 'login' && store.getters.isLoggedIn) {
-      next({ name: from.name })
-  }
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-      if (!store.getters.isLoggedIn) {
-          next({ name: 'login' })
-      } else {
-          next()
-      }
+  if (to.name === 'login' && store.getters.isLoggedIn) {
+    next({
+      name: from.name
+    });
+  } else if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters.isLoggedIn) {
+      next({
+        name: 'login'
+      });
+    } else {
+      next();
+    }
   } else {
-      next()
+    next();
   }
-})
+});
 export default router;

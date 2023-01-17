@@ -77,7 +77,7 @@ export default {
       if (isLogin) {
         this.setUser(user);
         this.setToken(token);
-        this.$router.push("/dashboard");
+        this.$router.replace({ path: '/dashboard'})
       } else {
         this.form.message = "Invalid Credentials";
       }

@@ -5,6 +5,7 @@
     "dictionaries": [],
     "words": [
         "axios",
+        "Loggedin",
         "persistedstate",
         "rememberme",
         "vuex",
