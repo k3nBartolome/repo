@@ -7,7 +7,7 @@ import AppLogin from '@/views/AppLogin';
 import AppDashboard from '@/views/AppDashboard';
 import ContactUs from '@/views/ContactUs';
 import AppLayout from '@/components/AppLayout'
-
+import AuthLayout from "@/components/AuthLayout.vue";
 const routes = [{
     path: "/",
     redirect: "/dashboard",
@@ -23,20 +23,23 @@ const routes = [{
     ],
   },
   {
-    path: '/login',
-    component: AppLogin,
-    name: 'login',
-    meta: {
-      requiresAuth: false
-    }
-  },
-  {
-    path: '/contact',
-    component: ContactUs,
-    name: 'contact',
-    meta: {
-      requiresAuth: false
-    }
+    path: "/auth",
+    redirect: "/login",
+    name: "Auth",
+    component: AuthLayout,
+    meta: {isGuest: true},
+    children: [
+      {
+        path: "/login",
+        name: "login",
+        component: AppLogin,
+      },
+      {
+        path: "/contact",
+        name: "contact",
+        component: ContactUs,
+      },
+    ],
   },
 ];
 
