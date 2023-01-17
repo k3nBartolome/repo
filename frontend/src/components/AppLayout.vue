@@ -18,13 +18,18 @@
 
       <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
       <ul :class="showMenu ? 'flex' : 'hidden'"
-        class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
-        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Dashboard
-          Us</li>
-        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Page 1
-          Us</li>
-        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Page 2
-          Us</li>
+        class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center font-bold md:space-x-10 md:mt-0">
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Dashboard</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Sourcing</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Hiring and
+          Selection</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">ReMX</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Corporate
+          Recruiting</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Reports</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Budget</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Onboarding</li>
+        <li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Admin</li>
       </ul>
     </nav>
   </div>
@@ -34,6 +39,14 @@
       <router-view :key="$route.path"></router-view>
     </div>
   </div>
+  <footer class="bg-orange-600 text-white p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <p class="text-sm">© {{ currentYear }} VXI Global Holdings B.V., All rights reserved.</p>
+      <div class="flex">
+        <p class="text-sm mr-4">Powered by: Global Recruitment Marketing</p>
+      </div>
+    </div>
+  </footer>
 </template>
 <script>
 import { ref } from 'vue';
@@ -46,7 +59,8 @@ export default {
   },
   data() {
     return {
-      logo
+      logo,
+      currentYear: new Date().getFullYear()
     }
   },
 };
