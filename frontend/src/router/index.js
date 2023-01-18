@@ -4,7 +4,7 @@ import {
 } from "vue-router";
 import store from '../store';
 import AppLogin from '@/views/AppLogin';
-import AppDashboard from '@/views/AppDashboard';
+import AppUserDashboard from '@/views/Dashboard/AppUserDashboard'
 import ContactUs from '@/views/ContactUs';
 import AppLayout from '@/components/AppLayout'
 import AuthLayout from "@/components/AuthLayout.vue";
@@ -18,7 +18,7 @@ const routes = [{
     children: [{
         path: "/dashboard",
         name: "Dashboard",
-        component: AppDashboard
+        component: AppUserDashboard
       },
     ],
   },
