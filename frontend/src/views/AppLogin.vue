@@ -54,10 +54,11 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken"]),
+    ...mapMutations(["setUser", "setToken","setRole"]),
     async login(e) {
       e.preventDefault();
       let user;
+      let role;
       let token;
       let isLogin;
       await axios.post('http://127.0.0.1:8000/api/login', {
@@ -66,8 +67,9 @@ export default {
       })
         .then(function (response) {
           isLogin = true;
-          user = response.data.data
+          user = response.data.user
           token = response.data.token
+          role=response.data.role
           console.log(response.data);
         })
         .catch(function (error) {
@@ -77,6 +79,7 @@ export default {
       if (isLogin) {
         this.setUser(user);
         this.setToken(token);
+        this.setRole(role);
         this.$router.replace({ path: '/dashboard'})
       } else {
         this.form.message = "Invalid Credentials";

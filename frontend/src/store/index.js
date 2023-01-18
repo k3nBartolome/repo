@@ -6,13 +6,17 @@ export default createStore({
         storage: window.sessionStorage
     })],
     state: {
-        user: null,
+        user: 'user',
+        role:'role',
         token: null,
     },
     mutations: {
         setUser(state, user) {
             state.user = user;
         },
+        setRole(state, role) {
+          state.role = role;
+      },
         setToken(state, token) {
             state.token = token;
         },

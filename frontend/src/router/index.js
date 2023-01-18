@@ -13,7 +13,7 @@ const routes = [{
     redirect: "/dashboard",
     component: AppLayout,
     meta: {
-      requiresAuth: true  
+      requiresAuth: true
     },
     children: [{
         path: "/dashboard",
