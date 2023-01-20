@@ -1,6 +1,10 @@
 import { createStore } from 'vuex'
+import createPersistedState from "vuex-persistedstate"
 
 export default createStore({
+    plugins: [createPersistedState({
+        storage: window.sessionStorage
+    })],
     state: {
         user: 'user',
         role:'role',
@@ -27,7 +31,7 @@ export default createStore({
             return !!state.token;
         },
         returnRole(state){
-          return !!state.role;
+          return state.role;
         }
     },
 })
