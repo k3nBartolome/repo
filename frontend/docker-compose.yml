@@ -7,3 +7,5 @@ services:
       dockerfile: docker/local/Dockerfile
     volumes:
       - ".:/cfms-frontend"
+    ports:
+      - "8001:8080"
