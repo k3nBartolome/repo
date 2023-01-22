@@ -1,0 +1,9 @@
+version: '3.7'
+services:
+  nodejs:
+    container_name: cfms-frontend
+    build:
+      context: .
+      dockerfile: docker/local/Dockerfile
+    volumes:
+      - ".:/cfms-frontend"
