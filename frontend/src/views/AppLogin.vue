@@ -94,7 +94,6 @@ export default {
           isLogin = true;
           user = response.data.user;
           token = response.data.token;
-          localStorage.setItem('token',token);
           role = response.data.role;
           console.log(response.data);
         })
@@ -103,17 +102,18 @@ export default {
           isLogin = false;
         });
       if (isLogin) {
-        this.setUser(user);
-        this.setToken(token);
-        this.setRole(role);
+          this.setUser(user);
+          this.setToken(token);
+          this.setRole(role);
+          localStorage.setItem('token',token);
         if(role ==='admin'){
-          this.$router.replace({ path: "/admin/dashboard" });
+          this.$router.push({ path: "/admin/dashboard" });
         }
         else if(role === 'manager'){
-          this.$router.replace({ path: "/manager/dashboard" });
+          this.$router.push({ path: "/manager/dashboard" });
         }
         else{
-          this.$router.replace({ path: "/dashboard" });
+          this.$router.push({ path: "/dashboard" });
         }
       } else {
         this.form.message = "Invalid Credentials";

@@ -1,18 +1,20 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import store from '../store';
-import AppLogin from '@/views/AppLogin';
-import AppUserDashboard from '@/views/Dashboard/AppUserDashboard'
-import ContactUs from '@/views/ContactUs';
-import AppLayout from '@/components/AppLayout'
-import AuthLayout from "@/components/AuthLayout.vue";
-import AppAdminDashboard from '@/views/Dashboard/AppAdminDashboard';
-import AppManagerDashboard from '@/views/Dashboard/AppManagerDashboard';
+import store from "../store";
+import AppLogin from "@/views/AppLogin";
+import AppUserDashboard from "@/views/Dashboard/AppUserDashboard";
+import ContactUs from "@/views/ContactUs";
+import AppUserLayout from "@/components/AppUserLayout";
+import AppManagerLayout from "@/components/AppManagerLayout";
+import AppAdminLayout from "@/components/AppAdminLayout";
+import AuthLayout from "@/components/AuthLayout";
+import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
+import AppManagerDashboard from "@/views/Dashboard/AppManagerDashboard";
 
 const routes = [
   {
     path: "/",
     redirect: "/dashboard",
-    component: AppLayout,
+    component: AppUserLayout,
     meta: { requiresAuth: true, requiresRole: 'user' },
     children: [
       {
@@ -25,7 +27,7 @@ const routes = [
   {
     path: "/admin",
     redirect: "/admin/dashboard",
-    component: AppLayout,
+    component: AppAdminLayout,
     meta: { requiresAuth: true, requiresRole: 'admin' },
     children: [
       {
@@ -38,7 +40,7 @@ const routes = [
   {
     path: "/manager",
     redirect: "/manager/dashboard",
-    component: AppLayout,
+    component: AppManagerLayout,
     meta: { requiresAuth: true, requiresRole: 'manager' },
     children: [
       {
@@ -76,12 +78,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth && !store.getters.isLoggedIn) {
-    next({ name: 'login' });
+    next({ name: "login" });
   } else if (to.meta.requiresRole && to.meta.requiresRole !== store.getters.returnRole) {
     next({ name: from.name });
+  } else if (store.getters.isLoggedIn) {
+    if(store.getters.returnRole){
+      next();}
   } else {
     next();
   }
 });
+
 
 export default router;

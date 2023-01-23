@@ -6,23 +6,31 @@ export default createStore({
         storage: window.sessionStorage
     })],
     state: {
-        user: 'user',
-        role:'role',
+        user: null,
+        role:null,
         token: null,
     },
     mutations: {
         setUser(state, user) {
-            state.user = user;
+            if (!state.token) {
+                state.user = user;
+            } else {
+                // display an error message or redirect the user
+                alert('Another user is already logged in. Please log out first.')
+            }
         },
         setRole(state, role) {
           state.role = role;
-      },
+        },
         setToken(state, token) {
             state.token = token;
         },
-        setLogout(state) {
-            state.user = false;
-            state.token = false;
+        logout(state) {
+            state.user = null;
+            state.token = null;
+            state.role = null;
+            // clear the sessionStorage
+            sessionStorage.clear();
         },
     },
     actions: {},
