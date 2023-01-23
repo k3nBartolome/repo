@@ -82,12 +82,20 @@ router.beforeEach((to, from, next) => {
   } else if (to.meta.requiresRole && to.meta.requiresRole !== store.getters.returnRole) {
     next({ name: from.name });
   } else if (store.getters.isLoggedIn) {
-    if(store.getters.returnRole){
-      next();}
+    if(store.getters.returnRole === 'admin'){
+      next({ path: '/admin/dashboard' });
+    }
+    else if(store.getters.returnRole === 'manager'){
+      next({ path: '/manager/dashboard' });
+    }
+    else{
+      next({ path: '/dashboard' });
+    }
   } else {
     next();
   }
 });
+
 
 
 export default router;

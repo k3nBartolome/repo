@@ -64,8 +64,8 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
+
 export default {
   data: () => {
     return {
@@ -77,47 +77,31 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken", "setRole"]),
+    ...mapMutations(["logout"]),
+    ...mapActions(["login"]),
     async login(e) {
       e.preventDefault();
-      let user;
-      let role;
-      let token;
-      let isLogin;
-      await axios
-        .post("http://127.0.0.1:8000/api/login", {
+      try {
+        const role = await this.login({
           email: this.email,
           password: this.password,
-
-        })
-        .then(function (response) {
-          isLogin = true;
-          user = response.data.user;
-          token = response.data.token;
-          role = response.data.role;
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.log(error);
-          isLogin = false;
         });
-      if (isLogin) {
-          this.setUser(user);
-          this.setToken(token);
-          this.setRole(role);
-          localStorage.setItem('token',token);
-        if(role ==='admin'){
+        localStorage.setItem("token", this.token);
+        if (role === "admin") {
           this.$router.push({ path: "/admin/dashboard" });
-        }
-        else if(role === 'manager'){
+        } else if (role === "manager") {
           this.$router.push({ path: "/manager/dashboard" });
-        }
-        else{
+        } else {
           this.$router.push({ path: "/dashboard" });
         }
-      } else {
+      } catch (error) {
         this.form.message = "Invalid Credentials";
       }
+    },
+    logout() {
+      this.logout();
+      this.$router.push({ path: "/" });
+      localStorage.removeItem("token");
     },
   },
 };
