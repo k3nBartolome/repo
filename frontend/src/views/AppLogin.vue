@@ -64,8 +64,8 @@
   </div>
 </template>
 <script>
-import { mapMutations, mapActions } from "vuex";
-
+import axios from "axios";
+import { mapMutations } from "vuex";
 export default {
   data: () => {
     return {
@@ -77,31 +77,43 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["logout"]),
-    ...mapActions(["login"]),
+    ...mapMutations(["setUser", "setToken", "setRole"]),
     async login(e) {
       e.preventDefault();
-      try {
-        const role = await this.login({
+      let user;
+      let role;
+      let token;
+      let isLogin;
+      await axios
+        .post("http://127.0.0.1:8000/api/login", {
           email: this.email,
           password: this.password,
+
+        })
+        .then(function (response) {
+          isLogin = true;
+          user = response.data.user;
+          token = response.data.token;
+          role = response.data.role;
+          console.log(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+          isLogin = false;
         });
-        localStorage.setItem("token", this.token);
-        if (role === "admin") {
+      if (isLogin) {
+          this.setUser(user);
+          this.setToken(token);
+          this.setRole(role);
+        if(role ==='admin'){
           this.$router.push({ path: "/admin/dashboard" });
-        } else if (role === "manager") {
-          this.$router.push({ path: "/manager/dashboard" });
-        } else {
+        }
+        else{
           this.$router.push({ path: "/dashboard" });
         }
-      } catch (error) {
+      } else {
         this.form.message = "Invalid Credentials";
       }
-    },
-    logout() {
-      this.logout();
-      this.$router.push({ path: "/" });
-      localStorage.removeItem("token");
     },
   },
 };

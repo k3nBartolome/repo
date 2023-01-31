@@ -4,7 +4,13 @@
     "dictionaryDefinitions": [],
     "dictionaries": [],
     "words": [
-        "Spatie"
+        "Adminboard",
+        "admindashboard",
+        "Spatie",
+        "Userboard",
+        "userdashboard",
+        "vuex",
+        "vxilogo"
     ],
     "ignoreWords": [],
     "import": []

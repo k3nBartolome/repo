@@ -4,11 +4,9 @@ import AppLogin from "@/views/AppLogin";
 import AppUserDashboard from "@/views/Dashboard/AppUserDashboard";
 import ContactUs from "@/views/ContactUs";
 import AppUserLayout from "@/components/AppUserLayout";
-import AppManagerLayout from "@/components/AppManagerLayout";
 import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
-import AppManagerDashboard from "@/views/Dashboard/AppManagerDashboard";
 
 const routes = [
   {
@@ -34,19 +32,6 @@ const routes = [
         path: "/admin/dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
-      },
-    ],
-  },
-  {
-    path: "/manager",
-    redirect: "/manager/dashboard",
-    component: AppManagerLayout,
-    meta: { requiresAuth: true, requiresRole: 'manager' },
-    children: [
-      {
-        path: "/manager/dashboard",
-        name: "managerDashboard",
-        component: AppManagerDashboard,
       },
     ],
   },
@@ -82,20 +67,12 @@ router.beforeEach((to, from, next) => {
   } else if (to.meta.requiresRole && to.meta.requiresRole !== store.getters.returnRole) {
     next({ name: from.name });
   } else if (store.getters.isLoggedIn) {
-    if(store.getters.returnRole === 'admin'){
-      next({ path: '/admin/dashboard' });
-    }
-    else if(store.getters.returnRole === 'manager'){
-      next({ path: '/manager/dashboard' });
-    }
-    else{
-      next({ path: '/dashboard' });
-    }
+    if(store.getters.returnRole){
+      next();}
   } else {
     next();
   }
 });
-
 
 
 export default router;
