@@ -106,7 +106,7 @@ export default {
           this.setToken(token);
           this.setRole(role);
         if(role ==='admin'){
-          this.$router.push({ path: "/admin/dashboard" });
+          this.$router.push({ path: "/admindashboard" });
         }
         else{
           this.$router.push({ path: "/dashboard" });
