@@ -7,6 +7,10 @@ import AppUserLayout from "@/components/AppUserLayout";
 import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
+import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
+import UserAdd from "@/views/DashboardNavItems/Admin/User/UserAdd";
+import UserEdit from "@/views/DashboardNavItems/Admin/User/UserEdit";
+import UserShow from '@/views/DashboardNavItems/Admin/User/UserShow';
 
 const routes = [
   {
@@ -27,9 +31,29 @@ const routes = [
     meta: { requiresAuth: true, requiresRole: "admin" },
     children: [
       {
-        path: "/admindashboard",
+        path: "/admin_dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
+      },
+      {
+        path: "/user_management",
+        name: "usermanagement",
+        component: UserManagement,
+      },
+      {
+        path: "/user_add",
+        name: "userAdd",
+        component: UserAdd,
+      },
+      {
+        path: "/user_edit/:user_id",
+        name: "userEdit",
+        component: UserEdit,
+      },
+      {
+        path: "/user_show/:user_id",
+        name: "userShow",
+        component: UserShow,
       },
     ],
   },
@@ -64,7 +88,7 @@ router.beforeEach((to, from, next) => {
       if (to.meta.requiresRole === store.getters.returnRole) {
         next();
       } else {
-        next({ name: "login" });
+        next({ query: { returnUrl: to.path } });
       }
     } else {
       next({ name: "login" });

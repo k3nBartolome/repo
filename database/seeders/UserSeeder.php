@@ -26,7 +26,7 @@ class UserSeeder extends Seeder
 
         $admin_role = Role::create(['name'=>'admin']);
         $user_role = Role::create(['name'=>'user']);
-        $manager_role = Role::create(['name'=>'manager']);
+
 
         $admin_role->givePermissionTo([
             $user_create,
@@ -36,9 +36,6 @@ class UserSeeder extends Seeder
             $user_list
         ]);
         $user_role -> givePermissionTo([
-            $user_list,
-        ]);
-        $manager_role -> givePermissionTo([
             $user_list,
         ]);
         $admin=User::create([
@@ -61,15 +58,6 @@ class UserSeeder extends Seeder
         ]);
         $user->assignRole($user_role);
         $user->givePermissionTo([
-            $user_list,
-        ]);
-        $manager=User::create([
-            'name'=>'Manager',
-            'email'=>'manager@manager.com',
-            'password'=>bcrypt('password')
-        ]);
-        $manager->assignRole($manager_role);
-        $manager->givePermissionTo([
             $user_list,
         ]);
     }

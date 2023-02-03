@@ -6,11 +6,13 @@
     "words": [
         "admindashboard",
         "axios",
+        "Fullname",
         "Loggedin",
         "maagerdashboard",
         "managerdashboard",
         "persistedstate",
         "rememberme",
+        "usermanagement",
         "vuex",
         "vxilogo",
         "websanova"
