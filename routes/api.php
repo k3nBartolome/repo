@@ -18,30 +18,37 @@ use App\Http\Resources\UserResource;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource($request->user());
 });
-Route::post('login',[AuthController::class,'login'])->name('login');
-Route::post('logout',[AuthController::class,'logout'])->name('logout');
+Route::post('login',[AuthController::class,'login']);
+Route::post('logout',[AuthController::class,'logout']);
 
 //User Routes
-Route::post('/create_user',[UserController::class,'store'])->name('users.create');
-Route::put('/update_user/{id}',[UserController::class,'update'])->name('users.update');
-Route::delete('/delete_user/{id}',[UserController::class,'destroy'])->name('users.delete');
-Route::get('/show_user/{id}',[UserController::class,'show'])->name('users.show');
-Route::get('/list_user',[UserController::class,'index'])->name('users.list');
+Route::post('/create_user',[UserController::class,'store']);
+Route::put('/update_user/{id}',[UserController::class,'update']);
+Route::delete('/delete_user/{id}',[UserController::class,'destroy']);
+Route::get('/show_user/{id}',[UserController::class,'show']);
+Route::get('/list_user',[UserController::class,'index']);
 
 //Role Routes
-Route::get('/list_role',[RoleController::class,'index'])->name('roles.list');
-Route::post('/create_role',[RoleController::class,'store'])->name('roles.create');
-Route::put('/update_role/{id}',[RoleController::class,'update'])->name('roles.update');
-Route::delete('/delete_role/{id}',[RoleController::class,'destroy'])->name('roles.delete');
-Route::get('/show_role/{id}',[RoleController::class,'show'])->name('roles.show');
+Route::get('/list_role',[RoleController::class,'index']);
+Route::post('/create_role',[RoleController::class,'store']);
+Route::put('/update_role/{id}',[RoleController::class,'update']);
+Route::delete('/delete_role/{id}',[RoleController::class,'destroy']);
+Route::get('/show_role/{id}',[RoleController::class,'show']);
 
 //Permission Routes
-Route::get('/list_permission',[PermissionController::class,'index'])->name('permissions.list');
-Route::post('/create_permission',[PermissionController::class,'store'])->name('permissions.create');
-Route::put('/update_permission/{id}',[PermissionController::class,'update'])->name('permissions.update');
-Route::delete('/delete_permission/{id}',[PermissionController::class,'destroy'])->name('permissions.delete');
-Route::get('/show_permission/{id}',[PermissionController::class,'show'])->name('permissions.show');
+Route::get('/list_permission',[PermissionController::class,'index']);
+Route::post('/create_permission',[PermissionController::class,'store']);
+Route::put('/update_permission/{id}',[PermissionController::class,'update']);
+Route::delete('/delete_permission/{id}',[PermissionController::class,'destroy']);
+Route::get('/show_permission/{id}',[PermissionController::class,'show']);
+
+//Site Routes
+Route::get('sites', [SiteController::class,'index']);
+Route::get('sites/{id}', [SiteController::class,'show']);
+Route::post('sites', [SiteController::class,'store']);
+Route::put('sites/{id}', [SiteController::class,'update']);
+Route::delete('sites/{id}', [SiteController::class,'destroy']);
+

@@ -6,8 +6,8 @@
       </h1>
     </div>
   </header>
-  <div class="flex h-80">
-    <div class="bg-white sm:w-screen">
+  <div class="flex h-full bg-gray-200">
+    <div class=" sm:w-screen">
       <div class="flex items-center justify-center">
       <div class="float-left pl-8">
         <h1

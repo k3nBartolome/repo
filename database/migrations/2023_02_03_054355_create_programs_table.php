@@ -18,8 +18,15 @@ class CreateProgramsTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('created_by');
+            $table->string('updated_by'); 
+            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('site_id');
+            $table->string('created_by');
             $table->string('updated_by');
+            $table->boolean('is_active');
             $table->timestamps();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
         });
     }
 

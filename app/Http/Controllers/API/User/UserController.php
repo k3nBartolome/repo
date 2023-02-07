@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\API\User;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Http\Requests\User\UserRequest;
-use App\Helpers\Helper;
-use App\Http\Resources\UserResource;
 use App\Models\User;
+use App\Helpers\Helper;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
@@ -20,18 +19,8 @@ class UserController extends Controller
      */
     public function index()
     {
-        $user =User::paginate(10);
-        return UserResource::collection($user);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $users = User::paginate(10);
+        return UserResource::collection($users);
     }
 
     /**
@@ -40,25 +29,22 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
         //register user
-        $user=User::create([    
-         
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password)
-        
+        $user = User::create([    
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
-            //assign role and permission
-            $user_role =($request->input('role'));
-            $role_permission =Role::findByName($request->input('role'))->permissions;
-            if($user_role){
-                $user->assignRole($user_role);
-                $user->givePermissionTo($role_permission);
-            }
-            return new UserResource($user);
-
+        //assign role and permission
+        $user_role = ($request->input('role'));
+        $role_permission = Role::findByName($request->input('role'))->permissions;
+        if ($user_role) {
+            $user->assignRole($user_role);
+            $user->givePermissionTo($role_permission);
+        }
+        return new UserResource($user);
     }
 
     /**
@@ -69,20 +55,8 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user=User::FindOrFail($id);
+        $user = User::FindOrFail($id);
         return new UserResource($user);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = User::find($id);
-        return response()->json($user);
     }
 
     /**
@@ -92,18 +66,17 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UserRequest $request, $id)
+    public function update(Request $request, $id)
     {
-       $user=User::FindOrFail($id);
+       $user = User::FindOrFail($id);
        $user->update([
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'password'=>bcrypt($request->password)
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
-        // $user_role =($request->input('role'));
-        $user_role =($request->input('role'));
-        $role_permission =Role::findByName($request->input('role'))->permissions;
-        if($user_role){
+        $user_role = ($request->input('role'));
+        $role_permission = Role::findByName($request->input('role'))->permissions;
+        if ($user_role) {
             $user->syncRoles($user_role);
             $user->syncPermissions($role_permission);
         }
@@ -118,11 +91,10 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        {
-            $user=User::FindOrFail($id);
-            if($user->delete()){
+        $user = User::FindOrFail($id);
+        if ($user->delete()) {
             return new UserResource($user);
             }
         }
     }
-}
+

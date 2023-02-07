@@ -14,17 +14,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        return Site::all();
     }
 
     /**
@@ -35,7 +25,9 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $site = Site::create($request->all());
+
+        return response()->json($site, 201);
     }
 
     /**
@@ -46,18 +38,7 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Site  $site
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Site $site)
-    {
-        //
+        return $site;
     }
 
     /**
@@ -69,7 +50,9 @@ class SiteController extends Controller
      */
     public function update(Request $request, Site $site)
     {
-        //
+        $site->update($request->all());
+
+        return response()->json($site, 200);
     }
 
     /**
@@ -80,6 +63,8 @@ class SiteController extends Controller
      */
     public function destroy(Site $site)
     {
-        //
+        $site->delete();
+
+        return response()->json(null, 204);
     }
 }
