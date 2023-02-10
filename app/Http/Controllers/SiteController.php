@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Site;
 use Illuminate\Http\Request;
+use App\Models\Site;
+use App\Http\Resources\SiteResource;
+use Illuminate\Validation\Rule;
 
 class SiteController extends Controller
 {
@@ -14,7 +16,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        return Site::all();
+        return SiteResource::collection(Site::all());
     }
 
     /**
@@ -25,40 +27,55 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
-        $site = Site::create($request->all());
+        $validatedData = $request->validate([
+            'name' => 'required|unique:sites',
+            'description' => 'required',
+            'region' => 'required',
+            'is_active' => Rule::in(['0', '1']),
+        ]);
 
-        return response()->json($site, 201);
+        $site = Site::create($validatedData);
+
+        return new SiteResource($site);
     }
+
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Site  $site
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show(Site $site)
     {
-        return $site;
+        return new SiteResource($site);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Site  $site
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Site $site)
     {
-        $site->update($request->all());
+        $validatedData = $request->validate([
+            'name' => 'sometimes|unique:sites,name,'.$site->id,
+            'description' => 'sometimes',
+            'region' => 'sometimes',
+            'is_active' => Rule::in(['0', '1']),
+        ]);
 
-        return response()->json($site, 200);
+        $site->update($validatedData);
+
+        return new SiteResource($site);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Site  $site
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Site $site)

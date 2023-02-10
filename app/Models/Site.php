@@ -18,11 +18,13 @@ class Site extends Model
         'updated_by',
         'is_active'
     ];
-    public function user()
+
+    public function belongsToUser()
     {
         return $this->belongsTo(User::class);
     }
-    public function program()
+
+    public function programs(){
         return $this->hasMany('App\Models\Program');
     }
 
@@ -37,17 +39,21 @@ class Site extends Model
     }
 
     protected static function boot()
-    {
-        parent::boot();
+{
+    parent::boot();
 
-        static::creating(function ($model) {
+    static::creating(function ($model) {
+        if (auth()->check()) {
             $model->created_by = auth()->user()->id;
             $model->updated_by = auth()->user()->id;
-        });
+        }
+    });
 
-        static::updating(function ($model) {
+    static::updating(function ($model) {
+        if (auth()->check()) {
             $model->updated_by = auth()->user()->id;
-        });
-    }
+        }
+    });
 }
 
+}

@@ -18,10 +18,12 @@ class CreateSitesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('region');
-            $table->boolean('is_active');
-            $table->string('created_by');
-            $table->string('updated_by');
+            $table->boolean('is_active')->default(0);
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
+
+            $table->index(['created_by', 'updated_by']);
         });
     }
 
@@ -35,3 +37,5 @@ class CreateSitesTable extends Migration
         Schema::dropIfExists('sites');
     }
 }
+
+

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -7,49 +8,37 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Site;
 
-
 class Program extends Model
 {
-    use HasFactory;
-      protected $fillable = [
-        'name',
-        'description',
-        'att_tagging',
-        'site_id'
-        'created_by',
-        'updated_by',
-        'is_active'
+    protected $fillable = [
+        'name', 'description', 'att_tagging', 'user_id', 'site_id', 'created_by', 'updated_by', 'is_active'
     ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function programs()
+
+    public function site()
     {
         return $this->belongsTo(Site::class);
     }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-
     protected static function boot()
-    {
-        parent::boot();
+{
+    parent::boot();
 
-        static::creating(function ($model) {
+    static::creating(function ($model) {
+        if (auth()->check()) {
             $model->created_by = auth()->user()->id;
             $model->updated_by = auth()->user()->id;
-        });
+        }
+    });
 
-        static::updating(function ($model) {
+    static::updating(function ($model) {
+        if (auth()->check()) {
             $model->updated_by = auth()->user()->id;
-        });
-    }
+        }
+    });
+}
+
 }

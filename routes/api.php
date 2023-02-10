@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\API\User\RoleController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Resources\UserResource;
 
@@ -51,4 +53,14 @@ Route::get('sites/{id}', [SiteController::class,'show']);
 Route::post('sites', [SiteController::class,'store']);
 Route::put('sites/{id}', [SiteController::class,'update']);
 Route::delete('sites/{id}', [SiteController::class,'destroy']);
+
+
+//Program Routes
+Route::get('programs', [ProgramController::class,'index']);
+Route::get('programs/{id}', [ProgramController::class,'show']);
+Route::post('programs', [ProgramController::class,'store']);
+Route::put('programs/{id}', [ProgramController::class,'update']);
+Route::delete('programs/{id}', [ProgramController::class,'destroy']);
+
+
 

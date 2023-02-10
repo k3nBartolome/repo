@@ -11,6 +11,7 @@ import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import UserAdd from "@/views/DashboardNavItems/Admin/User/UserAdd";
 import UserEdit from "@/views/DashboardNavItems/Admin/User/UserEdit";
 import UserShow from '@/views/DashboardNavItems/Admin/User/UserShow';
+import SiteManagement from '@/views//Dashboard/AppSiteDashboard.vue';
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
         path: "/user_show/:user_id",
         name: "userShow",
         component: UserShow,
+      },
+      {
+        path: "/site_management",
+        name: "sitemanagement",
+        component: SiteManagement,
       },
     ],
   },

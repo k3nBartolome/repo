@@ -12,40 +12,41 @@ use Spatie\Permission\Models\Permission;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
         $users = User::paginate(10);
         return UserResource::collection($users);
     }
-
     /**
-     * Store a newly created resource in storage.
+     * Display a listing of the resource.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //register user
-        $user = User::create([    
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
-        ]);
-        //assign role and permission
-        $user_role = ($request->input('role'));
-        $role_permission = Role::findByName($request->input('role'))->permissions;
-        if ($user_role) {
-            $user->assignRole($user_role);
-            $user->givePermissionTo($role_permission);
-        }
-        return new UserResource($user);
+{
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|string|min:6',
+        'role' => 'sometimes|string|exists:roles,name'
+    ]);
+
+    //register user
+    $user = User::create([
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'password' => bcrypt($validatedData['password'])
+    ]);
+    //assign role and permission
+    $user_role = ($validatedData['role']);
+    $role_permission = Role::findByName($validatedData['role'])->permissions;
+    if ($user_role) {
+        $user->assignRole($user_role);
+        $user->givePermissionTo($role_permission);
     }
+    return new UserResource($user);
+}
+
 
     /**
      * Display the specified resource.
@@ -68,20 +69,28 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
+       $validatedData = $request->validate([
+            'name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|unique:users,email,' . $id,
+            'password' => 'sometimes|string|min:6',
+            'role' => 'sometimes|string|exists:roles,name'
+        ]);
+
        $user = User::FindOrFail($id);
        $user->update([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password'])
         ]);
-        $user_role = ($request->input('role'));
-        $role_permission = Role::findByName($request->input('role'))->permissions;
+        $user_role = ($validatedData['role']);
+        $role_permission = Role::findByName($validatedData['role'])->permissions;
         if ($user_role) {
             $user->syncRoles($user_role);
             $user->syncPermissions($role_permission);
         }
         return new UserResource($user);
     }
+
 
     /**
      * Remove the specified resource from storage.
