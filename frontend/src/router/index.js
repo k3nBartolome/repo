@@ -1,4 +1,7 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory
+} from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
 import AppUserDashboard from "@/views/Dashboard/AppUserDashboard";
@@ -11,27 +14,29 @@ import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import UserAdd from "@/views/DashboardNavItems/Admin/User/UserAdd";
 import UserEdit from "@/views/DashboardNavItems/Admin/User/UserEdit";
 import UserShow from '@/views/DashboardNavItems/Admin/User/UserShow';
-import SiteManagement from '@/views//Dashboard/AppSiteDashboard.vue';
+import SiteManagement from '../views/Dashboard/AppSiteDashboard.vue';
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     component: AppUserLayout,
-    meta: { requiresAuth: true, requiresRole: "user" },
-    children: [
-      {
-        path: "/dashboard",
-        name: "userDashboard",
-        component: AppUserDashboard,
-      },
-    ],
+    meta: {
+      requiresAuth: true,
+      requiresRole: "user"
+    },
+    children: [{
+      path: "/dashboard",
+      name: "userDashboard",
+      component: AppUserDashboard,
+    }, ],
   },
   {
     path: "/",
     component: AppAdminLayout,
-    meta: { requiresAuth: true, requiresRole: "admin" },
-    children: [
-      {
+    meta: {
+      requiresAuth: true,
+      requiresRole: "admin"
+    },
+    children: [{
         path: "/admin_dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
@@ -67,9 +72,10 @@ const routes = [
     path: "/auth",
     name: "Auth",
     component: AuthLayout,
-    meta: { isGuest: true },
-    children: [
-      {
+    meta: {
+      isGuest: true
+    },
+    children: [{
         path: "/login",
         name: "login",
         component: AppLogin,
@@ -94,10 +100,16 @@ router.beforeEach((to, from, next) => {
       if (to.meta.requiresRole === store.getters.returnRole) {
         next();
       } else {
-        next({ query: { returnUrl: to.path } });
+        next({
+          query: {
+            returnUrl: to.path
+          }
+        });
       }
     } else {
-      next({ name: "login" });
+      next({
+        name: "login"
+      });
     }
   } else if (to.meta.isGuest && !store.getters.isLoggedIn) {
     next();

@@ -1,14 +1,13 @@
 <template>
-
   <div class="w-full">
-     <NavBar/>
+    <NavBar />
   </div>
   <div class="w-auto h-full">
     <router-view></router-view>
-</div>
-<div class="w-full">
-  <FootBar/>
-</div>
+  </div>
+  <div class="w-full">
+    <FootBar />
+  </div>
 </template>
 <script>
 import FootBar from "../components/FooterLayout.vue";
@@ -17,6 +16,6 @@ export default {
   components: {
     NavBar,
     FootBar
-}
+  }
 }
 </script>
