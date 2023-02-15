@@ -18,9 +18,10 @@ class SiteResource extends JsonResource {
             'name' => $this->name,
             'description' => $this->description,
             'region' => $this->region,
+            'site_director'=> $this->site_director,
             'is_active' => $this->is_active,
-            'created_by' => new UserResource( $this->createdBy ),
-            'updated_by' => new UserResource( $this->updatedBy ),
+            'created_by' => $this->created_by,
+            'updated_by' => $this->updated_by,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
         ];

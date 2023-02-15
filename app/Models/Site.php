@@ -28,33 +28,4 @@ class Site extends Model
     public function programs(){
         return $this->hasMany('App\Models\Program');
     }
-
-    public function createdBy()
-    {
-        return $this->belongsTo(User::class, 'created_by');
-    }
-
-    public function updatedBy()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    protected static function boot()
-{
-    parent::boot();
-
-    static::creating(function ($model) {
-        if (auth()->check()) {
-            $model->created_by = auth()->user()->id;
-            $model->updated_by = auth()->user()->id;
-        }
-    });
-
-    static::updating(function ($model) {
-        if (auth()->check()) {
-            $model->updated_by = auth()->user()->id;
-        }
-    });
-}
-
 }
