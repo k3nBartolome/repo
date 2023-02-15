@@ -18,7 +18,7 @@ class CreateSitesTable extends Migration
             $table->string('name');
             $table->string('description');
             $table->string('region');
-            $table->boolean('is_active')->default(0);
+            $table->boolean('is_active')->default(1);
             $table->unsignedBigInteger('created_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
