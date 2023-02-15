@@ -50,4 +50,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Program');
     }
+    public function sla_reasons()
+    {
+        return $this->hasMany('App\Models\Sla_reason');
+    }
 }

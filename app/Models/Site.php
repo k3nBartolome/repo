@@ -13,6 +13,7 @@ class Site extends Model
     protected $fillable = [
         'name',
         'description',
+        'site_director',
         'region',
         'created_by',
         'updated_by',

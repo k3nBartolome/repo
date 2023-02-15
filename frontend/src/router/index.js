@@ -12,6 +12,8 @@ import UserAdd from "@/views/DashboardNavItems/Admin/User/UserAdd";
 import UserEdit from "@/views/DashboardNavItems/Admin/User/UserEdit";
 import UserShow from '@/views/DashboardNavItems/Admin/User/UserShow';
 import SiteManagement from '@/views//Dashboard/AppSiteDashboard.vue';
+import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
+import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.vue";
 
 const routes = [
   {
@@ -23,6 +25,16 @@ const routes = [
         path: "/dashboard",
         name: "userDashboard",
         component: AppUserDashboard,
+      },
+      {
+        path: "/capfile",
+        name: "capacityFile",
+        component: capacityFile,
+      },
+      {
+        path: "/addcapfile",
+        name: "addCapacityFile",
+        component: addCapacityFile,
       },
     ],
   },
