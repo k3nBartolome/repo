@@ -11,7 +11,7 @@ use App\Models\Site;
 class Program extends Model
 {
     protected $fillable = [
-        'name', 'description', 'att_tagging', 'user_id', 'site_id', 'created_by', 'updated_by', 'is_active'
+        'name', 'description', 'program_group', 'user_id', 'site_id', 'created_by', 'updated_by', 'is_active'
     ];
 
     public function user()

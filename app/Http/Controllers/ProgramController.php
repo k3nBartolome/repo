@@ -23,7 +23,7 @@ class ProgramController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'description' => 'required',
-            'att_tagging' => 'required',
+            'program_group' => 'required',
             'user_id' => 'required|exists:users,id',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
@@ -42,7 +42,7 @@ class ProgramController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'sometimes|required|max:255',
             'description' => 'sometimes|required',
-            'att_tagging' => 'sometimes|required',
+            'program_group' => 'sometimes|required',
             'user_id' => 'sometimes|required|exists:users,id',
             'site_id' => 'sometimes|required|exists:sites,id',
             'is_active' => 'sometimes|required|boolean',

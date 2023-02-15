@@ -14,11 +14,37 @@ import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import UserAdd from "@/views/DashboardNavItems/Admin/User/UserAdd";
 import UserEdit from "@/views/DashboardNavItems/Admin/User/UserEdit";
 import UserShow from '@/views/DashboardNavItems/Admin/User/UserShow';
+<<<<<<< HEAD
+import SiteManagement from '@/views//Dashboard/AppSiteDashboard.vue';
+import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
+import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.vue";
+=======
 import SiteManagement from '../views/Dashboard/AppSiteDashboard.vue';
+>>>>>>> 9a74f4e25a80feb3779291035baa4d535ba1bdab
 
 const routes = [{
     path: "/",
     component: AppUserLayout,
+<<<<<<< HEAD
+    meta: { requiresAuth: true, requiresRole: "user" },
+    children: [
+      {
+        path: "/dashboard",
+        name: "userDashboard",
+        component: AppUserDashboard,
+      },
+      {
+        path: "/capfile",
+        name: "capacityFile",
+        component: capacityFile,
+      },
+      {
+        path: "/addcapfile",
+        name: "addCapacityFile",
+        component: addCapacityFile,
+      },
+    ],
+=======
     meta: {
       requiresAuth: true,
       requiresRole: "user"
@@ -28,6 +54,7 @@ const routes = [{
       name: "userDashboard",
       component: AppUserDashboard,
     }, ],
+>>>>>>> 9a74f4e25a80feb3779291035baa4d535ba1bdab
   },
   {
     path: "/",

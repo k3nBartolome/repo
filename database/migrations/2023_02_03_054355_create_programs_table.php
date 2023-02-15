@@ -17,12 +17,12 @@ class CreateProgramsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('att_tagging');
+            $table->string('program_group');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('site_id')->nullable();
-            $table->string('created_by')->nullable();
-            $table->string('updated_by')->nullable();
-            $table->boolean('is_active');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
