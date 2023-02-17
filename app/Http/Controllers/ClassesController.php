@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Classes;
 use App\Models\Sla_reason;
-
+use App\Http\Resources\ClassesResource;
 class ClassesController extends Controller
  {
     /**
@@ -43,57 +43,33 @@ class ClassesController extends Controller
     public function store( Request $request )
  {
         $validatedData = $request->validate( [
-            'notice_weeks' => 'nullable',
-            'notice_days' => 'nullable',
-            'external_target' => 'nullable',
-            'internal_target' => 'nullable',
-            'target' => 'nullable',
-            'pipeline_utilized' => 'nullable',
-            'type_of_hiring' => 'nullable',
-            'within_sla' => 'nullable',
-            'with_erf' => 'nullable',
-            'reason_for_counter_proposal' => 'nullable',
-            'remarks' => 'nullable',
-            'status' => 'nullable',
-            'update_status' => 'nullable',
-            'approved_status' => 'nullable',
-            'approved_date' => 'nullable',
-            'cancelled_date' => 'nullable',
-            'date_requested' => 'nullable',
-            'delivery_date' => 'nullable',
-            'entry_date' => 'nullable',
-            'original_start_date' => 'nullable',
-            'pushback_start_date_ta' => 'nullable',
-            'pushback_start_date_wf' => 'nullable',
-            'requested_start_date_by_wf' => 'nullable',
-            'start_date_committed_by_ta' => 'nullable',
-            'supposed_start_date' => 'nullable',
-            'wfm_date_requested' => 'nullable',
-            'program_id' => 'nullable',
-            'site_id' => 'nullable',
-            'sla_reason_id' => 'nullable',
-            'cancelled_by' => 'nullable',
-            'created_by' => 'nullable',
-            'requested_by' => 'nullable',
-            'updated_by' => 'nullable',
-            'approved_by' => 'nullable',
-            'is_active' => 'nullable',
+            'notice_weeks' => 'required',
+            'notice_days' => 'required',
+            'external_target' => 'required',
+            'internal_target' => 'required',
+            'total_target' => 'required',
+            'type_of_hiring' => 'required',
+            'within_sla' => 'required',
+            'with_erf' => 'required',
+            'remarks' => 'required',
+            'status' => 'required',
+            'approved_status' => 'required',
+            'original_start_date' => 'required',
+            'wfm_date_requested' => 'required',
+            'program_id' => 'required',
+            'site_id' => 'required',
+            'created_by' => 'required',
+            'is_active' => 'required',
         ] );
 
         $class = Classes::create( $validatedData );
 
         $validatedSlaData = $request->validate( [
-            'reason' => 'nullable',
-            'created_by' => 'nullable',
-            'updated_by' => 'nullable',
+            'out_of_sla_reason' => 'required',
         ] );
         $sla = Sla_reason::create( $validatedSlaData );
 
-        return response()->json( [
-            'message' => 'Class and SLA reason successfully created',
-            'class' => $class,
-            'sla' => $sla,
-        ], 201 );
+        return new  ClassesResource($class);
     }
 
     /**

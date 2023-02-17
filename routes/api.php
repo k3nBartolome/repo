@@ -7,6 +7,7 @@ use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\API\User\RoleController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Resources\UserResource;
 
