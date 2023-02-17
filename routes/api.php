@@ -62,5 +62,12 @@ Route::post('programs', [ProgramController::class,'store']);
 Route::put('programs/{id}', [ProgramController::class,'update']);
 Route::delete('programs/{id}', [ProgramController::class,'destroy']);
 
+//Classes Routes
+Route::get('classes', [ClassesController::class,'index']);
+Route::get('classes/{id}', [ClassesController::class,'show']);
+Route::post('classes', [ClassesController::class,'store']);
+Route::put('classes/{id}', [ClassesController::class,'update']);
+Route::delete('classes/{id}', [ClassesController::class,'destroy']);
+
 
 

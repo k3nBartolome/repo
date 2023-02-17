@@ -23,22 +23,5 @@ class Program extends Model
     {
         return $this->belongsTo(Site::class);
     }
-    protected static function boot()
-{
-    parent::boot();
-
-    static::creating(function ($model) {
-        if (auth()->check()) {
-            $model->created_by = auth()->user()->id;
-            $model->updated_by = auth()->user()->id;
-        }
-    });
-
-    static::updating(function ($model) {
-        if (auth()->check()) {
-            $model->updated_by = auth()->user()->id;
-        }
-    });
-}
 
 }

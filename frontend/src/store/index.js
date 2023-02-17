@@ -11,6 +11,7 @@ export default createStore({
     user: null,
     role: null,
     token: null,
+    user_id:null,
   },
   mutations: {
     setUser(state, user) {
@@ -19,6 +20,9 @@ export default createStore({
       } else {
         alert("Another user is already logged in. Please log out first.");
       }
+    },
+    setUserId(state,user_id){
+      state.user_id = user_id;
     },
     setRole(state, role) {
       state.role = role;
@@ -30,6 +34,7 @@ export default createStore({
       state.user = null;
       state.token = null;
       state.role = null;
+      state.user_id = null;
       // clear the sessionStorage
       sessionStorage.clear();
     },
@@ -41,6 +46,9 @@ export default createStore({
     },
     returnRole(state) {
       return state.role;
+    },
+    returnUserId(state) {
+      return state.user_id;
     },
   },
 });

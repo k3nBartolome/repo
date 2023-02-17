@@ -28,19 +28,20 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
+     
         $validatedData = $request->validate([
             'name' => 'required|unique:sites',
             'description' => 'required',
             'site_director'=>'required',
             'region' => 'required',
             'is_active' => Rule::in(['0', '1']),
+            'created_by'=> 'nullable'
         ]);
 
-        $validatedData['created_by'] = Auth::user();
-       
+
         $site = Site::create($validatedData);
 
-        return dd(Auth::user());;
+        return new SiteResource($site);
     }
 
 

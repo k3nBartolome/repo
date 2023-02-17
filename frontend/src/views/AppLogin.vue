@@ -77,12 +77,13 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken", "setRole"]),
+    ...mapMutations(["setUser", "setToken", "setRole","setUserId"]),
     async login(e) {
       e.preventDefault();
       let user;
       let role;
       let token;
+      let user_id;
       let isLogin;
       await axios
         .post("http://127.0.0.1:8000/api/login", {
@@ -95,6 +96,7 @@ export default {
           user = response.data.user;
           token = response.data.token;
           role = response.data.role;
+          user_id = response.data.user_id;
           console.log(response.data);
         })
         .catch(function (error) {
@@ -105,8 +107,9 @@ export default {
           this.setUser(user);
           this.setToken(token);
           this.setRole(role);
+          this.setUserId(user_id);
         if(role ==='admin'){
-          this.$router.push({ path: "/admin_dashboard" });
+          this.$router.push({ path: "/admin_dashboard"});
         }
         else{
           this.$router.push({ path: "/dashboard" });

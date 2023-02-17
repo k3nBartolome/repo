@@ -47,7 +47,7 @@
             Site Management
           </li></router-link
         >
-        <router-link to="/user_management"
+        <router-link to="/program_management"
           ><li
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >

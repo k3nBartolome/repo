@@ -26,12 +26,15 @@ class AuthController extends Controller
                 $user = Auth::user();
                 $token = $user->createToken('Personal Token')->plainTextToken;
                 $role = $user->roles->first()->name;
+                $user_id =Auth::user()->id;
 
                 return response()->json([
                     'status' => 'success',
                     'user'=>$user,
                     'token' => $token,
-                    'role'  => $role
+                    'role'  => $role,
+                    'user_id'=>$user_id
+                    
                 ], 200);
             }
 

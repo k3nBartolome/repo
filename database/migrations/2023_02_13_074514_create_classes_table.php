@@ -34,7 +34,7 @@ class CreateClassesTable extends Migration
             $table->integer('internal_target');
             $table->integer('notice_days');
             $table->integer('pipeline_utilized');
-            $table->integer('target');
+            $table->integer('total_target');
             $table->string('reason_for_counter_proposal');
             $table->string('remarks');
             $table->string('status');
@@ -48,7 +48,6 @@ class CreateClassesTable extends Migration
             $table->unsignedBigInteger('cancelled_by');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('program_id');
-            $table->unsignedBigInteger('requested_by');
             $table->unsignedBigInteger('site_id');
             $table->unsignedBigInteger('sla_reason_id');
             $table->unsignedBigInteger('updated_by');

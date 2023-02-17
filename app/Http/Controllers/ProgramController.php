@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Resources\ProgramResource;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +10,7 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        return Program::all();
+        return ProgramResource::collection(Program::all());
     }
 
     public function show(Program $program)
@@ -24,7 +24,6 @@ class ProgramController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'program_group' => 'required',
-            'user_id' => 'required|exists:users,id',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
         ]);
@@ -34,7 +33,7 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
-        return response()->json($program, 201);
+        return new ProgramResource($program);
     }
 
     public function update(Request $request, Program $program)
@@ -43,9 +42,9 @@ class ProgramController extends Controller
             'name' => 'sometimes|required|max:255',
             'description' => 'sometimes|required',
             'program_group' => 'sometimes|required',
-            'user_id' => 'sometimes|required|exists:users,id',
             'site_id' => 'sometimes|required|exists:sites,id',
-            'is_active' => 'sometimes|required|boolean',
+            'is_active' => Rule::in(['0', '1']),
+            'created_by'=> 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -53,7 +52,7 @@ class ProgramController extends Controller
         }
 
         $program->update($request->all());
-        return response()->json($program);
+        return new ProgramResource($program);
     }
 
     public function delete(Program $program)
