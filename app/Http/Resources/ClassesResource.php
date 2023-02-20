@@ -4,7 +4,6 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-
 class ClassesResource extends JsonResource
 {
     public function toArray($request)
@@ -30,9 +29,7 @@ class ClassesResource extends JsonResource
             'is_active' => $this->is_active,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'reason' => $this->whenLoaded('reason', function () {
-                return $this->sla_reason->where('class_id', $this->id)->first()->reason;
-            }),
+            'reason' => new SlaReasonResource($this->sla_reason)
         ];
     }
 }

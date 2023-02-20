@@ -12,7 +12,8 @@ class Sla_reason extends Model
         'class_id',
         'reason',
     ];
-    public function classes(){
+    public function classes()
+    {
         return $this->belongsTo(Classes::class);
     }
 }

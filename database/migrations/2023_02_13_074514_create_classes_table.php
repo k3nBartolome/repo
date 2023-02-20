@@ -25,7 +25,7 @@ class CreateClassesTable extends Migration
             $table->date('supposed_start_date')->nullable();
             $table->datetime('approved_date')->nullable();
             $table->datetime('cancelled_date')->nullable();
-            $table->datetime('wfm_date_requested');
+            $table->date('wfm_date_requested');
             $table->float('notice_weeks');
             $table->integer('external_target');
             $table->integer('internal_target');
