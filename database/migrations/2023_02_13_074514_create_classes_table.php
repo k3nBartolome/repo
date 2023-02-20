@@ -16,7 +16,7 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->boolean('is_active');
-            $table->boolean('within_sla');
+            $table->string('within_sla');
             $table->date('original_start_date');
             $table->date('pushback_start_date_ta')->nullable();
             $table->date('pushback_start_date_wf')->nullable();
