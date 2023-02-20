@@ -35,11 +35,7 @@
               @change="getPrograms"
             >
               <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
+              <option v-for="program in programs" :key="program.id" :value="program.id">
                 {{ program.name }}
               </option>
             </select>
@@ -62,6 +58,7 @@
               type="number"
               v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncTotalTarget"
             />
           </label>
           <label class="block">
@@ -70,13 +67,14 @@
               type="number"
               v-model="internal_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncTotalTarget"
             />
           </label>
           <label class="block">
             Total Target
             <input
-              type="text"
-              :value="total_target_computed" 
+              type="number"
+              v-model="total_target"
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -87,6 +85,7 @@
               type="date"
               v-model="original_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncNoticeDays"
             />
           </label>
 
@@ -96,24 +95,27 @@
               type="date"
               v-model="wfm_date_requested"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncNoticeDays"
             />
           </label>
           <label class="block">
             Notice Days
             <input
               type="number"
-              :value="notice_days_computed" 
+              v-model="notice_days"
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncNoticeWeeks"
             />
           </label>
           <label class="block">
             Notice Weeks
             <input
               type="text"
-              :value="notice_weeks_computed" 
+              v-model="notice_weeks"
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncWithinSla"
             />
           </label>
           <label class="block"
@@ -137,12 +139,13 @@
               <option value="placeholder">Placeholder</option>
               <option value="confirm">Confirm</option>
             </select>
+
           </label>
           <label class="block"
             >Within SLA?
             <input
               type="text"
-              :value="within_sla_computed ? 'Yes' : 'No'"
+              v-model="within_sla"
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -152,7 +155,7 @@
           <label class="block"
             >Out of SLA Reason<textarea
               type="text"
-              v-model="out_of_sla_reason"
+              v-model="reason"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
@@ -186,16 +189,14 @@ export default {
       type_of_hiring: "",
       external_target: "",
       internal_target: "",
+      total_target: 0,
       with_erf: "",
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      out_of_sla_reason: "",
+      reason: "",
       category: "",
-      total_target:"",
-      notice_weeks:"",
-      notice_days:"",
-      within_sla:"",
+      notice_days: 0,
       sites: [],
       programs: [],
     };
@@ -211,14 +212,13 @@ export default {
       const wrd = Date.parse(this.wfm_date_requested) || 0;
       return Math.round((osd - wrd) / (24 * 60 * 60 * 1000));
     },
-    notice_weeks_computed() {
-      const days = parseFloat(this.notice_days_computed) || 0;
-      return (days / 7).toFixed(2);
+    notice_weeks() {
+      return parseFloat(this.notice_days / 7);
     },
-    within_sla_computed() {
+    within_sla() {
       const days = parseFloat(this.notice_days) || 0;
       const days_computed = (days / 7).toFixed(2);
-      return days_computed > 5;
+      return days_computed > 5 ? "Yes" : "No";
     },
   },
   mounted() {
@@ -226,8 +226,20 @@ export default {
     this.getSites();
     this.getPrograms();
   },
-
   methods: {
+    syncTotalTarget: function(){
+      this.total_target = this.total_target_computed;
+    },
+
+    syncNoticeDays: function(){
+      this.notice_days = this.notice_days_computed;
+    },
+    syncNoticeWeeks: function(){
+      this.notice_weeks = this.notice_weeks_computed;
+    },
+    syncWithinSla: function(){
+      this.within_sla = this.within_sla_computed;
+    },
     async getSites() {
       console.log(this.sites_selected);
       await axios
@@ -268,7 +280,7 @@ export default {
         wfm_date_requested: this.wfm_date_requested,
         within_sla: this.within_sla,
         remarks: this.remarks,
-        out_of_sla_reason: this.out_of_sla_reason,
+        reason: this.reason,
         approved_status: "pending",
         status: "ok",
         is_active: 1,
@@ -292,7 +304,7 @@ export default {
           this.wfm_date_requested = "";
           this.within_sla = "";
           this.remarks = "";
-          this.out_of_sla_reason = "";
+          this.reason = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";

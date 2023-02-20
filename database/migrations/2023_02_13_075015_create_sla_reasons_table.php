@@ -17,8 +17,6 @@ class CreateSlaReasonsTable extends Migration
             $table->id();
             $table->string('reason');
             $table->unsignedBigInteger('class_id');
-            $table->unsignedBigInteger('created_by');
-            $table->unsignedBigInteger('updated_by');
             $table->timestamps();
             $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
         });

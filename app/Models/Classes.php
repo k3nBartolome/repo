@@ -4,57 +4,58 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Site;
-use App\Models\Program;
-use App\Models\User;
+
 class Classes extends Model
- {
+{
     use HasFactory;
+
     protected $fillable = [
-        'notice_weeks',
-        'notice_days',
-        'external_target',
-        'internal_target',
-        'target',
-        'pipeline_utilized',
-        'type_of_hiring',
+        'is_active',
         'within_sla',
-        'with_erf',
-        'reason_for_counter_proposal',
-        'remarks',
-        'status',
-        'update_status',
-        'approved_status',
-        'approved_date',
-        'cancelled_date',
-        'date_requested',
-        'delivery_date',
-        'entry_date',
         'original_start_date',
         'pushback_start_date_ta',
         'pushback_start_date_wf',
         'requested_start_date_by_wf',
         'start_date_committed_by_ta',
         'supposed_start_date',
+        'approved_date',
+        'cancelled_date',
         'wfm_date_requested',
-        'program_id',
-        'site_id',
-        'sla_reason_id',
+        'notice_weeks',
+        'external_target',
+        'internal_target',
+        'notice_days',
+        'pipeline_utilized',
+        'total_target',
+        'reason_for_counter_proposal',
+        'remarks',
+        'status',
+        'type_of_hiring',
+        'backfill',
+        'growth',
+        'update_status',
+        'approved_status',
+        'with_erf',
+        'approved_by',
         'cancelled_by',
         'created_by',
-        'requested_by',
+        'program_id',
+        'site_id',
         'updated_by',
-        'approved_by',
-        'is_active',
-
     ];
-    public function sites(){
-        return $this->hasMany('App\Models\Site');
+
+    public function site()
+    {
+        return $this->belongsTo(Site::class);
     }
-    public function programs(){
-        return $this->hasMany('App\Models\Program');
+
+    public function program()
+    {
+        return $this->belongsTo(Program::class);
     }
-    public function sla_reason(){
-        return $this->hasMany('App\Models\Sla_reason');
+
+    public function slaReason()
+    {
+        return $this->hasMany(Sla_reason::class);
     }
 }
