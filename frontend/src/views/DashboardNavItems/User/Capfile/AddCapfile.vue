@@ -76,7 +76,7 @@
             Total Target
             <input
               type="text"
-              :value="total_target_computed" v-model="total_target"
+              :value="total_target_computed" 
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -102,7 +102,7 @@
             Notice Days
             <input
               type="number"
-              :value="notice_days_computed" v-model="notice_days"
+              :value="notice_days_computed" 
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -111,7 +111,7 @@
             Notice Weeks
             <input
               type="text"
-              :value="notice_weeks_computed" v-model="notice_weeks"
+              :value="notice_weeks_computed" 
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -142,7 +142,7 @@
             >Within SLA?
             <input
               type="text"
-              :value="within_sla_computed ? 'Yes' : 'No'" v-model="within_sla"
+              :value="within_sla_computed ? 'Yes' : 'No'"
               readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
