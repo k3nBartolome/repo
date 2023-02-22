@@ -26,6 +26,7 @@
         "font-awesome": "^4.7.0",
         "v-toaster": "^1.0.3",
         "vue-axios": "^3.5.2",
+        "vue-multiselect": "^2.1.7",
         "vue-sweetalert2": "^5.0.5"
     }
 }

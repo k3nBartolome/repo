@@ -38,7 +38,7 @@ class ClassesController extends Controller {
             'site_id' => 'required',
             'created_by' => 'required',
             'is_active' => 'required',
-            'reason' => 'required'
+            'reason' => 'nullable'
         ] );
 
         if ( $validator->fails() ) {

@@ -55,7 +55,7 @@
           <label class="block">
             External Target
             <input
-              type="number"
+              type="number" v-bind:title="tooltipMessage"
               v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget"
@@ -152,7 +152,7 @@
           </label>
         </div>
         <div class="py-4">
-          <label class="block"
+          <label class="block" v-if="notice_weeks < 5"
             >Out of SLA Reason<textarea
               type="text"
               v-model="reason"
@@ -194,11 +194,12 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      reason: "",
+      reason: [],
       category: "",
       notice_days: 0,
       sites: [],
       programs: [],
+      tooltipMessage: 'External Target',
     };
   },
   computed: {
@@ -316,3 +317,31 @@ export default {
   },
 };
 </script>
+<style>
+[title] {
+  position: relative;
+}
+[title]:after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background-color: black;
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+}
+[title]:before {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent black transparent;
+}
+
+</style>
