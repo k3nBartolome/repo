@@ -136,6 +136,7 @@ export default {
           this.description = '';
           this.siteDirector = '';
           this.region = '';
+          this.getSites(); // Reload the data
         })
         .catch(error => {
           console.log(error.response.data);

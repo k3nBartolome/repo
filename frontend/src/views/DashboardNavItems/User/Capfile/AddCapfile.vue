@@ -118,6 +118,33 @@
               @change="syncWithinSla"
             />
           </label>
+          <label class="block">
+            Start Weeks
+            <input
+              type="date"
+              v-model="weeks_start"
+              readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block">
+            Growth
+            <input
+              type="number"
+              v-model="growth"
+              readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block">
+            Backfill
+            <input
+              type="number"
+              v-model="backfill"
+              readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
           <label class="block"
             >With ERF?
             <select
@@ -197,6 +224,9 @@ export default {
       reason: [],
       category: "",
       notice_days: 0,
+      growth:"",
+      backfill:"",
+      weeks_start:"",
       sites: [],
       programs: [],
       tooltipMessage: 'External Target',
@@ -282,6 +312,9 @@ export default {
         within_sla: this.within_sla,
         remarks: this.remarks,
         reason: this.reason,
+        growth:this.growth,
+        backfill:this.backfill,
+        weeks_start:this.weeks_start,
         approved_status: "pending",
         status: "ok",
         is_active: 1,
@@ -306,6 +339,9 @@ export default {
           this.within_sla = "";
           this.remarks = "";
           this.reason = "";
+          this.growth="";
+          this.backfill="";
+          this.weeks_start="";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";

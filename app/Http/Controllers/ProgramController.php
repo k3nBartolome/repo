@@ -1,15 +1,17 @@
 <?php
-
 namespace App\Http\Controllers;
+
 use App\Http\Resources\ProgramResource;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ProgramController extends Controller
 {
     public function index()
     {
+        $programs = Program::paginate(10);
         return ProgramResource::collection(Program::all());
     }
 

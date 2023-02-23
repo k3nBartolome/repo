@@ -38,6 +38,9 @@ class ClassesController extends Controller {
             'site_id' => 'required',
             'created_by' => 'required',
             'is_active' => 'required',
+            'weeks_start'=>'required',
+            'backfill'=>'required',
+            'growth'=>'required',
             'reason' => 'nullable'
         ] );
 

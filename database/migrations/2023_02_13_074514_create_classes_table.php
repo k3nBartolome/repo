@@ -38,6 +38,7 @@ class CreateClassesTable extends Migration
             $table->string('type_of_hiring');
             $table->integer('backfill')->nullable();
             $table->integer('growth')->nullable();
+            $table->date('weeks_start')->nullable();
             $table->string('update_status')->nullable();
             $table->string('approved_status');
             $table->string('with_erf');

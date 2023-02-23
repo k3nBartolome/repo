@@ -23,10 +23,14 @@
         "vuex": "^4.1.0"
     },
     "dependencies": {
+        "datatables.net-select": "^1.6.0",
+        "datatables.net-vue3": "^2.0.0",
         "font-awesome": "^4.7.0",
         "v-toaster": "^1.0.3",
         "vue-axios": "^3.5.2",
         "vue-multiselect": "^2.1.7",
-        "vue-sweetalert2": "^5.0.5"
+        "vue-pagination-2": "^3.1.0",
+        "vue-sweetalert2": "^5.0.5",
+        "vuejs-paginate": "^2.1.0"
     }
 }

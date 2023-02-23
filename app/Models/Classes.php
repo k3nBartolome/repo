@@ -33,6 +33,7 @@ class Classes extends Model
         'type_of_hiring',
         'backfill',
         'growth',
+        'weeks_start',
         'update_status',
         'approved_status',
         'with_erf',
