@@ -8,18 +8,13 @@
   </header>
   <div class="py-8">
     <form @submit.prevent="addClass">
-      <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
-      >
+      <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
-            <select
-              v-model="sites_selected"
+            <select v-model="sites_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-              @change="getSites"
-            >
+              required @change="getSites">
               <option disabled value="" selected>Please select one</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
                 {{ site.name }}
@@ -28,12 +23,9 @@
           </label>
           <label class="block">
             Line of Business
-            <select
-              v-model="programs_selected"
+            <select v-model="programs_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-              @change="getPrograms"
-            >
+              required @change="getPrograms">
               <option disabled value="" selected>Please select one</option>
               <option v-for="program in programs" :key="program.id" :value="program.id">
                 {{ program.name }}
@@ -42,10 +34,8 @@
           </label>
           <label class="block">
             Type of Hiring
-            <select
-              v-model="type_of_hiring"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
+            <select v-model="type_of_hiring"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
               <option value="growth">Growth</option>
@@ -54,151 +44,92 @@
           </label>
           <label class="block">
             External Target
-            <input
-              type="number" v-bind:title="tooltipMessage"
-              v-model="external_target"
+            <input type="number" v-bind:title="tooltipMessage" v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncTotalTarget"
-            />
+              @change="syncTotalTarget" />
           </label>
           <label class="block">
             Internal Target
-            <input
-              type="number"
-              v-model="internal_target"
+            <input type="number" v-model="internal_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncTotalTarget"
-            />
+              @change="syncTotalTarget" />
           </label>
           <label class="block">
             Total Target
-            <input
-              type="number"
-              v-model="total_target"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="number" v-model="total_target" readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
-          <label class="block"
-            >Original Start Date
-            <input
-              type="date"
-              v-model="original_start_date"
+          <label class="block">Original Start Date
+            <input type="date" v-model="original_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
+              @change="syncNoticeDays" />
           </label>
 
-          <label class="block"
-            >WFM Requested Date
-            <input
-              type="date"
-              v-model="wfm_date_requested"
+          <label class="block">WFM Requested Date
+            <input type="date" v-model="wfm_date_requested"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
+              @change="syncNoticeDays" />
           </label>
           <label class="block">
             Notice Days
-            <input
-              type="number"
-              v-model="notice_days"
-              readonly
+            <input type="number" v-model="notice_days" readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeWeeks"
-            />
+              @change="syncNoticeWeeks" />
           </label>
           <label class="block">
             Notice Weeks
-            <input
-              type="text"
-              v-model="notice_weeks"
-              readonly
+            <input type="text" v-model="notice_weeks" readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncWithinSla"
-            />
+              @change="syncWithinSla" />
           </label>
           <label class="block">
             Start Weeks
-            <input
-              type="date"
-              v-model="weeks_start"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="date" v-model="weeks_start" readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">
             Growth
-            <input
-              type="number"
-              v-model="growth"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="number" v-model="growth"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">
             Backfill
-            <input
-              type="number"
-              v-model="backfill"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="number" v-model="backfill"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
-          <label class="block"
-            >With ERF?
-            <select
-              v-model="with_erf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">With ERF?
+            <select v-model="with_erf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
           </label>
-          <label class="block"
-            >Category
-            <select
-              v-model="category"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">Category
+            <select v-model="category"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
               <option value="confirm">Confirm</option>
             </select>
 
           </label>
-          <label class="block"
-            >Within SLA?
-            <input
-              type="text"
-              v-model="within_sla"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+          <label class="block">Within SLA?
+            <input type="text" v-model="within_sla" readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
         </div>
         <div class="py-4">
-          <label class="block" v-if="notice_weeks < 5"
-            >Out of SLA Reason<textarea
-              type="text"
-              v-model="reason"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+          <label class="block" v-if="notice_weeks < 5">Out of SLA Reason<textarea type="text" v-model="reason"
+              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
-          <label class="block"
-            >Remarks<textarea
-              type="text"
-              v-model="remarks"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+          <label class="block">Remarks<textarea type="text" v-model="remarks"
+              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
         </div>
         <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
-          >
+          <button type="submit"
+            class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600">
             <i class="fa fa-save"></i> Save
           </button>
         </div>
@@ -224,9 +155,9 @@ export default {
       reason: [],
       category: "",
       notice_days: 0,
-      growth:"",
-      backfill:"",
-      weeks_start:"",
+      growth: "",
+      backfill: "",
+      weeks_start: "",
       sites: [],
       programs: [],
       tooltipMessage: 'External Target',
@@ -258,17 +189,17 @@ export default {
     this.getPrograms();
   },
   methods: {
-    syncTotalTarget: function(){
+    syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
     },
 
-    syncNoticeDays: function(){
+    syncNoticeDays: function () {
       this.notice_days = this.notice_days_computed;
     },
-    syncNoticeWeeks: function(){
+    syncNoticeWeeks: function () {
       this.notice_weeks = this.notice_weeks_computed;
     },
-    syncWithinSla: function(){
+    syncWithinSla: function () {
       this.within_sla = this.within_sla_computed;
     },
     async getSites() {
@@ -312,9 +243,9 @@ export default {
         within_sla: this.within_sla,
         remarks: this.remarks,
         reason: this.reason,
-        growth:this.growth,
-        backfill:this.backfill,
-        weeks_start:this.weeks_start,
+        growth: this.growth,
+        backfill: this.backfill,
+        weeks_start: this.weeks_start,
         approved_status: "pending",
         status: "ok",
         is_active: 1,
@@ -339,9 +270,9 @@ export default {
           this.within_sla = "";
           this.remarks = "";
           this.reason = "";
-          this.growth="";
-          this.backfill="";
-          this.weeks_start="";
+          this.growth = "";
+          this.backfill = "";
+          this.weeks_start = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";
@@ -357,6 +288,7 @@ export default {
 [title] {
   position: relative;
 }
+
 [title]:after {
   content: attr(title);
   position: absolute;
@@ -369,6 +301,7 @@ export default {
   padding: 5px;
   border-radius: 5px;
 }
+
 [title]:before {
   content: '';
   position: absolute;
@@ -379,5 +312,4 @@ export default {
   border-style: solid;
   border-color: transparent transparent black transparent;
 }
-
 </style>

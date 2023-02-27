@@ -6,6 +6,13 @@
       </h1>
     </div>
   </header>
+  <div class="flex float-right py-8 pr-8">
+    <router-link  to="/addcapfile">
+    <button class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600">
+      <i class="fa fa-folder"></i> Add
+    </button>
+  </router-link>
+  </div>
   <div class="py-8">
     <div class="pl-8 pr-8 w-full overflow-y-auto overflow-x-auto">
       <table class="w-full table-auto text-white">
@@ -153,5 +160,4 @@
     </div>
   </div>
 </template>
-<style>
-</style>
+<style></style>
