@@ -42,7 +42,7 @@ class CreateClassesTable extends Migration
             $table->string('update_status')->nullable();
             $table->string('approved_status');
             $table->string('with_erf');
-            $table->unsignedBigInteger('weeks_start')->nullable();
+            $table->string('weeks_start')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('cancelled_by')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();

@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DateRange extends Model
 {
-    use HasFactory;
+    protected $fillable = [
+        'range',
+    ];
+
+    public function classes()
+    {
+        return $this->belongsTo(Classes::class);
+    }
 }
