@@ -6,7 +6,7 @@
       </h1>
     </div>
   </header>
-  <div class="py-8">
+  <div class="py-8 px-12">
     <form @submit.prevent="addClass">
       <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
@@ -51,7 +51,6 @@
           <label class="block">
             Internal Target
             <input type="number" v-model="internal_target"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget" />
           </label>
           <label class="block">
@@ -84,7 +83,7 @@
           </label>
           <label class="block">
             Start Weeks
-            <input type="date" v-model="weeks_start" readonly
+            <input type="date" v-model="weeks_start" 
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">

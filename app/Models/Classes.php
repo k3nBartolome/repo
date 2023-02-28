@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Sla_reason;
 
 class Classes extends Model
 {
@@ -55,7 +56,7 @@ class Classes extends Model
         return $this->belongsTo(Program::class);
     }
 
-    public function slaReason()
+    public function sla_reason()
     {
         return $this->hasMany(Sla_reason::class);
     }

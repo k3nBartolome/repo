@@ -9,10 +9,26 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller {
 
-    public function index() {
-
-        return ClassesResource::collection(Classes::all());
+    public function index()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 2)
+                        ->get();
+    
+        /* $classesData = $classes->map(function ($class) {
+            return [
+                'id' => $class->id,
+                'site_name' => $class->site->name,
+                'program_name' => $class->program->name,
+            ];
+        }); */
+    
+        return response()->json([
+            'classes' => $classes,
+        ]);
     }
+    
+
 
     public function show( Classes $class ) {
         $class->load( 'sla_reason' );
@@ -51,7 +67,7 @@ class ClassesController extends Controller {
         $class = Classes::create( $request->all() );
 
         $slaReason = new Sla_reason( [ 'reason' => $request->input( 'reason' ) ] );
-        $slaReason->class_id = $class->id;
+        $slaReason->classes_id = $class->id;
         $slaReason->save();
 
         return new ClassesResource( $class );

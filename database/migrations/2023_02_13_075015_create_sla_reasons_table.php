@@ -16,9 +16,9 @@ class CreateSlaReasonsTable extends Migration
         Schema::create('sla_reasons', function (Blueprint $table) {
             $table->id();
             $table->string('reason')->nullable();
-            $table->unsignedBigInteger('class_id')->nullable();
+            $table->unsignedBigInteger('classes_id')->nullable();
             $table->timestamps();
-            $table->foreign('class_id')->references('id')->on('classes')->onDelete('cascade');
+            $table->foreign('classes_id')->references('id')->on('classes')->onDelete('cascade');
         });
     }
 
