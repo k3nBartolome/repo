@@ -15,6 +15,7 @@ class CreateDateRangesTable extends Migration
     {
         Schema::create('date_ranges', function (Blueprint $table) {
             $table->id();
+            $table->range();
             $table->timestamps();
         });
     }

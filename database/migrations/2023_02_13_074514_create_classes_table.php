@@ -35,13 +35,14 @@ class CreateClassesTable extends Migration
             $table->string('reason_for_counter_proposal')->nullable();
             $table->string('remarks');
             $table->string('status');
+            $table->string('category');
             $table->string('type_of_hiring');
             $table->integer('backfill')->nullable();
             $table->integer('growth')->nullable();
-            $table->date('weeks_start')->nullable();
             $table->string('update_status')->nullable();
             $table->string('approved_status');
             $table->string('with_erf');
+            $table->unsignedBigInteger('weeks_start')->nullable();
             $table->unsignedBigInteger('approved_by')->nullable();
             $table->unsignedBigInteger('cancelled_by')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
@@ -52,6 +53,10 @@ class CreateClassesTable extends Migration
             $table->timestamps();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('approved_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

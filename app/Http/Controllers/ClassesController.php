@@ -1,42 +1,536 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\Sla_reason;
-use App\Http\Resources\ClassesResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
-class ClassesController extends Controller {
-
+class ClassesController extends Controller
+{
     public function index()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 2)
-                        ->get();
-    
-        /* $classesData = $classes->map(function ($class) {
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
+        $classesData = $classes->map(function ($class) {
             return [
                 'id' => $class->id,
                 'site_name' => $class->site->name,
                 'program_name' => $class->program->name,
+                'type_of_hiring' => $class->type_of_hiring,
+                'external_target' => $class->external_target,
+                'internal_target' => $class->internal_target,
+                'total_target' => $class->total_target,
+                'original_start_date' => $class->original_start_date,
+                'wfm_date_requested' => $class->wfm_date_requested,
+                'notice_days' => $class->notice_days,
+                'notice_weeks' => $class->notice_weeks,
+                'weeks_start' => $class->weeks_start,
+                'growth' => $class->growth,
+                'backfill' => $class->backfill,
+                'with_erf' => $class->with_erf,
+                'category' => $class->category,
+                'remarks' => $class->remarks,
+                'within_sla' => $class->within_sla,
+                'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+                'created_at' => $class->created_at,
+                'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+                'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+                'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+                'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+                'is_active' => $class->is_active,
+                'approved_status' => $class->approved_status,
+                'status' => $class->status,
+                'is_active' => $class->is_active,
             ];
-        }); */
-    
+        });
+
         return response()->json([
-            'classes' => $classes,
+            'classes' => $classesData,
         ]);
     }
-    
 
+    public function clark()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 1)
+                        ->get();
 
-    public function show( Classes $class ) {
-        $class->load( 'sla_reason' );
-        return new ClassesResource( $class );
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
     }
 
-    public function store( Request $request ) {
-        $validator = Validator::make( $request->all(), [
+    public function quezoncity()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 2)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function bridgetowne()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 3)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function makati()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 4)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function moa()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 5)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function dvsm()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 6)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function dvrob()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 7)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function dvdelta()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 8)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function dvcentral()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 9)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function dfc()
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program'])
+                        ->where('site_id', 10)
+                        ->get();
+        $classesData = $classes->map(function ($class) {
+            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
+
+            return [
+            'id' => $class->id,
+            'site_name' => $class->site->name,
+            'program_name' => $class->program->name,
+            'type_of_hiring' => $class->type_of_hiring,
+            'external_target' => $class->external_target,
+            'internal_target' => $class->internal_target,
+            'total_target' => $class->total_target,
+            'original_start_date' => $class->original_start_date,
+            'wfm_date_requested' => $class->wfm_date_requested,
+            'notice_days' => $class->notice_days,
+            'notice_weeks' => $class->notice_weeks,
+            'weeks_start' => $class->weeks_start,
+            'growth' => $class->growth,
+            'backfill' => $class->backfill,
+            'with_erf' => $class->with_erf,
+            'category' => $class->category,
+            'remarks' => $class->remarks,
+            'within_sla' => $class->within_sla,
+            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
+            'created_at' => $class->created_at,
+            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
+            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
+            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
+            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
+            'is_active' => $class->is_active,
+            'approved_status' => $class->approved_status,
+            'status' => $class->status,
+            'is_active' => $class->is_active,
+    ];
+        });
+
+        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+
+        return response()->json([
+            'classes' => $groupedData,
+        ]);
+    }
+
+    public function show(Classes $class)
+    {
+        $class->load('sla_reason');
+
+        return new ClassesResource($class);
+    }
+
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'notice_weeks' => 'required',
             'notice_days' => 'required',
             'external_target' => 'required',
@@ -54,27 +548,29 @@ class ClassesController extends Controller {
             'site_id' => 'required',
             'created_by' => 'required',
             'is_active' => 'required',
-            'weeks_start'=>'required',
-            'backfill'=>'required',
-            'growth'=>'required',
-            'reason' => 'nullable'
-        ] );
+            'weeks_start' => 'required',
+            'backfill' => 'required',
+            'growth' => 'required',
+            'category' => 'required',
+            'reason' => 'nullable',
+        ]);
 
-        if ( $validator->fails() ) {
-            return response()->json( [ 'error' => $validator->errors() ], 400 );
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $class = Classes::create( $request->all() );
+        $class = Classes::create($request->all());
 
-        $slaReason = new Sla_reason( [ 'reason' => $request->input( 'reason' ) ] );
+        $slaReason = new Sla_reason(['reason' => $request->input('reason')]);
         $slaReason->classes_id = $class->id;
         $slaReason->save();
 
-        return new ClassesResource( $class );
+        return new ClassesResource($class);
     }
 
-    public function update( Request $request, Classes $class ) {
-        $validatedData = $request->validate( [
+    public function update(Request $request, Classes $class)
+    {
+        $validatedData = $request->validate([
             'notice_weeks' => 'required',
             'notice_days' => 'required',
             'external_target' => 'required',
@@ -92,46 +588,45 @@ class ClassesController extends Controller {
             'site_id' => 'required',
             'created_by' => 'required',
             'is_active' => 'required',
-            'reason'    =>'required'
-        ] );
+            'reason' => 'required',
+        ]);
 
-        if ( $validatedData[ 'name' ] ) {
-            $class->name = $validatedData[ 'name' ];
+        if ($validatedData['name']) {
+            $class->name = $validatedData['name'];
         }
 
-        if ( $validatedData[ 'description' ] ) {
-            $class->description = $validatedData[ 'description' ];
+        if ($validatedData['description']) {
+            $class->description = $validatedData['description'];
         }
 
         $class->save();
 
-        if ( $validatedData[ 'reason' ] ) {
-            $class->site_id = $validatedData[ 'site_id' ];
-            $class->program_id = $validatedData[ 'program_id' ];
-            $class->type_of_hiring = $validatedData[ 'type_of_hiring' ];
-            $class->external_target = $validatedData[ 'external_target' ];
-            $class->internal_target = $validatedData[ 'internal_target' ];
-            $class->total_target = $validatedData[ 'total_target' ];
-            $class->original_start_date = $validatedData[ 'original_start_date' ];
-            $class->wfm_requested_date = $validatedData[ 'wfm_requested_date' ];
-            $class->notice_days = $validatedData[ 'notice_days' ];
-            $class->notice_weeks = $validatedData[ 'notice_weeks' ];
-            $class->with_erf = $validatedData[ 'with_erf' ];
-            $class->category = $validatedData[ 'category' ];
-            $class->within_sla = $validatedData[ 'within_sla' ];
-            $class->approved_status = $validatedData[ 'approved_status' ];
-            $class->created_by = $validatedData[ 'updated_by' ];
-            $class->is_active = $validatedData[ 'is_active' ];
+        if ($validatedData['reason']) {
+            $class->site_id = $validatedData['site_id'];
+            $class->program_id = $validatedData['program_id'];
+            $class->type_of_hiring = $validatedData['type_of_hiring'];
+            $class->external_target = $validatedData['external_target'];
+            $class->internal_target = $validatedData['internal_target'];
+            $class->total_target = $validatedData['total_target'];
+            $class->original_start_date = $validatedData['original_start_date'];
+            $class->wfm_requested_date = $validatedData['wfm_requested_date'];
+            $class->notice_days = $validatedData['notice_days'];
+            $class->notice_weeks = $validatedData['notice_weeks'];
+            $class->with_erf = $validatedData['with_erf'];
+            $class->category = $validatedData['category'];
+            $class->within_sla = $validatedData['within_sla'];
+            $class->approved_status = $validatedData['approved_status'];
+            $class->created_by = $validatedData['updated_by'];
+            $class->is_active = $validatedData['is_active'];
         }
 
-        return new ClassesResource( $class );
+        return new ClassesResource($class);
     }
 
-    public function destroy( Classes $class ) {
+    public function destroy(Classes $class)
+    {
         $class->delete();
 
-        return response( null, 204 );
+        return response(null, 204);
     }
 }
-
-?>

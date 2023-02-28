@@ -54,4 +54,20 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Sla_reason');
     }
+    public function created_by()
+    {
+        return $this->hasMany('App\Models\Class', 'created_by');
+    }
+    public function approved_by()
+    {
+        return $this->hasMany('App\Models\Class', 'approved_by');
+    }
+    public function cancelled_by()
+    {
+        return $this->hasMany('App\Models\Class', 'cancelled_by');
+    }
+    public function updated_by()
+    {
+        return $this->hasMany('App\Models\Class', 'created_by');
+    }
 }

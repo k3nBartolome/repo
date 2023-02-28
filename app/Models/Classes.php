@@ -6,8 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Sla_reason;
 
-class Classes extends Model
-{
+class Classes extends Model {
     use HasFactory;
 
     protected $fillable = [
@@ -34,6 +33,7 @@ class Classes extends Model
         'type_of_hiring',
         'backfill',
         'growth',
+        'category',
         'weeks_start',
         'update_status',
         'approved_status',
@@ -46,18 +46,32 @@ class Classes extends Model
         'updated_by',
     ];
 
-    public function site()
-    {
-        return $this->belongsTo(Site::class);
+    public function site() {
+        return $this->belongsTo( Site::class );
     }
 
-    public function program()
-    {
-        return $this->belongsTo(Program::class);
+    public function program() {
+        return $this->belongsTo( Program::class );
     }
 
-    public function sla_reason()
-    {
-        return $this->hasMany(Sla_reason::class);
+    public function sla_reason() {
+        return $this->hasMany( Sla_reason::class );
     }
+
+    public function createdByUser() {
+        return $this->belongsTo( User::class, 'created_by' );
+    }
+
+    public function updatedByUser() {
+        return $this->belongsTo( User::class, 'updated_by' );
+    }
+
+    public function approvedByUser() {
+        return $this->belongsTo( User::class, 'approved_by' );
+    }
+
+    public function cancelledByUser() {
+        return $this->belongsTo( User::class, 'cancelled_by' );
+    }
+
 }
