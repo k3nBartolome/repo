@@ -13,38 +13,7 @@ class ClassesController extends Controller
     public function index()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
-        $classesData = $classes->map(function ($class) {
-            return [
-                'id' => $class->id,
-                'site_name' => $class->site->name,
-                'program_name' => $class->program->name,
-                'type_of_hiring' => $class->type_of_hiring,
-                'external_target' => $class->external_target,
-                'internal_target' => $class->internal_target,
-                'total_target' => $class->total_target,
-                'original_start_date' => $class->original_start_date,
-                'wfm_date_requested' => $class->wfm_date_requested,
-                'notice_days' => $class->notice_days,
-                'notice_weeks' => $class->notice_weeks,
-                'weeks_start' => $class->weeks_start,
-                'growth' => $class->growth,
-                'backfill' => $class->backfill,
-                'with_erf' => $class->with_erf,
-                'category' => $class->category,
-                'remarks' => $class->remarks,
-                'within_sla' => $class->within_sla,
-                'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-                'created_at' => $class->created_at,
-                'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-                'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-                'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-                'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-                'is_active' => $class->is_active,
-                'approved_status' => $class->approved_status,
-                'status' => $class->status,
-                'is_active' => $class->is_active,
-            ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         return response()->json([
             'classes' => $classesData,
@@ -57,45 +26,13 @@ class ClassesController extends Controller
                         ->where('site_id', 1)
                         ->get();
 
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function quezoncity()
@@ -103,46 +40,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 2)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function bridgetowne()
@@ -150,46 +54,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 3)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function makati()
@@ -197,46 +68,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 4)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function moa()
@@ -244,46 +82,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 5)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function dvsm()
@@ -291,46 +96,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 6)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function dvrob()
@@ -338,46 +110,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 7)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function dvdelta()
@@ -385,46 +124,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 8)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function dvcentral()
@@ -432,46 +138,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 9)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function dfc()
@@ -479,46 +152,13 @@ class ClassesController extends Controller
         $classes = Classes::with(['sla_reason', 'site', 'program'])
                         ->where('site_id', 10)
                         ->get();
-        $classesData = $classes->map(function ($class) {
-            $reasons = $class->sla_reason->pluck('reason')->implode(', ');
-
-            return [
-            'id' => $class->id,
-            'site_name' => $class->site->name,
-            'program_name' => $class->program->name,
-            'type_of_hiring' => $class->type_of_hiring,
-            'external_target' => $class->external_target,
-            'internal_target' => $class->internal_target,
-            'total_target' => $class->total_target,
-            'original_start_date' => $class->original_start_date,
-            'wfm_date_requested' => $class->wfm_date_requested,
-            'notice_days' => $class->notice_days,
-            'notice_weeks' => $class->notice_weeks,
-            'weeks_start' => $class->weeks_start,
-            'growth' => $class->growth,
-            'backfill' => $class->backfill,
-            'with_erf' => $class->with_erf,
-            'category' => $class->category,
-            'remarks' => $class->remarks,
-            'within_sla' => $class->within_sla,
-            'sla_reason' => $class->sla_reason->pluck('reason')->implode(', '),
-            'created_at' => $class->created_at,
-            'created_by' => $class->createdByUser ? $class->createdByUser->name : null,
-            'updated_by' => $class->updatedByUser ? $class->createdByUser->name : null,
-            'cancelled_by' => $class->cancelledByUser ? $class->createdByUser->name : null,
-            'approved_by' => $class->approvedByUser ? $class->createdByUser->name : null,
-            'is_active' => $class->is_active,
-            'approved_status' => $class->approved_status,
-            'status' => $class->status,
-            'is_active' => $class->is_active,
-    ];
-        });
+        $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-            'classes' => $groupedData,
-        ]);
+        'classes' => $groupedData,
+    ]);
     }
 
     public function show(Classes $class)

@@ -48,6 +48,7 @@
             <th class="px-1 py-2 ">Name</th>
             <th class="px-1 py-2 ">Description</th>
             <th class="px-1 py-2 ">Region</th>
+            <th class="px-1 py-2 ">Site Director</th>
             <th class="px-1 py-2 ">Created by</th>
             <th class="px-1 py-2 ">Created date</th>
             <th class="px-1 py-2 ">Updated by</th>
@@ -62,6 +63,7 @@
             <td class="px-1 py-2 ">{{ site.name }}</td>
             <td class="px-1 py-2 ">{{ site.description }}</td>
             <td class="px-1 py-2 ">{{ site.region }}</td>
+            <td class="px-1 py-2 ">{{ site.site_director }}</td>
             <td class="px-1 py-2 ">{{ site.created_by }}</td>
             <td class="px-1 py-2 ">{{ site.created_at }}</td>
             <td class="px-1 py-2 ">{{ site.updated_by }}</td>
