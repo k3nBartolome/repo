@@ -1,7 +1,4 @@
 <template>
-  <div class="py-8">
-    <div class="w-full pl-8 pr-8 overflow-x-scroll overflow-y-auto">
-      <table class="w-full text-white table-auto">
         <thead>
           <tr
             class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
@@ -77,77 +74,74 @@
           <tr
             class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
           >
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-4 py-1 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
-            <td class="px-1 py-2 border border-black"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-4 py-1 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
+            <td class="px-1 py-2 border border"></td>
           </tr>
         </tbody>
-      </table>
-    </div>
-  </div>
 </template>
 <script>
 import axios from "axios";

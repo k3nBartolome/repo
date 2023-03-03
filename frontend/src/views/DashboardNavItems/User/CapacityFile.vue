@@ -24,86 +24,85 @@
             <th class="px-10 py-1 truncate whitespace-no-wrap border">
               Line of Business
             </th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 1-Jan 7</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 8-Jan 14</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 15-Jan 21</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 22-Jan 28</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 1-7</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 8-14</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 15-21</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 22-28</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jan 29-Feb 4</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 5-Feb 11</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 12-Feb 18</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 19-Feb 25</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">29-Feb 4</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 5-11</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 12-18</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 19-25</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Feb 26-Mar 4</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 5-Mar 11</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 12-Mar 18</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 19-Mar 25</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">26-Mar 4</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 5-11</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 12-18</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 19-25</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Mar 26-Apr 1</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">April 2-Apr 8</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 9-Feb 15</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 16-Apr 22</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 23-Apr 29</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">26-Apr 1</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 2-8</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 9-15</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 16-22</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 23-29</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Apr 30-May 6</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 7-May 13</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 14-Jan 20</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 21-May 27</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">30-May 6</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 7-13</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 14-20</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 21-27</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">May</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">May 28-Jun 3</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">jun 4-Feb 10</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 11-Jun 17</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 18-Jun 24</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">28-Jun 3</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 4-10</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 11-17</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 18-24</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jun 25-Jul 1</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 2-Jul 8</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 8-Jul 15</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 16-Jul 22</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 23-Jul 29</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">25Jul1</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 2-8</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 8-15</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 16-22</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul 23-29</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Jul</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">July 30-Aug 5</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 6-Aug 12</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 13-Aug 19</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 20-Aug 26</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">30-Aug 5</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 6-12</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 13-19</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 20-26</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Aug 26-Sep 2</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 3-Sep 19</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 10-Sep 16</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 17-Sep 23</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 24-Sep 30</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">26-Sep 2</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 3-19</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 10-16</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 17-23</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep 24-30</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Sep</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 1-Oct 7</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 8-Oct 14</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 15-Oct 21</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 22-Oct 28</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 1-7</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 8-14</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 15-21</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 22-28</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Oct 29-Nov 4</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 5-Nov 11</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 12-Nov 18</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 19-Nov 25</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">29-Nov 4</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 5-11</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 12-18</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 19-25</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Nov 26-Dec 2</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 3-Dec 9</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 10-Dec 16</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 17-Dec 23</th>
-            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 18-Dec 30</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">26-Dec 2</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 3-9</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 10-16</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 17-23</th>
+            <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec 18-30</th>
             <th class="px-4 py-1 truncate whitespace-no-wrap border">Dec</th>
           </tr>
         </thead>
-        <tbody></tbody>
+        <Clark />
+        <QuezonCity />
+        <Bridgetowne />
+        <Makati />
+        <Moa />
+        <SmDv />
+        <RobDv />
+        <DeltaDv />
+        <CenDv />
+        <Dfc />
       </table>
     </div>
   </div>
-  <Clark />
-  <QuezonCity />
-  <Bridgetowne />
-  <Makati />
-  <Moa />
-  <SmDv />
-  <RobDv />
-  <DeltaDv />
-  <CenDv />
-  <Dfc />
 </template>
 <script>
 import Clark from "../User/Capfile/ClarkTable.vue";

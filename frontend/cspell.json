@@ -9,15 +9,18 @@
         "admindashboard",
         "axios",
         "BRIDGETOWNE",
+        "BRIGHTSPEED",
         "capfile",
         "clarks",
         "classs",
+        "CRIS",
         "Fullname",
         "hahahaassasa",
         "Loggedin",
         "maagerdashboard",
         "MAKATI",
         "managerdashboard",
+        "MODIVCARE",
         "persistedstate",
         "programmanagement",
         "Pushback",
@@ -27,7 +30,8 @@
         "vuejs",
         "vuex",
         "vxilogo",
-        "websanova"
+        "websanova",
+        "ZINUS"
     ],
     "ignoreWords": [],
     "import": []

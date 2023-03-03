@@ -238,7 +238,7 @@
           </label>
         </div>
         <div class="py-4">
-          <label class="block" v-if="notice_weeks < 5"
+          <label class="block" v-if="within_sla ==='Yes'"
             >Out of SLA Reason<textarea
               type="text"
               v-model="reason"

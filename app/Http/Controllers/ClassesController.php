@@ -22,19 +22,319 @@ class ClassesController extends Controller
 
     public function clark()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program'])
-                    ->where('site_id', 1)
-                    ->get();
+        $clark1 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 1)
+            ->get();
 
-        $classesData = ClassesResource::collection($classes);
+            $classesData = ClassesResource::collection($classes);
 
-        $groupedData = $classesData->groupBy([
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark2 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 2)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark3 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 3)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark4 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 4)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark5 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 5)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark6 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 6)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark7 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 7)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark8 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 8)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark9 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 9)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark10 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 10)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark11 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 11)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark12 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 12)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark13 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 13)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark14 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 14)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark15 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 15)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark16 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 1)
+            ->where('program_id', 16)
+            ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $clark17 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 1)
+        ->where('program_id', 17)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
         'weeks_start',
     ])->toArray();
 
+            return $groupedData;
+        };
+
+        $clark18 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 1)
+        ->where('program_id', 18)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+    ])->toArray();
+
+            return $groupedData;
+        };
+        $clark19 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 1)
+        ->where('program_id', 19)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+    ])->toArray();
+
+            return $groupedData;
+        };
+
+        $clark20 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 1)
+        ->where('program_id', 20)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+    ])->toArray();
+
+            return $groupedData;
+        };
+
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'clark1' => $clark1(),
+            'clark2' => $clark2(),
+            'clark3' => $clark3(),
+            'clark4' => $clark4(),
+            'clark5' => $clark5(),
+            'clark6' => $clark6(),
+            'clark7' => $clark7(),
+            'clark8' => $clark8(),
+            'clark9' => $clark9(),
+            'clark10' => $clark10(),
+            'clark11' => $clark11(),
+            'clark12' => $clark12(),
+            'clark13' => $clark13(),
+            'clark14' => $clark14(),
+            'clark15' => $clark15(),
+            'clark16' => $clark16(),
+            'clark17' => $clark17(),
+            'clark18' => $clark18(),
+            'clark19' => $clark19(),
+            'clark20' => $clark20(),
+        ]);
     }
 
     public function quezoncity()
