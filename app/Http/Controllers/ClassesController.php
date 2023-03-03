@@ -23,12 +23,14 @@ class ClassesController extends Controller
     public function clark()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 1)
-                        ->get();
+                    ->where('site_id', 1)
+                    ->get();
 
         $classesData = ClassesResource::collection($classes);
 
-        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+        $groupedData = $classesData->groupBy([
+        'weeks_start',
+    ])->toArray();
 
         return response()->json([
         'classes' => $groupedData,
