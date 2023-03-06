@@ -7,7 +7,7 @@
       </h1>
     </div>
   </header>
-  <div class="py-8 px-12">
+  <div class="px-12 py-8">
     <form @submit.prevent="addClass">
       <div
         class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
@@ -238,7 +238,7 @@
           </label>
         </div>
         <div class="py-4">
-          <label class="block" v-if="within_sla ==='Yes'"
+          <label class="block" v-if="within_sla ==='No'"
             >Out of SLA Reason<textarea
               type="text"
               v-model="reason"

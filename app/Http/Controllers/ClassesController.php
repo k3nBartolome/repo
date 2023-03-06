@@ -339,128 +339,428 @@ class ClassesController extends Controller
 
     public function quezoncity()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 2)
-                        ->get();
-        $classesData = ClassesResource::collection($classes);
+        $quezoncity1 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            ->where('site_id', 2)
+            ->where('program_id', 21)
+            ->get();
 
-        $groupedData = $classesData->groupBy('weeks_start')->toArray();
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+            'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity2 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 22)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity3 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 23)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity4 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 24)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity5 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 25)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity6 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 26)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity7 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 27)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity8 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 28)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+
+        $quezoncity9 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 29)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity10 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 30)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity11 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 31)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity12 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 32)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity13 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 33)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity14 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 34)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity15 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 35)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity16 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 36)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity17 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 37)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity18 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 38)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity19 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 39)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
+        $quezoncity20 = function () {
+            $classes = Classes::with(['sla_reason', 'site', 'program'])
+        ->where('site_id', 2)
+        ->where('program_id', 40)
+        ->get();
+
+            $classesData = ClassesResource::collection($classes);
+
+            $groupedData = $classesData->groupBy([
+        'weeks_start',
+        ])->toArray();
+
+            return $groupedData;
+        };
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'quezoncity1' => $quezoncity1(),
+            'quezoncity2' => $quezoncity2(),
+            'quezoncity3' => $quezoncity3(),
+            'quezoncity4' => $quezoncity4(),
+            'quezoncity5' => $quezoncity5(),
+            'quezoncity6' => $quezoncity6(),
+            'quezoncity7' => $quezoncity7(),
+            'quezoncity8' => $quezoncity8(),
+            'quezoncity9' => $quezoncity9(),
+            'quezoncity10' => $quezoncity10(),
+            'quezoncity11' => $quezoncity11(),
+            'quezoncity12' => $quezoncity12(),
+            'quezoncity13' => $quezoncity13(),
+            'quezoncity14' => $quezoncity14(),
+            'quezoncity15' => $quezoncity15(),
+            'quezoncity16' => $quezoncity16(),
+            'quezoncity17' => $quezoncity17(),
+            'quezoncity18' => $quezoncity18(),
+            'quezoncity19' => $quezoncity19(),
+            'quezoncity20' => $quezoncity20(),
+        ]);
     }
 
     public function bridgetowne()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 3)
-                        ->get();
+                            ->where('site_id', 3)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function makati()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 4)
-                        ->get();
+                            ->where('site_id', 4)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function moa()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 5)
-                        ->get();
+                            ->where('site_id', 5)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function dvsm()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 6)
-                        ->get();
+                            ->where('site_id', 6)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function dvrob()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 7)
-                        ->get();
+                            ->where('site_id', 7)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function dvdelta()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 8)
-                        ->get();
+                            ->where('site_id', 8)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function dvcentral()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 9)
-                        ->get();
+                            ->where('site_id', 9)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function dfc()
     {
         $classes = Classes::with(['sla_reason', 'site', 'program'])
-                        ->where('site_id', 10)
-                        ->get();
+                            ->where('site_id', 10)
+                            ->get();
         $classesData = ClassesResource::collection($classes);
 
         $groupedData = $classesData->groupBy('weeks_start')->toArray();
 
         return response()->json([
-        'classes' => $groupedData,
-    ]);
+            'classes' => $groupedData,
+        ]);
     }
 
     public function show(Classes $class)
