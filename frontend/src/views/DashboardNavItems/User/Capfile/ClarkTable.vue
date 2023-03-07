@@ -1,4 +1,3 @@
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <thead>
     <tr class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
@@ -276,7 +275,7 @@
         {{ clark23.total_target }}
       </td>
     </template>
-  </tbody>
+</tbody>
 </template>
 <script>
 import axios from "axios";
