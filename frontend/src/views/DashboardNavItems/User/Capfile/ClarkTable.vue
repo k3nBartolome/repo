@@ -69,222 +69,213 @@
       <th class="px-1 py-2 border"></th>
     </tr>
   </thead>
-  <tbody
-    v-for="(clark1, weeksStart) in groupedData1"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">AT&T BB MULTI SERVICE</td>
-    <td class="px-1 py-2 border" v-for="classA1 in clark1" :key="clark1.id">{{ classA1.total_target }}</td></tbody>
-  <tbody
-    v-for="(clark2, weeksStart) in groupedData2"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+    <template v-for="(clark1, weeksStart) in groupedData1" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark1 in clark1" :key="clark1.id">
+        {{ clark1.total_target }}
+      </td>
+    </template>
+  </tbody>
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY BUY PHONE</td>
-    <td class="px-1 py-2 border" v-for="clark2 in clark2" :key="clark2.id">
-      {{ clark2.total_target }}
-    </td>
+    <template v-for="(clark2, weeksStart) in groupedData2" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark2 in clark2" :key="clark2.id">
+        {{ clark2.total_target }}
+      </td>
+      td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark3, weeksStart) in groupedData3"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY BUY CHAT</td>
-    <td class="px-1 py-2 border" v-for="clark3 in clark3" :key="clark3.id">
-      {{ clark3.total_target }}
-    </td>
+    <template v-for="(clark3, weeksStart) in groupedData3" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark3 in clark3" :key="clark3.id">
+        {{ clark3.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark4, weeksStart) in groupedData4"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY SELL PHONE</td>
-    <td class="px-1 py-2 border" v-for="clark4 in clark4" :key="clark4.id">
-      {{ clark4.total_target }}
-    </td>
+    <template v-for="(clark4, weeksStart) in groupedData4" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark4 in clark4" :key="clark4.id">
+        {{ clark4.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark5, weeksStart) in groupedData5"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY SELL CHAT</td>
-    <td class="px-1 py-2 border" v-for="clark5 in clark5" :key="clark5.id">
-      {{ clark5.total_target }}
-    </td>
+    <template v-for="(clark5, weeksStart) in groupedData5" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark5 in clark5" :key="clark5.id">
+        {{ clark5.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark6, weeksStart) in groupedData6"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">ZINUS</td>
-    <td class="px-1 py-2 border" v-for="clark6 in clark6" :key="clark6.id">
-      {{ clark6.total_target }}
-    </td>
+    <template v-for="(clark6, weeksStart) in groupedData6" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark6 in clark6" :key="clark6.id">
+        {{ clark6.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark7, weeksStart) in groupedData7"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">MODIVCARE FULL TIME</td>
-    <td class="px-1 py-2 border" v-for="clark7 in clark7" :key="clark7.id">
-      {{ clark7.total_target }}
-    </td>
+    <template v-for="(clark7, weeksStart) in groupedData7" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark7 in clark7" :key="clark7.id">
+        {{ clark7.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark8, weeksStart) in groupedData8"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">COMCAST SPECIAL PROJECT</td>
-    <td class="px-1 py-2 border" v-for="clark8 in clark8" :key="clark8.id">
-      {{ clark8.total_target }}
-    </td>
+    <template v-for="(clark8, weeksStart) in groupedData8" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark8 in clark8" :key="clark8.id">
+        {{ clark8.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark9, weeksStart) in groupedData9"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">LUMEN/CRIS PHQ1</td>
-    <td class="px-1 py-2 border" v-for="clark9 in clark9" :key="clark9.id">
-      {{ clark9.total_target }}
-    </td>
+    <template v-for="(clark9, weeksStart) in groupedData9" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark9 in clark9" :key="clark9.id">
+        {{ clark9.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark10, weeksStart) in groupedData10"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">ENS Q1</td>
-    <td class="px-1 py-2 border" v-for="clark10 in clark10" :key="clark10.id">
-      {{ clark10.total_target }}
-    </td>
+    <template v-for="(clark10, weeksStart) in groupedData10" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark10 in clark10" :key="clark10.id">
+        {{ clark10.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark11, weeksStart) in groupedData11"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">CRIS Q2A</td>
-    <td class="px-1 py-2 border" v-for="clark11 in clark11" :key="clark11.id">
-      {{ clark11.total_target }}
-    </td>
+    <template v-for="(clark11, weeksStart) in groupedData11" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark11 in clark11" :key="clark11.id">
+        {{ clark11.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark12, weeksStart) in groupedData12"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">CRIS Q2B</td>
-    <td class="px-1 py-2 border" v-for="clark12 in clark12" :key="clark12.id">
-      {{ clark12.total_target }}
-    </td>
+    <template v-for="(clark12, weeksStart) in groupedData12" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark12 in clark12" :key="clark12.id">
+        {{ clark12.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark13, weeksStart) in groupedData13"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">FIS</td>
-    <td class="px-1 py-2 border" v-for="clark13 in clark13" :key="clark13.id">
-      {{ clark13.total_target }}
-    </td>
+    <template v-for="(clark13, weeksStart) in groupedData13" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark13 in clark13" :key="clark13.id">
+        {{ clark13.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark14, weeksStart) in groupedData14"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">BRIGHTSPEED T1</td>
-    <td class="px-1 py-2 border" v-for="clark14 in clark14" :key="clark14.id">
-      {{ clark14.total_target }}
-    </td>
+    <template v-for="(clark14, weeksStart) in groupedData14" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark14 in clark14" :key="clark14.id">
+        {{ clark14.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark15, weeksStart) in groupedData15"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">BRIGHTSPEED 2A</td>
-    <td class="px-1 py-2 border" v-for="clark15 in clark15" :key="clark15.id">
-      {{ clark15.total_target }}
-    </td>
+    <template v-for="(clark15, weeksStart) in groupedData15" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark15 in clark15" :key="clark15.id">
+        {{ clark15.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark16, weeksStart) in groupedData16"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
-    <td class="px-1 py-2 border">BRIGHTSPEED 2A</td>
-    <td class="px-1 py-2 border" v-for="clark16 in clark16" :key="clark16.id">
-      {{ clark16.total_target }}
-    </td>
+    <td class="px-1 py-2 border">BRIGHTSPEED ACQ</td>
+    <template v-for="(clark16, weeksStart) in groupedData16" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark16 in clark16" :key="clark16.id">
+        {{ clark16.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark17, weeksStart) in groupedData17"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">COMCAST XM T1</td>
-    <td class="px-1 py-2 border" v-for="clark17 in clark17" :key="clark17.id">
-      {{ clark17.total_target }}
-    </td>
+    <template v-for="(clark17, weeksStart) in groupedData17" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark17 in clark17" :key="clark17.id">
+        {{ clark17.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark18, weeksStart) in groupedData18"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">COMCAST NED 3P</td>
-    <td class="px-1 py-2 border" v-for="clark18 in clark18" :key="clark18.id">
-      {{ clark18.total_target }}
-    </td>
+    <template v-for="(clark18, weeksStart) in groupedData18" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark18 in clark18" :key="clark18.id">
+        {{ clark18.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark19, weeksStart) in groupedData19"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">COMCAST NED BILLING</td>
-    <td class="px-1 py-2 border" v-for="clark19 in clark19" :key="clark19.id">
-      {{ clark19.total_target }}
-    </td>
+    <template v-for="(clark19, weeksStart) in groupedData19" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark19 in clark19" :key="clark19.id">
+        {{ clark19.total_target }}
+      </td>
+    </template>
   </tbody>
-  <tbody
-    v-for="(clark20, weeksStart) in groupedData20"
-    :key="weeksStart"
-    class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-  >
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
-    <td class="px-1 py-2 border">COMCAST DIGITAL CARE</td>
-    <td class="px-1 py-2 border" v-for="clark20 in clark20" :key="clark20.id">
-      {{ clark20.total_target }}
-    </td>
+    <td class="px-1 py-2 border">COMCAST XM BILLING</td>
+    <template v-for="(clark20, weeksStart) in groupedData20" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark20 in clark20" :key="clark20.id">
+        {{ clark20.total_target }}
+      </td>
+    </template>
+  </tbody>
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
+    <td class="px-1 py-2 border">CLARK</td>
+    <td class="px-1 py-2 border">HYOSUNG</td>
+    <template v-for="(clark21, weeksStart) in groupedData21" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark21 in clark21" :key="clark21.id">
+        {{ clark21.total_target }}
+      </td>
+    </template>
+  </tbody>
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
+    <td class="px-1 py-2 border">CLARK</td>
+    <td class="px-1 py-2 border">DOORDASH</td>
+    <template v-for="(clark22, weeksStart) in groupedData22" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark22 in clark22" :key="clark22.id">
+        {{ clark22.total_target }}
+      </td>
+    </template>
+  </tbody>
+  <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
+    <td class="px-1 py-2 border">CLARK</td>
+    <td class="px-1 py-2 border">DUN & BRADSTREET</td>
+    <template v-for="(clark23, weeksStart) in groupedData23" :key="weeksStart">
+      <td class="px-1 py-2 border" v-for="clark23 in clark23" :key="clark23.id">
+        {{ clark23.total_target }}
+      </td>
+    </template>
   </tbody>
 </template>
 <script>
@@ -312,6 +303,9 @@ export default {
       groupedData18: [],
       groupedData19: [],
       groupedData20: [],
+      groupedData21: [],
+      groupedData22: [],
+      groupedData23: [],
     };
   },
   mounted() {
@@ -343,6 +337,9 @@ export default {
           this.groupedData18 = response.data.clark18;
           this.groupedData19 = response.data.clark19;
           this.groupedData20 = response.data.clark20;
+          this.groupedData21 = response.data.clark21;
+          this.groupedData22 = response.data.clark22;
+          this.groupedData23 = response.data.clark23;
           console.log(response.data.data);
         })
         .catch((error) => {
