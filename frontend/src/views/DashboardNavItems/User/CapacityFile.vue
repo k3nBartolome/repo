@@ -20,7 +20,7 @@
       <table class="w-full text-white table-auto">
         <thead>
           <tr class="text-left bg-orange-600 border-2 border-orange-600 border-solid">
-            <th class="px-10 py-1 truncate whitespace-no-wrap border">Site</th>
+            <th class="px-16 py-1 truncate whitespace-no-wrap border">Site</th>
             <th class="px-10 py-1 truncate whitespace-no-wrap border">
               Line of Business
             </th>
