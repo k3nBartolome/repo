@@ -9,6 +9,7 @@ class ClassesResource extends JsonResource
     public function toArray($request)
     {
         $reasons = $this->sla_reason->pluck('reason')->implode(', ');
+        $dateRange = $this->dateRange ? $this->dateRange->date_range : null;
 
         return [
             'id' => $this->id,
@@ -22,7 +23,7 @@ class ClassesResource extends JsonResource
             'wfm_date_requested' => $this->wfm_date_requested,
             'notice_days' => $this->notice_days,
             'notice_weeks' => $this->notice_weeks,
-            'date_range' => $this->dateRange ? $this->dateRange->date_range : null,
+            'date_range' => $dateRange,
             'growth' => $this->growth,
             'backfill' => $this->backfill,
             'with_erf' => $this->with_erf,

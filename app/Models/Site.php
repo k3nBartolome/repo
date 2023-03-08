@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
 class Site extends Model
 {
@@ -17,7 +16,7 @@ class Site extends Model
         'region',
         'created_by',
         'updated_by',
-        'is_active'
+        'is_active',
     ];
 
     public function belongsToUser()
@@ -25,7 +24,8 @@ class Site extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function programs(){
+    public function programs()
+    {
         return $this->hasMany('App\Models\Program');
     }
 }

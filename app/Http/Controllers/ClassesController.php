@@ -12,7 +12,7 @@ class ClassesController extends Controller
 {
     public function index()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'DateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
         $classesData = ClassesResource::collection($classes);
 
         return response()->json([
@@ -23,20 +23,20 @@ class ClassesController extends Controller
     public function clark()
     {
         $clark1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 1)
             ->get();
             $classesData = ClassesResource::collection($classes);
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 2)
             ->get();
@@ -44,13 +44,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 3)
             ->get();
@@ -58,14 +58,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 4)
             ->get();
@@ -73,13 +73,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 5)
             ->get();
@@ -87,14 +87,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 6)
             ->get();
@@ -102,13 +102,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 7)
             ->get();
@@ -116,14 +116,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark8 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 8)
             ->get();
@@ -131,13 +131,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark9 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 9)
             ->get();
@@ -145,14 +145,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark10 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 10)
             ->get();
@@ -160,13 +160,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark11 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 11)
             ->get();
@@ -174,14 +174,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark12 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 12)
             ->get();
@@ -189,13 +189,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark13 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 13)
             ->get();
@@ -203,14 +203,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark14 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 14)
             ->get();
@@ -218,13 +218,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark15 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 15)
             ->get();
@@ -232,14 +232,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $clark16 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 16)
             ->get();
@@ -247,13 +247,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $clark17 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 17)
         ->get();
@@ -261,14 +261,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
 
         $clark18 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 18)
         ->get();
@@ -276,13 +276,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
         $clark19 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 19)
         ->get();
@@ -290,14 +290,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
 
         $clark20 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 20)
         ->get();
@@ -305,13 +305,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
         $clark21 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 21)
         ->get();
@@ -319,13 +319,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
         $clark22 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 22)
         ->get();
@@ -333,13 +333,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
         };
         $clark23 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 1)
         ->where('program_id', 23)
         ->get();
@@ -347,7 +347,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
     ])->toArray();
 
             return $groupedData;
@@ -383,7 +383,7 @@ class ClassesController extends Controller
     public function quezoncity()
     {
         $quezoncity1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 2)
             ->where('program_id', 24)
             ->get();
@@ -391,13 +391,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-            'weeks_start',
+            'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 25)
         ->get();
@@ -405,14 +405,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 26)
         ->get();
@@ -420,14 +420,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 27)
         ->get();
@@ -435,14 +435,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 28)
         ->get();
@@ -450,14 +450,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 29)
         ->get();
@@ -465,14 +465,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 30)
         ->get();
@@ -480,14 +480,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity8 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 31)
         ->get();
@@ -495,14 +495,14 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
 
         $quezoncity9 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 32)
         ->get();
@@ -510,13 +510,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity10 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 33)
         ->get();
@@ -524,13 +524,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity11 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 34)
         ->get();
@@ -538,13 +538,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity12 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 35)
         ->get();
@@ -552,13 +552,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity13 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 36)
         ->get();
@@ -566,13 +566,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity14 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 37)
         ->get();
@@ -580,13 +580,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity15 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 38)
         ->get();
@@ -594,13 +594,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity16 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 39)
         ->get();
@@ -608,13 +608,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity17 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 40)
         ->get();
@@ -622,13 +622,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity18 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 41)
         ->get();
@@ -636,13 +636,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity19 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 42)
         ->get();
@@ -650,13 +650,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity20 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 43)
         ->get();
@@ -664,13 +664,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity21 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 44)
         ->get();
@@ -678,13 +678,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity22 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 45)
         ->get();
@@ -692,13 +692,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $quezoncity23 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 2)
         ->where('program_id', 46)
         ->get();
@@ -706,7 +706,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -742,7 +742,7 @@ class ClassesController extends Controller
     public function bridgetowne()
     {
         $bridgetowne1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 47)
         ->get();
@@ -750,13 +750,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 48)
         ->get();
@@ -764,13 +764,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 49)
         ->get();
@@ -778,13 +778,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 50)
         ->get();
@@ -792,13 +792,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 51)
         ->get();
@@ -806,13 +806,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 52)
         ->get();
@@ -820,13 +820,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 53)
         ->get();
@@ -834,13 +834,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne8 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 54)
         ->get();
@@ -848,13 +848,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne9 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 55)
         ->get();
@@ -862,13 +862,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne10 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 56)
         ->get();
@@ -876,13 +876,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $bridgetowne11 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 3)
         ->where('program_id', 57)
         ->get();
@@ -890,7 +890,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -914,7 +914,7 @@ class ClassesController extends Controller
     public function makati()
     {
         $makati1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 58)
         ->get();
@@ -922,13 +922,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 59)
         ->get();
@@ -936,13 +936,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 60)
         ->get();
@@ -950,13 +950,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 61)
         ->get();
@@ -964,13 +964,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 62)
         ->get();
@@ -978,13 +978,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 63)
         ->get();
@@ -992,13 +992,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 64)
         ->get();
@@ -1006,13 +1006,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati8 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 65)
         ->get();
@@ -1020,13 +1020,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati9 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 66)
         ->get();
@@ -1034,13 +1034,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati10 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 67)
         ->get();
@@ -1048,13 +1048,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati11 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 67)
         ->get();
@@ -1062,13 +1062,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati12 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 68)
         ->get();
@@ -1076,13 +1076,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati13 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 69)
         ->get();
@@ -1090,13 +1090,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati14 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 70)
         ->get();
@@ -1104,13 +1104,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati15 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 71)
         ->get();
@@ -1118,13 +1118,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati16 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 72)
         ->get();
@@ -1132,13 +1132,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $makati17 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 4)
         ->where('program_id', 73)
         ->get();
@@ -1146,7 +1146,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1176,7 +1176,7 @@ class ClassesController extends Controller
     public function moa()
     {
         $moa1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 5)
         ->where('program_id', 74)
         ->get();
@@ -1184,13 +1184,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $moa2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 5)
         ->where('program_id', 75)
         ->get();
@@ -1198,13 +1198,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $moa3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 5)
         ->where('program_id', 76)
         ->get();
@@ -1212,13 +1212,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $moa4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 5)
         ->where('program_id', 77)
         ->get();
@@ -1226,13 +1226,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $moa5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 5)
         ->where('program_id', 78)
         ->get();
@@ -1240,7 +1240,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1258,7 +1258,7 @@ class ClassesController extends Controller
     public function dvsm()
     {
         $dvsm1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 79)
         ->get();
@@ -1266,13 +1266,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 80)
         ->get();
@@ -1280,13 +1280,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 81)
         ->get();
@@ -1294,13 +1294,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 82)
         ->get();
@@ -1308,13 +1308,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 83)
         ->get();
@@ -1322,13 +1322,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 84)
         ->get();
@@ -1336,13 +1336,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvsm7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 6)
         ->where('program_id', 85)
         ->get();
@@ -1350,7 +1350,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1370,7 +1370,7 @@ class ClassesController extends Controller
     public function dvrob()
     {
         $dvrob1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 86)
         ->get();
@@ -1378,13 +1378,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 87)
         ->get();
@@ -1392,13 +1392,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 88)
         ->get();
@@ -1406,13 +1406,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 89)
         ->get();
@@ -1420,13 +1420,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 90)
         ->get();
@@ -1434,13 +1434,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 91)
         ->get();
@@ -1448,13 +1448,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvrob7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 7)
         ->where('program_id', 92)
         ->get();
@@ -1462,7 +1462,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1482,7 +1482,7 @@ class ClassesController extends Controller
     public function dvdelta()
     {
         $dvdelta1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 93)
         ->get();
@@ -1490,13 +1490,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvdelta2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 94)
         ->get();
@@ -1504,13 +1504,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvdelta3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 95)
         ->get();
@@ -1518,13 +1518,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvdelta4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 96)
         ->get();
@@ -1532,13 +1532,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvdelta5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 97)
         ->get();
@@ -1546,13 +1546,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvdelta6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 8)
         ->where('program_id', 98)
         ->get();
@@ -1560,7 +1560,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1579,7 +1579,7 @@ class ClassesController extends Controller
     public function dvcentral()
     {
         $dvcentral1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 99)
         ->get();
@@ -1587,13 +1587,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 100)
         ->get();
@@ -1601,13 +1601,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 101)
         ->get();
@@ -1615,13 +1615,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 102)
         ->get();
@@ -1629,13 +1629,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 103)
         ->get();
@@ -1643,13 +1643,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 104)
         ->get();
@@ -1657,13 +1657,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral7 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 105)
         ->get();
@@ -1671,13 +1671,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral8 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 106)
         ->get();
@@ -1685,13 +1685,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral9 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 107)
         ->get();
@@ -1699,13 +1699,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral10 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 108)
         ->get();
@@ -1713,13 +1713,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral11 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 109)
         ->get();
@@ -1727,13 +1727,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral12 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 110)
         ->get();
@@ -1741,13 +1741,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral13 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 111)
         ->get();
@@ -1755,13 +1755,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral14 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 112)
         ->get();
@@ -1769,13 +1769,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral15 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 113)
         ->get();
@@ -1783,13 +1783,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral16 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 114)
         ->get();
@@ -1797,13 +1797,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral17 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 115)
         ->get();
@@ -1811,13 +1811,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral18 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 116)
         ->get();
@@ -1825,13 +1825,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral19 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 117)
         ->get();
@@ -1839,13 +1839,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral20 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 118)
         ->get();
@@ -1853,13 +1853,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral21 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 119)
         ->get();
@@ -1867,13 +1867,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral22 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 120)
         ->get();
@@ -1881,13 +1881,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral23 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 121)
         ->get();
@@ -1895,13 +1895,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral24 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 122)
         ->get();
@@ -1909,13 +1909,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dvcentral25 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 9)
         ->where('program_id', 123)
         ->get();
@@ -1923,7 +1923,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
@@ -1961,7 +1961,7 @@ class ClassesController extends Controller
     public function dfc()
     {
         $dfc1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 124)
         ->get();
@@ -1969,13 +1969,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dfc2 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 125)
         ->get();
@@ -1983,13 +1983,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dfc3 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 126)
         ->get();
@@ -1997,13 +1997,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dfc4 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 127)
         ->get();
@@ -2011,13 +2011,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dfc5 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 128)
         ->get();
@@ -2025,13 +2025,13 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;
         };
         $dfc6 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program'])
+            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
         ->where('site_id', 10)
         ->where('program_id', 129)
         ->get();
@@ -2039,7 +2039,7 @@ class ClassesController extends Controller
             $classesData = ClassesResource::collection($classes);
 
             $groupedData = $classesData->groupBy([
-        'weeks_start',
+        'date_range_id',
         ])->toArray();
 
             return $groupedData;

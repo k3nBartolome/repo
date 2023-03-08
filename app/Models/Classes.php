@@ -34,7 +34,7 @@ class Classes extends Model
         'backfill',
         'growth',
         'category',
-        'date_id',
+        'date_range_id',
         'update_status',
         'approved_status',
         'with_erf',
@@ -51,9 +51,9 @@ class Classes extends Model
         return $this->belongsTo(Site::class);
     }
 
-    public function dateRangeModel()
+    public function dateRange()
     {
-        return $this->belongsTo(DateRange::class);
+        return $this->belongsTo(DateRange::class, 'date_range_id');
     }
 
     public function program()
