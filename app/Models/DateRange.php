@@ -7,11 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class DateRange extends Model
 {
     protected $fillable = [
-        'range',
+        'date_range',
+        'month',
+        'year',
     ];
 
     public function classes()
     {
-        return $this->belongsTo(Classes::class);
+        return $this->hasMany(Classes::class);
     }
 }

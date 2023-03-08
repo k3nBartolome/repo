@@ -84,7 +84,6 @@
       <td class="px-1 py-2 border" v-for="clark2 in clark2" :key="clark2.id">
         {{ clark2.total_target }}
       </td>
-      td>
     </template>
   </tbody>
   <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">

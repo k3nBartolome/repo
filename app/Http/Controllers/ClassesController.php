@@ -12,7 +12,7 @@ class ClassesController extends Controller
 {
     public function index()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'DateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
         $classesData = ClassesResource::collection($classes);
 
         return response()->json([
@@ -27,9 +27,7 @@ class ClassesController extends Controller
             ->where('site_id', 1)
             ->where('program_id', 1)
             ->get();
-
             $classesData = ClassesResource::collection($classes);
-
             $groupedData = $classesData->groupBy([
             'weeks_start',
         ])->toArray();
@@ -2084,7 +2082,7 @@ class ClassesController extends Controller
             'site_id' => 'required',
             'created_by' => 'required',
             'is_active' => 'required',
-            'weeks_start' => 'required',
+            'date_range_id' => 'required',
             'backfill' => 'required',
             'growth' => 'required',
             'category' => 'required',

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Classes;
 
 class Sla_reason extends Model
 {
@@ -13,6 +12,7 @@ class Sla_reason extends Model
         'class_id',
         'reason',
     ];
+
     public function classes()
     {
         return $this->belongsTo(Classes::class);

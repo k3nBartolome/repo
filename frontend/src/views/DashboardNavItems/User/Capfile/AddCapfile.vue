@@ -116,77 +116,17 @@
             />
           </label>
           <label class="block">
-             Weeks Start
-              <select v-model="weeks_start"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+            Weeks Start
+            <select
+              v-model="date_selected"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+              @change="getDateRange"
+            >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="option in options" :key="option.id">{{ option.name }}
-                {{ option.label }}
+              <option v-for="daterange in daterange" :key="daterange.id" :value="daterange.id">
+                {{ daterange.date_range }}
               </option>
-              <option value="Jan 1-Jan 7</">Jan 1-Jan 7</option>
-              <option value="Jan 8-Jan 14">Jan 8-Jan 14</option>
-              <option value="Jan 15-Jan 21">Jan 15-Jan 21</option>
-              <option value="Jan 22-Jan 28">Jan 22-Jan 28</option>
-              <option value="Jan">Jan</option>
-              <option value="Jan 29-Feb 4">Jan 29-Feb 4</option>
-              <option value="Feb 5-Feb 11">Feb 5-Feb 11</option>
-              <option value="Feb 12-Feb 18">Feb 12-Feb 18</option>
-              <option value="Feb 19-Feb 25">Feb 19-Feb 25</option>
-              <option value="Feb">Feb</option>
-              <option value="Feb 26-Mar 4">Feb 26-Mar 4</option>
-              <option value="Mar 5-Mar 11">Mar 5-Mar 11</option>
-              <option value="Mar 12-Mar 18">Mar 12-Mar 18</option>
-              <option value="Mar 19-Mar 25">Mar 19-Mar 25</option>
-              <option value="Mar">Mar</option>
-              <option value="Mar 26-Apr 1">Mar 26-Apr 1</option>
-              <option value="April 2-Apr 8">April 2-Apr 8</option>
-              <option value="Apr 9-Feb 15">Apr 9-Feb 15</option>
-              <option value="Apr 16-Apr 22">Apr 16-Apr 22</option>
-              <option value="Apr 23-Apr 29">Apr 23-Apr 29</option>
-              <option value="Apr">Apr</option>
-              <option value="Apr 30-May 6">Apr 30-May 6</option>
-              <option value="May 7-May 13">May 7-May 13</option>
-              <option value="May 14-Jan 20">May 14-Jan 20</option>
-              <option value="May 21-May 27">May 21-May 27</option>
-              <option value="May">May</option>
-              <option value="May 28-Jun 3">May 28-Jun 3</option>
-              <option value="jun 4-Feb 10">jun 4-Feb 10</option>
-              <option value="Jun 11-Jun 17">Jun 11-Jun 17</option>
-              <option value="Jun 18-Jun 24">Jun 18-Jun 24</option>
-              <option value="Jun">Jun</option>
-              <option value="Jun 25-Jul 1">Jun 25-Jul 1</option>
-              <option value="Jul 2-Jul 8</">Jul 2-Jul 8</option>
-              <option value="Jul 8-Jul 15">Jul 8-Jul 15</option>
-              <option value="Jul 16-Jul 22">Jul 16-Jul 22</option>
-              <option value="Jul 23-Jul 29">Jul 23-Jul 29</option>
-              <option value="Jul">Jul</option>
-              <option value="July 30-Aug 5">July 30-Aug 5</option>
-              <option value="Aug 6-Aug 12">Aug 6-Aug 12</option>
-              <option value="Aug 13-Aug 19">Aug 13-Aug 19</option>
-              <option value="Aug 20-Aug 26">Aug 20-Aug 26</option>
-              <option value="Aug">Aug</option>
-              <option value="Aug 26-Sep 2">Aug 26-Sep 2</option>
-              <option value="Sep 3-Sep 19">Sep 3-Sep 19</option>
-              <option value="Sep 10-Sep 16">Sep 10-Sep 16</option>
-              <option value="Sep 17-Sep 23">Sep 17-Sep 23</option>
-              <option value="Sep 24-Sep 30">Sep 24-Sep 30</option>
-              <option value="Sep">Sep</option>
-              <option value="Oct 1-Oct 7</">Oct 1-Oct 7</option>
-              <option value="Oct 8-Oct 14">Oct 8-Oct 14</option>
-              <option value="Oct 15-Oct 21">Oct 15-Oct 21</option>
-              <option value="Oct 22-Oct 28">Oct 22-Oct 28</option>
-              <option value="Oct">Oct</option>
-              <option value="Oct 29-Nov 4">Oct 29-Nov 4</option>
-              <option value="Nov 5-Nov 11">Nov 5-Nov 11</option>
-              <option value="Nov 12-Nov 18">Nov 12-Nov 18</option>
-              <option value="Nov 19-Nov 25">Nov 19-Nov 25</option>
-              <option value="Nov">Nov</option>
-              <option value="Nov 26-Dec 2">Nov 26-Dec 2</option>
-              <option value="Dec 3-Dec 9</">Dec 3-Dec 9</option>
-              <option value="Dec 10-Dec 16">Dec 10-Dec 16</option>
-              <option value="Dec 17-Dec 23">Dec 17-Dec 23</option>
-              <option value="Dec 18-Dec 30">Dec 18-Dec 30</option>
-              <option value="Dec">Dec</option>
             </select>
           </label>
           <label class="block">
@@ -272,6 +212,7 @@ export default {
     return {
       sites_selected: "",
       programs_selected: "",
+      date_selected: "",
       type_of_hiring: "",
       external_target: "",
       internal_target: "",
@@ -285,73 +226,13 @@ export default {
       notice_days: 0,
       growth: "",
       backfill: "",
-      weeks_start: "",
-      options: [
-        { label: "Jan 1-Jan 7", value: "Jan 1-Jan 7" },
-        { label: "Jan 8-Jan 14", value: "Jan 8-Jan 14" },
-        { label: "Jan 15-Jan 21", value: "Jan 15-Jan 21" },
-        { label: "Jan 22-Jan 28", value: "Jan 22-Jan 28" },
-        { label: "Jan 29-Feb 4", value: "Jan 29-Feb 4" },
-        { label: "Feb 5-Feb 11", value: "Feb 5-Feb 11" },
-        { label: "Feb 12-Feb 18", value: "Feb 12-Feb 18" },
-        { label: "Feb 19-Feb 25", value: "Feb 19-Feb 25" },
-        { label: "Feb 26-Mar 4", value: "Feb 26-Mar 4" },
-        { label: "Mar 5-Mar 11", value: "Mar 5-Mar 11" },
-        { label: "Mar 12-Mar 18", value: "Mar 12-Mar 18" },
-        { label: "Mar 19-Mar 25", value: "Mar 19-Mar 25" },
-        { label: "Mar 26-Apr 1", value: "Mar 26-Apr 1" },
-        { label: "April 2-Apr 8", value: "April 2-Apr 8" },
-        { label: "Apr 9-Feb 15", value: "Apr 9-Feb 15" },
-        { label: "Apr 16-Apr 22", value: "Apr 16-Apr 22" },
-        { label: "Apr 23-Apr 29", value: "Apr 23-Apr 29" },
-        { label: "Apr 30-May 6", value: "Apr 30-May 6" },
-        { label: "May 7-May 13", value: "May 7-May 13" },
-        { label: "May 14-Jan 20", value: "May 14-Jan 20" },
-        { label: "May 21-May 27", value: "May 21-May 27" },
-        { label: "May 28-Jun 3", value: "May 28-Jun 3" },
-        { label: "jun 4-Feb 10", value: "jun 4-Feb 10" },
-        { label: "Jun 11-Jun 17", value: "Jun 11-Jun 17" },
-        { label: "Jun 18-Jun 24", value: "Jun 18-Jun 24" },
-        { label: "Jun 25-Jul 1", value: "Jun 25-Jul 1" },
-        { label: "Jul 2-Jul 8", value: "Jul 2-Jul 8" },
-        { label: "Jul 8-Jul 15", value: "Jul 8-Jul 15" },
-        { label: "Jul 16-Jul 22", value: "Jul 16-Jul 22" },
-        { label: "Jul 23-Jul 29", value: "Jul 23-Jul 29" },
-        { label: "July 30-Aug 5", value: "July 30-Aug 5" },
-        { label: "Aug 6-Aug 12", value: "Aug 6-Aug 12" },
-        { label: "Aug 13-Aug 19", value: "Aug 13-Aug 19" },
-        { label: "Aug 20-Aug 26", value: "Aug 20-Aug 26" },
-        { label: "Aug 26-Sep 2", value: "Aug 26-Sep 2" },
-        { label: "Sep 3-Sep 19", value: "Sep 3-Sep 19" },
-        { label: "Sep 10-Sep 16", value: "Sep 10-Sep 16" },
-        { label: "Sep 17-Sep 23", value: "Sep 17-Sep 23" },
-        { label: "Sep 24-Sep 30", value: "Sep 24-Sep 30" },
-        { label: "Oct 1-Oct 7", value: "Oct 1-Oct 7" },
-        { label: "Oct 8-Oct 14", value: "Oct 8-Oct 14" },
-        { label: "Oct 15-Oct 21", value: "Oct 15-Oct 21" },
-        { label: "Oct 22-Oct 28", value: "Oct 22-Oct 28" },
-        { label: "Oct 29-Nov 4", value: "Oct 29-Nov 4" },
-        { label: "Nov 5-Nov 11", value: "Nov 5-Nov 11" },
-        { label: "Nov 12-Nov 18", value: "Nov 12-Nov 18" },
-        { label: "Nov 19-Nov 25", value: "Nov 19-Nov 25" },
-        { label: "Nov 26-Dec 2", value: "Nov 26-Dec 2" },
-        { label: "Dec 3-Dec 9", value: "Dec 3-Dec 9" },
-        { label: "Dec 10-Dec 16", value: "Dec 10-Dec 16" },
-        { label: "Dec 17-Dec 23", value: "Dec 17-Dec 23" },
-        { label: "Dec 18-Dec 30", value: "Dec 18-Dec 30" },
-      ],
       sites: [],
+      daterange: [],
       programs: [],
       tooltipMessage: "External Target",
     };
   },
   computed: {
-    filteredOptions() {
-      const searchTerm = this.weeks_start.toLowerCase();
-      return this.options.filter((option) =>
-        option.label.toLowerCase().includes(searchTerm)
-      );
-    },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
       const internal = parseInt(this.internal_target) || 0;
@@ -375,6 +256,7 @@ export default {
     console.log("Component mounted.");
     this.getSites();
     this.getPrograms();
+    this.getDateRange();
   },
   methods: {
     syncTotalTarget: function () {
@@ -414,6 +296,18 @@ export default {
           console.log(error);
         });
     },
+    async getDateRange() {
+      console.log(this.date_selected);
+      await axios
+        .get("http://127.0.0.1:8000/api/daterange")
+        .then((response) => {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     addClass() {
       const formData = {
         site_id: this.sites_selected,
@@ -433,9 +327,9 @@ export default {
         reason: this.reason,
         growth: this.growth,
         backfill: this.backfill,
-        weeks_start: this.weeks_start,
+        date_range_id: this.date_selected,
         approved_status: "pending",
-        status: "ok",
+        status: "1",
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
@@ -460,7 +354,7 @@ export default {
           this.reason = "";
           this.growth = "";
           this.backfill = "";
-          this.weeks_start = "";
+          this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";

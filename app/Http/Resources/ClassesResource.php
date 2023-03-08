@@ -22,7 +22,7 @@ class ClassesResource extends JsonResource
             'wfm_date_requested' => $this->wfm_date_requested,
             'notice_days' => $this->notice_days,
             'notice_weeks' => $this->notice_weeks,
-            'weeks_start' => $this->weeks_start,
+            'date_range' => $this->dateRange ? $this->dateRange->date_range : null,
             'growth' => $this->growth,
             'backfill' => $this->backfill,
             'with_erf' => $this->with_erf,
