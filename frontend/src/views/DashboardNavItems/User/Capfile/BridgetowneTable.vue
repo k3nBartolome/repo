@@ -78,7 +78,7 @@
         v-for="bridgetowne1 in bridgetowne1"
         :key="bridgetowne1.id"
       >
-        {{ bridgetowne1.total_target }}
+       <button> {{ bridgetowne1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -91,7 +91,7 @@
         v-for="bridgetowne2 in bridgetowne2"
         :key="bridgetowne2.id"
       >
-        {{ bridgetowne2.total_target }}
+       <button> {{ bridgetowne2.total_target }}</button>
       </td>
       td>
     </template>
@@ -105,7 +105,7 @@
         v-for="bridgetowne3 in bridgetowne3"
         :key="bridgetowne3.id"
       >
-        {{ bridgetowne3.total_target }}
+       <button> {{ bridgetowne3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -118,7 +118,7 @@
         v-for="bridgetowne4 in bridgetowne4"
         :key="bridgetowne4.id"
       >
-        {{ bridgetowne4.total_target }}
+       <button> {{ bridgetowne4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -131,7 +131,7 @@
         v-for="bridgetowne5 in bridgetowne5"
         :key="bridgetowne5.id"
       >
-        {{ bridgetowne5.total_target }}
+       <button> {{ bridgetowne5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -144,7 +144,7 @@
         v-for="bridgetowne6 in bridgetowne6"
         :key="bridgetowne6.id"
       >
-        {{ bridgetowne6.total_target }}
+       <button> {{ bridgetowne6.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -157,7 +157,7 @@
         v-for="bridgetowne7 in bridgetowne7"
         :key="bridgetowne7.id"
       >
-        {{ bridgetowne7.total_target }}
+       <button> {{ bridgetowne7.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -170,7 +170,7 @@
         v-for="bridgetowne8 in bridgetowne8"
         :key="bridgetowne8.id"
       >
-        {{ bridgetowne8.total_target }}
+       <button> {{ bridgetowne8.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -183,7 +183,7 @@
         v-for="bridgetowne9 in bridgetowne9"
         :key="bridgetowne9.id"
       >
-        {{ bridgetowne9.total_target }}
+       <button> {{ bridgetowne9.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -196,7 +196,7 @@
         v-for="bridgetowne10 in bridgetowne10"
         :key="bridgetowne10.id"
       >
-        {{ bridgetowne10.total_target }}
+       <button> {{ bridgetowne10.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -209,7 +209,7 @@
         v-for="bridgetowne11 in bridgetowne11"
         :key="bridgetowne11.id"
       >
-        {{ bridgetowne11.total_target }}
+       <button> {{ bridgetowne11.total_target }}</button>
       </td>
     </template>
   </tbody>

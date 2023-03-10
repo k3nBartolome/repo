@@ -53,7 +53,7 @@ class Classes extends Model
 
     public function dateRange()
     {
-        return $this->belongsTo(DateRange::class, 'date_range_id');
+        return $this->belongsTo(DateRange::class);
     }
 
     public function program()

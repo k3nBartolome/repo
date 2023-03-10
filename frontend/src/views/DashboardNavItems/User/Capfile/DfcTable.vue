@@ -74,7 +74,7 @@
     <td class="px-1 py-2 border">MICROSOFT TS CHAT</td>
     <template v-for="(dfc1, weeksStart) in groupedData1" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc1 in dfc1" :key="dfc1.id">
-        {{ dfc1.total_target }}
+      <button>  {{ dfc1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -83,7 +83,7 @@
     <td class="px-1 py-2 border">MICROSOFT CS CHAT</td>
     <template v-for="(dfc2, weeksStart) in groupedData2" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc2 in dfc2" :key="dfc2.id">
-        {{ dfc2.total_target }}
+      <button>  {{ dfc2.total_target }}</button>
       </td>
       td>
     </template>
@@ -93,7 +93,7 @@
     <td class="px-1 py-2 border">XBOX</td>
     <template v-for="(dfc3, weeksStart) in groupedData3" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc3 in dfc3" :key="dfc3.id">
-        {{ dfc3.total_target }}
+      <button>  {{ dfc3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -102,7 +102,7 @@
     <td class="px-1 py-2 border">FIS SNAP</td>
     <template v-for="(dfc4, weeksStart) in groupedData4" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc4 in dfc4" :key="dfc4.id">
-        {{ dfc4.total_target }}
+      <button>  {{ dfc4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -111,7 +111,7 @@
     <td class="px-1 py-2 border">META TECH T1</td>
     <template v-for="(dfc5, weeksStart) in groupedData5" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc5 in dfc5" :key="dfc5.id">
-        {{ dfc5.total_target }}
+      <button>  {{ dfc5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -120,7 +120,7 @@
     <td class="px-1 py-2 border">META SOCIAL</td>
     <template v-for="(dfc6, weeksStart) in groupedData6" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dfc6 in dfc6" :key="dfc6.id">
-        {{ dfc6.total_target }}
+      <button>  {{ dfc6.total_target }}</button>
       </td>
     </template>
   </tbody>

@@ -74,7 +74,7 @@
     <td class="px-1 py-2 border">DTV VIDEO SERVICE</td>
     <template v-for="(moa1, weeksStart) in groupedData1" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="moa1 in moa1" :key="moa1.id">
-        {{ moa1.total_target }}
+      <button>  {{ moa1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -83,7 +83,7 @@
     <td class="px-1 py-2 border">DTV VIDEO SERVICE FIBER</td>
     <template v-for="(moa2, weeksStart) in groupedData2" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="moa2 in moa2" :key="moa2.id">
-        {{ moa2.total_target }}
+      <button>  {{ moa2.total_target }}</button>
       </td>
       td>
     </template>
@@ -93,7 +93,7 @@
     <td class="px-1 py-2 border">AT&T MTS</td>
     <template v-for="(moa3, weeksStart) in groupedData3" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="moa3 in moa3" :key="moa3.id">
-        {{ moa3.total_target }}
+      <button>  {{ moa3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -102,7 +102,7 @@
     <td class="px-1 py-2 border">ATT TRIAGE</td>
     <template v-for="(moa4, weeksStart) in groupedData4" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="moa4 in moa4" :key="moa4.id">
-        {{ moa4.total_target }}
+      <button>  {{ moa4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -111,7 +111,7 @@
     <td class="px-1 py-2 border">AT&T MOBILITY</td>
     <template v-for="(moa5, weeksStart) in groupedData5" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="moa5 in moa5" :key="moa5.id">
-        {{ moa5.total_target }}
+      <button>  {{ moa5.total_target }}</button>
       </td>
     </template>
   </tbody>

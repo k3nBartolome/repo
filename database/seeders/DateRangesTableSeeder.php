@@ -87,7 +87,7 @@ class DateRangesTableSeeder extends Seeder
             'year' => '2023',
         ],
         [
-            'date_range' => 'Apr 9-Feb 15',
+            'date_range' => 'Apr 9-Apr 15',
             'month' => 'April',
             'year' => '2023',
         ],

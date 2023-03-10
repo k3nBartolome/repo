@@ -78,7 +78,7 @@
         v-for="quezoncity1 in quezoncity1"
         :key="quezoncity1.id"
       >
-        {{ quezoncity1.total_target }}
+       <button> {{ quezoncity1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -91,7 +91,7 @@
         v-for="quezoncity2 in quezoncity2"
         :key="quezoncity2.id"
       >
-        {{ quezoncity2.total_target }}
+       <button> {{ quezoncity2.total_target }}</button>
       </td>
       td>
     </template>
@@ -105,7 +105,7 @@
         v-for="quezoncity3 in quezoncity3"
         :key="quezoncity3.id"
       >
-        {{ quezoncity3.total_target }}
+       <button> {{ quezoncity3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -118,7 +118,7 @@
         v-for="quezoncity4 in quezoncity4"
         :key="quezoncity4.id"
       >
-        {{ quezoncity4.total_target }}
+       <button> {{ quezoncity4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -131,7 +131,7 @@
         v-for="quezoncity5 in quezoncity5"
         :key="quezoncity5.id"
       >
-        {{ quezoncity5.total_target }}
+       <button> {{ quezoncity5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -144,7 +144,7 @@
         v-for="quezoncity6 in quezoncity6"
         :key="quezoncity6.id"
       >
-        {{ quezoncity6.total_target }}
+       <button> {{ quezoncity6.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -157,7 +157,7 @@
         v-for="quezoncity7 in quezoncity7"
         :key="quezoncity7.id"
       >
-        {{ quezoncity7.total_target }}
+       <button> {{ quezoncity7.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -170,7 +170,7 @@
         v-for="quezoncity8 in quezoncity8"
         :key="quezoncity8.id"
       >
-        {{ quezoncity8.total_target }}
+       <button> {{ quezoncity8.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -183,7 +183,7 @@
         v-for="quezoncity9 in quezoncity9"
         :key="quezoncity9.id"
       >
-        {{ quezoncity9.total_target }}
+       <button> {{ quezoncity9.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -196,7 +196,7 @@
         v-for="quezoncity10 in quezoncity10"
         :key="quezoncity10.id"
       >
-        {{ quezoncity10.total_target }}
+       <button> {{ quezoncity10.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -209,7 +209,7 @@
         v-for="quezoncity11 in quezoncity11"
         :key="quezoncity11.id"
       >
-        {{ quezoncity11.total_target }}
+       <button> {{ quezoncity11.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -222,7 +222,7 @@
         v-for="quezoncity12 in quezoncity12"
         :key="quezoncity12.id"
       >
-        {{ quezoncity12.total_target }}
+       <button> {{ quezoncity12.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -235,7 +235,7 @@
         v-for="quezoncity13 in quezoncity13"
         :key="quezoncity13.id"
       >
-        {{ quezoncity13.total_target }}
+       <button> {{ quezoncity13.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -248,7 +248,7 @@
         v-for="quezoncity14 in quezoncity14"
         :key="quezoncity14.id"
       >
-        {{ quezoncity14.total_target }}
+       <button> {{ quezoncity14.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -261,7 +261,7 @@
         v-for="quezoncity15 in quezoncity15"
         :key="quezoncity15.id"
       >
-        {{ quezoncity15.total_target }}
+       <button> {{ quezoncity15.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -274,7 +274,7 @@
         v-for="quezoncity16 in quezoncity16"
         :key="quezoncity16.id"
       >
-        {{ quezoncity16.total_target }}
+       <button> {{ quezoncity16.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -287,7 +287,7 @@
         v-for="quezoncity17 in quezoncity17"
         :key="quezoncity17.id"
       >
-        {{ quezoncity17.total_target }}
+       <button> {{ quezoncity17.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -300,7 +300,7 @@
         v-for="quezoncity18 in quezoncity18"
         :key="quezoncity18.id"
       >
-        {{ quezoncity18.total_target }}
+       <button> {{ quezoncity18.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -313,7 +313,7 @@
         v-for="quezoncity19 in quezoncity19"
         :key="quezoncity19.id"
       >
-        {{ quezoncity19.total_target }}
+       <button> {{ quezoncity19.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -326,7 +326,7 @@
         v-for="quezoncity20 in quezoncity20"
         :key="quezoncity20.id"
       >
-        {{ quezoncity20.total_target }}
+       <button> {{ quezoncity20.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -339,7 +339,7 @@
         v-for="quezoncity21 in quezoncity21"
         :key="quezoncity21.id"
       >
-        {{ quezoncity21.total_target }}
+       <button> {{ quezoncity21.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -352,7 +352,7 @@
         v-for="quezoncity22 in quezoncity22"
         :key="quezoncity22.id"
       >
-        {{ quezoncity22.total_target }}
+       <button> {{ quezoncity22.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -365,7 +365,7 @@
         v-for="quezoncity23 in quezoncity23"
         :key="quezoncity23.id"
       >
-        {{ quezoncity23.total_target }}
+       <button> {{ quezoncity23.total_target }}</button>
       </td>
     </template>
   </tbody>

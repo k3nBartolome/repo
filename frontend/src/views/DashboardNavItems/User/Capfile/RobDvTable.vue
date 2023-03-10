@@ -74,7 +74,7 @@
     <td class="px-1 py-2 border">SXM SERVICE</td>
     <template v-for="(dvrob1, weeksStart) in groupedData1" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob1 in dvrob1" :key="dvrob1.id">
-        {{ dvrob1.total_target }}
+      <button>  {{ dvrob1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -83,7 +83,7 @@
     <td class="px-1 py-2 border">SXM SAVES</td>
     <template v-for="(dvrob2, weeksStart) in groupedData2" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob2 in dvrob2" :key="dvrob2.id">
-        {{ dvrob2.total_target }}
+      <button>  {{ dvrob2.total_target }}</button>
       </td>
       td>
     </template>
@@ -93,7 +93,7 @@
     <td class="px-1 py-2 border">NOTION</td>
     <template v-for="(dvrob3, weeksStart) in groupedData3" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob3 in dvrob3" :key="dvrob3.id">
-        {{ dvrob3.total_target }}
+      <button>  {{ dvrob3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -102,7 +102,7 @@
     <td class="px-1 py-2 border">AT&T MOBILITY CLG</td>
     <template v-for="(dvrob4, weeksStart) in groupedData4" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob4 in dvrob4" :key="dvrob4.id">
-        {{ dvrob4.total_target }}
+      <button>  {{ dvrob4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -111,7 +111,7 @@
     <td class="px-1 py-2 border">MODIVCARE</td>
     <template v-for="(dvrob5, weeksStart) in groupedData5" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob5 in dvrob5" :key="dvrob5.id">
-        {{ dvrob5.total_target }}
+      <button>  {{ dvrob5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -120,7 +120,7 @@
     <td class="px-1 py-2 border">ULTRAMINT</td>
     <template v-for="(dvrob6, weeksStart) in groupedData6" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob6 in dvrob6" :key="dvrob6.id">
-        {{ dvrob6.total_target }}
+      <button>  {{ dvrob6.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -129,7 +129,7 @@
     <td class="px-1 py-2 border">ULTRAMINT LIVECHAT</td>
     <template v-for="(dvrob7, weeksStart) in groupedData7" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvrob7 in dvrob7" :key="dvrob7.id">
-        {{ dvrob7.total_target }}
+      <button>  {{ dvrob7.total_target }}</button>
       </td>
     </template>
   </tbody>

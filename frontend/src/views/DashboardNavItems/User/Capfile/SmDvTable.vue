@@ -74,7 +74,7 @@
     <td class="px-1 py-2 border">AT&T BB TELCO SERVICE</td>
     <template v-for="(dvsm1, weeksStart) in groupedData1" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm1 in dvsm1" :key="dvsm1.id">
-        {{ dvsm1.total_target }}
+      <button>  {{ dvsm1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -83,7 +83,7 @@
     <td class="px-1 py-2 border">AT&T BB PTB MOB</td>
     <template v-for="(dvsm2, weeksStart) in groupedData2" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm2 in dvsm2" :key="dvsm2.id">
-        {{ dvsm2.total_target }}
+      <button>  {{ dvsm2.total_target }}</button>
       </td>
       td>
     </template>
@@ -93,7 +93,7 @@
     <td class="px-1 py-2 border">DTV VIDEO SERVICE DV</td>
     <template v-for="(dvsm3, weeksStart) in groupedData3" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm3 in dvsm3" :key="dvsm3.id">
-        {{ dvsm3.total_target }}
+      <button>  {{ dvsm3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -102,7 +102,7 @@
     <td class="px-1 py-2 border">AT&T MTS</td>
     <template v-for="(dvsm4, weeksStart) in groupedData4" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm4 in dvsm4" :key="dvsm4.id">
-        {{ dvsm4.total_target }}
+      <button>  {{ dvsm4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -111,7 +111,7 @@
     <td class="px-1 py-2 border">Q5</td>
     <template v-for="(dvsm5, weeksStart) in groupedData5" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm5 in dvsm5" :key="dvsm5.id">
-        {{ dvsm5.total_target }}
+      <button>  {{ dvsm5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -120,7 +120,7 @@
     <td class="px-1 py-2 border">LEGAL ZOOM VOICE</td>
     <template v-for="(dvsm6, weeksStart) in groupedData6" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm6 in dvsm6" :key="dvsm6.id">
-        {{ dvsm6.total_target }}
+      <button>  {{ dvsm6.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -129,7 +129,7 @@
     <td class="px-1 py-2 border">LEGAL ZOOM CHAT</td>
     <template v-for="(dvsm7, weeksStart) in groupedData7" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvsm7 in dvsm7" :key="dvsm7.id">
-        {{ dvsm7.total_target }}
+      <button>  {{ dvsm7.total_target }}</button>
       </td>
     </template>
   </tbody>

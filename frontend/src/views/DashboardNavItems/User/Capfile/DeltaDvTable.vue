@@ -74,7 +74,7 @@
     <td class="px-1 py-2 border">DTV TECH - VIDEO TECH</td>
     <template v-for="(dvdelta1, weeksStart) in groupedData1" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta1 in dvdelta1" :key="dvdelta1.id">
-        {{ dvdelta1.total_target }}
+      <button>  {{ dvdelta1.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -83,7 +83,7 @@
     <td class="px-1 py-2 border">GREAT JONES</td>
     <template v-for="(dvdelta2, weeksStart) in groupedData2" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta2 in dvdelta2" :key="dvdelta2.id">
-        {{ dvdelta2.total_target }}
+      <button>  {{ dvdelta2.total_target }}</button>
       </td>
       td>
     </template>
@@ -93,7 +93,7 @@
     <td class="px-1 py-2 border">AT&T MSS</td>
     <template v-for="(dvdelta3, weeksStart) in groupedData3" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta3 in dvdelta3" :key="dvdelta3.id">
-        {{ dvdelta3.total_target }}
+      <button>  {{ dvdelta3.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -102,7 +102,7 @@
     <td class="px-1 py-2 border">FACEBOOK META</td>
     <template v-for="(dvdelta4, weeksStart) in groupedData4" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta4 in dvdelta4" :key="dvdelta4.id">
-        {{ dvdelta4.total_target }}
+      <button>  {{ dvdelta4.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -111,7 +111,7 @@
     <td class="px-1 py-2 border">PAYPAL APFS</td>
     <template v-for="(dvdelta5, weeksStart) in groupedData5" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta5 in dvdelta5" :key="dvdelta5.id">
-        {{ dvdelta5.total_target }}
+      <button>  {{ dvdelta5.total_target }}</button>
       </td>
     </template>
   </tbody>
@@ -120,7 +120,7 @@
     <td class="px-1 py-2 border">PAYPAL CS</td>
     <template v-for="(dvdelta6, weeksStart) in groupedData6" :key="weeksStart">
       <td class="px-1 py-2 border" v-for="dvdelta6 in dvdelta6" :key="dvdelta6.id">
-        {{ dvdelta6.total_target }}
+      <button>  {{ dvdelta6.total_target }}</button>
       </td>
     </template>
   </tbody>

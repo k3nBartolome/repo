@@ -24,13 +24,13 @@ class ClassesController extends Controller
     {
         $clark1 = function () {
             $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-            ->where('site_id', 1)
-            ->where('program_id', 1)
-            ->get();
-            $classesData = ClassesResource::collection($classes);
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+                ->where('site_id', 1)
+                ->where('program_id', 1)
+                ->get();
+
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -41,11 +41,9 @@ class ClassesController extends Controller
             ->where('program_id', 2)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -55,11 +53,9 @@ class ClassesController extends Controller
             ->where('program_id', 3)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -70,11 +66,9 @@ class ClassesController extends Controller
             ->where('program_id', 4)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -84,11 +78,9 @@ class ClassesController extends Controller
             ->where('program_id', 5)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -99,11 +91,9 @@ class ClassesController extends Controller
             ->where('program_id', 6)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -113,11 +103,9 @@ class ClassesController extends Controller
             ->where('program_id', 7)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -128,11 +116,9 @@ class ClassesController extends Controller
             ->where('program_id', 8)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -142,11 +128,9 @@ class ClassesController extends Controller
             ->where('program_id', 9)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -157,11 +141,9 @@ class ClassesController extends Controller
             ->where('program_id', 10)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -171,11 +153,9 @@ class ClassesController extends Controller
             ->where('program_id', 11)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -186,11 +166,9 @@ class ClassesController extends Controller
             ->where('program_id', 12)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -200,11 +178,9 @@ class ClassesController extends Controller
             ->where('program_id', 13)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -215,11 +191,9 @@ class ClassesController extends Controller
             ->where('program_id', 14)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -229,11 +203,9 @@ class ClassesController extends Controller
             ->where('program_id', 15)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -244,11 +216,9 @@ class ClassesController extends Controller
             ->where('program_id', 16)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -258,11 +228,9 @@ class ClassesController extends Controller
         ->where('program_id', 17)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -273,11 +241,9 @@ class ClassesController extends Controller
         ->where('program_id', 18)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -287,11 +253,9 @@ class ClassesController extends Controller
         ->where('program_id', 19)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -302,11 +266,9 @@ class ClassesController extends Controller
         ->where('program_id', 20)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -316,11 +278,9 @@ class ClassesController extends Controller
         ->where('program_id', 21)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -330,11 +290,9 @@ class ClassesController extends Controller
         ->where('program_id', 22)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -344,11 +302,9 @@ class ClassesController extends Controller
         ->where('program_id', 23)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-    ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -388,11 +344,9 @@ class ClassesController extends Controller
             ->where('program_id', 24)
             ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-            'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -402,11 +356,9 @@ class ClassesController extends Controller
         ->where('program_id', 25)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -417,11 +369,9 @@ class ClassesController extends Controller
         ->where('program_id', 26)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -432,11 +382,9 @@ class ClassesController extends Controller
         ->where('program_id', 27)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -447,11 +395,9 @@ class ClassesController extends Controller
         ->where('program_id', 28)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -462,11 +408,9 @@ class ClassesController extends Controller
         ->where('program_id', 29)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -477,11 +421,9 @@ class ClassesController extends Controller
         ->where('program_id', 30)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -492,11 +434,9 @@ class ClassesController extends Controller
         ->where('program_id', 31)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -507,11 +447,9 @@ class ClassesController extends Controller
         ->where('program_id', 32)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -521,11 +459,9 @@ class ClassesController extends Controller
         ->where('program_id', 33)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -535,11 +471,9 @@ class ClassesController extends Controller
         ->where('program_id', 34)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -549,11 +483,9 @@ class ClassesController extends Controller
         ->where('program_id', 35)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -563,11 +495,9 @@ class ClassesController extends Controller
         ->where('program_id', 36)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -577,11 +507,9 @@ class ClassesController extends Controller
         ->where('program_id', 37)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -591,11 +519,9 @@ class ClassesController extends Controller
         ->where('program_id', 38)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -605,11 +531,9 @@ class ClassesController extends Controller
         ->where('program_id', 39)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -619,11 +543,9 @@ class ClassesController extends Controller
         ->where('program_id', 40)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -633,11 +555,9 @@ class ClassesController extends Controller
         ->where('program_id', 41)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -647,11 +567,9 @@ class ClassesController extends Controller
         ->where('program_id', 42)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -661,11 +579,9 @@ class ClassesController extends Controller
         ->where('program_id', 43)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -675,11 +591,9 @@ class ClassesController extends Controller
         ->where('program_id', 44)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -689,11 +603,9 @@ class ClassesController extends Controller
         ->where('program_id', 45)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -703,11 +615,9 @@ class ClassesController extends Controller
         ->where('program_id', 46)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -747,11 +657,9 @@ class ClassesController extends Controller
         ->where('program_id', 47)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -761,11 +669,9 @@ class ClassesController extends Controller
         ->where('program_id', 48)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -775,11 +681,9 @@ class ClassesController extends Controller
         ->where('program_id', 49)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -789,11 +693,9 @@ class ClassesController extends Controller
         ->where('program_id', 50)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -803,11 +705,9 @@ class ClassesController extends Controller
         ->where('program_id', 51)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -817,11 +717,9 @@ class ClassesController extends Controller
         ->where('program_id', 52)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -831,11 +729,9 @@ class ClassesController extends Controller
         ->where('program_id', 53)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -845,11 +741,9 @@ class ClassesController extends Controller
         ->where('program_id', 54)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -859,11 +753,9 @@ class ClassesController extends Controller
         ->where('program_id', 55)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -873,11 +765,9 @@ class ClassesController extends Controller
         ->where('program_id', 56)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -887,11 +777,9 @@ class ClassesController extends Controller
         ->where('program_id', 57)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -919,11 +807,9 @@ class ClassesController extends Controller
         ->where('program_id', 58)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -933,11 +819,9 @@ class ClassesController extends Controller
         ->where('program_id', 59)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -947,11 +831,9 @@ class ClassesController extends Controller
         ->where('program_id', 60)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -961,11 +843,9 @@ class ClassesController extends Controller
         ->where('program_id', 61)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -975,11 +855,9 @@ class ClassesController extends Controller
         ->where('program_id', 62)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -989,11 +867,9 @@ class ClassesController extends Controller
         ->where('program_id', 63)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1003,11 +879,9 @@ class ClassesController extends Controller
         ->where('program_id', 64)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1017,11 +891,9 @@ class ClassesController extends Controller
         ->where('program_id', 65)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1031,11 +903,9 @@ class ClassesController extends Controller
         ->where('program_id', 66)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1045,11 +915,9 @@ class ClassesController extends Controller
         ->where('program_id', 67)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1059,11 +927,9 @@ class ClassesController extends Controller
         ->where('program_id', 67)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1073,11 +939,9 @@ class ClassesController extends Controller
         ->where('program_id', 68)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1087,11 +951,9 @@ class ClassesController extends Controller
         ->where('program_id', 69)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1101,11 +963,9 @@ class ClassesController extends Controller
         ->where('program_id', 70)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1115,11 +975,9 @@ class ClassesController extends Controller
         ->where('program_id', 71)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1129,11 +987,9 @@ class ClassesController extends Controller
         ->where('program_id', 72)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1143,11 +999,9 @@ class ClassesController extends Controller
         ->where('program_id', 73)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1181,11 +1035,9 @@ class ClassesController extends Controller
         ->where('program_id', 74)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1195,11 +1047,9 @@ class ClassesController extends Controller
         ->where('program_id', 75)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1209,11 +1059,9 @@ class ClassesController extends Controller
         ->where('program_id', 76)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1223,11 +1071,9 @@ class ClassesController extends Controller
         ->where('program_id', 77)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1237,11 +1083,9 @@ class ClassesController extends Controller
         ->where('program_id', 78)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1263,11 +1107,9 @@ class ClassesController extends Controller
         ->where('program_id', 79)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1277,11 +1119,9 @@ class ClassesController extends Controller
         ->where('program_id', 80)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1291,11 +1131,9 @@ class ClassesController extends Controller
         ->where('program_id', 81)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1305,11 +1143,9 @@ class ClassesController extends Controller
         ->where('program_id', 82)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1319,11 +1155,9 @@ class ClassesController extends Controller
         ->where('program_id', 83)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1333,11 +1167,9 @@ class ClassesController extends Controller
         ->where('program_id', 84)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1347,11 +1179,9 @@ class ClassesController extends Controller
         ->where('program_id', 85)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1375,11 +1205,9 @@ class ClassesController extends Controller
         ->where('program_id', 86)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1389,11 +1217,9 @@ class ClassesController extends Controller
         ->where('program_id', 87)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1403,11 +1229,9 @@ class ClassesController extends Controller
         ->where('program_id', 88)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1417,11 +1241,9 @@ class ClassesController extends Controller
         ->where('program_id', 89)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1431,11 +1253,9 @@ class ClassesController extends Controller
         ->where('program_id', 90)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1445,11 +1265,9 @@ class ClassesController extends Controller
         ->where('program_id', 91)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1459,11 +1277,9 @@ class ClassesController extends Controller
         ->where('program_id', 92)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1487,11 +1303,9 @@ class ClassesController extends Controller
         ->where('program_id', 93)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1501,11 +1315,9 @@ class ClassesController extends Controller
         ->where('program_id', 94)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1515,11 +1327,9 @@ class ClassesController extends Controller
         ->where('program_id', 95)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1529,11 +1339,9 @@ class ClassesController extends Controller
         ->where('program_id', 96)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1543,11 +1351,9 @@ class ClassesController extends Controller
         ->where('program_id', 97)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1557,11 +1363,9 @@ class ClassesController extends Controller
         ->where('program_id', 98)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1584,11 +1388,9 @@ class ClassesController extends Controller
         ->where('program_id', 99)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1598,11 +1400,9 @@ class ClassesController extends Controller
         ->where('program_id', 100)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1612,11 +1412,9 @@ class ClassesController extends Controller
         ->where('program_id', 101)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1626,11 +1424,9 @@ class ClassesController extends Controller
         ->where('program_id', 102)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1640,11 +1436,9 @@ class ClassesController extends Controller
         ->where('program_id', 103)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1654,11 +1448,9 @@ class ClassesController extends Controller
         ->where('program_id', 104)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1668,11 +1460,9 @@ class ClassesController extends Controller
         ->where('program_id', 105)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1682,11 +1472,9 @@ class ClassesController extends Controller
         ->where('program_id', 106)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1696,11 +1484,9 @@ class ClassesController extends Controller
         ->where('program_id', 107)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1710,11 +1496,9 @@ class ClassesController extends Controller
         ->where('program_id', 108)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1724,11 +1508,9 @@ class ClassesController extends Controller
         ->where('program_id', 109)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1738,11 +1520,9 @@ class ClassesController extends Controller
         ->where('program_id', 110)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1752,11 +1532,9 @@ class ClassesController extends Controller
         ->where('program_id', 111)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1766,11 +1544,9 @@ class ClassesController extends Controller
         ->where('program_id', 112)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1780,11 +1556,9 @@ class ClassesController extends Controller
         ->where('program_id', 113)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1794,11 +1568,9 @@ class ClassesController extends Controller
         ->where('program_id', 114)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1808,11 +1580,9 @@ class ClassesController extends Controller
         ->where('program_id', 115)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1822,11 +1592,9 @@ class ClassesController extends Controller
         ->where('program_id', 116)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1836,11 +1604,9 @@ class ClassesController extends Controller
         ->where('program_id', 117)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1850,11 +1616,9 @@ class ClassesController extends Controller
         ->where('program_id', 118)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1864,11 +1628,9 @@ class ClassesController extends Controller
         ->where('program_id', 119)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1878,11 +1640,9 @@ class ClassesController extends Controller
         ->where('program_id', 120)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1892,11 +1652,9 @@ class ClassesController extends Controller
         ->where('program_id', 121)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1906,11 +1664,9 @@ class ClassesController extends Controller
         ->where('program_id', 122)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1920,11 +1676,9 @@ class ClassesController extends Controller
         ->where('program_id', 123)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1966,11 +1720,9 @@ class ClassesController extends Controller
         ->where('program_id', 124)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1980,11 +1732,9 @@ class ClassesController extends Controller
         ->where('program_id', 125)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -1994,11 +1744,9 @@ class ClassesController extends Controller
         ->where('program_id', 126)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -2008,11 +1756,9 @@ class ClassesController extends Controller
         ->where('program_id', 127)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -2022,11 +1768,9 @@ class ClassesController extends Controller
         ->where('program_id', 128)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
@@ -2036,11 +1780,9 @@ class ClassesController extends Controller
         ->where('program_id', 129)
         ->get();
 
-            $classesData = ClassesResource::collection($classes);
-
-            $groupedData = $classesData->groupBy([
-        'date_range_id',
-        ])->toArray();
+            $groupedData = $classes->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })->toArray();
 
             return $groupedData;
         };
