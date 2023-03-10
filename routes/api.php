@@ -79,5 +79,7 @@ Route::get('dvrob', [ClassesController::class, 'dvrob']);
 Route::get('dvdelta', [ClassesController::class, 'dvdelta']);
 Route::get('dvcentral', [ClassesController::class, 'dvcentral']);
 Route::get('dfc', [ClassesController::class, 'dfc']);
+Route::put('classes/{id}/pushedback', [ClassesController::class, 'pushedback']);
+
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);

@@ -10,6 +10,7 @@ class Classes extends Model
     use HasFactory;
 
     protected $fillable = [
+        'pushedback_id',
         'is_active',
         'within_sla',
         'original_start_date',

@@ -72,29 +72,29 @@
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">AT&T BB MULTI SERVICE</td>
     <template v-for="(clark1, weeksStart) in groupedData1" :key="weeksStart">
-      <td class="px-1 py-2 border" v-for="clark1Item in clark1" :key="clark1Item.id">
+      <td class="px-1 py-2 text-center border place-content-center" v-for="clark1Item in clark1" :key="clark1Item.id">
         <div class="flex items-center">
-          <button class="bg-orange-300 mr-2" @click="showButtons(clark1Item)">{{ clark1Item.total_target }}</button>
+          <button class="mr-2 bg-white" @click="showButtons(clark1Item)">{{ clark1Item.total_target }}</button>
           <div v-if="clark1Item.showButtons" class="flex items-center">
             <div v-if="clark1Item.total_target == 0">
-              <button class="bg-blue-500 mx-2" @click="add(clark1Item)">Add</button>
+              <button class="mx-2 bg-blue-500" @click="add(clark1Item)">Add</button>
             </div>
             <div v-else>
-              <button class="bg-green-500 mx-2 w-22" @click="pushedBack(clark1Item)">Pushed Back</button>
-              <button class="bg-red-500 mx-2 w-22" @click="cancel(clark1Item)">Cancel</button>
+              <button class="mx-2 bg-green-500 w-22" @click="pushedBack(clark1Item)">Pushed Back</button>
+              <button class="mx-2 bg-red-500 w-22" @click="cancel(clark1Item)">Cancel</button>
             </div>
           </div>
         </div>
       </td>
-      <td class="px-1 py-2 border bg-blue-600 text-white font-bold">
+      <td class="px-1 py-2 font-bold text-white bg-blue-600 border">
         {{ clark1.reduce((sum, clark1Item) => {
           return sum + parseFloat(clark1Item.total_target || 0);
         }, 0) }}
       </td>
     </template>
   </tbody>
-  
-  
+
+
   <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY BUY PHONE</td>
