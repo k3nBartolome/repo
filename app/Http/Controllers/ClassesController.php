@@ -26,11 +26,23 @@ class ClassesController extends Controller
             $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
                 ->where('site_id', 1)
                 ->where('program_id', 1)
+                ->where('status', 1)
+                ->selectRaw('MAX(id) as id')
+                ->groupBy('pushedback_id')
                 ->get();
 
-            $groupedData = $classes->groupBy(function ($class) {
-                return $class->dateRange->month;
-            })->toArray();
+            $classIds = $classes->pluck('id');
+
+            $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+                ->whereIn('id', $classIds)
+                ->get()
+                ->groupBy(function ($class) {
+                    return $class->dateRange->month;
+                })
+                ->map(function ($monthClasses) {
+                    return $monthClasses->sortBy('date_range_id')->values();
+                })
+                ->toArray();
 
             return $groupedData;
         };
@@ -1797,44 +1809,50 @@ class ClassesController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'notice_weeks' => 'required',
-            'notice_days' => 'required',
-            'external_target' => 'required',
-            'internal_target' => 'required',
-            'total_target' => 'required',
-            'type_of_hiring' => 'required',
-            'within_sla' => 'required',
-            'with_erf' => 'required',
-            'remarks' => 'required',
-            'status' => 'required',
-            'approved_status' => 'required',
-            'original_start_date' => 'required',
-            'wfm_date_requested' => 'required',
-            'program_id' => 'required',
-            'site_id' => 'required',
-            'created_by' => 'required',
-            'is_active' => 'required',
-            'date_range_id' => 'required',
-            'backfill' => 'required',
-            'growth' => 'required',
-            'category' => 'required',
-            'reason' => 'nullable',
-        ]);
+        'notice_weeks' => 'required',
+        'notice_days' => 'required',
+        'external_target' => 'required',
+        'internal_target' => 'required',
+        'total_target' => 'required',
+        'type_of_hiring' => 'required',
+        'within_sla' => 'required',
+        'with_erf' => 'required',
+        'remarks' => 'required',
+        'status' => 'required',
+        'approved_status' => 'required',
+        'original_start_date' => 'required',
+        'wfm_date_requested' => 'required',
+        'program_id' => 'required',
+        'site_id' => 'required',
+        'created_by' => 'required',
+        'is_active' => 'required',
+        'date_range_id' => 'required',
+        'backfill' => 'required',
+        'growth' => 'required',
+        'category' => 'required',
+        'reason' => 'nullable',
+    ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $class = new Classes($request->all());
-        $class->save();  // Save the record to generate the 'id'
+        $class = Classes::where('id', $id)->first();
+        if (!$class) {
+            return response()->json(['error' => 'Record not found.'], 404);
+        }
 
-        $class->pushedback_id = $class->id;  // Assign the 'id' to 'pushedback_id'
-        $class->save();  // Update the record with the 'pushedback_id'
+        $class->fill($request->all());
+        $class->save();
 
-        $slaReason = new Sla_reason(['reason' => $request->input('reason')]);
+        $slaReason = $class->sla_reason;
+        if (!$slaReason) {
+            $slaReason = new Sla_reason();
+        }
+        $slaReason->reason = $request->input('reason');
         $slaReason->classes_id = $class->id;
         $slaReason->save();
 
@@ -1850,12 +1868,15 @@ class ClassesController extends Controller
 
     public function show($id)
     {
-        $class = Classes::with('sla_reason')->find($id);
+        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->find($id);
+
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
 
-        return new ClassesResource($class);
+        return response()->json([
+        'class' => $class,
+    ]);
     }
 
     public function pushedback(Request $request, $id)
@@ -1896,8 +1917,6 @@ class ClassesController extends Controller
         $class = Classes::find($id);
 
         $newClass = $class->replicate();
-        $newClass->pushedback_id = $class->id; // set pushedback_id to the original class's id
-        $newClass->id = null; // set id to null to create a new ID for the pushed back class
         $newClass->update_status = $class->update_status + 1;
         $newClass->fill($request->all());
         $newClass->save();
@@ -1909,7 +1928,69 @@ class ClassesController extends Controller
         return new ClassesResource($newClass);
     }
 
-    public function cancel(Classes $class)
+    public function cancel(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'site_id' => 'required',
+            'program_id' => 'required',
+            'date_range_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $class = Classes::find($id);
+
+        // Update old class data
+        $class->status = 'Cancelled';
+        $class->cancelled_by = $class->cancelled_by;
+        $class->cancelled_date = now();
+        $class->save();
+
+        $class = Classes::find($id);
+
+        $newClass = $class->replicate();
+        $newClass->site_id = $class->site_id;
+        $newClass->program_id = $class->program_id;
+        $newClass->date_range_id = $class->date_range_id;
+        $newClass->fill($request->all());
+        $newClass->notice_weeks = null;
+        $newClass->notice_days = null;
+        $newClass->external_target = null;
+        $newClass->internal_target = null;
+        $newClass->total_target = 0;
+        $newClass->type_of_hiring = null;
+        $newClass->within_sla = null;
+        $newClass->with_erf = null;
+        $newClass->remarks = null;
+        $newClass->status = 1;
+        $newClass->approved_status = null;
+        $newClass->original_start_date = null;
+        $newClass->wfm_date_requested = null;
+        $newClass->is_active = null;
+        $newClass->backfill = null;
+        $newClass->growth = null;
+        $newClass->category = null;
+        $newClass->requested_start_date_by_wf = null;
+        $newClass->pushback_start_date_ta = null;
+        $newClass->pushback_start_date_wf = null;
+        $newClass->start_date_committed_by_ta = null;
+        $newClass->updated_by = null;
+        $newClass->updated_at = null;
+        $newClass->created_by = null;
+        $newClass->created_at = null;
+        $newClass->cancelled_by = null;
+        $newClass->cancelled_date = null;
+        $newClass->update_status = null;
+        $newClass->save();
+
+        $newClass->sla_reason->reason = null;
+        $newClass->save();
+
+        $newClass->pushedback_id = $newClass->id;
+        $newClass->save();
+
+        return new ClassesResource($newClass);
     }
 }

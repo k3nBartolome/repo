@@ -7,7 +7,7 @@
     </div>
   </header>
   <div class="px-12 py-8">
-    <form @submit.prevent="pushClass">
+    <form @submit.prevent="cancelClass">
       <div
         class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
       >
@@ -243,7 +243,7 @@
             type="submit"
             class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
           >
-            <i class="fa fa-save"></i> Pushed Back
+            <i class="fa fa-save"></i>Cancel
           </button>
         </div>
       </div>
@@ -388,64 +388,27 @@ export default {
           console.log(error);
         });
     },
-    pushClass() {
+    cancelClass() {
       const formData = {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
-        type_of_hiring: this.type_of_hiring,
-        external_target: this.external_target,
-        internal_target: this.internal_target,
-        total_target: this.total_target,
-        notice_days: this.notice_days,
-        notice_weeks: this.notice_weeks,
-        with_erf: this.with_erf,
-        category: this.category,
-        original_start_date: this.original_start_date,
-        wfm_date_requested: this.wfm_date_requested,
-        within_sla: this.within_sla,
-        remarks: this.remarks,
-        reason: this.reason,
-        growth: this.growth,
-        backfill: this.backfill,
         date_range_id: this.date_selected,
         approved_status: "pending",
-        status: "1",
-        is_active: 1,
-        updated_by: this.$store.state.user_id,
-        pushback_start_date_ta: this.pushback_start_date_ta,
-        pushback_start_date_wf: this.pushback_start_date_wf,
-        requested_start_date_by_wf: this.requested_start_date_by_wf,
-        start_date_committed_by_ta: this.start_date_committed_by_ta,
+        status: "cancelled",
+        is_active: 0,
+       cancelled_by: this.$store.state.user_id,
+
       };
       axios
-        .put("http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id, formData)
+        .put("http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id, formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
           this.program_id = "";
-          this.type_of_hiring = "";
-          this.external_target = "";
-          this.internal_target = "";
-          this.total_target = "";
-          this.notice_days = "";
-          this.notice_weeks = "";
-          this.with_erf = "";
-          this.category = "";
-          this.original_start_date = "";
-          this.wfm_date_requested = "";
-          this.within_sla = "";
-          this.remarks = "";
-          this.reason = "";
-          this.growth = "";
-          this.backfill = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
-          this.created_by = "";
-          this.pushback_start_date_ta = "";
-          this.pushback_start_date_wf = "";
-          this.requested_start_date_by_wf = "";
-          this.start_date_committed_by_ta = "";
+          this.cancelled_by = "";
         })
         .catch((error) => {
           console.log(error.response.data);

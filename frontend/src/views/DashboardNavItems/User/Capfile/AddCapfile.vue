@@ -257,6 +257,7 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
+    this.getClasses();
   },
   methods: {
     syncTotalTarget: function () {
@@ -308,6 +309,37 @@ export default {
           console.log(error);
         });
     },
+    async getClasses() {
+      await axios
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
+        .then((response) => {
+          const data = response.data;
+          const classObj = data.class;
+          this.sites_selected = classObj.site.id;
+          this.programs_selected = classObj.program.id;
+          this.type_of_hiring = classObj.type_of_hiring;
+          this.external_target = classObj.external_target;
+          this.internal_target = classObj.internal_target;
+          this.total_target = classObj.total_target;
+          this.original_start_date = classObj.original.start_date;
+          this.wfm_date_requested = classObj.wfm_date_requested;
+          this.notice_days = classObj.notice_days;
+          this.notice_weeks = classObj.notice_weeks;
+          this.date_selected = classObj.date_range_id;
+          this.growth = classObj.growth;
+          this.backfill = classObj.backfill;
+          this.with_erf = classObj.with_erf;
+          this.category = classObj.category;
+          this.within_sla = classObj.within_sla;
+          this.remarks = classObj.remarks;
+          this.reason = classObj.reason;
+
+          console.log(classObj);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     addClass() {
       const formData = {
         site_id: this.sites_selected,
@@ -334,7 +366,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classes", formData)
+        .put("http://127.0.0.1:8000/api/classes/"+ this.$route.params.id, formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

@@ -66,8 +66,7 @@ Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
 //Classes Routes
 Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
-Route::post('classes', [ClassesController::class, 'store']);
-Route::put('classes/{id}', [ClassesController::class, 'update']);
+
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('clark', [ClassesController::class, 'clark']);
 Route::get('quezoncity', [ClassesController::class, 'quezoncity']);
@@ -79,7 +78,9 @@ Route::get('dvrob', [ClassesController::class, 'dvrob']);
 Route::get('dvdelta', [ClassesController::class, 'dvdelta']);
 Route::get('dvcentral', [ClassesController::class, 'dvcentral']);
 Route::get('dfc', [ClassesController::class, 'dfc']);
-Route::put('classes/{id}/pushedback', [ClassesController::class, 'pushedback']);
+Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
+Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
+Route::put('classes/{id}', [ClassesController::class, 'store']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);

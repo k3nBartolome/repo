@@ -16,31 +16,31 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pushedback_id')->nullable();
-            $table->boolean('is_active'); //add
-            $table->string('within_sla'); //add
-            $table->date('original_start_date'); //add
+            $table->boolean('is_active')->nullable(); //add
+            $table->string('within_sla')->nullable(); //add
+            $table->date('original_start_date')->nullable(); //add
             $table->date('pushback_start_date_ta')->nullable(); //pushback
             $table->date('pushback_start_date_wf')->nullable(); //pushback
             $table->date('requested_start_date_by_wf')->nullable(); //pushback
             $table->date('start_date_committed_by_ta')->nullable(); //pushback
-            $table->datetime('approved_date')->nullable(); //cancel
-            $table->datetime('cancelled_date')->nullable(); //cancel
-            $table->date('wfm_date_requested'); //add
-            $table->float('notice_weeks'); //add
-            $table->integer('external_target'); //add
-            $table->integer('internal_target'); //add
-            $table->integer('notice_days'); //add
+            $table->date('approved_date')->nullable(); //cancel
+            $table->date('cancelled_date')->nullable(); //cancel
+            $table->date('wfm_date_requested')->nullable(); //add
+            $table->float('notice_weeks')->nullable(); //add
+            $table->integer('external_target')->nullable(); //add
+            $table->integer('internal_target')->nullable(); //add
+            $table->integer('notice_days')->nullable(); //add
             $table->integer('pipeline_utilized')->nullable(); //cancel
-            $table->integer('total_target'); //add
-            $table->string('remarks'); //add
-            $table->integer('status'); //add
-            $table->string('category'); //add
-            $table->string('type_of_hiring'); //add
+            $table->integer('total_target')->nullable(); //add
+            $table->string('remarks')->nullable(); //add
+            $table->string('status')->nullable(); //add
+            $table->string('category')->nullable(); //add
+            $table->string('type_of_hiring')->nullable(); //add
             $table->integer('backfill')->nullable(); //add
             $table->integer('growth')->nullable(); //add
             $table->integer('update_status')->nullable(); //pushback
-            $table->string('approved_status'); //add
-            $table->string('with_erf'); //add
+            $table->string('approved_status')->nullable(); //add
+            $table->string('with_erf')->nullable(); //add
             $table->unsignedBigInteger('approved_by')->nullable(); //cancel
             $table->unsignedBigInteger('cancelled_by')->nullable(); //cancel
             $table->unsignedBigInteger('created_by')->nullable(); //add
