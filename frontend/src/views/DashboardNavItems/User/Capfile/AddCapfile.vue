@@ -16,6 +16,7 @@
           <label class="block">
             Site
             <select
+              disabled
               v-model="sites_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -30,6 +31,7 @@
           <label class="block">
             Line of Business
             <select
+              disabled
               v-model="programs_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -57,7 +59,6 @@
             External Target
             <input
               type="number"
-              v-bind:title="tooltipMessage"
               v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget"
@@ -65,7 +66,12 @@
           </label>
           <label class="block">
             Internal Target
-            <input type="number" v-model="internal_target" @change="syncTotalTarget" />
+            <input
+              type="number"
+              v-model="internal_target"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncTotalTarget"
+            />
           </label>
           <label class="block">
             Total Target
@@ -87,7 +93,7 @@
           </label>
 
           <label class="block"
-            >WFM Requested Date
+            >Movement Date
             <input
               type="date"
               v-model="wfm_date_requested"
@@ -118,18 +124,23 @@
           <label class="block">
             Weeks Start
             <select
+              disabled
               v-model="date_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getDateRange"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="daterange in daterange" :key="daterange.id" :value="daterange.id">
+              <option
+                v-for="daterange in daterange"
+                :key="daterange.id"
+                :value="daterange.id"
+              >
                 {{ daterange.date_range }}
               </option>
             </select>
           </label>
-          <label class="block">
+          <!--  <label class="block">
             Growth
             <input
               type="number"
@@ -144,7 +155,7 @@
               v-model="backfill"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
-          </label>
+          </label> -->
           <label class="block"
             >With ERF?
             <select
@@ -156,6 +167,16 @@
               <option value="no">No</option>
             </select>
           </label>
+          <label class="block" v-if="with_erf === 'yes'">
+            ERF Number
+            <input
+              type="number"
+              v-model="erf_number"
+              readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+             
+            />
+          </label>
           <label class="block"
             >Category
             <select
@@ -164,7 +185,7 @@
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
-              <option value="confirm">Confirm</option>
+              <option value="confirmed">Confirmed</option>
             </select>
           </label>
           <label class="block"
@@ -178,7 +199,7 @@
           </label>
         </div>
         <div class="py-4">
-          <label class="block" v-if="within_sla ==='No'"
+          <label class="block" v-if="within_sla === 'No'"
             >Out of SLA Reason<textarea
               type="text"
               v-model="reason"
@@ -224,12 +245,12 @@ export default {
       reason: [],
       category: "",
       notice_days: 0,
-      growth: "",
-      backfill: "",
+      erf_number:"",
+      /* growth: "",
+      backfill: "", */
       sites: [],
       daterange: [],
       programs: [],
-      tooltipMessage: "External Target",
     };
   },
   computed: {
@@ -321,13 +342,11 @@ export default {
           this.external_target = classObj.external_target;
           this.internal_target = classObj.internal_target;
           this.total_target = classObj.total_target;
-          this.original_start_date = classObj.original.start_date;
+          this.original_start_date = classObj.original_start_date;
           this.wfm_date_requested = classObj.wfm_date_requested;
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range_id;
-          this.growth = classObj.growth;
-          this.backfill = classObj.backfill;
           this.with_erf = classObj.with_erf;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
@@ -351,14 +370,13 @@ export default {
         notice_days: this.notice_days,
         notice_weeks: this.notice_weeks,
         with_erf: this.with_erf,
+        erf_number:this.erf_number_number,
         category: this.category,
         original_start_date: this.original_start_date,
         wfm_date_requested: this.wfm_date_requested,
         within_sla: this.within_sla,
         remarks: this.remarks,
         reason: this.reason,
-        growth: this.growth,
-        backfill: this.backfill,
         date_range_id: this.date_selected,
         approved_status: "pending",
         status: "1",
@@ -366,7 +384,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .put("http://127.0.0.1:8000/api/classes/"+ this.$route.params.id, formData)
+        .put("http://127.0.0.1:8000/api/classes/" + this.$route.params.id, formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -378,18 +396,18 @@ export default {
           this.notice_days = "";
           this.notice_weeks = "";
           this.with_erf = "";
+          this.erf_number=";"
           this.category = "";
           this.original_start_date = "";
           this.wfm_date_requested = "";
           this.within_sla = "";
           this.remarks = "";
           this.reason = "";
-          this.growth = "";
-          this.backfill = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";
+          this.router.push('/capfile');
         })
         .catch((error) => {
           console.log(error.response.data);

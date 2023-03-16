@@ -16,7 +16,7 @@
             Site
             <select
               v-model="sites_selected"
-              readonly
+              disabled
               class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getSites"
@@ -30,7 +30,7 @@
           <label class="block">
             Line of Business
             <select
-              readonly
+              disabled
               v-model="programs_selected"
               class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -45,7 +45,7 @@
           <label class="block">
             Type of Hiring
             <select
-              readonly
+              disabled
               v-model="type_of_hiring"
               class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
@@ -79,13 +79,13 @@
             <input
               type="number"
               v-model="total_target"
-              readonly
+              disabled
               class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block"
             >Original Start Date
-            <input
+            <input disabled
               type="date"
               v-model="original_start_date"
               class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -107,7 +107,7 @@
             <input
               type="number"
               v-model="notice_days"
-              readonly
+              disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeWeeks"
             />
@@ -117,7 +117,7 @@
             <input
               type="text"
               v-model="notice_weeks"
-              readonly
+              disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncWithinSla"
             />
@@ -125,7 +125,7 @@
           <label class="block">
             Weeks Start
             <select
-              readonly
+              disabled
               v-model="date_selected"
               class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -141,22 +141,6 @@
               </option>
             </select>
           </label>
-          <label class="block">
-            Growth
-            <input
-              type="number"
-              v-model="growth"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block">
-            Backfill
-            <input
-              type="number"
-              v-model="backfill"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
           <label class="block"
             >With ERF?
             <select
@@ -167,6 +151,16 @@
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
+          </label>
+          <label class="block" v-if="with_erf === 'yes'">
+            ERF Number
+            <input
+              type="number"
+              v-model="erf_number"
+              disabled
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+             
+            />
           </label>
           <label class="block"
             >Category
@@ -184,40 +178,27 @@
             <input
               type="text"
               v-model="within_sla"
-              readonly
+              disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
-          <label class="block"
-            >Pushed Back Start Date By TA
-            <input
-              type="date"
-              v-model="pushback_start_date_ta"
+          <!-- <label class="block"
+            >Requested by
+            <select
+              v-model="requested_by"
+              multiple
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
+            >
+              <input type="checkbox" value="TA" />TA<br />
+              <input type="checkbox" value="WF" />WF<br />
+              <input type="checkbox" value="TA/WF" />TA/WF<br />
+            </select>
+          </label> -->
           <label class="block"
-            >Pushed Back Start Date By WF
+            >Agreed Start Date
             <input
               type="date"
-              v-model="pushback_start_date_wf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block"
-            >Requested Start Date by WF
-            <input
-              type="date"
-              v-model="requested_start_date_by_wf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
-          </label>
-          <label class="block"
-            >Start Date Committed by TA
-            <input
-              type="date"
-              v-model="start_date_committed_by_ta"
+              v-model="agreed_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
@@ -268,16 +249,13 @@ export default {
       remarks: "",
       reason: [],
       category: "",
+      requested_by:"",
       notice_days: 0,
-      growth: "",
-      backfill: "",
+      erf_number:"",
       sites: [],
       daterange: [],
       programs: [],
-      pushback_start_date_ta: "",
-      pushback_start_date_wf: "",
-      requested_start_date_by_wf: "",
-      start_date_committed_by_ta: "",
+      agreed_start_date: "",
     };
   },
   computed: {
@@ -369,13 +347,11 @@ export default {
           this.external_target = classObj.external_target;
           this.internal_target = classObj.internal_target;
           this.total_target = classObj.total_target;
-          this.original_start_date = classObj.original.start_date;
+          this.original_start_date = classObj.original_start_date;
           this.wfm_date_requested = classObj.wfm_date_requested;
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
-          this.date_selected = classObj.date_range_id;
-          this.growth = classObj.growth;
-          this.backfill = classObj.backfill;
+          this.date_selected = classObj.date_range.id;
           this.with_erf = classObj.with_erf;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
@@ -405,20 +381,18 @@ export default {
         within_sla: this.within_sla,
         remarks: this.remarks,
         reason: this.reason,
-        growth: this.growth,
-        backfill: this.backfill,
         date_range_id: this.date_selected,
         approved_status: "pending",
         status: "1",
         is_active: 1,
         updated_by: this.$store.state.user_id,
-        pushback_start_date_ta: this.pushback_start_date_ta,
-        pushback_start_date_wf: this.pushback_start_date_wf,
-        requested_start_date_by_wf: this.requested_start_date_by_wf,
-        start_date_committed_by_ta: this.start_date_committed_by_ta,
+        agreed_start_date: this.start_date_committed_by_ta,
       };
       axios
-        .put("http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id, formData)
+        .put(
+          "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
+          formData
+        )
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -436,16 +410,12 @@ export default {
           this.within_sla = "";
           this.remarks = "";
           this.reason = "";
-          this.growth = "";
-          this.backfill = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";
-          this.pushback_start_date_ta = "";
-          this.pushback_start_date_wf = "";
-          this.requested_start_date_by_wf = "";
-          this.start_date_committed_by_ta = "";
+          this.agreed_start_date = "";
+          this.router.push('/capfile');
         })
         .catch((error) => {
           console.log(error.response.data);

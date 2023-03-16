@@ -51,11 +51,23 @@ class ClassesController extends Controller
             $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 2)
+            ->where('status', 1)
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('pushedback_id')
             ->get();
 
-            $groupedData = $classes->groupBy(function ($class) {
+            $classIds = $classes->pluck('id');
+
+            $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+            ->whereIn('id', $classIds)
+            ->get()
+            ->groupBy(function ($class) {
                 return $class->dateRange->month;
-            })->toArray();
+            })
+            ->map(function ($monthClasses) {
+                return $monthClasses->sortBy('date_range_id')->values();
+            })
+            ->toArray();
 
             return $groupedData;
         };
@@ -63,15 +75,26 @@ class ClassesController extends Controller
             $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
             ->where('program_id', 3)
+            ->where('status', 1)
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('pushedback_id')
             ->get();
 
-            $groupedData = $classes->groupBy(function ($class) {
+            $classIds = $classes->pluck('id');
+
+            $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+            ->whereIn('id', $classIds)
+            ->get()
+            ->groupBy(function ($class) {
                 return $class->dateRange->month;
-            })->toArray();
+            })
+            ->map(function ($monthClasses) {
+                return $monthClasses->sortBy('date_range_id')->values();
+            })
+            ->toArray();
 
             return $groupedData;
         };
-
         $clark4 = function () {
             $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
             ->where('site_id', 1)
@@ -1820,6 +1843,7 @@ class ClassesController extends Controller
         'type_of_hiring' => 'required',
         'within_sla' => 'required',
         'with_erf' => 'required',
+        'erf_number' => 'nullable',
         'remarks' => 'required',
         'status' => 'required',
         'approved_status' => 'required',
@@ -1830,8 +1854,8 @@ class ClassesController extends Controller
         'created_by' => 'required',
         'is_active' => 'required',
         'date_range_id' => 'required',
-        'backfill' => 'required',
-        'growth' => 'required',
+        /* 'backfill' => 'required',
+        'growth' => 'required', */
         'category' => 'required',
         'reason' => 'nullable',
     ]);
@@ -1890,6 +1914,7 @@ class ClassesController extends Controller
         'type_of_hiring' => 'required',
         'within_sla' => 'required',
         'with_erf' => 'required',
+        'erf_number' => 'nullable',
         'remarks' => 'required',
         'status' => 'required',
         'approved_status' => 'required',
@@ -1899,14 +1924,12 @@ class ClassesController extends Controller
         'site_id' => 'required',
         'is_active' => 'required',
         'date_range_id' => 'required',
-        'backfill' => 'required',
-        'growth' => 'required',
+       /*  'backfill' => 'required',
+        'growth' => 'required', */
         'category' => 'required',
         'reason' => 'nullable',
-        'requested_start_date_by_wf' => 'required',
-        'pushback_start_date_ta' => 'required',
-        'pushback_start_date_wf' => 'required',
-        'start_date_committed_by_ta' => 'required',
+        'requested_by' => 'required',
+        'agreed_start_date' => 'required',
         'updated_by' => 'required',
     ]);
 
@@ -1963,6 +1986,7 @@ class ClassesController extends Controller
         $newClass->type_of_hiring = null;
         $newClass->within_sla = null;
         $newClass->with_erf = null;
+        $newClass->erf_number = null;
         $newClass->remarks = null;
         $newClass->status = 1;
         $newClass->approved_status = null;
@@ -1972,10 +1996,7 @@ class ClassesController extends Controller
         $newClass->backfill = null;
         $newClass->growth = null;
         $newClass->category = null;
-        $newClass->requested_start_date_by_wf = null;
-        $newClass->pushback_start_date_ta = null;
-        $newClass->pushback_start_date_wf = null;
-        $newClass->start_date_committed_by_ta = null;
+        $newClass->agreed_start_date = null;
         $newClass->updated_by = null;
         $newClass->updated_at = null;
         $newClass->created_by = null;

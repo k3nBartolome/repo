@@ -116,7 +116,6 @@
       </td>
     </template>
   </tbody>
-
   <tbody class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
     <td class="px-1 py-2 border">CLARK</td>
     <td class="px-1 py-2 border">EBAY BUY PHONE</td>

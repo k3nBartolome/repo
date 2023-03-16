@@ -19,10 +19,11 @@ class CreateClassesTable extends Migration
             $table->boolean('is_active')->nullable(); //add
             $table->string('within_sla')->nullable(); //add
             $table->date('original_start_date')->nullable(); //add
-            $table->date('pushback_start_date_ta')->nullable(); //pushback
+           /*  $table->date('pushback_start_date_ta')->nullable(); //pushback
             $table->date('pushback_start_date_wf')->nullable(); //pushback
             $table->date('requested_start_date_by_wf')->nullable(); //pushback
-            $table->date('start_date_committed_by_ta')->nullable(); //pushback
+            $table->date('start_date_committed_by_ta')->nullable(); //pushback */
+            $table->date('agreed_start_date')->nullable();
             $table->date('approved_date')->nullable(); //cancel
             $table->date('cancelled_date')->nullable(); //cancel
             $table->date('wfm_date_requested')->nullable(); //add
@@ -36,11 +37,12 @@ class CreateClassesTable extends Migration
             $table->string('status')->nullable(); //add
             $table->string('category')->nullable(); //add
             $table->string('type_of_hiring')->nullable(); //add
-            $table->integer('backfill')->nullable(); //add
-            $table->integer('growth')->nullable(); //add
+           /*  $table->integer('backfill')->nullable(); //add
+            $table->integer('growth')->nullable(); //add */
             $table->integer('update_status')->nullable(); //pushback
             $table->string('approved_status')->nullable(); //add
             $table->string('with_erf')->nullable(); //add
+            $table->integer('erf_number')->nullable(); //add
             $table->unsignedBigInteger('approved_by')->nullable(); //cancel
             $table->unsignedBigInteger('cancelled_by')->nullable(); //cancel
             $table->unsignedBigInteger('created_by')->nullable(); //add
