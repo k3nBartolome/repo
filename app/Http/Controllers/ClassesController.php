@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
-use App\Models\Sla_reason;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -1854,8 +1853,6 @@ class ClassesController extends Controller
         'created_by' => 'required',
         'is_active' => 'required',
         'date_range_id' => 'required',
-        /* 'backfill' => 'required',
-        'growth' => 'required', */
         'category' => 'required',
         'reason' => 'nullable',
     ]);
@@ -1871,14 +1868,6 @@ class ClassesController extends Controller
 
         $class->fill($request->all());
         $class->save();
-
-        $slaReason = $class->sla_reason;
-        if (!$slaReason) {
-            $slaReason = new Sla_reason();
-        }
-        $slaReason->reason = $request->input('reason');
-        $slaReason->classes_id = $class->id;
-        $slaReason->save();
 
         return new ClassesResource($class);
     }
@@ -1924,8 +1913,6 @@ class ClassesController extends Controller
         'site_id' => 'required',
         'is_active' => 'required',
         'date_range_id' => 'required',
-       /*  'backfill' => 'required',
-        'growth' => 'required', */
         'category' => 'required',
         'reason' => 'nullable',
         'requested_by' => 'required',
@@ -1943,10 +1930,6 @@ class ClassesController extends Controller
         $newClass->update_status = $class->update_status + 1;
         $newClass->fill($request->all());
         $newClass->save();
-
-        $slaReason = new Sla_reason(['reason' => $request->input('reason')]);
-        $slaReason->classes_id = $newClass->id;
-        $slaReason->save();
 
         return new ClassesResource($newClass);
     }
@@ -2004,9 +1987,6 @@ class ClassesController extends Controller
         $newClass->cancelled_by = null;
         $newClass->cancelled_date = null;
         $newClass->update_status = null;
-        $newClass->save();
-
-        $newClass->sla_reason->reason = null;
         $newClass->save();
 
         $newClass->pushedback_id = $newClass->id;

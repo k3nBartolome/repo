@@ -175,12 +175,19 @@
           </label>
           <label class="block"
             >Within SLA?
-            <input
+           <select
               type="text"
               v-model="within_sla"
-              disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            >
+            <option disabled value="" selected>Please select one</option>
+            <option value="Within Sla">Within Sla</option>
+            <option value="Outside Sla-Change in Demand">Outside Sla-Change in Demand</option>
+            <option value="Outside Sla-Change in Start Date">Outside Sla-Change in Start Date</option>
+            <option value="Outside Sla-Change in Profile">Outside Sla-Change in Profile</option>
+            <option value="Outside Sla-Change in Process/Assessments">Outside Sla-Change in Process/Assessments</option>
+            <option value="OV Support">OV Support</option>
+        </select>
           </label>
           <!-- <label class="block"
             >Requested by
@@ -202,17 +209,62 @@
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
+          <label class="block"
+          >Condition
+          <select
+            type="text"
+            v-model="condition"
+            class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option value="Filed ERF with necessary approvals and within timeline">
+              Filed ERF with necessary approvals and within timeline
+            </option>
+            <option value="Adherence to hiring demand from initial sign-off">
+              Adherence to hiring demand from initial sign-off
+            </option>
+            <option value="Adherence to hiring timelines from initial sign-off">
+              Adherence to hiring timelines from initial sign-off
+            </option>
+            <option value="Adherence to agreed hiring profile, process and assessments">Adherence to agreed hiring profile, process and assessments
+            </option>
+            <option value="Adherence to OV Support based on the required no. of POCs and sched"
+            >Adherence to OV Support based on the required no. of POCs and sched</option>
+            <option value="Program-specific assessment per SOW">
+              Program-specific assessment per SOW
+            </option>
+            <option value="Employment requirements prior Day1 per SOW">
+              Employment requirements prior Day1 per SOW
+            </option>
+            <option value="Specific previous work exp per SOW">
+              Specific previous work exp per SOW
+            </option>
+            <option value="Roster submission requirement for ID creation prior Day 1">
+              Roster submission requirement for ID creation prior Day 1
+            </option>
+            <option
+              value="Programs following VXI standard hiring process and emp req’ts"
+            >
+              Programs following VXI standard hiring process and emp req’ts
+            </option>
+            <option value="Agreed hiring profile, process and assessments">
+              Agreed hiring profile, process and assessments
+            </option>
+            <option value="Sample call recordings, sample transactions">
+              Sample call recordings, sample transactions
+            </option>
+            <option value="Approved wage rates and job offer/contract template">
+              Approved wage rates and job offer/contract template
+            </option>
+            <option value="Agreed ramp plan with WF, CS, PMO">
+              Agreed ramp plan with WF, CS, PMO
+            </option>
+          </select>
+        </label>
         </div>
         <div class="py-4">
-          <label class="block" v-if="within_sla === 'No'"
-            >Out of SLA Reason<textarea
-              type="text"
-              v-model="reason"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
           <label class="block"
-            >Reason for Counter Proposal<textarea
+            >Remarks<textarea
               type="text"
               v-model="remarks"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -224,7 +276,7 @@
             type="submit"
             class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
           >
-            <i class="fa fa-save"></i> Pushed Back
+            <i class="fa fa-save"></i> Move
           </button>
         </div>
       </div>

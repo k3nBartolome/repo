@@ -48,7 +48,6 @@ class CreateClassesTable extends Migration
             $table->unsignedBigInteger('created_by')->nullable(); //add
             $table->unsignedBigInteger('site_id')->nullable(); //add
             $table->unsignedBigInteger('program_id')->nullable(); //add
-            $table->unsignedBigInteger('sla_reason_id')->nullable(); //add
             $table->unsignedBigInteger('updated_by')->nullable(); //pushback
             $table->unsignedBigInteger('date_range_id')->nullable(); //add
             $table->timestamps();
