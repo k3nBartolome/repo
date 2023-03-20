@@ -85,7 +85,8 @@
           </label>
           <label class="block"
             >Original Start Date
-            <input disabled
+            <input
+              disabled
               type="date"
               v-model="original_start_date"
               class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -94,7 +95,7 @@
           </label>
 
           <label class="block"
-            >WFM Requested Date
+            >Movement Date
             <input
               type="date"
               v-model="wfm_date_requested"
@@ -119,7 +120,6 @@
               v-model="notice_weeks"
               disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncWithinSla"
             />
           </label>
           <label class="block">
@@ -159,7 +159,6 @@
               v-model="erf_number"
               disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-             
             />
           </label>
           <label class="block"
@@ -170,100 +169,128 @@
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
-              <option value="confirm">Confirm</option>
+              <option value="confirmed">Confirmed</option>
             </select>
           </label>
           <label class="block"
             >Within SLA?
-           <select
-              type="text"
+            <select
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Within Sla">Within Sla</option>
-            <option value="Outside Sla-Change in Demand">Outside Sla-Change in Demand</option>
-            <option value="Outside Sla-Change in Start Date">Outside Sla-Change in Start Date</option>
-            <option value="Outside Sla-Change in Profile">Outside Sla-Change in Profile</option>
-            <option value="Outside Sla-Change in Process/Assessments">Outside Sla-Change in Process/Assessments</option>
-            <option value="OV Support">OV Support</option>
-        </select>
-          </label>
-          <!-- <label class="block"
-            >Requested by
-            <select
-              v-model="requested_by"
-              multiple
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <input type="checkbox" value="TA" />TA<br />
-              <input type="checkbox" value="WF" />WF<br />
-              <input type="checkbox" value="TA/WF" />TA/WF<br />
+              <option disabled value="" selected>Please select one</option>
+              <option value="Within Sla">Within Sla</option>
+              <option value="Outside Sla-Change in Demand">
+                Outside Sla-Change in Demand
+              </option>
+              <option value="Outside Sla-Change in Start Date">
+                Outside Sla-Change in Start Date
+              </option>
+              <option value="Outside Sla-Change in Profile">
+                Outside Sla-Change in Profile
+              </option>
+              <option value="Outside Sla-Change in Process/Assessments">
+                Outside Sla-Change in Process/Assessments
+              </option>
+              <option value="OV Support">OV Support</option>
             </select>
-          </label> -->
+          </label>
           <label class="block"
             >Agreed Start Date
             <input
               type="date"
               v-model="agreed_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncNoticeDays"
             />
           </label>
           <label class="block"
-          >Condition
-          <select
-            type="text"
-            v-model="condition"
-            class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Filed ERF with necessary approvals and within timeline">
-              Filed ERF with necessary approvals and within timeline
-            </option>
-            <option value="Adherence to hiring demand from initial sign-off">
-              Adherence to hiring demand from initial sign-off
-            </option>
-            <option value="Adherence to hiring timelines from initial sign-off">
-              Adherence to hiring timelines from initial sign-off
-            </option>
-            <option value="Adherence to agreed hiring profile, process and assessments">Adherence to agreed hiring profile, process and assessments
-            </option>
-            <option value="Adherence to OV Support based on the required no. of POCs and sched"
-            >Adherence to OV Support based on the required no. of POCs and sched</option>
-            <option value="Program-specific assessment per SOW">
-              Program-specific assessment per SOW
-            </option>
-            <option value="Employment requirements prior Day1 per SOW">
-              Employment requirements prior Day1 per SOW
-            </option>
-            <option value="Specific previous work exp per SOW">
-              Specific previous work exp per SOW
-            </option>
-            <option value="Roster submission requirement for ID creation prior Day 1">
-              Roster submission requirement for ID creation prior Day 1
-            </option>
-            <option
-              value="Programs following VXI standard hiring process and emp req’ts"
+            >Condition
+            <select
+              v-model="condition"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
-              Programs following VXI standard hiring process and emp req’ts
-            </option>
-            <option value="Agreed hiring profile, process and assessments">
-              Agreed hiring profile, process and assessments
-            </option>
-            <option value="Sample call recordings, sample transactions">
-              Sample call recordings, sample transactions
-            </option>
-            <option value="Approved wage rates and job offer/contract template">
-              Approved wage rates and job offer/contract template
-            </option>
-            <option value="Agreed ramp plan with WF, CS, PMO">
-              Agreed ramp plan with WF, CS, PMO
-            </option>
-          </select>
-        </label>
-        </div>
-        <div class="py-4">
+              <option disabled value="" selected>Please select one</option>
+              <option value="Filed ERF with necessary approvals and within timeline">
+                Filed ERF with necessary approvals and within timeline
+              </option>
+              <option value="Adherence to hiring demand from initial sign-off">
+                Adherence to hiring demand from initial sign-off
+              </option>
+              <option value="Adherence to hiring timelines from initial sign-off">
+                Adherence to hiring timelines from initial sign-off
+              </option>
+              <option value="Adherence to agreed hiring profile, process and assessments">
+                Adherence to agreed hiring profile, process and assessments
+              </option>
+              <option
+                value="Adherence to OV Support based on the required no. of POCs and sched"
+              >
+                Adherence to OV Support based on the required no. of POCs and sched
+              </option>
+              <option value="Program-specific assessment per SOW">
+                Program-specific assessment per SOW
+              </option>
+              <option value="Employment requirements prior Day1 per SOW">
+                Employment requirements prior Day1 per SOW
+              </option>
+              <option value="Specific previous work exp per SOW">
+                Specific previous work exp per SOW
+              </option>
+              <option value="Roster submission requirement for ID creation prior Day 1">
+                Roster submission requirement for ID creation prior Day 1
+              </option>
+              <option
+                value="Programs following VXI standard hiring process and emp req’ts"
+              >
+                Programs following VXI standard hiring process and emp req’ts
+              </option>
+              <option value="Agreed hiring profile, process and assessments">
+                Agreed hiring profile, process and assessments
+              </option>
+              <option value="Sample call recordings, sample transactions">
+                Sample call recordings, sample transactions
+              </option>
+              <option value="Approved wage rates and job offer/contract template">
+                Approved wage rates and job offer/contract template
+              </option>
+              <option value="Agreed ramp plan with WF, CS, PMO">
+                Agreed ramp plan with WF, CS, PMO
+              </option>
+            </select>
+          </label>
           <label class="block"
+            >Approved by
+            <select
+              v-model="approved_by"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
+            <option disabled value="" selected>Please select one</option>
+              <option value="SD Sheila Y">SD Sheila Y</option>
+              <option value="CS/Ops">CS/Ops</option>
+              <option value="WF/Ops">WF/Ops</option>
+              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
+              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
+              <option value="Christito Villaprudente">Christito Villaprudente</option>
+              <option value="VP Sheryll">VP Sheryll</option>
+              <option value="Kim De Guzman">Kim De Guzman</option>
+              <option value="Ryan Tomzer">Ryan Tomzer</option>
+            </select>
+          </label>
+        </div>
+        <div class="py-6">
+          <label class="block"
+            >Requested by:
+            <input type="radio" v-model="requested_by" value="Talent Acquisition" />Talent
+            Acquisition
+            <input type="radio" v-model="requested_by" value="Workforce" />Workforce
+            <input
+              type="radio"
+              v-model="requested_by"
+              value="Talent Acquisition/Workforce"
+            />Talent Acquisition/Workforce
+          </label>
+          <label class="block py-6"
             >Remarks<textarea
               type="text"
               v-model="remarks"
@@ -299,15 +326,17 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      reason: [],
       category: "",
-      requested_by:"",
+      requested_by: "",
+      approved_by: "",
       notice_days: 0,
-      erf_number:"",
+      erf_number: "",
       sites: [],
       daterange: [],
       programs: [],
       agreed_start_date: "",
+      condition: "",
+      within_sla: "",
     };
   },
   computed: {
@@ -317,17 +346,12 @@ export default {
       return (external + internal).toFixed();
     },
     notice_days_computed() {
-      const osd = Date.parse(this.original_start_date) || 0;
+      const osd = Date.parse(this.agreed_start_date) || 0;
       const wrd = Date.parse(this.wfm_date_requested) || 0;
       return Math.round((osd - wrd) / (24 * 60 * 60 * 1000));
     },
     notice_weeks() {
-      return parseFloat(this.notice_days / 7);
-    },
-    within_sla() {
-      const days = parseFloat(this.notice_days) || 0;
-      const days_computed = (days / 7).toFixed(2);
-      return days_computed > 5 ? "Yes" : "No";
+      return parseFloat(this.notice_days / 7).toFixed(1);
     },
   },
   mounted() {
@@ -347,9 +371,6 @@ export default {
     },
     syncNoticeWeeks: function () {
       this.notice_weeks = this.notice_weeks_computed;
-    },
-    syncWithinSla: function () {
-      this.within_sla = this.within_sla_computed;
     },
     async getSites() {
       console.log(this.sites_selected);
@@ -400,15 +421,17 @@ export default {
           this.internal_target = classObj.internal_target;
           this.total_target = classObj.total_target;
           this.original_start_date = classObj.original_start_date;
-          this.wfm_date_requested = classObj.wfm_date_requested;
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range.id;
           this.with_erf = classObj.with_erf;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
-          this.remarks = classObj.remarks;
-          this.reason = classObj.reason;
+          this.agreed_start_date = classObj.agreed_start_date;
+          this.condition = classObj.condition;
+          this.erf_number = classObj.erf_number;
+          this.requested_by = classObj.requested_by;
+          this.approved_by = classObj.approved_by;
 
           console.log(classObj);
         })
@@ -432,13 +455,16 @@ export default {
         wfm_date_requested: this.wfm_date_requested,
         within_sla: this.within_sla,
         remarks: this.remarks,
-        reason: this.reason,
+        requested_by: this.requested_by,
+        erf_number: this.erf_number,
         date_range_id: this.date_selected,
         approved_status: "pending",
         status: "1",
         is_active: 1,
         updated_by: this.$store.state.user_id,
-        agreed_start_date: this.start_date_committed_by_ta,
+        agreed_start_date: this.agreed_start_date,
+        condition: this.condition,
+        approved_by: this.approved_by,
       };
       axios
         .put(
@@ -456,18 +482,21 @@ export default {
           this.notice_days = "";
           this.notice_weeks = "";
           this.with_erf = "";
+          this.erf_number = "";
           this.category = "";
           this.original_start_date = "";
           this.wfm_date_requested = "";
           this.within_sla = "";
           this.remarks = "";
-          this.reason = "";
+          this.requested_by = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
-          this.created_by = "";
+          this.updated_by = "";
           this.agreed_start_date = "";
-          this.router.push('/capfile');
+          this.condition = "";
+          this.approved_by = "";
+          this.$router.push("/capfile");
         })
         .catch((error) => {
           console.log(error.response.data);

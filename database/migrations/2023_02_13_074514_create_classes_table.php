@@ -17,7 +17,9 @@ class CreateClassesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('pushedback_id')->nullable();
             $table->boolean('is_active')->nullable(); //add
-            $table->string('within_sla')->nullable(); //add
+            $table->string('within_sla')->nullable();
+            $table->string('condition')->nullable(); //add
+            $table->string('requested_by')->nullable(); //add
             $table->date('original_start_date')->nullable(); //add
            /*  $table->date('pushback_start_date_ta')->nullable(); //pushback
             $table->date('pushback_start_date_wf')->nullable(); //pushback
@@ -43,7 +45,7 @@ class CreateClassesTable extends Migration
             $table->string('approved_status')->nullable(); //add
             $table->string('with_erf')->nullable(); //add
             $table->integer('erf_number')->nullable(); //add
-            $table->unsignedBigInteger('approved_by')->nullable(); //cancel
+            $table->string('approved_by')->nullable(); //cancel
             $table->unsignedBigInteger('cancelled_by')->nullable(); //cancel
             $table->unsignedBigInteger('created_by')->nullable(); //add
             $table->unsignedBigInteger('site_id')->nullable(); //add
@@ -54,7 +56,6 @@ class CreateClassesTable extends Migration
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('date_range_id')->references('id')->on('date_ranges')->onDelete('cascade');
-            $table->foreign('approved_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');

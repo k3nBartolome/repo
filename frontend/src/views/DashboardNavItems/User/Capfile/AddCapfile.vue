@@ -93,7 +93,7 @@
           </label>
 
           <label class="block"
-            >Movement Date
+            >WFM Date Requested
             <input
               type="date"
               v-model="wfm_date_requested"
@@ -155,7 +155,6 @@
             <input
               type="number"
               v-model="erf_number"
-              readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
@@ -173,7 +172,6 @@
           <label class="block"
             >Within SLA?
             <select
-              type="text"
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -197,7 +195,6 @@
           <label class="block"
             >Condition
             <select
-              type="text"
               v-model="condition"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -284,12 +281,11 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      reason: [],
       category: "",
       notice_days: 0,
       erf_number: "",
-      /* growth: "",
-      backfill: "", */
+      condition: "",
+      within_sla: "",
       sites: [],
       daterange: [],
       programs: [],
@@ -307,7 +303,7 @@ export default {
       return Math.round((osd - wrd) / (24 * 60 * 60 * 1000));
     },
     notice_weeks() {
-      return parseFloat(this.notice_days / 7);
+      return parseFloat(this.notice_days / 7).toFixed(1);
     },
   },
   mounted() {
@@ -382,10 +378,12 @@ export default {
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range_id;
           this.with_erf = classObj.with_erf;
+          this.erf_number = classObj.erf_number;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
           this.remarks = classObj.remarks;
-          this.reason = classObj.reason;
+          this.condition = classObj.condition;
+          this.approved_by = classObj.approved_by;
 
           console.log(classObj);
         })
@@ -404,15 +402,16 @@ export default {
         notice_days: this.notice_days,
         notice_weeks: this.notice_weeks,
         with_erf: this.with_erf,
-        erf_number: this.erf_number_number,
+        erf_number: this.erf_number,
         category: this.category,
         original_start_date: this.original_start_date,
         wfm_date_requested: this.wfm_date_requested,
         within_sla: this.within_sla,
         remarks: this.remarks,
-        reason: this.reason,
+        condition: this.condition,
         date_range_id: this.date_selected,
         approved_status: "pending",
+        approved_by:this.approved_by,
         status: "1",
         is_active: 1,
         created_by: this.$store.state.user_id,
@@ -430,18 +429,19 @@ export default {
           this.notice_days = "";
           this.notice_weeks = "";
           this.with_erf = "";
-          this.erf_number = ";";
+          this.erf_number = "";
           this.category = "";
           this.original_start_date = "";
           this.wfm_date_requested = "";
           this.within_sla = "";
           this.remarks = "";
-          this.reason = "";
+          this.condition = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";
-          this.router.push("/capfile");
+          this.approved_by="";
+          this.$router.push("/capfile");
         })
         .catch((error) => {
           console.log(error.response.data);

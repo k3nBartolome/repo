@@ -90,7 +90,6 @@
               type="date"
               v-model="original_start_date"
               class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
             />
           </label>
 
@@ -169,13 +168,12 @@
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
-              <option value="confirm">Confirm</option>
+              <option value="confirmed">Confirmed</option>
             </select>
           </label>
           <label class="block"
             >Within SLA?
             <select
-              type="text"
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -200,14 +198,14 @@
             >Agreed Start Date
             <input
               type="date"
-              v-model="start_date_committed_by_ta"
+              v-model="agreed_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              @change="syncNoticeDays"
             />
           </label>
           <label class="block"
             >Condition
             <select
-              type="text"
               v-model="condition"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -260,9 +258,38 @@
               </option>
             </select>
           </label>
-        </div>
-        <div class="py-4">
           <label class="block"
+            >Approved by
+            <select
+              v-model="approved_by"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="SD Sheila Y">SD Sheila Y</option>
+              <option value="CS/Ops">CS/Ops</option>
+              <option value="WF/Ops">WF/Ops</option>
+              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
+              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
+              <option value="Christito Villaprudente">Christito Villaprudente</option>
+              <option value="VP Sheryll">VP Sheryll</option>
+              <option value="Kim De Guzman">Kim De Guzman</option>
+              <option value="Ryan Tomzer">Ryan Tomzer</option>
+            </select>
+          </label>
+        </div>
+        <div class="py-6">
+          <label class="block"
+            >Requested by:
+            <input type="radio" v-model="requested_by" value="Talent Acquisition" />Talent
+            Acquisition
+            <input type="radio" v-model="requested_by" value="Workforce" />Workforce
+            <input
+              type="radio"
+              v-model="requested_by"
+              value="Talent Acquisition/Workforce"
+            />Talent Acquisition/Workforce
+          </label>
+          <label class="block py-6"
             >Reason for Cancellation<textarea
               type="text"
               v-model="remarks"
@@ -305,10 +332,11 @@ export default {
       sites: [],
       daterange: [],
       programs: [],
-      pushback_start_date_ta: "",
-      pushback_start_date_wf: "",
-      requested_start_date_by_wf: "",
-      start_date_committed_by_ta: "",
+      agreed_start_date: "",
+      condition: "",
+      within_sla: "",
+      approved_by: "",
+      requested_by: "",
     };
   },
   computed: {
@@ -318,12 +346,12 @@ export default {
       return (external + internal).toFixed();
     },
     notice_days_computed() {
-      const osd = Date.parse(this.original_start_date) || 0;
+      const osd = Date.parse(this.agreed_start_date) || 0;
       const wrd = Date.parse(this.wfm_date_requested) || 0;
       return Math.round((osd - wrd) / (24 * 60 * 60 * 1000));
     },
     notice_weeks() {
-      return parseFloat(this.notice_days / 7);
+      return parseFloat(this.notice_days / 7).toFixed(1);
     },
   },
   mounted() {
@@ -397,14 +425,14 @@ export default {
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range.id;
-          this.growth = classObj.growth;
-          this.backfill = classObj.backfill;
           this.with_erf = classObj.with_erf;
           this.erf_number = classObj.erf_number;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
-          this.remarks = classObj.remarks;
-          this.reason = classObj.reason;
+          this.agreed_start_date = classObj.agreed_start_date;
+          this.condition = classObj.condition;
+          this.approved_by = classObj.approved_by;
+          this.requested_by = classObj.requested_by;
 
           console.log(classObj);
         })
@@ -417,8 +445,11 @@ export default {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
         date_range_id: this.date_selected,
+        requested_by:this.requested_by,
+        approved_by:this.approved_by,
+        remarks: this.remarks,
         approved_status: "pending",
-        status: "cancelled",
+        status: "previous",
         is_active: 0,
         cancelled_by: this.$store.state.user_id,
       };
@@ -433,9 +464,12 @@ export default {
           this.program_id = "";
           this.date_range_id = "";
           this.approved_status = "";
+          this.approved_by = "";
+          this.remarks = "";
+          this.requested_by = "";
           this.is_active = "";
           this.cancelled_by = "";
-          this.router.push("/capfile");
+          this.$router.push("/capfile");
         })
         .catch((error) => {
           console.log(error.response.data);

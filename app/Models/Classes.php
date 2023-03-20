@@ -44,7 +44,10 @@ class Classes extends Model
         'created_by',
         'program_id',
         'site_id',
-        'updated_by',
+        'erf_number',
+        'condition',
+        'agreed_start_date',
+        'requested_by',
     ];
 
     public function site()
@@ -75,11 +78,6 @@ class Classes extends Model
     public function updatedByUser()
     {
         return $this->belongsTo(User::class, 'updated_by');
-    }
-
-    public function approvedByUser()
-    {
-        return $this->belongsTo(User::class, 'approved_by');
     }
 
     public function cancelledByUser()

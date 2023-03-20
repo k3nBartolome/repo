@@ -11,7 +11,7 @@ class ClassesController extends Controller
 {
     public function index()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->get();
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])->get();
         $classesData = ClassesResource::collection($classes);
 
         return response()->json([
@@ -1833,42 +1833,52 @@ class ClassesController extends Controller
 
     public function store(Request $request, $id)
     {
+        // Validate the request.
         $validator = Validator::make($request->all(), [
-        'notice_weeks' => 'required',
-        'notice_days' => 'required',
-        'external_target' => 'required',
-        'internal_target' => 'required',
-        'total_target' => 'required',
-        'type_of_hiring' => 'required',
-        'within_sla' => 'required',
-        'with_erf' => 'required',
-        'erf_number' => 'nullable',
-        'remarks' => 'required',
-        'status' => 'required',
-        'approved_status' => 'required',
-        'original_start_date' => 'required',
-        'wfm_date_requested' => 'required',
-        'program_id' => 'required',
-        'site_id' => 'required',
-        'created_by' => 'required',
-        'is_active' => 'required',
-        'date_range_id' => 'required',
-        'category' => 'required',
-        'reason' => 'nullable',
-    ]);
+            'notice_weeks' => 'required',
+            'notice_days' => 'required',
+            'external_target' => 'required',
+            'internal_target' => 'required',
+            'total_target' => 'required',
+            'type_of_hiring' => 'required',
+            'within_sla' => 'required',
+            'with_erf' => 'required',
+            'erf_number' => 'nullable',
+            'remarks' => 'required',
+            'status' => 'required',
+            'approved_status' => 'required',
+            'original_start_date' => 'required',
+            'wfm_date_requested' => 'required',
+            'program_id' => 'required',
+            'site_id' => 'required',
+            'created_by' => 'required',
+            'is_active' => 'required',
+            'date_range_id' => 'required',
+            'category' => 'required',
+            'condition' => 'required',
+        ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $class = Classes::where('id', $id)->first();
+        // Validate the ID parameter.
+        if (!is_numeric($id) || $id < 0) {
+            return response()->json(['error' => 'Invalid ID.'], 400);
+        }
+
+        // Get the class by ID.
+        $class = Classes::find($id);
         if (!$class) {
             return response()->json(['error' => 'Record not found.'], 404);
         }
 
+        // Update the class with the request data.
         $class->fill($request->all());
+        $class->agreed_start_date = $request->input('original_start_date');
         $class->save();
 
+        // Return the updated class as a resource.
         return new ClassesResource($class);
     }
 
@@ -1881,7 +1891,7 @@ class ClassesController extends Controller
 
     public function show($id)
     {
-        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser', 'approvedByUser'])->find($id);
+        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
@@ -1914,9 +1924,10 @@ class ClassesController extends Controller
         'is_active' => 'required',
         'date_range_id' => 'required',
         'category' => 'required',
-        'reason' => 'nullable',
         'requested_by' => 'required',
         'agreed_start_date' => 'required',
+        'condition' => 'required',
+        'approved_by' => 'required',
         'updated_by' => 'required',
     ]);
 
@@ -1925,7 +1936,8 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-
+        $class->status = 'Cancelled';
+        $class->save();
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->fill($request->all());
@@ -1971,13 +1983,14 @@ class ClassesController extends Controller
         $newClass->with_erf = null;
         $newClass->erf_number = null;
         $newClass->remarks = null;
+        $newClass->condition = null;
+        $newClass->approved_by = null;
+        $newClass->requested_by = null;
         $newClass->status = 1;
         $newClass->approved_status = null;
         $newClass->original_start_date = null;
         $newClass->wfm_date_requested = null;
         $newClass->is_active = null;
-        $newClass->backfill = null;
-        $newClass->growth = null;
         $newClass->category = null;
         $newClass->agreed_start_date = null;
         $newClass->updated_by = null;
