@@ -15,9 +15,11 @@ class CreateDateRangesTable extends Migration
     {
         Schema::create('date_ranges', function (Blueprint $table) {
             $table->id();
-            $table->string('date_range');
-            $table->string('month');
-            $table->string('year');
+            $table->string('date_range')->nullable();
+            $table->date('week_start')->nullable();
+            $table->date('week_end')->nullable();
+            $table->string('month')->nullable();
+            $table->string('year')->nullable();
             $table->timestamps();
         });
     }

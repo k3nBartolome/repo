@@ -46,6 +46,7 @@
           <label class="block">
             Type of Hiring
             <select
+              required
               v-model="type_of_hiring"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
@@ -58,6 +59,7 @@
           <label class="block">
             External Target
             <input
+              required
               type="number"
               v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -67,6 +69,7 @@
           <label class="block">
             Internal Target
             <input
+              required
               type="number"
               v-model="internal_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -85,6 +88,7 @@
           <label class="block"
             >Original Start Date
             <input
+              required
               type="date"
               v-model="original_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -95,6 +99,7 @@
           <label class="block"
             >WFM Date Requested
             <input
+              required
               type="date"
               v-model="wfm_date_requested"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -142,6 +147,7 @@
           <label class="block"
             >With ERF?
             <select
+              required
               v-model="with_erf"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -153,7 +159,7 @@
           <label class="block" v-if="with_erf === 'yes'">
             ERF Number
             <input
-              type="number"
+              type="text"
               v-model="erf_number"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
@@ -161,6 +167,7 @@
           <label class="block"
             >Category
             <select
+              required
               v-model="category"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -172,6 +179,7 @@
           <label class="block"
             >Within SLA?
             <select
+              required
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -193,8 +201,30 @@
             </select>
           </label>
           <label class="block"
+          >Approved by
+          <select
+            required
+            v-model="approved_by"
+            class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option value="SD Sheila Y">SD Sheila Y</option>
+            <option value="CS/Ops">CS/Ops</option>
+            <option value="WF/Ops">WF/Ops</option>
+            <option value="Cheryll Punzalan">Cheryll Punzalan</option>
+            <option value="Daniel Dela Vega">Daniel Dela Vega</option>
+            <option value="Christito Villaprudente">Christito Villaprudente</option>
+            <option value="VP Sheryll">VP Sheryll</option>
+            <option value="Kim De Guzman">Kim De Guzman</option>
+            <option value="Ryan Tomzer">Ryan Tomzer</option>
+          </select>
+        </label>
+        </div>
+        <div class="py-4">
+          <label class="block"
             >Condition
             <select
+              required
               v-model="condition"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -208,10 +238,14 @@
               <option value="Adherence to hiring timelines from initial sign-off">
                 Adherence to hiring timelines from initial sign-off
               </option>
-              <option value="Adherence to agreed hiring profile, process and assessments">Adherence to agreed hiring profile, process and assessments
+              <option value="Adherence to agreed hiring profile, process and assessments">
+                Adherence to agreed hiring profile, process and assessments
               </option>
-              <option value="Adherence to OV Support based on the required no. of POCs and sched"
-              >Adherence to OV Support based on the required no. of POCs and sched</option>
+              <option
+                value="Adherence to OV Support based on the required no. of POCs and sched"
+              >
+                Adherence to OV Support based on the required no. of POCs and sched
+              </option>
               <option value="Program-specific assessment per SOW">
                 Program-specific assessment per SOW
               </option>
@@ -243,10 +277,9 @@
               </option>
             </select>
           </label>
-        </div>
-        <div class="py-4">
-          <label class="block"
+          <label class="block py-6"
             >Remarks<textarea
+              required
               type="text"
               v-model="remarks"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -286,6 +319,7 @@ export default {
       erf_number: "",
       condition: "",
       within_sla: "",
+      approved_by: "",
       sites: [],
       daterange: [],
       programs: [],
@@ -411,7 +445,7 @@ export default {
         condition: this.condition,
         date_range_id: this.date_selected,
         approved_status: "pending",
-        approved_by:this.approved_by,
+        approved_by: this.approved_by,
         status: "1",
         is_active: 1,
         created_by: this.$store.state.user_id,
@@ -440,7 +474,7 @@ export default {
           this.approved_status = "";
           this.is_active = "";
           this.created_by = "";
-          this.approved_by="";
+          this.approved_by = "";
           this.$router.push("/capfile");
         })
         .catch((error) => {

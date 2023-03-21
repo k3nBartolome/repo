@@ -8,6 +8,8 @@ class DateRange extends Model
 {
     protected $fillable = [
         'date_range',
+        'week_start',
+        'week_end',
         'month',
         'year',
     ];

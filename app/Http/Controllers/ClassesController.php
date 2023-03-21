@@ -11,7 +11,7 @@ class ClassesController extends Controller
 {
     public function index()
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])->get();
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->get();
         $classesData = ClassesResource::collection($classes);
 
         return response()->json([
@@ -22,7 +22,7 @@ class ClassesController extends Controller
     public function clark()
     {
         $clark1 = function () {
-            $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+            $classes = Classes::with(['site', 'program', 'dateRange'])
                 ->where('site_id', 1)
                 ->where('program_id', 1)
                 ->where('status', 1)
@@ -1854,8 +1854,10 @@ class ClassesController extends Controller
             'created_by' => 'required',
             'is_active' => 'required',
             'date_range_id' => 'required',
+            //'datetable_id' => 'required',
             'category' => 'required',
             'condition' => 'required',
+            'approved_by' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -1891,7 +1893,7 @@ class ClassesController extends Controller
 
     public function show($id)
     {
-        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])->find($id);
+        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
@@ -1900,6 +1902,23 @@ class ClassesController extends Controller
         return response()->json([
         'class' => $class,
     ]);
+    }
+
+    public function transaction($id)
+    {
+        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
+
+        if (!$class) {
+            return response()->json(['error' => 'Class not found'], 404);
+        }
+
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
+                    ->where('pushedback_id', $class->pushedback_id)
+                    ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
     }
 
     public function pushedback(Request $request, $id)
@@ -1918,19 +1937,21 @@ class ClassesController extends Controller
         'status' => 'required',
         'approved_status' => 'required',
         'original_start_date' => 'required',
-        'wfm_date_requested' => 'required',
+        'wfm_date_requested' => 'nullable',
         'program_id' => 'required',
         'site_id' => 'required',
         'is_active' => 'required',
         'date_range_id' => 'required',
+        //'datetable_id' => 'required',
         'category' => 'required',
         'requested_by' => 'required',
         'agreed_start_date' => 'required',
         'condition' => 'required',
         'approved_by' => 'required',
         'updated_by' => 'required',
-    ]);
-
+        'changes' => 'required',
+         ]);
+        $requested_by = [$request->requested_by];
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
@@ -1940,6 +1961,7 @@ class ClassesController extends Controller
         $class->save();
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
+        $newClass->requested_by = json_encode($requested_by);
         $newClass->fill($request->all());
         $newClass->save();
 
@@ -1952,7 +1974,10 @@ class ClassesController extends Controller
             'site_id' => 'required',
             'program_id' => 'required',
             'date_range_id' => 'required',
+            'cancelled_by' => 'required',
+            'cancelled_date' => 'required',
         ]);
+        $cancelled_by = [$request->cancelled_by];
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
@@ -1962,8 +1987,8 @@ class ClassesController extends Controller
 
         // Update old class data
         $class->status = 'Cancelled';
-        $class->cancelled_by = $class->cancelled_by;
-        $class->cancelled_date = now();
+        $class->cancelled_by = json_encode($cancelled_by);
+        $class->cancelled_date = $request->input('cancelled_date');
         $class->save();
 
         $class = Classes::find($id);
@@ -1994,6 +2019,7 @@ class ClassesController extends Controller
         $newClass->category = null;
         $newClass->agreed_start_date = null;
         $newClass->updated_by = null;
+        $newClass->changes = null;
         $newClass->updated_at = null;
         $newClass->created_by = null;
         $newClass->created_at = null;

@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Classes extends Model
 {
     use HasFactory;
+    protected $casts = [
+        'requested_by' => 'array',
+        'cancelled_by' => 'array',
+    ];
+
 
     protected $fillable = [
         'pushedback_id',
@@ -48,6 +53,7 @@ class Classes extends Model
         'condition',
         'agreed_start_date',
         'requested_by',
+        'changes',
     ];
 
     public function site()
@@ -80,8 +86,5 @@ class Classes extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function cancelledByUser()
-    {
-        return $this->belongsTo(User::class, 'cancelled_by');
-    }
+ 
 }

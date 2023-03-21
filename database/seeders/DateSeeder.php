@@ -6,7 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-class DateRangesTableSeeder extends Seeder
+class DateSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -16,7 +16,7 @@ class DateRangesTableSeeder extends Seeder
     public function run()
     {
         $start_date = Carbon::parse('2023-01-01');
-        $end_date = Carbon::parse('2028-12-30');
+        $end_date = Carbon::parse('2023-12-30');
 
         $weeks = [];
         while ($start_date->lte($end_date)) {
@@ -26,7 +26,7 @@ class DateRangesTableSeeder extends Seeder
             $year = $start_date->format('Y');
 
             $weeks[] = [
-                'date_range' => Carbon::parse($week_start)->format('M j').' - '.Carbon::parse($week_end)->format('M j'),
+                'date_range' => Carbon::parse($week_start)->format('F j').' - '.Carbon::parse($week_end)->format('F j'),
         'week_start' => $week_start,
         'week_end' => $week_end,
         'month' => $month,
@@ -36,6 +36,6 @@ class DateRangesTableSeeder extends Seeder
             $start_date->addDays(1);
         }
 
-        DB::table('date_ranges')->insert($weeks);
+        DB::table('date_tables')->insert($weeks);
     }
 }

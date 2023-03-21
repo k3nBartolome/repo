@@ -21,10 +21,7 @@ class CreateClassesTable extends Migration
             $table->string('condition')->nullable(); //add
             $table->string('requested_by')->nullable(); //add
             $table->date('original_start_date')->nullable(); //add
-           /*  $table->date('pushback_start_date_ta')->nullable(); //pushback
-            $table->date('pushback_start_date_wf')->nullable(); //pushback
-            $table->date('requested_start_date_by_wf')->nullable(); //pushback
-            $table->date('start_date_committed_by_ta')->nullable(); //pushback */
+            $table->string('changes')->nullable(); //add
             $table->date('agreed_start_date')->nullable();
             $table->date('approved_date')->nullable(); //cancel
             $table->date('cancelled_date')->nullable(); //cancel
@@ -39,24 +36,21 @@ class CreateClassesTable extends Migration
             $table->string('status')->nullable(); //add
             $table->string('category')->nullable(); //add
             $table->string('type_of_hiring')->nullable(); //add
-           /*  $table->integer('backfill')->nullable(); //add
-            $table->integer('growth')->nullable(); //add */
             $table->integer('update_status')->nullable(); //pushback
             $table->string('approved_status')->nullable(); //add
             $table->string('with_erf')->nullable(); //add
-            $table->integer('erf_number')->nullable(); //add
+            $table->string('erf_number')->nullable(); //add
             $table->string('approved_by')->nullable(); //cancel
-            $table->unsignedBigInteger('cancelled_by')->nullable(); //cancel
+            $table->string('cancelled_by')->nullable(); //cancel
             $table->unsignedBigInteger('created_by')->nullable(); //add
             $table->unsignedBigInteger('site_id')->nullable(); //add
             $table->unsignedBigInteger('program_id')->nullable(); //add
             $table->unsignedBigInteger('updated_by')->nullable(); //pushback
-            $table->unsignedBigInteger('date_range_id')->nullable(); //add
+            $table->unsignedBigInteger('date_range_id')->nullable();
             $table->timestamps();
             $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
             $table->foreign('date_range_id')->references('id')->on('date_ranges')->onDelete('cascade');
-            $table->foreign('cancelled_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
         });

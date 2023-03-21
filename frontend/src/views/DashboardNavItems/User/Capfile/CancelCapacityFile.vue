@@ -58,6 +58,7 @@
           <label class="block">
             External Target
             <input
+              disabled
               type="number"
               v-model="external_target"
               name="external_target"
@@ -68,6 +69,7 @@
           <label class="block">
             Internal Target
             <input
+              disabled
               type="number"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               v-model="internal_target"
@@ -94,10 +96,10 @@
           </label>
 
           <label class="block"
-            >Movement Date
+            >Cancelled Date
             <input
               type="date"
-              v-model="wfm_date_requested"
+              v-model="cancelled_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
@@ -140,9 +142,10 @@
               </option>
             </select>
           </label>
-          <label class="block"
+          <!-- <label class="block"
             >With ERF?
             <select
+              required
               v-model="with_erf"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -159,10 +162,11 @@
               disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
-          </label>
+          </label> -->
           <label class="block"
             >Category
             <select
+              required
               v-model="category"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -174,6 +178,7 @@
           <label class="block"
             >Within SLA?
             <select
+              required
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -204,8 +209,30 @@
             />
           </label>
           <label class="block"
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="SD Sheila Y">SD Sheila Y</option>
+              <option value="CS/Ops">CS/Ops</option>
+              <option value="WF/Ops">WF/Ops</option>
+              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
+              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
+              <option value="Christito Villaprudente">Christito Villaprudente</option>
+              <option value="VP Sheryll">VP Sheryll</option>
+              <option value="Kim De Guzman">Kim De Guzman</option>
+              <option value="Ryan Tomzer">Ryan Tomzer</option>
+            </select>
+          </label>
+        </div>
+        <div class="py-6">
+          <label class="block"
             >Condition
             <select
+              required
               v-model="condition"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -258,39 +285,20 @@
               </option>
             </select>
           </label>
-          <label class="block"
-            >Approved by
-            <select
-              v-model="approved_by"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="SD Sheila Y">SD Sheila Y</option>
-              <option value="CS/Ops">CS/Ops</option>
-              <option value="WF/Ops">WF/Ops</option>
-              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
-              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
-              <option value="Christito Villaprudente">Christito Villaprudente</option>
-              <option value="VP Sheryll">VP Sheryll</option>
-              <option value="Kim De Guzman">Kim De Guzman</option>
-              <option value="Ryan Tomzer">Ryan Tomzer</option>
-            </select>
-          </label>
-        </div>
-        <div class="py-6">
-          <label class="block"
+          <label class="block py-6"
             >Requested by:
-            <input type="radio" v-model="requested_by" value="Talent Acquisition" />Talent
-            Acquisition
-            <input type="radio" v-model="requested_by" value="Workforce" />Workforce
             <input
-              type="radio"
-              v-model="requested_by"
-              value="Talent Acquisition/Workforce"
-            />Talent Acquisition/Workforce
+              type="checkbox"
+              v-model="cancelled_by"
+              value="Talent Acquisition"
+              required
+            />Talent Acquisition
+            <input type="checkbox" v-model="cancelled_by" value="Workforce" />Workforce
+            <input type="checkbox" v-model="cancelled_by" value="Training" />Training
           </label>
           <label class="block py-6"
-            >Reason for Cancellation<textarea
+            >Remarks<textarea
+              required
               type="text"
               v-model="remarks"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -321,10 +329,8 @@ export default {
       external_target: "",
       internal_target: "",
       total_target: 0,
-      with_erf: "",
-      erf_number: "",
       original_start_date: "",
-      wfm_date_requested: "",
+      cancelled_date: "",
       remarks: "",
       reason: [],
       category: "",
@@ -336,7 +342,7 @@ export default {
       condition: "",
       within_sla: "",
       approved_by: "",
-      requested_by: "",
+      cancelled_by: [],
     };
   },
   computed: {
@@ -347,7 +353,7 @@ export default {
     },
     notice_days_computed() {
       const osd = Date.parse(this.agreed_start_date) || 0;
-      const wrd = Date.parse(this.wfm_date_requested) || 0;
+      const wrd = Date.parse(this.cancelled_date) || 0;
       return Math.round((osd - wrd) / (24 * 60 * 60 * 1000));
     },
     notice_weeks() {
@@ -421,18 +427,16 @@ export default {
           this.internal_target = classObj.internal_target;
           this.total_target = classObj.total_target;
           this.original_start_date = classObj.original_start_date;
-          this.wfm_date_requested = classObj.wfm_date_requested;
+          this.cancelled_date = classObj.cancelled_date;
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range.id;
-          this.with_erf = classObj.with_erf;
-          this.erf_number = classObj.erf_number;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
           this.agreed_start_date = classObj.agreed_start_date;
           this.condition = classObj.condition;
+          this.changes = classObj.changes;
           this.approved_by = classObj.approved_by;
-          this.requested_by = classObj.requested_by;
 
           console.log(classObj);
         })
@@ -445,13 +449,13 @@ export default {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
         date_range_id: this.date_selected,
-        requested_by:this.requested_by,
-        approved_by:this.approved_by,
+        cancelled_by: this.cancelled_by,
+        cancelled_date: this.cancelled_date,
+        approved_by: this.approved_by,
         remarks: this.remarks,
         approved_status: "pending",
-        status: "previous",
+        status: "cancelled",
         is_active: 0,
-        cancelled_by: this.$store.state.user_id,
       };
       axios
         .put(
@@ -466,9 +470,9 @@ export default {
           this.approved_status = "";
           this.approved_by = "";
           this.remarks = "";
-          this.requested_by = "";
+          this.cancelled_by = [];
+          this.cancelled_date="";
           this.is_active = "";
-          this.cancelled_by = "";
           this.$router.push("/capfile");
         })
         .catch((error) => {

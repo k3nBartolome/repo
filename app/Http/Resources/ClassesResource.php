@@ -8,7 +8,6 @@ class ClassesResource extends JsonResource
 {
     public function toArray($request)
     {
-        $reasons = $this->sla_reason->pluck('reason')->implode(', ');
         $dateRange = $this->dateRange ? $this->dateRange->date_range : null;
 
         return [
@@ -31,12 +30,10 @@ class ClassesResource extends JsonResource
             'category' => $this->category,
             'remarks' => $this->remarks,
             'within_sla' => $this->within_sla,
-            'sla_reason' => $reasons,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->createdByUser ? $this->createdByUser->name : null,
             'updated_by' => $this->updatedByUser ? $this->createdByUser->name : null,
-            'cancelled_by' => $this->cancelledByUser ? $this->createdByUser->name : null,
             'is_active' => $this->is_active,
             'approved_status' => $this->approved_status,
             'status' => $this->status,

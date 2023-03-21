@@ -15,9 +15,9 @@ class ClassesSeeder extends Seeder
     public function run()
     {
         for ($i = 1; $i <= 1; ++$i) {
-            for ($j = 1; $j <= 3; ++$j) {
+            for ($j = 1; $j <= 1; ++$j) {
                 for ($k = 1; $k <= 52; ++$k) {
-                    $className = Classes::create(['site_id' => $i, 'program_id' => $j, 'date_range_id' => $k, 'status' => 1, 'total_target' => 0]);
+                    $className = Classes::create(['site_id' => $i, 'program_id' => $j, 'date_range_id' => $k, 'pushedback_id' => $k, 'status' => 1, 'total_target' => 0]);
                 }
             }
         }

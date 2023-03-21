@@ -8,9 +8,36 @@
   </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
-      <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
-      >
+      <div class="px-12 py-6 mx-auto font-semibold bg-white max-w-7xl sm:px-2 lg:px-2">
+        <div class="py-8 font-bold">
+          <label class="block">
+            Targets
+            <input
+              type="radio"
+              v-model="changes"
+              value="Change Targets"
+              required
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            Dates
+            <input
+              type="radio"
+              v-model="changes"
+              value="Change Dates"
+              required
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+            Both
+            <input
+              type="radio"
+              v-model="changes"
+              required
+              checked
+              value="Change Targets and Dates"
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+        </div>
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
@@ -58,7 +85,9 @@
           <label class="block">
             External Target
             <input
+              required
               type="number"
+              :disabled="isTargetDisabled"
               v-model="external_target"
               name="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -68,7 +97,9 @@
           <label class="block">
             Internal Target
             <input
+              required
               type="number"
+              :disabled="isTargetDisabled"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               v-model="internal_target"
               @change="syncTotalTarget"
@@ -97,6 +128,7 @@
           <label class="block"
             >Movement Date
             <input
+              required
               type="date"
               v-model="wfm_date_requested"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -118,7 +150,6 @@
             <input
               type="text"
               v-model="notice_weeks"
-              disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
@@ -141,9 +172,10 @@
               </option>
             </select>
           </label>
-          <label class="block"
+          <!--  <label class="block"
             >With ERF?
             <select
+              required
               v-model="with_erf"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -160,10 +192,11 @@
               disabled
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
-          </label>
+          </label> -->
           <label class="block"
             >Category
             <select
+              required
               v-model="category"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -175,6 +208,7 @@
           <label class="block"
             >Within SLA?
             <select
+              required
               v-model="within_sla"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
@@ -199,73 +233,22 @@
             >Agreed Start Date
             <input
               type="date"
+              required
               v-model="agreed_start_date"
+              :disabled="isDateDisabled"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
-          <label class="block"
-            >Condition
-            <select
-              v-model="condition"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="Filed ERF with necessary approvals and within timeline">
-                Filed ERF with necessary approvals and within timeline
-              </option>
-              <option value="Adherence to hiring demand from initial sign-off">
-                Adherence to hiring demand from initial sign-off
-              </option>
-              <option value="Adherence to hiring timelines from initial sign-off">
-                Adherence to hiring timelines from initial sign-off
-              </option>
-              <option value="Adherence to agreed hiring profile, process and assessments">
-                Adherence to agreed hiring profile, process and assessments
-              </option>
-              <option
-                value="Adherence to OV Support based on the required no. of POCs and sched"
-              >
-                Adherence to OV Support based on the required no. of POCs and sched
-              </option>
-              <option value="Program-specific assessment per SOW">
-                Program-specific assessment per SOW
-              </option>
-              <option value="Employment requirements prior Day1 per SOW">
-                Employment requirements prior Day1 per SOW
-              </option>
-              <option value="Specific previous work exp per SOW">
-                Specific previous work exp per SOW
-              </option>
-              <option value="Roster submission requirement for ID creation prior Day 1">
-                Roster submission requirement for ID creation prior Day 1
-              </option>
-              <option
-                value="Programs following VXI standard hiring process and emp req’ts"
-              >
-                Programs following VXI standard hiring process and emp req’ts
-              </option>
-              <option value="Agreed hiring profile, process and assessments">
-                Agreed hiring profile, process and assessments
-              </option>
-              <option value="Sample call recordings, sample transactions">
-                Sample call recordings, sample transactions
-              </option>
-              <option value="Approved wage rates and job offer/contract template">
-                Approved wage rates and job offer/contract template
-              </option>
-              <option value="Agreed ramp plan with WF, CS, PMO">
-                Agreed ramp plan with WF, CS, PMO
-              </option>
-            </select>
-          </label>
+
           <label class="block"
             >Approved by
             <select
+              required
               v-model="approved_by"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
-            <option disabled value="" selected>Please select one</option>
+              <option disabled value="" selected>Please select one</option>
               <option value="SD Sheila Y">SD Sheila Y</option>
               <option value="CS/Ops">CS/Ops</option>
               <option value="WF/Ops">WF/Ops</option>
@@ -280,18 +263,110 @@
         </div>
         <div class="py-6">
           <label class="block"
+            >Condition
+            <select
+              required
+              v-model="condition"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Filed ERF with necessary approvals and within timeline">
+                <label
+                  ><input type="checkbox" />Filed ERF with necessary approvals and within
+                  timeline</label
+                >
+              </option>
+              <option value="Adherence to hiring demand from initial sign-off">
+                <label
+                  ><input type="checkbox" />Adherence to hiring demand from initial
+                  sign-off</label
+                >
+              </option>
+              <option value="Adherence to hiring timelines from initial sign-off">
+                <label
+                  ><input type="checkbox" />Adherence to hiring timelines from initial
+                  sign-off</label
+                >
+              </option>
+              <option value="Adherence to agreed hiring profile, process and assessments">
+                <label
+                  ><input type="checkbox" />Adherence to agreed hiring profile, process
+                  and assessments</label
+                >
+              </option>
+              <option
+                value="Adherence to OV Support based on the required no. of POCs and sched"
+              >
+                <label
+                  ><input type="checkbox" />Adherence to OV Support based on the required
+                  no. of POCs and sched</label
+                >
+              </option>
+              <option value="Program-specific assessment per SOW">
+                <label
+                  ><input type="checkbox" />Program-specific assessment per SOW</label
+                >
+              </option>
+              <option value="Employment requirements prior Day1 per SOW">
+                <label
+                  ><input type="checkbox" />Employment requirements prior Day1 per
+                  SOW</label
+                >
+              </option>
+              <option value="Specific previous work exp per SOW">
+                <label><input type="checkbox" />Specific previous work exp per SOW</label>
+              </option>
+              <option value="Roster submission requirement for ID creation prior Day 1">
+                <label
+                  ><input type="checkbox" />Roster submission requirement for ID creation
+                  prior Day 1</label
+                >
+              </option>
+              <option
+                value="Programs following VXI standard hiring process and emp req’ts"
+              >
+                <label
+                  ><input type="checkbox" />Programs following VXI standard hiring process
+                  and emp req’ts</label
+                >
+              </option>
+              <option value="Agreed hiring profile, process and assessments">
+                <label
+                  ><input type="checkbox" />Agreed hiring profile, process and
+                  assessments</label
+                >
+              </option>
+              <option value="Sample call recordings, sample transactions">
+                <label
+                  ><input type="checkbox" />Sample call recordings, sample
+                  transactions</label
+                >
+              </option>
+              <option value="Approved wage rates and job offer/contract template">
+                <label
+                  ><input type="checkbox" />Approved wage rates and job offer/contract
+                  template</label
+                >
+              </option>
+              <option value="Agreed ramp plan with WF, CS, PMO">
+                <label><input type="checkbox" />Agreed ramp plan with WF, CS, PMO</label>
+              </option>
+            </select>
+          </label>
+          <label class="block py-6"
             >Requested by:
-            <input type="radio" v-model="requested_by" value="Talent Acquisition" />Talent
-            Acquisition
-            <input type="radio" v-model="requested_by" value="Workforce" />Workforce
             <input
-              type="radio"
+              type="checkbox"
               v-model="requested_by"
-              value="Talent Acquisition/Workforce"
-            />Talent Acquisition/Workforce
+              value="Talent Acquisition"
+              required
+            />Talent Acquisition
+            <input type="checkbox" v-model="requested_by" value="Workforce" />Workforce
+            <input type="checkbox" v-model="requested_by" value="Training" />Training
           </label>
           <label class="block py-6"
             >Remarks<textarea
+              required
               type="text"
               v-model="remarks"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
@@ -303,11 +378,37 @@
             type="submit"
             class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
           >
-            <i class="fa fa-save"></i> Move
+            <i class="fa fa-save"></i> Pushback
           </button>
         </div>
       </div>
     </form>
+  </div>
+  <div>
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Site</th>
+          <th>Line of Business</th>
+          <th>Total Target</th>
+          <th>Transaction</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="classes in classes" :key="classes.id">
+          <td>{{ classes.id }}</td>
+
+          <td>{{ classes.site.name }}</td>
+          <td>{{ classes.program.name }}</td>
+
+          <td>{{ classes.total_target }}</td>
+
+          <td>{{ classes.changes }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 <script>
@@ -327,7 +428,6 @@ export default {
       wfm_date_requested: "",
       remarks: "",
       category: "",
-      requested_by: "",
       approved_by: "",
       notice_days: 0,
       erf_number: "",
@@ -337,9 +437,31 @@ export default {
       agreed_start_date: "",
       condition: "",
       within_sla: "",
+      changes: "",
+      disableForm: true,
+      requested_by: [],
+      classes: [],
     };
   },
   computed: {
+    isTargetDisabled() {
+      if (this.changes === "Change Dates") {
+        return true;
+      } else if (this.changes === "Change Targets") {
+        return false;
+      } else {
+        return false;
+      }
+    },
+    isDateDisabled() {
+      if (this.changes === "Change Targets") {
+        return true;
+      } else if (this.changes === "Change Dates") {
+        return false;
+      } else {
+        return false;
+      }
+    },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
       const internal = parseInt(this.internal_target) || 0;
@@ -360,6 +482,7 @@ export default {
     this.getPrograms();
     this.getDateRange();
     this.getClasses();
+    this.getTransaction();
   },
   methods: {
     syncTotalTarget: function () {
@@ -430,10 +553,20 @@ export default {
           this.agreed_start_date = classObj.agreed_start_date;
           this.condition = classObj.condition;
           this.erf_number = classObj.erf_number;
-          this.requested_by = classObj.requested_by;
           this.approved_by = classObj.approved_by;
 
           console.log(classObj);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async getTransaction() {
+      await axios
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
+        .then((response) => {
+          this.classes = response.data.classes;
+          console.log(response.data.classes);
         })
         .catch((error) => {
           console.log(error);
@@ -464,6 +597,7 @@ export default {
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
         condition: this.condition,
+        changes: this.changes,
         approved_by: this.approved_by,
       };
       axios
@@ -496,6 +630,7 @@ export default {
           this.agreed_start_date = "";
           this.condition = "";
           this.approved_by = "";
+          this.changes = "";
           this.$router.push("/capfile");
         })
         .catch((error) => {

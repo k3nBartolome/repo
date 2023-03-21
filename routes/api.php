@@ -81,6 +81,7 @@ Route::get('dfc', [ClassesController::class, 'dfc']);
 Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
 Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::put('classes/{id}', [ClassesController::class, 'store']);
+Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
