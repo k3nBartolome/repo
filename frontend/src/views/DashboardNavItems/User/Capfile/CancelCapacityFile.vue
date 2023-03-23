@@ -297,6 +297,46 @@
             <input type="checkbox" v-model="cancelled_by" value="Training" />Training
           </label>
           <label class="block py-6"
+            >Talent Acquisition
+            <input
+              type="text"
+              v-model="ta"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Workforce
+            <input
+              type="text"
+              v-model="wf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Training
+            <input
+              type="text"
+              v-model="tr"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Client
+            <input
+              type="text"
+              v-model="cl"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Operation
+            <input
+              type="text"
+              v-model="wf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
             >Remarks<textarea
               required
               type="text"
@@ -343,6 +383,11 @@ export default {
       within_sla: "",
       approved_by: "",
       cancelled_by: [],
+      ta: "",
+      wf: "",
+      tr: "",
+      cl: "",
+      op: "",
     };
   },
   computed: {

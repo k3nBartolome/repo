@@ -172,27 +172,6 @@
               </option>
             </select>
           </label>
-          <!--  <label class="block"
-            >With ERF?
-            <select
-              required
-              v-model="with_erf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </label>
-          <label class="block" v-if="with_erf === 'yes'">
-            ERF Number
-            <input
-              type="number"
-              v-model="erf_number"
-              disabled
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label> -->
           <label class="block"
             >Category
             <select
@@ -363,6 +342,48 @@
             />Talent Acquisition
             <input type="checkbox" v-model="requested_by" value="Workforce" />Workforce
             <input type="checkbox" v-model="requested_by" value="Training" />Training
+            <input type="checkbox" v-model="requested_by" value="Client" />Client
+            <input type="checkbox" v-model="requested_by" value="Operation" />Operation
+          </label>
+          <label class="block py-6"
+            >Talent Acquisition
+            <input
+              type="text"
+              v-model="ta"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Workforce
+            <input
+              type="text"
+              v-model="wf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Training
+            <input
+              type="text"
+              v-model="tr"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Client
+            <input
+              type="text"
+              v-model="cl"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+          <label class="block py-6"
+            >Operation
+            <input
+              type="text"
+              v-model="wf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
           </label>
           <label class="block py-6"
             >Remarks<textarea
@@ -384,28 +405,45 @@
       </div>
     </form>
   </div>
-  <div>
-    <table>
-      <thead>
+  <div class="py-6 px-12">
+    <h2 class="font-bold">History</h2>
+    <table class="w-full table-auto border">
+      <thead class="text-left font-bold border border-black">
         <tr>
-          <th>ID</th>
-          <th>Site</th>
-          <th>Line of Business</th>
-          <th>Total Target</th>
-          <th>Transaction</th>
-
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Site</th>
+          <th class="px-4 py-2">Line of Business</th>
+          <th class="px-4 py-2">Type of Hiring</th>
+          <th class="px-4 py-2">Total Target</th>
+          <th class="px-4 py-2">Original Start Date</th>
+          <th class="px-4 py-2">Movement Date</th>
+          <th class="px-4 py-2">Weeks Range</th>
+          <th class="px-4 py-2">Within SLA?</th>
+          <th class="px-4 py-2">Agreed Start Date</th>
+          <th class="px-4 py-2">Requested by</th>
+          <th class="px-4 py-2">Approved by</th>
+          <th class="px-4 py-2">Transaction Type</th>
         </tr>
       </thead>
-      <tbody>
-        <tr v-for="classes in classes" :key="classes.id">
-          <td>{{ classes.id }}</td>
-
-          <td>{{ classes.site.name }}</td>
-          <td>{{ classes.program.name }}</td>
-
-          <td>{{ classes.total_target }}</td>
-
-          <td>{{ classes.changes }}</td>
+      <tbody class="text-gray-700">
+        <tr
+          v-for="classes in classes"
+          :key="classes.id"
+          class="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td class="px-4 py-3">{{ classes.pushedback_id }}</td>
+          <td class="px-4 py-3">{{ classes.site.name }}</td>
+          <td class="px-4 py-3">{{ classes.program.name }}</td>
+          <td class="px-4 py-3">{{ classes.type_of_hiring }}</td>
+          <td class="px-4 py-3">{{ classes.total_target }}</td>
+          <td class="px-4 py-3">{{ classes.original_start_date }}</td>
+          <td class="px-4 py-3">{{ classes.wfm_date_requested }}</td>
+          <td class="px-4 py-3">{{ classes.date_range.date_range }}</td>
+          <td class="px-4 py-3">{{ classes.within_sla }}</td>
+          <td class="px-4 py-3">{{ classes.agreed_start_date }}</td>
+          <td class="px-4 py-3">{{ classes.requested_by }}</td>
+          <td class="px-4 py-3">{{ classes.approved_by }}</td>
+          <td class="px-4 py-3">{{ classes.changes }}</td>
         </tr>
       </tbody>
     </table>
@@ -438,6 +476,11 @@ export default {
       condition: "",
       within_sla: "",
       changes: "",
+      ta: "",
+      wf: "",
+      tr: "",
+      cl: "",
+      op: "",
       disableForm: true,
       requested_by: [],
       classes: [],
@@ -599,6 +642,11 @@ export default {
         condition: this.condition,
         changes: this.changes,
         approved_by: this.approved_by,
+        ta: this.ta,
+        wf: this.wf,
+        tr: this.tr,
+        cl: this.cl,
+        op: this.op,
       };
       axios
         .put(

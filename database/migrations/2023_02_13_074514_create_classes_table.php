@@ -42,6 +42,11 @@ class CreateClassesTable extends Migration
             $table->string('erf_number')->nullable(); //add
             $table->string('approved_by')->nullable(); //cancel
             $table->string('cancelled_by')->nullable(); //cancel
+            $table->string('ta')->nullable();
+            $table->string('wf')->nullable();
+            $table->string('tr')->nullable();
+            $table->string('cl')->nullable();
+            $table->string('op')->nullable();
             $table->unsignedBigInteger('created_by')->nullable(); //add
             $table->unsignedBigInteger('site_id')->nullable(); //add
             $table->unsignedBigInteger('program_id')->nullable(); //add
