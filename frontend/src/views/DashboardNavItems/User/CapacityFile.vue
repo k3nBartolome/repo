@@ -1,35 +1,32 @@
 <template>
-  <div>
-    <header class="w-full bg-white shadow">
-      <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-        <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-          Capacity File Dashboard
-        </h1>
-      </div>
-    </header>
-    <div class="flex float-right py-8 pr-8">
-    </div>
-    <div class="py-8">
-      <div class="w-full pl-8 pr-8 overflow-x-scroll overflow-y-hidden">
-        <table class="w-full text-white table-auto">
-          <thead>
-            <tr class="text-left bg-orange-600 border-2 border-orange-600 border-solid">
-                <th class="px-16 py-1 truncate whitespace-no-wrap border">Site</th>
-                <th class="px-10 py-1 truncate whitespace-no-wrap border">Line of Business</th>
-                <th class="px-4 py-1 truncate whitespace-no-wrap border">{{ classesData[0]?.date_range }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr v-for="classData in classesData[0]?.data" :key="classData.id">
-                <td class="px-4 py-1 border">{{ classData.site_name }}</td>
-                <td class="px-4 py-1 border">{{ classData.program_name }}</td>
-                <td class="px-4 py-1 border">{{ classData.total_target }}</td>
-            </tr>
-        </tbody>
-        
-        </table>
-      </div>
-    </div>
+  <div class="overflow-x-auto">
+    <table class="table-auto border border-black">
+      <thead>
+        <tr>
+          <th class="px-4">Programs</th>
+          <th
+            v-for="daterange in daterange"
+            :key="daterange.id"
+            class="px-4 truncate  py-1"
+          >
+            {{ daterange.date_range }}
+          </th>
+        </tr>
+      </thead>
+      <tbody class="overflow-y-auto">
+        <tr v-for="program in programs" :key="program.id">
+          <td class=" px-4 py-1 truncate border border-black">{{ program.name }}</td>
+          <td v-for="date in daterange" :key="date.id" class="w-1/4 px-2 py-1 border border-black">
+            <button
+              type="button"
+              v-on:click="getTwoDimensionalId(date.year,program.id + 100, date.id)"
+              class="bg-red-500 px-4"
+            >target
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </template>
 
@@ -39,25 +36,41 @@ import axios from "axios";
 export default {
   data() {
     return {
-      classesData: [],
+      programs: [], // array of site objects
+      daterange: [], // array of week objects
+      twoDimensionalIds: [], // array to hold two-dimensional IDs
     };
   },
-  async mounted() {
-    await this.fetchData();
+  created() {
+    // fetch site and week data from API
+    this.fetchSiteData();
+    this.fetchWeekData();
   },
   methods: {
-    async fetchData() {
+    async fetchSiteData() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        const data = response.data;
-        const flattenedData = Object.values(data).flat();
-        this.classesData = flattenedData;
+        const response = await axios.get("http://127.0.0.1:8000/api/programs");
+        this.programs = response.data.data;
       } catch (error) {
         console.error(error);
+      }
+    },
+    async fetchWeekData() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/daterange");
+        this.daterange = response.data.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    getTwoDimensionalId(dateYear,programId, dateId) {
+      const twoDimensionalId = `${dateYear}${programId}${dateId}`;
+      if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
+        this.twoDimensionalIds.push(twoDimensionalId);
+        console.log(twoDimensionalId);
+        // do something with the two-dimensional ID here
       }
     },
   },
 };
 </script>
-
-<style></style>

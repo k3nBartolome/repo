@@ -69,7 +69,7 @@ Route::get('classes/{id}', [ClassesController::class, 'show']);
 
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('classesall', [ClassesController::class, 'classesAll']);
-Route::get('quezoncity', [ClassesController::class, 'quezoncity']);
+/* Route::get('quezoncity', [ClassesController::class, 'quezoncity']);
 Route::get('bridgetowne', [ClassesController::class, 'bridgetowne']);
 Route::get('makati', [ClassesController::class, 'makati']);
 Route::get('moa', [ClassesController::class, 'moa']);
@@ -77,7 +77,7 @@ Route::get('dvsm', [ClassesController::class, 'dvsm']);
 Route::get('dvrob', [ClassesController::class, 'dvrob']);
 Route::get('dvdelta', [ClassesController::class, 'dvdelta']);
 Route::get('dvcentral', [ClassesController::class, 'dvcentral']);
-Route::get('dfc', [ClassesController::class, 'dfc']);
+Route::get('dfc', [ClassesController::class, 'dfc']); */
 Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
 Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::put('classes/{id}', [ClassesController::class, 'store']);

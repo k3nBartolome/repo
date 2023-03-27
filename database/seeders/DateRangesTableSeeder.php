@@ -16,7 +16,7 @@ class DateRangesTableSeeder extends Seeder
     public function run()
     {
         $start_date = Carbon::parse('2023-01-01');
-        $end_date = Carbon::parse('2028-12-30');
+        $end_date = Carbon::parse('2023-12-30');
 
         $weeks = [];
         while ($start_date->lte($end_date)) {
