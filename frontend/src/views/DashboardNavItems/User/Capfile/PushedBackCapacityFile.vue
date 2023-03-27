@@ -241,96 +241,139 @@
           </label>
         </div>
         <div class="py-6">
-          <label class="block"
-            >Condition
-            <select
-              required
-              v-model="condition"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="Filed ERF with necessary approvals and within timeline">
-                <label
-                  ><input type="checkbox" />Filed ERF with necessary approvals and within
-                  timeline</label
-                >
-              </option>
-              <option value="Adherence to hiring demand from initial sign-off">
-                <label
-                  ><input type="checkbox" />Adherence to hiring demand from initial
-                  sign-off</label
-                >
-              </option>
-              <option value="Adherence to hiring timelines from initial sign-off">
-                <label
-                  ><input type="checkbox" />Adherence to hiring timelines from initial
-                  sign-off</label
-                >
-              </option>
-              <option value="Adherence to agreed hiring profile, process and assessments">
-                <label
-                  ><input type="checkbox" />Adherence to agreed hiring profile, process
-                  and assessments</label
-                >
-              </option>
-              <option
+          <label class="block">
+            Condition
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Filed ERF with necessary approvals and within timeline"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Filed ERF with necessary approvals and within timeline</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to hiring demand from initial sign-off"
+                class="ml-2"
+              />
+              <span class="ml-2">Adherence to hiring demand from initial sign-off</span>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to hiring timelines from initial sign-off"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to hiring timelines from initial sign-off</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to agreed hiring profile, process and assessments"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to agreed hiring profile, process and assessments</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
                 value="Adherence to OV Support based on the required no. of POCs and sched"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to OV Support based on the required no. of POCs and sched</span
               >
-                <label
-                  ><input type="checkbox" />Adherence to OV Support based on the required
-                  no. of POCs and sched</label
-                >
-              </option>
-              <option value="Program-specific assessment per SOW">
-                <label
-                  ><input type="checkbox" />Program-specific assessment per SOW</label
-                >
-              </option>
-              <option value="Employment requirements prior Day1 per SOW">
-                <label
-                  ><input type="checkbox" />Employment requirements prior Day1 per
-                  SOW</label
-                >
-              </option>
-              <option value="Specific previous work exp per SOW">
-                <label><input type="checkbox" />Specific previous work exp per SOW</label>
-              </option>
-              <option value="Roster submission requirement for ID creation prior Day 1">
-                <label
-                  ><input type="checkbox" />Roster submission requirement for ID creation
-                  prior Day 1</label
-                >
-              </option>
-              <option
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Program-specific assessment per SOW"
+                class="ml-2"
+              />
+              <span class="ml-2">Program-specific assessment per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Employment requirements prior Day1 per SOW"
+                class="ml-2"
+              />
+              <span class="ml-2">Employment requirements prior Day1 per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input type="checkbox" v-model="condition" class="ml-2" />
+              <span class="ml-2">Specific previous work exp per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input type="checkbox" v-model="condition" class="ml-2" />
+              <span class="ml-2"
+                >Roster submission requirement for ID creation prior Day 1</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
                 value="Programs following VXI standard hiring process and emp req’ts"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Programs following VXI standard hiring process and emp req’ts</span
               >
-                <label
-                  ><input type="checkbox" />Programs following VXI standard hiring process
-                  and emp req’ts</label
-                >
-              </option>
-              <option value="Agreed hiring profile, process and assessments">
-                <label
-                  ><input type="checkbox" />Agreed hiring profile, process and
-                  assessments</label
-                >
-              </option>
-              <option value="Sample call recordings, sample transactions">
-                <label
-                  ><input type="checkbox" />Sample call recordings, sample
-                  transactions</label
-                >
-              </option>
-              <option value="Approved wage rates and job offer/contract template">
-                <label
-                  ><input type="checkbox" />Approved wage rates and job offer/contract
-                  template</label
-                >
-              </option>
-              <option value="Agreed ramp plan with WF, CS, PMO">
-                <label><input type="checkbox" />Agreed ramp plan with WF, CS, PMO</label>
-              </option>
-            </select>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Agreed hiring profile, process and assessments"
+                class="ml-2"
+              />
+              <span class="ml-2">Agreed hiring profile, process and assessments</span>
+            </label>
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Sample call recordings, sample transactions"
+                class="ml-2"
+              /><span class="ml-2">
+                Sample call recordings, sample transactions</span
+              ></label
+            >
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Approved wage rates and job offer/contract template"
+                class="ml-2"
+              ><span class="ml-2">
+                Approved wage rates and job offer/contract template</span></label
+            >
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Agreed ramp plan with WF, CS, PMO"
+                class="ml-2"
+              ><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
+            >
           </label>
           <label class="block py-6"
             >Requested by:
@@ -344,47 +387,53 @@
             <input type="checkbox" v-model="requested_by" value="Training" />Training
             <input type="checkbox" v-model="requested_by" value="Client" />Client
             <input type="checkbox" v-model="requested_by" value="Operation" />Operation
+
+            <label class="block py-6" v-if="requested_by.includes('Talent Acquisition')"
+              >Talent Acquisition
+              <input
+                type="text"
+                v-model="ta"
+                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              />
+            </label>
+
+            <label class="block py-6" v-if="requested_by.includes('Workforce')"
+              >Workforce
+              <input
+                type="text"
+                v-model="wf"
+                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              />
+            </label>
+
+            <label class="block py-6" v-if="requested_by.includes('Training')"
+              >Training
+              <input
+                type="text"
+                v-model="tr"
+                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              />
+            </label>
+
+            <label class="block py-6" v-if="requested_by.includes('Client')"
+              >Client
+              <input
+                type="text"
+                v-model="cl"
+                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              />
+            </label>
+
+            <label class="block py-6" v-if="requested_by.includes('Operation')"
+              >Operation
+              <input
+                type="text"
+                v-model="op"
+                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              />
+            </label>
           </label>
-          <label class="block py-6"
-            >Talent Acquisition
-            <input
-              type="text"
-              v-model="ta"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block py-6"
-            >Workforce
-            <input
-              type="text"
-              v-model="wf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block py-6"
-            >Training
-            <input
-              type="text"
-              v-model="tr"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block py-6"
-            >Client
-            <input
-              type="text"
-              v-model="cl"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
-          <label class="block py-6"
-            >Operation
-            <input
-              type="text"
-              v-model="wf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
+
           <label class="block py-6"
             >Remarks<textarea
               required
@@ -473,7 +522,7 @@ export default {
       daterange: [],
       programs: [],
       agreed_start_date: "",
-      condition: "",
+      condition: [],
       within_sla: "",
       changes: "",
       ta: "",
@@ -594,7 +643,6 @@ export default {
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
           this.agreed_start_date = classObj.agreed_start_date;
-          this.condition = classObj.condition;
           this.erf_number = classObj.erf_number;
           this.approved_by = classObj.approved_by;
 
@@ -679,6 +727,11 @@ export default {
           this.condition = "";
           this.approved_by = "";
           this.changes = "";
+          this.ta = "";
+          this.wf = "";
+          this.tr = "";
+          this.cl = "";
+          this.op = "";
           this.$router.push("/capfile");
         })
         .catch((error) => {

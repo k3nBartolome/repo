@@ -221,61 +221,139 @@
         </label>
         </div>
         <div class="py-4">
-          <label class="block"
-            >Condition
-            <select
-              required
-              v-model="condition"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="Filed ERF with necessary approvals and within timeline">
-                Filed ERF with necessary approvals and within timeline
-              </option>
-              <option value="Adherence to hiring demand from initial sign-off">
-                Adherence to hiring demand from initial sign-off
-              </option>
-              <option value="Adherence to hiring timelines from initial sign-off">
-                Adherence to hiring timelines from initial sign-off
-              </option>
-              <option value="Adherence to agreed hiring profile, process and assessments">
-                Adherence to agreed hiring profile, process and assessments
-              </option>
-              <option
+          <label class="block">
+            Condition
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Filed ERF with necessary approvals and within timeline"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Filed ERF with necessary approvals and within timeline</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to hiring demand from initial sign-off"
+                class="ml-2"
+              />
+              <span class="ml-2">Adherence to hiring demand from initial sign-off</span>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to hiring timelines from initial sign-off"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to hiring timelines from initial sign-off</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Adherence to agreed hiring profile, process and assessments"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to agreed hiring profile, process and assessments</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
                 value="Adherence to OV Support based on the required no. of POCs and sched"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Adherence to OV Support based on the required no. of POCs and sched</span
               >
-                Adherence to OV Support based on the required no. of POCs and sched
-              </option>
-              <option value="Program-specific assessment per SOW">
-                Program-specific assessment per SOW
-              </option>
-              <option value="Employment requirements prior Day1 per SOW">
-                Employment requirements prior Day1 per SOW
-              </option>
-              <option value="Specific previous work exp per SOW">
-                Specific previous work exp per SOW
-              </option>
-              <option value="Roster submission requirement for ID creation prior Day 1">
-                Roster submission requirement for ID creation prior Day 1
-              </option>
-              <option
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Program-specific assessment per SOW"
+                class="ml-2"
+              />
+              <span class="ml-2">Program-specific assessment per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Employment requirements prior Day1 per SOW"
+                class="ml-2"
+              />
+              <span class="ml-2">Employment requirements prior Day1 per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input type="checkbox" v-model="condition" class="ml-2" />
+              <span class="ml-2">Specific previous work exp per SOW</span>
+            </label>
+            <label class="flex items-start">
+              <input type="checkbox" v-model="condition" class="ml-2" />
+              <span class="ml-2"
+                >Roster submission requirement for ID creation prior Day 1</span
+              >
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
                 value="Programs following VXI standard hiring process and emp req’ts"
+                class="ml-2"
+              />
+              <span class="ml-2"
+                >Programs following VXI standard hiring process and emp req’ts</span
               >
-                Programs following VXI standard hiring process and emp req’ts
-              </option>
-              <option value="Agreed hiring profile, process and assessments">
-                Agreed hiring profile, process and assessments
-              </option>
-              <option value="Sample call recordings, sample transactions">
-                Sample call recordings, sample transactions
-              </option>
-              <option value="Approved wage rates and job offer/contract template">
-                Approved wage rates and job offer/contract template
-              </option>
-              <option value="Agreed ramp plan with WF, CS, PMO">
-                Agreed ramp plan with WF, CS, PMO
-              </option>
-            </select>
+            </label>
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Agreed hiring profile, process and assessments"
+                class="ml-2"
+              />
+              <span class="ml-2">Agreed hiring profile, process and assessments</span>
+            </label>
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Sample call recordings, sample transactions"
+                class="ml-2"
+              /><span class="ml-2">
+                Sample call recordings, sample transactions</span
+              ></label
+            >
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Approved wage rates and job offer/contract template"
+                class="ml-2"
+              ><span class="ml-2">
+                Approved wage rates and job offer/contract template</span></label
+            >
+
+            <label class="flex items-start">
+              <input
+                type="checkbox"
+                v-model="condition"
+                value="Agreed ramp plan with WF, CS, PMO"
+                class="ml-2"
+              ><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
+            >
           </label>
           <label class="block py-6"
             >Remarks<textarea
@@ -317,7 +395,7 @@ export default {
       category: "",
       notice_days: 0,
       erf_number: "",
-      condition: "",
+      condition: [],
       within_sla: "",
       approved_by: "",
       sites: [],
@@ -446,7 +524,7 @@ export default {
         date_range_id: this.date_selected,
         approved_status: "pending",
         approved_by: this.approved_by,
-        status: "1",
+        status: "Active",
         is_active: 1,
         created_by: this.$store.state.user_id,
       };

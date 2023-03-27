@@ -68,7 +68,7 @@ Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
 
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
-Route::get('clark', [ClassesController::class, 'clark']);
+Route::get('classesall', [ClassesController::class, 'classesAll']);
 Route::get('quezoncity', [ClassesController::class, 'quezoncity']);
 Route::get('bridgetowne', [ClassesController::class, 'bridgetowne']);
 Route::get('makati', [ClassesController::class, 'makati']);

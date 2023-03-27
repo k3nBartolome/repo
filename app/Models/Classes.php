@@ -11,8 +11,8 @@ class Classes extends Model
     protected $casts = [
         'requested_by' => 'array',
         'cancelled_by' => 'array',
+        'condition' => 'array',
     ];
-
 
     protected $fillable = [
         'pushedback_id',
@@ -85,6 +85,4 @@ class Classes extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
-
- 
 }
