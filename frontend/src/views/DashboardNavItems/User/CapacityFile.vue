@@ -7,7 +7,7 @@
           <th
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="px-4 truncate  py-1"
+            class="px-4 truncate py-1"
           >
             {{ daterange.date_range }}
           </th>
@@ -15,15 +15,44 @@
       </thead>
       <tbody class="overflow-y-auto">
         <tr v-for="program in programs" :key="program.id">
-          <td class=" px-4 py-1 truncate border border-black">{{ program.name }}</td>
-          <td v-for="date in daterange" :key="date.id" class="w-1/4 px-2 py-1 border border-black">
+          <td class="px-4 py-1 truncate border border-black">{{ program.name }}</td>
+          <td
+            v-for="date in daterange"
+            :key="date.id"
+            class="w-1/4 px-2 py-1 border border-black"
+          >
             <button
               type="button"
-              v-on:click="getTwoDimensionalId(date.year, program.id + 100, date.id)"
-              class="bg-white-500 px-4 w-full h-full"
+              @click="showButtons"
+              class="bg-white px-4 w-full h-full"
             >
               {{ total_target }}
             </button>
+            <div  class="flex items-center">
+              <div v-if="total_target === 0">
+                <router-link :to="`/addcapfile/${daterange.year,program.id + 100,daterange.id}`"
+                  ><button class="mx-2 bg-blue-500" @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)">
+                    Add
+                  </button></router-link
+                >
+              </div>
+            </div>
+              <!-- <div v-else>
+                <router-link :to="`/pushbackcapfile/${clark1Item.id}`"
+                  ><button
+                    class="mx-2 bg-green-500 w-22"
+                    @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)"
+                  >
+                    Pushed Back
+                  </button></router-link
+                >
+                <router-link :to="`/cancelcapfile/${clark1Item.id}`"
+                  ><button class="mx-2 bg-red-500 w-22" @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)">
+                    Cancel
+                  </button></router-link
+                >
+              </div>
+            </div> -->
           </td>
         </tr>
       </tbody>
@@ -33,23 +62,29 @@
 
 <script>
 import axios from "axios";
-
 export default {
   data() {
     return {
-      programs: [], // array of site objects
-      daterange: [], // array of week objects
-      twoDimensionalIds: [], // array to hold two-dimensional IDs
-      total_target: "", // example value
+      programs: [],
+      daterange: [],
+      twoDimensionalIds: [],
+      selectedCell: null,
+      modalVisible: false,
+      total_target: 0,
     };
   },
   created() {
-    // get site and week data from API
-    this.getSiteData();
-    this.getWeekData();
+    // fetch site and week data from API
+    this.fetchSiteData();
+    this.fetchWeekData();
   },
   methods: {
-    async getSiteData() {
+    closeModal() {
+      this.modalVisible = false;
+      this.selectedCell = null;
+    },
+
+    async fetchSiteData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/programs");
         this.programs = response.data.data;
@@ -57,7 +92,7 @@ export default {
         console.error(error);
       }
     },
-    async getWeekData() {
+    async fetchWeekData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/daterange");
         this.daterange = response.data.data;
@@ -65,18 +100,13 @@ export default {
         console.error(error);
       }
     },
-    async getTwoDimensionalId(dateYear, programId, dateId) {
-  const twoDimensionalId = `${dateYear}${programId}${dateId}`;
-  if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
-    this.twoDimensionalIds.push(twoDimensionalId);
-    try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/target/${twoDimensionalId}`);
-      this.total_target = response.data.total_target;
-    } catch (error) {
-      console.error(error);
-    }
-  }
-},  
+    getTwoDimensionalId(programId, dateId) {
+      const twoDimensionalId = `${programId}${dateId}`;
+      if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
+        this.twoDimensionalIds.push(twoDimensionalId);
+        console.log(twoDimensionalId);
+      }
+    },
   },
 };
 </script>

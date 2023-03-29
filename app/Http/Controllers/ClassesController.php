@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-    public function twod($twoDimensionalId)
+    /* public function twod($twoDimensionalId)
     {
         $classes = Classes::where('two_dimensional_id', $twoDimensionalId)->get();
         $totalTarget = $classes->sum(function ($class) {
@@ -20,7 +20,7 @@ class ClassesController extends Controller
 
         return response()->json(['total_target' => $totalTarget]);
     }
-
+ */
     public function classesAll()
     {
         $siteIds = Classes::distinct()->pluck('site_id')->toArray();
@@ -74,10 +74,11 @@ class ClassesController extends Controller
         return $groupedData;
     }
 
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
         // Validate the request.
         $validator = Validator::make($request->all(), [
+            'two_dimensional_id' => 'required',
             'notice_weeks' => 'required',
             'notice_days' => 'required',
             'external_target' => 'required',
@@ -106,23 +107,13 @@ class ClassesController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        // Validate the ID parameter.
-        if (!is_numeric($id) || $id < 0) {
-            return response()->json(['error' => 'Invalid ID.'], 400);
-        }
-
-        // Get the class by ID.
-        $class = Classes::find($id);
-        if (!$class) {
-            return response()->json(['error' => 'Record not found.'], 404);
-        }
+        $class = new Classes(); // replace `YourClass` with the actual name of your class
         $condition = [$request->condition];
-
-        // Update the class with the request data.
         $class->fill($request->all());
         $class->condition = json_encode($condition);
         $class->agreed_start_date = $request->input('original_start_date');
         $class->changes = 'Add Class';
+        $class->pushedback_id = $class->id;
         $class->save();
 
         // Return the updated class as a resource.

@@ -526,10 +526,11 @@ export default {
         approved_by: this.approved_by,
         status: "Active",
         is_active: 1,
+        two_dimensional_id: this.$route.params.id,
         created_by: this.$store.state.user_id,
       };
       axios
-        .put("http://127.0.0.1:8000/api/classes/" + this.$route.params.id, formData)
+        .post("http://127.0.0.1:8000/api/classes/", formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -553,6 +554,7 @@ export default {
           this.is_active = "";
           this.created_by = "";
           this.approved_by = "";
+          this.two_dimensional_id = "";
           this.$router.push("/capfile");
         })
         .catch((error) => {

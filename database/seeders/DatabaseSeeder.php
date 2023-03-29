@@ -19,6 +19,6 @@ class DatabaseSeeder extends Seeder
         //$this->call(DateSeeder::class);
         $this->call(DateRangesTableSeeder::class);
 
-        $this->call(ClassesSeeder::class);
+        //$this->call(ClassesSeeder::class);
     }
 }
