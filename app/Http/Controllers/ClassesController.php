@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-    public function index()
+    public function twod($twoDimensionalId)
     {
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->get();
-        $classesData = ClassesResource::collection($classes);
+        $classes = Classes::where('two_dimensional_id', $twoDimensionalId)->get();
+        $totalTarget = $classes->sum(function ($class) {
+            return $class->internal_target + $class->external_target;
+        });
 
-        return response()->json([
-            'classes' => $classesData,
-        ]);
+        return response()->json(['total_target' => $totalTarget]);
     }
 
     public function classesAll()
@@ -33,41 +33,45 @@ class ClassesController extends Controller
                 $site = Site::find($siteId)->name;
                 $program = Program::find($programId)->name;
                 $key = 'classes_'.$site.'_'.$program;
-
-                $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                     ->where('site_id', $siteId)
-                     ->where('program_id', $programId)
-                     ->where('status', 'Active')
-                     ->selectRaw('MAX(id) as id')
-                     ->groupBy('pushedback_id')
-                     ->get();
-
-                $classIds = $classes->pluck('id');
-
-                $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                     ->whereIn('id', $classIds)
-                     ->get()
-                     ->groupBy(function ($class) {
-                         return $class->dateRange->month;
-                     })
-                     ->map(function ($monthClasses) {
-                         return $monthClasses->sortBy('date_range_id')->map(function ($class) {
-                             return [
-                                 'id' => $class->id,
-                                 'site_name' => $class->site->name,
-                                 'program_name' => $class->program->name,
-                                 'date_range' => $class->dateRange->date_range,
-                                 'total_target' => $class->total_target,
-                             ];
-                         })->values();
-                     })
-                     ->toArray();
-
-                $response[$key] = $groupedData;
+                $response[$key] = $this->classesForSiteAndProgram($siteId, $programId);
             }
         }
 
         return response()->json($response);
+    }
+
+    private function classesForSiteAndProgram($siteId, $programId)
+    {
+        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+                ->where('site_id', $siteId)
+                ->where('program_id', $programId)
+                ->where('status', 'Active')
+                ->selectRaw('MAX(id) as id')
+                ->groupBy('pushedback_id')
+                ->get();
+
+        $classIds = $classes->pluck('id');
+
+        $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+                ->whereIn('id', $classIds)
+                ->get()
+                ->groupBy(function ($class) {
+                    return $class->dateRange->month;
+                })
+                ->map(function ($monthClasses) {
+                    return $monthClasses->sortBy('date_range_id')->map(function ($class) {
+                        return [
+                            'id' => $class->id,
+                            'site_name' => $class->site->name,
+                            'program_name' => $class->program->name,
+                            'date_range' => $class->dateRange->date_range,
+                            'total_target' => $class->total_target,
+                        ];
+                    })->values();
+                })
+                ->toArray();
+
+        return $groupedData;
     }
 
     public function store(Request $request, $id)

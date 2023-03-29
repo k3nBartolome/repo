@@ -85,3 +85,4 @@ Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
+Route::get('/target/{twoDimensionalId}', [ClassesController::class, 'twod']);
