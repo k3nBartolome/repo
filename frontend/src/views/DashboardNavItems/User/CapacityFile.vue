@@ -46,7 +46,6 @@
                     Pushed Back
                   </button></router-link
                 >
-                <router-link :to="`/cancelcapfile/${clark1Item.id}`"
                   ><button class="mx-2 bg-red-500 w-22" @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)">
                     Cancel
                   </button></router-link

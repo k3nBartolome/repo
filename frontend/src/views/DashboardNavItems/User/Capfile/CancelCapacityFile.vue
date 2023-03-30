@@ -442,6 +442,49 @@
       </div>
     </form>
   </div>
+  <div class="py-6 px-12">
+    <h2 class="font-bold">History</h2>
+    <table class="w-full table-auto border">
+      <thead class="text-left font-bold border border-black">
+        <tr>
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Site</th>
+          <th class="px-4 py-2">Line of Business</th>
+          <th class="px-4 py-2">Type of Hiring</th>
+          <th class="px-4 py-2">Total Target</th>
+          <th class="px-4 py-2">Original Start Date</th>
+          <th class="px-4 py-2">Movement Date</th>
+          <th class="px-4 py-2">Weeks Range</th>
+          <th class="px-4 py-2">Within SLA?</th>
+          <th class="px-4 py-2">Agreed Start Date</th>
+          <th class="px-4 py-2">Requested by</th>
+          <th class="px-4 py-2">Approved by</th>
+          <th class="px-4 py-2">Transaction Type</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr
+          v-for="classes in classes"
+          :key="classes.id"
+          class="border-b border-gray-200 hover:bg-gray-100"
+        >
+          <td class="px-4 py-3">{{ classes.pushedback_id }}</td>
+          <td class="px-4 py-3">{{ classes.site.name }}</td>
+          <td class="px-4 py-3">{{ classes.program.name }}</td>
+          <td class="px-4 py-3">{{ classes.type_of_hiring }}</td>
+          <td class="px-4 py-3">{{ classes.total_target }}</td>
+          <td class="px-4 py-3">{{ classes.original_start_date }}</td>
+          <td class="px-4 py-3">{{ classes.wfm_date_requested }}</td>
+          <td class="px-4 py-3">{{ classes.date_range.date_range }}</td>
+          <td class="px-4 py-3">{{ classes.within_sla }}</td>
+          <td class="px-4 py-3">{{ classes.agreed_start_date }}</td>
+          <td class="px-4 py-3">{{ classes.requested_by }}</td>
+          <td class="px-4 py-3">{{ classes.approved_by }}</td>
+          <td class="px-4 py-3">{{ classes.changes }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -469,6 +512,7 @@ export default {
       within_sla: "",
       approved_by: "",
       cancelled_by: [],
+      classes: [],
       ta: "",
       wf: "",
       tr: "",
@@ -497,6 +541,7 @@ export default {
     this.getPrograms();
     this.getDateRange();
     this.getClasses();
+    this.getTransaction();
   },
   methods: {
     syncTotalTarget: function () {
@@ -528,6 +573,17 @@ export default {
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async getTransaction() {
+      await axios
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
+        .then((response) => {
+          this.classes = response.data.classes;
+          console.log(response.data.classes);
         })
         .catch((error) => {
           console.log(error);
