@@ -3,6 +3,7 @@
     <table class="table-auto border border-black">
       <thead>
         <tr>
+          <th class="px-4">Sites</th>
           <th class="px-4">Programs</th>
           <th
             v-for="daterange in daterange"
@@ -15,11 +16,12 @@
       </thead>
       <tbody class="overflow-y-auto">
         <tr v-for="program in programs" :key="program.id">
+          <td class="px-4 py-1 truncate border border-black">{{ program.site_id }}</td>
           <td class="px-4 py-1 truncate border border-black">{{ program.name }}</td>
           <td
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="w-1/4 px-2 py-1 border border-black"
+            class="w-1/4 px-2 py-1 border border-black truncate"
           >
             <button
               type="button"
@@ -28,17 +30,18 @@
             >
               {{ total_target }}
             </button>
-            <div
-              class="flex items-center"
-              v-if="program.total_target[daterange.id] === 0"
-            >
+            <div class="flex items-center" v-if="total_target === 0">
               <router-link
-                :to="`/addcapfile/${daterange.year}${program.id + 100}${daterange.id}`"
-                :query="{ program: program.id, daterange: daterange.id }"
+                :to="{
+                  path: `/addcapfile/${daterange.year}${program.id + 100}${daterange.id}`,
+                  query: { program: program.id, daterange: daterange.id, site: program.site_id },
+                }"
               >
                 <button
                   class="mx-2 bg-blue-500"
-                  @click="getTwoDimensionalId(program.id + 100, daterange.id)"
+                  @click="
+                    getTwoDimensionalId(daterange.year, program.id + 100, daterange.id)
+                  "
                 >
                   Add
                 </button>
@@ -65,12 +68,13 @@ export default {
   },
   created() {
     // fetch site and week data from API
-    this.fetchSiteData();
+    //this.fetchSiteData();
     this.fetchWeekData();
     this.fetchClassesData();
+    this.fetchProgramData()
   },
   methods: {
-    async fetchSiteData() {
+    async fetchProgramData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/programs");
         this.programs = response.data.data;
@@ -94,8 +98,8 @@ export default {
         console.error(error);
       }
     },
-    getTwoDimensionalId(programId, dateId) {
-      const twoDimensionalId = `${programId}${dateId}`;
+    getTwoDimensionalId(dateYear, programId, dateId) {
+      const twoDimensionalId = `${dateYear}${programId}${dateId}`;
       if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
         this.twoDimensionalIds.push(twoDimensionalId);
         console.log(twoDimensionalId);

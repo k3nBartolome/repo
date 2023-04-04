@@ -382,9 +382,9 @@ import axios from "axios";
 export default {
   data() {
     return {
-      sites_selected: "",
-      programs_selected: "",
-      date_selected: "",
+      //sites_selected: "",
+      //programs_selected: "",
+      //date_selected: "",
       type_of_hiring: "",
       external_target: "",
       internal_target: "",
@@ -406,6 +406,15 @@ export default {
   },
 
   computed: {
+    programs_selected() {
+      return this.$route.query.program;
+    },
+    sites_selected() {
+      return this.$route.query.site;
+    },
+    date_selected() {
+      return this.$route.query.daterange;
+    },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
       const internal = parseInt(this.internal_target) || 0;
@@ -425,9 +434,6 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
-    this.sites_selected = this.$route.query.site;
-    this.programs_selected = this.$route.query.program;
-    this.date_selected = this.$route.query.daterange;
   },
   methods: {
     syncTotalTarget: function () {
