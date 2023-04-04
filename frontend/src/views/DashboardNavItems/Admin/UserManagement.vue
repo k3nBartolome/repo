@@ -38,7 +38,7 @@
             class="block w-full mt-1 border rounded-md  focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required />
         </label>
-        <button type="submit" class="bg-orange-600 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded">
+        <button type="submit" class="bg-orange-500 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded">
           <i class="fa fa-building	"></i> Add
         </button>
       </form>
@@ -48,7 +48,7 @@
     <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
       <table class="w-full table-auto text-white">
         <thead>
-          <tr class="text-left bg-orange-600 border-solid border-2 border-orange-600">
+          <tr class="text-left bg-orange-500 border-solid border-2 border-orange-600">
             <th class="px-1 py-2 ">ID</th>
             <th class="px-1 py-2 ">Avatar</th>
             <th class="px-1 py-2 ">Name</th>

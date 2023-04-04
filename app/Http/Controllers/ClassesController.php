@@ -30,46 +30,51 @@ class ClassesController extends Controller
 
         foreach ($siteIds as $siteId) {
             foreach ($programIds as $programId) {
-                $site = Site::find($siteId)->name;
-                $program = Program::find($programId)->name;
-                $key = 'classes_'.$site.'_'.$program;
-                $response[$key] = $this->classesForSiteAndProgram($siteId, $programId);
+                $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
+                ->where('site_id', $siteId)
+                ->where('program_id', $programId)
+                ->where('status', 'Active')
+                ->selectRaw('MAX(id) as id, two_dimensional_id')
+                ->groupBy('two_dimensional_id')
+                ->get();
+
+                foreach ($classes as $class) {
+                    $site = Site::find($siteId)->name;
+                    $program = Program::find($programId)->name;
+                    $twoDimensionalId = $class->two_dimensional_id;
+                    $key = 'classes_'.$site.'_'.$program.'_'.$twoDimensionalId;
+                    $response[$key] = $this->classesForSiteProgramAndTwoDimensionalId($siteId, $programId, $twoDimensionalId);
+                }
             }
         }
 
         return response()->json($response);
     }
 
-    private function classesForSiteAndProgram($siteId, $programId)
+    private function classesForSiteProgramAndTwoDimensionalId($siteId, $programId, $twoDimensionalId)
     {
         $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                ->where('site_id', $siteId)
-                ->where('program_id', $programId)
-                ->where('status', 'Active')
-                ->selectRaw('MAX(id) as id')
-                ->groupBy('pushedback_id')
-                ->get();
+            ->where('site_id', $siteId)
+            ->where('program_id', $programId)
+            ->where('two_dimensional_id', $twoDimensionalId)
+            ->where('status', 'Active')
+            ->get();
 
-        $classIds = $classes->pluck('id');
-
-        $groupedData = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                ->whereIn('id', $classIds)
-                ->get()
-                ->groupBy(function ($class) {
-                    return $class->dateRange->month;
-                })
-                ->map(function ($monthClasses) {
-                    return $monthClasses->sortBy('date_range_id')->map(function ($class) {
-                        return [
-                            'id' => $class->id,
-                            'site_name' => $class->site->name,
-                            'program_name' => $class->program->name,
-                            'date_range' => $class->dateRange->date_range,
-                            'total_target' => $class->total_target,
-                        ];
-                    })->values();
-                })
-                ->toArray();
+        $groupedData = $classes->groupBy(function ($class) {
+            return $class->dateRange->month;
+        })
+    ->map(function ($monthClasses) {
+        return $monthClasses->sortBy('date_range_id')->map(function ($class) {
+            return [
+                'id' => $class->id,
+                'site_name' => $class->site->name,
+                'program_name' => $class->program->name,
+                'date_range' => $class->dateRange->date_range,
+                'total_target' => $class->total_target,
+            ];
+        })->values();
+    })
+    ->toArray();
 
         return $groupedData;
     }

@@ -201,24 +201,24 @@
             </select>
           </label>
           <label class="block"
-          >Approved by
-          <select
-            required
-            v-model="approved_by"
-            class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="SD Sheila Y">SD Sheila Y</option>
-            <option value="CS/Ops">CS/Ops</option>
-            <option value="WF/Ops">WF/Ops</option>
-            <option value="Cheryll Punzalan">Cheryll Punzalan</option>
-            <option value="Daniel Dela Vega">Daniel Dela Vega</option>
-            <option value="Christito Villaprudente">Christito Villaprudente</option>
-            <option value="VP Sheryll">VP Sheryll</option>
-            <option value="Kim De Guzman">Kim De Guzman</option>
-            <option value="Ryan Tomzer">Ryan Tomzer</option>
-          </select>
-        </label>
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="SD Sheila Y">SD Sheila Y</option>
+              <option value="CS/Ops">CS/Ops</option>
+              <option value="WF/Ops">WF/Ops</option>
+              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
+              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
+              <option value="Christito Villaprudente">Christito Villaprudente</option>
+              <option value="VP Sheryll">VP Sheryll</option>
+              <option value="Kim De Guzman">Kim De Guzman</option>
+              <option value="Ryan Tomzer">Ryan Tomzer</option>
+            </select>
+          </label>
         </div>
         <div class="py-4">
           <label class="block">
@@ -342,8 +342,9 @@
                 v-model="condition"
                 value="Approved wage rates and job offer/contract template"
                 class="ml-2"
-              ><span class="ml-2">
-                Approved wage rates and job offer/contract template</span></label
+              /><span class="ml-2">
+                Approved wage rates and job offer/contract template</span
+              ></label
             >
 
             <label class="flex items-start">
@@ -352,7 +353,7 @@
                 v-model="condition"
                 value="Agreed ramp plan with WF, CS, PMO"
                 class="ml-2"
-              ><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
+              /><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
             >
           </label>
           <label class="block py-6"
@@ -367,7 +368,7 @@
         <div class="flex justify-center py-4">
           <button
             type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
+            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
           >
             <i class="fa fa-save"></i> Save
           </button>
@@ -403,6 +404,7 @@ export default {
       programs: [],
     };
   },
+
   computed: {
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
@@ -423,7 +425,9 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
-    this.getClasses();
+    this.sites_selected = this.$route.query.site;
+    this.programs_selected = this.$route.query.program;
+    this.date_selected = this.$route.query.daterange;
   },
   methods: {
     syncTotalTarget: function () {
@@ -467,37 +471,6 @@ export default {
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getClasses() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
-        .then((response) => {
-          const data = response.data;
-          const classObj = data.class;
-          this.sites_selected = classObj.site.id;
-          this.programs_selected = classObj.program.id;
-          this.type_of_hiring = classObj.type_of_hiring;
-          this.external_target = classObj.external_target;
-          this.internal_target = classObj.internal_target;
-          this.total_target = classObj.total_target;
-          this.original_start_date = classObj.original_start_date;
-          this.wfm_date_requested = classObj.wfm_date_requested;
-          this.notice_days = classObj.notice_days;
-          this.notice_weeks = classObj.notice_weeks;
-          this.date_selected = classObj.date_range_id;
-          this.with_erf = classObj.with_erf;
-          this.erf_number = classObj.erf_number;
-          this.category = classObj.category;
-          this.within_sla = classObj.within_sla;
-          this.remarks = classObj.remarks;
-          this.condition = classObj.condition;
-          this.approved_by = classObj.approved_by;
-
-          console.log(classObj);
         })
         .catch((error) => {
           console.log(error);

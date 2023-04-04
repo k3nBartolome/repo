@@ -446,7 +446,7 @@
         <div class="flex justify-center py-4">
           <button
             type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-600 rounded hover:bg-gray-600"
+            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
           >
             <i class="fa fa-save"></i> Pushback
           </button>

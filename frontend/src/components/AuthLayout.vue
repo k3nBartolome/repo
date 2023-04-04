@@ -25,7 +25,7 @@
 
                 <router-link to="/login">
                     <li class=""><button
-                            class="inline-flex items-center py-2 font-semibold text-white bg-orange-600 rounded-full w-28 hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray">
+                            class="inline-flex items-center py-2 font-semibold text-white bg-orange-500 rounded-full w-28 hover:bg-gray-600 focus:outline-none focus:shadow-outline-gray">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
                                 stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"

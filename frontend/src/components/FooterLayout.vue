@@ -1,5 +1,5 @@
 <template>
-  <footer class="w-full p-4 text-white bg-orange-600">
+  <footer class="w-full p-4 text-white bg-orange-500">
     <div class="container flex items-center justify-between mx-auto">
       <p class="text-sm">© {{ currentYear }} VXI Global Holdings B.V., All rights reserved.</p>
       <div class="flex">

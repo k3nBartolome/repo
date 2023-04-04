@@ -57,7 +57,7 @@
         </label>
         <button
           type="submit"
-          class="bg-orange-600 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded"
+          class="bg-orange-500 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded"
         >
           <i class="fa fa-building"></i> Add
         </button>
@@ -69,7 +69,7 @@
       <input type="text" v-model="search" placeholder="Search...">
       <table class="w-full table-auto text-white">
         <thead>
-          <tr class="text-left bg-orange-600 border-solid border-2 border-orange-600">
+          <tr class="text-left bg-orange-500 border-solid border-2 border-orange-600">
             <th class="px-1 py-1 whitespace-no-wrap truncate border">ID</th>
             <th class="px-1 py-1 whitespace-no-wrap truncate border">Name</th>
             <th class="px-1 py-1 whitespace-no-wrap truncate border">Description</th>

@@ -7,7 +7,7 @@
           <th
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="px-4 truncate py-1"
+            class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
           >
             {{ daterange.date_range }}
           </th>
@@ -17,8 +17,8 @@
         <tr v-for="program in programs" :key="program.id">
           <td class="px-4 py-1 truncate border border-black">{{ program.name }}</td>
           <td
-            v-for="date in daterange"
-            :key="date.id"
+            v-for="daterange in daterange"
+            :key="daterange.id"
             class="w-1/4 px-2 py-1 border border-black"
           >
             <button
@@ -28,30 +28,22 @@
             >
               {{ total_target }}
             </button>
-            <div  class="flex items-center">
-              <div v-if="total_target === 0">
-                <router-link :to="`/addcapfile/${daterange.year,program.id + 100,daterange.id}`"
-                  ><button class="mx-2 bg-blue-500" @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)">
-                    Add
-                  </button></router-link
+            <div
+              class="flex items-center"
+              v-if="program.total_target[daterange.id] === 0"
+            >
+              <router-link
+                :to="`/addcapfile/${daterange.year}${program.id + 100}${daterange.id}`"
+                :query="{ program: program.id, daterange: daterange.id }"
+              >
+                <button
+                  class="mx-2 bg-blue-500"
+                  @click="getTwoDimensionalId(program.id + 100, daterange.id)"
                 >
-              </div>
+                  Add
+                </button>
+              </router-link>
             </div>
-              <!-- <div v-else>
-                <router-link :to="`/pushbackcapfile/${clark1Item.id}`"
-                  ><button
-                    class="mx-2 bg-green-500 w-22"
-                    @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)"
-                  >
-                    Pushed Back
-                  </button></router-link
-                >
-                  ><button class="mx-2 bg-red-500 w-22" @click="getTwoDimensionalId(daterange.year,program.id + 100,daterange.id)">
-                    Cancel
-                  </button></router-link
-                >
-              </div>
-            </div> -->
           </td>
         </tr>
       </tbody>
@@ -68,7 +60,6 @@ export default {
       daterange: [],
       twoDimensionalIds: [],
       selectedCell: null,
-      modalVisible: false,
       total_target: 0,
     };
   },
@@ -76,13 +67,9 @@ export default {
     // fetch site and week data from API
     this.fetchSiteData();
     this.fetchWeekData();
+    this.fetchClassesData();
   },
   methods: {
-    closeModal() {
-      this.modalVisible = false;
-      this.selectedCell = null;
-    },
-
     async fetchSiteData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/programs");
@@ -95,6 +82,14 @@ export default {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/daterange");
         this.daterange = response.data.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async fetchClassesData() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        this.classes = response.data.data;
       } catch (error) {
         console.error(error);
       }
