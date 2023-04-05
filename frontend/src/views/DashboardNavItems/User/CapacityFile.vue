@@ -34,7 +34,11 @@
               <router-link
                 :to="{
                   path: `/addcapfile/${daterange.year}${program.id + 100}${daterange.id}`,
-                  query: { program: program.id, daterange: daterange.id, site: program.site_id },
+                  query: {
+                    program: program.id,
+                    daterange: daterange.id,
+                    site: program.site_id,
+                  },
                 }"
               >
                 <button
@@ -61,9 +65,7 @@ export default {
     return {
       programs: [],
       daterange: [],
-      twoDimensionalIds: [],
-      selectedCell: null,
-      total_target: 0,
+      classes: [],
     };
   },
   created() {
@@ -71,7 +73,7 @@ export default {
     //this.fetchSiteData();
     this.fetchWeekData();
     this.fetchClassesData();
-    this.fetchProgramData()
+    this.fetchProgramData();
   },
   methods: {
     async fetchProgramData() {
@@ -93,7 +95,7 @@ export default {
     async fetchClassesData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        this.classes = response.data.data;
+        this.classes = response.data.groupedDataa;
       } catch (error) {
         console.error(error);
       }
