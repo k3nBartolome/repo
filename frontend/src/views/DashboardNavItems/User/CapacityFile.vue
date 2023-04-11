@@ -66,6 +66,7 @@ export default {
       programs: [],
       daterange: [],
       classes: [],
+      total_target: 0,
     };
   },
   created() {
