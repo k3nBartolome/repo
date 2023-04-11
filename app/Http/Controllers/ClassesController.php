@@ -11,16 +11,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-    /* public function twod($twoDimensionalId)
-    {
-        $classes = Classes::where('two_dimensional_id', $twoDimensionalId)->get();
-        $totalTarget = $classes->sum(function ($class) {
-            return $class->internal_target + $class->external_target;
-        });
-
-        return response()->json(['total_target' => $totalTarget]);
-    }
- */
     public function classesAll()
     {
         $sites = Site::all();
@@ -30,32 +20,30 @@ class ClassesController extends Controller
 
         foreach ($sites as $site) {
             foreach ($programs as $program) {
-                $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                ->where('site_id', $site->id)
-                ->where('program_id', $program->id)
-                ->where('status', 1)
-                ->selectRaw('MAX(id) as id')
-                ->groupBy('pushedback_id')
-                ->get();
+                $classes = Classes::with(['site', 'program', 'dateRange'])
+            ->where('site_id', $site->id)
+            ->where('program_id', $program->id)
+            ->where('status', 'Active')
+            ->selectRaw('MAX(id) as id')
+            ->groupBy('pushedback_id')
+            ->get();
 
                 $classIds = $classes->pluck('id');
 
-                $groupedData[$site->name][$program->name] = Classes::with(['sla_reason', 'site', 'program', 'dateRange'])
-                ->whereIn('id', $classIds)
-                ->get()
-                ->groupBy(function ($class) {
-                    return $class->dateRange->month;
-                })
-                ->map(function ($monthClasses) {
-                    return $monthClasses->sortBy('date_range_id')->values();
-                })
-                ->toArray();
+                $groupedData[$site->name][$program->name] = Classes::with(['site', 'program', 'dateRange'])
+            ->whereIn('id', $classIds)
+            ->get()
+            ->groupBy(function ($class) {
+                return $class->dateRange->month;
+            })
+            ->map(function ($monthClasses) {
+                return $monthClasses->sortBy('date_range_id')->values();
+            })
+            ->toArray();
             }
         }
 
-        return response()->json([
-        'groupedData' => $groupedData,
-    ]);
+        return $groupedData;
     }
 
     public function store(Request $request)

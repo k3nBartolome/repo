@@ -25,32 +25,11 @@
           >
             <button
               type="button"
-              @click="showButtons"
               class="bg-white px-4 w-full h-full"
+              v-for="classIds in groupedData" :key="classIds.id"
             >
-              {{ total_target }}
+              {{ classIds.id }}
             </button>
-            <div class="flex items-center" v-if="total_target === 0">
-              <router-link
-                :to="{
-                  path: `/addcapfile/${daterange.year}${program.id + 100}${daterange.id}`,
-                  query: {
-                    program: program.id,
-                    daterange: daterange.id,
-                    site: program.site_id,
-                  },
-                }"
-              >
-                <button
-                  class="mx-2 bg-blue-500"
-                  @click="
-                    getTwoDimensionalId(daterange.year, program.id + 100, daterange.id)
-                  "
-                >
-                  Add
-                </button>
-              </router-link>
-            </div>
           </td>
         </tr>
       </tbody>
@@ -65,8 +44,9 @@ export default {
     return {
       programs: [],
       daterange: [],
-      classes: [],
-      total_target: 0,
+      groupedData: [],
+      classIds: [],
+      twoDimensionalIds: [],
     };
   },
   created() {
@@ -96,7 +76,7 @@ export default {
     async fetchClassesData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        this.classes = response.data.groupedDataa;
+        this.groupedData = response.data.groupedData;
       } catch (error) {
         console.error(error);
       }
