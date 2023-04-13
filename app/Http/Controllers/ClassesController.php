@@ -4,46 +4,75 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
+use App\Models\DateRange;
 use App\Models\Program;
 use App\Models\Site;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
     public function classesAll()
     {
-        $sites = Site::all();
-        $programs = Program::all();
+        $cacheKey = 'classesAll';
+        $cacheTime = 60; // Cache for 60 seconds
 
-        $groupedData = [];
+        if (Cache::has($cacheKey)) {
+            $classes = Cache::get($cacheKey);
+        } else {
+            $sites = Site::all();
+            $programs = Program::all();
+            $dateRanges = DateRange::all();
 
-        foreach ($sites as $site) {
-            foreach ($programs as $program) {
-                $classes = Classes::with(['site', 'program', 'dateRange'])
-            ->where('site_id', $site->id)
-            ->where('program_id', $program->id)
-            ->where('status', 'Active')
-            ->selectRaw('MAX(id) as id')
-            ->groupBy('pushedback_id')
-            ->get();
+            $classes = [];
 
-                $classIds = $classes->pluck('id');
+            foreach ($sites as $site) {
+                $classes[$site->name] = [];
 
-                $groupedData[$site->name][$program->name] = Classes::with(['site', 'program', 'dateRange'])
-            ->whereIn('id', $classIds)
-            ->get()
-            ->groupBy(function ($class) {
-                return $class->dateRange->month;
-            })
-            ->map(function ($monthClasses) {
-                return $monthClasses->sortBy('date_range_id')->values();
-            })
-            ->toArray();
+                foreach ($programs as $program) {
+                    $classes[$site->name][$program->name] = [];
+
+                    foreach ($dateRanges as $dateRange) {
+                        $class = Classes::with(['site', 'program', 'dateRange'])
+                            ->where('site_id', $site->id)
+                            ->where('program_id', $program->id)
+                            ->where('date_range_id', $dateRange->id)
+                            ->where('status', 'Active')
+                            ->first();
+
+                        $classes[$site->name][$program->name][$dateRange->id] = $class ?? null;
+                    }
+
+                    // If there are no classes for any date range, add null entries for all date ranges
+                    if (count(array_filter($classes[$site->name][$program->name], function ($class) {
+                        return $class !== null;
+                    })) === 0) {
+                        foreach ($dateRanges as $dateRange) {
+                            $classes[$site->name][$program->name][$dateRange->id] = null;
+                        }
+                    }
+                }
+
+                // If there are no classes for any program, add null entries for all programs and date ranges
+                if (count(array_filter($classes[$site->name], function ($program) {
+                    return count(array_filter($program, function ($class) {
+                        return $class !== null;
+                    })) !== 0;
+                })) === 0) {
+                    foreach ($programs as $program) {
+                        $classes[$site->name][$program->name] = [];
+                        foreach ($dateRanges as $dateRange) {
+                            $classes[$site->name][$program->name][$dateRange->id] = null;
+                        }
+                    }
+                }
             }
+
+            Cache::put($cacheKey, $classes, $cacheTime);
         }
 
-        return $groupedData;
+        return response()->json($classes);
     }
 
     public function store(Request $request)

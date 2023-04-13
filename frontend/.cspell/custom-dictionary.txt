@@ -2,6 +2,7 @@
 cancelcapfile
 Cheryll
 Christito
+Classe
 Dela
 Punzalan
 pushbackcapfile
