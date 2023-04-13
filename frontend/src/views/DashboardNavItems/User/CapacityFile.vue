@@ -23,13 +23,22 @@
             :key="daterange.id"
             class="w-1/4 px-2 py-1 border border-black truncate"
           >
-            <button
-              type="button"
-              class="bg-white px-4 w-full h-full"
-              v-for="classIds in groupedData" :key="classIds.id"
-            >
-              {{ classIds.id }}
-            </button>
+            <template v-for="(siteData, siteName) in groupedData" :key="siteName">
+              <template v-if="siteData[program.name]">
+                <template
+                  v-for="(classItem, classIndex) in siteData[program.name]"
+                  :key="classIndex"
+                >
+                  <button
+                    type="button"
+                    class="bg-white px-4 w-full h-full"
+                    v-if="classIds.includes(classItem.id)"
+                  >
+                    {{ classItem.id}}
+                  </button>
+                </template>
+              </template>
+            </template>
           </td>
         </tr>
       </tbody>
@@ -76,7 +85,7 @@ export default {
     async fetchClassesData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        this.groupedData = response.data.groupedData;
+        this.groupedData = response.data.data;
       } catch (error) {
         console.error(error);
       }
