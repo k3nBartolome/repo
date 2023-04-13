@@ -24,16 +24,16 @@
             class="w-1/4 px-2 py-1 border border-black truncate"
           >
             <template v-if="program && groupedData[program.name]">
-              <button
+              <template
                 v-for="classItem in groupedData[program.name][program.name][
                   daterange.month
                 ]"
                 :key="classItem.id"
-                type="button"
-                class="bg-white px-4 w-full h-full"
               >
-                {{ classItem.id }}
-              </button>
+                <button type="button" class="bg-white px-4 w-full h-full">
+                  {{ classItem.id }}
+                </button>
+              </template>
             </template>
           </td>
         </tr>
