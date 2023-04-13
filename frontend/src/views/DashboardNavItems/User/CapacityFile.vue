@@ -23,13 +23,18 @@
             :key="daterange.id"
             class="w-1/4 px-2 py-1 border border-black truncate"
           >
-            <button
-              type="button"
-              class="bg-white px-4 w-full h-full"
-              v-for="classIds in groupedData" :key="classIds.id"
-            >
-              {{ classIds.id }}
-            </button>
+            <template v-if="program && groupedData[program.name]">
+              <button
+                v-for="classItem in groupedData[program.name][program.name][
+                  daterange.month
+                ]"
+                :key="classItem.id"
+                type="button"
+                class="bg-white px-4 w-full h-full"
+              >
+                {{ classItem.id }}
+              </button>
+            </template>
           </td>
         </tr>
       </tbody>
@@ -42,6 +47,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      site: [],
       programs: [],
       daterange: [],
       groupedData: [],
@@ -76,11 +82,12 @@ export default {
     async fetchClassesData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        this.groupedData = response.data.groupedData;
+        this.groupedData = response.data.data;
       } catch (error) {
         console.error(error);
       }
     },
+
     getTwoDimensionalId(dateYear, programId, dateId) {
       const twoDimensionalId = `${dateYear}${programId}${dateId}`;
       if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
