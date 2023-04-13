@@ -41,10 +41,9 @@
               
             </td>
             <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-              
             </td>
             <td v-for=" Classe in dateRangeClasses" :key="Classe" class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-              {{ Classe.id }}
+              {{ Classe }}
             </td>
         </template>
       </tr>
