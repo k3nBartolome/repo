@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-x-auto">
-    <table class="table-auto border border-black">
+    <table class="border border-black table-auto">
       <thead>
         <tr>
           <th class="px-4">Sites</th>
@@ -8,7 +8,7 @@
           <th
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
+            class="px-4 py-1 text-white truncate bg-orange-500 border border-black"
           >
             {{ daterange.date_range }}
           </th>
@@ -21,22 +21,18 @@
           <td
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="w-1/4 px-2 py-1 border border-black truncate"
+            class="w-1/4 px-2 py-1 truncate border border-black"
           >
-            <template v-for="(siteData, siteName) in groupedData" :key="siteName">
-              <template v-if="siteData[program.name]">
-                <template
-                  v-for="(classItem, classIndex) in siteData[program.name]"
-                  :key="classIndex"
-                >
-                  <button
-                    type="button"
-                    class="bg-white px-4 w-full h-full"
-                    v-if="classIds.includes(classItem.id)"
-                  >
-                    {{ classItem.id}}
-                  </button>
-                </template>
+            <template v-if="program && groupedData[program.name]">
+              <template
+                v-for="classItem in groupedData[program.name][program.name][
+                  daterange.month
+                ]"
+                :key="classItem.id"
+              >
+                <button type="button" class="w-full h-full px-4 bg-white">
+                  {{ classItem.id }}
+                </button>
               </template>
             </template>
           </td>
@@ -51,6 +47,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      site: [],
       programs: [],
       daterange: [],
       groupedData: [],
@@ -90,6 +87,7 @@ export default {
         console.error(error);
       }
     },
+
     getTwoDimensionalId(dateYear, programId, dateId) {
       const twoDimensionalId = `${dateYear}${programId}${dateId}`;
       if (!this.twoDimensionalIds.includes(twoDimensionalId)) {
