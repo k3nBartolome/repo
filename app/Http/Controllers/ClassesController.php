@@ -6,7 +6,6 @@ use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\DateRange;
 use App\Models\Program;
-use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -16,56 +15,32 @@ class ClassesController extends Controller
     public function classesAll()
     {
         $cacheKey = 'classesAll';
-        $cacheTime = 60; // Cache for 60 seconds
+        $cacheTime = 3600; // Cache for 60 seconds
 
         if (Cache::has($cacheKey)) {
             $classes = Cache::get($cacheKey);
         } else {
-            $sites = Site::all();
             $programs = Program::all();
             $dateRanges = DateRange::all();
 
             $classes = [];
+            foreach ($programs as $program) {
+                foreach ($dateRanges as $dateRange) {
+                    $class = Classes::with(['program', 'dateRange'])
+                    ->where('site_id', $program->site_id)
+                    ->where('program_id', $program->id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->first();
 
-            foreach ($sites as $site) {
-                $classes[$site->name] = [];
-
-                foreach ($programs as $program) {
-                    $classes[$site->name][$program->name] = [];
-
-                    foreach ($dateRanges as $dateRange) {
-                        $class = Classes::with(['site', 'program', 'dateRange'])
-                            ->where('site_id', $site->id)
-                            ->where('program_id', $program->id)
-                            ->where('date_range_id', $dateRange->id)
-                            ->where('status', 'Active')
-                            ->first();
-
-                        $classes[$site->name][$program->name][$dateRange->id] = $class ?? null;
-                    }
-
-                    // If there are no classes for any date range, add null entries for all date ranges
-                    if (count(array_filter($classes[$site->name][$program->name], function ($class) {
-                        return $class !== null;
-                    })) === 0) {
-                        foreach ($dateRanges as $dateRange) {
-                            $classes[$site->name][$program->name][$dateRange->id] = null;
-                        }
-                    }
-                }
-
-                // If there are no classes for any program, add null entries for all programs and date ranges
-                if (count(array_filter($classes[$site->name], function ($program) {
-                    return count(array_filter($program, function ($class) {
-                        return $class !== null;
-                    })) !== 0;
-                })) === 0) {
-                    foreach ($programs as $program) {
-                        $classes[$site->name][$program->name] = [];
-                        foreach ($dateRanges as $dateRange) {
-                            $classes[$site->name][$program->name][$dateRange->id] = null;
-                        }
-                    }
+                    $classes[] = [
+                    'site_id' => $program->site_id,
+                    'program_name' => $program->name,
+                    'date_range' => [
+                        'date_range' => $dateRange->date_range,
+                    ],
+                    'class' => $class ?? null,
+                ];
                 }
             }
 

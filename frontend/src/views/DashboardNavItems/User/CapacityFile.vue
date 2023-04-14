@@ -26,25 +26,25 @@
     </thead>
     <tbody
       class="truncate bg-white divide-y divide-gray-200"
-      v-for="(siteClasses, siteName) in classes"
-      :key="siteName"
+      v-for="(programClasses, siteId) in classes"
+      :key="siteId"
     >
-      <tr v-for="(programClasses, programName) in siteClasses" :key="programName">
+      <tr v-for="(programClasses, programName) in classes" :key="programName">
         <template
           v-for="(dateRangeClasses, dateRange) in programClasses"
           :key="dateRange"
         >
             <td class="px-6 py-4 text-sm font-medium text-gray-900 whitespace-nowrap">
-              {{ siteName }}
+
             </td>
             <td class="px-6 py-4 text-sm text-gray-500 truncate">
-              {{ programName }}
+
             </td>
             <td class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-              {{ dateRange }}
+
             </td>
             <td v-for=" Classe in dateRangeClasses" :key="Classe" class="px-6 py-4 text-sm text-gray-500 whitespace-nowrap">
-              {{ Classe }}
+
             </td>
         </template>
       </tr>
