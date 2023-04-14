@@ -54,11 +54,11 @@ class CreateClassesTable extends Migration
             $table->unsignedBigInteger('updated_by')->nullable(); //pushback
             $table->unsignedBigInteger('date_range_id')->nullable();
             $table->timestamps();
-            $table->foreign('program_id')->references('id')->on('programs')->onDelete('cascade');
-            $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
-            $table->foreign('date_range_id')->references('id')->on('date_ranges')->onDelete('cascade');
-            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('site_id')->references('id')->on('sites');
+            $table->foreign('program_id')->references('id')->on('programs');
+            $table->foreign('date_range_id')->references('id')->on('date_ranges');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 
