@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ClassesAllResource;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\DateRange;
 use App\Models\Program;
-use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -16,42 +16,37 @@ class ClassesController extends Controller
     public function classesAll()
     {
         $cacheKey = 'classesAll';
-        $cacheTime = 3600; // Cache for 60 seconds
+        $cacheTime = 3600;
 
         if (Cache::has($cacheKey)) {
             $classes = Cache::get($cacheKey);
         } else {
-            $sites = Site::all();
             $programs = Program::all();
             $dateRanges = DateRange::all();
 
             $classes = [];
-            foreach ($sites as $site) {
-                foreach ($programs as $program) {
-                    foreach ($dateRanges as $dateRange) {
-                        $class = Classes::with(['program', 'dateRange'])
-                ->where('site_id', $site->id)
-                ->where('program_id', $program->id)
-                ->where('date_range_id', $dateRange->id)
-                ->where('status', 'Active')
-                ->first();
 
-                        $classes[] = [
-                    'site_id' => $site->id,
+            foreach ($programs as $program) {
+                foreach ($dateRanges as $dateRange) {
+                    $class = Classes::with(['program', 'dateRange'])
+                    ->where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->first();
+
+                    $classes[] = [
+                    'site_id' => $program->site_id,
                     'program_name' => $program->name,
-                    'date_range' => [
-                        'date_range' => $dateRange->date_range,
-                    ],
-                    'class' => $class ?? null,
+                    'date_range' =>  $dateRange->date_range, 
+                    'total_target' => $class->total_target ?? null,
                 ];
-                    }
                 }
             }
 
             Cache::put($cacheKey, $classes, $cacheTime);
         }
 
-        return response()->json($classes);
+        return new ClassesAllResource($classes);
     }
 
     /*  public function classesAll()

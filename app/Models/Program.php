@@ -22,6 +22,6 @@ class Program extends Model
 
     public function classes()
     {
-        return $this->hasMany(Classes::class);
+        return $this->hasMany(Classes::class, 'site_id', 'site_id');
     }
 }

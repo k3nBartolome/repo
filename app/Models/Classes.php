@@ -69,7 +69,7 @@ class Classes extends Model
 
     public function program()
     {
-        return $this->belongsTo(Program::class);
+        return $this->belongsTo(Program::class, 'site_id', 'site_id');
     }
 
     public function sla_reason()

@@ -8,7 +8,6 @@ class ClassesResource extends JsonResource
 {
     public function toArray($request)
     {
-        $dateRange = $this->dateRange ? $this->dateRange->date_range : null;
 
         return [
             'id' => $this->id,
