@@ -37,7 +37,7 @@ class ClassesController extends Controller
                     $classes[] = [
                     'site_id' => $program->site_id,
                     'program_name' => $program->name,
-                    'date_range' =>  $dateRange->date_range, 
+                    'date_range' => $dateRange->date_range,
                     'total_target' => $class->total_target ?? null,
                 ];
                 }
@@ -48,45 +48,6 @@ class ClassesController extends Controller
 
         return new ClassesAllResource($classes);
     }
-
-    /*  public function classesAll()
-     {
-         $cacheKey = 'classesAll';
-         $cacheTime = 3600; // Cache for 60 seconds
-
-         if (Cache::has($cacheKey)) {
-             $classes = Cache::get($cacheKey);
-         } else {
-             $programs = Program::with('classes')->get();
-             $dateRanges = DateRange::with('classes')->get();
-
-             $classes = [];
-
-             foreach ($programs as $program) {
-                 foreach ($dateRanges as $dateRange) {
-                     $class = $program->classes->where('date_range_id', $dateRange->id)
-                     ->where('status', 'Active')
-                     ->first();
-
-                     $classes[] = [
-                     'site_id' => $program->site_id,
-                     'program_name' => $program->name,
-                     'date_range' => [
-                         'date_range' => $dateRange->date_range,
-                     ],
-                     'class' => $class ? [
-                         'id' => $class->id,
-                         // Add any other necessary fields here
-                     ] : null,
-                 ];
-                 }
-             }
-
-             Cache::put($cacheKey, $classes, $cacheTime);
-         }
-
-         return response()->json($classes);
-     } */
 
     public function store(Request $request)
     {
