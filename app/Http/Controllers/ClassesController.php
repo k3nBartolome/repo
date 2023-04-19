@@ -16,7 +16,7 @@ class ClassesController extends Controller
     public function classesAll()
     {
         $cacheKey = 'classesAll';
-        $cacheTime = 3600;
+        $cacheTime = 60;
 
         if (Cache::has($cacheKey)) {
             $classes = Cache::get($cacheKey);
@@ -27,26 +27,65 @@ class ClassesController extends Controller
             $classes = [];
 
             foreach ($programs as $program) {
-                foreach ($dateRanges as $dateRange) {
-                    $class = Classes::with(['program', 'dateRange'])
-                    ->where('site_id', $program->site_id)
-                    ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Active')
-                    ->first();
+                $programClasses = [];
 
-                    $classes[] = [
+                foreach ($dateRanges as $dateRange) {
+                    $class = Classes::where('site_id', $program->site_id)
+                    ->where('program_id', $program->id)
+                    ->where('date_range_id', $dateRange->id)
+                        ->where('status', 'Active')
+                        ->first();
+
+                    $totalTarget = $class ? $class->total_target : 0;
+
+                    $programClasses[] = [
+                        'date_range' => $dateRange->date_range,
+                        'total_target' => $totalTarget,
+                    ];
+                }
+
+                $classes[] = [
                     'site_id' => $program->site_id,
                     'program_name' => $program->name,
-                    'date_range' => $dateRange->date_range,
-                    'total_target' => $class->total_target ?? 0,
+                    'classes' => $programClasses,
                 ];
-                }
             }
 
             Cache::put($cacheKey, $classes, $cacheTime);
         }
 
-        return new ClassesAllResource($classes);
+        $groupedClasses = [];
+
+        foreach ($classes as $class) {
+            $siteId = $class['site_id'];
+            $programName = $class['program_name'];
+
+            if (!isset($groupedClasses[$siteId])) {
+                $groupedClasses[$siteId] = [];
+            }
+
+            if (!isset($groupedClasses[$siteId][$programName])) {
+                $groupedClasses[$siteId][$programName] = [
+                    'date_ranges' => [],
+                    'total_target' => 0,
+                ];
+            }
+
+            $dateRanges = $class['classes'];
+
+            foreach ($dateRanges as $dateRange) {
+                $dateRangeName = $dateRange['date_range'];
+                $totalTarget = $dateRange['total_target'];
+
+                if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName])) {
+                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = 0;
+                }
+
+                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] += $totalTarget;
+            }
+        }
+
+        return new ClassesAllResource($groupedClasses);
     }
 
     public function store(Request $request)
