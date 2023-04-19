@@ -38,7 +38,7 @@ class ClassesController extends Controller
                     'site_id' => $program->site_id,
                     'program_name' => $program->name,
                     'date_range' => $dateRange->date_range,
-                    'total_target' => $class->total_target ?? null,
+                    'total_target' => $class->total_target ?? 0,
                 ];
                 }
             }
