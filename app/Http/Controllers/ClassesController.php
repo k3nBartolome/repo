@@ -39,6 +39,7 @@ class ClassesController extends Controller
                     $totalTarget = $class ? $class->total_target : 0;
 
                     $programClasses[] = [
+                        'id' => $dateRange->id,
                         'date_range' => $dateRange->date_range,
                         'total_target' => $totalTarget,
                     ];
@@ -46,6 +47,7 @@ class ClassesController extends Controller
 
                 $classes[] = [
                     'site_id' => $program->site_id,
+                    'program_id' => $program->id,
                     'program_name' => $program->name,
                     'classes' => $programClasses,
                 ];
@@ -59,29 +61,30 @@ class ClassesController extends Controller
         foreach ($classes as $class) {
             $siteId = $class['site_id'];
             $programName = $class['program_name'];
+            $programId = $class['program_id'];
 
             if (!isset($groupedClasses[$siteId])) {
                 $groupedClasses[$siteId] = [];
             }
 
             if (!isset($groupedClasses[$siteId][$programName])) {
-                $groupedClasses[$siteId][$programName] = [
+                $groupedClasses[$siteId][$programName][$programId] = [
+                    'id' => [],
                     'date_ranges' => [],
-                    'total_target' => 0,
                 ];
             }
 
             $dateRanges = $class['classes'];
-
             foreach ($dateRanges as $dateRange) {
+                $dateRangeId = $dateRange['id'];
                 $dateRangeName = $dateRange['date_range'];
                 $totalTarget = $dateRange['total_target'];
 
-                if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName])) {
-                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = 0;
+                if (!isset($groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName])) {
+                    $groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName] = 0;
                 }
 
-                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] += $totalTarget;
+                $groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName] += $totalTarget;
             }
         }
 
