@@ -24,18 +24,17 @@
               v-for="(classItemClasses, classesName) in classClasses"
               :key="classesName"
             >
-              <tbody class="overflow-y-auto">
-                <tr>
-                  <td class="w-1/4 px-2 py-1 truncate border border-black">
-                    {{ SiteName + 1 }}
-                  </td>
-                  <td class="w-1/4 px-2 py-1 truncate border border-black">
-                    {{ classesName }}
-                  </td>
-                  <template
-                    v-for="(classItemAClasses, DateRangeName) in classItemClasses"
-                    :key="DateRangeName"
-                    ><template
+              <template
+                v-for="(classItemAClasses, DateRangeName) in classItemClasses"
+                :key="DateRangeName"
+              >
+                <tbody class="overflow-y-auto">
+                  <tr>
+                    <td class="w-1/4 px-2 py-1 truncate border border-black">
+                      {{ SiteName + 1 }}
+                    </td>
+                    <td class="w-1/4 px-2 py-1 truncate border border-black"></td>
+                    <template
                       v-for="(classItemBClasses, DateRangeAName) in classItemAClasses"
                       :key="DateRangeAName"
                     >
@@ -47,30 +46,38 @@
                           v-for="(classItemDClasses, DateRangeCName) in classItemCClasses"
                           :key="DateRangeCName"
                         >
-                          <td class="w-1/4 truncate border border-black">
-                            <router-link
-                              :to="{
-                                path: `/addcapfile/
+                          <template
+                            v-for="(
+                              classItemEClasses, DateRangeDName
+                            ) in classItemDClasses"
+                            :key="DateRangeDName"
+                          >
+                            <td class="w-1/4 truncate border border-black">
+                              <router-link
+                                :to="{
+                                  path: `/addcapfile/
                             }`,
-                                query: {
-                                  site: SiteName + 1,
-                                  daterange: DateRangeAName + 1,
-                                },
-                              }"
-                            >
-                              <button class="w-full h-full text -black bg-white">
-                                {{ DateRangeName }}
-                              </button>
-                            </router-link>
+                                  query: {
+                                    site: SiteName + 1,
+                                    daterange: DateRangeAName + 1,
+                                    program: classesName,
+                                  },
+                                }"
+                              >
+                                <button class="w-full h-full text -black bg-white">
+                                  {{ classClasses }}
+                                </button>
+                              </router-link>
 
-                            <button class="mx-2 bg-blue-500">Add</button>
-                          </td>
+                              <button class="mx-2 bg-blue-500">Add</button>
+                            </td>
+                          </template>
                         </template>
                       </template>
                     </template>
-                  </template>
-                </tr>
-              </tbody>
+                  </tr>
+                </tbody>
+              </template>
             </template>
           </template>
         </template>

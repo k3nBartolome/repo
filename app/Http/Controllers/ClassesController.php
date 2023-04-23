@@ -16,7 +16,7 @@ class ClassesController extends Controller
     public function classesAll()
     {
         $cacheKey = 'classesAll';
-        $cacheTime = 60;
+        $cacheTime = 3600;
 
         if (Cache::has($cacheKey)) {
             $classes = Cache::get($cacheKey);
@@ -68,9 +68,9 @@ class ClassesController extends Controller
             }
 
             if (!isset($groupedClasses[$siteId][$programName])) {
-                $groupedClasses[$siteId][$programName][$programId] = [
-                    'id' => [],
+                $groupedClasses[$siteId][$programName] = [
                     'date_ranges' => [],
+                    'id' => [],
                 ];
             }
 
@@ -80,11 +80,11 @@ class ClassesController extends Controller
                 $dateRangeName = $dateRange['date_range'];
                 $totalTarget = $dateRange['total_target'];
 
-                if (!isset($groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName])) {
-                    $groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName] = 0;
+                if (!isset($groupedClasses[$siteId][$programId][$programName]['id'][$dateRangeId]['date_ranges'][$dateRangeName])) {
+                    $groupedClasses[$siteId][$programId][$programName]['id'][$dateRangeId]['date_ranges'][$dateRangeName] = 0;
                 }
 
-                $groupedClasses[$siteId][$programName][$programId]['id'][$dateRangeId]['date_ranges'][$dateRangeName] += $totalTarget;
+                $groupedClasses[$siteId][$programId][$programName]['id'][$dateRangeId]['date_ranges'][$dateRangeName] += $totalTarget;
             }
         }
 
