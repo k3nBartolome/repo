@@ -1,14 +1,14 @@
 <template>
-  <div class="px-12 overflow-x-auto">
-    <table class="border border-black table-auto">
+  <div class="overflow-x-auto px-12">
+    <table class="table-auto border border-black">
       <thead>
         <tr>
-          <th class="px-4 border-black">Sites</th>
-          <th class="px-4 border-black">Programs</th>
+          <th class="px-4">Sites</th>
+          <th class="px-4">Programs</th>
           <th
             v-for="daterange in daterange"
             :key="daterange.id"
-            class="px-4 py-1 text-white truncate bg-orange-500 border border-black"
+            class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
           >
             {{ daterange.date_range }}
           </th>
@@ -24,60 +24,45 @@
               v-for="(classItemClasses, classesName) in classClasses"
               :key="classesName"
             >
-              <template
-                v-for="(classItemAClasses, DateRangeName) in classItemClasses"
-                :key="DateRangeName"
-              >
-                <tbody class="overflow-y-auto">
-                  <tr>
-                    <td class="w-1/4 px-2 py-1 truncate border border-black">
-                      {{ SiteName + 1 }}
-                    </td>
-                    <td class="w-1/4 px-2 py-1 truncate border border-black"></td>
+              <tbody class="overflow-y-auto">
+                <tr>
+                  <td class="w-1/4 px-2 py-1 border border-black truncate">
+                    {{ SiteName + 1 }}
+                  </td>
+                  <td class="w-1/4 px-2 py-1 border border-black truncate">
+                    {{ classItemClasses.program_name }}
+                  </td>
+                  <template
+                    v-for="(classItemAClasses, DateRangeName) in classItemClasses"
+                    :key="DateRangeName"
+                  >
                     <template
-                      v-for="(classItemBClasses, DateRangeAName) in classItemAClasses"
-                      :key="DateRangeAName"
+                      v-for="(classItemBClasses, DateRangeNameA) in classItemAClasses"
+                      :key="DateRangeNameA"
                     >
-                      <template
-                        v-for="(classItemCClasses, DateRangeBName) in classItemBClasses"
-                        :key="DateRangeBName"
-                      >
-                        <template
-                          v-for="(classItemDClasses, DateRangeCName) in classItemCClasses"
-                          :key="DateRangeCName"
-                        >
-                          <template
-                            v-for="(
-                              classItemEClasses, DateRangeDName
-                            ) in classItemDClasses"
-                            :key="DateRangeDName"
-                          >
-                            <td class="w-1/4 truncate border border-black">
-                              <router-link
-                                :to="{
-                                  path: `/addcapfile/
+                      <td class="w-1/4 border border-black truncate">
+                        <router-link
+                          :to="{
+                            path: `/addcapfile/daterange.id
                             }`,
-                                  query: {
-                                    site: SiteName + 1,
-                                    daterange: DateRangeAName + 1,
-                                    program: classesName,
-                                  },
-                                }"
-                              >
-                                <button class="w-full h-full text -black bg-white">
-                                  {{ classClasses }}
-                                </button>
-                              </router-link>
+                            query: {
+                              program: 1,
+                              daterange: 1,
+                              site: SiteName + 1,
+                            },
+                          }"
+                        >
+                          <button class="bg-white h-full w-full text-black">
+                            {{ classClasses }}
+                          </button>
+                        </router-link>
 
-                              <button class="mx-2 bg-blue-500">Add</button>
-                            </td>
-                          </template>
-                        </template>
-                      </template>
+                        <button class="mx-2 bg-blue-500">Add</button>
+                      </td>
                     </template>
-                  </tr>
-                </tbody>
-              </template>
+                  </template>
+                </tr>
+              </tbody>
             </template>
           </template>
         </template>
@@ -93,7 +78,7 @@ export default {
     return {
       classes: {},
       daterange: [],
-      programs: [],
+      program: [],
     };
   },
   mounted() {
@@ -113,7 +98,7 @@ export default {
     async fetchProgramData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/programs");
-        this.programs = response.data.data;
+        this.program = response.data.data;
       } catch (error) {
         console.error(error);
       }
