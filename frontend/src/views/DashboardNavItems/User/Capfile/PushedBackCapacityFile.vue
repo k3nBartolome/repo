@@ -362,8 +362,9 @@
                 v-model="condition"
                 value="Approved wage rates and job offer/contract template"
                 class="ml-2"
-              ><span class="ml-2">
-                Approved wage rates and job offer/contract template</span></label
+              /><span class="ml-2">
+                Approved wage rates and job offer/contract template</span
+              ></label
             >
 
             <label class="flex items-start">
@@ -372,7 +373,7 @@
                 v-model="condition"
                 value="Agreed ramp plan with WF, CS, PMO"
                 class="ml-2"
-              ><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
+              /><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
             >
           </label>
           <label class="block py-6"
@@ -576,6 +577,12 @@ export default {
     this.getClasses();
     this.getTransaction();
   },
+  watch: {
+  agreed_start_date: {
+    handler: "getDateRange",
+    immediate: true,
+  },
+},
   methods: {
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
@@ -612,17 +619,29 @@ export default {
         });
     },
     async getDateRange() {
-      console.log(this.date_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/daterange")
-        .then((response) => {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    console.log(this.agreed_start_date);
+    await axios
+      .get("http://127.0.0.1:8000/api/daterange")
+      .then((response) => {
+        this.daterange = response.data.data;
+        console.log(response.data.data);
+       
+        for (let i = 0; i < this.daterange.length; i++) {
+          const range = this.daterange[i];
+          if (
+            this.agreed_start_date >= range.week_start &&
+            this.agreed_start_date <= range.week_end
+          ) {
+          
+            this.date_selected = range.id;
+            break;
+          }
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  },
     async getClasses() {
       await axios
         .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
@@ -683,7 +702,7 @@ export default {
         erf_number: this.erf_number,
         date_range_id: this.date_selected,
         approved_status: "pending",
-        status: "1",
+        status: "Active",
         is_active: 1,
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
@@ -732,7 +751,9 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("/capfile");
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);

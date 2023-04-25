@@ -40,23 +40,48 @@
                       v-for="(classItemBClasses, DateRangeNameA) in classItemAClasses"
                       :key="DateRangeNameA"
                     >
-                      <td class="w-1/4 border border-black truncate">
-                        <router-link
-                          :to="{
-                            path: `/addcapfile/daterange.id
-                            }`,
-                            query: {
-                              program: classesName,
-                              site: SiteName + 1,
-                            },
-                          }"
+                      <td class="w-1/4 border border-black truncate ">
+                        <button
+                          class="h-full w-1/2 text-black bg-gray-200"
+                          @click="showButtons(classItemBClasses)"
                         >
-                          <button class="bg-white h-full w-full text-black">
-                            {{ classItemBClasses }}
-                          </button>
-                        </router-link>
-
-                        <button class="mx-2 bg-blue-500">Add</button>
+                          {{ classItemBClasses.total_target }}
+                        </button>
+                        <div v-if="classItemBClasses.showButtons" class="flex items-center">
+                          <div v-if="classItemBClasses.total_target == 0">
+                            <router-link
+                              :to="{
+                                path: `/addcapfile/
+                          }`,
+                                query: {
+                                  program: classItemBClasses.program_id,
+                                  site: classItemBClasses.site_id,
+                                  daterange: classItemBClasses.date_range_id,
+                                },
+                              }"
+                            >
+                              <button class="mx-2 bg-blue-500">Add</button>
+                            </router-link>
+                          </div>
+                          <div v-else>
+                            <router-link :to="`/pushbackcapfile/${classItemBClasses.class_id}`"
+                              ><button
+                                class="mx-2 bg-green-500 w-22"
+                             
+                              >
+                                Pushed Back
+                              </button></router-link
+                            >
+                            <router-link :to="`/cancelcapfile/${classItemBClasses.class_id}`"
+                              ><button
+                                class="mx-2 bg-red-500 w-22"
+                              
+                              >
+                                Cancel
+                              </button></router-link
+                            >
+                          </div>
+                        </div>
                       </td>
                     </template>
                   </template>
@@ -102,6 +127,9 @@ export default {
         .catch((error) => {
           console.log(error);
         });
+    },
+    showButtons(classItemBClasses) {
+      classItemBClasses.showButtons = !classItemBClasses.showButtons;
     },
   },
 };

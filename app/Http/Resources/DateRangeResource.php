@@ -11,6 +11,8 @@ class DateRangeResource extends JsonResource
         return [
             'id' => $this->id,
             'date_range' => $this->date_range,
+            'week_start' => $this->week_start,
+            'week_end' => $this->week_end,
             'month' => $this->month,
             'year' => $this->year,
         ];

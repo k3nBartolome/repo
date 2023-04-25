@@ -59,22 +59,17 @@ class Classes extends Model
 
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Site::class, 'site_id');
     }
 
     public function dateRange()
     {
-        return $this->belongsTo(DateRange::class);
+        return $this->belongsTo(DateRange::class, 'date_range_id');
     }
 
     public function program()
     {
-        return $this->belongsTo(Program::class, 'site_id', 'site_id');
-    }
-
-    public function sla_reason()
-    {
-        return $this->hasMany(Sla_reason::class);
+        return $this->belongsTo(Program::class, 'program_id');
     }
 
     public function createdByUser()

@@ -35,6 +35,8 @@ class ClassesController extends Controller
                         ->first();
                     $totalTarget = $class ? $class->total_target : 0;
                     $programClasses[] = [
+                        'date_range_id' => $dateRange->id,
+                        'class_id' => $class ? $class->id : 0,
                         'date_range' => $dateRange->date_range,
                         'total_target' => $totalTarget,
                     ];
@@ -67,13 +69,20 @@ class ClassesController extends Controller
             foreach ($dateRanges as $dateRange) {
                 $dateRangeName = $dateRange['date_range'];
                 $totalTarget = $dateRange['total_target'];
-                $programId = $class['program_id'];
+                $dateRangeId = $dateRange['date_range_id'];
+                $classId = $dateRange['class_id'];
 
                 if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName])) {
-                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = 0;
+                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = [
+                        'total_target' => 0,
+                        'program_id' => $programId,
+                        'date_range_id' => $dateRangeId,
+                        'site_id' => $siteId,
+                        'class_id' => $classId,
+                    ];
                 }
 
-                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] += $totalTarget;
+                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName]['total_target'] += $totalTarget;
             }
         }
 
@@ -84,7 +93,6 @@ class ClassesController extends Controller
     {
         // Validate the request.
         $validator = Validator::make($request->all(), [
-            'two_dimensional_id' => 'required',
             'notice_weeks' => 'required',
             'notice_days' => 'required',
             'external_target' => 'required',
@@ -119,6 +127,7 @@ class ClassesController extends Controller
         $class->condition = json_encode($condition);
         $class->agreed_start_date = $request->input('original_start_date');
         $class->changes = 'Add Class';
+        $class->save();
         $class->pushedback_id = $class->id;
         $class->save();
 
@@ -135,7 +144,7 @@ class ClassesController extends Controller
 
     public function show($id)
     {
-        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
+        $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
@@ -148,13 +157,13 @@ class ClassesController extends Controller
 
     public function transaction($id)
     {
-        $class = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
+        $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
 
-        $classes = Classes::with(['sla_reason', 'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
+        $classes = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
                     ->where('pushedback_id', $class->pushedback_id)
                     ->get();
 

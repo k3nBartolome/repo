@@ -382,7 +382,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-      //sites_selected: "",
+      //=sites_selected: "",
       //programs_selected: "",
       //date_selected: "",
       type_of_hiring: "",
@@ -533,7 +533,9 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
-          this.$router.push("/capfile");
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);

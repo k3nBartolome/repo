@@ -8,7 +8,6 @@ class ClassesResource extends JsonResource
 {
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'pushedback_id' => $this->pushedback_id,
@@ -22,7 +21,7 @@ class ClassesResource extends JsonResource
             'wfm_date_requested' => $this->wfm_date_requested,
             'notice_days' => $this->notice_days,
             'notice_weeks' => $this->notice_weeks,
-            'date_range' => $dateRange,
+            'date_range' => $this->dateRange->id,
             'growth' => $this->growth,
             'backfill' => $this->backfill,
             'with_erf' => $this->with_erf,
