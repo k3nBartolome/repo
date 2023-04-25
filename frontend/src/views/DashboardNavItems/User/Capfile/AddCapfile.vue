@@ -505,7 +505,6 @@ export default {
         approved_by: this.approved_by,
         status: "Active",
         is_active: 1,
-        two_dimensional_id: this.$route.params.id,
         created_by: this.$store.state.user_id,
       };
       axios

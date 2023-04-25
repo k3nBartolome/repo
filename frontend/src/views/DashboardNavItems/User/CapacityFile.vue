@@ -30,7 +30,7 @@
                     {{ SiteName + 1 }}
                   </td>
                   <td class="w-1/4 px-2 py-1 border border-black truncate">
-                    {{ classItemClasses.program_name }}
+                    {{ classesName }}
                   </td>
                   <template
                     v-for="(classItemAClasses, DateRangeName) in classItemClasses"
@@ -46,14 +46,13 @@
                             path: `/addcapfile/daterange.id
                             }`,
                             query: {
-                              program: 1,
-                              daterange: 1,
+                              program: classesName,
                               site: SiteName + 1,
                             },
                           }"
                         >
                           <button class="bg-white h-full w-full text-black">
-                            {{ classClasses }}
+                            {{ classItemBClasses }}
                           </button>
                         </router-link>
 
@@ -78,27 +77,17 @@ export default {
     return {
       classes: {},
       daterange: [],
-      program: [],
     };
   },
   mounted() {
     this.fetchClassesData();
     this.fetchWeekData();
-    this.fetchProgramData();
   },
   methods: {
     async fetchWeekData() {
       try {
         const response = await axios.get("http://127.0.0.1:8000/api/daterange");
         this.daterange = response.data.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async fetchProgramData() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/programs");
-        this.program = response.data.data;
       } catch (error) {
         console.error(error);
       }

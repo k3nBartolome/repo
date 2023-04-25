@@ -16,7 +16,7 @@ class ClassesController extends Controller
     public function classesAll()
     {
         $cacheKey = 'classesAll';
-        $cacheTime = 3600;
+        $cacheTime = 60;
 
         if (Cache::has($cacheKey)) {
             $classes = Cache::get($cacheKey);
@@ -25,71 +25,55 @@ class ClassesController extends Controller
             $dateRanges = DateRange::all();
 
             $classes = [];
-
             foreach ($programs as $program) {
                 $programClasses = [];
-
                 foreach ($dateRanges as $dateRange) {
                     $class = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $program->id)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Active')
-                    ->first();
-
+                        ->where('status', 'Active')
+                        ->first();
                     $totalTarget = $class ? $class->total_target : 0;
-
                     $programClasses[] = [
-                    'date_range_id' => $dateRange->id,
-                    'date_range' => $dateRange->date_range,
-                    'total_target' => $totalTarget,
-                ];
+                        'date_range' => $dateRange->date_range,
+                        'total_target' => $totalTarget,
+                    ];
                 }
-
                 $classes[] = [
-                'program_id' => $program->id,
-                'site_id' => $program->site_id,
-                'program_name' => $program->name,
-                'classes' => $programClasses,
-            ];
+                    'site_id' => $program->site_id,
+                    'program_name' => $program->name,
+                    'program_id' => $program->id,
+                    'classes' => $programClasses,
+                ];
             }
-
             Cache::put($cacheKey, $classes, $cacheTime);
         }
-
         $groupedClasses = [];
+
         foreach ($classes as $class) {
             $siteId = $class['site_id'];
-            $programId = $class['program_id'];
             $programName = $class['program_name'];
+            $programId = $class['program_id'];
 
-            if (!isset($groupedClasses[$siteId])) {
-                $groupedClasses[$siteId] = [];
-            }
-
-            if (!isset($groupedClasses[$siteId][$programId])) {
-                $groupedClasses[$siteId][$programId] = [
-                'program_name' => $programName,
-                'date_ranges' => [],
-                'total_target' => 0,
-            ];
+            if (!isset($groupedClasses[$siteId][$programName])) {
+                $groupedClasses[$siteId][$programName] = [
+                    'date_ranges' => [],
+                    'total_target' => 0,
+                ];
             }
 
             $dateRanges = $class['classes'];
 
             foreach ($dateRanges as $dateRange) {
-                $dateRangeId = $dateRange['date_range_id'];
                 $dateRangeName = $dateRange['date_range'];
                 $totalTarget = $dateRange['total_target'];
+                $programId = $class['program_id'];
 
-                if (!isset($groupedClasses[$siteId][$programId]['date_ranges'][$dateRangeId])) {
-                    $groupedClasses[$siteId][$programId]['date_ranges'][$dateRangeId] = [
-                    'date_range' => $dateRangeName,
-                    'total_target' => 0,
-                ];
+                if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName])) {
+                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = 0;
                 }
 
-                $groupedClasses[$siteId][$programId]['date_ranges'][$dateRangeId]['total_target'] += $totalTarget;
-                $groupedClasses[$siteId][$programId]['total_target'] += $totalTarget;
+                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] += $totalTarget;
             }
         }
 
