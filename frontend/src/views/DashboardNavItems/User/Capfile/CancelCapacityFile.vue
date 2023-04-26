@@ -670,7 +670,9 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("/capfile");
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);

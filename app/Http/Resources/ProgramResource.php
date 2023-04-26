@@ -21,6 +21,7 @@ class ProgramResource extends JsonResource
             'description' => $this->description,
             'program_group' => $this->program_group,
             'site_id' => $this->site_id,
+            'site_name' => $this->site->name,
             'is_active' => $this->is_active,
             'created_by' => $this->created_by,
             'created_by' => $this->updated_by,

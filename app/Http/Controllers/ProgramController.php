@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProgramResource;
@@ -12,6 +13,7 @@ class ProgramController extends Controller
     public function index()
     {
         $programs = Program::paginate(10);
+
         return ProgramResource::collection(Program::all());
     }
 
@@ -35,6 +37,7 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
+
         return new ProgramResource($program);
     }
 
@@ -46,7 +49,7 @@ class ProgramController extends Controller
             'program_group' => 'sometimes|required',
             'site_id' => 'sometimes|required|exists:sites,id',
             'is_active' => Rule::in(['0', '1']),
-            'created_by'=> 'nullable'
+            'created_by' => 'nullable',
         ]);
 
         if ($validator->fails()) {
@@ -54,6 +57,7 @@ class ProgramController extends Controller
         }
 
         $program->update($request->all());
+
         return new ProgramResource($program);
     }
 

@@ -26,6 +26,6 @@ class Site extends Model
 
     public function programs()
     {
-        return $this->hasMany('App\Models\Program');
+        return $this->hasMany(Program::class, 'site_id');
     }
 }

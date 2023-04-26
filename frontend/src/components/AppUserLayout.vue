@@ -3,12 +3,12 @@
     <div class="nav-container">
       <NavBar />
     </div>
-    <div class="content-container">
-      <router-view></router-view>
+    <div class="content-container ">
+      <div class="scrollable-content ">
+        <router-view></router-view>
+      </div>
     </div>
-    <div class="footer-container">
-      <FootBar />
-    </div>
+
   </div>
 </template>
 
@@ -20,25 +20,48 @@
 }
 
 .content-container {
- 
-  padding-bottom: 50px; 
+  padding-top: 50px;
+  flex-grow: 1;
+  padding-bottom: 50px;
+  height: 400px;
+}
+
+.scrollable-content {
+  overflow-x: scroll;
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  height: 20px;
+  background-color: #f5f5f5;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+  background-color: #888;
+  border-radius: 5px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+  background-color: #555;
 }
 
 .footer-container {
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding-top: 20px; 
+  padding-top: 20px;
+  z-index: 1;
 }
 </style>
 
 <script>
-import FootBar from "../components/FooterLayout.vue";
+//import FootBar from "../components/FooterLayout.vue";
 import NavBar from "../components/UserNav.vue";
 export default {
   components: {
     NavBar,
-    FootBar,
+    //FootBar,
   },
 };
 </script>

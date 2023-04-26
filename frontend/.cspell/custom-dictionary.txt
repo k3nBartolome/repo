@@ -4,9 +4,11 @@ Cheryll
 Christito
 Classe
 Dela
+hoverable
 Punzalan
 pushbackcapfile
 sched
 Sheryll
 Tomzer
+tooltiptext
 Villaprudente

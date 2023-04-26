@@ -1,97 +1,120 @@
 <template>
-  <div class="overflow-x-auto px-12">
-    <table class="table-auto border border-black">
-      <thead>
-        <tr>
-          <th class="px-4">Sites</th>
-          <th class="px-4">Programs</th>
-          <th
-            v-for="daterange in daterange"
-            :key="daterange.id"
-            class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
-          >
-            {{ daterange.date_range }}
-          </th>
-        </tr>
-      </thead>
-      <template v-for="(programClasses, programSiteId) in classes" :key="programSiteId">
-        <template
-          v-for="(dateRangeClasses, programName) in programClasses"
-          :key="programName"
-        >
-          <template v-for="(classClasses, SiteName) in dateRangeClasses" :key="SiteName">
-            <template
-              v-for="(classItemClasses, classesName) in classClasses"
-              :key="classesName"
+  <header class="w-full bg-white shadow">
+    <div class="flex items-center w-full px-4 py-6 max-w-7xl sm:px-6 lg:px-8">
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+        Capacity File Manager
+      </h1>
+    </div>
+  </header>
+  <div class="py-12 px-12 ">
+    <div class="px-12 py-12">
+      <table class="table border border-black px-20 py-20">
+        <thead class="">
+          <tr class="">
+            <th class="px-4">Sites</th>
+            <th class="px-4">Programs</th>
+            <th
+              v-for="daterange in daterange"
+              :key="daterange.id"
+              class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
             >
-              <tbody class="overflow-y-auto">
-                <tr>
-                  <td class="w-1/4 px-2 py-1 border border-black truncate">
-                    {{ SiteName + 1 }}
-                  </td>
-                  <td class="w-1/4 px-2 py-1 border border-black truncate">
-                    {{ classesName }}
-                  </td>
-                  <template
-                    v-for="(classItemAClasses, DateRangeName) in classItemClasses"
-                    :key="DateRangeName"
-                  >
+              {{ daterange.date_range }}
+            </th>
+          </tr>
+        </thead>
+        <template v-for="(programClasses, programSiteId) in classes" :key="programSiteId">
+          <template
+            v-for="(dateRangeClasses, programName) in programClasses"
+            :key="programName"
+          >
+            <template
+              v-for="(classClasses, SiteName) in dateRangeClasses"
+              :key="SiteName"
+            >
+              <template
+                v-for="(classItemClasses, classesName) in classClasses"
+                :key="classesName"
+              >
+                <tbody>
+                  <tr>
+                    <td class="w-1/4 px-2 py-1 border border-black truncate">
+                      {{ SiteName }}
+                    </td>
+                    <td class="w-1/4 px-2 py-1 border border-black truncate">
+                      {{ classesName }}
+                    </td>
                     <template
-                      v-for="(classItemBClasses, DateRangeNameA) in classItemAClasses"
-                      :key="DateRangeNameA"
+                      v-for="(classItemAClasses, DateRangeName) in classItemClasses"
+                      :key="DateRangeName"
                     >
-                      <td class="w-1/4 border border-black truncate ">
-                        <button
-                          class="h-full w-1/2 text-black bg-gray-200"
-                          @click="showButtons(classItemBClasses)"
+                      <template
+                        v-for="(classItemBClasses, DateRangeNameA) in classItemAClasses"
+                        :key="DateRangeNameA"
+                      >
+                        <td
+                          class="w-1/4 border border-black truncate hoverable"
+                          :data-hover-text="
+                            SiteName +
+                            ' | ' +
+                            classesName +
+                            ' | ' +
+                            classItemBClasses.date_range
+                          "
                         >
-                          {{ classItemBClasses.total_target }}
-                        </button>
-                        <div v-if="classItemBClasses.showButtons" class="flex items-center">
-                          <div v-if="classItemBClasses.total_target == 0">
-                            <router-link
-                              :to="{
-                                path: `/addcapfile/
+                          <div class="flex items-center">
+                            <button
+                              class="h-full w-1/2 text-black bg-gray-200"
+                              @click="showButtons(classItemBClasses)"
+                            >
+                              {{ classItemBClasses.total_target }}
+                            </button>
+
+                            <div
+                              v-if="classItemBClasses.showButtons"
+                              class="flex items-center"
+                            >
+                              <div v-if="classItemBClasses.total_target == 0">
+                                <router-link
+                                  :to="{
+                                    path: `/addcapfile/
                           }`,
-                                query: {
-                                  program: classItemBClasses.program_id,
-                                  site: classItemBClasses.site_id,
-                                  daterange: classItemBClasses.date_range_id,
-                                },
-                              }"
-                            >
-                              <button class="mx-2 bg-blue-500">Add</button>
-                            </router-link>
+                                    query: {
+                                      program: classItemBClasses.program_id,
+                                      site: classItemBClasses.site_id,
+                                      daterange: classItemBClasses.date_range_id,
+                                    },
+                                  }"
+                                >
+                                  <button class="mx-2 bg-blue-600 text-white">ADD</button>
+                                </router-link>
+                              </div>
+                              <div v-else>
+                                <router-link
+                                  :to="`/pushbackcapfile/${classItemBClasses.class_id}`"
+                                  ><button class="mx-2 bg-green-500 w-22">
+                                    Pushed Back
+                                  </button></router-link
+                                >
+                                <router-link
+                                  :to="`/cancelcapfile/${classItemBClasses.class_id}`"
+                                  ><button class="mx-2 bg-red-500 w-22">
+                                    Cancel Class
+                                  </button></router-link
+                                >
+                              </div>
+                            </div>
                           </div>
-                          <div v-else>
-                            <router-link :to="`/pushbackcapfile/${classItemBClasses.class_id}`"
-                              ><button
-                                class="mx-2 bg-green-500 w-22"
-                             
-                              >
-                                Pushed Back
-                              </button></router-link
-                            >
-                            <router-link :to="`/cancelcapfile/${classItemBClasses.class_id}`"
-                              ><button
-                                class="mx-2 bg-red-500 w-22"
-                              
-                              >
-                                Cancel
-                              </button></router-link
-                            >
-                          </div>
-                        </div>
-                      </td>
+                        </td>
+                      </template>
                     </template>
-                  </template>
-                </tr>
-              </tbody>
+                  </tr>
+                </tbody>
+              </template>
             </template>
           </template>
         </template>
-      </template>
-    </table>
+      </table>
+    </div>
   </div>
 </template>
 <script>
@@ -102,7 +125,15 @@ export default {
     return {
       classes: {},
       daterange: [],
+      search: "",
     };
+  },
+  computed: {
+    filteredClasses() {
+      return this.classes.filter((programSiteId) =>
+        programSiteId.toLowerCase().includes(this.search.toLowerCase())
+      );
+    },
   },
   mounted() {
     this.fetchClassesData();
@@ -134,3 +165,24 @@ export default {
   },
 };
 </script>
+<style>
+.hoverable:hover::before {
+  content: attr(data-hover-text);
+  position: relative;
+  padding: 5px;
+  display: none;
+  width: 200px;
+  border: 1px solid #004970;
+  border-radius: 6px 6px;
+  background: rgb(236, 241, 243);
+  white-space: normal;
+  font-size: 10px;
+  color: #000000;
+  font-weight: bold;
+  line-height: 15px;
+}
+
+.hoverable:hover::before {
+  display: inline-block;
+}
+</style>

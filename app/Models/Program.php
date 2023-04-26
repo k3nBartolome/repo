@@ -17,11 +17,11 @@ class Program extends Model
 
     public function site()
     {
-        return $this->belongsTo(Site::class);
+        return $this->belongsTo(Site::class, 'site_id');
     }
 
     public function classes()
     {
-        return $this->hasMany(Classes::class, 'site_id', 'site_id');
+        return $this->hasMany(Classes::class, 'program_id');
     }
 }

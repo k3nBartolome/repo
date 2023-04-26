@@ -18,7 +18,7 @@ class CreateClassesTable extends Migration
             $table->unsignedBigInteger('pushedback_id')->nullable();
             $table->boolean('is_active')->nullable();
             $table->string('within_sla')->nullable();
-            $table->string('condition')->nullable();
+            $table->string('condition', 5000)->nullable();
             $table->string('requested_by')->nullable();
             $table->date('original_start_date')->nullable();
             $table->string('changes')->nullable();

@@ -43,6 +43,7 @@ class ClassesController extends Controller
                 }
                 $classes[] = [
                     'site_id' => $program->site_id,
+                    'site_name' => $program->site->name,
                     'program_name' => $program->name,
                     'program_id' => $program->id,
                     'classes' => $programClasses,
@@ -53,7 +54,8 @@ class ClassesController extends Controller
         $groupedClasses = [];
 
         foreach ($classes as $class) {
-            $siteId = $class['site_id'];
+            $siteId = $class['site_name'];
+            $siteName = $class['site_id'];
             $programName = $class['program_name'];
             $programId = $class['program_id'];
 
@@ -77,7 +79,8 @@ class ClassesController extends Controller
                         'total_target' => 0,
                         'program_id' => $programId,
                         'date_range_id' => $dateRangeId,
-                        'site_id' => $siteId,
+                        'date_range' => $dateRangeName,
+                        'site_id' => $siteName,
                         'class_id' => $classId,
                     ];
                 }
@@ -256,52 +259,6 @@ class ClassesController extends Controller
         $class->cancelled_date = $request->input('cancelled_date');
         $class->save();
 
-        $class = Classes::find($id);
-
-        $newClass = $class->replicate();
-        $newClass->site_id = $class->site_id;
-        $newClass->program_id = $class->program_id;
-        $newClass->date_range_id = $class->date_range_id;
-        $newClass->fill($request->all());
-        $newClass->notice_weeks = null;
-        $newClass->notice_days = null;
-        $newClass->external_target = null;
-        $newClass->internal_target = null;
-        $newClass->total_target = 0;
-        $newClass->type_of_hiring = null;
-        $newClass->within_sla = null;
-        $newClass->with_erf = null;
-        $newClass->erf_number = null;
-        $newClass->remarks = null;
-        $newClass->condition = null;
-        $newClass->approved_by = null;
-        $newClass->requested_by = null;
-        $newClass->status = 1;
-        $newClass->approved_status = null;
-        $newClass->original_start_date = null;
-        $newClass->wfm_date_requested = null;
-        $newClass->is_active = null;
-        $newClass->category = null;
-        $newClass->agreed_start_date = null;
-        $newClass->updated_by = null;
-        $newClass->changes = null;
-        $newClass->updated_at = null;
-        $newClass->created_by = null;
-        $newClass->created_at = null;
-        $newClass->cancelled_by = null;
-        $newClass->cancelled_date = null;
-        $newClass->update_status = null;
-        $newClass->changes = null;
-        $newClass->wf = null;
-        $newClass->ta = null;
-        $newClass->op = null;
-        $newClass->cl = null;
-        $newClass->tr = null;
-        $newClass->save();
-
-        $newClass->pushedback_id = $newClass->id;
-        $newClass->save();
-
-        return new ClassesResource($newClass);
+        return new ClassesResource($class);
     }
 }
