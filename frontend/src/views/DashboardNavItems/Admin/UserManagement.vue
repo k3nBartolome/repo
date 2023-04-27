@@ -113,7 +113,7 @@ export default {
   methods: {
     async getRoles() {
       console.log(this.roles_selected)
-      await axios.get('http://127.0.0.1:8000/api/list_role')
+      await axios.get('http://10.109.2.112:8080/api/list_role')
         .then((response) => {
           this.roles = response.data.data;
           console.log(response.data.data)
@@ -123,7 +123,7 @@ export default {
         })
     },
     async postUser() {
-      await axios.post('http://127.0.0.1:8000/api/create_user', {
+      await axios.post('http://10.109.2.112:8080/api/create_user', {
         name: this.name,
         role: this.roles_selected,
         email: this.email,
@@ -140,7 +140,7 @@ export default {
     },
     async getUsers() {
       await axios
-        .get("http://127.0.0.1:8000/api/list_user")
+        .get("http://10.109.2.112:8080/api/list_user")
         .then((response) => {
           this.users = response.data.data;
           console.log(response.data.data);
@@ -151,7 +151,7 @@ export default {
     },
     async deleteUsers(user_id) {
       await axios
-        .delete("http://127.0.0.1:8000/api/delete_user/" + user_id)
+        .delete("http://10.109.2.112:8080/api/delete_user/" + user_id)
         .then((response) => {
           this.users = response.data.data;
           console.log(response.data.data);

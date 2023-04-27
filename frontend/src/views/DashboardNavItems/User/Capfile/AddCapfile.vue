@@ -449,7 +449,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8080/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -461,7 +461,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/programs")
+        .get("http://10.109.2.112:8080/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -473,7 +473,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/daterange")
+        .get("http://10.109.2.112:8080/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -508,7 +508,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classes/", formData)
+        .post("http://10.109.2.112:8080/api/classes/", formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
