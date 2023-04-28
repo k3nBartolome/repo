@@ -51,13 +51,84 @@ class UserSeeder extends Seeder
             $user_delete,
             $user_list
         ]);
-        $user=User::create([
+        $user=User::create(
+            [
             'name'=>'User',
             'email'=>'user@user.com',
             'password'=>bcrypt('password')
-        ]);
+            ] );
+
+             $user1=User::create([
+            'name'=>'pmercado',
+            'email'=>'pmercado@vxi.com.ph',
+            'password'=>bcrypt('password')
+            ]);
+            $user2=User::create([
+                'name'=>'ldytioco',
+                'email'=>'ldytioco@vxi.com.ph',
+                'password'=>bcrypt('password')
+                ] );
+                $user3=User::create( [
+                    'name'=>'xbarrantes',
+                    'email'=>'xbarrantes@vxi.com.ph',
+                    'password'=>bcrypt('password')
+                    ] );
+                    $user4=User::create(    [
+                        'name'=>'agomez',
+                        'email'=>'agomez@vxi.com.ph',
+                        'password'=>bcrypt('password')
+                        ] );
+                        $user5=User::create(  [
+                            'name'=>'jfabiano',
+                            'email'=>'jfabiano@vxi.com.ph',
+                            'password'=>bcrypt('password')
+                            ]
+                        );
+                            $user6=User::create(   [
+                                'name'=>'apascua',
+                                'email'=>'apascua@vxi.com.ph',
+                                'password'=>bcrypt('password')
+                                ]
+                            );
+                                $user7=User::create(         [
+                                    'name'=>'kolis',
+                                    'email'=>'kolis@vxi.com.ph',
+                                    'password'=>bcrypt('password')
+                                    ]
+    );
         $user->assignRole($user_role);
+        $user1->assignRole($user_role);
+        $user2->assignRole($user_role);
+        $user3->assignRole($user_role);
+        $user4->assignRole($user_role);
+        $user5->assignRole($user_role);
+        $user6->assignRole($user_role);
+        $user7->assignRole($user_role);
         $user->givePermissionTo([
+            $user_list,
+        ]);
+        $user->givePermissionTo([
+            $user_list,
+        ]);
+        $user1->givePermissionTo([
+            $user_list,
+        ]);
+        $user2->givePermissionTo([
+            $user_list,
+        ]);
+        $user3->givePermissionTo([
+            $user_list,
+        ]);
+        $user4->givePermissionTo([
+            $user_list,
+        ]);
+        $user5->givePermissionTo([
+            $user_list,
+        ]);
+        $user6->givePermissionTo([
+            $user_list,
+        ]);
+        $user7->givePermissionTo([
             $user_list,
         ]);
     }

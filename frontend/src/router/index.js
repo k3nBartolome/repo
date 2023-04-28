@@ -17,6 +17,7 @@ import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.v
 import ProgramManagement from '@/views/Dashboard/AppProgramDashboard.vue';
 import pushbackCapacityFile from "@/views/DashboardNavItems/User/Capfile/PushedBackCapacityFile.vue";
 import cancelCapacityFile from "@/views/DashboardNavItems/User/Capfile/CancelCapacityFile.vue";
+import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
 
 const routes = [{
     path: "/",
@@ -33,11 +34,11 @@ const routes = [{
         name: "capacityFile",
         component: capacityFile,
       },
-      // {
-      //   path: "/addcapfile",
-      //   name: "addCapacityFile",
-      //   component: addCapacityFile,
-      // },
+      {
+        path: "/powerbi",
+        name: "powerBi",
+        component: powerBi,
+      },
       {
         path: "/pushbackcapfile/:id",
         name: "pushbackCapacityFile",
@@ -52,6 +53,16 @@ const routes = [{
         path: "/addcapfile/:id",
         name: "addCapacityFile",
         component: addCapacityFile,
+      },
+      {
+        path: "/site_management",
+        name: "sitemanagement",
+        component: SiteManagement,
+      },
+      {
+        path: "/program_management",
+        name: "programmanagement",
+        component: ProgramManagement,
       },
     ],
   },
@@ -72,16 +83,7 @@ const routes = [{
         name: "usermanagement",
         component: UserManagement,
       },
-      {
-        path: "/site_management",
-        name: "sitemanagement",
-        component: SiteManagement,
-      },
-      {
-        path: "/program_management",
-        name: "programmanagement",
-        component: ProgramManagement,
-      },
+      
     ],
   },
   {

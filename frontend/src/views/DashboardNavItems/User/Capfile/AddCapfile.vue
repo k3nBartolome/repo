@@ -504,7 +504,6 @@ export default {
         approved_status: "pending",
         approved_by: this.approved_by,
         status: "Active",
-        is_active: 1,
         created_by: this.$store.state.user_id,
       };
       axios
@@ -529,7 +528,6 @@ export default {
           this.condition = "";
           this.date_range_id = "";
           this.approved_status = "";
-          this.is_active = "";
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";

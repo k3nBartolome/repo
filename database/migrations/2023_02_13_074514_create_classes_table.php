@@ -16,7 +16,6 @@ class CreateClassesTable extends Migration
         Schema::create('classes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('pushedback_id')->nullable();
-            $table->boolean('is_active')->nullable();
             $table->string('within_sla')->nullable();
             $table->string('condition', 3000)->nullable();
             $table->string('requested_by')->nullable();

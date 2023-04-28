@@ -525,7 +525,7 @@ export default {
       agreed_start_date: "",
       condition: [],
       within_sla: "",
-      changes: "",
+      changes: "Change Targets and Dates",
       ta: "",
       wf: "",
       tr: "",
@@ -703,7 +703,6 @@ export default {
         date_range_id: this.date_selected,
         approved_status: "pending",
         status: "Active",
-        is_active: 1,
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
         condition: this.condition,
@@ -740,7 +739,6 @@ export default {
           this.requested_by = "";
           this.date_range_id = "";
           this.approved_status = "";
-          this.is_active = "";
           this.updated_by = "";
           this.agreed_start_date = "";
           this.condition = "";

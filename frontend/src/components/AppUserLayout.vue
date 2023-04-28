@@ -23,7 +23,7 @@
   padding-top: 50px;
   flex-grow: 1;
   padding-bottom: 50px;
-  height: 400px;
+  height: 850px;
 }
 
 .scrollable-content {

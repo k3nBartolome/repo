@@ -20,6 +20,9 @@
         class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
       <router-link to="/dashboard"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Dashboard</li></router-link>
       <router-link to="/capfile"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Capacity File</li></router-link>
+      <router-link to="/powerbi"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Power BI Report</li></router-link>
+      <router-link to="/site_management"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Sites</li></router-link>
+      <router-link to="/program_management"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Programs</li></router-link>
       </ul>
     </nav>
   </div>

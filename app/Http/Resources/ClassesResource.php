@@ -32,7 +32,7 @@ class ClassesResource extends JsonResource
             'updated_at' => $this->updated_at,
             'created_by' => $this->createdByUser ? $this->createdByUser->name : null,
             'updated_by' => $this->updatedByUser ? $this->createdByUser->name : null,
-            'is_active' => $this->is_active,
+            
             'approved_status' => $this->approved_status,
             'status' => $this->status,
             'update_status' => $this->update_status,

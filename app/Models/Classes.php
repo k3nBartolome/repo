@@ -16,7 +16,6 @@ class Classes extends Model
 
     protected $fillable = [
         'pushedback_id',
-        'is_active',
         'within_sla',
         'original_start_date',
         'pushback_start_date_ta',

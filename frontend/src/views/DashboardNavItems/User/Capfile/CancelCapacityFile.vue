@@ -642,7 +642,6 @@ export default {
         remarks: this.remarks,
         approved_status: "pending",
         status: "cancelled",
-        is_active: 0,
         ta: this.ta,
         wf: this.wf,
         tr: this.tr,
@@ -664,7 +663,6 @@ export default {
           this.remarks = "";
           this.cancelled_by = [];
           this.cancelled_date = "";
-          this.is_active = "";
           this.ta = "";
           this.wf = "";
           this.tr = "";
