@@ -218,6 +218,7 @@ class ClassesController extends Controller
         $class->save();
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
+        $newClass->changes = 'Pushedback';
         $newClass->requested_by = json_encode($requested_by);
         $newClass->condition = json_encode($condition);
         $newClass->fill($request->all());
@@ -248,14 +249,14 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-
-        // Update old class data
         $class->status = 'Cancelled';
-        $class->changes = 'Cancelled';
-        $class->cancelled_by = json_encode($cancelled_by);
-        $class->condition = json_encode($condition);
-        $class->cancelled_date = $request->input('cancelled_date');
         $class->save();
+        $newClass = $class->replicate();
+        $newClass->cancelled_by = json_encode($cancelled_by);
+        $newClass->condition = json_encode($condition);
+        $newClass->changes = 'Cancellation';
+        $newClass->cancelled_date = $request->input('cancelled_date');
+        $newClass->save();
 
         return new ClassesResource($class);
     }

@@ -557,7 +557,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8080/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -569,7 +569,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8080/api/programs")
+        .get("http://10.109.2.112:8081/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -580,7 +580,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8080/api/transaction/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -592,7 +592,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://10.109.2.112:8080/api/daterange")
+        .get("http://10.109.2.112:8081/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -603,7 +603,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("http://10.109.2.112:8080/api/classes/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -621,7 +621,6 @@ export default {
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
           this.agreed_start_date = classObj.agreed_start_date;
-          this.condition = classObj.condition;
           this.changes = classObj.changes;
           this.approved_by = classObj.approved_by;
 
@@ -636,6 +635,7 @@ export default {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
         date_range_id: this.date_selected,
+        condition:this.condition,
         cancelled_by: this.cancelled_by,
         cancelled_date: this.cancelled_date,
         approved_by: this.approved_by,
@@ -650,7 +650,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8080/api/classes/cancel/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
           formData
         )
         .then((response) => {
@@ -661,6 +661,7 @@ export default {
           this.approved_status = "";
           this.approved_by = "";
           this.remarks = "";
+          this.condittion =[];
           this.cancelled_by = [];
           this.cancelled_date = "";
           this.ta = "";

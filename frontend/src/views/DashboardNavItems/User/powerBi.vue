@@ -1,7 +1,5 @@
 <template>
-    <iframe class="w-full h-full" title="201 Dashboard"
-        src="https://app.powerbi.com/reportEmbed?reportId=2df0a0bd-3b44-46f6-ba7d-e2c8a4a4910d&autoAuth=true&ctid=7a918d5e-acad-4bf6-8ff6-36fc388c7817"
-        frameborder="0" allowFullScreen="true"></iframe>
+    <iframe title="Capacity File v3" class="h-full w-full" src="https://app.powerbi.com/reportEmbed?reportId=3be8f9b5-648d-4469-95a9-cbf2a3b230df&autoAuth=true&ctid=7a918d5e-acad-4bf6-8ff6-36fc388c7817" frameborder="0" allowFullScreen="true"></iframe>
 </template>
 <script>
 </script>

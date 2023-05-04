@@ -10,6 +10,7 @@ class DateRange extends Model
         'date_range',
         'week_start',
         'week_end',
+        'month_num',
         'month',
         'year',
     ];
