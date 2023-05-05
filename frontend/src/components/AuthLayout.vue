@@ -18,7 +18,7 @@
             </div>
 
             <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-            <ul :class="showMenu ? 'flex' : 'hidden'"
+           <!--  <ul :class="showMenu ? 'flex' : 'hidden'"
                 class="flex-col mt-8 space-y-4 md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
                 <router-link to="/contact"><li class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">Contact
                     Us</li></router-link>
@@ -34,7 +34,7 @@
                             <span>Login</span>
                         </button></li>
                 </router-link>
-            </ul>
+            </ul> -->
         </nav>
     </div>
     

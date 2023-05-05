@@ -126,7 +126,7 @@
           </label>
 
           <label class="block"
-            >Movement Date
+            >Date of Request
             <input
               required
               type="date"
@@ -382,7 +382,6 @@
               type="checkbox"
               v-model="requested_by"
               value="Talent Acquisition"
-              required
             />Talent Acquisition
             <input type="checkbox" v-model="requested_by" value="Workforce" />Workforce
             <input type="checkbox" v-model="requested_by" value="Training" />Training
@@ -578,11 +577,11 @@ export default {
     this.getTransaction();
   },
   watch: {
-  agreed_start_date: {
-    handler: "getDateRange",
-    immediate: true,
+    agreed_start_date: {
+      handler: "getDateRange",
+      immediate: true,
+    },
   },
-},
   methods: {
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
@@ -597,7 +596,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -609,7 +608,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/programs")
+        .get("http://10.109.2.112:8081/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -619,32 +618,31 @@ export default {
         });
     },
     async getDateRange() {
-    console.log(this.agreed_start_date);
-    await axios
-      .get("http://127.0.0.1:8000/api/daterange")
-      .then((response) => {
-        this.daterange = response.data.data;
-        console.log(response.data.data);
-       
-        for (let i = 0; i < this.daterange.length; i++) {
-          const range = this.daterange[i];
-          if (
-            this.agreed_start_date >= range.week_start &&
-            this.agreed_start_date <= range.week_end
-          ) {
-          
-            this.date_selected = range.id;
-            break;
+      console.log(this.agreed_start_date);
+      await axios
+        .get("http://10.109.2.112:8081/api/daterange")
+        .then((response) => {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+
+          for (let i = 0; i < this.daterange.length; i++) {
+            const range = this.daterange[i];
+            if (
+              this.agreed_start_date >= range.week_start &&
+              this.agreed_start_date <= range.week_end
+            ) {
+              this.date_selected = range.id;
+              break;
+            }
           }
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async getClasses() {
       await axios
-        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -673,7 +671,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -716,7 +714,7 @@ export default {
       };
       axios
         .put(
-          "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/classes/pushedback/" + this.$route.params.id,
           formData
         )
         .then((response) => {

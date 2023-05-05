@@ -67,4 +67,11 @@ class ProgramController extends Controller
 
         return response()->json(null, 204);
     }
+
+    public function indexBySite($siteId)
+    {
+        $programs = Program::where('site_id', $siteId)->get();
+
+        return response()->json(['data' => $programs]);
+    }
 }

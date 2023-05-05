@@ -86,7 +86,7 @@ export default {
       let user_id;
       let isLogin;
       await axios
-        .post("http://127.0.0.1:8000/api/login", {
+        .post("http://10.109.2.112:8081/api/login", {
           email: this.email,
           password: this.password,
 
@@ -112,7 +112,7 @@ export default {
           this.$router.push({ path: "/admin_dashboard"});
         }
         else{
-          this.$router.push({ path: "/dashboard" });
+          this.$router.push({ path: "/capfile" });
         }
       } else {
         this.form.message = "Invalid Credentials";

@@ -62,6 +62,7 @@ Route::get('programs/{id}', [ProgramController::class, 'show']);
 Route::post('programs', [ProgramController::class, 'store']);
 Route::put('programs/{id}', [ProgramController::class, 'update']);
 Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
+Route::get('programs_selected/{siteId}', [ProgramController::class, 'indexBySite']);
 
 //Classes Routes
 Route::get('classes', [ClassesController::class, 'index']);
@@ -72,7 +73,9 @@ Route::get('classesall', [ClassesController::class, 'classesAll']);
 Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
 Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::post('classes', [ClassesController::class, 'store']);
+Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
 Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
+Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);

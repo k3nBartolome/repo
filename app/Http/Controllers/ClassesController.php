@@ -2,96 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ClassesAllResource;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
-use App\Models\DateRange;
-use App\Models\Program;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-    public function classesAll()
-    {
-        $cacheKey = 'classesAll';
-        $cacheTime = 60;
-
-        if (Cache::has($cacheKey)) {
-            $classes = Cache::get($cacheKey);
-        } else {
-            $programs = Program::all();
-            $dateRanges = DateRange::all();
-
-            $classes = [];
-            foreach ($programs as $program) {
-                $programClasses = [];
-                foreach ($dateRanges as $dateRange) {
-                    $class = Classes::where('site_id', $program->site_id)
-                    ->where('program_id', $program->id)
-                    ->where('date_range_id', $dateRange->id)
-                        ->where('status', 'Active')
-                        ->first();
-                    $totalTarget = $class ? $class->total_target : 0;
-                    $programClasses[] = [
-                        'date_range_id' => $dateRange->id,
-                        'class_id' => $class ? $class->id : 0,
-                        'date_range' => $dateRange->date_range,
-                        'total_target' => $totalTarget,
-                    ];
-                }
-                $classes[] = [
-                    'site_id' => $program->site_id,
-                    'site_name' => $program->site->name,
-                    'program_name' => $program->name,
-                    'program_id' => $program->id,
-                    'classes' => $programClasses,
-                ];
-            }
-            Cache::put($cacheKey, $classes, $cacheTime);
-        }
-        $groupedClasses = [];
-
-        foreach ($classes as $class) {
-            $siteId = $class['site_name'];
-            $siteName = $class['site_id'];
-            $programName = $class['program_name'];
-            $programId = $class['program_id'];
-
-            if (!isset($groupedClasses[$siteId][$programName])) {
-                $groupedClasses[$siteId][$programName] = [
-                    'date_ranges' => [],
-                    'total_target' => 0,
-                ];
-            }
-
-            $dateRanges = $class['classes'];
-
-            foreach ($dateRanges as $dateRange) {
-                $dateRangeName = $dateRange['date_range'];
-                $totalTarget = $dateRange['total_target'];
-                $dateRangeId = $dateRange['date_range_id'];
-                $classId = $dateRange['class_id'];
-
-                if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName])) {
-                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName] = [
-                        'total_target' => 0,
-                        'program_id' => $programId,
-                        'date_range_id' => $dateRangeId,
-                        'date_range' => $dateRangeName,
-                        'site_id' => $siteName,
-                        'class_id' => $classId,
-                    ];
-                }
-
-                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeName]['total_target'] += $totalTarget;
-            }
-        }
-
-        return new ClassesAllResource($groupedClasses);
-    }
-
     public function store(Request $request)
     {
         // Validate the request.
@@ -172,6 +89,37 @@ class ClassesController extends Controller
         return response()->json([
             'classes' => $classes,
         ]);
+    }
+
+    public function classesall()
+    {
+        $classes = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
+                    ->where('status', 'Active')
+                    ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
+    public function check($siteId, $programId, $dateRangeId)
+    {
+        $validated = $request->validate([
+        'site' => 'required|exists:sites_id',
+        'program' => 'required|exists:programs_id',
+        'daterange' => 'required|exists:daterange_id',
+    ]);
+
+        $existingRecord = Classes::where([
+        'program_id' => $validated['program'],
+        'site_id' => $validated['site'],
+        'date_range_id' => $validated['daterange'],
+    ])->first();
+
+        if ($existingRecord) {
+            // Record with same combination already exists, return error
+            return response()->json(['message' => 'Record already exists'], 400);
+        }
     }
 
     public function pushedback(Request $request, $id)

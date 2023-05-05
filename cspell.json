@@ -71,6 +71,8 @@
         "Westwood",
         "ZINUS"
     ],
-    "ignoreWords": [],
+    "ignoreWords": [
+        "classesall"
+    ],
     "import": []
 }

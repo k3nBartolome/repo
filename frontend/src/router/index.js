@@ -4,7 +4,6 @@ import {
 } from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
-import AppUserDashboard from "@/views/Dashboard/AppUserDashboard";
 import ContactUs from "@/views/ContactUs";
 import AppUserLayout from "@/components/AppUserLayout";
 import AppAdminLayout from "@/components/AppAdminLayout";
@@ -24,11 +23,6 @@ const routes = [{
     component: AppUserLayout,
     meta: { requiresAuth: true, requiresRole: "user" },
     children: [
-      {
-        path: "/dashboard",
-        name: "userDashboard",
-        component: AppUserDashboard,
-      },
       {
         path: "/capfile",
         name: "capacityFile",

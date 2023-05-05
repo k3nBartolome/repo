@@ -66,7 +66,14 @@
   </div>
   <div class="py-8">
     <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <input type="text" v-model="search" placeholder="Search...">
+      <div class="mb-4">
+        <input
+          type="text"
+          v-model="search"
+          placeholder="Search..."
+          class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+        />
+      </div>
       <table class="w-full text-white table-auto">
         <thead>
           <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
@@ -85,7 +92,7 @@
             </th>
           </tr>
         </thead>
-        <tbody v-for="program in  filteredPrograms" :key="program.id">
+        <tbody v-for="program in filteredPrograms" :key="program.id">
           <tr
             class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
           >
@@ -147,7 +154,7 @@ export default {
       sites: [],
       currentPage: 1,
       perPage: 5,
-      search:""
+      search: "",
     };
   },
 
@@ -159,8 +166,7 @@ export default {
   computed: {
     filteredPrograms() {
       return this.programs.filter((programs) =>
-        programs.name.toLowerCase().includes(this.search.toLowerCase()
-        )
+        programs.name.toLowerCase().includes(this.search.toLowerCase())
       );
     },
     totalPages() {
@@ -170,7 +176,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://127.0.0.1:8000/api/programs")
+        .get("http://10.109.2.112:8081/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -182,7 +188,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -201,7 +207,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/programs", formData)
+        .post("http://10.109.2.112:8081/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";

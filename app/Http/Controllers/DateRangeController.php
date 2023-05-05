@@ -20,6 +20,13 @@ class DateRangeController extends Controller
         return DateRangeResource::collection(DateRange::all());
     }
 
+    public function indexByMonth($monthId)
+    {
+        $dateRanges = DateRange::where('month_num', $monthId)->get();
+
+        return DateRangeResource::collection($dateRanges);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

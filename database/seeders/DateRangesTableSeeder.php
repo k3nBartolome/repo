@@ -24,13 +24,15 @@ class DateRangesTableSeeder extends Seeder
             $week_end = $start_date->addDays(6)->format('Y-m-d');
             $month = $start_date->format('F');
             $year = $start_date->format('Y');
-            $month_num=$start_date->format('m');
+            $month_num = $start_date->format('m');
+            $quarter = ceil($month_num / 3);
 
             $weeks[] = [
                 'date_range' => Carbon::parse($week_start)->format('M j').' - '.Carbon::parse($week_end)->format('M j'),
                 'week_start' => $week_start,
                 'week_end' => $week_end,
-                'month_num'=>$month_num,
+                'month_num' => $month_num,
+                'quarter' => $quarter,
                 'month' => $month,
                 'year' => $year,
             ];
@@ -39,14 +41,13 @@ class DateRangesTableSeeder extends Seeder
         }
 
         $existingData = DB::table('date_ranges')->get();
-        
+
         if ($existingData->count() === 0) {
             // Insert new data into the table
             DB::table('date_ranges')->insert($weeks);
         } else {
             // Table already seeded with data
-            echo "Table already seeded with data";
+            echo 'Table already seeded with data';
         }
     }
 }
-

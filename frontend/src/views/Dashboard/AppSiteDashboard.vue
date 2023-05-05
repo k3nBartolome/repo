@@ -113,7 +113,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -131,7 +131,7 @@ export default {
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
-      axios.post("http://127.0.0.1:8000/api/sites", formData)
+      axios.post("http://10.109.2.112:8081/api/sites", formData)
         .then(response => {
           console.log(response.data);
           this.name = '';
