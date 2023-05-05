@@ -19,7 +19,7 @@ class CreateDateRangesTable extends Migration
             $table->date('week_start')->nullable();
             $table->date('week_end')->nullable();
             $table->string('month')->nullable();
-            $table->int('month_num')->nullable();
+            $table->integer('month_num')->nullable();
             $table->string('year')->nullable();
             $table->timestamps();
         });

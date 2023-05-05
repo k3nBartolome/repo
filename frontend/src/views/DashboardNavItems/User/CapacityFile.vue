@@ -1,188 +1,93 @@
 <template>
   <header class="w-full bg-white shadow">
-    <div class="flex items-center w-full px-4 py-6 max-w-7xl sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+        User Manager
       </h1>
     </div>
   </header>
-  <div class="py-12 px-12 ">
-    <div class="px-12 py-12">
-      <table class="table border border-black px-20 py-20">
-        <thead class="">
-          <tr class="">
-            <th class="px-4">Sites</th>
-            <th class="px-4">Programs</th>
-            <th
-              v-for="daterange in daterange"
-              :key="daterange.id"
-              class="px-4 truncate py-1 border border-black bg-orange-500 text-white"
-            >
-              {{ daterange.date_range }}
-            </th>
+  <div class="py-8">
+    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8" >
+      <form @submit.prevent="postUser" class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <label class="block">
+          Name
+          <input v-model="name" type="text"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required />
+        </label>
+        <label class="block">
+          Email
+          <input v-model="email" type="email"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required />
+        </label>
+        <label class="block">
+            Roles
+            <select v-model="roles_selected"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required @change="getRoles">
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="role in roles" :key="role.id" :value="role.name">
+                {{ role.name }}
+              </option>
+            </select>
+          </label>
+        <label class="block">
+          Password
+          <input v-model="password" type="password"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required />
+        </label>
+        <button type="submit" class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600">
+          <i class="fa fa-building "></i> Add
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="py-8">
+    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
+      <table class="w-full text-white table-auto">
+        <thead>
+          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
+            <th class="px-1 py-2 ">ID</th>
+            <th class="px-1 py-2 ">Avatar</th>
+            <th class="px-1 py-2 ">Name</th>
+            <th class="px-1 py-2 ">Email</th>
+            <th class="px-1 py-2 ">Roles</th>
+            <th class="px-1 py-2 ">Created date</th>
+            <th class="px-1 py-2 ">Updated date</th>
+            <th class="px-1 py-2 " colspan="3">Action</th>
           </tr>
         </thead>
-        <template v-for="(programClasses, programSiteId) in classes" :key="programSiteId">
-          <template
-            v-for="(dateRangeClasses, programName) in programClasses"
-            :key="programName"
-          >
-            <template
-              v-for="(classClasses, SiteName) in dateRangeClasses"
-              :key="SiteName"
-            >
-              <template
-                v-for="(classItemClasses, classesName) in classClasses"
-                :key="classesName"
-              >
-                <tbody>
-                  <tr>
-                    <td class="w-1/4 px-2 py-1 border border-black truncate">
-                      {{ SiteName }}
-                    </td>
-                    <td class="w-1/4 px-2 py-1 border border-black truncate">
-                      {{ classesName }}
-                    </td>
-                    <template
-                      v-for="(classItemAClasses, DateRangeName) in classItemClasses"
-                      :key="DateRangeName"
-                    >
-                      <template
-                        v-for="(classItemBClasses, DateRangeNameA) in classItemAClasses"
-                        :key="DateRangeNameA"
-                      >
-                        <td
-                          class="w-1/4 border border-black truncate hoverable"
-                          :data-hover-text="
-                            SiteName +
-                            ' | ' +
-                            classesName +
-                            ' | ' +
-                            classItemBClasses.date_range
-                          "
-                        >
-                          <div class="flex items-center">
-                            <button
-                              class="h-full w-1/2 text-black bg-gray-200"
-                              @click="showButtons(classItemBClasses)"
-                            >
-                              {{ classItemBClasses.total_target }}
-                            </button>
-
-                            <div
-                              v-if="classItemBClasses.showButtons"
-                              class="flex items-center"
-                            >
-                              <div v-if="classItemBClasses.total_target == 0">
-                                <router-link
-                                  :to="{
-                                    path: `/addcapfile/
-                          }`,
-                                    query: {
-                                      program: classItemBClasses.program_id,
-                                      site: classItemBClasses.site_id,
-                                      daterange: classItemBClasses.date_range_id,
-                                    },
-                                  }"
-                                >
-                                  <button class="mx-2 bg-blue-600 text-white">ADD</button>
-                                </router-link>
-                              </div>
-                              <div v-else>
-                                <router-link
-                                  :to="`/pushbackcapfile/${classItemBClasses.class_id}`"
-                                  ><button class="mx-2 bg-green-500 w-22">
-                                    Pushed Back
-                                  </button></router-link
-                                >
-                                <router-link
-                                  :to="`/cancelcapfile/${classItemBClasses.class_id}`"
-                                  ><button class="mx-2 bg-red-500 w-22">
-                                    Cancel Class
-                                  </button></router-link
-                                >
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-                      </template>
-                    </template>
-                  </tr>
-                </tbody>
-              </template>
-            </template>
-          </template>
-        </template>
+        <tbody v-for="user in users" :key="user.user_id">
+          <tr class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
+            <td class="px-1 py-2 ">{{ user.user_id }}</td>
+            <td class="px-1 py-2 ">{{ user.avatar }}</td>
+            <td class="px-1 py-2 ">{{ user.name }}</td>
+            <td class="px-1 py-2 ">{{ user.email }}</td>
+            <td class="px-1 py-2 ">{{ slicedRoles(user.roles) }}</td>
+            <td class="px-1 py-2 ">{{ user.created_at }}</td>
+            <td class="px-1 py-2 ">{{ user.updated_at }}</td>
+            <td class="px-2 py-2 "><button @click="getUsers(user.user_id)"
+                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
+                <i class="fa fa-eye"></i>
+              </button>
+            </td>
+            <td class="px-2 py-2">
+              <button @click="getUsers(user.user_id)"
+                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
+                <i class="fa fa-edit"></i>
+              </button>
+            </td>
+            <td class="px-2 py-2 ">
+              <button   @click="deleteUsers(user.user_id)"
+                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
+                <i class="fa fa-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
   </div>
 </template>
-<script>
-import axios from "axios";
-
-export default {
-  data() {
-    return {
-      classes: {},
-      daterange: [],
-      search: "",
-    };
-  },
-  computed: {
-    filteredClasses() {
-      return this.classes.filter((programSiteId) =>
-        programSiteId.toLowerCase().includes(this.search.toLowerCase())
-      );
-    },
-  },
-  mounted() {
-    this.fetchClassesData();
-    this.fetchWeekData();
-  },
-  methods: {
-    async fetchWeekData() {
-      try {
-        const response = await axios.get("http://10.109.2.112:8081/api/daterange");
-        this.daterange = response.data.data;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    async fetchClassesData() {
-      axios
-        .get("http://10.109.2.112:8081/api/classesall")
-        .then((response) => {
-          this.classes = response.data;
-          console.log(this.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    showButtons(classItemBClasses) {
-      classItemBClasses.showButtons = !classItemBClasses.showButtons;
-    },
-  },
-};
-</script>
-<style>
-.hoverable:hover::before {
-  content: attr(data-hover-text);
-  position: relative;
-  padding: 5px;
-  display: none;
-  width: 200px;
-  border: 1px solid #004970;
-  border-radius: 6px 6px;
-  background: rgb(236, 241, 243);
-  white-space: normal;
-  font-size: 10px;
-  color: #000000;
-  font-weight: bold;
-  line-height: 15px;
-}
-
-.hoverable:hover::before {
-  display: inline-block;
-}
-</style>

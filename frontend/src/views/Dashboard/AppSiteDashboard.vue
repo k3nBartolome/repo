@@ -1,49 +1,49 @@
 <template>
   <header class="w-full bg-white shadow">
-    <div class="flex items-center w-full py-2  max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 pl-8">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Site Manager
       </h1>
     </div>
   </header>
   <div class="py-8">
-    <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8 border-2 border-orange-600" >
-      <form @submit.prevent="addSite" class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5 font-semibold">
+    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8" >
+      <form @submit.prevent="addSite" class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Name
           <input v-model="name" type="text"
-            class="block w-full mt-1 border rounded-md  focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required />
         </label>
         <label class="block">
           Description
           <input v-model="description" type="text"
-            class="block w-full mt-1 border rounded-md  focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required />
         </label>
         <label class="block">
           Site Director
           <input v-model="siteDirector" type="text"
-            class="block w-full mt-1 border rounded-md  focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required />
         </label>
         <label class="block">
           Region
           <input v-model="region" type="text"
-            class="block w-full mt-1 border rounded-md  focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required />
         </label>
-        <button type="submit" class="bg-orange-500 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded">
-          <i class="fa fa-building	"></i> Add
+        <button type="submit" class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600">
+          <i class="fa fa-building "></i> Add
         </button>
       </form>
     </div>
   </div>
   <div class="py-8">
     <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <table class="w-full table-auto text-white">
+      <table class="w-full text-white table-auto">
         <thead>
-          <tr class="text-left bg-orange-500 border-solid border-2 border-orange-600">
+          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
             <th class="px-1 py-2 ">ID</th>
             <th class="px-1 py-2 ">Name</th>
             <th class="px-1 py-2 ">Description</th>
@@ -58,7 +58,7 @@
           </tr>
         </thead>
         <tbody v-for="site in sites" :key="site.id">
-          <tr class="bg-white text-black font-semibold border-2 border-solid border-gray-400">
+          <tr class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
             <td class="px-1 py-2 ">{{ site.id }}</td>
             <td class="px-1 py-2 ">{{ site.name }}</td>
             <td class="px-1 py-2 ">{{ site.description }}</td>
@@ -113,7 +113,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -131,7 +131,7 @@ export default {
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
-      axios.post("http://10.109.2.112:8081/api/sites", formData)
+      axios.post("http://127.0.0.1:8000/api/sites", formData)
         .then(response => {
           console.log(response.data);
           this.name = '';

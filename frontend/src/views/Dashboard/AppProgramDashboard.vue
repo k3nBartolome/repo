@@ -1,18 +1,18 @@
 <template>
   <header class="w-full bg-white shadow">
-    <div class="flex items-center w-full py-2 max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 pl-8">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Program Manager
       </h1>
     </div>
   </header>
   <div class="py-8">
     <div
-      class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8 border-2 border-orange-600"
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
       <form
         @submit.prevent="addProgram"
-        class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5 font-semibold"
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
       >
         <label class="block">
           Name
@@ -57,7 +57,7 @@
         </label>
         <button
           type="submit"
-          class="bg-orange-500 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded"
+          class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
           <i class="fa fa-building"></i> Add
         </button>
@@ -67,27 +67,27 @@
   <div class="py-8">
     <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
       <input type="text" v-model="search" placeholder="Search...">
-      <table class="w-full table-auto text-white">
+      <table class="w-full text-white table-auto">
         <thead>
-          <tr class="text-left bg-orange-500 border-solid border-2 border-orange-600">
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">ID</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Name</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Description</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Program Group</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Site</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Created by</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Created date</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Updated by</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Updated date</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border">Active Status</th>
-            <th class="px-1 py-1 whitespace-no-wrap truncate border" colspan="3">
+          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Description</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Program Group</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Updated by</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Updated date</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
               Action
             </th>
           </tr>
         </thead>
         <tbody v-for="program in  filteredPrograms" :key="program.id">
           <tr
-            class="bg-white text-black font-semibold border-2 border-solid border-gray-400"
+            class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
           >
             <td class="px-1 py-1">{{ program.id }}</td>
             <td class="px-1 py-1">{{ program.name }}</td>
@@ -104,7 +104,7 @@
             <td class="px-2 py-2">
               <button
                 @click="getPrograms(program.id)"
-                class="flex items-center h-8 px-1 py-1 whitespace-no-wrap truncate border text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 <i class="fa fa-eye"></i>
               </button>
@@ -112,14 +112,14 @@
             <td class="px-2 py-2">
               <button
                 @click="getPrograms(program.id)"
-                class="flex items-center h-8 px-1 py-1 whitespace-no-wrap truncate border text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-green-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 <i class="fa fa-edit"></i>
               </button>
             </td>
             <td class="px-2 py-2">
               <button
-                class="flex items-center h-8 px-1 py-1 whitespace-no-wrap truncate border text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 <i class="fa fa-trash"></i>
               </button>
@@ -170,7 +170,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs")
+        .get("http://127.0.0.1:8000/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -182,7 +182,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -201,7 +201,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData)
+        .post("http://127.0.0.1:8000/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";
