@@ -4,7 +4,6 @@
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
       <form
-        @submit.prevent="addClass"
         class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
       >
         <label class="block">
@@ -181,17 +180,16 @@ export default {
       );
     },
     classExists() {
-      return this.classes.some((c) => {
+      return this.filteredClasses.some((c) => {
         return (
-          c.site_id === this.sites_selected &&
-          c.program_id === this.programs_selected &&
-          c.date_range_id === this.week_selected
+          c.site.id === this.sites_selected &&
+          c.program.id === this.programs_selected &&
+          c.date_range.id === this.week_selected
         );
       });
     },
   },
   mounted() {
-    console.log("Component mounted.");
     this.getSites();
     this.getPrograms();
     this.getDateRange();

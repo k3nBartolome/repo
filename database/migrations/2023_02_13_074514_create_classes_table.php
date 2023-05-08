@@ -52,10 +52,7 @@ class CreateClassesTable extends Migration
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('date_range_id')->nullable();
             $table->timestamps();
-
-            // Add indexes
             $table->index(['site_id', 'program_id', 'date_range_id', 'status']);
-
             $table->foreign('site_id')->references('id')->on('sites');
             $table->foreign('program_id')->references('id')->on('programs');
             $table->foreign('date_range_id')->references('id')->on('date_ranges');
