@@ -12,9 +12,9 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::paginate(10);
-
-        return ProgramResource::collection(Program::all());
+        $programs = Program::with('user', 'createdByUser', 'site', 'classes')->get();
+        
+        return response()->json(['data' => $programs]);
     }
 
     public function show(Program $program)

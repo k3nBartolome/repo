@@ -20,7 +20,7 @@
 }
 
 .content-container {
-  padding-top: 50px;
+  padding-top: 4px;
   flex-grow: 1;
   padding-bottom: 50px;
   height: 850px;

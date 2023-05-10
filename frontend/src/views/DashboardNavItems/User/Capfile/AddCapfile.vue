@@ -1,27 +1,21 @@
 <!-- eslint-disable vue/require-v-for-key -->
 <template>
   <header class="w-full bg-white shadow">
-    <div class="flex items-center w-full px-4 py-6 max-w-7xl sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
+    <div class="items-center w-full py-2">
+      <h1 class="text-center text-xl font-bold">
+        ADD CLASS
       </h1>
     </div>
   </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
-      <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
-      >
+      <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
-            <select
-              disabled
-              v-model="sites_selected"
+            <select disabled v-model="sites_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-              @change="getSites"
-            >
+              required @change="getSites">
               <option disabled value="" selected>Please select one</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
                 {{ site.name }}
@@ -30,13 +24,9 @@
           </label>
           <label class="block">
             Line of Business
-            <select
-              disabled
-              v-model="programs_selected"
+            <select disabled v-model="programs_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-              @change="getPrograms"
-            >
+              required @change="getPrograms">
               <option disabled value="" selected>Please select one</option>
               <option v-for="program in programs" :key="program.id" :value="program.id">
                 {{ program.name }}
@@ -45,11 +35,8 @@
           </label>
           <label class="block">
             Type of Hiring
-            <select
-              required
-              v-model="type_of_hiring"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
+            <select required v-model="type_of_hiring"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
               <option value="growth">Growth</option>
@@ -58,99 +45,57 @@
           </label>
           <label class="block">
             External Target
-            <input
-              required
-              type="number"
-              v-model="external_target"
+            <input required type="number" v-model="external_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncTotalTarget"
-            />
+              @change="syncTotalTarget" />
           </label>
           <label class="block">
             Internal Target
-            <input
-              required
-              type="number"
-              v-model="internal_target"
+            <input required type="number" v-model="internal_target"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncTotalTarget"
-            />
+              @change="syncTotalTarget" />
           </label>
           <label class="block">
             Total Target
-            <input
-              type="number"
-              v-model="total_target"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="number" v-model="total_target" readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
-          <label class="block"
-            >Original Start Date
-            <input
-              required
-              type="date"
-              v-model="original_start_date"
+          <label class="block">Original Start Date
+            <input required type="date" v-model="original_start_date"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
+              @change="syncNoticeDays" />
           </label>
 
-          <label class="block"
-            >WFM Date Requested
-            <input
-              required
-              type="date"
-              v-model="wfm_date_requested"
+          <label class="block">WFM Date Requested
+            <input required type="date" v-model="wfm_date_requested"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
+              @change="syncNoticeDays" />
           </label>
           <label class="block">
             Notice Days
-            <input
-              type="number"
-              v-model="notice_days"
-              readonly
+            <input type="number" v-model="notice_days" readonly
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeWeeks"
-            />
+              @change="syncNoticeWeeks" />
           </label>
           <label class="block">
             Notice Weeks
-            <input
-              type="text"
-              v-model="notice_weeks"
-              readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="text" v-model="notice_weeks" readonly
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">
             Weeks Start
-            <select
-              disabled
-              v-model="date_selected"
+            <select disabled v-model="date_selected"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-              @change="getDateRange"
-            >
+              required @change="getDateRange">
               <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
-              >
+              <option v-for="daterange in daterange" :key="daterange.id" :value="daterange.id">
                 {{ daterange.date_range }}
               </option>
             </select>
           </label>
-          <label class="block"
-            >With ERF?
-            <select
-              required
-              v-model="with_erf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">With ERF?
+            <select required v-model="with_erf"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
@@ -158,31 +103,20 @@
           </label>
           <label class="block" v-if="with_erf === 'yes'">
             ERF Number
-            <input
-              type="text"
-              v-model="erf_number"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+            <input type="text" v-model="erf_number"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
-          <label class="block"
-            >Category
-            <select
-              required
-              v-model="category"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">Category
+            <select required v-model="category"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
               <option value="confirmed">Confirmed</option>
             </select>
           </label>
-          <label class="block"
-            >Within SLA?
-            <select
-              required
-              v-model="within_sla"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">Within SLA?
+            <select required v-model="within_sla"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="Within Sla">Within Sla</option>
               <option value="Outside Sla-Change in Demand">
@@ -200,13 +134,9 @@
               <option value="OV Support">OV Support</option>
             </select>
           </label>
-          <label class="block"
-            >Approved by
-            <select
-              required
-              v-model="approved_by"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">Approved by
+            <select required v-model="approved_by"
+              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="SD Sheila Y">SD Sheila Y</option>
               <option value="CS/Ops">CS/Ops</option>
@@ -224,74 +154,37 @@
           <label class="block">
             Condition
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Filed ERF with necessary approvals and within timeline"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Filed ERF with necessary approvals and within timeline</span
-              >
+              <input type="checkbox" v-model="condition" value="Filed ERF with necessary approvals and within timeline"
+                class="ml-2" />
+              <span class="ml-2">Filed ERF with necessary approvals and within timeline</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to hiring demand from initial sign-off"
-                class="ml-2"
-              />
+              <input type="checkbox" v-model="condition" value="Adherence to hiring demand from initial sign-off"
+                class="ml-2" />
               <span class="ml-2">Adherence to hiring demand from initial sign-off</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to hiring timelines from initial sign-off"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to hiring timelines from initial sign-off</span
-              >
+              <input type="checkbox" v-model="condition" value="Adherence to hiring timelines from initial sign-off"
+                class="ml-2" />
+              <span class="ml-2">Adherence to hiring timelines from initial sign-off</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to agreed hiring profile, process and assessments"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to agreed hiring profile, process and assessments</span
-              >
+              <input type="checkbox" v-model="condition"
+                value="Adherence to agreed hiring profile, process and assessments" class="ml-2" />
+              <span class="ml-2">Adherence to agreed hiring profile, process and assessments</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to OV Support based on the required no. of POCs and sched"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to OV Support based on the required no. of POCs and sched</span
-              >
+              <input type="checkbox" v-model="condition"
+                value="Adherence to OV Support based on the required no. of POCs and sched" class="ml-2" />
+              <span class="ml-2">Adherence to OV Support based on the required no. of POCs and sched</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Program-specific assessment per SOW"
-                class="ml-2"
-              />
+              <input type="checkbox" v-model="condition" value="Program-specific assessment per SOW" class="ml-2" />
               <span class="ml-2">Program-specific assessment per SOW</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Employment requirements prior Day1 per SOW"
-                class="ml-2"
-              />
+              <input type="checkbox" v-model="condition" value="Employment requirements prior Day1 per SOW"
+                class="ml-2" />
               <span class="ml-2">Employment requirements prior Day1 per SOW</span>
             </label>
             <label class="flex items-start">
@@ -300,78 +193,46 @@
             </label>
             <label class="flex items-start">
               <input type="checkbox" v-model="condition" class="ml-2" />
-              <span class="ml-2"
-                >Roster submission requirement for ID creation prior Day 1</span
-              >
+              <span class="ml-2">Roster submission requirement for ID creation prior Day 1</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Programs following VXI standard hiring process and emp req’ts"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Programs following VXI standard hiring process and emp req’ts</span
-              >
+              <input type="checkbox" v-model="condition"
+                value="Programs following VXI standard hiring process and emp req’ts" class="ml-2" />
+              <span class="ml-2">Programs following VXI standard hiring process and emp req’ts</span>
             </label>
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Agreed hiring profile, process and assessments"
-                class="ml-2"
-              />
+              <input type="checkbox" v-model="condition" value="Agreed hiring profile, process and assessments"
+                class="ml-2" />
               <span class="ml-2">Agreed hiring profile, process and assessments</span>
             </label>
 
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Sample call recordings, sample transactions"
-                class="ml-2"
-              /><span class="ml-2">
-                Sample call recordings, sample transactions</span
-              ></label
-            >
+              <input type="checkbox" v-model="condition" value="Sample call recordings, sample transactions"
+                class="ml-2" /><span class="ml-2">
+                Sample call recordings, sample transactions</span></label>
 
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Approved wage rates and job offer/contract template"
-                class="ml-2"
-              /><span class="ml-2">
-                Approved wage rates and job offer/contract template</span
-              ></label
-            >
+              <input type="checkbox" v-model="condition" value="Approved wage rates and job offer/contract template"
+                class="ml-2" /><span class="ml-2">
+                Approved wage rates and job offer/contract template</span></label>
 
             <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Agreed ramp plan with WF, CS, PMO"
-                class="ml-2"
-              /><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
-            >
+              <input type="checkbox" v-model="condition" value="Agreed ramp plan with WF, CS, PMO" class="ml-2" /><span
+                class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label>
           </label>
-          <label class="block py-6"
-            >Remarks<textarea
-              required
-              type="text"
-              v-model="remarks"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
+          <label class="block py-6">Remarks<textarea required type="text" v-model="remarks"
+              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
         </div>
         <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
+          <button type="submit" class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600">
             <i class="fa fa-save"></i> Save
           </button>
+        </div>
+        <div class="flex justify-between">
+          <router-link to="/capfile">
+          <button class="ml-auto bg-blue-500 rounded hover:bg-gray-600 px-4 py-1 text-white">
+            <i class="fa fa-chevron-circle-left	"></i> Back</button></router-link>
         </div>
       </div>
     </form>

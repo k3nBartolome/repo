@@ -19,9 +19,13 @@ class Site extends Model
         'is_active',
     ];
 
-    public function belongsToUser()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(User::class);
+    }
+    public function createdBy()
+    {
+        return $this->hasMany(User::class ,'created_by');
     }
 
     public function programs()

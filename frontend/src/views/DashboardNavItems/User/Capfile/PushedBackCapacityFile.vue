@@ -1,14 +1,14 @@
 <template>
   <header class="w-full bg-white shadow">
-    <div class="flex items-center w-full px-4 py-6 max-w-7xl sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
+    <div class="items-center w-full py-2">
+      <h1 class="text-center text-xl font-bold">
+        PUSHBACK CLASS
       </h1>
     </div>
   </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
-      <div class="px-12 py-6 mx-auto font-semibold bg-white max-w-7xl sm:px-2 lg:px-2">
+      <div class="px-12 py-6 mx-auto font-semibold bg-white max-w-7xl sm:px-2 lg:px-2 border-2 border-orange-600">
         <div class="py-8 font-bold">
           <label class="block">
             Targets
@@ -450,6 +450,11 @@
           >
             <i class="fa fa-save"></i> Pushback
           </button>
+        </div>
+        <div class="flex justify-between">
+          <router-link to="/capfile">
+          <button class="ml-auto bg-blue-500 rounded hover:bg-gray-600 px-4 py-1 text-white">
+            <i class="fa fa-chevron-circle-left	"></i> Back</button></router-link>
         </div>
       </div>
     </form>

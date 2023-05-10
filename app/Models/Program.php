@@ -14,7 +14,10 @@ class Program extends Model
     {
         return $this->belongsTo(User::class);
     }
-
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
     public function site()
     {
         return $this->belongsTo(Site::class, 'site_id');

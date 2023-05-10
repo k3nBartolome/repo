@@ -1,4 +1,11 @@
 <template>
+  <header class="w-full bg-white shadow">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+        Capacity File Manager
+      </h1>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"

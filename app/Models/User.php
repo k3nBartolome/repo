@@ -44,7 +44,7 @@ class User extends Authenticatable
     ];
     public function sites()
     {
-        return $this->hasMany('App\Models\Site');
+        return $this->belongsTo(Site::class, 'created_by');
     }
     public function programs()
     {

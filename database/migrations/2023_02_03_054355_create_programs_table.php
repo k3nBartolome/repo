@@ -24,6 +24,8 @@ class CreateProgramsTable extends Migration
             $table->boolean('is_active')->default(1);
             $table->timestamps();
             $table->foreign('site_id')->references('id')->on('sites')->onDelete('cascade');
+            $table->foreign('created_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
         });
     }
 

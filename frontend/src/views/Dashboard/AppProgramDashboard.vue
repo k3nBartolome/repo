@@ -79,13 +79,9 @@
           <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
             <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Description</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Program Group</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Updated by</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Updated date</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
               Action
@@ -98,15 +94,11 @@
           >
             <td class="px-1 py-1">{{ program.id }}</td>
             <td class="px-1 py-1">{{ program.name }}</td>
-            <td class="px-1 py-1">{{ program.description }}</td>
-            <td class="px-1 py-1">{{ program.program_group }}</td>
-            <td class="px-1 py-1">{{ program.site_id }}</td>
-            <td class="px-1 py-1">{{ program.created_by }}</td>
+            <td class="px-1 py-1">{{ program.site.name }}</td>
+            <td class="px-1 py-1">{{ program.created_by_user.name }}</td>
             <td class="px-1 py-1">{{ program.created_at }}</td>
-            <td class="px-1 py-1">{{ program.updated_by }}</td>
-            <td class="px-1 py-1">{{ program.updated_at }}</td>
             <td class="px-1 py-1">
-              {{ program.is_active === 1 ? "Active" : "Inactive" }}
+              {{ program.is_active == 1 ? "Active" : "Inactive" }}
             </td>
             <td class="px-2 py-2">
               <button
@@ -134,9 +126,6 @@
           </tr>
         </tbody>
       </table>
-      <button @click="previousPage" :disabled="currentPage === 1">Previous</button>
-      <span>{{ currentPage }} / {{ totalPages }}</span>
-      <button @click="nextPage" :disabled="currentPage === totalPages">Next</button>
     </div>
   </div>
 </template>

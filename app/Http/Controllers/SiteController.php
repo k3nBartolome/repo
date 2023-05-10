@@ -17,7 +17,9 @@ class SiteController extends Controller
      */
     public function index()
     {
-        return SiteResource::collection(Site::all());
+        $sites = Site::with('createdBy')->get();
+        
+        return response()->json(['data' => $sites]);
     }
 
     /**
