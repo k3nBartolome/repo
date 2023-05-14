@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -11,7 +10,10 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens;
+    use HasFactory;
+    use Notifiable;
+    use HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -42,30 +44,37 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
     public function sites()
     {
-        return $this->belongsTo(Site::class, 'created_by');
+        return $this->hasMany(Site::class, 'created_by');
     }
+
     public function programs()
     {
         return $this->hasMany('App\Models\Program');
     }
+
     public function sla_reasons()
     {
         return $this->hasMany('App\Models\Sla_reason');
     }
+
     public function created_by()
     {
         return $this->hasMany('App\Models\Class', 'created_by');
     }
+
     public function approved_by()
     {
         return $this->hasMany('App\Models\Class', 'approved_by');
     }
+
     public function cancelled_by()
     {
         return $this->hasMany('App\Models\Class', 'cancelled_by');
     }
+
     public function updated_by()
     {
         return $this->hasMany('App\Models\Class', 'created_by');

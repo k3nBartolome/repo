@@ -2,7 +2,7 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h1 class="text-center text-xl font-bold">
+      <h1 class="text-xl font-bold text-center">
         ADD CLASS
       </h1>
     </div>
@@ -231,8 +231,8 @@
         </div>
         <div class="flex justify-between">
           <router-link to="/capfile">
-          <button class="ml-auto bg-blue-500 rounded hover:bg-gray-600 px-4 py-1 text-white">
-            <i class="fa fa-chevron-circle-left	"></i> Back</button></router-link>
+          <button class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600">
+            <i class="fa fa-chevron-circle-left "></i> Back</button></router-link>
         </div>
       </div>
     </form>

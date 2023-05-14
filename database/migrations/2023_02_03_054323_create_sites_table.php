@@ -39,5 +39,3 @@ class CreateSitesTable extends Migration
         Schema::dropIfExists('sites');
     }
 }
-
-

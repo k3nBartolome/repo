@@ -23,9 +23,10 @@ class Site extends Model
     {
         return $this->hasMany(User::class);
     }
+
     public function createdBy()
     {
-        return $this->hasMany(User::class ,'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function programs()

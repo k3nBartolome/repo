@@ -64,7 +64,7 @@
             <td class="px-1 py-2 ">{{ site.description }}</td>
             <td class="px-1 py-2 ">{{ site.region }}</td>
             <td class="px-1 py-2 ">{{ site.site_director }}</td>
-            <td class="px-1 py-2 ">{{ site.created_by }}</td>
+            <td class="px-1 py-2 ">{{ site.created_by.name }}</td>
             <td class="px-1 py-2 ">{{ site.created_at }}</td>
             <td class="px-1 py-2 ">{{ site.updated_by }}</td>
             <td class="px-1 py-2 ">{{ site.updated_at }}</td>
