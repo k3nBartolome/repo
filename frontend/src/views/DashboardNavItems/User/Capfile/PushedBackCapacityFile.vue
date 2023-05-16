@@ -44,7 +44,7 @@
             <select
               v-model="sites_selected"
               disabled
-              class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getSites"
             >
@@ -59,7 +59,7 @@
             <select
               disabled
               v-model="programs_selected"
-              class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getPrograms"
             >
@@ -74,7 +74,7 @@
             <select
               disabled
               v-model="type_of_hiring"
-              class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -90,7 +90,7 @@
               :disabled="isTargetDisabled"
               v-model="external_target"
               name="external_target"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget"
             />
           </label>
@@ -100,7 +100,7 @@
               required
               type="number"
               :disabled="isTargetDisabled"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               v-model="internal_target"
               @change="syncTotalTarget"
             />
@@ -111,7 +111,7 @@
               type="number"
               v-model="total_target"
               disabled
-              class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block"
@@ -120,7 +120,7 @@
               disabled
               type="date"
               v-model="original_start_date"
-              class="block w-full mt-1 bg-gray-300 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
@@ -131,7 +131,7 @@
               required
               type="date"
               v-model="wfm_date_requested"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
@@ -141,7 +141,7 @@
               type="number"
               v-model="notice_days"
               disabled
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeWeeks"
             />
           </label>
@@ -150,7 +150,7 @@
             <input
               type="text"
               v-model="notice_weeks"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block">
@@ -158,7 +158,7 @@
             <select
               disabled
               v-model="date_selected"
-              class="block w-full mt-1 bg-gray-300 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getDateRange"
             >
@@ -177,7 +177,7 @@
             <select
               required
               v-model="category"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
@@ -189,7 +189,7 @@
             <select
               required
               v-model="within_sla"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="Within Sla">Within Sla</option>
@@ -215,167 +215,28 @@
               required
               v-model="agreed_start_date"
               :disabled="isDateDisabled"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
 
-          <label class="block"
-            >Approved by
-            <select
-              required
-              v-model="approved_by"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+          <label class="block">Approved by
+            <select required v-model="approved_by"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
-              <option value="SD Sheila Y">SD Sheila Y</option>
-              <option value="CS/Ops">CS/Ops</option>
-              <option value="WF/Ops">WF/Ops</option>
-              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
-              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
-              <option value="Christito Villaprudente">Christito Villaprudente</option>
-              <option value="VP Sheryll">VP Sheryll</option>
-              <option value="Kim De Guzman">Kim De Guzman</option>
-              <option value="Ryan Tomzer">Ryan Tomzer</option>
+              <option value="VP-Ops">VP-Ops</option>
+              <option value="VP-Training">VP-Training</option>
+              <option value="VP-WF">VP-WF</option>
+              <option value="VP-TA">VP-TA</option>
+              <option value="CS">CS</option>
+              <option value="WF">WF</option>
+              <option value="Ops">Ops</option>
+              <option value="Training">Training</option>
+              <option value="TA">TA</option>
             </select>
           </label>
         </div>
         <div class="py-6">
-          <label class="block">
-            Condition
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Filed ERF with necessary approvals and within timeline"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Filed ERF with necessary approvals and within timeline</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to hiring demand from initial sign-off"
-                class="ml-2"
-              />
-              <span class="ml-2">Adherence to hiring demand from initial sign-off</span>
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to hiring timelines from initial sign-off"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to hiring timelines from initial sign-off</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to agreed hiring profile, process and assessments"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to agreed hiring profile, process and assessments</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Adherence to OV Support based on the required no. of POCs and sched"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Adherence to OV Support based on the required no. of POCs and sched</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Program-specific assessment per SOW"
-                class="ml-2"
-              />
-              <span class="ml-2">Program-specific assessment per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Employment requirements prior Day1 per SOW"
-                class="ml-2"
-              />
-              <span class="ml-2">Employment requirements prior Day1 per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" class="ml-2" />
-              <span class="ml-2">Specific previous work exp per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" class="ml-2" />
-              <span class="ml-2"
-                >Roster submission requirement for ID creation prior Day 1</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Programs following VXI standard hiring process and emp req’ts"
-                class="ml-2"
-              />
-              <span class="ml-2"
-                >Programs following VXI standard hiring process and emp req’ts</span
-              >
-            </label>
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Agreed hiring profile, process and assessments"
-                class="ml-2"
-              />
-              <span class="ml-2">Agreed hiring profile, process and assessments</span>
-            </label>
-
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Sample call recordings, sample transactions"
-                class="ml-2"
-              /><span class="ml-2">
-                Sample call recordings, sample transactions</span
-              ></label
-            >
-
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Approved wage rates and job offer/contract template"
-                class="ml-2"
-              /><span class="ml-2">
-                Approved wage rates and job offer/contract template</span
-              ></label
-            >
-
-            <label class="flex items-start">
-              <input
-                type="checkbox"
-                v-model="condition"
-                value="Agreed ramp plan with WF, CS, PMO"
-                class="ml-2"
-              /><span class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label
-            >
-          </label>
           <label class="block py-6"
             >Requested by:
             <input
@@ -393,7 +254,7 @@
               <input
                 type="text"
                 v-model="ta"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               />
             </label>
 
@@ -402,7 +263,7 @@
               <input
                 type="text"
                 v-model="wf"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               />
             </label>
 
@@ -411,7 +272,7 @@
               <input
                 type="text"
                 v-model="tr"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               />
             </label>
 
@@ -420,7 +281,7 @@
               <input
                 type="text"
                 v-model="cl"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               />
             </label>
 
@@ -429,7 +290,7 @@
               <input
                 type="text"
                 v-model="op"
-                class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               />
             </label>
           </label>
@@ -439,7 +300,7 @@
               required
               type="text"
               v-model="remarks"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full h-20 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
         </div>
@@ -527,7 +388,6 @@ export default {
       daterange: [],
       programs: [],
       agreed_start_date: "",
-      condition: [],
       within_sla: "",
       changes: "Change Targets and Dates",
       ta: "",
@@ -708,7 +568,6 @@ export default {
         status: "Active",
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
-        condition: this.condition,
         changes: this.changes,
         approved_by: this.approved_by,
         ta: this.ta,
@@ -744,7 +603,6 @@ export default {
           this.approved_status = "";
           this.updated_by = "";
           this.agreed_start_date = "";
-          this.condition = "";
           this.approved_by = "";
           this.changes = "";
           this.ta = "";

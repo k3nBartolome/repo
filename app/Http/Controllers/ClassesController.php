@@ -32,7 +32,6 @@ class ClassesController extends Controller
             'created_by' => 'required',
             'date_range_id' => 'required',
             'category' => 'required',
-            'condition' => 'required',
             'approved_by' => 'required',
         ]);
 
@@ -40,10 +39,8 @@ class ClassesController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $class = new Classes(); // replace `YourClass` with the actual name of your class
-        $condition = [$request->condition];
+        $class = new Classes();
         $class->fill($request->all());
-        $class->condition = json_encode($condition);
         $class->agreed_start_date = $request->input('original_start_date');
         $class->changes = 'Add Class';
         $class->save();
@@ -125,7 +122,6 @@ class ClassesController extends Controller
             'category' => 'required',
             'requested_by' => 'required',
             'agreed_start_date' => 'required',
-            'condition' => 'required',
             'approved_by' => 'required',
             'updated_by' => 'required',
             'changes' => 'required',
@@ -136,7 +132,6 @@ class ClassesController extends Controller
             'cl' => 'nullable',
         ]);
         $requested_by = [$request->requested_by];
-        $condition = [$request->condition];
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
@@ -148,7 +143,6 @@ class ClassesController extends Controller
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
         $newClass->requested_by = json_encode($requested_by);
-        $newClass->condition = json_encode($condition);
         $newClass->fill($request->all());
         $newClass->save();
 
@@ -177,7 +171,6 @@ class ClassesController extends Controller
             'category' => 'required',
             'requested_by' => 'required',
             'agreed_start_date' => 'required',
-            'condition' => 'required',
             'approved_by' => 'required',
             'updated_by' => 'required',
             'changes' => 'required',
@@ -188,7 +181,6 @@ class ClassesController extends Controller
             'cl' => 'nullable',
         ]);
         $requested_by = [$request->requested_by];
-        $condition = [$request->condition];
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
@@ -200,7 +192,6 @@ class ClassesController extends Controller
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
         $newClass->requested_by = json_encode($requested_by);
-        $newClass->condition = json_encode($condition);
         $newClass->fill($request->all());
         $newClass->save(); */
 
@@ -222,7 +213,6 @@ class ClassesController extends Controller
             'cancelled_date' => 'required',
         ]);
         $cancelled_by = [$request->cancelled_by];
-        $condition = [$request->condition];
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
@@ -233,7 +223,6 @@ class ClassesController extends Controller
         $class->save();
         $newClass = $class->replicate();
         $newClass->cancelled_by = json_encode($cancelled_by);
-        $newClass->condition = json_encode($condition);
         $newClass->changes = 'Cancellation';
         $newClass->cancelled_date = $request->input('cancelled_date');
         $newClass->save();

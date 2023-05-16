@@ -9,12 +9,12 @@
   </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
-      <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
+      <div class="px-12 py-6 mx-auto font-semibold bg-white border border-2  border-orange-600 max-w-7xl sm:px-2 lg:px-2">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
             <select disabled v-model="sites_selected"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required @change="getSites">
               <option disabled value="" selected>Please select one</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -25,7 +25,7 @@
           <label class="block">
             Line of Business
             <select disabled v-model="programs_selected"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required @change="getPrograms">
               <option disabled value="" selected>Please select one</option>
               <option v-for="program in programs" :key="program.id" :value="program.id">
@@ -36,7 +36,7 @@
           <label class="block">
             Type of Hiring
             <select required v-model="type_of_hiring"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100">
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
               <option value="growth">Growth</option>
@@ -46,46 +46,46 @@
           <label class="block">
             External Target
             <input required type="number" v-model="external_target"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget" />
           </label>
           <label class="block">
             Internal Target
             <input required type="number" v-model="internal_target"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget" />
           </label>
           <label class="block">
             Total Target
             <input type="number" v-model="total_target" readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">Original Start Date
             <input required type="date" v-model="original_start_date"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays" />
           </label>
 
           <label class="block">WFM Date Requested
             <input required type="date" v-model="wfm_date_requested"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays" />
           </label>
           <label class="block">
             Notice Days
             <input type="number" v-model="notice_days" readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeWeeks" />
           </label>
           <label class="block">
             Notice Weeks
             <input type="text" v-model="notice_weeks" readonly
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">
             Weeks Start
             <select disabled v-model="date_selected"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required @change="getDateRange">
               <option disabled value="" selected>Please select one</option>
               <option v-for="daterange in daterange" :key="daterange.id" :value="daterange.id">
@@ -95,7 +95,7 @@
           </label>
           <label class="block">With ERF?
             <select required v-model="with_erf"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
@@ -104,11 +104,11 @@
           <label class="block" v-if="with_erf === 'yes'">
             ERF Number
             <input type="text" v-model="erf_number"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
           <label class="block">Category
             <select required v-model="category"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
               <option value="confirmed">Confirmed</option>
@@ -116,7 +116,7 @@
           </label>
           <label class="block">Within SLA?
             <select required v-model="within_sla"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="Within Sla">Within Sla</option>
               <option value="Outside Sla-Change in Demand">
@@ -139,7 +139,7 @@
           </label>
           <label class="block">Approved by
             <select required v-model="approved_by"
-              class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -154,80 +154,8 @@
           </label>
         </div>
         <div class="py-4">
-          <label class="block">
-            Condition
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Filed ERF with necessary approvals and within timeline"
-                class="ml-2" />
-              <span class="ml-2">Filed ERF with necessary approvals and within timeline</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Adherence to hiring demand from initial sign-off"
-                class="ml-2" />
-              <span class="ml-2">Adherence to hiring demand from initial sign-off</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Adherence to hiring timelines from initial sign-off"
-                class="ml-2" />
-              <span class="ml-2">Adherence to hiring timelines from initial sign-off</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition"
-                value="Adherence to agreed hiring profile, process and assessments" class="ml-2" />
-              <span class="ml-2">Adherence to agreed hiring profile, process and assessments</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition"
-                value="Adherence to OV Support based on the required no. of POCs and sched" class="ml-2" />
-              <span class="ml-2">Adherence to OV Support based on the required no. of POCs and sched</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Program-specific assessment per SOW" class="ml-2" />
-              <span class="ml-2">Program-specific assessment per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Employment requirements prior Day1 per SOW"
-                class="ml-2" />
-              <span class="ml-2">Employment requirements prior Day1 per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" class="ml-2" />
-              <span class="ml-2">Specific previous work exp per SOW</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" class="ml-2" />
-              <span class="ml-2">Roster submission requirement for ID creation prior Day 1</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition"
-                value="Programs following VXI standard hiring process and emp req’ts" class="ml-2" />
-              <span class="ml-2">Programs following VXI standard hiring process and emp req’ts</span>
-            </label>
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Agreed hiring profile, process and assessments"
-                class="ml-2" />
-              <span class="ml-2">Agreed hiring profile, process and assessments</span>
-            </label>
-
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Sample call recordings, sample transactions"
-                class="ml-2" /><span class="ml-2">
-                Sample call recordings, sample transactions</span></label>
-
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Approved wage rates and job offer/contract template"
-                class="ml-2" /><span class="ml-2">
-                Approved wage rates and job offer/contract template</span></label>
-
-            <label class="flex items-start">
-              <input type="checkbox" v-model="condition" value="Agreed ramp plan with WF, CS, PMO" class="ml-2" /><span
-                class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label>
-                <label class="flex items-start">
-                  <input type="checkbox" v-model="condition" value="Class to be filled internally" class="ml-2" /><span
-                    class="ml-2">Class to be filled internally</span></label>
-          </label>
           <label class="block py-6">Remarks<textarea required type="text" v-model="remarks"
-              class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
+              class="block w-full h-20 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
           </label>
         </div>
         <div class="flex justify-center py-4">
@@ -263,7 +191,6 @@ export default {
       category: "",
       notice_days: 0,
       erf_number: "",
-      condition: [],
       within_sla: "",
       approved_by: "",
       sites: [],
@@ -366,7 +293,6 @@ export default {
         wfm_date_requested: this.wfm_date_requested,
         within_sla: this.within_sla,
         remarks: this.remarks,
-        condition: this.condition,
         date_range_id: this.date_selected,
         approved_status: "pending",
         approved_by: this.approved_by,
@@ -392,7 +318,6 @@ export default {
           this.wfm_date_requested = "";
           this.within_sla = "";
           this.remarks = "";
-          this.condition = "";
           this.date_range_id = "";
           this.approved_status = "";
           this.created_by = "";
