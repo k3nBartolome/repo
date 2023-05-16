@@ -5,7 +5,7 @@
     </div>
   </header>
   <div class="px-12 py-8">
-    <form @submit.prevent="pushClass">
+    <form @submit.prevent="editClass">
       <div
         class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
       >
@@ -196,7 +196,7 @@
               required
               v-model="approved_by"
               class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            >
+            > 
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -216,26 +216,31 @@
             <input
               type="checkbox"
               v-model="requested_by"
+              :checked="databaseValue.includes('Talent Acquisition')"
               value="Talent Acquisition"
             />Talent Acquisition
             <input
               type="checkbox"
               v-model="requested_by"
+              :checked="databaseValue.includes('Workforce')"
               value="Workforce"
             />Workforce
             <input
               type="checkbox"
               v-model="requested_by"
+              :checked="databaseValue.includes('Training')"
               value="Training"
             />Training
             <input
               type="checkbox"
               v-model="requested_by"
+              :checked="databaseValue.includes('Client')"
               value="Client"
             />Client
             <input
               type="checkbox"
               v-model="requested_by"
+              :checked="databaseValue.includes('Operation')"
               value="Operation"
             />Operation
 
@@ -394,6 +399,7 @@ export default {
       disableForm: true,
       requested_by: [],
       classes: [],
+      databaseValue: "",
     };
   },
   computed: {
@@ -436,6 +442,7 @@ export default {
     this.getDateRange();
     this.getClasses();
     this.getTransaction();
+    this.databaseValue = this.databaseValue.split(", ");
   },
   watch: {
     agreed_start_date: {
@@ -524,6 +531,7 @@ export default {
           this.erf_number = classObj.erf_number;
           this.approved_by = classObj.approved_by;
           this.wfm_date_requested = classObj.wfm_date_requested;
+          this.remarks = classObj.remarks;
 
           console.log(classObj);
         })
@@ -544,7 +552,7 @@ export default {
           console.log(error);
         });
     },
-    pushClass() {
+    editClass() {
       const formData = {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
@@ -577,7 +585,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/pushedback/" +
+          "http://10.109.2.112:8081/api/classes/edit/" +
             this.$route.params.id,
           formData
         )

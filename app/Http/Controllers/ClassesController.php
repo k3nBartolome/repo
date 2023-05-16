@@ -187,15 +187,10 @@ class ClassesController extends Controller
 
         $class = Classes::find($id);
         $class->fill($request->all());
+        $class->requested_by = json_encode($requested_by);
         $class->save();
-        /* $newClass = $class->replicate();
-        $newClass->update_status = $class->update_status + 1;
-        $newClass->changes = 'Pushedback';
-        $newClass->requested_by = json_encode($requested_by);
-        $newClass->fill($request->all());
-        $newClass->save(); */
 
-        return new ClassesResource($newClass);
+        return new ClassesResource($class);
     }
 
     public function cancel(Request $request, $id)

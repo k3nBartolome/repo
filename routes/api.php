@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return new UserResource($request->user());
 });
@@ -71,6 +71,7 @@ Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('classesall', [ClassesController::class, 'classesAll']);
 Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
+Route::put('classes/edit/{id}', [ClassesController::class, 'edit']);
 Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::post('classes', [ClassesController::class, 'store']);
 Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
