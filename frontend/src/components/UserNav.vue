@@ -67,6 +67,30 @@
           </div>
         </div>
       </ul>
+      <ul>
+        <div class="py-4">
+          <div class="relative inline-block">
+            <button
+              @click="toggleDropdown2"
+              class="px-4 py-2 font-bold text-black rounded cursor-pointer"
+            >
+              Name
+            </button>
+            <div
+              v-show="isDropdown2Open"
+              class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14 "
+            >
+              <router-link to="/site_management"
+                ><li
+                  class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
+                >
+                <i class="bg-red-600 fa fa-sign-out"></i> Logout  
+                </li></router-link
+              >
+            </div>
+          </div>
+        </div>  
+      </ul>
     </nav>
   </div>
 </template>
@@ -82,12 +106,17 @@ export default {
   data() {
     return {
       logo,
+      
       isDropdownOpen: false,
+      isDropdown2Open: false,
     };
   },
   methods: {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
+    },
+    toggleDropdown2() {
+      this.isDropdown2Open = !this.isDropdown2Open;
     },
   },
 };

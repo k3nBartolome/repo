@@ -30,14 +30,6 @@ export default createStore({
     setToken(state, token) {
       state.token = token;
     },
-    logout(state) {
-      state.user = null;
-      state.token = null;
-      state.role = null;
-      state.user_id = null;
-      // clear the sessionStorage
-      sessionStorage.clear();
-    },
   },
   actions: {},
   getters: {

@@ -4,8 +4,10 @@ Cheryll
 Christito
 Classe
 Dela
+editcapfile
 hoverable
 li
+powerbi
 Punzalan
 pushbackcapfile
 pushedback

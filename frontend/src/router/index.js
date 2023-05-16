@@ -16,6 +16,7 @@ import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.v
 import ProgramManagement from '@/views/Dashboard/AppProgramDashboard.vue';
 import pushbackCapacityFile from "@/views/DashboardNavItems/User/Capfile/PushedBackCapacityFile.vue";
 import cancelCapacityFile from "@/views/DashboardNavItems/User/Capfile/CancelCapacityFile.vue";
+import editCapFile from "@/views/DashboardNavItems/User/Capfile/EditCapfile.vue";
 import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
 
 const routes = [{
@@ -42,6 +43,11 @@ const routes = [{
         path: "/cancelcapfile/:id",
         name: "cancelCapacityFile",
         component: cancelCapacityFile,
+      },
+      {
+        path: "/editcapfile/:id",
+        name: "editCapFile",
+        component: editCapFile,
       },
       {
         path: "/addcapfile/:id",

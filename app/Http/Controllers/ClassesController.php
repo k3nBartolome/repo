@@ -70,8 +70,8 @@ class ClassesController extends Controller
         }
 
         return response()->json([
-        'class' => $class,
-    ]);
+            'class' => $class,
+        ]);
     }
 
     public function transaction($id)
@@ -83,8 +83,8 @@ class ClassesController extends Controller
         }
 
         $classes = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
-                    ->where('pushedback_id', $class->pushedback_id)
-                    ->get();
+            ->where('pushedback_id', $class->pushedback_id)
+            ->get();
 
         return response()->json([
             'classes' => $classes,
@@ -94,67 +94,47 @@ class ClassesController extends Controller
     public function classesall()
     {
         $classes = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
-                    ->where('status', 'Active')
-                    ->get();
+            ->where('status', 'Active')
+            ->get();
 
         return response()->json([
             'classes' => $classes,
         ]);
     }
 
-    public function check($siteId, $programId, $dateRangeId)
-    {
-        $validated = $request->validate([
-        'site' => 'required|exists:sites_id',
-        'program' => 'required|exists:programs_id',
-        'daterange' => 'required|exists:daterange_id',
-    ]);
-
-        $existingRecord = Classes::where([
-        'program_id' => $validated['program'],
-        'site_id' => $validated['site'],
-        'date_range_id' => $validated['daterange'],
-    ])->first();
-
-        if ($existingRecord) {
-            // Record with same combination already exists, return error
-            return response()->json(['message' => 'Record already exists'], 400);
-        }
-    }
-
     public function pushedback(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-        'notice_weeks' => 'required',
-        'notice_days' => 'required',
-        'external_target' => 'required',
-        'internal_target' => 'required',
-        'total_target' => 'required',
-        'type_of_hiring' => 'required',
-        'within_sla' => 'required',
-        'with_erf' => 'required',
-        'erf_number' => 'nullable',
-        'remarks' => 'required',
-        'status' => 'required',
-        'approved_status' => 'required',
-        'original_start_date' => 'required',
-        'wfm_date_requested' => 'nullable',
-        'program_id' => 'required',
-        'site_id' => 'required',
-        'date_range_id' => 'required',
-        'category' => 'required',
-        'requested_by' => 'required',
-        'agreed_start_date' => 'required',
-        'condition' => 'required',
-        'approved_by' => 'required',
-        'updated_by' => 'required',
-        'changes' => 'required',
-        'wf' => 'nullable',
+            'notice_weeks' => 'required',
+            'notice_days' => 'required',
+            'external_target' => 'required',
+            'internal_target' => 'required',
+            'total_target' => 'required',
+            'type_of_hiring' => 'required',
+            'within_sla' => 'required',
+            'with_erf' => 'required',
+            'erf_number' => 'nullable',
+            'remarks' => 'required',
+            'status' => 'required',
+            'approved_status' => 'required',
+            'original_start_date' => 'required',
+            'wfm_date_requested' => 'nullable',
+            'program_id' => 'required',
+            'site_id' => 'required',
+            'date_range_id' => 'required',
+            'category' => 'required',
+            'requested_by' => 'required',
+            'agreed_start_date' => 'required',
+            'condition' => 'required',
+            'approved_by' => 'required',
+            'updated_by' => 'required',
+            'changes' => 'required',
+            'wf' => 'nullable',
             'tr' => 'nullable',
             'op' => 'nullable',
             'ta' => 'nullable',
             'cl' => 'nullable',
-         ]);
+        ]);
         $requested_by = [$request->requested_by];
         $condition = [$request->condition];
         if ($validator->fails()) {
@@ -171,6 +151,58 @@ class ClassesController extends Controller
         $newClass->condition = json_encode($condition);
         $newClass->fill($request->all());
         $newClass->save();
+
+        return new ClassesResource($newClass);
+    }
+    public function edit(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'notice_weeks' => 'required',
+            'notice_days' => 'required',
+            'external_target' => 'required',
+            'internal_target' => 'required',
+            'total_target' => 'required',
+            'type_of_hiring' => 'required',
+            'within_sla' => 'required',
+            'with_erf' => 'required',
+            'erf_number' => 'nullable',
+            'remarks' => 'required',
+            'status' => 'required',
+            'approved_status' => 'required',
+            'original_start_date' => 'required',
+            'wfm_date_requested' => 'nullable',
+            'program_id' => 'required',
+            'site_id' => 'required',
+            'date_range_id' => 'required',
+            'category' => 'required',
+            'requested_by' => 'required',
+            'agreed_start_date' => 'required',
+            'condition' => 'required',
+            'approved_by' => 'required',
+            'updated_by' => 'required',
+            'changes' => 'required',
+            'wf' => 'nullable',
+            'tr' => 'nullable',
+            'op' => 'nullable',
+            'ta' => 'nullable',
+            'cl' => 'nullable',
+        ]);
+        $requested_by = [$request->requested_by];
+        $condition = [$request->condition];
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $class = Classes::find($id);
+        $class->fill($request->all());
+        $class->save();
+        /* $newClass = $class->replicate();
+        $newClass->update_status = $class->update_status + 1;
+        $newClass->changes = 'Pushedback';
+        $newClass->requested_by = json_encode($requested_by);
+        $newClass->condition = json_encode($condition);
+        $newClass->fill($request->all());
+        $newClass->save(); */
 
         return new ClassesResource($newClass);
     }

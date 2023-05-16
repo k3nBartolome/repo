@@ -132,7 +132,7 @@
                   <button
                     class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >
-                    Pushback
+                    Update/Pushback
                   </button>
                 </router-link>
                 <router-link :to="`/cancelcapfile/${classes.id}`">
@@ -140,6 +140,13 @@
                     class="flex items-center justify-center px-4 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >
                     Cancel
+                  </button>
+                </router-link>
+                <router-link :to="`/editcapfile/${classes.id}`">
+                  <button
+                    class="flex items-center justify-center px-4 py-2 ml-6 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                  >
+                    Edit
                   </button>
                 </router-link>
               </div>

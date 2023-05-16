@@ -131,6 +131,9 @@
               <option value="Outside Sla-Change in Process/Assessments">
                 Outside Sla-Change in Process/Assessments
               </option>
+              <option value="Outside Sla-New class added">
+                Outside Sla-New class added
+              </option>
               <option value="OV Support">OV Support</option>
             </select>
           </label>
@@ -138,15 +141,15 @@
             <select required v-model="approved_by"
               class="block w-full mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
               <option disabled value="" selected>Please select one</option>
-              <option value="SD Sheila Y">SD Sheila Y</option>
-              <option value="CS/Ops">CS/Ops</option>
-              <option value="WF/Ops">WF/Ops</option>
-              <option value="Cheryll Punzalan">Cheryll Punzalan</option>
-              <option value="Daniel Dela Vega">Daniel Dela Vega</option>
-              <option value="Christito Villaprudente">Christito Villaprudente</option>
-              <option value="VP Sheryll">VP Sheryll</option>
-              <option value="Kim De Guzman">Kim De Guzman</option>
-              <option value="Ryan Tomzer">Ryan Tomzer</option>
+              <option value="VP-Ops">VP-Ops</option>
+              <option value="VP-Training">VP-Training</option>
+              <option value="VP-WF">VP-WF</option>
+              <option value="VP-TA">VP-TA</option>
+              <option value="CS">CS</option>
+              <option value="WF">WF</option>
+              <option value="Ops">Ops</option>
+              <option value="Training">Training</option>
+              <option value="TA">TA</option>
             </select>
           </label>
         </div>
@@ -219,6 +222,9 @@
             <label class="flex items-start">
               <input type="checkbox" v-model="condition" value="Agreed ramp plan with WF, CS, PMO" class="ml-2" /><span
                 class="ml-2">Agreed ramp plan with WF, CS, PMO</span></label>
+                <label class="flex items-start">
+                  <input type="checkbox" v-model="condition" value="Class to be filled internally" class="ml-2" /><span
+                    class="ml-2">Class to be filled internally</span></label>
           </label>
           <label class="block py-6">Remarks<textarea required type="text" v-model="remarks"
               class="block w-full h-20 mt-1 border rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100" />
