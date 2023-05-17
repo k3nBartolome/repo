@@ -8,11 +8,13 @@ editcapfile
 hoverable
 li
 powerbi
+programmanagementedit
 Punzalan
 pushbackcapfile
 pushedback
 sched
 Sheryll
+sitemanagementedit
 Tomzer
 tooltiptext
 Villaprudente

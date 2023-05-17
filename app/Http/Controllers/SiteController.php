@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\SiteResource;
 use App\Models\Site;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class SiteController extends Controller
@@ -48,8 +48,9 @@ class SiteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(Site $site)
+    public function show($id)
     {
+        $site = Site::FindOrFail($id);
         return new SiteResource($site);
     }
 
@@ -58,20 +59,27 @@ class SiteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Site $site)
+    public function update(Request $request, $id)
     {
-        $validatedData = $request->validate([
-            'name' => 'sometimes|unique:sites,name,'.$site->id,
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes|unique:sites,name,' . $id,
             'description' => 'sometimes',
             'site_director' => 'sometimes',
             'region' => 'sometimes',
-            'is_active' => Rule::in(['0', '1']),
+            'updated_by' => 'sometimes',
         ]);
 
-        $validatedData['updated_by'] = auth()->user()->id;
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
 
-        $site->update($validatedData);
+        $site = Site::find($id);
+        if (!$site) {
+            return response()->json(['error' => 'Site not found'], 404);
+        }
 
+        $site->fill($request->all());
+        $site->save();
         return new SiteResource($site);
     }
 
@@ -80,10 +88,17 @@ class SiteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Site $site)
+    public function destroy($id)
     {
+        $site = Site::find($id);
+
+        if (!$site) {
+            return response()->json(['error' => 'Site not found'], 404);
+        }
+
         $site->delete();
 
         return response()->json(null, 204);
     }
+
 }

@@ -312,11 +312,16 @@
         <div class="flex justify-between">
           <router-link to="/capfile">
             <button
-              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
+              class="px-4 py-1 ml-auto text-white bg-blue-600 rounded hover:bg-gray-600"
             >
               <i class="fa fa-chevron-circle-left"></i> Back
             </button></router-link
           >
+          <button  @click="deleteClasses(classes.id)"
+              class="px-4 py-1 ml-auto text-white bg-red-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-warning"></i> Delete
+            </button>
         </div>
       </div>
     </form>
@@ -468,6 +473,20 @@ export default {
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    async deleteClasses() {
+      await axios
+      .delete("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .then((response) => {
+          this.classes = response.data.data;
+          console.log(response.data.data);
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error);

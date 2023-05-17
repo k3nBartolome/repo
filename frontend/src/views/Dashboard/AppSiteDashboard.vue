@@ -69,21 +69,18 @@
             <td class="px-1 py-2 ">{{ site.updated_by }}</td>
             <td class="px-1 py-2 ">{{ site.updated_at }}</td>
             <td class="px-1 py-2 ">{{ site.is_active === 1 ? 'Active' : 'Inactive' }}</td>
-            <td class="px-2 py-2 "><button @click="getSites(site.id)"
-                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                <i class="fa fa-eye"></i>
-              </button>
-            </td>
+            <router-link :to="`/site_management/edit/${site.id}`">
             <td class="px-2 py-2">
               <button @click="getSites(site.id)"
-                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                <i class="fa fa-edit"></i>
+                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
+                Edit
               </button>
             </td>
+          </router-link>
             <td class="px-2 py-2 ">
-              <button
+              <button @click="deleteSites(site.id)"
                 class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                <i class="fa fa-trash"></i>
+                Delete
               </button>
             </td>
           </tr>
@@ -111,6 +108,18 @@ export default {
     this.getSites();
   },
   methods: {
+    async deleteSites() {
+      await axios
+        .delete("http://10.109.2.112:8081/api/sites/"+ this.$route.params.id)
+        .then((response) => {
+          this.sites = response.data.data;
+          console.log(response.data.data);
+          this.getSites();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async getSites() {
       await axios
         .get("http://10.109.2.112:8081/api/sites")

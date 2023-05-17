@@ -6,20 +6,20 @@ use App\Http\Resources\ProgramResource;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class ProgramController extends Controller
 {
     public function index()
     {
         $programs = Program::with('user', 'createdByUser', 'site', 'classes')->get();
-        
+
         return response()->json(['data' => $programs]);
     }
 
-    public function show(Program $program)
+    public function show($id)
     {
-        return $program;
+        $program = Program::FindOrFail($id);
+        return new ProgramResource($program);
     }
 
     public function store(Request $request)
@@ -41,28 +41,38 @@ class ProgramController extends Controller
         return new ProgramResource($program);
     }
 
-    public function update(Request $request, Program $program)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|required|max:255',
-            'description' => 'sometimes|required',
-            'program_group' => 'sometimes|required',
-            'site_id' => 'sometimes|required|exists:sites,id',
-            'is_active' => Rule::in(['0', '1']),
-            'created_by' => 'nullable',
+            'name' => 'sometimes|unique:programs,name,' . $id,
+            'description' => 'sometimes',
+            'program_group' => 'sometimes',
+            'site_id' => 'sometimes',
+            'updated_by' => 'sometimes',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $program->update($request->all());
+        $program = Program::find($id);
+        if (!$program) {
+            return response()->json(['error' => 'Program not found'], 404);
+        }
 
+        $program->fill($request->all());
+        $program->save();
         return new ProgramResource($program);
     }
 
-    public function delete(Program $program)
+    public function destroy($id)
     {
+        $program = Program::find($id);
+
+        if (!$program) {
+            return response()->json(['error' => 'Program not found'], 404);
+        }
+
         $program->delete();
 
         return response()->json(null, 204);

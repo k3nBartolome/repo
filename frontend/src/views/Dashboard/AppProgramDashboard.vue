@@ -101,26 +101,20 @@
               {{ program.is_active == 1 ? "Active" : "Inactive" }}
             </td>
             <td class="px-2 py-2">
+              <router-link :to="`/program_management/edit/${program.id}`">
               <button
                 @click="getPrograms(program.id)"
                 class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
-                <i class="fa fa-eye"></i>
+                Edit
               </button>
+            </router-link>
             </td>
             <td class="px-2 py-2">
-              <button
-                @click="getPrograms(program.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-green-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                <i class="fa fa-edit"></i>
-              </button>
-            </td>
-            <td class="px-2 py-2">
-              <button
+              <button @click="deletePrograms(program.id)"
                 class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
-                <i class="fa fa-trash"></i>
+                Delete
               </button>
             </td>
           </tr>
@@ -163,12 +157,25 @@ export default {
     },
   },
   methods: {
+    async deletePrograms() {
+      await axios
+        .delete("http://10.109.2.112:8081/api/programs/"+ this.$route.params.id)
+        .then((response) => {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+          this.getPrograms();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     async getPrograms() {
       await axios
         .get("http://10.109.2.112:8081/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
+          
         })
         .catch((error) => {
           console.log(error);

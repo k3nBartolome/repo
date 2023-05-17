@@ -51,11 +51,17 @@ class ClassesController extends Controller
         return new ClassesResource($class);
     }
 
-    public function destroy(Classes $class)
+    public function destroy($id)
     {
-        $class->delete();
+        $classes = Classes::find($id);
 
-        return response(null, 204);
+        if (!$classes) {
+            return response()->json(['error' => 'Classes not found'], 404);
+        }
+
+        $classes->delete();
+
+        return response()->json(null, 204);
     }
 
     public function show($id)

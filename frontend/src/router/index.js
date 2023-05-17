@@ -10,6 +10,8 @@ import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
+import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
+import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
 import SiteManagement from '@/views//Dashboard/AppSiteDashboard.vue';
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
 import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.vue";
@@ -60,9 +62,19 @@ const routes = [{
         component: SiteManagement,
       },
       {
+        path: "/site_management/edit/:id",
+        name: "sitemanagementedit",
+        component: siteManagementEdit,
+      },
+      {
         path: "/program_management",
         name: "programmanagement",
         component: ProgramManagement,
+      },
+      {
+        path: "/program_management/edit/:id",
+        name: "programmanagementedit",
+        component: programManagementEdit,
       },
     ],
   },
