@@ -45,9 +45,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function sites()
+    public function sitesCreated()
     {
         return $this->hasMany(Site::class, 'created_by');
+    }
+
+    public function sitesUpdated()
+    {
+        return $this->hasMany(Site::class, 'updated_by');
     }
 
     public function programs()
@@ -55,28 +60,4 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\Program');
     }
 
-    public function sla_reasons()
-    {
-        return $this->hasMany('App\Models\Sla_reason');
-    }
-
-    public function created_by()
-    {
-        return $this->hasMany('App\Models\Class', 'created_by');
-    }
-
-    public function approved_by()
-    {
-        return $this->hasMany('App\Models\Class', 'approved_by');
-    }
-
-    public function cancelled_by()
-    {
-        return $this->hasMany('App\Models\Class', 'cancelled_by');
-    }
-
-    public function updated_by()
-    {
-        return $this->hasMany('App\Models\Class', 'created_by');
-    }
 }

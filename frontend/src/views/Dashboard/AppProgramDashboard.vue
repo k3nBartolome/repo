@@ -157,9 +157,9 @@ export default {
     },
   },
   methods: {
-    async deletePrograms() {
+    async deletePrograms(id) {
       await axios
-        .delete("http://10.109.2.112:8081/api/programs/"+ this.$route.params.id)
+        .delete("http://10.109.2.112:8081/api/programs/"+ id)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);

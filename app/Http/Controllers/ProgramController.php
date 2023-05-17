@@ -48,7 +48,6 @@ class ProgramController extends Controller
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
-            'updated_by' => 'sometimes',
         ]);
 
         if ($validator->fails()) {

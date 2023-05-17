@@ -17,7 +17,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites = Site::with('createdBy')->get();
+        $sites = Site::with(['created_by', 'updatedByUser'])->get();
 
         return response()->json(['data' => $sites]);
     }
@@ -66,7 +66,7 @@ class SiteController extends Controller
             'description' => 'sometimes',
             'site_director' => 'sometimes',
             'region' => 'sometimes',
-            'updated_by' => 'sometimes',
+            'updated_by' => 'nullable',
         ]);
 
         if ($validator->fails()) {

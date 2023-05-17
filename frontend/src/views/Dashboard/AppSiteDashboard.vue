@@ -66,9 +66,9 @@
             <td class="px-1 py-2 ">{{ site.site_director }}</td>
             <td class="px-1 py-2 ">{{ site.created_by.name }}</td>
             <td class="px-1 py-2 ">{{ site.created_at }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_by }}</td>
+            <td class="px-1 py-2 ">{{ site.updated_by_user(name) }}</td>
             <td class="px-1 py-2 ">{{ site.updated_at }}</td>
-            <td class="px-1 py-2 ">{{ site.is_active === 1 ? 'Active' : 'Inactive' }}</td>
+            <td class="px-1 py-2 ">{{ site.is_active == 1 ? 'Active' : 'Inactive' }}</td>
             <router-link :to="`/site_management/edit/${site.id}`">
             <td class="px-2 py-2">
               <button @click="getSites(site.id)"
@@ -108,9 +108,9 @@ export default {
     this.getSites();
   },
   methods: {
-    async deleteSites() {
+    async deleteSites(id) {
       await axios
-        .delete("http://10.109.2.112:8081/api/sites/"+ this.$route.params.id)
+        .delete("http://10.109.2.112:8081/api/sites/"+ id)
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);

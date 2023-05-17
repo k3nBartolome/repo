@@ -24,9 +24,14 @@ class Site extends Model
         return $this->hasMany(User::class);
     }
 
-    public function createdBy()
+    public function created_by()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function updatedByUser()
+    {
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     public function programs()
