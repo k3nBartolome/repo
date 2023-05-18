@@ -66,7 +66,7 @@
             <td class="px-1 py-2 ">{{ site.site_director }}</td>
             <td class="px-1 py-2 ">{{ site.created_by.name }}</td>
             <td class="px-1 py-2 ">{{ site.created_at }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_by_user(name) }}</td>
+            <td class="px-1 py-2 ">{{ site.updated_by }}</td>
             <td class="px-1 py-2 ">{{ site.updated_at }}</td>
             <td class="px-1 py-2 ">{{ site.is_active == 1 ? 'Active' : 'Inactive' }}</td>
             <router-link :to="`/site_management/edit/${site.id}`">

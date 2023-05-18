@@ -33,7 +33,11 @@
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="program in programs" :key="program.id" :value="program.id">
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
               {{ program.name }}
             </option>
           </select>
@@ -111,7 +115,9 @@
 
       <table class="w-full text-white table-auto">
         <thead>
-          <tr class="text-center bg-orange-500 border-2 border-orange-600 border-solid">
+          <tr
+            class="text-center bg-orange-500 border-2 border-orange-600 border-solid"
+          >
             <th class="px-1 py-2">ID</th>
             <th class="px-2 py-2 truncate" colspan="1">Action</th>
             <th class="px-1 py-2">Total Target</th>
@@ -125,7 +131,9 @@
           <tr
             class="font-semibold text-center text-black bg-white border-2 border-gray-400 border-solid align-center"
           >
-            <td class="px-1 py-2 border border-black">{{ classes.pushedback_id }}</td>
+            <td class="px-1 py-2 border border-black">
+              {{ classes.pushedback_id }}
+            </td>
             <td class="px-2 py-2 truncate">
               <div class="flex justify-center mt-2">
                 <router-link :to="`/pushbackcapfile/${classes.id}`">
@@ -151,9 +159,15 @@
                 </router-link>
               </div>
             </td>
-            <td class="px-1 py-2 border border-black">{{ classes.total_target }}</td>
-            <td class="px-1 py-2 border border-black">{{ classes.site.name }}</td>
-            <td class="px-1 py-2 border border-black">{{ classes.program.name }}</td>
+            <td class="px-1 py-2 border border-black">
+              {{ classes.total_target }}
+            </td>
+            <td class="px-1 py-2 border border-black">
+              {{ classes.site.name }}
+            </td>
+            <td class="px-1 py-2 border border-black">
+              {{ classes.program.name }}
+            </td>
             <td class="px-1 py-2 border border-black">
               {{ classes.date_range.date_range }}
             </td>
@@ -189,7 +203,9 @@ export default {
           classes.date_range.date_range
             .toLowerCase()
             .includes(this.search.toLowerCase()) ||
-          classes.program.name.toLowerCase().includes(this.search.toLowerCase()) ||
+          classes.program.name
+            .toLowerCase()
+            .includes(this.search.toLowerCase()) ||
           classes.site.name.toLowerCase().includes(this.search.toLowerCase())
       );
     },
@@ -238,13 +254,15 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
 
@@ -254,7 +272,9 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+        )
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);

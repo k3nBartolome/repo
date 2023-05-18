@@ -79,8 +79,9 @@ class ProgramController extends Controller
 
     public function indexBySite($siteId)
     {
-        $programs = Program::where('site_id', $siteId)->get();
+        $programs = Program::where('site_id', $siteId)->get()->sortByDesc('name');
 
         return response()->json(['data' => $programs]);
     }
+
 }
