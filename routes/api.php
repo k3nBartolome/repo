@@ -51,16 +51,22 @@ Route::get('/show_permission/{id}', [PermissionController::class, 'show']);
 
 //Site Routes
 Route::get('sites', [SiteController::class, 'index']);
+Route::get('sites2', [SiteController::class, 'index2']);
 Route::get('sites/{id}', [SiteController::class, 'show']);
 Route::post('sites', [SiteController::class, 'store']);
 Route::put('sites/{id}', [SiteController::class, 'update']);
+Route::put('sites_activate/{id}', [SiteController::class, 'activate']);
+Route::put('sites_deactivate/{id}', [SiteController::class, 'deactivate']);
 Route::delete('sites/{id}', [SiteController::class, 'destroy']);
 
 //Program Routes
 Route::get('programs', [ProgramController::class, 'index']);
+Route::get('programs2', [ProgramController::class, 'index2']);
 Route::get('programs/{id}', [ProgramController::class, 'show']);
 Route::post('programs', [ProgramController::class, 'store']);
 Route::put('programs/{id}', [ProgramController::class, 'update']);
+Route::put('programs_activate/{id}', [ProgramController::class, 'activate']);
+Route::put('programs_deactivate/{id}', [ProgramController::class, 'deactivate']);
 Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
 Route::get('programs_selected/{siteId}', [ProgramController::class, 'indexBySite']);
 

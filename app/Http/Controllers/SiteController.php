@@ -17,7 +17,17 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])->get();
+        $sites = Site::with(['created_by', 'updatedByUser'])
+            ->where('is_active', 1)
+            ->get();
+
+        return response()->json(['data' => $sites]);
+    }
+    public function index2()
+    {
+        $sites = Site::with(['created_by', 'updatedByUser'])
+            ->where('is_active', 0)
+            ->get();
 
         return response()->json(['data' => $sites]);
     }
@@ -99,6 +109,44 @@ class SiteController extends Controller
         $site->delete();
 
         return response()->json(null, 204);
+    }
+    public function deactivate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_Active' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = Site::find($id);
+        if (!$site) {
+            return response()->json(['error' => 'Site not found'], 404);
+        }
+
+        $site->fill($request->all());
+        $site->save();
+        return new SiteResource($site);
+    }
+    public function activate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_Active' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = Site::find($id);
+        if (!$site) {
+            return response()->json(['error' => 'Site not found'], 404);
+        }
+
+        $site->fill($request->all());
+        $site->save();
+        return new SiteResource($site);
     }
 
 }

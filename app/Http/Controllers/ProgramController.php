@@ -11,7 +11,17 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::with('user', 'createdByUser', 'site', 'classes')->get();
+        $programs = Program::with('user', 'createdByUser', 'site', 'classes')
+            ->where('is_active', 1)
+            ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+    public function index2()
+    {
+        $programs = Program::with('user', 'createdByUser', 'site', 'classes')
+            ->where('is_active', 0)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -79,9 +89,49 @@ class ProgramController extends Controller
 
     public function indexBySite($siteId)
     {
-        $programs = Program::where('site_id', $siteId)->get()->sortByDesc('name');
+        $programs = Program::where('site_id', $siteId)
+            ->where('is_active', 1)
+            ->get()->sortByDesc('name');
 
         return response()->json(['data' => $programs]);
+    }
+    public function deactivate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_active' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $program = Program::find($id);
+        if (!$program) {
+            return response()->json(['error' => 'Program not found'], 404);
+        }
+
+        $program->fill($request->all());
+        $program->save();
+        return new ProgramResource($program);
+    }
+    public function activate(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'is_active' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $program = Program::find($id);
+        if (!$program) {
+            return response()->json(['error' => 'Program not found'], 404);
+        }
+
+        $program->fill($request->all());
+        $program->save();
+        return new ProgramResource($program);
     }
 
 }
