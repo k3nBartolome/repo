@@ -3,6 +3,7 @@ cancelcapfile
 Cheryll
 Christito
 Classe
+classesall
 Dela
 editcapfile
 hoverable
