@@ -29,7 +29,13 @@
           >
             Capacity File
           </li></router-link
+        ><router-link to="/staffing"
+        ><li
+          class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
         >
+          Staffing Tracker
+        </li></router-link
+      >
         <router-link to="/powerbi"
           ><li
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"

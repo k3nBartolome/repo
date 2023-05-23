@@ -20,6 +20,7 @@ import pushbackCapacityFile from "@/views/DashboardNavItems/User/Capfile/PushedB
 import cancelCapacityFile from "@/views/DashboardNavItems/User/Capfile/CancelCapacityFile.vue";
 import editCapFile from "@/views/DashboardNavItems/User/Capfile/EditCapfile.vue";
 import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
+import StaffingTracker from "@/views/DashboardNavItems/User/StaffingTracker.vue";
 
 const routes = [{
     path: "/",
@@ -30,6 +31,11 @@ const routes = [{
         path: "/capfile",
         name: "capacityFile",
         component: capacityFile,
+      },
+      {
+        path: "/staffing",
+        name: "StaffingTracker",
+        component: StaffingTracker,
       },
       {
         path: "/powerbi",
