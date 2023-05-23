@@ -196,7 +196,7 @@
               required
               v-model="approved_by"
               class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            > 
+            >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -303,9 +303,9 @@
         </div>
         <div class="flex justify-center py-4">
           <button
-          v-if="!classExists"
-          type="submit"
-          :disabled="classExists"
+            v-if="!classExists"
+            type="submit"
+            :disabled="classExists"
             class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
           >
             <i class="fa fa-save"></i> Save
@@ -319,11 +319,12 @@
               <i class="fa fa-chevron-circle-left"></i> Back
             </button></router-link
           >
-          <button  @click="deleteClasses(classes.id)"
-              class="px-4 py-1 ml-auto text-white bg-red-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-warning"></i> Delete
-            </button>
+          <button
+            @click="deleteClasses(classes.id)"
+            class="px-4 py-1 ml-auto text-white bg-red-500 rounded hover:bg-gray-600"
+          >
+            <i class="fa fa-warning"></i> Delete
+          </button>
         </div>
       </div>
     </form>
@@ -406,19 +407,34 @@ export default {
       disableForm: true,
       requested_by: [],
       classes: [],
+      classes1: [],
       databaseValue: "",
     };
   },
   computed: {
     classExists() {
-      return this.classes.some((c) => {
+    const selectedSite = this.sites_selected;
+    const selectedProgram = this.programs_selected;
+    const selectedDate = this.date_selected;
+    const currentId = parseInt(this.$route.params.id);
+    
+    if (selectedSite && selectedProgram && selectedDate) {
+      const matchingClasses = this.classes1.filter((c) => {
         return (
-          c.site.id === this.sites_selected &&
-          c.program.id === this.programs_selected &&
-          c.date_range.id === this.date_selected
+          c.site.id === selectedSite &&
+          c.program.id === selectedProgram &&
+          c.date_range.id === selectedDate &&
+          c.id !== currentId
         );
       });
-    },
+
+      return matchingClasses.length > 0;
+    }
+
+    return false; 
+  },
+   
+
     isTargetDisabled() {
       if (this.changes === "Change Dates") {
         return true;
@@ -479,16 +495,19 @@ export default {
       this.notice_weeks = this.notice_weeks_computed;
     },
     async getClassesAll() {
-      await axios
-        .get("http://10.109.2.112:8081/api/classesall")
-        .then((response) => {
-          this.classes = response.data.classes;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+  try {
+    const response = await axios.get("http://10.109.2.112:8081/api/classesall");
+    const allClasses = response.data.classes;
+    const currentId = this.$route.params.id;
+    this.classes1 = allClasses.filter((c) => c.id !== parseInt(currentId));
+
+    console.log(response.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
     async getSites() {
       console.log(this.sites_selected);
       await axios
@@ -503,7 +522,7 @@ export default {
     },
     async deleteClasses() {
       await axios
-      .delete("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .delete("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.data;
           console.log(response.data.data);
@@ -627,8 +646,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/edit/" +
-            this.$route.params.id,
+          "http://10.109.2.112:8081/api/classes/edit/" + this.$route.params.id,
           formData
         )
         .then((response) => {
