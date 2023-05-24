@@ -142,6 +142,14 @@
               </option>
             </select>
           </label>
+          <label class="block">
+            Wave Number
+            <input
+              type="text"
+              v-model="wave_no"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
           <label class="block"
             >Category
             <select
@@ -389,6 +397,7 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
+      wave_no:"",
       category: "",
       approved_by: "",
       notice_days: 0,
@@ -643,6 +652,7 @@ export default {
         tr: this.tr,
         cl: this.cl,
         op: this.op,
+        wave_no:this.wave_no,
       };
       axios
         .put(
@@ -678,6 +688,7 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
+          this.wave_no="";
           this.$router.push("/capfile", () => {
             location.reload();
           });

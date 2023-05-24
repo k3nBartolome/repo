@@ -185,6 +185,7 @@ class ClassesController extends Controller
             'op' => 'nullable',
             'ta' => 'nullable',
             'cl' => 'nullable',
+            'wave_no' => 'nullable',
         ]);
         $requested_by = [$request->requested_by];
         if ($validator->fails()) {
