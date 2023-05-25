@@ -72,7 +72,8 @@
         "ZINUS"
     ],
     "ignoreWords": [
-        "classesall"
+        "classesall",
+        "emps"
     ],
     "import": []
 }
