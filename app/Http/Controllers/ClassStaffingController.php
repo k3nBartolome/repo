@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\c;
+use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
 
 class ClassStaffingController extends Controller
@@ -14,7 +14,6 @@ class ClassStaffingController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**
@@ -24,62 +23,59 @@ class ClassStaffingController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\c  $c
      * @return \Illuminate\Http\Response
      */
-    public function show(c $c)
+    public function show($id)
     {
-        //
+        $class = ClassesStaffing::with(['classes'])->find($id);
+
+        if (!$class) {
+            return response()->json(['error' => 'Classes not found'], 404);
+        }
+
+        return response()->json([
+            'class' => $class,
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\c  $c
      * @return \Illuminate\Http\Response
      */
-    public function edit(c $c)
+    public function edit(ClassStaffing $ClassStaffing)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\c  $c
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, c $c)
+    public function update(Request $request, ClassStaffing $ClassStaffing)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\c  $c
      * @return \Illuminate\Http\Response
      */
-    public function destroy(c $c)
+    public function destroy(ClassStaffing $ClassStaffing)
     {
-        //
     }
 }

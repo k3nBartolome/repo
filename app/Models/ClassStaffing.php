@@ -26,8 +26,11 @@ class ClassStaffing extends Model
         'day_8_start_rate',
         'total_endorsed',
         'endorsed_rate',
-        'internals',
-        'externals',
+        'internals_hires',
+        'externals_hires',
+        'internals_hires_all',
+        'externals_hires_all',
+        'add_extender_jo',
         'with_jo',
         'pending_jo',
         'pending_berlitz',
@@ -35,16 +38,19 @@ class ClassStaffing extends Model
         'pending_pre_emps',
         'additional_remarks',
         'pipeline',
+        'pipeline_target',
+        'pipeline_total',
+        'percentage',
         'show_ups_internal',
         'show_ups_external',
         'show_ups_total',
         'deficit',
+        'deficit_total',
         'fill_Rate',
+        'hiring_status',
         'status',
         'over_hires',
-        'wave_no',
         'fallout_reason',
-        'target',
         'catch_up_start',
         'catch_up_percentage',
         'classes_id',
@@ -56,5 +62,4 @@ class ClassStaffing extends Model
     {
         return $this->belongsTo(Classes::classes, 'classes_id');
     }
-
 }

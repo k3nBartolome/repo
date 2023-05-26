@@ -154,6 +154,7 @@ class ClassesController extends Controller
 
         return new ClassesResource($newClass);
     }
+
     public function edit(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
