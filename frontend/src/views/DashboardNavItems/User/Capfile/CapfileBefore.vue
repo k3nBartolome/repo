@@ -142,7 +142,7 @@
     methods: {
       async fetchWeekData() {
         try {
-          const response = await axios.get("http://127.0.0.1:8000/api/daterange");
+          const response = await axios.get("http://10.109.2.112:8081/api/daterange");
           this.daterange = response.data.data;
         } catch (error) {
           console.error(error);
@@ -150,7 +150,7 @@
       },
       async fetchClassesData() {
         axios
-          .get("http://127.0.0.1:8000/api/classesall")
+          .get("http://10.109.2.112:8081/api/classesall")
           .then((response) => {
             this.classes = response.data;
             console.log(this.classes);
