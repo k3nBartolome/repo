@@ -13,7 +13,7 @@
       >
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
-            Site
+            Classes
             <select
               v-model="class_selected"
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -21,8 +21,8 @@
               @change="getClassesAll"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="classesall in classesall" :key="classesall.id" :value="classesAll.id">
-                {{ classesall.site }}{{classes.program}}{{ classesall.date_range }}{{ classesall.total_target }}
+              <option v-for="classesall in classesall" :key="classesall.id" :value="classesall.id">
+                {{ classesall.site.name }} {{classesall.program.name}} {{ classesall.date_range.date_range }} {{ classesall.total_target }}
               </option>
             </select>
           </label>
@@ -50,7 +50,7 @@ export default {
       await axios
         .get("http://10.109.2.112:8081/api/classesall")
         .then((response) => {
-          this.classesall = response.data.data;
+          this.classesall = response.data.classes;
           console.log(response.data.data);
         })
         .catch((error) => {
