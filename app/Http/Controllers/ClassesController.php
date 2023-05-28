@@ -96,7 +96,15 @@ class ClassesController extends Controller
 
     public function classesall()
     {
-        $classes = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])
+        $classes = Classes::with([
+            'site' => function ($query) {
+                $query->where('country', 'Philippines');
+            },
+            'program',
+            'dateRange',
+            'createdByUser',
+            'updatedByUser',
+        ])
             ->where('status', 'Active')
             ->get();
 

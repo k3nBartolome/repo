@@ -11,7 +11,9 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::with('user', 'createdByUser', 'site', 'classes')
+        $programs = Program::with(['site' => function ($query) {
+            $query->where('country', 'Philippines');
+        }, 'user', 'createdByUser', 'classes'])
             ->where('is_active', 1)
             ->get();
 
@@ -19,7 +21,9 @@ class ProgramController extends Controller
     }
     public function index2()
     {
-        $programs = Program::with('user', 'createdByUser', 'site', 'classes')
+        $programs = Program::with(['site' => function ($query) {
+            $query->where('country', 'Philippines');
+        }, 'user', 'createdByUser', 'classes'])
             ->where('is_active', 0)
             ->get();
 

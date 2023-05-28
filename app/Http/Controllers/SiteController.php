@@ -19,6 +19,7 @@ class SiteController extends Controller
     {
         $sites = Site::with(['created_by', 'updatedByUser'])
             ->where('is_active', 1)
+            ->where('country', 'Philippines')
             ->get();
 
         return response()->json(['data' => $sites]);
@@ -27,6 +28,7 @@ class SiteController extends Controller
     {
         $sites = Site::with(['created_by', 'updatedByUser'])
             ->where('is_active', 0)
+            ->where('country', 'Philippines')
             ->get();
 
         return response()->json(['data' => $sites]);
