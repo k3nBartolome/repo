@@ -24,11 +24,32 @@ class SiteController extends Controller
 
         return response()->json(['data' => $sites]);
     }
+
     public function index2()
     {
         $sites = Site::with(['created_by', 'updatedByUser'])
             ->where('is_active', 0)
             ->where('country', 'Philippines')
+            ->get();
+
+        return response()->json(['data' => $sites]);
+    }
+
+    public function index3()
+    {
+        $sites = Site::with(['created_by', 'updatedByUser'])
+            ->where('is_active', 1)
+            ->where('country', 'India')
+            ->get();
+
+        return response()->json(['data' => $sites]);
+    }
+
+    public function index4()
+    {
+        $sites = Site::with(['created_by', 'updatedByUser'])
+            ->where('is_active', 0)
+            ->where('country', 'India')
             ->get();
 
         return response()->json(['data' => $sites]);
@@ -63,6 +84,7 @@ class SiteController extends Controller
     public function show($id)
     {
         $site = Site::FindOrFail($id);
+
         return new SiteResource($site);
     }
 
@@ -74,7 +96,7 @@ class SiteController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:sites,name,' . $id,
+            'name' => 'sometimes|unique:sites,name,'.$id,
             'description' => 'sometimes',
             'site_director' => 'sometimes',
             'region' => 'sometimes',
@@ -92,6 +114,7 @@ class SiteController extends Controller
 
         $site->fill($request->all());
         $site->save();
+
         return new SiteResource($site);
     }
 
@@ -112,6 +135,7 @@ class SiteController extends Controller
 
         return response()->json(null, 204);
     }
+
     public function deactivate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -129,8 +153,10 @@ class SiteController extends Controller
 
         $site->fill($request->all());
         $site->save();
+
         return new SiteResource($site);
     }
+
     public function activate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -148,7 +174,7 @@ class SiteController extends Controller
 
         $site->fill($request->all());
         $site->save();
+
         return new SiteResource($site);
     }
-
 }

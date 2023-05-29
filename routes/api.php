@@ -52,6 +52,8 @@ Route::get('/show_permission/{id}', [PermissionController::class, 'show']);
 //Site Routes
 Route::get('sites', [SiteController::class, 'index']);
 Route::get('sites2', [SiteController::class, 'index2']);
+Route::get('sites3', [SiteController::class, 'index3']);
+Route::get('sites4', [SiteController::class, 'index4']);
 Route::get('sites/{id}', [SiteController::class, 'show']);
 Route::post('sites', [SiteController::class, 'store']);
 Route::put('sites/{id}', [SiteController::class, 'update']);
@@ -62,6 +64,8 @@ Route::delete('sites/{id}', [SiteController::class, 'destroy']);
 //Program Routes
 Route::get('programs', [ProgramController::class, 'index']);
 Route::get('programs2', [ProgramController::class, 'index2']);
+Route::get('programs3', [ProgramController::class, 'index3']);
+Route::get('programs4', [ProgramController::class, 'index4']);
 Route::get('programs/{id}', [ProgramController::class, 'show']);
 Route::post('programs', [ProgramController::class, 'store']);
 Route::put('programs/{id}', [ProgramController::class, 'update']);
@@ -76,6 +80,8 @@ Route::get('classes/{id}', [ClassesController::class, 'show']);
 
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('classesall', [ClassesController::class, 'classesAll']);
+Route::get('classesallindia', [ClassesController::class, 'classesAllInd']);
+Route::get('classesalljam', [ClassesController::class, 'classesAllJam']);
 Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
 Route::put('classes/edit/{id}', [ClassesController::class, 'edit']);
 Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);

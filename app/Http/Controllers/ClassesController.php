@@ -96,9 +96,37 @@ class ClassesController extends Controller
 
     public function classesall()
     {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
+
+        return response()->json([
+        'classes' => $classes,
+    ]);
+    }
+
+    public function classesallInd()
+    {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'India');
+        })
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
+
+        return response()->json([
+        'classes' => $classes,
+    ]);
+    }
+
+    public function classesallJam()
+    {
         $classes = Classes::with([
             'site' => function ($query) {
-                $query->where('country', 'Philippines');
+                $query->where('country', 'Jamaica');
             },
             'program',
             'dateRange',

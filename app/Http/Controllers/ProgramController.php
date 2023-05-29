@@ -11,18 +11,44 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::with(['site' => function ($query) {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        ->whereHas('site', function ($query) {
             $query->where('country', 'Philippines');
-        }, 'user', 'createdByUser', 'classes'])
-            ->where('is_active', 1)
-            ->get();
+        })
+        ->where('is_active', 1)
+        ->get();
 
         return response()->json(['data' => $programs]);
     }
+
     public function index2()
     {
-        $programs = Program::with(['site' => function ($query) {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        ->whereHas('site', function ($query) {
             $query->where('country', 'Philippines');
+        })
+        ->where('is_active', 0)
+        ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
+    public function index3()
+    {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        ->whereHas('site', function ($query) {
+            $query->where('country', 'India');
+        })
+        ->where('is_active', 1)
+        ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
+    public function index4()
+    {
+        $programs = Program::with(['site' => function ($query) {
+            $query->where('country', 'India');
         }, 'user', 'createdByUser', 'classes'])
             ->where('is_active', 0)
             ->get();
@@ -33,6 +59,7 @@ class ProgramController extends Controller
     public function show($id)
     {
         $program = Program::FindOrFail($id);
+
         return new ProgramResource($program);
     }
 
@@ -58,7 +85,7 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,' . $id,
+            'name' => 'sometimes|unique:programs,name,'.$id,
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
@@ -75,6 +102,7 @@ class ProgramController extends Controller
 
         $program->fill($request->all());
         $program->save();
+
         return new ProgramResource($program);
     }
 
@@ -99,6 +127,7 @@ class ProgramController extends Controller
 
         return response()->json(['data' => $programs]);
     }
+
     public function deactivate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -116,8 +145,10 @@ class ProgramController extends Controller
 
         $program->fill($request->all());
         $program->save();
+
         return new ProgramResource($program);
     }
+
     public function activate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -135,7 +166,7 @@ class ProgramController extends Controller
 
         $program->fill($request->all());
         $program->save();
+
         return new ProgramResource($program);
     }
-
 }

@@ -1,17 +1,22 @@
 # Custom Dictionary Words
+addcapfileindia
 cancelcapfile
+capfileindia
 Cheryll
 Christito
 Classe
 classesall
 Dela
 editcapfile
+editcapfileindia
 hoverable
 li
+managementindia
 powerbi
 programmanagementedit
 Punzalan
 pushbackcapfile
+pushbackcapfileindia
 pushedback
 sched
 Sheryll
