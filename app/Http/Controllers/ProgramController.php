@@ -12,11 +12,11 @@ class ProgramController extends Controller
     public function index()
     {
         $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
-        ->whereHas('site', function ($query) {
-            $query->where('country', 'Philippines');
-        })
-        ->where('is_active', 1)
-        ->get();
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Philippines');
+            })
+            ->where('is_active', 1)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -24,11 +24,11 @@ class ProgramController extends Controller
     public function index2()
     {
         $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
-        ->whereHas('site', function ($query) {
-            $query->where('country', 'Philippines');
-        })
-        ->where('is_active', 0)
-        ->get();
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Philippines');
+            })
+            ->where('is_active', 0)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -36,11 +36,11 @@ class ProgramController extends Controller
     public function index3()
     {
         $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
-        ->whereHas('site', function ($query) {
-            $query->where('country', 'India');
-        })
-        ->where('is_active', 1)
-        ->get();
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'India');
+            })
+            ->where('is_active', 1)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -85,7 +85,7 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,'.$id,
+            'name' => 'sometimes|unique:programs,name,' . $id,
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',

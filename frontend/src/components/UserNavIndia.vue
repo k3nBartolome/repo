@@ -74,8 +74,22 @@
           </div>
         </div>
       </ul>
+      <ul class="flex items-center space-x-2">
+        <li>
+          <select class="rounded border-gray-300 focus:ring focus:ring-indigo-200 focus:border-indigo-500">
+            <option value="india" class="flex items-center">
+              <span class="rounded-full bg-blue-500 w-3 h-3 mr-2"></span> India
+            </option>
+            <option value="philippines" class="flex items-center">
+              <span class="rounded-full bg-red-500 w-3 h-3 mr-2"></span> Philippines
+            </option>
+          </select>
+        </li>
+      </ul>
+      
       <ul>
         <div class="py-4">
+         
           <div class="relative inline-block">
             <button
               @click="toggleDropdown2"
@@ -134,4 +148,5 @@ export default {
 button:focus {
   outline: none;
 }
+
 </style>

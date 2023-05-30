@@ -62,7 +62,7 @@ class SiteController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|unique:sites',
             'description' => 'required',
             'site_director' => 'required',
@@ -71,9 +71,86 @@ class SiteController extends Controller
             'created_by' => 'nullable',
         ]);
 
-        $site = Site::create($validatedData);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = new SIte();
+        $site->fill($request->all());
+        $site->country = 'Philippines';
+        $site->save();
 
         return new SiteResource($site);
+
+    }
+    public function store2(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:sites',
+            'description' => 'required',
+            'site_director' => 'required',
+            'region' => 'required',
+            'is_active' => Rule::in(['0', '1']),
+            'created_by' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = new SIte();
+        $site->fill($request->all());
+        $site->country = 'India';
+        $site->save();
+
+        return new SiteResource($site);
+
+    }
+    public function store3(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:sites',
+            'description' => 'required',
+            'site_director' => 'required',
+            'region' => 'required',
+            'is_active' => Rule::in(['0', '1']),
+            'created_by' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = new SIte();
+        $site->fill($request->all());
+        $site->country = 'Jamaica';
+        $site->save();
+
+        return new SiteResource($site);
+
+    }
+    public function store4(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|unique:sites',
+            'description' => 'required',
+            'site_director' => 'required',
+            'region' => 'required',
+            'is_active' => Rule::in(['0', '1']),
+            'created_by' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $site = new SIte();
+        $site->fill($request->all());
+        $site->country = 'Guatemala';
+        $site->save();
+
+        return new SiteResource($site);
+
     }
 
     /**
@@ -96,7 +173,7 @@ class SiteController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:sites,name,'.$id,
+            'name' => 'sometimes|unique:sites,name,' . $id,
             'description' => 'sometimes',
             'site_director' => 'sometimes',
             'region' => 'sometimes',

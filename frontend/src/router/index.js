@@ -10,6 +10,8 @@ import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
 import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
+import programManagementEditIndia from "@/views/DashboardNavItems/Admin/EditProgramIndia";
+import siteManagementEditIndia from "@/views/DashboardNavItems/Admin/EditSiteIndia";
 import SiteManagement from "@/views//Dashboard/AppSiteDashboard.vue";
 import SiteManagementIndia from "@/views//Dashboard/AppSiteDashboardIndia.vue";
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
@@ -76,7 +78,7 @@ const routes = [
       {
         path: "/site_managementindia/edit/:id",
         name: "sitemanagementeditIndia",
-        //component: siteManagementEditIndia,
+        component: siteManagementEditIndia,
       },
       {
         path: "/program_managementindia",
@@ -86,7 +88,7 @@ const routes = [
       {
         path: "/program_managementindia/edit/:id",
         name: "programmanagementeditIndia",
-        //component: programManagementEditIndia,
+        component: programManagementEditIndia,
       },
     ],
   },

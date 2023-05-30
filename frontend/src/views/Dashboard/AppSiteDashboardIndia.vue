@@ -222,7 +222,7 @@ export default {
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
-      axios.post("http://127.0.0.1:8000/api/sites", formData)
+      axios.post("http://127.0.0.1:8000/api/sites2", formData)
         .then(response => {
           console.log(response.data);
           this.name = '';
