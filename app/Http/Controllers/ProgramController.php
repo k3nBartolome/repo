@@ -56,6 +56,52 @@ class ProgramController extends Controller
         return response()->json(['data' => $programs]);
     }
 
+    public function index5()
+    {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Jamaica');
+            })
+            ->where('is_active', 1)
+            ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
+    public function index6()
+    {
+        $programs = Program::with(['site' => function ($query) {
+            $query->where('country', 'Jamaica');
+        }, 'user', 'createdByUser', 'classes'])
+            ->where('is_active', 0)
+            ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
+    public function index7()
+    {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Guatemala');
+            })
+            ->where('is_active', 1)
+            ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
+    public function index8()
+    {
+        $programs = Program::with(['site' => function ($query) {
+            $query->where('country', 'Guatemala');
+        }, 'user', 'createdByUser', 'classes'])
+            ->where('is_active', 0)
+            ->get();
+
+        return response()->json(['data' => $programs]);
+    }
+
     public function show($id)
     {
         $program = Program::FindOrFail($id);
@@ -85,7 +131,7 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,' . $id,
+            'name' => 'sometimes|unique:programs,name,'.$id,
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
