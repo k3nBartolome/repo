@@ -85,26 +85,27 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,' . $id,
+            'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
         ]);
-
+    
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+    
         $program = Program::find($id);
         if (!$program) {
             return response()->json(['error' => 'Program not found'], 404);
         }
-
+    
         $program->fill($request->all());
         $program->save();
-
+    
         return new ProgramResource($program);
     }
+    
 
     public function destroy($id)
     {

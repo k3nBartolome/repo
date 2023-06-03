@@ -210,12 +210,14 @@ export default {
   computed: {
     filteredPrograms() {
       return this.programs.filter((programs) =>
-        programs.name.toLowerCase().includes(this.search.toLowerCase())
+        programs.name.toLowerCase().includes(this.search.toLowerCase())||
+        programs.site.name.toLowerCase().includes(this.search.toLowerCase())
       );
     },
     filteredPrograms2() {
       return this.programs2.filter((programs2) =>
-        programs2.name.toLowerCase().includes(this.search2.toLowerCase())
+        programs2.name.toLowerCase().includes(this.search2.toLowerCase())||
+        programs2.site.name.toLowerCase().includes(this.search2.toLowerCase())
       );
     },
     totalPages() {
@@ -228,7 +230,7 @@ export default {
         is_active:1,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/programs_activate/"+ id, form)
+      axios.put("http://10.109.2.112:8081/api/programs_activate/"+ id, form)
         .then(response => {
           console.log(response.data);
           this.is_active = "";
@@ -244,7 +246,7 @@ export default {
         is_active:0,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/programs_deactivate/"+ id, form)
+      axios.put("http://10.109.2.112:8081/api/programs_deactivate/"+ id, form)
         .then(response => {
           console.log(response.data);
           this.is_active = "";
@@ -257,7 +259,7 @@ export default {
     },
     async getPrograms() {
       await axios
-        .get("http://127.0.0.1:8000/api/programs")
+        .get("http://10.109.2.112:8081/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -269,7 +271,7 @@ export default {
     },
     async getPrograms2() {
       await axios
-        .get("http://127.0.0.1:8000/api/programs2")
+        .get("http://10.109.2.112:8081/api/programs2")
         .then((response) => {
           this.programs2 = response.data.data;
           console.log(response.data.data);
@@ -282,7 +284,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -301,7 +303,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/programs", formData)
+        .post("http://10.109.2.112:8081/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";
