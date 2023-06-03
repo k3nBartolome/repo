@@ -141,6 +141,25 @@ class ClassesController extends Controller
         ]);
     }
 
+    public function classesallGua()
+    {
+        $classes = Classes::with([
+            'site' => function ($query) {
+                $query->where('country', 'Guatemala');
+            },
+            'program',
+            'dateRange',
+            'createdByUser',
+            'updatedByUser',
+        ])
+            ->where('status', 'Active')
+            ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
     public function pushedback(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
