@@ -228,7 +228,7 @@ export default {
   methods: {
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://10.109.2.112:8081/api/classesallgua")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.data);
@@ -239,7 +239,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://10.109.2.112:8081/api/sites7")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);

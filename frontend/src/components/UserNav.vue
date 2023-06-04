@@ -79,6 +79,8 @@
           <select v-model="selectedOption" @change="navigateToPage" class="rounded border-gray-300 focus:ring focus:ring-indigo-200 focus:border-indigo-500">
             <option value="/capfileindia" class="flex items-center">IND</option>
             <option value="/capfile" class="flex items-center">PH</option>
+            <option value="/capfilejamaica" class="flex items-center">JAM</option>
+            <option value="/capfileguatemala" class="flex items-center">GUA</option>
           </select>
           <div class="relative inline-block">
             <button @click="toggleDropdown2" class="px-4 py-2 font-bold text-black rounded cursor-pointer">
