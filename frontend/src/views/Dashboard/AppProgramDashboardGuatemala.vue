@@ -187,8 +187,8 @@ import axios from "axios";
 export default {
   data() {
     return {
-      programs3: [],
-      programs4: [],
+      programs7: [],
+      programs8: [],
       name: "",
       description: "",
       program_group: "",
@@ -209,13 +209,13 @@ export default {
   },
   computed: {
     filteredPrograms3() {
-      return this.programs3.filter((programs3) =>
-        programs3.name.toLowerCase().includes(this.search.toLowerCase())
+      return this.programs7.filter((programs7) =>
+        programs7.name.toLowerCase().includes(this.search.toLowerCase())
       );
     },
     filteredPrograms4() {
-      return this.programs4.filter((programs4) =>
-        programs4.name.toLowerCase().includes(this.search2.toLowerCase())
+      return this.programs8.filter((programs8) =>
+        programs8.name.toLowerCase().includes(this.search2.toLowerCase())
       );
     },
     totalPages() {
@@ -259,7 +259,7 @@ export default {
       await axios
         .get("http://10.109.2.112:8081/api/programs7")
         .then((response) => {
-          this.programs3 = response.data.data;
+          this.programs7 = response.data.data;
           console.log(response.data.data);
 
         })
@@ -271,7 +271,7 @@ export default {
       await axios
         .get("http://10.109.2.112:8081/api/programs8")
         .then((response) => {
-          this.programs4 = response.data.data;
+          this.programs8 = response.data.data;
           console.log(response.data.data);
 
         })
@@ -282,7 +282,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://10.109.2.112:8081/api/sites7")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
