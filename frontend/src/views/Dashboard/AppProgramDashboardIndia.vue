@@ -308,7 +308,8 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.getPrograms();
+          this.getPrograms3();
+          this.getPrograms4();
         })
         .catch((error) => {
           console.log(error.response.data);

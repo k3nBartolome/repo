@@ -82,7 +82,7 @@
         </label>
         <router-link
           :to="{
-            path: `/addcapfile/}`,
+            path: `/addcapfileguatemala/}`,
             query: {
               program: programs_selected,
               site: sites_selected,

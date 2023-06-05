@@ -124,40 +124,30 @@ class ClassesController extends Controller
 
     public function classesallJam()
     {
-        $classes = Classes::with([
-            'site' => function ($query) {
-                $query->where('country', 'Jamaica');
-            },
-            'program',
-            'dateRange',
-            'createdByUser',
-            'updatedByUser',
-        ])
-            ->where('status', 'Active')
-            ->get();
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Jamaica');
+        })
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
 
         return response()->json([
-            'classes' => $classes,
-        ]);
+        'classes' => $classes,
+    ]);
     }
 
     public function classesallGua()
     {
-        $classes = Classes::with([
-            'site' => function ($query) {
-                $query->where('country', 'Guatemala');
-            },
-            'program',
-            'dateRange',
-            'createdByUser',
-            'updatedByUser',
-        ])
-            ->where('status', 'Active')
-            ->get();
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Guatemala');
+        })
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
 
         return response()->json([
-            'classes' => $classes,
-        ]);
+        'classes' => $classes,
+    ]);
     }
 
     public function pushedback(Request $request, $id)

@@ -2,7 +2,7 @@
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
+        Capacity File Manager Jamaica
       </h1>
     </div>
   </header>
@@ -82,7 +82,7 @@
         </label>
         <router-link
           :to="{
-            path: `/addcapfile/}`,
+            path: `/addcapfilejamaica/}`,
             query: {
               program: programs_selected,
               site: sites_selected,
@@ -136,21 +136,21 @@
             </td>
             <td class="px-2 py-2 truncate">
               <div class="flex justify-center mt-2">
-                <router-link :to="`/pushbackcapfile/${classes.id}`">
+                <router-link :to="`/pushbackcapfilejamaica/${classes.id}`">
                   <button
                     class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >
                     Update/Pushback
                   </button>
                 </router-link>
-                <router-link :to="`/cancelcapfile/${classes.id}`">
+                <router-link :to="`/cancelcapfilejamaica/${classes.id}`">
                   <button
                     class="flex items-center justify-center px-4 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >
                     Cancel
                   </button>
                 </router-link>
-                <router-link :to="`/editcapfile/${classes.id}`">
+                <router-link :to="`/editcapfilejamaica/${classes.id}`">
                   <button
                     class="flex items-center justify-center px-4 py-2 ml-6 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >
@@ -178,6 +178,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 
