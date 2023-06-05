@@ -47,11 +47,12 @@ class ProgramController extends Controller
 
     public function index4()
     {
-        $programs = Program::with(['site' => function ($query) {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        ->whereHas('site', function ($query) {
             $query->where('country', 'India');
-        }, 'user', 'createdByUser', 'classes'])
-            ->where('is_active', 0)
-            ->get();
+        })
+        ->where('is_active', 0)
+        ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -70,9 +71,10 @@ class ProgramController extends Controller
 
     public function index6()
     {
-        $programs = Program::with(['site' => function ($query) {
-            $query->where('country', 'Jamaica');
-        }, 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Jamaica');
+            })
             ->where('is_active', 0)
             ->get();
 
@@ -93,11 +95,12 @@ class ProgramController extends Controller
 
     public function index8()
     {
-        $programs = Program::with(['site' => function ($query) {
+        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        ->whereHas('site', function ($query) {
             $query->where('country', 'Guatemala');
-        }, 'user', 'createdByUser', 'classes'])
-            ->where('is_active', 0)
-            ->get();
+        })
+        ->where('is_active', 0)
+        ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -131,27 +134,26 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
+            'name' => 'sometimes|unique:programs,name,'.$id.',id,site_id,'.$request->input('site_id'),
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-    
+
         $program = Program::find($id);
         if (!$program) {
             return response()->json(['error' => 'Program not found'], 404);
         }
-    
+
         $program->fill($request->all());
         $program->save();
-    
+
         return new ProgramResource($program);
     }
-    
 
     public function destroy($id)
     {

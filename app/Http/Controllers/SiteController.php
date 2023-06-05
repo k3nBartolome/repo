@@ -115,7 +115,7 @@ class SiteController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $site = new SIte();
+        $site = new Site();
         $site->fill($request->all());
         $site->country = 'Philippines';
         $site->save();
@@ -138,7 +138,7 @@ class SiteController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $site = new SIte();
+        $site = new Site();
         $site->fill($request->all());
         $site->country = 'India';
         $site->save();
@@ -161,7 +161,7 @@ class SiteController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $site = new SIte();
+        $site = new Site();
         $site->fill($request->all());
         $site->country = 'Jamaica';
         $site->save();
@@ -184,7 +184,7 @@ class SiteController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $site = new SIte();
+        $site = new Site();
         $site->fill($request->all());
         $site->country = 'Guatemala';
         $site->save();

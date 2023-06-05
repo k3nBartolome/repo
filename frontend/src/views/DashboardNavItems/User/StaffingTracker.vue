@@ -48,7 +48,7 @@ export default {
   methods: {
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.data);
@@ -59,7 +59,7 @@ export default {
     },
     /* async getClasses() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
