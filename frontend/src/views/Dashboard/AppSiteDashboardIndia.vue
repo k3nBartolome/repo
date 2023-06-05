@@ -229,7 +229,7 @@ export default {
           this.description = '';
           this.siteDirector = '';
           this.region = '';
-          this.getSites(); 
+          this.getSites();
         })
         .catch(error => {
           console.log(error.response.data);

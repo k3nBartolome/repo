@@ -426,7 +426,7 @@ export default {
     const selectedProgram = this.programs_selected;
     const selectedDate = this.date_selected;
     const currentId = parseInt(this.$route.params.id);
-    
+
     if (selectedSite && selectedProgram && selectedDate) {
       const matchingClasses = this.classes1.filter((c) => {
         return (
@@ -440,9 +440,9 @@ export default {
       return matchingClasses.length > 0;
     }
 
-    return false; 
+    return false;
   },
-   
+
 
     isTargetDisabled() {
       if (this.changes === "Change Dates") {
