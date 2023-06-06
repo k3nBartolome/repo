@@ -94,6 +94,139 @@
       </form>
     </div>
   </div>
+  <div class="py-8">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <label class="block">
+          Country
+          <input
+            type="text"
+            disabled
+            v-model="country"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Region
+          <input
+            type="text"
+            v-model="region"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Site
+          <select
+            v-model="site_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            @change="getPrograms"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </label>
+        <label class="block">
+          Programs
+          <select
+            v-model="program_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="program in programs" :key="program.id" :value="program.id">
+              {{ program.name }}
+            </option>
+          </select>
+        </label>
+        <label class="block">
+          Type of Hiring
+          <input
+            type="text"
+            v-model="type_of_hiring"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Year
+          <input
+            type="text"
+            v-model="year"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Month
+          <input
+            type="text"
+            v-model="month"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Hiring Week
+          <input
+            type="text"
+            v-model="hiring_week"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Classes Start
+          <input
+            type="text"
+            v-model="classes_start"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Training Start
+          <input
+            type="text"
+            v-model="training_start"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Internal Target
+          <input
+            type="text"
+            v-model="internal_target"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          External Target
+          <input
+            type="text"
+            v-model="external_target"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Target
+          <input
+            type="text"
+            v-model="total_target"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+      </form>
+    </div>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -109,27 +242,33 @@ export default {
       programs_selected: "",
       month_selected: "",
       week_selected: "",
+      country: "Philippines",
+      region: "",
+      site_selected: "",
+      program_selected: "",
+      type_of_hiring: "",
+      year: "",
+      month: "",
+      hiring_week: "",
+      classes_start: "",
+      training_start: "",
+      internal_target: "",
+      external_target: "",
+      total_target: "",
     };
   },
   computed: {
     filteredClasses() {
       let filtered = this.classesall;
-
-      // Filter by site
       if (this.sites_selected) {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
-
-      // Filter by program
       if (this.programs_selected) {
         filtered = filtered.filter((c) => c.program.id === this.programs_selected);
       }
-
-      // Filter by date range
       if (this.week_selected) {
         filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
       }
-
       return filtered;
     },
   },
@@ -138,11 +277,39 @@ export default {
     this.getPrograms();
     this.getDateRange();
     this.getClassesAll();
+    this.getClasses();
   },
   methods: {
+    async getClasses() {
+      if (!this.class_selected) {
+        return; // do nothing if no class is selected
+      }
+
+      try {
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/classes/${this.class_selected}`
+        );
+        const classObj = response.data.class;
+
+        this.site_selected = classObj.site.id;
+        this.program_selected = classObj.program.id;
+        this.type_of_hiring = classObj.type_of_hiring;
+        this.external_target = classObj.external_target;
+        this.internal_target = classObj.internal_target;
+        this.total_target = classObj.total_target;
+        this.original_start_date = classObj.original_start_date;
+        this.date_selected = classObj.date_range.id;
+        this.agreed_start_date = classObj.agreed_start_date;
+        this.erf_number = classObj.erf_number;
+
+        console.log(classObj);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.data);
@@ -153,7 +320,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -168,7 +335,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -184,7 +351,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
