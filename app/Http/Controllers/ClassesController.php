@@ -77,6 +77,19 @@ class ClassesController extends Controller
         ]);
     }
 
+    public function staffing($classesId)
+    {
+        $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($classesId);
+
+        if (!$class) {
+            return response()->json(['error' => 'Class not found'], 404);
+        }
+
+        return response()->json([
+        'class' => $class,
+    ]);
+    }
+
     public function transaction($id)
     {
         $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);

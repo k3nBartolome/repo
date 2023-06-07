@@ -13,7 +13,7 @@
       <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Site
-          <select
+          <select disabled
             v-model="sites_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
@@ -79,7 +79,7 @@
           <select
             v-model="class_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
+            @change="getClasses" >
             <option disabled value="" selected>Please select one</option>
             <option
               v-for="classes in filteredClasses"
@@ -111,7 +111,7 @@
         </label>
         <label class="block">
           Region
-          <input
+          <input disabled
             type="text"
             v-model="region"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -120,7 +120,7 @@
         </label>
         <label class="block">
           Site
-          <select
+          <select disabled
             v-model="site_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
@@ -132,11 +132,10 @@
           </select>
         </label>
         <label class="block">
-          Programs
-          <select
-            v-model="program_selected"
+         Program
+          <select disabled v-model="program_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
+            required @change="getPrograms">
             <option disabled value="" selected>Please select one</option>
             <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.name }}
@@ -145,16 +144,17 @@
         </label>
         <label class="block">
           Type of Hiring
-          <input
-            type="text"
-            v-model="type_of_hiring"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
+          <select disabled v-model="type_of_hiring"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100">
+            <option disabled value="" selected>Please select one</option>
+            <option value="attrition">Attrition</option>
+            <option value="growth">Growth</option>
+            <option value="attrition and growth">Attrition and Growth</option>
+          </select>
         </label>
         <label class="block">
           Year
-          <input
+          <input disabled
             type="text"
             v-model="year"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -163,7 +163,7 @@
         </label>
         <label class="block">
           Month
-          <input
+          <input disabled
             type="text"
             v-model="month"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -172,26 +172,19 @@
         </label>
         <label class="block">
           Hiring Week
-          <input
-            type="text"
-            v-model="hiring_week"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Classes Start
-          <input
-            type="text"
-            v-model="classes_start"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
+          <select disabled v-model="hiring_week"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required @change="getDateRange2">
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="daterange in daterange" :key="daterange.id" :value="daterange.id">
+              {{ daterange.date_range }}
+            </option>
+          </select>
         </label>
         <label class="block">
           Training Start
-          <input
-            type="text"
+          <input disabled
+            type="date"
             v-model="training_start"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
@@ -199,7 +192,7 @@
         </label>
         <label class="block">
           Internal Target
-          <input
+          <input disabled
             type="text"
             v-model="internal_target"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -208,7 +201,7 @@
         </label>
         <label class="block">
           External Target
-          <input
+          <input disabled
             type="text"
             v-model="external_target"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -217,9 +210,135 @@
         </label>
         <label class="block">
           Target
-          <input
+          <input disabled
             type="text"
             v-model="total_target"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Wave#
+          <input disabled
+            type="text"
+            v-model="wave_no"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          ERF#
+          <input disabled
+            type="text"
+            v-model="erf_number"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+      </form>
+    </div>
+  </div>
+  <div class="py-8">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <label class="block">
+          Day 1
+          <input
+            type="text"
+
+            v-model="day1"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 2
+          <input
+            type="text"
+
+            v-model="day2"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 3
+          <input
+            type="text"
+
+            v-model="day3"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 4
+          <input
+            type="text"
+
+            v-model="day4"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 5
+          <input
+            type="text"
+
+            v-model="day5"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 6
+          <input
+            type="text"
+
+            v-model="day6"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 7
+          <input
+            type="text"
+
+            v-model="day7"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Day 8
+          <input
+            type="text"
+
+            v-model="day8"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Total_Endorsed
+          <input
+            type="text"
+
+            v-model="day1"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Endorsed Rate
+          <input
+            type="text"
+
+            v-model="day1"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
@@ -238,11 +357,12 @@ export default {
       sites: [],
       programs: [],
       daterange: [],
+      daterange2: [],
       sites_selected: "",
       programs_selected: "",
       month_selected: "",
       week_selected: "",
-      country: "Philippines",
+      country: "",
       region: "",
       site_selected: "",
       program_selected: "",
@@ -255,6 +375,16 @@ export default {
       internal_target: "",
       external_target: "",
       total_target: "",
+      erf_number:"",
+      wave_no:"",
+      day1:"",
+      day2:"",
+      day3:"",
+      day4:"",
+      day5:"",
+      day6:"",
+      day7:"",
+      day8:"",
     };
   },
   computed: {
@@ -276,6 +406,7 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
+    this.getDateRange2();
     this.getClassesAll();
     this.getClasses();
   },
@@ -289,18 +420,21 @@ export default {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/classes/${this.class_selected}`
         );
-        const classObj = response.data.class;
 
-        this.site_selected = classObj.site.id;
-        this.program_selected = classObj.program.id;
+        // Bind the response data to the component properties
+        const classObj = response.data.class;
+        console.log(classObj);
         this.type_of_hiring = classObj.type_of_hiring;
         this.external_target = classObj.external_target;
         this.internal_target = classObj.internal_target;
         this.total_target = classObj.total_target;
-        this.original_start_date = classObj.original_start_date;
-        this.date_selected = classObj.date_range.id;
-        this.agreed_start_date = classObj.agreed_start_date;
-        this.erf_number = classObj.erf_number;
+        this.region = classObj.site.region;
+        this.country = classObj.site.country;
+        this.program_selected= classObj.program_id;
+        this.site_selected= classObj.site_id;
+        this.hiring_week= classObj.date_range.id;
+        this.year= classObj.date_range.year;
+        this.month= classObj.date_range.month;
 
         console.log(classObj);
       } catch (error) {
@@ -360,6 +494,19 @@ export default {
           console.log(error);
         });
     },
+    async getDateRange2() {
+      console.log(this.hiring);
+      await axios
+        .get("http://127.0.0.1:8000/api/daterange")
+        .then((response) => {
+          this.daterange2 = response.data.data;
+          console.log(response.data.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
   },
+
 };
 </script>
