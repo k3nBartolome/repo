@@ -32,6 +32,51 @@ class ClassStaffingController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'show_ups_internal' => 'required',
+            'show_ups_external' => 'required',
+            'show_ups_total' => 'required',
+            'deficit' => 'required',
+            'percentage' => 'required',
+            'status' => 'required',
+            'day1' => 'required',
+            'day2' => 'required',
+            'day3' => 'required',
+            'day4' => 'required',
+            'day5' => 'required',
+            'day6' => 'required',
+            'day7' => 'required',
+            'day8' => 'required',
+            'total_endorsed' => 'required',
+            'endorsed_rate' => 'required',
+            'internal_hires' => 'required',
+            'external_hires' => 'required',
+            'additional_extended_jo' => 'required',
+            'with_jo' => 'required',
+            'pending_jo' => 'required',
+            'pending_berlitz' => 'required',
+            'pending_pre_emps' => 'required',
+            'classes_number' => 'required',
+            'pipeline_total' => 'required',
+            'cap_starts' => 'required',
+            'internal_hires_all' => 'required',
+            'external_hires_all' => 'required',
+            'pipeline_target' => 'required',
+            'total_deficit' => 'required',
+            'pipeline' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $staffing = new ClassesStaffing();
+        $staffing->fill($request->all());
+        $staffing->save();
+
+        return response()->json([
+            'staffing' => $staffing,
+        ]);
     }
 
     /**

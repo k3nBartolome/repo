@@ -13,7 +13,7 @@
       <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Site
-          <select disabled
+          <select 
             v-model="sites_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
@@ -244,6 +244,66 @@
     >
       <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
+          Show-ups Internal
+          <input
+            type="text"
+
+            v-model="show_ups_internal"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Show-ups External
+          <input
+            type="text"
+
+            v-model="show_ups_external"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Show-ups Total
+          <input
+            type="text"
+
+            v-model="show_ups_total"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Deficit
+          <input
+            type="text"
+
+            v-model="deficit"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Percentage
+          <input
+            type="text"
+
+            v-model="percentage"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Status
+          <input
+            type="text"
+
+            v-model="status"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
           Day 1
           <input
             type="text"
@@ -343,6 +403,156 @@
             required
           />
         </label>
+        <label class="block">
+          Internals
+          <input
+            type="text"
+
+            v-model="internals"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Externals
+          <input
+            type="text"
+
+            v-model="externals"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Additional Extended JO
+          <input
+            type="text"
+
+            v-model="additional_extended_jo"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          With JO
+          <input
+            type="text"
+
+            v-model="with_jo"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Pending Jo
+          <input
+            type="text"
+
+            v-model="pending_jo"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Pending Berlitz
+          <input
+            type="text"
+
+            v-model="pending_berlitz"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Pending Pre-Emps
+          <input
+            type="text"
+
+            v-model="pending_emps"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Classes
+          <input
+            type="text"
+
+            v-model="classes_number"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+        <label class="block">
+          Total Pipeline
+          <input
+            type="text"
+
+            v-model="total_pipeline"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
+          <label class="block">
+            Cap Starts
+            <input
+              type="text"
+  
+              v-model="cap_start"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            All Internals
+            <input
+              type="text"
+  
+              v-model="all_internals"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            All Externals
+            <input
+              type="text"
+  
+              v-model="all_externals"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Pipeline Target
+            <input
+              type="text"
+  
+              v-model="pipeline_target"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Total Deficit
+            <input
+              type="text"
+  
+              v-model="total_deficit"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Pipeline
+            <input
+              type="text"
+  
+              v-model="Pipeline"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
       </form>
     </div>
   </div>
