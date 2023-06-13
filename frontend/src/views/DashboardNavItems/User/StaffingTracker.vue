@@ -9,7 +9,9 @@
   <div class="py-8 bg-gray-100">
     <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <form class="">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Site
             <select
@@ -30,7 +32,11 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -95,11 +101,13 @@
       </form>
     </div>
   </div>
-  <div class="py-3 bg-gray-100">
+  <div class="py-2 bg-gray-100">
     <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      class="px-4 py-6 mx-auto bg-white border-2  max-w-7xl sm:px-6 lg:px-8"
     >
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+      <form
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+      >
         <label class="block">
           Country
           <input
@@ -144,7 +152,11 @@
             @change="getPrograms"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="program in programs" :key="program.id" :value="program.id">
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
               {{ program.name }}
             </option>
           </select>
@@ -235,10 +247,11 @@
           Target
           <input
             disabled
-            type="text"
+            type="number"
             v-model="total_target"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
+            @change="syncDeficitTotal"
           />
         </label>
         <label class="block">
@@ -264,14 +277,16 @@
       </form>
     </div>
   </div>
-  <div class="py-8 bg-gray-100">
-    <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <form class="" @submit.prevent="addClass">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+  <form class="" @submit.prevent="addClass">
+    <div class="py-2 bg-gray-100">
+      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Day 1
             <input
-              type="text"
+              type="number"
               v-model="day1"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -280,7 +295,7 @@
           <label class="block">
             Day 2
             <input
-              type="text"
+              type="number"
               v-model="day2"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -289,7 +304,7 @@
           <label class="block">
             Day 3
             <input
-              type="text"
+              type="number"
               v-model="day3"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -298,7 +313,7 @@
           <label class="block">
             Day 4
             <input
-              type="text"
+              type="number"
               v-model="day4"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -307,7 +322,7 @@
           <label class="block">
             Day 5
             <input
-              type="text"
+              type="number"
               v-model="day5"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -316,7 +331,7 @@
           <label class="block">
             Day 6
             <input
-              type="text"
+              type="number"
               v-model="day6"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -325,7 +340,7 @@
           <label class="block">
             Day 7
             <input
-              type="text"
+              type="number"
               v-model="day7"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -334,7 +349,7 @@
           <label class="block">
             Day 8
             <input
-              type="text"
+              type="number"
               v-model="day8"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -343,47 +358,55 @@
           <label class="block">
             Total_Endorsed
             <input
-              type="text"
-              v-model="day1"
+              disabled
+              type="number"
+              v-model="total_endorsed"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
         </div>
+      </div>
+    </div>
+    <div class="py-2 bg-gray-100">
+      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
         <div
-          class="grid grid-cols-1 gap-4 py-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
         >
           <label class="block">
             Show-ups Internal
             <input
-              type="text"
+              type="number"
               v-model="show_ups_internal"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
+              @change="syncShowUpsTotal"
             />
           </label>
           <label class="block">
             Show-ups External
             <input
-              type="text"
+              type="number"
               v-model="show_ups_external"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
+              @change="syncShowUpsTotal"
             />
           </label>
           <label class="block">
             Show-ups Total
             <input
-              type="text"
+              type="number"
               v-model="show_ups_total"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
+              @change="syncDeficitTotal"
             />
           </label>
           <label class="block">
             Deficit
             <input
-              type="text"
+              type="number"
               v-model="deficit"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -392,7 +415,7 @@
           <label class="block">
             Percentage
             <input
-              type="text"
+              type="number"
               v-model="percentage"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -400,7 +423,11 @@
           </label>
           <label class="block">
             Status
-            <select v-model="status" class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" required>
+            <select
+              v-model="status"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            >
               <option value="open">Open</option>
               <option value="filled">Filled</option>
             </select>
@@ -408,7 +435,7 @@
           <label class="block">
             Internals
             <input
-              type="text"
+              type="number"
               v-model="internal_hires"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -417,7 +444,7 @@
           <label class="block">
             Externals
             <input
-              type="text"
+              type="number"
               v-model="external_hires"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -426,30 +453,33 @@
           <label class="block">
             Additional Extended JO
             <input
-              type="text"
+              type="number"
               v-model="additional_extended_jo"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
-          Overhires
-          <input
-            type="text"
-            v-model="over_hires"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
+            Overhires
+            <input
+              type="number"
+              v-model="over_hires"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
         </div>
+      </div>
+    </div>
+    <div class="py-2 bg-gray-100">
+      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
         <div
           class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        ></div>
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-4">
+        >
           <label class="block">
             With JO
             <input
-              type="text"
+              type="number"
               v-model="with_jo"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -458,7 +488,7 @@
           <label class="block">
             Pending Jo
             <input
-              type="text"
+              type="number"
               v-model="pending_jo"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -467,7 +497,7 @@
           <label class="block">
             Pending Berlitz
             <input
-              type="text"
+              type="number"
               v-model="pending_berlitz"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -476,7 +506,7 @@
           <label class="block">
             Pending Pre-Emps
             <input
-              type="text"
+              type="number"
               v-model="pending_pre_emps"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -485,7 +515,7 @@
           <label class="block">
             Classes
             <input
-              type="text"
+              type="number"
               v-model="classes_number"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -494,7 +524,7 @@
           <label class="block">
             Total Pipeline
             <input
-              type="text"
+              type="number"
               v-model="total_pipeline"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -503,7 +533,7 @@
           <label class="block">
             Cap Starts
             <input
-              type="text"
+              type="number"
               v-model="cap_starts"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -512,7 +542,7 @@
           <label class="block">
             All Internals
             <input
-              type="text"
+              type="number"
               v-model="internal_hires_all"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -521,7 +551,7 @@
           <label class="block">
             All Externals
             <input
-              type="text"
+              type="number"
               v-model="external_hires_all"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -530,7 +560,7 @@
           <label class="block">
             Pipeline Target
             <input
-              type="text"
+              type="number"
               v-model="pipeline_target"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -539,18 +569,23 @@
           <label class="block">
             Total Deficit
             <input
-              type="text"
+              type="number"
               v-model="total_deficit"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
+        </div>
+      </div>
+    </div>
+    <div class="py-2 bg-gray-100">
+      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 gap-4 font-semibold">
           <label class="block">
             Pipeline
-            <input
-              type="text"
+            <textarea
               v-model="pipeline"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
               required
             />
           </label>
@@ -558,14 +593,14 @@
         <div class="flex justify-center py-8">
           <button
             type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600 wi"
           >
             <i class="fa fa-save"></i> Save
           </button>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
+  </form>
 </template>
 <script>
 import axios from "axios";
@@ -597,37 +632,37 @@ export default {
       total_target: "",
       erf_number: "",
       wave_no: "",
-      day1: "",
-      day2: "",
-      day3: "",
-      day4: "",
-      day5: "",
-      day6: "",
-      day7: "",
-      day8: "",
-      total_endorsed: "",
-      show_ups_internal: "",
-      show_ups_external: "",
-      show_ups_total: "",
-      deficit: "",
-      percentage: "",
+      day1: 0,
+      day2: 0,
+      day3: 0,
+      day4: 0,
+      day5: 0,
+      day6: 0,
+      day7: 0,
+      day8: 0,
+      total_endorsed: 0,
+      show_ups_internal: 0,
+      show_ups_external: 0,
+      show_ups_total: 0,
+      deficit: 0,
+      percentage: 0,
       status: "",
-      internal_hires: "",
-      external_hires: "",
-      additional_extended_jo: "",
-      with_jo: "",
-      pending_jo: "",
-      pending_berlitz: "",
-      pending_pre_emps: "",
-      classes_number: "",
-      total_pipeline: "",
-      cap_starts: "",
-      internal_hires_all: "",
-      external_hires_all: "",
-      pipeline_target: "",
-      total_deficit: "",
+      internal_hires: 0,
+      external_hires: 0,
+      additional_extended_jo: 0,
+      with_jo: 0,
+      pending_jo: 0,
+      pending_berlitz: 0,
+      pending_pre_emps: 0,
+      classes_number: 0,
+      total_pipeline: 0,
+      cap_starts: 0,
+      internal_hires_all: 0,
+      external_hires_all: 0,
+      pipeline_target: 0,
+      total_deficit: 0,
       pipeline: "",
-      over_hires:"",
+      over_hires: 0,
     };
   },
   computed: {
@@ -637,12 +672,88 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
+        filtered = filtered.filter(
+          (c) => c.program.id === this.programs_selected
+        );
       }
       if (this.week_selected) {
-        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
+        filtered = filtered.filter(
+          (c) => c.date_range.id === this.week_selected
+        );
       }
       return filtered;
+    },
+    show_ups_total_computed() {
+      const show_ups_internal = parseInt(this.show_ups_internal) || 0;
+      const show_ups_external = parseInt(this.show_ups_external) || 0;
+      return (show_ups_internal + show_ups_external).toFixed();
+    },
+    deficit_computed() {
+      const target = parseInt(this.target) || 0;
+      const show_ups_total = parseInt(this.show_ups_total) || 0;
+      return target - show_ups_total < 0 ? 0 : target - show_ups_total;
+    },
+    percentage_computed() {
+      const target = parseInt(this.target) || 0;
+      const show_ups_total = parseInt(this.show_ups_total) || 0;
+      return show_ups_total / target;
+    },
+    total_endorsed_computed() {
+      const days = [
+        parseInt(this.day1) || 0,
+        parseInt(this.day2) || 0,
+        parseInt(this.day3) || 0,
+        parseInt(this.day4) || 0,
+        parseInt(this.day5) || 0,
+        parseInt(this.day6) || 0,
+        parseInt(this.day7) || 0,
+        parseInt(this.day8) || 0,
+      ];
+
+      return days.reduce((total, day) => total + day, 0).toFixed();
+    },
+    classes_number_computed() {
+      const target = this.target;
+
+      if (target % 15 > 1) {
+        return Math.floor(target / 15) + 1;
+      } else {
+        return Math.floor(target / 15);
+      }
+    },
+  },
+  watch: {
+    day1: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day2: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day3: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day4: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day5: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day6: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day7: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
+    },
+    day8: {
+      handler: "syncEndorsedTotal",
+      immediate: true,
     },
   },
   mounted() {
@@ -654,6 +765,17 @@ export default {
     this.getClasses();
   },
   methods: {
+    syncShowUpsTotal() {
+      this.show_ups_total = this.show_ups_total_computed;
+    },
+    syncDeficitTotal() {
+      this.deficit = this.deficit_computed;
+      this.percentage = this.percentage_computed;
+      this.classes_number = this.classes_number_computed;
+    },
+    syncEndorsedTotal() {
+      this.total_endorsed = this.total_endorsed_computed;
+    },
     async getClasses() {
       if (!this.class_selected) {
         return; // do nothing if no class is selected
@@ -663,8 +785,6 @@ export default {
         const response = await axios.get(
           `http://127.0.0.1:8000/api/classes/${this.class_selected}`
         );
-
-        // Bind the response data to the component properties
         const classObj = response.data.class;
         console.log(classObj);
         this.type_of_hiring = classObj.type_of_hiring;
@@ -713,7 +833,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -729,7 +851,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+        )
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);

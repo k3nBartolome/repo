@@ -35,6 +35,7 @@ pushedback
 sched
 Sheryll
 sitemanagementedit
+syncShowUps
 Tomzer
 tooltiptext
 Villaprudente
