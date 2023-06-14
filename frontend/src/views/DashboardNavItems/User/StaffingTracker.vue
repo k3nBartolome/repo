@@ -9,9 +9,7 @@
   <div class="py-8 bg-gray-100">
     <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <form class="">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
             <select
@@ -32,11 +30,7 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
+              <option v-for="program in programs" :key="program.id" :value="program.id">
                 {{ program.name }}
               </option>
             </select>
@@ -102,12 +96,8 @@
     </div>
   </div>
   <div class="py-2 bg-gray-100">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2  max-w-7xl sm:px-6 lg:px-8"
-    >
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-      >
+    <div class="px-4 py-6 mx-auto bg-white border-2 max-w-7xl sm:px-6 lg:px-8">
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Country
           <input
@@ -152,11 +142,7 @@
             @change="getPrograms"
           >
             <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="program in programs"
-              :key="program.id"
-              :value="program.id"
-            >
+            <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.name }}
             </option>
           </select>
@@ -251,7 +237,6 @@
             v-model="total_target"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
-            @change="syncDeficitTotal"
           />
         </label>
         <label class="block">
@@ -280,9 +265,7 @@
   <form class="" @submit.prevent="addClass">
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Day 1
             <input
@@ -370,9 +353,7 @@
     </div>
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Show-ups Internal
             <input
@@ -400,7 +381,6 @@
               v-model="show_ups_total"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
-              @change="syncDeficitTotal"
             />
           </label>
           <label class="block">
@@ -415,7 +395,7 @@
           <label class="block">
             Percentage
             <input
-              type="number"
+              type="text"
               v-model="percentage"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
@@ -437,15 +417,6 @@
             <input
               type="number"
               v-model="internal_hires"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-            />
-          </label>
-          <label class="block">
-            Externals
-            <input
-              type="number"
-              v-model="external_hires"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -473,9 +444,7 @@
     </div>
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             With JO
             <input
@@ -499,6 +468,15 @@
             <input
               type="number"
               v-model="pending_berlitz"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Pending OV
+            <input
+              type="number"
+              v-model="pending_ov"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -544,15 +522,6 @@
             <input
               type="number"
               v-model="internal_hires_all"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-            />
-          </label>
-          <label class="block">
-            All Externals
-            <input
-              type="number"
-              v-model="external_hires_all"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -653,6 +622,7 @@ export default {
       with_jo: 0,
       pending_jo: 0,
       pending_berlitz: 0,
+      pending_ov: 0,
       pending_pre_emps: 0,
       classes_number: 0,
       total_pipeline: 0,
@@ -672,14 +642,10 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter(
-          (c) => c.program.id === this.programs_selected
-        );
+        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
       }
       if (this.week_selected) {
-        filtered = filtered.filter(
-          (c) => c.date_range.id === this.week_selected
-        );
+        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
       }
       return filtered;
     },
@@ -689,14 +655,29 @@ export default {
       return (show_ups_internal + show_ups_external).toFixed();
     },
     deficit_computed() {
-      const target = parseInt(this.target) || 0;
-      const show_ups_total = parseInt(this.show_ups_total) || 0;
-      return target - show_ups_total < 0 ? 0 : target - show_ups_total;
+      const targetValue = Number(parseFloat(this.total_target));
+      const showUpsValue = Number(parseFloat(this.show_ups_total));
+
+      if (isNaN(targetValue) || isNaN(showUpsValue)) {
+        return 0; // Treat invalid or empty values as 0
+      }
+
+      if (targetValue - showUpsValue < 0) {
+        return 0;
+      } else {
+        return targetValue - showUpsValue;
+      }
     },
     percentage_computed() {
-      const target = parseInt(this.target) || 0;
-      const show_ups_total = parseInt(this.show_ups_total) || 0;
-      return show_ups_total / target;
+      const total_target = Number(parseInt(this.total_target)) || 0;
+      const show_ups_total = Number(parseInt(this.show_ups_total)) || 0;
+
+      if (total_target === 0) {
+        return "0%";
+      }
+
+      const percentage = (show_ups_total / total_target) * 100;
+      return percentage.toFixed(2) + "%";
     },
     total_endorsed_computed() {
       const days = [
@@ -713,12 +694,85 @@ export default {
       return days.reduce((total, day) => total + day, 0).toFixed();
     },
     classes_number_computed() {
-      const target = this.target;
+      const target = this.total_target;
 
       if (target % 15 > 1) {
         return Math.floor(target / 15) + 1;
       } else {
         return Math.floor(target / 15);
+      }
+    },
+    over_hires_computed() {
+      const difference = this.show_ups_total - this.total_target;
+      if (difference < 0) {
+        return 0;
+      } else {
+        return difference;
+      }
+    },
+    total_pipeline_computed() {
+      const pipeline = [
+        parseInt(this.internal_hires) || 0,
+        parseInt(this.external_hires) || 0,
+        parseInt(this.with_jo) || 0,
+        parseInt(this.pending_jo) || 0,
+        parseInt(this.pending_berlitz) || 0,
+        parseInt(this.pending_ov) || 0,
+        parseInt(this.pending_pre_emps) || 0,
+      ];
+
+      return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
+    },
+    capstart_computed() {
+      const show_ups_total = this.show_ups_total;
+      const total_target = this.total_target;
+
+      return show_ups_total > total_target ? total_target : show_ups_total;
+    },
+    pipeline_computed() {
+      const internal_hires = this.internal_hires;
+      const with_jo = this.with_jo;
+      const pending_jo = this.pending_jo;
+      const pending_berlitz = this.pending_berlitz;
+      const pending_ov = this.pending_ov;
+      const pending_pre_emps = this.pending_pre_emps;
+
+      let result = "";
+
+      if (internal_hires !== "") {
+        result += `${internal_hires} Internals ; `;
+      }
+
+      if (with_jo !== "") {
+        result += `${with_jo} With JO ; `;
+      }
+
+      if (pending_jo !== "") {
+        result += `${pending_jo} Pending JO ; `;
+      }
+
+      if (pending_berlitz !== "") {
+        result += `${pending_berlitz} Pending Berlitz ; `;
+      }
+
+      if (pending_ov !== "") {
+        result += `${pending_ov} Pending OV ; `;
+      }
+
+      if (pending_pre_emps !== "") {
+        result += `${pending_pre_emps} Pending Pre Emps ; `;
+      }
+
+      return result.trim();
+    },
+    all_internal_hires_computed() {
+      if (
+        this.show_ups_internal >= this.total_target &&
+        (this.deficit === "" || this.deficit === 0)
+      ) {
+        return 1;
+      } else {
+        return 0;
       }
     },
   },
@@ -755,6 +809,38 @@ export default {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
+    target: {
+      handler: "syncDeficitTotal",
+      immediate: true,
+    },
+    show_ups_total: {
+      handler: "syncDeficitTotal",
+      immediate: true,
+    },
+    internal_hires: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    external_hires: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    with_jo: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    pending_jo: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    pending_berlitz: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    pending_pre_emps: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
   },
   mounted() {
     this.getSites();
@@ -767,15 +853,25 @@ export default {
   methods: {
     syncShowUpsTotal() {
       this.show_ups_total = this.show_ups_total_computed;
+      this.internal_hires_all = this.all_internal_hires_computed;
     },
     syncDeficitTotal() {
       this.deficit = this.deficit_computed;
       this.percentage = this.percentage_computed;
       this.classes_number = this.classes_number_computed;
+      this.over_hires = this.over_hires_computed;
+      this.cap_starts = this.capstart_computed;
+      this.internal_hires_all = this.all_internal_hires_computed;
     },
     syncEndorsedTotal() {
       this.total_endorsed = this.total_endorsed_computed;
     },
+    syncPipelineTotal() {
+      this.total_pipeline = this.total_pipeline_computed;
+      this.pipeline = this.pipeline_computed;
+      //this.internal_hires_all = this.all_internal_hires_computed;
+    },
+
     async getClasses() {
       if (!this.class_selected) {
         return; // do nothing if no class is selected
@@ -783,7 +879,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.class_selected}`
+          `http://127.0.0.1:8000/api/classes/${this.class_selected}`
         );
         const classObj = response.data.class;
         console.log(classObj);
@@ -799,6 +895,7 @@ export default {
         this.year = classObj.date_range.year;
         this.month = classObj.date_range.month;
         this.training_start = classObj.agreed_start_date;
+        this.erf_number = classObj.erf_number;
 
         console.log(classObj);
       } catch (error) {
@@ -807,7 +904,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.data);
@@ -818,7 +915,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -833,9 +930,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
-        )
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -851,9 +946,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
-        )
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -865,7 +958,7 @@ export default {
     async getDateRange2() {
       console.log(this.hiring);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange2 = response.data.data;
           console.log(response.data.data);
@@ -897,6 +990,7 @@ export default {
         with_jo: this.with_jo,
         pending_jo: this.pending_jo,
         pending_berlitz: this.pending_berlitz,
+        pending_ov: this.pending_ov,
         pending_pre_emps: this.pending_pre_emps,
         classes_number: this.classes_number,
         total_pipeline: this.total_pipeline,
@@ -910,7 +1004,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classesstaffing/", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing/", formData)
         .then((response) => {
           console.log(response.data);
           this.day1 = "";
@@ -934,11 +1028,12 @@ export default {
           this.with_jo = "";
           this.pending_jo = "";
           this.pending_berlitz = "";
+          this.pending_ov = "";
           this.pending_pre_emps = "";
           this.classes_number = "";
           this.total_pipeline = "";
           this.cap_starts = "";
-          this.all_internal_hires = "";
+          this.internal_hires_all = "";
           this.all_external_hires = "";
           this.pipeline_target = "";
           this.total_deficit = "";

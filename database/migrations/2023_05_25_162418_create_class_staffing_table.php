@@ -37,7 +37,7 @@ class CreateClassStaffingTable extends Migration
             $table->integer('externals_hires')->nullable();
             $table->integer('internals_hires_all')->nullable();
             $table->integer('externals_hires_all')->nullable();
-            $table->integer('add_extender_jo')->nullable();
+            $table->integer('additional_extended_jo')->nullable();
             $table->integer('with_jo')->nullable();
             $table->integer('pending_jo')->nullable();
             $table->integer('pending_berlitz')->nullable();
@@ -53,7 +53,7 @@ class CreateClassStaffingTable extends Migration
             $table->integer('show_ups_total')->nullable();
             $table->integer('deficit')->nullable();
             $table->integer('deficit_total')->nullable();
-            $table->string('fill_Rate')->nullable();
+            $table->string('fill_rate')->nullable();
             $table->string('hiring_status')->nullable();
             $table->string('status')->nullable();
             $table->integer('over_hires')->nullable();
