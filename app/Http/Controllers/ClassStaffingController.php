@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ClassStaffingController extends Controller
 {
@@ -39,30 +40,28 @@ class ClassStaffingController extends Controller
             'deficit' => 'required',
             'percentage' => 'required',
             'status' => 'required',
-            'day1' => 'required',
-            'day2' => 'required',
-            'day3' => 'required',
-            'day4' => 'required',
-            'day5' => 'required',
-            'day6' => 'required',
-            'day7' => 'required',
-            'day8' => 'required',
+            'day_1' => 'required',
+            'day_2' => 'required',
+            'day_3' => 'required',
+            'day_4' => 'required',
+            'day_5' => 'required',
+            'day_6' => 'required',
+            'day_7' => 'required',
+            'day_8' => 'required',
             'total_endorsed' => 'required',
-            'endorsed_rate' => 'required',
-            'internal_hires' => 'required',
-            'external_hires' => 'required',
+            'internals_hires' => 'required',
             'additional_extended_jo' => 'required',
             'with_jo' => 'required',
             'pending_jo' => 'required',
             'pending_berlitz' => 'required',
+            'pending_ov' => 'required',
             'pending_pre_emps' => 'required',
             'classes_number' => 'required',
             'pipeline_total' => 'required',
             'cap_starts' => 'required',
-            'internal_hires_all' => 'required',
-            'external_hires_all' => 'required',
+            'internals_hires_all' => 'required',
             'pipeline_target' => 'required',
-            'total_deficit' => 'required',
+            'deficit_total' => 'required',
             'pipeline' => 'required',
         ]);
 
@@ -70,7 +69,7 @@ class ClassStaffingController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $staffing = new ClassesStaffing();
+        $staffing = new ClassStaffing();
         $staffing->fill($request->all());
         $staffing->save();
 

@@ -126,7 +126,6 @@
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
-            <option disabled value="" selected>Please select one</option>
             <option v-for="site in sites" :key="site.id" :value="site.id">
               {{ site.name }}
             </option>
@@ -141,7 +140,6 @@
             required
             @change="getPrograms"
           >
-            <option disabled value="" selected>Please select one</option>
             <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.name }}
             </option>
@@ -154,7 +152,6 @@
             v-model="type_of_hiring"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
-            <option disabled value="" selected>Please select one</option>
             <option value="attrition">Attrition</option>
             <option value="growth">Growth</option>
             <option value="attrition and growth">Attrition and Growth</option>
@@ -189,7 +186,7 @@
             required
             @change="getDateRange2"
           >
-            <option disabled value="" selected>Please select one</option>
+           
             <option
               v-for="daterange in daterange"
               :key="daterange.id"
@@ -270,7 +267,7 @@
             Day 1
             <input
               type="number"
-              v-model="day1"
+              v-model="day_1"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -279,7 +276,7 @@
             Day 2
             <input
               type="number"
-              v-model="day2"
+              v-model="day_2"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -288,7 +285,7 @@
             Day 3
             <input
               type="number"
-              v-model="day3"
+              v-model="day_3"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -297,7 +294,7 @@
             Day 4
             <input
               type="number"
-              v-model="day4"
+              v-model="day_4"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -306,7 +303,7 @@
             Day 5
             <input
               type="number"
-              v-model="day5"
+              v-model="day_5"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -315,7 +312,7 @@
             Day 6
             <input
               type="number"
-              v-model="day6"
+              v-model="day_6"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -324,7 +321,7 @@
             Day 7
             <input
               type="number"
-              v-model="day7"
+              v-model="day_7"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -333,7 +330,7 @@
             Day 8
             <input
               type="number"
-              v-model="day8"
+              v-model="day_8"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -408,6 +405,7 @@
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             >
+              <option disabled value="" selected>Please select one</option>
               <option value="open">Open</option>
               <option value="filled">Filled</option>
             </select>
@@ -416,7 +414,7 @@
             Internals
             <input
               type="number"
-              v-model="internal_hires"
+              v-model="internals_hires"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -503,7 +501,7 @@
             Total Pipeline
             <input
               type="number"
-              v-model="total_pipeline"
+              v-model="pipeline_total"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -521,7 +519,7 @@
             All Internals
             <input
               type="number"
-              v-model="internal_hires_all"
+              v-model="internals_hires_all"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -539,7 +537,7 @@
             Total Deficit
             <input
               type="number"
-              v-model="total_deficit"
+              v-model="deficit_total"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -601,14 +599,14 @@ export default {
       total_target: "",
       erf_number: "",
       wave_no: "",
-      day1: 0,
-      day2: 0,
-      day3: 0,
-      day4: 0,
-      day5: 0,
-      day6: 0,
-      day7: 0,
-      day8: 0,
+      day_1: 0,
+      day_2: 0,
+      day_3: 0,
+      day_4: 0,
+      day_5: 0,
+      day_6: 0,
+      day_7: 0,
+      day_8: 0,
       total_endorsed: 0,
       show_ups_internal: 0,
       show_ups_external: 0,
@@ -616,8 +614,8 @@ export default {
       deficit: 0,
       percentage: 0,
       status: "",
-      internal_hires: 0,
-      external_hires: 0,
+      internals_hires: 0,
+      externals_hires: 0,
       additional_extended_jo: 0,
       with_jo: 0,
       pending_jo: 0,
@@ -625,12 +623,12 @@ export default {
       pending_ov: 0,
       pending_pre_emps: 0,
       classes_number: 0,
-      total_pipeline: 0,
+      pipeline_total: 0,
       cap_starts: 0,
-      internal_hires_all: 0,
-      external_hires_all: 0,
+      internals_hires_all: 0,
+      externals_hires_all: 0,
       pipeline_target: 0,
-      total_deficit: 0,
+      deficit_total: 0,
       pipeline: "",
       over_hires: 0,
     };
@@ -681,14 +679,14 @@ export default {
     },
     total_endorsed_computed() {
       const days = [
-        parseInt(this.day1) || 0,
-        parseInt(this.day2) || 0,
-        parseInt(this.day3) || 0,
-        parseInt(this.day4) || 0,
-        parseInt(this.day5) || 0,
-        parseInt(this.day6) || 0,
-        parseInt(this.day7) || 0,
-        parseInt(this.day8) || 0,
+        parseInt(this.day_1) || 0,
+        parseInt(this.day_2) || 0,
+        parseInt(this.day_3) || 0,
+        parseInt(this.day_4) || 0,
+        parseInt(this.day_5) || 0,
+        parseInt(this.day_6) || 0,
+        parseInt(this.day_7) || 0,
+        parseInt(this.day_8) || 0,
       ];
 
       return days.reduce((total, day) => total + day, 0).toFixed();
@@ -710,10 +708,10 @@ export default {
         return difference;
       }
     },
-    total_pipeline_computed() {
+    pipeline_total_computed() {
       const pipeline = [
-        parseInt(this.internal_hires) || 0,
-        parseInt(this.external_hires) || 0,
+        parseInt(this.internals_hires) || 0,
+        parseInt(this.externals_hires) || 0,
         parseInt(this.with_jo) || 0,
         parseInt(this.pending_jo) || 0,
         parseInt(this.pending_berlitz) || 0,
@@ -730,7 +728,7 @@ export default {
       return show_ups_total > total_target ? total_target : show_ups_total;
     },
     pipeline_computed() {
-      const internal_hires = this.internal_hires;
+      const internals_hires = this.internals_hires;
       const with_jo = this.with_jo;
       const pending_jo = this.pending_jo;
       const pending_berlitz = this.pending_berlitz;
@@ -739,8 +737,8 @@ export default {
 
       let result = "";
 
-      if (internal_hires !== "") {
-        result += `${internal_hires} Internals ; `;
+      if (internals_hires !== "") {
+        result += `${internals_hires} Internals ; `;
       }
 
       if (with_jo !== "") {
@@ -765,7 +763,7 @@ export default {
 
       return result.trim();
     },
-    all_internal_hires_computed() {
+    all_internals_hires_computed() {
       if (
         this.show_ups_internal >= this.total_target &&
         (this.deficit === "" || this.deficit === 0)
@@ -777,35 +775,35 @@ export default {
     },
   },
   watch: {
-    day1: {
+    day_1: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day2: {
+    day_2: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day3: {
+    day_3: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day4: {
+    day_4: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day5: {
+    day_5: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day6: {
+    day_6: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day7: {
+    day_7: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    day8: {
+    day_8: {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
@@ -817,11 +815,11 @@ export default {
       handler: "syncDeficitTotal",
       immediate: true,
     },
-    internal_hires: {
+    internals_hires: {
       handler: "syncPipelineTotal",
       immediate: true,
     },
-    external_hires: {
+    externals_hires: {
       handler: "syncPipelineTotal",
       immediate: true,
     },
@@ -853,7 +851,7 @@ export default {
   methods: {
     syncShowUpsTotal() {
       this.show_ups_total = this.show_ups_total_computed;
-      this.internal_hires_all = this.all_internal_hires_computed;
+      this.internals_hires_all = this.all_internals_hires_computed;
     },
     syncDeficitTotal() {
       this.deficit = this.deficit_computed;
@@ -861,15 +859,15 @@ export default {
       this.classes_number = this.classes_number_computed;
       this.over_hires = this.over_hires_computed;
       this.cap_starts = this.capstart_computed;
-      this.internal_hires_all = this.all_internal_hires_computed;
+      this.internals_hires_all = this.all_internals_hires_computed;
     },
     syncEndorsedTotal() {
       this.total_endorsed = this.total_endorsed_computed;
     },
     syncPipelineTotal() {
-      this.total_pipeline = this.total_pipeline_computed;
+      this.pipeline_total = this.pipeline_total_computed;
       this.pipeline = this.pipeline_computed;
-      //this.internal_hires_all = this.all_internal_hires_computed;
+      //this.internals_hires_all = this.all_internals_hires_computed;
     },
 
     async getClasses() {
@@ -969,14 +967,14 @@ export default {
     },
     addClass() {
       const formData = {
-        day1: this.day1,
-        day2: this.day2,
-        day3: this.day3,
-        day4: this.day4,
-        day5: this.day5,
-        day6: this.day6,
-        day7: this.day7,
-        day8: this.day8,
+        day_1: this.day_1,
+        day_2: this.day_2,
+        day_3: this.day_3,
+        day_4: this.day_4,
+        day_5: this.day_5,
+        day_6: this.day_6,
+        day_7: this.day_7,
+        day_8: this.day_8,
         total_endorsed: this.total_endorsed,
         show_ups_internal: this.show_ups_internal,
         show_ups_external: this.show_ups_external,
@@ -984,8 +982,8 @@ export default {
         deficit: this.deficit,
         percentage: this.percentage,
         status: this.status,
-        internal_hires: this.internal_hires,
-        external_hires: this.external_hires,
+        internals_hires: this.internals_hires,
+        externals_hires: this.externals_hires,
         additional_extended_jo: this.additional_extended_jo,
         with_jo: this.with_jo,
         pending_jo: this.pending_jo,
@@ -993,28 +991,28 @@ export default {
         pending_ov: this.pending_ov,
         pending_pre_emps: this.pending_pre_emps,
         classes_number: this.classes_number,
-        total_pipeline: this.total_pipeline,
-        cap_starts: this.cap_start,
-        internal_hires_all: this.internal_hires_all,
-        external_hires_all: this.external_hires_all,
+        pipeline_total: this.pipeline_total,
+        cap_starts: this.cap_starts,
+        internals_hires_all: this.internals_hires_all,
+        externals_hires_all: this.externals_hires_all,
         pipeline_target: this.pipeline_target,
-        total_deficit: this.total_deficit,
+        deficit_total: this.deficit_total,
         pipeline: this.pipeline,
         over_hires: this.over_hires,
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classesstaffing/", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
-          this.day1 = "";
-          this.day2 = "";
-          this.day3 = "";
-          this.day4 = "";
-          this.day5 = "";
-          this.day6 = "";
-          this.day7 = "";
-          this.day8 = "";
+          this.day_1 = "";
+          this.day_2 = "";
+          this.day_3 = "";
+          this.day_4 = "";
+          this.day_5 = "";
+          this.day_6 = "";
+          this.day_7 = "";
+          this.day_8 = "";
           this.total_endorsed = "";
           this.show_ups_internal = "";
           this.show_ups_external = "";
@@ -1022,8 +1020,8 @@ export default {
           this.deficit = "";
           this.percentage = "";
           this.status = "";
-          this.internal_hires = "";
-          this.external_hires = "";
+          this.internals_hires = "";
+          this.externals_hires = "";
           this.additional_extended_jo = "";
           this.with_jo = "";
           this.pending_jo = "";
@@ -1031,12 +1029,12 @@ export default {
           this.pending_ov = "";
           this.pending_pre_emps = "";
           this.classes_number = "";
-          this.total_pipeline = "";
+          this.pipeline_total = "";
           this.cap_starts = "";
-          this.internal_hires_all = "";
-          this.all_external_hires = "";
+          this.internals_hires_all = "";
+          this.all_externals_hires = "";
           this.pipeline_target = "";
-          this.total_deficit = "";
+          this.deficit_total = "";
           this.pipeline = "";
           this.over_hires = "";
           this.$router.push("/staffing", () => {

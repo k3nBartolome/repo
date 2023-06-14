@@ -5,6 +5,7 @@ use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Controllers\API\User\RoleController;
 use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SiteController;
@@ -104,7 +105,8 @@ Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::post('classes', [ClassesController::class, 'store']);
 Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
 Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
-Route::get('classesstaffing/{id}', [ClassesController::class, 'staffing']);
+Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'staffing']);
+Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
