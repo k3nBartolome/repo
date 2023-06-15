@@ -60,11 +60,10 @@ class ClassStaffingController extends Controller
             'pipeline_total' => 'required',
             'cap_starts' => 'required',
             'internals_hires_all' => 'required',
-            'pipeline_target' => 'required',
-            'deficit_total' => 'required',
+            //'deficit_total' => 'required',
             'pipeline' => 'required',
             'additional_remarks' => 'required',
-            'classes_id'=>'required',
+            'classes_id' => 'required',
         ]);
 
         if ($validator->fails()) {
