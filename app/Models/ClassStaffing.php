@@ -54,6 +54,7 @@ class ClassStaffing extends Model
         'catch_up_start',
         'catch_up_percentage',
         'classes_id',
+        'transaction',
         'updated_by',
         'created_by',
     ];
