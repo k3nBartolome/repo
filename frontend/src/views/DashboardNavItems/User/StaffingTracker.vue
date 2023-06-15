@@ -11,7 +11,9 @@
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
       <form class="">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Site
             <select
@@ -32,7 +34,11 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -101,14 +107,16 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+      <form
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+      >
         <label class="block">
           Country
           <input
             type="text"
             disabled
             v-model="country"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -118,7 +126,7 @@
             disabled
             type="text"
             v-model="region"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -127,7 +135,7 @@
           <select
             disabled
             v-model="site_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
             <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -140,11 +148,15 @@
           <select
             disabled
             v-model="program_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border border-2  bg-gray-200 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getPrograms"
           >
-            <option v-for="program in programs" :key="program.id" :value="program.id">
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
               {{ program.name }}
             </option>
           </select>
@@ -154,7 +166,7 @@
           <select
             disabled
             v-model="type_of_hiring"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border border-2  rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option value="attrition">Attrition</option>
             <option value="growth">Growth</option>
@@ -167,7 +179,7 @@
             disabled
             type="text"
             v-model="year"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -177,7 +189,7 @@
             disabled
             type="text"
             v-model="month"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -186,7 +198,7 @@
           <select
             disabled
             v-model="hiring_week"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border border-2  rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getDateRange2"
           >
@@ -205,7 +217,7 @@
             disabled
             type="date"
             v-model="training_start"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -215,7 +227,7 @@
             disabled
             type="text"
             v-model="internal_target"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -225,7 +237,7 @@
             disabled
             type="text"
             v-model="external_target"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -235,7 +247,7 @@
             disabled
             type="number"
             v-model="total_target"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -245,7 +257,7 @@
             disabled
             type="text"
             v-model="wave_no"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -255,7 +267,7 @@
             disabled
             type="text"
             v-model="erf_number"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -267,7 +279,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Day 1
             <input
@@ -346,7 +360,7 @@
               disabled
               type="number"
               v-model="total_endorsed"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -357,7 +371,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Show-ups Internal
             <input
@@ -381,27 +397,30 @@
           <label class="block">
             Show-ups Total
             <input
+              disabled
               type="number"
               v-model="show_ups_total"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             Deficit
             <input
+              disabled
               type="number"
               v-model="deficit"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             Percentage
             <input
+              disabled
               type="text"
               v-model="percentage"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -438,9 +457,10 @@
           <label class="block">
             Overhires
             <input
+              disabled
               type="number"
               v-model="over_hires"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -451,7 +471,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             With JO
             <input
@@ -504,49 +526,56 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Classes
             <input
+              disabled
               type="number"
               v-model="classes_number"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             Total Pipeline
             <input
+              disabled
               type="number"
               v-model="pipeline_total"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             Cap Starts
             <input
+              disabled
               type="number"
               v-model="cap_starts"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             All Internals
             <input
+              disabled
               type="number"
               v-model="internals_hires_all"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
           <label class="block">
             Pipeline Target
             <input
+              disabled
               type="number"
               v-model="pipeline_target"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -579,8 +608,9 @@
           <label class="block">
             Pipeline
             <textarea
+              disabled
               v-model="pipeline"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
+              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
               required
             />
           </label>
@@ -669,10 +699,14 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
+        filtered = filtered.filter(
+          (c) => c.program.id === this.programs_selected
+        );
       }
       if (this.week_selected) {
-        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
+        filtered = filtered.filter(
+          (c) => c.date_range.id === this.week_selected
+        );
       }
       return filtered;
     },
@@ -748,7 +782,9 @@ export default {
         parseInt(this.pending_pre_emps) || 0,
       ];
 
-      return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
+      return pipeline
+        .reduce((total, pipeline) => total + pipeline, 0)
+        .toFixed();
     },
     capstart_computed() {
       const show_ups_total = this.show_ups_total;
@@ -812,7 +848,10 @@ export default {
       const internals_hires = this.internals_hires;
       const with_jo = this.with_jo;
 
-      const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
+      const minValue = Math.min(
+        total_target,
+        show_ups_total + internals_hires + with_jo
+      );
       const result = total_target - minValue;
 
       console.log(result); // Log the value of 'result'
@@ -824,7 +863,8 @@ export default {
       const pipeline_total = this.pipeline_total;
       const total_target = this.total_target;
 
-      const result = pipeline_total > total_target ? total_target : pipeline_total;
+      const result =
+        pipeline_total > total_target ? total_target : pipeline_total;
 
       return result;
     },
@@ -998,7 +1038,9 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -1014,7 +1056,9 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+        )
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
