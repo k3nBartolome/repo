@@ -63,6 +63,7 @@ class ClassStaffingController extends Controller
             'pipeline_target' => 'required',
             'deficit_total' => 'required',
             'pipeline' => 'required',
+            'additonal_remarks' => 'required',
         ]);
 
         if ($validator->fails()) {

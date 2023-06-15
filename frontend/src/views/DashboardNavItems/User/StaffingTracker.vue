@@ -9,7 +9,9 @@
   <div class="py-8 bg-gray-100">
     <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <form class="">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Site
             <select
@@ -30,7 +32,11 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -97,7 +103,9 @@
   </div>
   <div class="py-2 bg-gray-100">
     <div class="px-4 py-6 mx-auto bg-white border-2 max-w-7xl sm:px-6 lg:px-8">
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+      <form
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+      >
         <label class="block">
           Country
           <input
@@ -140,7 +148,11 @@
             required
             @change="getPrograms"
           >
-            <option v-for="program in programs" :key="program.id" :value="program.id">
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
               {{ program.name }}
             </option>
           </select>
@@ -186,7 +198,6 @@
             required
             @change="getDateRange2"
           >
-           
             <option
               v-for="daterange in daterange"
               :key="daterange.id"
@@ -262,7 +273,9 @@
   <form class="" @submit.prevent="addClass">
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Day 1
             <input
@@ -350,7 +363,9 @@
     </div>
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Show-ups Internal
             <input
@@ -442,7 +457,9 @@
     </div>
     <div class="py-2 bg-gray-100">
       <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             With JO
             <input
@@ -488,6 +505,14 @@
               required
             />
           </label>
+        </div>
+      </div>
+    </div>
+    <div class="py-2 bg-gray-100">
+      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Classes
             <input
@@ -538,6 +563,15 @@
             <input
               type="number"
               v-model="deficit_total"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Additional Remarks
+            <input
+              type="text"
+              v-model="additional_remarks"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -631,6 +665,7 @@ export default {
       deficit_total: 0,
       pipeline: "",
       over_hires: 0,
+      additonal_remarks:"",
     };
   },
   computed: {
@@ -640,10 +675,14 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
+        filtered = filtered.filter(
+          (c) => c.program.id === this.programs_selected
+        );
       }
       if (this.week_selected) {
-        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
+        filtered = filtered.filter(
+          (c) => c.date_range.id === this.week_selected
+        );
       }
       return filtered;
     },
@@ -719,7 +758,9 @@ export default {
         parseInt(this.pending_pre_emps) || 0,
       ];
 
-      return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
+      return pipeline
+        .reduce((total, pipeline) => total + pipeline, 0)
+        .toFixed();
     },
     capstart_computed() {
       const show_ups_total = this.show_ups_total;
@@ -928,7 +969,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -944,7 +987,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+        )
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -999,6 +1044,7 @@ export default {
         deficit_total: this.deficit_total,
         pipeline: this.pipeline,
         over_hires: this.over_hires,
+        additional_remarks: this.additional_remarks,
         created_by: this.$store.state.user_id,
       };
       axios
@@ -1037,6 +1083,7 @@ export default {
           this.deficit_total = "";
           this.pipeline = "";
           this.over_hires = "";
+          this.additional_remarks="";
           this.$router.push("/staffing", () => {
             location.reload();
           });
