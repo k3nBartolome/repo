@@ -550,7 +550,7 @@
               required
             />
           </label>
-          <label class="block">
+          <!--   <label class="block">
             Total Deficit
             <input
               type="number"
@@ -558,17 +558,17 @@
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
-          </label>
-          <label class="block">
-            Additional Remarks
-            <input
-              type="text"
-              v-model="additional_remarks"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-            />
-          </label>
+          </label> -->
         </div>
+        <label class="block">
+          Additional Remarks
+          <textarea
+            type="text"
+            v-model="additional_remarks"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+          />
+        </label>
       </div>
     </div>
     <div class="py-2 bg-gray-100">
@@ -815,8 +815,11 @@ export default {
       const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
       const result = total_target - minValue;
 
+      console.log(result); // Log the value of 'result'
+
       return result;
     },
+
     pipeline_target_computed() {
       const pipeline_total = this.pipeline_total;
       const total_target = this.total_target;
@@ -907,6 +910,7 @@ export default {
     this.getDateRange2();
     this.getClassesAll();
     this.getClasses();
+    console.log(this.deficit_total_computed);
   },
   methods: {
     syncShowUpsTotal() {
@@ -933,6 +937,7 @@ export default {
     },
     syncPipelineTarget() {
       this.pipeline_target = this.pipeline_target_computed;
+      this.deficit_total = this.deficit_total_computed;
     },
 
     async getClasses() {
@@ -1105,7 +1110,7 @@ export default {
           this.pipeline = "";
           this.over_hires = "";
           this.additional_remarks = "";
-          this.class_selected="";
+          this.class_selected = "";
           this.$router.push("/staffing", () => {
             location.reload();
           });

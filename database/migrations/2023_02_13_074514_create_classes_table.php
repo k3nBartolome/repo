@@ -42,6 +42,7 @@ class CreateClassesTable extends Migration
             $table->string('approved_by')->nullable();
             $table->string('cancelled_by')->nullable();
             $table->string('ta')->nullable();
+            $table->integer('wave_no')->nullable();
             $table->string('wf')->nullable();
             $table->string('tr')->nullable();
             $table->string('cl')->nullable();
