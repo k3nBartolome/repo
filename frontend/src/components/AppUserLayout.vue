@@ -27,8 +27,8 @@
 }
 
 .scrollable-content {
-  overflow-x: scroll;
-  overflow-y: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
   height: 100%;
 }
 

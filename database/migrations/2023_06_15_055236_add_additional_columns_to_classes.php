@@ -1,9 +1,10 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddWaveNumberToClasses extends Migration
+class AddAdditionalColumnsToClasses extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +13,8 @@ class AddWaveNumberToClasses extends Migration
      */
     public function up()
     {
-        Schema::table('classes', function (Blueprint $table) {
-            $table->integer('wave_no')->nullable()->change();
+        Schema::table('class_staffing', function (Blueprint $table) {
+            $table->string('transaction')->nullable();
         });
     }
 
@@ -24,8 +25,8 @@ class AddWaveNumberToClasses extends Migration
      */
     public function down()
     {
-        Schema::table('classes', function (Blueprint $table) {
-            $table->integer('wave_no')->nullable(false)->change();
+        Schema::table('class_staffing', function (Blueprint $table) {
+            $table->dropColumn('transaction');
         });
     }
 }

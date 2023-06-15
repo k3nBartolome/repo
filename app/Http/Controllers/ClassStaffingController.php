@@ -73,6 +73,7 @@ class ClassStaffingController extends Controller
 
         $staffing = new ClassStaffing();
         $staffing->fill($request->all());
+        $staffing->transaction = 'Add Class Staffing';
         $staffing->save();
 
         return response()->json([
@@ -87,7 +88,7 @@ class ClassStaffingController extends Controller
      */
     public function show($id)
     {
-        $class = ClassesStaffing::with(['classes'])->find($id);
+        $class = ClassStaffing::with(['classes'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Classes not found'], 404);
