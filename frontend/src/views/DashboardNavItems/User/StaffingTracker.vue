@@ -7,11 +7,11 @@
     </div>
   </header>
   <div class="py-8 bg-gray-100">
-    <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
       <form class="">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
             <select
@@ -32,11 +32,7 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
+              <option v-for="program in programs" :key="program.id" :value="program.id">
                 {{ program.name }}
               </option>
             </select>
@@ -102,10 +98,10 @@
     </div>
   </div>
   <div class="py-2 bg-gray-100">
-    <div class="px-4 py-6 mx-auto bg-white border-2 max-w-7xl sm:px-6 lg:px-8">
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-      >
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Country
           <input
@@ -148,11 +144,7 @@
             required
             @change="getPrograms"
           >
-            <option
-              v-for="program in programs"
-              :key="program.id"
-              :value="program.id"
-            >
+            <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.name }}
             </option>
           </select>
@@ -272,10 +264,10 @@
   </div>
   <form class="" @submit.prevent="addClass">
     <div class="py-2 bg-gray-100">
-      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+      <div
+        class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Day 1
             <input
@@ -362,10 +354,10 @@
       </div>
     </div>
     <div class="py-2 bg-gray-100">
-      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+      <div
+        class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Show-ups Internal
             <input
@@ -456,10 +448,10 @@
       </div>
     </div>
     <div class="py-2 bg-gray-100">
-      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+      <div
+        class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             With JO
             <input
@@ -509,10 +501,10 @@
       </div>
     </div>
     <div class="py-2 bg-gray-100">
-      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+      <div
+        class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Classes
             <input
@@ -580,7 +572,9 @@
       </div>
     </div>
     <div class="py-2 bg-gray-100">
-      <div class="px-4 py-6 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+      <div
+        class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      >
         <div class="grid grid-cols-1 gap-4 font-semibold">
           <label class="block">
             Pipeline
@@ -665,7 +659,7 @@ export default {
       deficit_total: 0,
       pipeline: "",
       over_hires: 0,
-      additonal_remarks:"",
+      additional_remarks: "",
     };
   },
   computed: {
@@ -675,14 +669,10 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter(
-          (c) => c.program.id === this.programs_selected
-        );
+        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
       }
       if (this.week_selected) {
-        filtered = filtered.filter(
-          (c) => c.date_range.id === this.week_selected
-        );
+        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
       }
       return filtered;
     },
@@ -758,9 +748,7 @@ export default {
         parseInt(this.pending_pre_emps) || 0,
       ];
 
-      return pipeline
-        .reduce((total, pipeline) => total + pipeline, 0)
-        .toFixed();
+      return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
     },
     capstart_computed() {
       const show_ups_total = this.show_ups_total;
@@ -775,6 +763,7 @@ export default {
       const pending_berlitz = this.pending_berlitz;
       const pending_ov = this.pending_ov;
       const pending_pre_emps = this.pending_pre_emps;
+      const additional_remarks = this.additional_remarks;
 
       let result = "";
 
@@ -801,6 +790,9 @@ export default {
       if (pending_pre_emps !== "") {
         result += `${pending_pre_emps} Pending Pre Emps ; `;
       }
+      if (additional_remarks !== "") {
+        result += `${additional_remarks} Additional Remarks ; `;
+      }
 
       return result.trim();
     },
@@ -813,6 +805,25 @@ export default {
       } else {
         return 0;
       }
+    },
+    deficit_total_computed() {
+      const total_target = this.total_target;
+      const show_ups_total = this.show_ups_total;
+      const internals_hires = this.internals_hires;
+      const with_jo = this.with_jo;
+
+      const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
+      const result = total_target - minValue;
+
+      return result;
+    },
+    pipeline_target_computed() {
+      const pipeline_total = this.pipeline_total;
+      const total_target = this.total_target;
+
+      const result = pipeline_total > total_target ? total_target : pipeline_total;
+
+      return result;
     },
   },
   watch: {
@@ -880,6 +891,14 @@ export default {
       handler: "syncPipelineTotal",
       immediate: true,
     },
+    additional_remarks: {
+      handler: "syncPipelineTotal",
+      immediate: true,
+    },
+    pipeline_total: {
+      handler: "syncPipelineTarget",
+      immediate: true,
+    },
   },
   mounted() {
     this.getSites();
@@ -901,6 +920,8 @@ export default {
       this.over_hires = this.over_hires_computed;
       this.cap_starts = this.capstart_computed;
       this.internals_hires_all = this.all_internals_hires_computed;
+      this.deficit_total = this.deficit_total_computed;
+      this.pipeline_target = this.pipeline_target_computed;
     },
     syncEndorsedTotal() {
       this.total_endorsed = this.total_endorsed_computed;
@@ -908,17 +929,20 @@ export default {
     syncPipelineTotal() {
       this.pipeline_total = this.pipeline_total_computed;
       this.pipeline = this.pipeline_computed;
-      //this.internals_hires_all = this.all_internals_hires_computed;
+      this.deficit_total = this.deficit_total_computed;
+    },
+    syncPipelineTarget() {
+      this.pipeline_target = this.pipeline_target_computed;
     },
 
     async getClasses() {
       if (!this.class_selected) {
-        return; // do nothing if no class is selected
+        return;
       }
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/classes/${this.class_selected}`
+          `http://10.109.2.112:8081/api/classes/${this.class_selected}`
         );
         const classObj = response.data.class;
         console.log(classObj);
@@ -943,7 +967,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://127.0.0.1:8000/api/classesall")
+        .get("http://10.109.2.112:8081/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.data);
@@ -954,7 +978,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -969,9 +993,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
-        )
+        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -987,9 +1009,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
-        )
+        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -1001,7 +1021,7 @@ export default {
     async getDateRange2() {
       console.log(this.hiring);
       await axios
-        .get("http://127.0.0.1:8000/api/daterange")
+        .get("http://10.109.2.112:8081/api/daterange")
         .then((response) => {
           this.daterange2 = response.data.data;
           console.log(response.data.data);
@@ -1045,10 +1065,11 @@ export default {
         pipeline: this.pipeline,
         over_hires: this.over_hires,
         additional_remarks: this.additional_remarks,
+        classes_id: this.class_selected,
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
+        .post("http://10.109.2.112:8081/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -1083,7 +1104,8 @@ export default {
           this.deficit_total = "";
           this.pipeline = "";
           this.over_hires = "";
-          this.additional_remarks="";
+          this.additional_remarks = "";
+          this.class_selected="";
           this.$router.push("/staffing", () => {
             location.reload();
           });
