@@ -48,6 +48,7 @@ import cancelCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileG
 import editCapFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/EditCapfileGuatemala.vue";
 import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
 import StaffingTracker from "@/views/DashboardNavItems/User/StaffingTracker.vue";
+import AddStaffingTracker from "@/views/DashboardNavItems/User/AddStaffingTracker.vue";
 
 const routes = [
   {
@@ -250,6 +251,11 @@ const routes = [
         path: "/staffing",
         name: "StaffingTracker",
         component: StaffingTracker,
+      },
+      {
+        path: "/addstaffing/:id",
+        name: "AddStaffingTracker",
+        component: AddStaffingTracker,
       },
       {
         path: "/powerbi",

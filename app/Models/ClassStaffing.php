@@ -61,6 +61,6 @@ class ClassStaffing extends Model
 
     public function classes()
     {
-        return $this->belongsTo(Classes::classes, 'classes_id');
+        return $this->belongsTo(Classes::class, 'classes_id');
     }
 }

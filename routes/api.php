@@ -105,8 +105,9 @@ Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
 Route::post('classes', [ClassesController::class, 'store']);
 Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
 Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
-Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'staffing']);
 Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
+Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'show']);
+Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);

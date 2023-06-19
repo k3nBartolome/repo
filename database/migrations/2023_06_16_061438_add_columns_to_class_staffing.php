@@ -1,10 +1,9 @@
 <?php
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddAdditionalColumnsToClasses extends Migration
+class AddColumnsToClassStaffing extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +13,8 @@ class AddAdditionalColumnsToClasses extends Migration
     public function up()
     {
         Schema::table('class_staffing', function (Blueprint $table) {
-            $table->string('transaction')->nullable();
+            $table->integer('active_status')->nullable();
+            $table->unsignedBigInteger('class_staffing_id')->nullable();
         });
     }
 
@@ -26,7 +26,8 @@ class AddAdditionalColumnsToClasses extends Migration
     public function down()
     {
         Schema::table('class_staffing', function (Blueprint $table) {
-            $table->dropColumn('transaction');
+            $table->integer('active_status')->nullable();
+            $table->unsignedBigInteger('class_staffing_id')->nullable();
         });
     }
 }

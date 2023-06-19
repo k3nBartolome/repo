@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassStaffing;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,6 +16,17 @@ class ClassStaffingController extends Controller
      */
     public function index()
     {
+        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+            ->where('active_status', '1')
+            ->get();
+
+        if ($classStaffing->isEmpty()) {
+            return response()->json(['error' => 'Classes not found'], 404);
+        }
+
+        return response()->json([
+            'class_staffing' => $classStaffing,
+        ]);
     }
 
     /**
@@ -60,7 +72,6 @@ class ClassStaffingController extends Controller
             'pipeline_total' => 'required',
             'cap_starts' => 'required',
             'internals_hires_all' => 'required',
-            //'deficit_total' => 'required',
             'pipeline' => 'required',
             'additional_remarks' => 'required',
             'classes_id' => 'required',
@@ -73,6 +84,9 @@ class ClassStaffingController extends Controller
         $staffing = new ClassStaffing();
         $staffing->fill($request->all());
         $staffing->transaction = 'Add Class Staffing';
+        $staffing->active_status = '1';
+        $staffing->save();
+        $staffing->class_staffing_id = $staffing->id;
         $staffing->save();
 
         return response()->json([
@@ -87,7 +101,7 @@ class ClassStaffingController extends Controller
      */
     public function show($id)
     {
-        $class = ClassStaffing::with(['classes'])->find($id);
+        $class = ClassStaffing::with(['classes_staffing'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Classes not found'], 404);

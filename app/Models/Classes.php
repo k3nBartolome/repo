@@ -81,7 +81,7 @@ class Classes extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
-    public function classes_staffing()
+    public function classes()
     {
         return $this->hasMany(ClassStaffing::ClassStaffing, 'classes_id');
     }

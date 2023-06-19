@@ -2,6 +2,7 @@
 addcapfileguatemala
 addcapfileindia
 addcapfilejamaica
+addstaffing
 cancelcapfile
 cancelcapfileguatemala
 cancelcapfilejamaica
