@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassStaffing;
-use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -101,7 +100,7 @@ class ClassStaffingController extends Controller
      */
     public function show($id)
     {
-        $class = ClassStaffing::with(['classes_staffing'])->find($id);
+        $class = ClassStaffing::with(['classes'])->find($id);
 
         if (!$class) {
             return response()->json(['error' => 'Classes not found'], 404);
@@ -126,8 +125,53 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ClassStaffing $ClassStaffing)
+    public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'show_ups_internal' => 'required',
+            'show_ups_external' => 'required',
+            'show_ups_total' => 'required',
+            'deficit' => 'required',
+            'percentage' => 'required',
+            'status' => 'required',
+            'day_1' => 'required',
+            'day_2' => 'required',
+            'day_3' => 'required',
+            'day_4' => 'required',
+            'day_5' => 'required',
+            'day_6' => 'required',
+            'total_endorsed' => 'required',
+            'internals_hires' => 'required',
+            'additional_extended_jo' => 'required',
+            'with_jo' => 'required',
+            'pending_jo' => 'required',
+            'pending_berlitz' => 'required',
+            'pending_ov' => 'required',
+            'pending_pre_emps' => 'required',
+            'classes_number' => 'required',
+            'pipeline_total' => 'required',
+            'cap_starts' => 'required',
+            'internals_hires_all' => 'required',
+            'pipeline' => 'required',
+            'additional_remarks' => 'required',
+            'classes_id' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $class = ClassStaffing::find($id);
+        $class->active_status = '0';
+        $class->save();
+        $newClass = $class->replicate();
+        $newClass->transaction = 'Update';
+        $newClass->updated_by = $request->input('updated_by');
+        $newClass->fill($request->all());
+        $newClass->save();
+
+        return response()->json([
+            'class' => $class,
+        ]);
     }
 
     /**

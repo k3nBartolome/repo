@@ -6,7 +6,7 @@
       </h1>
     </div>
   </header>
-  <div class="py-8 bg-gray-100">
+  <div class="py-8 bg-white">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
@@ -75,7 +75,7 @@
               </option>
             </select>
           </label>
-          <label class="block">
+          <label class="block" style="display: none">
             Class
             <select
               v-model="class_selected"
@@ -84,7 +84,7 @@
             >
               <option disabled value="" selected>Please select one</option>
               <option
-                v-for="classes in class_staffing"
+                v-for="classes in filteredClasses"
                 :key="classes.id"
                 :value="classes.id"
               >
@@ -93,6 +93,24 @@
               </option>
             </select>
           </label>
+          <router-link
+          :to="{
+            path: `/addstaffing/}`,
+            query: {
+              program: programs_selected,
+              site: sites_selected,
+              daterange: week_selected,
+              class_selected: class_selected,
+            },
+          }"
+        >
+          <button
+            type="submit"
+            class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+          >
+            <i class="fa fa-building"></i> Add
+          </button>
+        </router-link>
         </div>
       </form>
     </div>
@@ -106,23 +124,7 @@
           placeholder="Search..."
           class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
         />
-        <router-link
-          :to="{
-            path: `/addstaffing/`,
-            query: {
-              program: programs_selected,
-              site: sites_selected,
-              daterange: week_selected,
-            },
-          }"
-        >
-        <button
-          type="submit"
-          class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-        >
-          <i class="fa fa-building"></i> Add
-        </button>
-      </router-link>
+
       </div>
     </div>
   </div>
@@ -149,16 +151,7 @@
             <th class="px-1 py-2">Day4</th>
             <th class="px-1 py-2">Day5</th>
             <th class="px-1 py-2">Day6</th>
-            <th class="px-1 py-2">Day7</th>
-            <th class="px-1 py-2">Day8</th>
             <th class="px-1 py-2">Day1 Start Rate</th>
-            <th class="px-1 py-2">Day2 Start Rate</th>
-            <th class="px-1 py-2">Day3 Start Rate</th>
-            <th class="px-1 py-2">Day4 Start Rate</th>
-            <th class="px-1 py-2">Day5 Start Rate</th>
-            <th class="px-1 py-2">Day6 Start Rate</th>
-            <th class="px-1 py-2">Day7 Start Rate</th>
-            <th class="px-1 py-2">Day8 Start Rate</th>
             <th class="px-1 py-2">Total Endorsed</th>
             <th class="px-1 py-2">Endorsed Rate</th>
             <th class="px-1 py-2">Show-ups-Internal</th>
@@ -194,11 +187,13 @@
             </td>
             <td class="px-2 py-2 truncate">
               <div class="flex justify-center mt-2">
-                <button
-                  class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-                >
-                  Update
-                </button>
+                <router-link :to="`/updatestaffing/${class_staffing.id}`">
+                  <button
+                    class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                  >
+                    Update
+                  </button>
+                </router-link>
               </div>
             </td>
             <td class="px-1 py-2 border border-black">
@@ -244,34 +239,7 @@
               {{ class_staffing.day_6 }}
             </td>
             <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_7 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_8 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
               {{ class_staffing.day_1_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_2_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_3_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_4_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_5_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_6_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_7_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_8_start_rate }}
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.total_endorsed }}
@@ -359,9 +327,10 @@ export default {
   data() {
     return {
       class_staffing: [],
-      programs:[],
-      sites:[],
-      daterange:[],
+      classesall: [],
+      programs: [],
+      sites: [],
+      daterange: [],
       search: "",
       week_selected: "",
       programs_selected: "",
@@ -370,70 +339,126 @@ export default {
       class_selected: "",
     };
   },
-  computed: {
+  watch: {
+    sites_selected: {
+      immediate: true,
+      handler() {
+        this.getPrograms();
+        this.class_selected = "";
+        this.updateClassSelected();
+      },
+    },
+    programs_selected: {
+      immediate: true,
+      handler() {
+        this.getClasses();
+        this.class_selected = "";
+        this.updateClassSelected();
+      },
+    },
+    week_selected: {
+      immediate: true,
+      handler() {
+        this.class_selected = "";
+        this.updateClassSelected();
+      },
+    },
+  },
 
+  computed: {
+    filteredClasses() {
+      return this.classesall.filter((cls) => {
+        return (
+          cls.site.id === this.sites_selected &&
+          cls.program.id === this.programs_selected &&
+          cls.date_range.id === this.week_selected
+        );
+      });
+    },
   },
   mounted() {
     this.getClassesAll();
+    this.getClasses();
     this.getSites();
-      this.getPrograms();
-      this.getDateRange();
+    this.getPrograms();
+    this.getDateRange();
   },
   methods: {
-    async getClassesAll() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classesstaffing")
-        .then((response) => {
-          this.class_staffing = response.data.class_staffing;
-          console.log(response.data.class_staffing);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    updateClassSelected() {
+      const filteredClasses = this.filteredClasses;
+      if (filteredClasses.length > 0) {
+        this.class_selected = filteredClasses[0].id;
+      } else {
+        this.class_selected = "";
+      }
     },
+    async getClasses() {
+      try {
+        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
+        this.classesall = response.data.classes;
+        console.log(response.data.classes);
+
+        const filteredClasses = this.filteredClasses; // Get the filtered classes
+        if (filteredClasses.length > 0) {
+          this.class_selected = filteredClasses[0].id; // Select the first class from the filtered classes
+        } else {
+          this.class_selected = ""; // Reset the selection if there are no matching classes
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getClassesAll() {
+      try {
+        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
+        this.class_staffing = response.data.class_staffing;
+        console.log(response.data.class_staffing);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     async getSites() {
-        await axios
-          .get("http://127.0.0.1:8000/api/sites")
-          .then((response) => {
-            this.sites = response.data.data;
-            console.log(response.data.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
-      async getPrograms() {
-        if (!this.sites_selected) {
-          return; // do nothing if no site is selected
-        }
-  
-        await axios
-          .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
-          .then((response) => {
-            this.programs = response.data.data;
-            console.log(response.data.data);
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      },
-  
-      async getDateRange() {
-        if (!this.month_selected) {
-          return;
-        }
-  
-        await axios
-          .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
-          .then((response) => {
-            this.daterange = response.data.data;
-            console.log(response.data.data);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      },
-    
+      try {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites");
+        this.sites = response.data.data;
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getPrograms() {
+      if (!this.sites_selected) {
+        return; // Do nothing if no site is selected
+      }
+
+      try {
+        const response = await axios.get(
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+        );
+        this.programs = response.data.data;
+        console.log(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getDateRange() {
+      if (!this.month_selected) {
+        return;
+      }
+
+      try {
+        const response = await axios.get(
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+        );
+        this.daterange = response.data.data;
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
   },
 };
 </script>

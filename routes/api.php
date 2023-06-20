@@ -91,9 +91,7 @@ Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
 Route::get('programs_selected/{siteId}', [ProgramController::class, 'indexBySite']);
 
 //Classes Routes
-Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
-
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('classesall', [ClassesController::class, 'classesAll']);
 Route::get('classesallindia', [ClassesController::class, 'classesAllInd']);

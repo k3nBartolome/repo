@@ -232,24 +232,6 @@
               />
             </label>
             <label class="block">
-              Day 7
-              <input
-                type="number"
-                v-model="day_7"
-                class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-                required
-              />
-            </label>
-            <label class="block">
-              Day 8
-              <input
-                type="number"
-                v-model="day_8"
-                class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-                required
-              />
-            </label>
-            <label class="block">
               Total_Endorsed
               <input
                 disabled
@@ -521,16 +503,11 @@
   export default {
     data() {
       return {
-        class_selected: "",
         classesall: [],
         sites: [],
         programs: [],
         daterange: [],
         daterange2: [],
-        sites_selected: "",
-        programs_selected: "",
-        month_selected: "",
-        week_selected: "",
         country: "",
         region: "",
         site_selected: "",
@@ -552,8 +529,6 @@
         day_4: 0,
         day_5: 0,
         day_6: 0,
-        day_7: 0,
-        day_8: 0,
         total_endorsed: 0,
         show_ups_internal: 0,
         show_ups_external: 0,
@@ -582,6 +557,18 @@
       };
     },
     computed: {
+      programs_selected() {
+      return this.$route.query.program;
+    },
+    sites_selected() {
+      return this.$route.query.site;
+    },
+    week_selected() {
+      return this.$route.query.daterange;
+    },
+    class_selected() {
+      return this.$route.query.class_selected;
+    },
       filteredClasses() {
         let filtered = this.classesall;
         if (this.sites_selected) {
@@ -603,11 +590,11 @@
       deficit_computed() {
         const targetValue = Number(parseFloat(this.total_target));
         const showUpsValue = Number(parseFloat(this.show_ups_total));
-  
+
         if (isNaN(targetValue) || isNaN(showUpsValue)) {
           return 0; // Treat invalid or empty values as 0
         }
-  
+
         if (targetValue - showUpsValue < 0) {
           return 0;
         } else {
@@ -617,11 +604,11 @@
       percentage_computed() {
         const total_target = Number(parseInt(this.total_target)) || 0;
         const show_ups_total = Number(parseInt(this.show_ups_total)) || 0;
-  
+
         if (total_target === 0) {
           return "0%";
         }
-  
+
         const percentage = (show_ups_total / total_target) * 100;
         return percentage.toFixed(2) + "%";
       },
@@ -633,15 +620,14 @@
           parseInt(this.day_4) || 0,
           parseInt(this.day_5) || 0,
           parseInt(this.day_6) || 0,
-          parseInt(this.day_7) || 0,
-          parseInt(this.day_8) || 0,
+
         ];
-  
+
         return days.reduce((total, day) => total + day, 0).toFixed();
       },
       classes_number_computed() {
         const target = this.total_target;
-  
+
         if (target % 15 > 1) {
           return Math.floor(target / 15) + 1;
         } else {
@@ -666,13 +652,13 @@
           parseInt(this.pending_ov) || 0,
           parseInt(this.pending_pre_emps) || 0,
         ];
-  
+
         return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
       },
       capstart_computed() {
         const show_ups_total = this.show_ups_total;
         const total_target = this.total_target;
-  
+
         return show_ups_total > total_target ? total_target : show_ups_total;
       },
       pipeline_computed() {
@@ -683,36 +669,36 @@
         const pending_ov = this.pending_ov;
         const pending_pre_emps = this.pending_pre_emps;
         const additional_remarks = this.additional_remarks;
-  
+
         let result = "";
-  
+
         if (internals_hires !== "") {
           result += `${internals_hires} Internals ; `;
         }
-  
+
         if (with_jo !== "") {
           result += `${with_jo} With JO ; `;
         }
-  
+
         if (pending_jo !== "") {
           result += `${pending_jo} Pending JO ; `;
         }
-  
+
         if (pending_berlitz !== "") {
           result += `${pending_berlitz} Pending Berlitz ; `;
         }
-  
+
         if (pending_ov !== "") {
           result += `${pending_ov} Pending OV ; `;
         }
-  
+
         if (pending_pre_emps !== "") {
           result += `${pending_pre_emps} Pending Pre Emps ; `;
         }
         if (additional_remarks !== "") {
           result += `${additional_remarks} Additional Remarks ; `;
         }
-  
+
         return result.trim();
       },
       all_internals_hires_computed() {
@@ -730,21 +716,21 @@
         const show_ups_total = this.show_ups_total;
         const internals_hires = this.internals_hires;
         const with_jo = this.with_jo;
-  
+
         const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
         const result = total_target - minValue;
-  
+
         console.log(result); // Log the value of 'result'
-  
+
         return result;
       },
-  
+
       pipeline_target_computed() {
         const pipeline_total = this.pipeline_total;
         const total_target = this.total_target;
-  
+
         const result = pipeline_total > total_target ? total_target : pipeline_total;
-  
+
         return result;
       },
     },
@@ -770,14 +756,6 @@
         immediate: true,
       },
       day_6: {
-        handler: "syncEndorsedTotal",
-        immediate: true,
-      },
-      day_7: {
-        handler: "syncEndorsedTotal",
-        immediate: true,
-      },
-      day_8: {
         handler: "syncEndorsedTotal",
         immediate: true,
       },
@@ -858,15 +836,15 @@
         this.pipeline_target = this.pipeline_target_computed;
         this.deficit_total = this.deficit_total_computed;
       },
-  
+
       async getClasses() {
         if (!this.class_selected) {
           return;
         }
-  
+
         try {
           const response = await axios.get(
-            `http://127.0.0.1:8000/api/classes/${this.class_selected}`
+            `http://10.109.2.112:8081/api/classes/${this.class_selected}`
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -883,7 +861,7 @@
           this.month = classObj.date_range.month;
           this.training_start = classObj.agreed_start_date;
           this.erf_number = classObj.erf_number;
-  
+
           console.log(classObj);
         } catch (error) {
           console.log(error);
@@ -891,7 +869,7 @@
       },
       async getClassesAll() {
         await axios
-          .get("http://127.0.0.1:8000/api/classesall")
+          .get("http://10.109.2.112:8081/api/classesall")
           .then((response) => {
             this.classesall = response.data.classes;
             console.log(response.data.data);
@@ -902,7 +880,7 @@
       },
       async getSites() {
         await axios
-          .get("http://127.0.0.1:8000/api/sites")
+          .get("http://10.109.2.112:8081/api/sites")
           .then((response) => {
             this.sites = response.data.data;
             console.log(response.data.data);
@@ -915,9 +893,9 @@
         if (!this.sites_selected) {
           return; // do nothing if no site is selected
         }
-  
+
         await axios
-          .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+          .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
           .then((response) => {
             this.programs = response.data.data;
             console.log(response.data.data);
@@ -926,14 +904,14 @@
             console.error(error);
           });
       },
-  
+
       async getDateRange() {
         if (!this.month_selected) {
           return;
         }
-  
+
         await axios
-          .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+          .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
           .then((response) => {
             this.daterange = response.data.data;
             console.log(response.data.data);
@@ -945,7 +923,7 @@
       async getDateRange2() {
         console.log(this.hiring);
         await axios
-          .get("http://127.0.0.1:8000/api/daterange")
+          .get("http://10.109.2.112:8081/api/daterange")
           .then((response) => {
             this.daterange2 = response.data.data;
             console.log(response.data.data);
@@ -962,8 +940,6 @@
           day_4: this.day_4,
           day_5: this.day_5,
           day_6: this.day_6,
-          day_7: this.day_7,
-          day_8: this.day_8,
           total_endorsed: this.total_endorsed,
           show_ups_internal: this.show_ups_internal,
           show_ups_external: this.show_ups_external,
@@ -992,7 +968,7 @@
           created_by: this.$store.state.user_id,
         };
         axios
-          .post("http://127.0.0.1:8000/api/classesstaffing", formData)
+          .post("http://10.109.2.112:8081/api/classesstaffing", formData)
           .then((response) => {
             console.log(response.data);
             this.day_1 = "";
@@ -1001,8 +977,6 @@
             this.day_4 = "";
             this.day_5 = "";
             this.day_6 = "";
-            this.day_7 = "";
-            this.day_8 = "";
             this.total_endorsed = "";
             this.show_ups_internal = "";
             this.show_ups_external = "";
@@ -1039,4 +1013,3 @@
     },
   };
   </script>
-  
