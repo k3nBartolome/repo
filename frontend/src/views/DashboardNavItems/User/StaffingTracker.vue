@@ -6,6 +6,97 @@
       </h1>
     </div>
   </header>
+  <div class="py-8 bg-gray-100">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form class="">
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+          <label class="block">
+            Site
+            <select
+              v-model="sites_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getPrograms"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+            </select>
+          </label>
+          <label class="block">
+            Programs
+            <select
+              v-model="programs_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="program in programs" :key="program.id" :value="program.id">
+                {{ program.name }}
+              </option>
+            </select>
+          </label>
+          <label class="block">
+            Month
+            <select
+              v-model="month_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getDateRange"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </label>
+          <label class="block">
+            Week Range
+            <select
+              v-model="week_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option
+                v-for="daterange in daterange"
+                :key="daterange.id"
+                :value="daterange.id"
+              >
+                {{ daterange.date_range }}
+              </option>
+            </select>
+          </label>
+          <label class="block">
+            Class
+            <select
+              v-model="class_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getClasses"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option
+                v-for="classes in class_staffing"
+                :key="classes.id"
+                :value="classes.id"
+              >
+                {{ classes.site.name }} {{ classes.program.name }}
+                {{ classes.date_range.date_range }} {{ classes.total_target }}
+              </option>
+            </select>
+          </label>
+        </div>
+      </form>
+    </div>
+  </div>
   <div class="py-4">
     <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
       <div class="mb-4">
@@ -27,7 +118,7 @@
         >
         <button
           type="submit"
-          class="px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600 float-right"
+          class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
           <i class="fa fa-building"></i> Add
         </button>
@@ -40,7 +131,7 @@
       <table class="w-full text-white table-auto">
         <thead class="sticky-header">
           <tr
-            class="text-center bg-orange-500 border-2 border-orange-600 border-solid truncate"
+            class="text-center truncate bg-orange-500 border-2 border-orange-600 border-solid"
           >
             <th class="px-1 py-2">ID</th>
             <th class="px-2 py-2 truncate">Action</th>
@@ -96,7 +187,7 @@
         </thead>
         <tbody v-for="class_staffing in class_staffing" :key="class_staffing.id">
           <tr
-            class="font-semibold text-center text-black bg-white border-2 border-gray-400 border-solid align-center truncate"
+            class="font-semibold text-center text-black truncate bg-white border-2 border-gray-400 border-solid align-center"
           >
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.id }}
@@ -111,7 +202,7 @@
               </div>
             </td>
             <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.site.country, }}
+              {{ class_staffing.classes.site.country }}
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.classes.site.name }}
@@ -268,7 +359,15 @@ export default {
   data() {
     return {
       class_staffing: [],
+      programs:[],
+      sites:[],
+      daterange:[],
       search: "",
+      week_selected: "",
+      programs_selected: "",
+      sites_selected: "",
+      month_selected: "",
+      class_selected: "",
     };
   },
   computed: {
@@ -276,6 +375,9 @@ export default {
   },
   mounted() {
     this.getClassesAll();
+    this.getSites();
+      this.getPrograms();
+      this.getDateRange();
   },
   methods: {
     async getClassesAll() {
@@ -289,6 +391,49 @@ export default {
           console.log(error);
         });
     },
+    async getSites() {
+        await axios
+          .get("http://127.0.0.1:8000/api/sites")
+          .then((response) => {
+            this.sites = response.data.data;
+            console.log(response.data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+      async getPrograms() {
+        if (!this.sites_selected) {
+          return; // do nothing if no site is selected
+        }
+  
+        await axios
+          .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+          .then((response) => {
+            this.programs = response.data.data;
+            console.log(response.data.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      },
+  
+      async getDateRange() {
+        if (!this.month_selected) {
+          return;
+        }
+  
+        await axios
+          .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+          .then((response) => {
+            this.daterange = response.data.data;
+            console.log(response.data.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      },
+    
   },
 };
 </script>
