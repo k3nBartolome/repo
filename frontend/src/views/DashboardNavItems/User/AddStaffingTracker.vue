@@ -498,7 +498,6 @@ export default {
       sites: [],
       programs: [],
       daterange: [],
-      daterange2: [],
       country: "",
       region: "",
       site_selected: "",
@@ -661,30 +660,31 @@ export default {
 
       let result = "";
 
-      if (internals_hires !== "") {
+      if (internals_hires !== "" && internals_hires !== 0) {
         result += `${internals_hires} Internals ; `;
       }
 
-      if (with_jo !== "") {
+      if (with_jo !== "" && with_jo !== 0) {
         result += `${with_jo} With JO ; `;
       }
 
-      if (pending_jo !== "") {
+      if (pending_jo !== "" && pending_jo !== 0) {
         result += `${pending_jo} Pending JO ; `;
       }
 
-      if (pending_berlitz !== "") {
+      if (pending_berlitz !== "" && pending_berlitz !== 0) {
         result += `${pending_berlitz} Pending Berlitz ; `;
       }
 
-      if (pending_ov !== "") {
+      if (pending_ov !== "" && pending_ov !== 0) {
         result += `${pending_ov} Pending OV ; `;
       }
 
-      if (pending_pre_emps !== "") {
+      if (pending_pre_emps !== "" && pending_pre_emps !== 0) {
         result += `${pending_pre_emps} Pending Pre Emps ; `;
       }
-      if (additional_remarks !== "") {
+
+      if (additional_remarks !== "" && additional_remarks !== 0) {
         result += `${additional_remarks} Additional Remarks ; `;
       }
 
@@ -708,9 +708,6 @@ export default {
 
       const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
       const result = total_target - minValue;
-
-      console.log(result); // Log the value of 'result'
-
       return result;
     },
 
@@ -793,10 +790,8 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
-    this.getDateRange2();
     this.getClassesAll();
     this.getClasses();
-    console.log(this.deficit_total_computed);
   },
   methods: {
     syncShowUpsTotal() {
@@ -827,41 +822,39 @@ export default {
     },
 
     async getClasses() {
-      if (!this.class_selected) {
-        return;
-      }
-
       try {
-        const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.class_selected}`
-        );
-        const classObj = response.data.class;
-        console.log(classObj);
-        this.type_of_hiring = classObj.type_of_hiring;
-        this.external_target = classObj.external_target;
-        this.internal_target = classObj.internal_target;
-        this.total_target = classObj.total_target;
-        this.region = classObj.site.region;
-        this.country = classObj.site.country;
-        this.program_selected = classObj.program_id;
-        this.site_selected = classObj.site_id;
-        this.hiring_week = classObj.date_range.id;
-        this.year = classObj.date_range.year;
-        this.month = classObj.date_range.month;
-        this.training_start = classObj.agreed_start_date;
-        this.erf_number = classObj.erf_number;
-
-        console.log(classObj);
+        if (this.class_selected) {
+          const response = await axios.get(
+            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
+          );
+          const classObj = response.data.class;
+          console.log(classObj);
+          this.type_of_hiring = classObj.type_of_hiring;
+          this.external_target = classObj.external_target;
+          this.internal_target = classObj.internal_target;
+          this.total_target = classObj.total_target;
+          this.region = classObj.site.region;
+          this.country = classObj.site.country;
+          this.program_selected = classObj.program_id;
+          this.site_selected = classObj.site_id;
+          this.hiring_week = classObj.date_range.id;
+          this.year = classObj.date_range.year;
+          this.month = classObj.date_range.month;
+          this.training_start = classObj.agreed_start_date;
+          this.erf_number = classObj.erf_number;
+        } else {
+          console.log("No class selected");
+        }
       } catch (error) {
         console.log(error);
       }
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
-          console.log(response.data.data);
+          console.log(response.data.classes);
         })
         .catch((error) => {
           console.log(error);
@@ -869,7 +862,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -884,7 +877,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -893,28 +886,11 @@ export default {
           console.error(error);
         });
     },
-
     async getDateRange() {
-      if (!this.month_selected) {
-        return;
-      }
-
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getDateRange2() {
-      console.log(this.hiring);
-      await axios
-        .get("http://10.109.2.112:8081/api/daterange")
-        .then((response) => {
-          this.daterange2 = response.data.data;
           console.log(response.data.data);
         })
         .catch((error) => {
@@ -957,7 +933,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -1002,7 +978,7 @@ export default {
   },
   async getSites() {
     await axios
-      .get("http://10.109.2.112:8081/api/sites")
+      .get("http://127.0.0.1:8000/api/sites")
       .then((response) => {
         this.sites = response.data.data;
         console.log(response.data.data);
@@ -1017,7 +993,7 @@ export default {
     }
 
     await axios
-      .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+      .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
       .then((response) => {
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -1028,26 +1004,10 @@ export default {
   },
 
   async getDateRange() {
-    if (!this.month_selected) {
-      return;
-    }
-
     await axios
-      .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+      .get("http://127.0.0.1:8000/api/daterange")
       .then((response) => {
         this.daterange = response.data.data;
-        console.log(response.data.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  },
-  async getDateRange2() {
-    console.log(this.hiring);
-    await axios
-      .get("http://10.109.2.112:8081/api/daterange")
-      .then((response) => {
-        this.daterange2 = response.data.data;
         console.log(response.data.data);
       })
       .catch((error) => {
@@ -1090,7 +1050,7 @@ export default {
       created_by: this.$store.state.user_id,
     };
     axios
-      .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+      .post("http://127.0.0.1:8000/api/classesstaffing", formData)
       .then((response) => {
         console.log(response.data);
         this.day_1 = "";
