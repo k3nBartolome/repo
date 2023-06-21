@@ -57,8 +57,6 @@ class ClassStaffingController extends Controller
             'day_4' => 'required',
             'day_5' => 'required',
             'day_6' => 'required',
-            'day_7' => 'required',
-            'day_8' => 'required',
             'total_endorsed' => 'required',
             'internals_hires' => 'required',
             'additional_extended_jo' => 'required',

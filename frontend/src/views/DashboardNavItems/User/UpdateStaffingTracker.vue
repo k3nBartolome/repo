@@ -841,7 +841,7 @@ export default {
 
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -853,7 +853,7 @@ export default {
     async getClassesStaffing() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesstaffing/" + this.$route.params.id
+          "http://127.0.0.1:8000/api/classesstaffing/" + this.$route.params.id
         );
         const classObj = response.data.class;
 
@@ -898,7 +898,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            `http://10.109.2.112:8081/api/classes/${this.class_selected}`
+            `http://127.0.0.1:8000/api/classes/${this.class_selected}`
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -924,7 +924,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -939,7 +939,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -955,7 +955,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -966,7 +966,7 @@ export default {
     },
     async getDateRange2() {
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange2 = response.data.data;
           console.log(response.data.data);
@@ -1013,7 +1013,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
