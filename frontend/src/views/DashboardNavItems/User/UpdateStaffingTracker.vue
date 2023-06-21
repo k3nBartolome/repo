@@ -97,7 +97,7 @@
             v-model="hiring_week"
             class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
-            @change="getDateRange2"
+            @change="getDateRange"
           >
             <option
               v-for="daterange in daterange"
@@ -709,36 +709,36 @@ export default {
       total_target: "",
       erf_number: "",
       wave_no: "",
-      day_1: 0,
-      day_2: 0,
-      day_3: 0,
-      day_4: 0,
-      day_5: 0,
-      day_6: 0,
-      total_endorsed: 0,
-      show_ups_internal: 0,
-      show_ups_external: 0,
-      show_ups_total: 0,
-      deficit: 0,
-      percentage: 0,
+      day_1: "",
+      day_2: "",
+      day_3: "",
+      day_4: "",
+      day_5: "",
+      day_6: "",
+      total_endorsed: "",
+      show_ups_internal: "",
+      show_ups_external: "",
+      show_ups_total: "",
+      deficit: "",
+      percentage: "",
       status: "",
-      internals_hires: 0,
-      externals_hires: 0,
-      additional_extended_jo: 0,
-      with_jo: 0,
-      pending_jo: 0,
-      pending_berlitz: 0,
-      pending_ov: 0,
-      pending_pre_emps: 0,
-      classes_number: 0,
-      pipeline_total: 0,
-      cap_starts: 0,
-      internals_hires_all: 0,
-      externals_hires_all: 0,
-      pipeline_target: 0,
-      deficit_total: 0,
+      internals_hires: "",
+      externals_hires: "",
+      additional_extended_jo: "",
+      with_jo: "",
+      pending_jo: "",
+      pending_berlitz: "",
+      pending_ov: "",
+      pending_pre_emps: "",
+      classes_number: "",
+      pipeline_total: "",
+      cap_starts: "",
+      internals_hires_all: "",
+      externals_hires_all: "",
+      pipeline_target: "",
+      deficit_total: "",
       pipeline: "",
-      over_hires: 0,
+      over_hires: "",
       additional_remarks: "",
     };
   },
@@ -907,7 +907,7 @@ export default {
 
       const result = pipeline_total > total_target ? total_target : pipeline_total;
 
-      return result || 0;
+      return result;
     },
   },
   watch: {
@@ -935,7 +935,7 @@ export default {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    target: {
+    total_target: {
       handler: "syncDeficitTotal",
       immediate: true,
     },
@@ -1040,40 +1040,38 @@ export default {
         const response = await axios.get(
           "http://10.109.2.112:8081/api/classesstaffing/" + this.$route.params.id
         );
-        const classObj = response.data.class;
+        const classStaffingObj = response.data.class;
 
-        this.day_1 = classObj.day_1;
-        this.day_2 = classObj.day_2;
-        this.day_3 = classObj.day_3;
-        this.day_4 = classObj.day_4;
-        this.day_5 = classObj.day_5;
-        this.day_6 = classObj.day_6;
-        this.day_7 = classObj.day_7;
-        this.day_8 = classObj.day_8;
-        this.total_endorsed = classObj.total_endorsed;
-        this.show_ups_internal = classObj.show_ups_internal;
-        this.show_ups_external = classObj.show_ups_external;
-        this.show_ups_total = classObj.show_ups_total;
-        this.deficit = classObj.deficit;
-        this.percentage = classObj.percentage;
-        this.status = classObj.status;
-        this.internals_hires = classObj.internals_hires;
-        this.externals_hires = classObj.externals_hires;
-        this.additional_extended_jo = classObj.additional_extended_jo;
-        this.with_jo = classObj.with_jo;
-        this.pending_jo = classObj.pending_jo;
-        this.pending_berlitz = classObj.pending_berlitz;
-        this.pending_ov = classObj.pending_ov;
-        this.pending_pre_emps = classObj.pending_pre_emps;
-        this.classes_number = classObj.classes_number;
-        this.pipeline_total = classObj.pipeline_total;
-        this.cap_starts = classObj.cap_starts;
-        this.internals_hires_all = classObj.internals_hires_all;
-        this.externals_hires_all = classObj.externals_hires_all;
-        this.pipeline_target = classObj.pipeline_target;
-        this.pipeline = classObj.pipeline;
-        this.over_hires = classObj.over_hires;
-        this.additional_remarks = classObj.additional_remarks;
+        this.day_1 = classStaffingObj.day_1;
+        this.day_2 = classStaffingObj.day_2;
+        this.day_3 = classStaffingObj.day_3;
+        this.day_4 = classStaffingObj.day_4;
+        this.day_5 = classStaffingObj.day_5;
+        this.day_6 = classStaffingObj.day_6;
+        this.total_endorsed = classStaffingObj.total_endorsed;
+        this.show_ups_internal = classStaffingObj.show_ups_internal;
+        this.show_ups_external = classStaffingObj.show_ups_external;
+        this.show_ups_total = classStaffingObj.show_ups_total;
+        this.deficit = classStaffingObj.deficit;
+        this.percentage = classStaffingObj.percentage;
+        this.status = classStaffingObj.status;
+        this.internals_hires = classStaffingObj.internals_hires;
+        this.externals_hires = classStaffingObj.externals_hires;
+        this.additional_extended_jo = classStaffingObj.additional_extended_jo;
+        this.with_jo = classStaffingObj.with_jo;
+        this.pending_jo = classStaffingObj.pending_jo;
+        this.pending_berlitz = classStaffingObj.pending_berlitz;
+        this.pending_ov = classStaffingObj.pending_ov;
+        this.pending_pre_emps = classStaffingObj.pending_pre_emps;
+        this.classes_number = classStaffingObj.classes_number;
+        this.pipeline_total = classStaffingObj.pipeline_total;
+        this.cap_starts = classStaffingObj.cap_starts;
+        this.internals_hires_all = classStaffingObj.internals_hires_all;
+        this.externals_hires_all = classStaffingObj.externals_hires_all;
+        this.pipeline_target = classStaffingObj.pipeline_target;
+        this.pipeline = classStaffingObj.pipeline;
+        this.over_hires = classStaffingObj.over_hires;
+        this.additional_remarks = classStaffingObj.additional_remarks;
       } catch (error) {
         console.log(error);
       }
@@ -1094,7 +1092,7 @@ export default {
           this.country = classObj.site.country;
           this.program_selected = classObj.program_id;
           this.site_selected = classObj.site_id;
-          this.hiring_week = classObj.date_range_id;
+          this.hiring_week = classObj.date_range.id;
           this.year = classObj.date_range.year;
           this.month = classObj.date_range.month;
           this.training_start = classObj.agreed_start_date;

@@ -748,7 +748,7 @@ export default {
       handler: "syncEndorsedTotal",
       immediate: true,
     },
-    target: {
+    total_target: {
       handler: "syncDeficitTotal",
       immediate: true,
     },
