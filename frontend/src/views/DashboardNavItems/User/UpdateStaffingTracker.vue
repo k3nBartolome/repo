@@ -498,7 +498,7 @@
     </div>
   </form>
   <div class="py-4 bg-gray-100">
-    <div class="px-8 overflow-x-auto overflow-y-auto bg-gray-100 ">
+    <div class="px-8 overflow-x-auto overflow-y-auto bg-gray-100">
       <table class="w-full text-white table-auto px-10">
         <thead class="sticky-header">
           <tr
@@ -682,7 +682,7 @@ export default {
   data() {
     return {
       classesall: [],
-      class_transaction:[],
+      class_transaction: [],
       sites: [],
       programs: [],
       daterange: [],
@@ -988,7 +988,7 @@ export default {
   methods: {
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/classestransaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classestransaction/" + this.$route.params.id)
         .then((response) => {
           this.class_transaction = response.data.class;
           console.log(response.data.class);
@@ -1026,7 +1026,7 @@ export default {
 
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -1038,7 +1038,7 @@ export default {
     async getClassesStaffing() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesstaffing/" + this.$route.params.id
+          "http://127.0.0.1:8000/api/classesstaffing/" + this.$route.params.id
         );
         const classObj = response.data.class;
 
@@ -1082,7 +1082,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "http://10.109.2.112:8081/api/classes/" + this.$route.query.class_selected
+            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -1108,7 +1108,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -1119,18 +1119,19 @@ export default {
     },
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs")
+        .get("http://127.0.0.1:8000/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
         })
         .catch((error) => {
-          console.log(error);
+          console.error(error);
         });
     },
+
     async getDateRange() {
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -1178,7 +1179,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/updateclassesstaffing/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/updateclassesstaffing/" + this.$route.params.id,
           formData
         )
         .then((response) => {
