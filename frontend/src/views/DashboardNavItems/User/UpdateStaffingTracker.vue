@@ -544,6 +544,7 @@
             <th class="px-1 py-2">Total Deficit</th>
             <th class="px-1 py-2">Additional Remarks</th>
             <th class="px-1 py-2">Pipeline</th>
+            <th class="px-1 py-2">Transaction</th>
           </tr>
         </thead>
         <tbody v-for="class_staffing in class_transaction" :key="class_staffing.id">
@@ -669,6 +670,9 @@
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.pipeline }}
+            </td>
+            <td class="px-1 py-2 border border-black">
+              {{ class_staffing.transaction }}
             </td>
           </tr>
         </tbody>
@@ -831,7 +835,7 @@ export default {
       const show_ups_total = this.show_ups_total;
       const total_target = this.total_target;
 
-      return show_ups_total > total_target ? total_target : show_ups_total;
+      return show_ups_total > total_target ? total_target : show_ups_total || 0;
     },
     pipeline_computed() {
       const internals_hires = this.internals_hires;
@@ -901,13 +905,9 @@ export default {
       const pipeline_total = this.pipeline_total;
       const total_target = this.total_target;
 
-      if (pipeline_total === 0 && total_target === 0) {
-        return 0;
-      }
-
       const result = pipeline_total > total_target ? total_target : pipeline_total;
 
-      return result;
+      return result || 0;
     },
   },
   watch: {
