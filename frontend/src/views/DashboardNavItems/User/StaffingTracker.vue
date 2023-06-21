@@ -94,23 +94,23 @@
             </select>
           </label>
           <router-link
-          :to="{
-            path: `/addstaffing/}`,
-            query: {
-              program: programs_selected,
-              site: sites_selected,
-              daterange: week_selected,
-              class_selected: class_selected,
-            },
-          }"
-        >
-          <button
-            type="submit"
-            class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            :to="{
+              path: `/addstaffing/}`,
+              query: {
+                program: programs_selected,
+                site: sites_selected,
+                daterange: week_selected,
+                class_selected: class_selected,
+              },
+            }"
           >
-            <i class="fa fa-building"></i> Add
-          </button>
-        </router-link>
+            <button
+              type="submit"
+              class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-building"></i> Add
+            </button>
+          </router-link>
         </div>
       </form>
     </div>
@@ -124,7 +124,6 @@
           placeholder="Search..."
           class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
         />
-
       </div>
     </div>
   </div>
@@ -187,7 +186,14 @@
             </td>
             <td class="px-2 py-2 truncate">
               <div class="flex justify-center mt-2">
-                <router-link :to="`/updatestaffing/${class_staffing.id}`">
+                <router-link
+                  :to="{
+                    path: `/updatestaffing/${class_staffing.id}`,
+                    query: {
+                      class_selected: class_staffing.classes_id,
+                    },
+                  }"
+                >
                   <button
                     class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                   >

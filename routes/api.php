@@ -105,7 +105,9 @@ Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
 Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
 Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
 Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'show']);
+Route::put('updateclassesstaffing/{id}', [ClassStaffingController::class, 'update']);
 Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
+Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transaction']);
 
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);

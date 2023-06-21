@@ -3,12 +3,11 @@
     <div class="nav-container">
       <NavBar />
     </div>
-    <div class="content-container ">
-      <div class="scrollable-content ">
+    <div class="content-container">
+      <div class="scrollable-content">
         <router-view></router-view>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -27,8 +26,8 @@
 }
 
 .scrollable-content {
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow-x: visible;
+  overflow-y: visible;
   height: 100%;
 }
 
