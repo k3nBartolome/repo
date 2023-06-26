@@ -116,220 +116,64 @@
     </div>
   </div>
   <div class="py-4">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <div class="mb-4">
-        <input
-          type="text"
-          v-model="search"
-          placeholder="Search..."
-          class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-        />
+    <div class="pl-8 pr-8 overflow-x-auto">
+      <div class="table-responsive">
+        <DataTable
+          :data="class_staffing"
+          :columns="columns"
+          class="table table-striped table-bordered display"
+          :options="{
+            responsive: true,
+            autoWidth: true,
+            dom: 'Bfrtip',
+            language: {
+              search: 'Search',
+              zeroRecords: 'No data available',
+              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+              infoFiltered: '(Filtrados de _MAX_ registros.)',
+              paginate: {
+                first: 'First',
+                previous: 'Prev',
+                next: 'Next',
+                last: 'Last',
+              },
+            },
+          }"
+        >
+          <thead class="truncate">
+            <tr>
+              <!-- ...existing code... -->
+            </tr>
+          </thead>
+        </DataTable>
       </div>
-    </div>
-  </div>
-  <div class="py-2">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <table class="w-full text-white table-auto">
-        <thead class="sticky-header">
-          <tr
-            class="text-center truncate bg-orange-500 border-2 border-orange-600 border-solid"
-          >
-            <th class="px-1 py-2">ID</th>
-            <th class="px-2 py-2 truncate">Action</th>
-            <th class="px-1 py-2">Country</th>
-            <th class="px-1 py-2">Site</th>
-            <th class="px-1 py-2">Program</th>
-            <th class="px-1 py-2">Hiring Week</th>
-            <th class="px-1 py-2">Target</th>
-            <th class="px-1 py-2">Wave#</th>
-            <th class="px-1 py-2">ERF#</th>
-            <th class="px-1 py-2">Types of Hiring</th>
-            <th class="px-1 py-2">Day1</th>
-            <th class="px-1 py-2">Day2</th>
-            <th class="px-1 py-2">Day3</th>
-            <th class="px-1 py-2">Day4</th>
-            <th class="px-1 py-2">Day5</th>
-            <th class="px-1 py-2">Day6</th>
-            <th class="px-1 py-2">Day1 Start Rate</th>
-            <th class="px-1 py-2">Total Endorsed</th>
-            <th class="px-1 py-2">Endorsed Rate</th>
-            <th class="px-1 py-2">Show-ups-Internal</th>
-            <th class="px-1 py-2">Show-ups-External</th>
-            <th class="px-1 py-2">Show-ups-Total</th>
-            <th class="px-1 py-2">Deficit</th>
-            <th class="px-1 py-2">Percentage</th>
-            <th class="px-1 py-2">Status</th>
-            <th class="px-1 py-2">Internals</th>
-            <th class="px-1 py-2">Additional Extended JO</th>
-            <th class="px-1 py-2">Over Hires</th>
-            <th class="px-1 py-2">With JO</th>
-            <th class="px-1 py-2">Pending JO</th>
-            <th class="px-1 py-2">Pending Berlitz</th>
-            <th class="px-1 py-2">Pending OV</th>
-            <th class="px-1 py-2">Pending Pre-Emps</th>
-            <th class="px-1 py-2">Classes</th>
-            <th class="px-1 py-2">Total Pipeline</th>
-            <th class="px-1 py-2">Cap Starts</th>
-            <th class="px-1 py-2">All Internals</th>
-            <th class="px-1 py-2">Pipeline Target</th>
-            <th class="px-1 py-2">Total Deficit</th>
-            <th class="px-1 py-2">Additional Remarks</th>
-            <th class="px-1 py-2">Pipeline</th>
-          </tr>
-        </thead>
-        <tbody v-for="class_staffing in class_staffing" :key="class_staffing.id">
-          <tr
-            class="font-semibold text-center text-black truncate bg-white border-2 border-gray-400 border-solid align-center"
-          >
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.id }}
-            </td>
-            <td class="px-2 py-2 truncate">
-              <div class="flex justify-center mt-2">
-                <router-link
-                  :to="{
-                    path: `/updatestaffing/${class_staffing.id}`,
-                    query: {
-                      class_selected: class_staffing.classes_id,
-                    },
-                  }"
-                >
-                  <button
-                    class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-                  >
-                    Update
-                  </button>
-                </router-link>
-              </div>
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.site.country }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.site.name }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.program.name }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.date_range.date_range }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.total_target }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.wave_no }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.erf_number }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes.type_of_hiring }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_1 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_2 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_3 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_4 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_5 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_6 }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.day_1_start_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.total_endorsed }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.endorsed_rate }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.show_ups_internal }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.show_ups_external }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.show_ups_total }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.deficit }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.percentage }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.status }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.internals_hires }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.additional_extended_jo }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.over_hires }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.with_jo }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pending_jo }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pending_berlitz }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pending_ov }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pending_pre_emps }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.classes_number }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pipeline_total }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.cap_starts }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.internals_hires_all }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pipeline_target }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.deficit_total }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.additional_remarks }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pipeline }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import DataTable from "datatables.net-vue3";
+import DataTableLib from "datatables.net-bs5";
+// eslint-disable-next-line no-unused-vars
+import Buttons from "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+// eslint-disable-next-line no-unused-vars
+import print from "datatables.net-buttons/js/buttons.print";
+//import pdfmake from "pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import "datatables.net-responsive-bs5";
+// eslint-disable-next-line no-unused-vars
+
+import "bootstrap/dist/css/bootstrap.css";
+
+DataTable.use(DataTableLib);
+//DataTable.use(pdfmake);
+DataTable.use(ButtonsHtml5);
 
 export default {
+  components: { DataTable },
   data() {
     return {
       class_staffing: [],
@@ -337,12 +181,64 @@ export default {
       programs: [],
       sites: [],
       daterange: [],
-      search: "",
       week_selected: "",
       programs_selected: "",
       sites_selected: "",
       month_selected: "",
       class_selected: "",
+      columns: [
+  { data: "id", title: "ID" },
+  {
+  data: "id",
+  title: "Actions",
+  orderable: false,
+  searchable: false,
+  render: function (data, type, row) {
+    const classSelected = row.classes ? row.classes.id : '';
+    return `<button class="btn btn-primary" data-id="${data}" onclick="window.vm.navigateToEdit(${data}, '${classSelected}')">Edit</button>`;
+  },
+},
+  { data: "classes.site.country", title: "Country" },
+  { data: "classes.site.name", title: "Site" },
+  { data: "classes.program.name", title: "Program" },
+  { data: "classes.date_range.date_range", title: "Hiring Week" },
+  { data: "classes.total_target", title: "Target" },
+  { data: "classes.wave_no", title: "Wave#" },
+  { data: "classes.erf_number", title: "ERF#" },
+  { data: "classes.type_of_hiring", title: "Types of Hiring" },
+  { data: "day_1", title: "Day1" },
+  { data: "day_2", title: "Day2" },
+  { data: "day_3", title: "Day3" },
+  { data: "day_4", title: "Day4" },
+  { data: "day_5", title: "Day5" },
+  { data: "day_6", title: "Day6" },
+  { data: "day_1_start_rate", title: "Day1 Start Rate" },
+  { data: "total_endorsed", title: "Total Endorsed" },
+  { data: "endorsed_rate", title: "Endorsed Rate" },
+  { data: "show_ups_internal", title: "Show-ups-Internal" },
+  { data: "show_ups_external", title: "Show-ups-External" },
+  { data: "show_ups_total", title: "Show-ups-Total" },
+  { data: "deficit", title: "Deficit" },
+  { data: "percentage", title: "Percentage" },
+  { data: "status", title: "Status" },
+  { data: "internals_hires", title: "Internals" },
+  { data: "additional_extended_jo", title: "Additional Extended JO" },
+  { data: "over_hires", title: "Over Hires" },
+  { data: "with_jo", title: "With JO" },
+  { data: "pending_jo", title: "Pending JO" },
+  { data: "pending_berlitz", title: "Pending Berlitz" },
+  { data: "pending_ov", title: "Pending OV" },
+  { data: "pending_pre_emps", title: "Pending Pre-Emps" },
+  { data: "classes_number", title: "Classes" },
+  { data: "pipeline_total", title: "Total Pipeline" },
+  { data: "cap_starts", title: "Cap Starts" },
+  { data: "internals_hires_all", title: "All Internals" },
+  { data: "pipeline_target", title: "Pipeline Target" },
+  { data: "deficit_total", title: "Total Deficit" },
+  { data: "additional_remarks", title: "Additional Remarks" },
+  { data: "pipeline", title: "Pipeline" }
+],
+
     };
   },
   watch: {
@@ -383,6 +279,7 @@ export default {
     },
   },
   mounted() {
+    window.vm = this;
     this.getClassesAll();
     this.getClasses();
     this.getSites();
@@ -390,6 +287,15 @@ export default {
     this.getDateRange();
   },
   methods: {
+    navigateToEdit(id, classSelected) {
+  this.$router.push({
+    path: `/updatestaffing/${id}`,
+    query: {
+      class_selected: classSelected,
+    },
+  });
+},
+
     updateClassSelected() {
       const filteredClasses = this.filteredClasses;
       if (filteredClasses.length > 0) {
@@ -464,7 +370,7 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
+   },
   },
 };
 </script>
@@ -474,5 +380,21 @@ export default {
   top: 0;
   z-index: 1;
   background-color: #fff;
+}
+.table-responsive {
+  overflow-x: scroll;
+}
+
+table.dataTable {
+  width: auto !important;
+  margin: 0 auto;
+  clear: both;
+  border-collapse: separate;
+  table-layout: fixed;
+}
+
+table.dataTable td {
+  white-space: normal !important;
+  word-wrap: break-word;
 }
 </style>

@@ -17,7 +17,7 @@ class SiteController extends Controller
      */
     public function index()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 1)
             ->where('country', 'Philippines')
             ->get();
@@ -27,7 +27,7 @@ class SiteController extends Controller
 
     public function index2()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 0)
             ->where('country', 'Philippines')
             ->get();
@@ -37,7 +37,7 @@ class SiteController extends Controller
 
     public function index3()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 1)
             ->where('country', 'India')
             ->get();
@@ -47,7 +47,7 @@ class SiteController extends Controller
 
     public function index4()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 0)
             ->where('country', 'India')
             ->get();
@@ -57,7 +57,7 @@ class SiteController extends Controller
 
     public function index5()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 1)
             ->where('country', 'Jamaica')
             ->get();
@@ -67,7 +67,7 @@ class SiteController extends Controller
 
     public function index6()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 0)
             ->where('country', 'Jamaica')
             ->get();
@@ -77,7 +77,7 @@ class SiteController extends Controller
 
     public function index7()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 1)
             ->where('country', 'Guatemala')
             ->get();
@@ -87,7 +87,7 @@ class SiteController extends Controller
 
     public function index8()
     {
-        $sites = Site::with(['created_by', 'updatedByUser'])
+        $sites = Site::with(['created_by', 'updated_by'])
             ->where('is_active', 0)
             ->where('country', 'Guatemala')
             ->get();

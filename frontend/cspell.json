@@ -67,6 +67,8 @@
         "Westwood",
         "ZINUS"
     ],
-    "ignoreWords": [],
+    "ignoreWords": [
+        "cancelcapfileindia"
+    ],
     "import": []
 }

@@ -29,7 +29,7 @@ class Site extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function updatedByUser()
+    public function updated_by()
     {
         return $this->belongsTo(User::class, 'updated_by');
     }

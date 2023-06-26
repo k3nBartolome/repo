@@ -3,6 +3,7 @@ addcapfileguatemala
 addcapfileindia
 addcapfilejamaica
 addstaffing
+Bfrtip
 cancelcapfile
 cancelcapfileguatemala
 cancelcapfilejamaica
@@ -13,6 +14,7 @@ Cheryll
 Christito
 Classe
 classesall
+datatables
 Dela
 editcapfile
 editcapfileguatemala
@@ -20,12 +22,16 @@ editcapfileindia
 editcapfilejamaica
 emps
 Emps
+Filtrados
 hoverable
+jszip
 li
 managementguatemala
 managementindia
 managementjamaica
+Monstrando
 Overhires
+pdfmake
 powerbi
 programmanagementedit
 Punzalan
@@ -34,6 +40,9 @@ pushbackcapfileguatemala
 pushbackcapfileindia
 pushbackcapfilejamaica
 pushedback
+record
+registros
+resgistros
 sched
 Sheryll
 sitemanagementedit

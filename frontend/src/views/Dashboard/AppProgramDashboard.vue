@@ -64,127 +64,45 @@
       </form>
     </div>
   </div>
-  <div class="py-8">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <div class="mb-4">
-        <input
-          type="text"
-          v-model="search"
-          placeholder="Search..."
-          class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-        />
+  <div class="py-2">
+    <div class="px-8">
+      <div class="table-responsive">
+        <DataTable :data="programs" :columns="columns" class="table table-striped table-bordered display" 
+        :options="{responsive:true,autoWidth:false,dom:'Bfrtip',language:{
+          search:'Search',zeroRecords:'No data available',
+          info:'Showing from _START_ to _END_ of _TOTAL_ records',
+          infoFiltered:'(Filtrados de _MAX_ registros.)',
+          paginate:{first:'First',previous:'Prev',next:'Next',last:'Last'}}}">
+          <thead class="truncate">
+            <tr>
+              
+            </tr>
+          </thead>
+        </DataTable>
       </div>
-      <table class="w-full text-white table-auto">
-        <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody v-for="program in filteredPrograms" :key="program.id">
-          <tr
-            class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-          >
-            <td class="px-1 py-1">{{ program.id }}</td>
-            <td class="px-1 py-1">{{ program.name }}</td>
-            <td class="px-1 py-1">{{ program.site.name }}</td>
-            <td class="px-1 py-1">{{ program.created_by_user.name }}</td>
-            <td class="px-1 py-1">{{ program.created_at }}</td>
-            <td class="px-1 py-1">
-              {{ program.is_active == 1 ? "Active" : "Inactive" }}
-            </td>
-            <td class="px-2 py-2">
-              <router-link :to="`/program_management/edit/${program.id}`">
-              <button
-                @click="getPrograms(program.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Edit
-              </button>
-            </router-link>
-            </td>
-            <td class="px-2 py-2">
-              <button @click="deactivateProgram(program.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Deactivate
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="py-8">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <div class="mb-4">
-        <input
-          type="text"
-          v-model="search2"
-          placeholder="Search..."
-          class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-        />
-      </div>
-      <table class="w-full text-white table-auto">
-        <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody v-for="program2 in filteredPrograms2" :key="program2.id">
-          <tr
-            class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
-          >
-            <td class="px-1 py-1">{{ program2.id }}</td>
-            <td class="px-1 py-1">{{ program2.name }}</td>
-            <td class="px-1 py-1">{{ program2.site.name }}</td>
-            <td class="px-1 py-1">{{ program2.created_by_user.name }}</td>
-            <td class="px-1 py-1">{{ program2.created_at }}</td>
-            <td class="px-1 py-1">
-              {{ program2.is_active == 1 ? "Active" : "Inactive" }}
-            </td>
-            <td class="px-2 py-2">
-              <router-link :to="`/program_management/edit/${program2.id}`">
-              <button
-                @click="getPrograms(program2.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Edit
-              </button>
-            </router-link>
-            </td>
-            <td class="px-2 py-2">
-              <button @click="activateProgram(program2.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Activate
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
 <script>
 import axios from "axios";
+import DataTable from "datatables.net-vue3";
+import DataTableLib from "datatables.net-bs5";
+// eslint-disable-next-line no-unused-vars
+import Buttons from "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+// eslint-disable-next-line no-unused-vars
+import print from "datatables.net-buttons/js/buttons.print";
+//import pdfmake from "pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import "datatables.net-responsive-bs5";
+// eslint-disable-next-line no-unused-vars
 
+DataTable.use(DataTableLib);
+//DataTable.use(pdfmake);
+DataTable.use(ButtonsHtml5);
 export default {
+  components: { DataTable },
   data() {
     return {
       programs: [],
@@ -194,66 +112,81 @@ export default {
       program_group: "",
       sites_selected: "",
       sites: [],
-      currentPage: 1,
-      perPage: 5,
-      search: "",
-      search2: "",
+      columns: [
+        { data: "id", title: "ID" },
+        { data: "name", title: "Name" },
+        { data: "site.name", title: "Site" },
+        { data: "description", title: "Description" },
+        { data: "created_by_user.name", title: "Created By" },
+        { data: "created_at", title: "Created Date" },
+        { data: "updated_by", title: "Updated By" },
+        { data: "updated_at", title: "Updated Date" },
+        {
+          data: "is_active",
+          title: "Active Status",
+          render: function (data) {
+            return data === 1 ? "Active" : "Inactive";
+          },
+        },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.deactivateProgram(${data})">Deactivate</button>
+                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+  `;
+          },
+        },
+      ],
     };
   },
 
   mounted() {
-    console.log("Component mounted.");
     this.getPrograms();
     this.getPrograms2();
     this.getSites();
+    window.vm = this;
   },
   computed: {
-    filteredPrograms() {
-      return this.programs.filter((programs) =>
-        programs.name.toLowerCase().includes(this.search.toLowerCase())||
-        programs.site.name.toLowerCase().includes(this.search.toLowerCase())
-      );
-    },
-    filteredPrograms2() {
-      return this.programs2.filter((programs2) =>
-        programs2.name.toLowerCase().includes(this.search2.toLowerCase())||
-        programs2.site.name.toLowerCase().includes(this.search2.toLowerCase())
-      );
-    },
-    totalPages() {
-      return Math.ceil(this.filteredPrograms.length / this.perPage);
-    },
+    
   },
   methods: {
+    navigateToEdit(id) {
+      this.$router.push(`/program_management/edit/${id}`);
+    },
     activateProgram(id) {
       const form = {
-        is_active:1,
+        is_active: 1,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/programs_activate/"+ id, form)
-        .then(response => {
+      axios
+        .put("http://127.0.0.1:8000/api/programs_activate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getPrograms();
           this.getPrograms2();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
-      deactivateProgram(id) {
+    deactivateProgram(id) {
       const form = {
-        is_active:0,
+        is_active: 0,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/programs_deactivate/"+ id, form)
-        .then(response => {
+      axios
+        .put("http://127.0.0.1:8000/api/programs_deactivate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getPrograms();
           this.getPrograms2();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
@@ -263,7 +196,6 @@ export default {
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
-
         })
         .catch((error) => {
           console.log(error);
@@ -275,7 +207,6 @@ export default {
         .then((response) => {
           this.programs2 = response.data.data;
           console.log(response.data.data);
-
         })
         .catch((error) => {
           console.log(error);
@@ -315,16 +246,6 @@ export default {
         .catch((error) => {
           console.log(error.response.data);
         });
-    },
-    previousPage() {
-      if (this.currentPage > 1) {
-        this.currentPage--;
-      }
-    },
-    nextPage() {
-      if (this.currentPage < this.totalPages) {
-        this.currentPage++;
-      }
     },
   },
 };

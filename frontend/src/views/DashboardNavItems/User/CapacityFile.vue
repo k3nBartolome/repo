@@ -102,87 +102,65 @@
       </form>
     </div>
   </div>
-  <div class="py-8">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <div class="mb-4">
-        <input
-          type="text"
-          v-model="search"
-          placeholder="Search..."
-          class="px-6 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
-        />
+  <div class="py-2">
+    <div class="px-8">
+      <div class="table-responsive">
+        <DataTable
+          :data="classes"
+          :columns="columns"
+          class="table table-striped table-bordered display"
+          :options="{
+            responsive: true,
+            autoWidth: false,
+            dom: 'Bfrtip',
+            language: {
+              search: 'Search',
+              zeroRecords: 'No data available',
+              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+              infoFiltered: '(Filtrados de _MAX_ registros.)',
+              paginate: {
+                first: 'First',
+                previous: 'Prev',
+                next: 'Next',
+                last: 'Last',
+              },
+            },
+          }"
+        >
+          <thead class="truncate">
+            <tr>
+              <!-- ...existing code... -->
+            </tr>
+          </thead>
+        </DataTable>
       </div>
-
-      <table class="w-full text-white table-auto">
-        <thead>
-          <tr
-            class="text-center bg-orange-500 border-2 border-orange-600 border-solid"
-          >
-            <th class="px-1 py-2">ID</th>
-            <th class="px-2 py-2 truncate" colspan="1">Action</th>
-            <th class="px-1 py-2">Total Target</th>
-            <th class="px-1 py-2">Site</th>
-            <th class="px-1 py-2">Program</th>
-            <th class="px-1 py-2">Date Range</th>
-            <th class="px-1 py-2">Status</th>
-          </tr>
-        </thead>
-        <tbody v-for="classes in filteredClasses" :key="classes.id">
-          <tr
-            class="font-semibold text-center text-black bg-white border-2 border-gray-400 border-solid align-center"
-          >
-            <td class="px-1 py-2 border border-black">
-              {{ classes.pushedback_id }}
-            </td>
-            <td class="px-2 py-2 truncate">
-              <div class="flex justify-center mt-2">
-                <router-link :to="`/pushbackcapfile/${classes.id}`">
-                  <button
-                    class="flex items-center justify-center px-4 py-2 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-green-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-                  >
-                    Update/Pushback
-                  </button>
-                </router-link>
-                <router-link :to="`/cancelcapfile/${classes.id}`">
-                  <button
-                    class="flex items-center justify-center px-4 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-                  >
-                    Cancel
-                  </button>
-                </router-link>
-                <router-link :to="`/editcapfile/${classes.id}`">
-                  <button
-                    class="flex items-center justify-center px-4 py-2 ml-6 mr-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-                  >
-                    Edit
-                  </button>
-                </router-link>
-              </div>
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ classes.total_target }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ classes.site.name }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ classes.program.name }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ classes.date_range.date_range }}
-            </td>
-            <td class="px-1 py-2 border border-black">{{ classes.status }}</td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import DataTable from "datatables.net-vue3";
+import DataTableLib from "datatables.net-bs5";
+// eslint-disable-next-line no-unused-vars
+import Buttons from "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+// eslint-disable-next-line no-unused-vars
+import print from "datatables.net-buttons/js/buttons.print";
+//import pdfmake from "pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import "datatables.net-responsive-bs5";
+// eslint-disable-next-line no-unused-vars
+
+import "bootstrap/dist/css/bootstrap.css";
+
+DataTable.use(DataTableLib);
+//DataTable.use(pdfmake);
+DataTable.use(ButtonsHtml5);
 
 export default {
+  components: { DataTable },
   data() {
     return {
       classes: [],
@@ -193,22 +171,34 @@ export default {
       programs_selected: "",
       month_selected: "",
       week_selected: "",
-      search: "",
+      columns: [
+        { data: "id", title: "ID" },
+        { data: "pushedback_id", title: "Pushed Back ID" },
+        { data: "site.country", title: "Country" },
+        { data: "site.name", title: "Site" },
+        { data: "program.name", title: "Program" },
+        { data: "date_range.date_range", title: "Hiring Week" },
+        { data: "total_target", title: "Total Target" },
+        { data: "original_start_date", title: "Original Start Date" },
+        { data: "type_of_hiring", title: "Type of Hiring" },
+        { data: "created_at", title: "Created date" },
+        { data: "created_by_user.name", title: "Created by" },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
+                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
+                    <button class="btn btn-danger" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button> 
+  `;
+          },
+        },
+      ],
     };
   },
   computed: {
-    filteredClasses() {
-      return this.classes.filter(
-        (classes) =>
-          classes.date_range.date_range
-            .toLowerCase()
-            .includes(this.search.toLowerCase()) ||
-          classes.program.name
-            .toLowerCase()
-            .includes(this.search.toLowerCase()) ||
-          classes.site.name.toLowerCase().includes(this.search.toLowerCase())
-      );
-    },
     classExists() {
       return this.classes.some((c) => {
         return (
@@ -220,12 +210,22 @@ export default {
     },
   },
   mounted() {
+    window.vm = this;
     this.getSites();
     this.getPrograms();
     this.getDateRange();
     this.getClassesAll();
   },
   methods: {
+    navigateToEdit(id) {
+      this.$router.push(`/editcapfile/${id}`);
+    },
+    navigateToCancel(id) {
+      this.$router.push(`/cancelcapfile/${id}`);
+    },
+    navigateToPushback(id) {
+      this.$router.push(`/pushbackcapfile/${id}`);
+    },
     async getClassesAll() {
       await axios
         .get("http://127.0.0.1:8000/api/classesall")

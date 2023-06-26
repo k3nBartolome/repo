@@ -7,187 +7,196 @@
     </div>
   </header>
   <div class="py-8">
-    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8" >
-      <form @submit.prevent="addSite" class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form
+        @submit.prevent="addSite"
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+      >
         <label class="block">
           Name
-          <input v-model="name" type="text"
+          <input
+            v-model="name"
+            type="text"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required />
+            required
+          />
         </label>
         <label class="block">
           Description
-          <input v-model="description" type="text"
+          <input
+            v-model="description"
+            type="text"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required />
+            required
+          />
         </label>
         <label class="block">
           Site Director
-          <input v-model="siteDirector" type="text"
+          <input
+            v-model="siteDirector"
+            type="text"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required />
+            required
+          />
         </label>
         <label class="block">
           Region
-          <input v-model="region" type="text"
+          <input
+            v-model="region"
+            type="text"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required />
+            required
+          />
         </label>
-        <button type="submit" class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600">
-          <i class="fa fa-building "></i> Add
+        <button
+          type="submit"
+          class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        >
+          <i class="fa fa-building"></i> Add
         </button>
       </form>
     </div>
   </div>
-  <div class="py-8">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <table class="w-full text-white table-auto">
-        <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
-            <th class="px-1 py-2 ">ID</th>
-            <th class="px-1 py-2 ">Name</th>
-            <th class="px-1 py-2 ">Description</th>
-            <th class="px-1 py-2 ">Region</th>
-            <th class="px-1 py-2 ">Site Director</th>
-            <th class="px-1 py-2 ">Created by</th>
-            <th class="px-1 py-2 ">Created date</th>
-            <th class="px-1 py-2 ">Updated by</th>
-            <th class="px-1 py-2 ">Updated date</th>
-            <th class="px-1 py-2 ">Active Status</th>
-            <th class="px-1 py-2 " colspan="3">Action</th>
-          </tr>
-        </thead>
-        <tbody v-for="site in sites" :key="site.id">
-          <tr class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
-            <td class="px-1 py-2 ">{{ site.id }}</td>
-            <td class="px-1 py-2 ">{{ site.name }}</td>
-            <td class="px-1 py-2 ">{{ site.description }}</td>
-            <td class="px-1 py-2 ">{{ site.region }}</td>
-            <td class="px-1 py-2 ">{{ site.site_director }}</td>
-            <td class="px-1 py-2 ">{{ site.created_by.name }}</td>
-            <td class="px-1 py-2 ">{{ site.created_at }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_by }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_at }}</td>
-            <td class="px-1 py-2 ">{{ site.is_active == 1 ? 'Active' : 'Inactive' }}</td>
-            <router-link :to="`/site_management/edit/${site.id}`">
-            <td class="px-2 py-2">
-              <button @click="getSites(site.id)"
-                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                Edit
-              </button>
-            </td>
-          </router-link>
-            <td class="px-2 py-2 ">
-              <button @click="deactivateSite(site.id)"
-                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                Deactivate
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-  <div class="py-8">
-    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
-      <table class="w-full text-white table-auto">
-        <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
-            <th class="px-1 py-2 ">ID</th>
-            <th class="px-1 py-2 ">Name</th>
-            <th class="px-1 py-2 ">Description</th>
-            <th class="px-1 py-2 ">Region</th>
-            <th class="px-1 py-2 ">Site Director</th>
-            <th class="px-1 py-2 ">Created by</th>
-            <th class="px-1 py-2 ">Created date</th>
-            <th class="px-1 py-2 ">Updated by</th>
-            <th class="px-1 py-2 ">Updated date</th>
-            <th class="px-1 py-2 ">Active Status</th>
-            <th class="px-1 py-2 " colspan="3">Action</th>
-          </tr>
-        </thead>
-        <tbody v-for="site in sites2" :key="site.id">
-          <tr class="font-semibold text-black bg-white border-2 border-gray-400 border-solid">
-            <td class="px-1 py-2 ">{{ site.id }}</td>
-            <td class="px-1 py-2 ">{{ site.name }}</td>
-            <td class="px-1 py-2 ">{{ site.description }}</td>
-            <td class="px-1 py-2 ">{{ site.region }}</td>
-            <td class="px-1 py-2 ">{{ site.site_director }}</td>
-            <td class="px-1 py-2 ">{{ site.created_by.name }}</td>
-            <td class="px-1 py-2 ">{{ site.created_at }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_by }}</td>
-            <td class="px-1 py-2 ">{{ site.updated_at }}</td>
-            <td class="px-1 py-2 ">{{ site.is_active == 1 ? 'Active' : 'Inactive' }}</td>
-            <router-link :to="`/site_management/edit/${site.id}`">
-            <td class="px-2 py-2">
-              <button @click="getSites(site.id)"
-                class="flex items-center h-8 px-1 py-2 text-xs font-semibold text-center text-white uppercase transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                Edit
-              </button>
-            </td>
-          </router-link>
-            <td class="px-2 py-2 ">
-              <button @click="activateSite(site.id)"
-                class="flex items-center h-8 px-1 y-2 text-xs font-semibold text-white uppercase transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25">
-                Activate
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+  <div class="py-2">
+    <div class="px-8">
+      <div class="table-responsive">
+        <DataTable
+          :data="sites"
+          :columns="columns"
+          class="table table-striped table-bordered display"
+          :options="{
+            responsive: true,
+            autoWidth: true,
+            dom: 'Bfrtip',
+            language: {
+              search: 'Search',
+              zeroRecords: 'No data available',
+              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+              infoFiltered: '(Filtrados de _MAX_ registros.)',
+              paginate: {
+                first: 'First',
+                previous: 'Prev',
+                next: 'Next',
+                last: 'Last',
+              },
+            },
+          }"
+        >
+          <thead class="truncate">
+            <tr>
+              <!-- ...existing code... -->
+            </tr>
+          </thead>
+        </DataTable>
+      </div>
     </div>
   </div>
 </template>
 <script>
-import axios from 'axios';
+import axios from "axios";
+import DataTable from "datatables.net-vue3";
+import DataTableLib from "datatables.net-bs5";
+// eslint-disable-next-line no-unused-vars
+import Buttons from "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+// eslint-disable-next-line no-unused-vars
+import print from "datatables.net-buttons/js/buttons.print";
+//import pdfmake from "pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import "datatables.net-responsive-bs5";
+// eslint-disable-next-line no-unused-vars
+
+import "bootstrap/dist/css/bootstrap.css";
+
+DataTable.use(DataTableLib);
+//DataTable.use(pdfmake);
+DataTable.use(ButtonsHtml5);
 
 export default {
+  components: { DataTable },
   data() {
     return {
-      sites: false,
-      sites2: false,
-      name: '',
-      description: '',
-      siteDirector: '',
-      region: ''
-
+      sites: [],
+      sites2: [],
+      name: "",
+      description: "",
+      siteDirector: "",
+      region: "",
+      columns: [
+        { data: "id", title: "ID" },
+        { data: "name", title: "Name" },
+        { data: "description", title: "Description" },
+        { data: "site_director", title: "Site Director" },
+        { data: "region", title: "Region" },
+        { data: "country", title: "Country" },
+        { data: "created_by.name", title: "Created by" },
+        { data: "created_at", title: "Created date" },
+        { data: "updated_by", title: "Updated by" },
+        { data: "updated_at", title: "Updated date" },
+        {
+          data: "is_active",
+          title: "Active Status",
+          render: function (data) {
+            return data === 1 ? "Active" : "Inactive";
+          },
+        },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.deactivateSite(${data})">Deactivate</button>
+                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+  `;
+          },
+        },
+      ],
     };
   },
   mounted() {
-    console.log("Component mounted.");
+    window.vm = this;
     this.getSites();
     this.getSites2();
   },
   methods: {
+    navigateToEdit(id) {
+      this.$router.push(`/site_management/edit/${id}`);
+    },
     activateSite(id) {
       const form = {
-        is_active:1,
+        is_active: 1,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/sites_activate/"+ id, form)
-        .then(response => {
+      axios
+        .put("http://127.0.0.1:8000/api/sites_activate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getSites();
           this.getSites2();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
-      deactivateSite(id) {
+    deactivateSite(id) {
       const form = {
-        is_active:0,
+        is_active: 0,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/sites_deactivate/"+ id, form)
-        .then(response => {
+      axios
+        .put("http://127.0.0.1:8000/api/sites_deactivate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getSites();
           this.getSites2();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
@@ -222,19 +231,20 @@ export default {
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
-      axios.post("http://127.0.0.1:8000/api/sites", formData)
-        .then(response => {
+      axios
+        .post("http://127.0.0.1:8000/api/sites", formData)
+        .then((response) => {
           console.log(response.data);
-          this.name = '';
-          this.description = '';
-          this.siteDirector = '';
-          this.region = '';
+          this.name = "";
+          this.description = "";
+          this.siteDirector = "";
+          this.region = "";
           this.getSites();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
-    }
-  }
+    },
+  },
 };
 </script>
