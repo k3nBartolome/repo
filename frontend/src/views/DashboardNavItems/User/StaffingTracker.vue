@@ -116,36 +116,39 @@
     </div>
   </div>
   <div class="py-4">
-    <div class="pl-8 pr-8 overflow-x-auto">
+    <div class="pl-8 pr-8">
       <div class="table-responsive">
-        <DataTable
-          :data="class_staffing"
-          :columns="columns"
-          class="table table-striped table-bordered display"
-          :options="{
-            responsive: true,
-            autoWidth: true,
-            dom: 'Bfrtip',
-            language: {
-              search: 'Search',
-              zeroRecords: 'No data available',
-              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-              infoFiltered: '(Filtrados de _MAX_ registros.)',
-              paginate: {
-                first: 'First',
-                previous: 'Prev',
-                next: 'Next',
-                last: 'Last',
+        <div class="datatable-container">
+          <DataTable
+            :data="class_staffing"
+            :columns="columns"
+            class="table table-striped table-bordered display"
+            :options="{
+              responsive: true,
+              autoWidth: false,
+              scrollX: true,
+              dom: 'Bfrtip',
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtrados de _MAX_ registros.)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
               },
-            },
-          }"
-        >
-          <thead class="truncate">
-            <tr>
-              <!-- ...existing code... -->
-            </tr>
-          </thead>
-        </DataTable>
+            }"
+          >
+            <thead class="truncate">
+              <tr>
+                <!-- ...existing code... -->
+              </tr>
+            </thead>
+          </DataTable>
+        </div>
       </div>
     </div>
   </div>
@@ -187,58 +190,57 @@ export default {
       month_selected: "",
       class_selected: "",
       columns: [
-  { data: "id", title: "ID" },
-  {
-  data: "id",
-  title: "Actions",
-  orderable: false,
-  searchable: false,
-  render: function (data, type, row) {
-    const classSelected = row.classes ? row.classes.id : '';
-    return `<button class="btn btn-primary" data-id="${data}" onclick="window.vm.navigateToEdit(${data}, '${classSelected}')">Edit</button>`;
-  },
-},
-  { data: "classes.site.country", title: "Country" },
-  { data: "classes.site.name", title: "Site" },
-  { data: "classes.program.name", title: "Program" },
-  { data: "classes.date_range.date_range", title: "Hiring Week" },
-  { data: "classes.total_target", title: "Target" },
-  { data: "classes.wave_no", title: "Wave#" },
-  { data: "classes.erf_number", title: "ERF#" },
-  { data: "classes.type_of_hiring", title: "Types of Hiring" },
-  { data: "day_1", title: "Day1" },
-  { data: "day_2", title: "Day2" },
-  { data: "day_3", title: "Day3" },
-  { data: "day_4", title: "Day4" },
-  { data: "day_5", title: "Day5" },
-  { data: "day_6", title: "Day6" },
-  { data: "day_1_start_rate", title: "Day1 Start Rate" },
-  { data: "total_endorsed", title: "Total Endorsed" },
-  { data: "endorsed_rate", title: "Endorsed Rate" },
-  { data: "show_ups_internal", title: "Show-ups-Internal" },
-  { data: "show_ups_external", title: "Show-ups-External" },
-  { data: "show_ups_total", title: "Show-ups-Total" },
-  { data: "deficit", title: "Deficit" },
-  { data: "percentage", title: "Percentage" },
-  { data: "status", title: "Status" },
-  { data: "internals_hires", title: "Internals" },
-  { data: "additional_extended_jo", title: "Additional Extended JO" },
-  { data: "over_hires", title: "Over Hires" },
-  { data: "with_jo", title: "With JO" },
-  { data: "pending_jo", title: "Pending JO" },
-  { data: "pending_berlitz", title: "Pending Berlitz" },
-  { data: "pending_ov", title: "Pending OV" },
-  { data: "pending_pre_emps", title: "Pending Pre-Emps" },
-  { data: "classes_number", title: "Classes" },
-  { data: "pipeline_total", title: "Total Pipeline" },
-  { data: "cap_starts", title: "Cap Starts" },
-  { data: "internals_hires_all", title: "All Internals" },
-  { data: "pipeline_target", title: "Pipeline Target" },
-  { data: "deficit_total", title: "Total Deficit" },
-  { data: "additional_remarks", title: "Additional Remarks" },
-  { data: "pipeline", title: "Pipeline" }
-],
-
+        { data: "id", title: "ID" },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data, type, row) {
+            const classSelected = row.classes ? row.classes.id : "";
+            return `<button class="btn btn-primary" data-id="${data}" onclick="window.vm.navigateToEdit(${data}, '${classSelected}')">Edit</button>`;
+          },
+        },
+        { data: "classes.site.country", title: "Country" },
+        { data: "classes.site.name", title: "Site" },
+        { data: "classes.program.name", title: "Program" },
+        { data: "classes.date_range.date_range", title: "Hiring Week" },
+        { data: "classes.total_target", title: "Target" },
+        { data: "classes.wave_no", title: "Wave#" },
+        { data: "classes.erf_number", title: "ERF#" },
+        { data: "classes.type_of_hiring", title: "Types of Hiring" },
+        { data: "day_1", title: "Day1" },
+        { data: "day_2", title: "Day2" },
+        { data: "day_3", title: "Day3" },
+        { data: "day_4", title: "Day4" },
+        { data: "day_5", title: "Day5" },
+        { data: "day_6", title: "Day6" },
+        { data: "day_1_start_rate", title: "Day1 Start Rate" },
+        { data: "total_endorsed", title: "Total Endorsed" },
+        { data: "endorsed_rate", title: "Endorsed Rate" },
+        { data: "show_ups_internal", title: "Show-ups-Internal" },
+        { data: "show_ups_external", title: "Show-ups-External" },
+        { data: "show_ups_total", title: "Show-ups-Total" },
+        { data: "deficit", title: "Deficit" },
+        { data: "percentage", title: "Percentage" },
+        { data: "status", title: "Status" },
+        { data: "internals_hires", title: "Internals" },
+        { data: "additional_extended_jo", title: "Additional Extended JO" },
+        { data: "over_hires", title: "Over Hires" },
+        { data: "with_jo", title: "With JO" },
+        { data: "pending_jo", title: "Pending JO" },
+        { data: "pending_berlitz", title: "Pending Berlitz" },
+        { data: "pending_ov", title: "Pending OV" },
+        { data: "pending_pre_emps", title: "Pending Pre-Emps" },
+        { data: "classes_number", title: "Classes" },
+        { data: "pipeline_total", title: "Total Pipeline" },
+        { data: "cap_starts", title: "Cap Starts" },
+        { data: "internals_hires_all", title: "All Internals" },
+        { data: "pipeline_target", title: "Pipeline Target" },
+        { data: "deficit_total", title: "Total Deficit" },
+        { data: "additional_remarks", title: "Additional Remarks" },
+        { data: "pipeline", title: "Pipeline" },
+      ],
     };
   },
   watch: {
@@ -288,13 +290,13 @@ export default {
   },
   methods: {
     navigateToEdit(id, classSelected) {
-  this.$router.push({
-    path: `/updatestaffing/${id}`,
-    query: {
-      class_selected: classSelected,
+      this.$router.push({
+        path: `/updatestaffing/${id}`,
+        query: {
+          class_selected: classSelected,
+        },
+      });
     },
-  });
-},
 
     updateClassSelected() {
       const filteredClasses = this.filteredClasses;
@@ -370,31 +372,28 @@ export default {
       } catch (error) {
         console.log(error);
       }
-   },
+    },
   },
 };
 </script>
 <style>
-.sticky-header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: #fff;
-}
 .table-responsive {
-  overflow-x: scroll;
+  overflow: auto;
 }
 
-table.dataTable {
-  width: auto !important;
-  margin: 0 auto;
-  clear: both;
-  border-collapse: separate;
-  table-layout: fixed;
+.datatable-container {
+  width: 100%;
 }
 
-table.dataTable td {
-  white-space: normal !important;
-  word-wrap: break-word;
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
 }
 </style>

@@ -66,16 +66,32 @@
   </div>
   <div class="py-2">
     <div class="px-8">
-      <div class="table-responsive">
-        <DataTable :data="programs" :columns="columns" class="table table-striped table-bordered display" 
-        :options="{responsive:true,autoWidth:false,dom:'Bfrtip',language:{
-          search:'Search',zeroRecords:'No data available',
-          info:'Showing from _START_ to _END_ of _TOTAL_ records',
-          infoFiltered:'(Filtrados de _MAX_ registros.)',
-          paginate:{first:'First',previous:'Prev',next:'Next',last:'Last'}}}">
+      <div class="overflow-x-auto">
+        <DataTable
+          :data="programs"
+          :columns="columns"
+          class="min-w-full divide-y divide-gray-200"
+          :options="{
+            responsive: true,
+            autoWidth: true,
+            dom: 'Bfrtip',
+            language: {
+              search: 'Search',
+              zeroRecords: 'No data available',
+              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+              infoFiltered: '(Filtrados de _MAX_ registros.)',
+              paginate: {
+                first: 'First',
+                previous: 'Prev',
+                next: 'Next',
+                last: 'Last',
+              },
+            },
+          }"
+        >
           <thead class="truncate">
             <tr>
-              
+              <!-- ...existing code... -->
             </tr>
           </thead>
         </DataTable>
@@ -134,8 +150,8 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.deactivateProgram(${data})">Deactivate</button>
-                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+            return `<button class="btn btn-danger w-36" data-id="${data}"  onclick="window.vm.deactivateProgram(${data})">Deactivate</button>
+                    <button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
   `;
           },
         },
@@ -149,9 +165,7 @@ export default {
     this.getSites();
     window.vm = this;
   },
-  computed: {
-    
-  },
+  computed: {},
   methods: {
     navigateToEdit(id) {
       this.$router.push(`/program_management/edit/${id}`);

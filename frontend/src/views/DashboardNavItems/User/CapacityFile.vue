@@ -10,9 +10,7 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-      >
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
         <label class="block">
           Site
           <select
@@ -33,11 +31,7 @@
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="program in programs"
-              :key="program.id"
-              :value="program.id"
-            >
+            <option v-for="program in programs" :key="program.id" :value="program.id">
               {{ program.name }}
             </option>
           </select>
@@ -104,14 +98,14 @@
   </div>
   <div class="py-2">
     <div class="px-8">
-      <div class="table-responsive">
+      <div class="overflow-x-auto">
         <DataTable
           :data="classes"
           :columns="columns"
-          class="table table-striped table-bordered display"
+          class="min-w-full divide-y divide-gray-200"
           :options="{
             responsive: true,
-            autoWidth: false,
+            autoWidth: true,
             dom: 'Bfrtip',
             language: {
               search: 'Search',
@@ -173,7 +167,18 @@ export default {
       week_selected: "",
       columns: [
         { data: "id", title: "ID" },
-        { data: "pushedback_id", title: "Pushed Back ID" },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-primary text-xs w-40" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
+                    <button class="btn btn-secondary text-xs  w-40" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
+                    <button class="btn btn-danger  w-40" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button> 
+  `;
+          },
+        },
         { data: "site.country", title: "Country" },
         { data: "site.name", title: "Site" },
         { data: "program.name", title: "Program" },
@@ -183,18 +188,7 @@ export default {
         { data: "type_of_hiring", title: "Type of Hiring" },
         { data: "created_at", title: "Created date" },
         { data: "created_by_user.name", title: "Created by" },
-        {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
-                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="btn btn-danger" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button> 
-  `;
-          },
-        },
+        
       ],
     };
   },
@@ -254,9 +248,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
-        )
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -272,9 +264,7 @@ export default {
       }
 
       await axios
-        .get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
-        )
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);

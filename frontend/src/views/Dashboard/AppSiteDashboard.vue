@@ -61,11 +61,11 @@
   </div>
   <div class="py-2">
     <div class="px-8">
-      <div class="table-responsive">
+      <div class="overflow-x-auto">
         <DataTable
           :data="sites"
           :columns="columns"
-          class="table table-striped table-bordered display"
+          class="min-w-full divide-y divide-gray-200"
           :options="{
             responsive: true,
             autoWidth: true,
@@ -149,8 +149,8 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="btn btn-primary" data-id="${data}"  onclick="window.vm.deactivateSite(${data})">Deactivate</button>
-                    <button class="btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+            return `<button class="btn btn-danger w-36" data-id="${data}"  onclick="window.vm.deactivateSite(${data})">Deactivate</button>
+                    <button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
   `;
           },
         },
