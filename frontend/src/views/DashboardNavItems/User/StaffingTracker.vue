@@ -117,22 +117,26 @@
   </div>
   <div class="py-4">
     <div class="pl-8 pr-8">
-      <div class="table-responsive">
-        <div class="datatable-container">
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
           <DataTable
             :data="class_staffing"
             :columns="columns"
-            class="table table-striped table-bordered display"
+            class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
-              responsive: true,
+              responsive: false,
               autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering:true,
               scrollX: true,
               dom: 'Bfrtip',
               language: {
                 search: 'Search',
                 zeroRecords: 'No data available',
                 info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                infoFiltered: '(Filtrados de _MAX_ registros.)',
+                infoFiltered: '(Filtered from MAX records)',
+
                 paginate: {
                   first: 'First',
                   previous: 'Prev',
