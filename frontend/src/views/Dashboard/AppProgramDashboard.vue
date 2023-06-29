@@ -70,7 +70,7 @@
         <DataTable
           :data="programs"
           :columns="columns"
-          class="min-w-full divide-y divide-gray-200"
+          class="min-w-full divide-y divide-gray-200 table table-striped"
           :options="{
             responsive: true,
             autoWidth: true,
