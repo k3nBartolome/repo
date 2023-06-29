@@ -102,7 +102,7 @@
         <DataTable
           :data="classes"
           :columns="columns"
-          class="min-w-full divide-y divide-gray-200"
+          class="min-w-full divide-y divide-gray-200 table table-striped"
           :options="{
             responsive: true,
             autoWidth: true,
@@ -111,7 +111,7 @@
               search: 'Search',
               zeroRecords: 'No data available',
               info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-              infoFiltered: '(Filtrados de _MAX_ registros.)',
+              infoFiltered: '(Filtered from MAX records.)',
               paginate: {
                 first: 'First',
                 previous: 'Prev',
