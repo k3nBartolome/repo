@@ -210,6 +210,7 @@ export default {
         { data: "classes.program.name", title: "Program" },
         { data: "classes.date_range.date_range", title: "Hiring Week" },
         { data: "classes.total_target", title: "Target" },
+        { data: "pipeline", title: "Pipeline" },
         { data: "classes.wave_no", title: "Wave#" },
         { data: "classes.erf_number", title: "ERF#" },
         { data: "classes.type_of_hiring", title: "Types of Hiring" },
@@ -243,7 +244,7 @@ export default {
         { data: "pipeline_target", title: "Pipeline Target" },
         { data: "deficit_total", title: "Total Deficit" },
         { data: "additional_remarks", title: "Additional Remarks" },
-        { data: "pipeline", title: "Pipeline" },
+        
       ],
     };
   },
