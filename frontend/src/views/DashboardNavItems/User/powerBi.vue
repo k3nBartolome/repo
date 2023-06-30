@@ -93,24 +93,13 @@
               </option>
             </select>
           </label>
-          <router-link
-            :to="{
-              path: `/addstaffing/}`,
-              query: {
-                program: programs_selected,
-                site: sites_selected,
-                daterange: week_selected,
-                class_selected: class_selected,
-              },
-            }"
+
+          <button
+            type="submit"
+            class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
           >
-            <button
-              type="submit"
-              class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-building"></i> Add
-            </button>
-          </router-link>
+            <i class="fa fa-building"></i> Filter
+          </button>
         </div>
       </form>
     </div>
