@@ -210,6 +210,7 @@ export default {
         { data: "classes.program.name", title: "Program" },
         { data: "classes.date_range.date_range", title: "Hiring Week" },
         { data: "classes.total_target", title: "Target" },
+        { data: "pipeline", title: "Pipeline" },
         { data: "classes.wave_no", title: "Wave#" },
         { data: "classes.erf_number", title: "ERF#" },
         { data: "classes.type_of_hiring", title: "Types of Hiring" },
@@ -243,7 +244,7 @@ export default {
         { data: "pipeline_target", title: "Pipeline Target" },
         { data: "deficit_total", title: "Total Deficit" },
         { data: "additional_remarks", title: "Additional Remarks" },
-        { data: "pipeline", title: "Pipeline" },
+        
       ],
     };
   },
@@ -312,7 +313,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -328,7 +329,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -338,7 +339,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/sites");
+        const response = await axios.get("http://10.109.2.112:8081/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -353,7 +354,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -369,7 +370,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);

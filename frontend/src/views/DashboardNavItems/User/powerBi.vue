@@ -93,24 +93,13 @@
               </option>
             </select>
           </label>
-          <router-link
-            :to="{
-              path: `/addstaffing/}`,
-              query: {
-                program: programs_selected,
-                site: sites_selected,
-                daterange: week_selected,
-                class_selected: class_selected,
-              },
-            }"
+
+          <button
+            type="submit"
+            class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
           >
-            <button
-              type="submit"
-              class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-building"></i> Add
-            </button>
-          </router-link>
+            <i class="fa fa-building"></i> Filter
+          </button>
         </div>
       </form>
     </div>
@@ -310,7 +299,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -326,7 +315,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -336,7 +325,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/sites");
+        const response = await axios.get("http://10.109.2.112:8081/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -351,7 +340,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -367,7 +356,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);

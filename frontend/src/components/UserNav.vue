@@ -37,13 +37,35 @@
             Staffing Tracker
           </li></router-link
         >
-        <router-link to="/powerbi"
-          ><li
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
+        <div class="py-4">
+          <div class="relative inline-block">
+            <button
+              @click="toggleDropdown3"
+              class="px-4 py-2 text-black rounded cursor-pointer"
+            >
+              Reports
+            </button>
+            <div
+              v-show="isDropdown3Open"
+              class="absolute z-10 py-2 bg-white rounded shadow-md truncate"
+            >
+            <router-link to="/powerbi"
+            ><li
+              class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
+            >
+              Staffing Tracker
+            </li></router-link
           >
-            Power BI Report
-          </li></router-link
-        >
+              <router-link to="/program_management"
+                ><li
+                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
+                >
+                  Capacity File
+                </li></router-link
+              >
+            </div>
+          </div>
+        </div>
         <div class="py-4">
           <div class="relative inline-block">
             <button
@@ -119,6 +141,7 @@ export default {
       selectedOption: '/capfile',
       isDropdownOpen: false,
       isDropdown2Open: false,
+      isDropdown3Open: false,
 
     };
   },
@@ -129,6 +152,10 @@ export default {
     toggleDropdown2() {
       this.isDropdown2Open = !this.isDropdown2Open;
     },
+    toggleDropdown3() {
+      this.isDropdown3Open = !this.isDropdown3Open;
+    },
+    
     navigateToPage() {
       this.$router.push(this.selectedOption);
     }
