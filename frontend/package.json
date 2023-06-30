@@ -18,7 +18,12 @@
     "datatables.net-buttons-dt": "^2.3.6",
     "datatables.net-dt": "^1.13.4",
     "datatables.net-responsive-bs5": "^2.4.1",
+<<<<<<< HEAD
     "datatables.net-responsive-dt": "^2.4.1",
+=======
+    "datatables.net-searchbuilder-dt": "^1.4.2",
+    "datatables.net-searchpanes-dt": "^2.1.2",
+>>>>>>> 06f3ed664325e4337eec6494b57ccfe272c5826b
     "datatables.net-vue3": "^2.1.1",
     "event-pubsub": "^5.0.3",
     "flag-icon-css": "^4.1.7",
@@ -30,6 +35,7 @@
     "vue-auth": "^1.0.0-alpha.1",
     "vue-datatables-net": "^2.0.1",
     "vue-router": "^4.0.13",
+    "vuejs-datatable": "^2.0.0-alpha.7",
     "vuex": "^4.1.0",
     "vuex-persistedstate": "^4.1.0",
     "zip": "^1.2.0"
