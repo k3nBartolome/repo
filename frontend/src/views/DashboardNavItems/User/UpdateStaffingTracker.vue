@@ -17,7 +17,7 @@
             type="text"
             disabled
             v-model="country"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -27,7 +27,7 @@
             disabled
             type="text"
             v-model="region"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -36,7 +36,7 @@
           <select
             disabled
             v-model="site_selected"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
             <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -49,7 +49,7 @@
           <select
             disabled
             v-model="program_selected"
-            class="block w-full mt-1 border border-2 bg-gray-200 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getPrograms"
           >
@@ -63,7 +63,7 @@
           <select
             disabled
             v-model="type_of_hiring"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option value="attrition">Attrition</option>
             <option value="growth">Growth</option>
@@ -76,7 +76,7 @@
             disabled
             type="text"
             v-model="year"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -86,7 +86,7 @@
             disabled
             type="text"
             v-model="month"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -95,7 +95,7 @@
           <select
             disabled
             v-model="hiring_week"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getDateRange"
           >
@@ -114,7 +114,7 @@
             disabled
             type="date"
             v-model="training_start"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -124,7 +124,7 @@
             disabled
             type="text"
             v-model="internal_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -134,7 +134,7 @@
             disabled
             type="text"
             v-model="external_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -144,7 +144,7 @@
             disabled
             type="number"
             v-model="total_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -154,7 +154,7 @@
             disabled
             type="text"
             v-model="wave_no"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -164,7 +164,7 @@
             disabled
             type="text"
             v-model="erf_number"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -237,7 +237,7 @@
               disabled
               type="number"
               v-model="total_endorsed"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -275,7 +275,7 @@
               disabled
               type="number"
               v-model="show_ups_total"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -285,7 +285,7 @@
               disabled
               type="number"
               v-model="deficit"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -295,7 +295,7 @@
               disabled
               type="text"
               v-model="percentage"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -335,7 +335,7 @@
               disabled
               type="number"
               v-model="over_hires"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -406,7 +406,7 @@
               disabled
               type="number"
               v-model="classes_number"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -416,7 +416,7 @@
               disabled
               type="number"
               v-model="pipeline_total"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -426,7 +426,7 @@
               disabled
               type="number"
               v-model="cap_starts"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -436,7 +436,7 @@
               disabled
               type="number"
               v-model="internals_hires_all"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -446,7 +446,7 @@
               disabled
               type="number"
               v-model="pipeline_target"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -481,7 +481,7 @@
             <textarea
               disabled
               v-model="pipeline"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
               required
             />
           </label>
@@ -499,7 +499,7 @@
   </form>
   <div class="py-4 bg-gray-100">
     <div class="px-8 overflow-x-auto overflow-y-auto bg-gray-100">
-      <table class="w-full text-white table-auto px-10">
+      <table class="w-full px-10 text-white table-auto">
         <thead class="sticky-header">
           <tr
             class="text-center truncate bg-orange-500 border-2 border-orange-600 border-solid"
@@ -509,6 +509,7 @@
             <th class="px-1 py-2">Site</th>
             <th class="px-1 py-2">Program</th>
             <th class="px-1 py-2">Hiring Week</th>
+            <th class="px-1 py-2">Pipeline</th>
             <th class="px-1 py-2">Target</th>
             <th class="px-1 py-2">Wave#</th>
             <th class="px-1 py-2">ERF#</th>
@@ -543,7 +544,6 @@
             <th class="px-1 py-2">Pipeline Target</th>
             <th class="px-1 py-2">Total Deficit</th>
             <th class="px-1 py-2">Additional Remarks</th>
-            <th class="px-1 py-2">Pipeline</th>
             <th class="px-1 py-2">Transaction</th>
           </tr>
         </thead>
@@ -565,6 +565,9 @@
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.classes.date_range.date_range }}
+            </td>
+            <td class="px-1 py-2 border border-black">
+              {{ class_staffing.pipeline }}
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.classes.total_target }}
@@ -667,9 +670,6 @@
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.additional_remarks }}
-            </td>
-            <td class="px-1 py-2 border border-black">
-              {{ class_staffing.pipeline }}
             </td>
             <td class="px-1 py-2 border border-black">
               {{ class_staffing.transaction }}
@@ -1096,6 +1096,7 @@ export default {
           this.month = classObj.date_range.month;
           this.training_start = classObj.agreed_start_date;
           this.erf_number = classObj.erf_number;
+          this.wave_no = classObj.wave_no;
         } else {
           console.log("No class selected");
         }

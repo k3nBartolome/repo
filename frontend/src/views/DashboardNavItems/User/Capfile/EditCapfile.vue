@@ -602,6 +602,8 @@ export default {
           this.approved_by = classObj.approved_by;
           this.wfm_date_requested = classObj.wfm_date_requested;
           this.remarks = classObj.remarks;
+          this.wave_no = classObj.wave_no;
+          
 
           console.log(classObj);
         })

@@ -12,7 +12,7 @@ return [
     | to use as your default connection for all database work. Of course
     | you may use many connections at once using the Database library.
     |
-    */
+     */
 
     'default' => env('DB_CONNECTION', 'mysql'),
 
@@ -30,7 +30,7 @@ return [
     | so make sure you have the driver for your particular database of
     | choice installed on your machine before you begin development.
     |
-    */
+     */
 
     'connections' => [
         'sqlite' => [
@@ -76,6 +76,18 @@ return [
             'strict' => true,
             'engine' => null,
         ],
+        'secondary_sqlsrv' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DB_SECONDARY_URL'),
+            'host' => env('DB_SECONDARY_HOST', '10.109.2.112'),
+            'port' => env('DB_SECONDARY_PORT', '1433'),
+            'database' => env('DB_SECONDARY_DATABASE', 'TALENT_RC01'),
+            'username' => env('DB_SECONDARY_USERNAME', 'vxi_ta'),
+            'password' => env('DB_SECONDARY_PASSWORD', 'capfilems'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+        ],
 
         'pgsql' => [
             'driver' => 'pgsql',
@@ -115,7 +127,7 @@ return [
     | your application. Using this information, we can determine which of
     | the migrations on disk haven't actually been run in the database.
     |
-    */
+     */
 
     'migrations' => 'migrations',
 
@@ -128,14 +140,14 @@ return [
     | provides a richer body of commands than a typical key-value system
     | such as APC or Memcached. Laravel makes it easy to dig right in.
     |
-    */
+     */
 
     'redis' => [
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
