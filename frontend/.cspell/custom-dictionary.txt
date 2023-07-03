@@ -33,6 +33,8 @@ managementjamaica
 Monstrando
 Overhires
 pdfmake
+perx
+Perx
 powerbi
 programmanagementedit
 Punzalan

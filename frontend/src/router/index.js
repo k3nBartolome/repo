@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
 import ContactUs from "@/views/ContactUs";
+import AppPerxLayout from "@/components/AppPerxLayout";
 import AppUserLayout from "@/components/AppUserLayout";
 import AppUserLayoutIndia from "@/components/AppUserLayoutIndia";
 import AppUserLayoutJamaica from "@/components/AppUserLayoutJamaica";
@@ -9,6 +10,7 @@ import AppUserLayoutGuatemala from "@/components/AppUserLayoutGuatemala";
 import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
+import AppPerxDashboard from "@/views/Dashboard/AppPerxDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
 import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
@@ -327,6 +329,21 @@ const routes = [
         path: "/user_management",
         name: "usermanagement",
         component: UserManagement,
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: AppPerxLayout,
+    meta: {
+      requiresAuth: true,
+      requiresRole: "perx",
+    },
+    children: [
+      {
+        path: "/perx_dashboard",
+        name: "Perx",
+        component: AppPerxDashboard,
       },
     ],
   },
