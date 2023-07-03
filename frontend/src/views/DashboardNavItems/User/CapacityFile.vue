@@ -175,7 +175,7 @@ export default {
           render: function (data) {
             return `<button class="btn btn-primary text-xs w-40" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
                     <button class="btn btn-secondary text-xs  w-40" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="btn btn-danger  w-40" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button> 
+                    <button class="btn btn-danger  w-40" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
   `;
           },
         },
@@ -188,7 +188,7 @@ export default {
         { data: "type_of_hiring", title: "Type of Hiring" },
         { data: "created_at", title: "Created date" },
         { data: "created_by_user.name", title: "Created by" },
-        
+
       ],
     };
   },
