@@ -5,10 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
+    public function index()
+    {
+        $users = DB::connection('secondary')->table('test_name')->get();
+
+        $name = DB::connection('secondary')
+            ->table('test_name')->get();
+
+        return response()->json([
+                'class' => $name,
+            ]);
+    }
+
     public function store(Request $request)
     {
         // Validate the request.
@@ -109,12 +123,16 @@ class ClassesController extends Controller
 
     public function classesall()
     {
-        $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines');
-        })
-        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-        ->where('status', 'Active')
-        ->get();
+        $minutes = 60;
+
+        $classes = Cache::remember('classesall', $minutes, function () {
+            return Classes::whereHas('site', function ($query) {
+                $query->where('country', '=', 'Philippines');
+            })
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'Active')
+            ->get();
+        });
 
         return response()->json([
         'classes' => $classes,

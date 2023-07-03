@@ -3,7 +3,6 @@
 use Illuminate\Support\Str;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -34,7 +33,6 @@ return [
     */
 
     'connections' => [
-
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
@@ -61,6 +59,22 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
+        ],
+        'secondary' => [
+            'driver' => 'mysql',
+            'url' => env('DB_SECONDARY_URL'),
+            'host' => env('DB_SECONDARY_HOST', '127.0.0.1'),
+            'port' => env('DB_SECONDARY_PORT', '3306'),
+            'database' => env('DB_SECONDARY_DATABASE', 'testdb'),
+            'username' => env('DB_SECONDARY_USERNAME', 'root'),
+            'password' => env('DB_SECONDARY_PASSWORD', ''),
+            'unix_socket' => env('DB_SECONDARY_SOCKET', ''),
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'strict' => true,
+            'engine' => null,
         ],
 
         'pgsql' => [
@@ -90,7 +104,6 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
-
     ],
 
     /*
@@ -118,7 +131,6 @@ return [
     */
 
     'redis' => [
-
         'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
@@ -141,7 +153,5 @@ return [
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
-
     ],
-
 ];

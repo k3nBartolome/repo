@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ClassStaffingController extends Controller
@@ -15,17 +16,26 @@ class ClassStaffingController extends Controller
      */
     public function index()
     {
-        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+        $minutes = 60;
+        $classStaffing = Cache::remember('classStaffing', $minutes, function () {
+            $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
             ->where('active_status', '1')
             ->get();
 
-        if ($classStaffing->isEmpty()) {
+            if ($classStaffing->isEmpty()) {
+                return null;
+            }
+
+            return $classStaffing;
+        });
+
+        if ($classStaffing === null) {
             return response()->json(['error' => 'Classes not found'], 404);
         }
 
         return response()->json([
-            'class_staffing' => $classStaffing,
-        ]);
+        'class_staffing' => $classStaffing,
+    ]);
     }
 
     /**
