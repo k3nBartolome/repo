@@ -842,6 +842,7 @@ export default {
           this.month = classObj.date_range.month;
           this.training_start = classObj.agreed_start_date;
           this.erf_number = classObj.erf_number;
+          this.wave_no = classObj.wave_no;
         } else {
           console.log("No class selected");
         }

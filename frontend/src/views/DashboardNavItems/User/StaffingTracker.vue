@@ -244,7 +244,7 @@ export default {
         { data: "pipeline_target", title: "Pipeline Target" },
         { data: "deficit_total", title: "Total Deficit" },
         { data: "additional_remarks", title: "Additional Remarks" },
-        
+
       ],
     };
   },

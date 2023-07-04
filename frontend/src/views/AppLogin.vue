@@ -110,8 +110,11 @@ export default {
         if(role ==='admin'){
           this.$router.push({ path: "/admin_dashboard"});
         }
+        else if (role === 'user') {
+        this.$router.push({ path: "/capfile" });
+        }
         else{
-          this.$router.push({ path: "/capfile" });
+          this.$router.push({ path: "/perx_manager" });
         }
       } else {
         this.form.message = "Invalid Credentials";
