@@ -13,10 +13,8 @@ class ClassesController extends Controller
 {
     public function index()
 {
-    $minutes = 3600;
-    $perPage = 1111111111;
-
-    $query = DB::connection('secondary_sqlsrv')
+    $minutes = 60;
+    $data = DB::connection('secondary_sqlsrv')
         ->table('PERX_DATA')
         ->select(
             'DateOfApplication',
@@ -36,16 +34,17 @@ class ClassesController extends Controller
             'OSS_LNAME',
             'OSS_LOB',
             'OSS_SITE'
-        );
+        )->get();
 
-    $data = cache()->remember('perx_data', $minutes, function () use ($query, $perPage) {
-        return $query->paginate($perPage);
+    $data = cache()->remember('perx_data', $minutes, function () use ($data) {
+        return $data;
     });
 
     return response()->json([
-        'perx' => $data->items(),
+        'perx' => $data,
     ]);
 }
+
 
 
     public function store(Request $request)

@@ -60,6 +60,7 @@ import "datatables.net-responsive-bs5";
 import "bootstrap/dist/css/bootstrap.css";
 
 DataTable.use(DataTableLib);
+//DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
 
 export default {
@@ -69,26 +70,28 @@ export default {
       perx: [],
       columns: [
         { data: "DateOfApplication", title: "Date of Application" },
-        { data: "LastName", title: "Lastname" },
-        { data: "FirstName", title: "Firstname" },
-        { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNo", title: "Mobile#" },
-        { data: "Site", title: "SITE" },
-        { data: "GenSource", title: "Gen Source" },
-        { data: "SpecSource", title: "Spec Source" },
-        { data: "Step", title: "Step" },
-        { data: "AppStep", title: "App Step" },
-        { data: "PERX_HRID", title: "PERX HRID" },
-        { data: "PERX_NAME", title: "PERX NAME" },
-        { data: "OSS_HRID", title: "OSS HRID" },
-        { data: "OSS_FNAME", title: "OSS FNAME" },
-        { data: "OSS_LNAME", title: "OSS LNAME" },
-        { data: "OSS_LOB", title: "OSS LOB" },
-        { data: "OSS_SITE", title: "OSS SITE" },
-      ],
+            { data: "LastName", title: "Lastname" },
+            { data: "FirstName", title: "Firstname" },
+            { data: "MiddleName", title: "MiddleName" },
+            { data: "MobileNo", title: "Mobile#" },
+            { data: "Site", title: "SITE" },
+            { data: "GenSource", title: "Gen Source" },
+            { data: "SpecSource", title: "Spec Source" },
+            { data: "Step", title: "Step" },
+            { data: "AppStep", title: "App Step" },
+            { data: "PERX_HRID", title: "PERX HRID" },
+            { data: "PERX_NAME", title: "PERX NAME" },
+            { data: "OSS_HRID", title: "OSS HRID" },
+            { data: "OSS_FNAME", title: "OSS FNAME" },
+            { data: "OSS_LNAME", title: "OSS LNAME" },
+            { data: "OSS_LOB", title: "OSS LOB" },
+            { data: "OSS_SITE", title: "OSS SITE" },
+],
+
     };
   },
   mounted() {
+    window.vm = this;
     this.getPerx();
   },
   methods: {
@@ -103,6 +106,7 @@ export default {
           console.log(error);
         });
     },
+    
   },
 };
 </script>
