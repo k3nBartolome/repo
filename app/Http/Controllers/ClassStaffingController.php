@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClassStaffing;
 use App\Models\Classes;
+use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -151,54 +151,57 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id ,$classesId)
+    public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'show_ups_internal' => 'required',
-            'show_ups_external' => 'required',
-            'show_ups_total' => 'required',
-            'deficit' => 'required',
-            'percentage' => 'required',
-            'status' => 'required',
-            'day_1' => 'required',
-            'day_2' => 'required',
-            'day_3' => 'required',
-            'day_4' => 'required',
-            'day_5' => 'required',
-            'day_6' => 'required',
-            'total_endorsed' => 'required',
-            'internals_hires' => 'required',
-            'additional_extended_jo' => 'required',
-            'with_jo' => 'required',
-            'pending_jo' => 'required',
-            'pending_berlitz' => 'required',
-            'pending_ov' => 'required',
-            'pending_pre_emps' => 'required',
-            'classes_number' => 'required',
-            'pipeline_total' => 'required',
-            'cap_starts' => 'required',
-            'internals_hires_all' => 'required',
-            'pipeline' => 'required',
-            'pipeline_target' => 'required',
-            'additional_remarks' => 'required',
-            'classes_id' => 'required',
-            'updated_by' => 'required',
-            'wave_no' => 'required',
-            'agreed_start_date' => 'required',
-            'erf_number' => 'required',
-        ]);
+        'show_ups_internal' => 'required',
+        'show_ups_external' => 'required',
+        'show_ups_total' => 'required',
+        'deficit' => 'required',
+        'percentage' => 'required',
+        'status' => 'required',
+        'day_1' => 'required',
+        'day_2' => 'required',
+        'day_3' => 'required',
+        'day_4' => 'required',
+        'day_5' => 'required',
+        'day_6' => 'required',
+        'total_endorsed' => 'required',
+        'internals_hires' => 'required',
+        'additional_extended_jo' => 'required',
+        'with_jo' => 'required',
+        'pending_jo' => 'required',
+        'pending_berlitz' => 'required',
+        'pending_ov' => 'required',
+        'pending_pre_emps' => 'required',
+        'classes_number' => 'required',
+        'pipeline_total' => 'required',
+        'cap_starts' => 'required',
+        'internals_hires_all' => 'required',
+        'pipeline' => 'required',
+        'pipeline_target' => 'required',
+        'additional_remarks' => 'required',
+        'classes_id' => 'required',
+        'updated_by' => 'required',
+        'wave_no' => 'nullable',
+        'agreed_start_date' => 'nullable',
+        'erf_number' => 'nullable',
+    ]);
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $classes = Classes::find($classesId);
-        $classes->wave_no =  $request->input('wave_no');
-        $classes->agreed_start_date =  $request->input('agreed_start_date');
-        $classes->erf_number =  $request->input('erf_number');
+
+        $classes = Classes::find($request->input('classes_id'));
+        $classes->wave_no = $request->input('wave_no');
+        $classes->agreed_start_date = $request->input('agreed_start_date');
+        $classes->erf_number = $request->input('erf_number');
         $classes->save();
 
         $class = ClassStaffing::find($id);
         $class->active_status = '0';
         $class->save();
+
         $newClass = $class->replicate();
         $newClass->transaction = 'Update';
         $newClass->updated_by = $request->input('updated_by');
@@ -207,8 +210,8 @@ class ClassStaffingController extends Controller
         $newClass->save();
 
         return response()->json([
-            'class' => $class,
-        ]);
+        'class' => $class,
+    ]);
     }
 
     /**

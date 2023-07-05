@@ -109,7 +109,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="class_staffing"
+          :data="filteredData"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -270,6 +270,24 @@ export default {
         );
       });
     },
+    filteredData() {
+  if (
+    !this.sites_selected ||
+    !this.programs_selected ||
+    !this.week_selected
+  ) {
+    return this.class_staffing;
+  }
+
+  return this.class_staffing.filter((class_staffing) => {
+    return (
+      class_staffing.classes.site.id === this.sites_selected &&
+      class_staffing.classes.program.id === this.programs_selected &&
+      class_staffing.classes.date_range.id === this.week_selected
+    );
+  });
+},
+
   },
   mounted() {
     window.vm = this;
@@ -299,15 +317,15 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
-        const filteredClasses = this.filteredClasses; // Get the filtered classes
+        const filteredClasses = this.filteredClasses;
         if (filteredClasses.length > 0) {
-          this.class_selected = filteredClasses[0].id; // Select the first class from the filtered classes
+          this.class_selected = filteredClasses[0].id;
         } else {
-          this.class_selected = ""; // Reset the selection if there are no matching classes
+          this.class_selected = "";
         }
       } catch (error) {
         console.log(error);
@@ -315,7 +333,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -325,7 +343,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/sites");
+        const response = await axios.get("http://10.109.2.112:8081/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -340,7 +358,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -356,7 +374,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);
