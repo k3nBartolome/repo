@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ClassStaffing;
+use App\Models\Classes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
@@ -150,7 +151,7 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $id ,$classesId)
     {
         $validator = Validator::make($request->all(), [
             'show_ups_internal' => 'required',
@@ -182,10 +183,18 @@ class ClassStaffingController extends Controller
             'additional_remarks' => 'required',
             'classes_id' => 'required',
             'updated_by' => 'required',
+            'wave_no' => 'required',
+            'agreed_start_date' => 'required',
+            'erf_number' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
+        $classes = Classes::find($classesId);
+        $classes->wave_no =  $request->input('wave_no');
+        $classes->agreed_start_date =  $request->input('agreed_start_date');
+        $classes->erf_number =  $request->input('erf_number');
+        $classes->save();
 
         $class = ClassStaffing::find($id);
         $class->active_status = '0';

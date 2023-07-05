@@ -341,7 +341,7 @@ const routes = [
     },
     children: [
       {
-        path: "/perx_dashboard",
+        path: "/perx_manager",
         name: "Perx",
         component: AppPerxDashboard,
       },

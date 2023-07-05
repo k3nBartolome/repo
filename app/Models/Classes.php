@@ -53,7 +53,7 @@ class Classes extends Model
         'agreed_start_date',
         'requested_by',
         'changes',
-        'two_dimensional_id',
+        'wave_no',
     ];
 
     public function site()

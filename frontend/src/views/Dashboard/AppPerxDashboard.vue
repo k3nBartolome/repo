@@ -10,7 +10,7 @@
     <div class="px-8">
       <div class="overflow-x-auto">
         <DataTable
-          :data="classes"
+          :data="perx"
           :columns="columns"
           class="min-w-full divide-y divide-gray-200 table table-striped"
           :options="{
@@ -67,122 +67,46 @@ export default {
   components: { DataTable },
   data() {
     return {
-      classes: [],
-      sites: [],
-      programs: [],
-      daterange: [],
-      sites_selected: "",
-      programs_selected: "",
-      month_selected: "",
-      week_selected: "",
+      perx: [],
       columns: [
-        { data: "id", title: "ID" },
-        {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-            return `<button class="btn btn-primary text-xs w-40" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
-                    <button class="btn btn-secondary text-xs  w-40" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="btn btn-danger  w-40" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
-  `;
-          },
-        },
-        { data: "site.country", title: "Country" },
-        { data: "site.name", title: "Site" },
-        { data: "program.name", title: "Program" },
-        { data: "date_range.date_range", title: "Hiring Week" },
-        { data: "total_target", title: "Total Target" },
-        { data: "original_start_date", title: "Original Start Date" },
-        { data: "type_of_hiring", title: "Type of Hiring" },
-        { data: "created_at", title: "Created date" },
-        { data: "created_by_user.name", title: "Created by" },
+        { data: "DateOfApplication", title: "Date of Application" },
+            { data: "LastName", title: "Lastname" },
+            { data: "FirstName", title: "Firstname" },
+            { data: "MiddleName", title: "MiddleName" },
+            { data: "MobileNo", title: "Mobile#" },
+            { data: "Site", title: "SITE" },
+            { data: "GenSource", title: "Gen Source" },
+            { data: "SpecSource", title: "Spec Source" },
+            { data: "Step", title: "Step" },
+            { data: "AppStep", title: "App Step" },
+            { data: "PERX_HRID", title: "PERX HRID" },
+            { data: "PERX_NAME", title: "PERX NAME" },
+            { data: "OSS_HRID", title: "OSS HRID" },
+            { data: "OSS_FNAME", title: "OSS FNAME" },
+            { data: "OSS_LNAME", title: "OSS LNAME" },
+            { data: "OSS_LOB", title: "OSS LOB" },
+            { data: "OSS_SITE", title: "OSS SITE" },
+],
 
-      ],
     };
-  },
-  computed: {
-    classExists() {
-      return this.classes.some((c) => {
-        return (
-          c.site.id === this.sites_selected &&
-          c.program.id === this.programs_selected &&
-          c.date_range.id === this.week_selected
-        );
-      });
-    },
   },
   mounted() {
     window.vm = this;
-    this.getSites();
-    this.getPrograms();
-    this.getDateRange();
-    this.getClassesAll();
+    this.getPerx();
   },
   methods: {
-    navigateToEdit(id) {
-      this.$router.push(`/editcapfile/${id}`);
-    },
-    navigateToCancel(id) {
-      this.$router.push(`/cancelcapfile/${id}`);
-    },
-    navigateToPushback(id) {
-      this.$router.push(`/pushbackcapfile/${id}`);
-    },
-    async getClassesAll() {
+    async getPerx() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classes")
         .then((response) => {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
+          this.perx = response.data.perx;
+          console.log(response.data.perx);
         })
         .catch((error) => {
           console.log(error);
         });
     },
-    async getSites() {
-      await axios
-        .get("http://10.109.2.112:8081/api/sites")
-        .then((response) => {
-          this.sites = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getPrograms() {
-      if (!this.sites_selected) {
-        return; // do nothing if no site is selected
-      }
-
-      await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
-        .then((response) => {
-          this.programs = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
-
-    async getDateRange() {
-      if (!this.month_selected) {
-        return;
-      }
-
-      await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
-        .then((response) => {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    
   },
 };
 </script>

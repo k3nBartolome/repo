@@ -12,20 +12,43 @@ use Illuminate\Support\Facades\Validator;
 class ClassesController extends Controller
 {
     public function index()
-    {
-        $users = DB::connection('secondary')->table('test_name')->get();
+{
+    $minutes = 60;
+    $data = DB::connection('secondary_sqlsrv')
+        ->table('PERX_DATA')
+        ->select(
+            'DateOfApplication',
+            'LastName',
+            'FirstName',
+            'MiddleName',
+            'MobileNo',
+            'Site',
+            'GenSource',
+            'SpecSource',
+            'Step',
+            'AppStep',
+            'PERX_HRID',
+            'PERX_NAME',
+            'OSS_HRID',
+            'OSS_FNAME',
+            'OSS_LNAME',
+            'OSS_LOB',
+            'OSS_SITE'
+        )->get();
 
-        $name = DB::connection('secondary')
-            ->table('test_name')->get();
+    $data = cache()->remember('perx_data', $minutes, function () use ($data) {
+        return $data;
+    });
 
-        return response()->json([
-                'class' => $name,
-            ]);
-    }
+    return response()->json([
+        'perx' => $data,
+    ]);
+}
+
+
 
     public function store(Request $request)
     {
-        // Validate the request.
         $validator = Validator::make($request->all(), [
             'notice_weeks' => 'required',
             'notice_days' => 'required',
@@ -100,8 +123,8 @@ class ClassesController extends Controller
         }
 
         return response()->json([
-        'class' => $class,
-    ]);
+            'class' => $class,
+        ]);
     }
 
     public function transaction($id)
@@ -129,14 +152,14 @@ class ClassesController extends Controller
             return Classes::whereHas('site', function ($query) {
                 $query->where('country', '=', 'Philippines');
             })
-            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('status', 'Active')
-            ->get();
+                ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                ->where('status', 'Active')
+                ->get();
         });
 
         return response()->json([
-        'classes' => $classes,
-    ]);
+            'classes' => $classes,
+        ]);
     }
 
     public function classesallInd()
@@ -144,13 +167,13 @@ class ClassesController extends Controller
         $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'India');
         })
-        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-        ->where('status', 'Active')
-        ->get();
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'Active')
+            ->get();
 
         return response()->json([
-        'classes' => $classes,
-    ]);
+            'classes' => $classes,
+        ]);
     }
 
     public function classesallJam()
@@ -158,13 +181,13 @@ class ClassesController extends Controller
         $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'Jamaica');
         })
-        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-        ->where('status', 'Active')
-        ->get();
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'Active')
+            ->get();
 
         return response()->json([
-        'classes' => $classes,
-    ]);
+            'classes' => $classes,
+        ]);
     }
 
     public function classesallGua()
@@ -172,13 +195,13 @@ class ClassesController extends Controller
         $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'Guatemala');
         })
-        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-        ->where('status', 'Active')
-        ->get();
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'Active')
+            ->get();
 
         return response()->json([
-        'classes' => $classes,
-    ]);
+            'classes' => $classes,
+        ]);
     }
 
     public function pushedback(Request $request, $id)
