@@ -117,7 +117,7 @@
       </form>
     </div>
   </div>
-  <div class="py-4">
+  <div class="py-2">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -132,7 +132,7 @@
               lengthChange: true,
               ordering: true,
               scrollX: true,
-              dom: 'Bfrtip',
+              dom: 'frtip',
               language: {
                 search: 'Search',
                 zeroRecords: 'No data available',

@@ -47,7 +47,7 @@
             </button>
             <div
               v-show="isDropdown3Open"
-              class="absolute z-10 py-2 bg-white rounded shadow-md truncate"
+              class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
             >
             <router-link to="/staffing_report"
             ><li
@@ -56,7 +56,7 @@
               Staffing Tracker
             </li></router-link
           >
-              <router-link to="/program_management"
+              <router-link to="/capfile_report"
                 ><li
                   class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
                 >
@@ -98,7 +98,7 @@
       </ul>
       <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
         <div class="py-4">
-          <select v-model="selectedOption" @change="navigateToPage" class="rounded border-gray-300 focus:ring focus:ring-indigo-200 focus:border-indigo-500">
+          <select v-model="selectedOption" @change="navigateToPage" class="border-gray-300 rounded focus:ring focus:ring-indigo-200 focus:border-indigo-500">
             <option value="/capfileindia" class="flex items-center">IND</option>
             <option value="/capfile" class="flex items-center">PH</option>
             <option value="/capfilejamaica" class="flex items-center">JAM</option>

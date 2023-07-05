@@ -109,7 +109,7 @@
               responsive: false,
               autoWidth: false,
               scrollX: true,
-              dom: 'Bfrtip',
+              dom: 'fBrtlip',
               language: {
                 search: 'Search',
                 zeroRecords: 'No data available',
@@ -405,5 +405,29 @@ export default {
 
 .table tbody td {
   padding: 8px;
+}
+.dataTables_wrapper .dataTables_filter {
+  float: left;
+  padding-right: 30px;
+}
+
+.dataTables_wrapper .dataTables_Buttons {
+  float: left;
+  margin-top: 30px;
+}
+
+.dataTables_wrapper .dataTables_pagination {
+  float: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dataTables_wrapper .dataTables_length {
+  float: left;
+  padding-right: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>

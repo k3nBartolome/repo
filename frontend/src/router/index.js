@@ -25,6 +25,7 @@ import SiteManagementIndia from "@/views//Dashboard/AppSiteDashboardIndia.vue";
 import SiteManagementJamaica from "@/views//Dashboard/AppSiteDashboardJamaica.vue";
 import SiteManagementGuatemala from "@/views//Dashboard/AppSiteDashboardGuatemala.vue";
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
+import capacityFileReport from "@/views/DashboardNavItems/User/CapacityFileReport.vue";
 import capacityFileIndia from "@/views/DashboardNavItems/User/CapacityFileIndia.vue";
 import capacityFileJamaica from "@/views/DashboardNavItems/User/CapacityFileJamaica.vue";
 import capacityFileGuatemala from "@/views/DashboardNavItems/User/CapacityFileGuatemala.vue";
@@ -269,6 +270,11 @@ const routes = [
         path: "/staffing_report",
         name: "powerBi",
         component: powerBi,
+      },
+      {
+        path: "/capfile_report",
+        name: "capacityFileReport",
+        component: capacityFileReport,
       },
       {
         path: "/pushbackcapfile/:id",

@@ -106,7 +106,7 @@
           :options="{
             responsive: true,
             autoWidth: true,
-            dom: 'frtip',
+            dom: 'Blfrtip',
             language: {
               search: 'Search',
               zeroRecords: 'No data available',
@@ -188,6 +188,7 @@ export default {
         { data: "type_of_hiring", title: "Type of Hiring" },
         { data: "created_at", title: "Created date" },
         { data: "created_by_user.name", title: "Created by" },
+
       ],
     };
   },
