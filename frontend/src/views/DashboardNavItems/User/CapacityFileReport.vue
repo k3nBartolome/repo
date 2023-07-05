@@ -10,7 +10,14 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6">
+        <button
+  type="button"
+  class="w-12 h-12  ml-28 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+  @click="resetFilter"
+>
+  X
+</button>
         <label class="block">
           Site
           <select
@@ -234,6 +241,12 @@ export default {
     this.getClassesAll();
   },
   methods: {
+    resetFilter() {
+    this.sites_selected = "";
+    this.programs_selected = "";
+    this.month_selected = "";
+    this.week_selected = "";
+  },
     navigateToEdit(id) {
       this.$router.push(`/editcapfile/${id}`);
     },

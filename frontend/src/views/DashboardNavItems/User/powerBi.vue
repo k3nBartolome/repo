@@ -12,6 +12,14 @@
     >
       <form class="">
         <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+          <button
+  type="button"
+  class="w-12 h-12  ml-40 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+  @click="resetFilter"
+>
+  X
+</button>
+
           <label class="block">
             Site
             <select
@@ -299,6 +307,12 @@ export default {
     this.getDateRange();
   },
   methods: {
+    resetFilter() {
+    this.sites_selected = "";
+    this.programs_selected = "";
+    this.month_selected = "";
+    this.week_selected = "";
+  },
     navigateToEdit(id, classSelected) {
       this.$router.push({
         path: `/updatestaffing/${id}`,
