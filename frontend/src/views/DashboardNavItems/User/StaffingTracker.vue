@@ -105,7 +105,9 @@
             }"
           >
             <button
-              type="submit"
+            v-if="!classStaffingExists"
+            type="submit"
+            :disabled="classStaffingExists"
               class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
             >
               <i class="fa fa-building"></i> Add
@@ -120,7 +122,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="class_staffing"
+            :data="filteredData"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -128,7 +130,7 @@
               autoWidth: false,
               pageLength: 10,
               lengthChange: true,
-              ordering:true,
+              ordering: true,
               scrollX: true,
               dom: 'Bfrtip',
               language: {
@@ -244,7 +246,6 @@ export default {
         { data: "pipeline_target", title: "Pipeline Target" },
         { data: "deficit_total", title: "Total Deficit" },
         { data: "additional_remarks", title: "Additional Remarks" },
-
       ],
     };
   },
@@ -255,6 +256,9 @@ export default {
         this.getPrograms();
         this.class_selected = "";
         this.updateClassSelected();
+        this.programs_selected = null;
+        this.week_selected = null;
+        this.month_selected = null;
       },
     },
     programs_selected: {
@@ -275,6 +279,15 @@ export default {
   },
 
   computed: {
+    classStaffingExists() {
+      return this.class_staffing.some((class_staffing) => {
+        return (
+          class_staffing.classes.site.id === this.sites_selected &&
+          class_staffing.classes.program.id === this.programs_selected &&
+          class_staffing.classes.date_range.id === this.week_selected
+        );
+      });
+    },
     filteredClasses() {
       return this.classesall.filter((cls) => {
         return (
@@ -283,6 +296,29 @@ export default {
           cls.date_range.id === this.week_selected
         );
       });
+    },
+    filteredData() {
+      let filteredData = [...this.class_staffing];
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          return class_staffing.classes.site.id === this.sites_selected;
+        });
+      }
+
+      if (this.programs_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          return class_staffing.classes.program.id === this.programs_selected;
+        });
+      }
+
+      if (this.week_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          const weekId = class_staffing.classes.date_range.id;
+          return weekId === this.week_selected;
+        });
+      }
+
+      return filteredData;
     },
   },
   mounted() {
@@ -313,7 +349,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -329,7 +365,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -339,7 +375,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/sites");
+        const response = await axios.get("http://127.0.0.1:8000/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -354,7 +390,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -370,7 +406,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);

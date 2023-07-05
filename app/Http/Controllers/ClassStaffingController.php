@@ -186,6 +186,7 @@ class ClassStaffingController extends Controller
         'wave_no' => 'nullable',
         'agreed_start_date' => 'nullable',
         'erf_number' => 'nullable',
+        'date_range_id' => 'required',
     ]);
 
         if ($validator->fails()) {
@@ -196,6 +197,7 @@ class ClassStaffingController extends Controller
         $classes->wave_no = $request->input('wave_no');
         $classes->agreed_start_date = $request->input('agreed_start_date');
         $classes->erf_number = $request->input('erf_number');
+        $classes->date_range_id = $request->input('date_range_id');
         $classes->save();
 
         $class = ClassStaffing::find($id);

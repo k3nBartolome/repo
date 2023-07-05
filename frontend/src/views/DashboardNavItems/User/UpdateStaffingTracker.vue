@@ -97,7 +97,6 @@
             v-model="hiring_week"
             class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
-            @change="getDateRange"
           >
             <option
               v-for="daterange in daterange"
@@ -907,6 +906,10 @@ export default {
     },
   },
   watch: {
+    training_start: {
+      handler: "getDateRange",
+      immediate: true,
+    },
     day_1: {
       handler: "syncEndorsedTotal",
       immediate: true,
@@ -984,7 +987,7 @@ export default {
   methods: {
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/classestransaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classestransaction/" + this.$route.params.id)
         .then((response) => {
           this.class_transaction = response.data.class;
           console.log(response.data.class);
@@ -1022,7 +1025,7 @@ export default {
 
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -1034,7 +1037,7 @@ export default {
     async getClassesStaffing() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesstaffing/" + this.$route.params.id
+          "http://127.0.0.1:8000/api/classesstaffing/" + this.$route.params.id
         );
         const classStaffingObj = response.data.class;
 
@@ -1076,7 +1079,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "http://10.109.2.112:8081/api/classes/" + this.$route.query.class_selected
+            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -1103,7 +1106,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -1114,7 +1117,7 @@ export default {
     },
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs")
+        .get("http://127.0.0.1:8000/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -1124,12 +1127,24 @@ export default {
         });
     },
 
-    async getDateRange() {
+   async getDateRange() {
+      console.log(this.training_start);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
+
+          for (let i = 0; i < this.daterange.length; i++) {
+            const range = this.daterange[i];
+            if (
+              this.training_start >= range.week_start &&
+              this.training_start <= range.week_end
+            ) {
+              this.hiring_week = range.id;
+              break;
+            }
+          }
         })
         .catch((error) => {
           console.log(error);
@@ -1173,11 +1188,12 @@ export default {
         erf_number: this.erf_number,
         wave_no: this.wave_no,
         agreed_start_date: this.training_start,
+        date_range_id: this.hiring_week,
         updated_by: this.$store.state.user_id,
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/updateclassesstaffing/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/updateclassesstaffing/" + this.$route.params.id,
           formData
         )
         .then((response) => {
@@ -1216,6 +1232,7 @@ export default {
           this.wave_no = "";
           this.erf_number = "";
           this.agreed_start_date = "";
+          this.date_range_id= "";
           this.$router.push("/staffing", () => {
             location.reload();
           });
