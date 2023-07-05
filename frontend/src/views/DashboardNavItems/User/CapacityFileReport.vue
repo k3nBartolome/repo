@@ -106,7 +106,7 @@
           :options="{
             responsive: true,
             autoWidth: true,
-            dom: 'Blfrtip',
+            dom: 'fBrtlip',
             language: {
               search: 'Search',
               zeroRecords: 'No data available',
@@ -245,7 +245,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -256,7 +256,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -271,7 +271,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -287,7 +287,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -299,3 +299,37 @@ export default {
   },
 };
 </script>
+<style>
+.dataTables_wrapper .dataTables_filter {
+  float: left;
+  padding-right: 30px;
+}
+
+.dataTables_wrapper .dataTables_Buttons {
+  float: left;
+  margin-top: 30px;
+}
+
+.dataTables_wrapper .dataTables_pagination {
+  float: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dataTables_wrapper .dataTables_length {
+  float: left;
+  padding-right: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dataTables_wrapper .dt-buttons .btn {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 8px;
+  margin-top: 15px;
+}
+</style>
