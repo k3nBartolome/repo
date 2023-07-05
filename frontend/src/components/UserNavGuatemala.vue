@@ -37,7 +37,7 @@
             Staffing Tracker
           </li></router-link
         >
-        <router-link to="/powerbi"
+        <router-link to="/staffing_report"
           ><li
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >

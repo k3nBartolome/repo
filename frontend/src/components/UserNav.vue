@@ -49,7 +49,7 @@
               v-show="isDropdown3Open"
               class="absolute z-10 py-2 bg-white rounded shadow-md truncate"
             >
-            <router-link to="/powerbi"
+            <router-link to="/staffing_report"
             ><li
               class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
             >

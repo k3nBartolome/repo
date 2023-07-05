@@ -70,7 +70,7 @@ const routes = [
         component: StaffingTracker,
       },
       {
-        path: "/powerbi",
+        path: "/staffing_report",
         name: "powerBi",
         component: powerBi,
       },
@@ -132,7 +132,7 @@ const routes = [
         component: StaffingTracker,
       },
       {
-        path: "/powerbi",
+        path: "/staffing_report",
         name: "powerBi",
         component: powerBi,
       },
@@ -194,7 +194,7 @@ const routes = [
         component: StaffingTracker,
       },
       {
-        path: "/powerbi",
+        path: "/staffing_report",
         name: "powerBi",
         component: powerBi,
       },
@@ -266,7 +266,7 @@ const routes = [
         component: UpdateStaffingTracker,
       },
       {
-        path: "/powerbi",
+        path: "/staffing_report",
         name: "powerBi",
         component: powerBi,
       },

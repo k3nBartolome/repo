@@ -93,13 +93,6 @@
               </option>
             </select>
           </label>
-
-          <button
-            type="submit"
-            class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
-            <i class="fa fa-building"></i> Filter
-          </button>
         </div>
       </form>
     </div>
@@ -109,7 +102,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-          :data="filteredData"
+            :data="filteredData"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -241,6 +234,9 @@ export default {
         this.getPrograms();
         this.class_selected = "";
         this.updateClassSelected();
+        this.programs_selected = null;
+        this.week_selected = null;
+        this.month_selected = null;
       },
     },
     programs_selected: {
@@ -271,23 +267,28 @@ export default {
       });
     },
     filteredData() {
-  if (
-    !this.sites_selected ||
-    !this.programs_selected ||
-    !this.week_selected
-  ) {
-    return this.class_staffing;
-  }
+      let filteredData = [...this.class_staffing];
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          return class_staffing.classes.site.id === this.sites_selected;
+        });
+      }
 
-  return this.class_staffing.filter((class_staffing) => {
-    return (
-      class_staffing.classes.site.id === this.sites_selected &&
-      class_staffing.classes.program.id === this.programs_selected &&
-      class_staffing.classes.date_range.id === this.week_selected
-    );
-  });
-},
+      if (this.programs_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          return class_staffing.classes.program.id === this.programs_selected;
+        });
+      }
 
+      if (this.week_selected) {
+        filteredData = filteredData.filter((class_staffing) => {
+          const weekId = class_staffing.classes.date_range.id;
+          return weekId === this.week_selected;
+        });
+      }
+
+      return filteredData;
+    },
   },
   mounted() {
     window.vm = this;
