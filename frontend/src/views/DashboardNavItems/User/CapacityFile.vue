@@ -100,9 +100,9 @@
     <div class="px-8">
       <div class="overflow-x-auto">
         <DataTable
-          :data="classes"
+          :data="filteredData"
           :columns="columns"
-          class="min-w-full divide-y divide-gray-200 table table-striped"
+          class="table min-w-full divide-y divide-gray-200 table-striped"
           :options="{
             responsive: true,
             autoWidth: true,
@@ -173,9 +173,9 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="btn btn-primary text-xs w-40" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
-                    <button class="btn btn-secondary text-xs  w-40" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="btn btn-danger  w-40" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
+            return `<button class="w-40 text-xs btn btn-primary" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
+                    <button class="w-40 text-xs btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
+                    <button class="w-40 btn btn-danger" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
   `;
           },
         },
@@ -201,6 +201,29 @@ export default {
           c.date_range.id === this.week_selected
         );
       });
+    },
+    filteredData() {
+      let filteredData = [...this.classes];
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.site.id === this.sites_selected;
+        });
+      }
+
+      if (this.programs_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.program.id === this.programs_selected;
+        });
+      }
+
+      if (this.week_selected) {
+        filteredData = filteredData.filter((classes) => {
+          const weekId = classes.date_range.id;
+          return weekId === this.week_selected;
+        });
+      }
+
+      return filteredData;
     },
   },
   mounted() {
