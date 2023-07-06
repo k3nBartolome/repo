@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full bg-white shadow">
+  <header class="w-full bg-green-300">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Capacity File Reports
@@ -13,10 +13,10 @@
       <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6">
         <button
           type="button"
-          class="w-12 h-12 mt-2 font-semibold text-white bg-gray-500 rounded ml-28 hover:bg-gray-600"
+          class="w-20 h-12 mt-2 font-semibold text-white bg-gray-500 rounded ml-28 hover:bg-gray-600 block"
           @click="resetFilter"
         >
-          X
+          Reset Filters
         </button>
         <label class="block">
           Site
@@ -242,7 +242,7 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
-      this.status = ""; 
+      this.status = "";
     },
     navigateToEdit(id) {
       this.$router.push(`/editcapfile/${id}`);
@@ -255,7 +255,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/cstat")
+        .get("http://127.0.0.1:8000/api/cstat")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -266,7 +266,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -281,7 +281,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -297,7 +297,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);

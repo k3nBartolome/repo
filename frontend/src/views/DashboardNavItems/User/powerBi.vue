@@ -1,5 +1,5 @@
 <template>
-  <header class="w-full bg-white shadow">
+  <header class="w-full bg-orange-300">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker Reports
@@ -332,7 +332,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -348,7 +348,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -358,7 +358,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/sites");
+        const response = await axios.get("http://127.0.0.1:8000/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -373,7 +373,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -389,7 +389,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);
