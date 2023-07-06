@@ -14,10 +14,10 @@
         <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <button
             type="button"
-            class="w-12 h-12 mt-2 ml-40 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            class="w-20 h-12 mt-2 ml-40 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
             @click="resetFilter"
           >
-            X
+          Reset Filters
           </button>
 
           <label class="block">
@@ -332,7 +332,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -348,7 +348,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
+        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -358,7 +358,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/sites");
+        const response = await axios.get("http://10.109.2.112:8081/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -373,7 +373,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -389,7 +389,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);
