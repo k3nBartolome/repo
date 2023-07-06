@@ -89,7 +89,7 @@
           >
             <option disabled value="" selected>Please select one</option>
             <option value="Active">Active</option>
-            <option value="Canceled">Canceled</option>
+            <option value="Cancelled">Cancelled</option>
             <option value="Moved">Moved</option>
           </select>
         </label>
@@ -219,6 +219,12 @@ export default {
           return weekId === this.week_selected;
         });
       }
+      if (this.status) {
+        filteredData = filteredData.filter((classes) => {
+          const status = classes.status;
+          return status === this.status;
+        });
+      }
 
       return filteredData;
     },
@@ -236,6 +242,7 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
+      this.status = ""; 
     },
     navigateToEdit(id) {
       this.$router.push(`/editcapfile/${id}`);
