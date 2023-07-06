@@ -89,7 +89,7 @@
           >
             <option disabled value="" selected>Please select one</option>
             <option value="Active">Active</option>
-            <option value="Canceled">Canceled</option>
+            <option value="Cancelled">Cancelled</option>
             <option value="Moved">Moved</option>
           </select>
         </label>
@@ -219,6 +219,12 @@ export default {
           return weekId === this.week_selected;
         });
       }
+      if (this.status) {
+        filteredData = filteredData.filter((classes) => {
+          const status = classes.status;
+          return status === this.status;
+        });
+      }
 
       return filteredData;
     },
@@ -236,6 +242,7 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
+      this.status = ""; 
     },
     navigateToEdit(id) {
       this.$router.push(`/editcapfile/${id}`);
@@ -248,7 +255,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://127.0.0.1:8000/api/cstat")
+        .get("http://10.109.2.112:8081/api/cstat")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -259,7 +266,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -274,7 +281,7 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -290,7 +297,7 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
