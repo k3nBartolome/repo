@@ -95,6 +95,7 @@ Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
 Route::get('classesall', [ClassesController::class, 'classesAll']);
+Route::get('cstat', [ClassesController::class, 'cstat']);
 Route::get('classesallindia', [ClassesController::class, 'classesAllInd']);
 Route::get('classesalljam', [ClassesController::class, 'classesAllJam']);
 Route::get('classesallgua', [ClassesController::class, 'classesAllGua']);
@@ -109,7 +110,6 @@ Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'show']);
 Route::put('updateclassesstaffing/{id}', [ClassStaffingController::class, 'update']);
 Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
 Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transaction']);
-
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
 Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);

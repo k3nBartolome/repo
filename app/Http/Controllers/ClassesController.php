@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Validator;
 class ClassesController extends Controller
 {
     public function index()
-{
-    $minutes = 60;
-    $data = DB::connection('secondary_sqlsrv')
+    {
+        $minutes = 60;
+        $data = DB::connection('secondary_sqlsrv')
         ->table('PERX_DATA')
         ->select(
             'DateOfApplication',
@@ -36,16 +36,14 @@ class ClassesController extends Controller
             'OSS_SITE'
         )->get();
 
-    $data = cache()->remember('perx_data', $minutes, function () use ($data) {
-        return $data;
-    });
+        $data = cache()->remember('perx_data', $minutes, function () use ($data) {
+            return $data;
+        });
 
-    return response()->json([
+        return response()->json([
         'perx' => $data,
     ]);
-}
-
-
+    }
 
     public function store(Request $request)
     {
@@ -154,6 +152,22 @@ class ClassesController extends Controller
             })
                 ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
                 ->where('status', 'Active')
+                ->get();
+        });
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
+    public function cStat()
+    {
+        $minutes = 60;
+        $classes = Cache::remember('cstat', $minutes, function () {
+            return Classes::whereHas('site', function ($query) {
+                $query->where('country', '=', 'Philippines');
+            })
+                ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
                 ->get();
         });
 

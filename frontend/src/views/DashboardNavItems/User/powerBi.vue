@@ -2,7 +2,7 @@
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Staffing Tracker
+        Staffing Tracker Reports
       </h1>
     </div>
   </header>
@@ -13,12 +13,12 @@
       <form class="">
         <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
           <button
-  type="button"
-  class="w-12 h-12  ml-40 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
-  @click="resetFilter"
->
-  X
-</button>
+            type="button"
+            class="w-12 h-12 mt-2 ml-40 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            @click="resetFilter"
+          >
+            X
+          </button>
 
           <label class="block">
             Site
@@ -308,11 +308,11 @@ export default {
   },
   methods: {
     resetFilter() {
-    this.sites_selected = "";
-    this.programs_selected = "";
-    this.month_selected = "";
-    this.week_selected = "";
-  },
+      this.sites_selected = "";
+      this.programs_selected = "";
+      this.month_selected = "";
+      this.week_selected = "";
+    },
     navigateToEdit(id, classSelected) {
       this.$router.push({
         path: `/updatestaffing/${id}`,

@@ -138,7 +138,6 @@
                 zeroRecords: 'No data available',
                 info: 'Showing from _START_ to _END_ of _TOTAL_ records',
                 infoFiltered: '(Filtered from MAX records)',
-
                 paginate: {
                   first: 'First',
                   previous: 'Prev',

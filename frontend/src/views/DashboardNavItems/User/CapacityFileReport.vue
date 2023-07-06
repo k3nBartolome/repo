@@ -2,7 +2,7 @@
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
+        Capacity File Reports
       </h1>
     </div>
   </header>
@@ -12,12 +12,12 @@
     >
       <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6">
         <button
-  type="button"
-  class="w-12 h-12  ml-28 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
-  @click="resetFilter"
->
-  X
-</button>
+          type="button"
+          class="w-12 h-12 mt-2 font-semibold text-white bg-gray-500 rounded ml-28 hover:bg-gray-600"
+          @click="resetFilter"
+        >
+          X
+        </button>
         <label class="block">
           Site
           <select
@@ -81,59 +81,58 @@
             </option>
           </select>
         </label>
-        <router-link
-          :to="{
-            path: `/addcapfile/}`,
-            query: {
-              program: programs_selected,
-              site: sites_selected,
-              daterange: week_selected,
-            },
-          }"
-        >
-          <button
-            v-if="!classExists"
-            type="submit"
-            :disabled="classExists"
-            class="px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        <label class="block">
+          Status
+          <select
+            v-model="status"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
-            <i class="fa fa-building"></i> Add
-          </button>
-        </router-link>
+            <option disabled value="" selected>Please select one</option>
+            <option value="Active">Active</option>
+            <option value="Canceled">Canceled</option>
+            <option value="Moved">Moved</option>
+          </select>
+        </label>
       </form>
     </div>
   </div>
   <div class="py-2">
-    <div class="px-8">
-      <div class="overflow-x-auto">
-        <DataTable
-          :data="filteredData"
-          :columns="columns"
-          class="table min-w-full divide-y divide-gray-200 table-striped"
-          :options="{
-            responsive: true,
-            autoWidth: true,
-            dom: 'fBrtlip',
-            language: {
-              search: 'Search',
-              zeroRecords: 'No data available',
-              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-              infoFiltered: '(Filtered from MAX records.)',
-              paginate: {
-                first: 'First',
-                previous: 'Prev',
-                next: 'Next',
-                last: 'Last',
+    <div class="pl-8 pr-8">
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <DataTable
+            :data="filteredData"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'fBrtlip',
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
               },
-            },
-          }"
-        >
-          <thead class="truncate">
-            <tr>
-              <!-- ...existing code... -->
-            </tr>
-          </thead>
-        </DataTable>
+            }"
+          >
+            <thead class="truncate">
+              <tr>
+                <!-- ...existing code... -->
+              </tr>
+            </thead>
+          </DataTable>
+        </div>
       </div>
     </div>
   </div>
@@ -172,30 +171,21 @@ export default {
       programs_selected: "",
       month_selected: "",
       week_selected: "",
+      status: "",
       columns: [
         { data: "id", title: "ID" },
-        {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-            return `<button class="w-40 text-xs btn btn-primary" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
-                    <button class="w-40 text-xs btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="w-40 btn btn-danger" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
-  `;
-          },
-        },
         { data: "site.country", title: "Country" },
+        { data: "status", title: "status" },
         { data: "site.name", title: "Site" },
         { data: "program.name", title: "Program" },
         { data: "date_range.date_range", title: "Hiring Week" },
         { data: "total_target", title: "Total Target" },
         { data: "original_start_date", title: "Original Start Date" },
         { data: "type_of_hiring", title: "Type of Hiring" },
+        { data: "wave_no", title: "Wave#" },
+        { data: "erf_number", title: "ERF#" },
         { data: "created_at", title: "Created date" },
         { data: "created_by_user.name", title: "Created by" },
-
       ],
     };
   },
@@ -242,11 +232,11 @@ export default {
   },
   methods: {
     resetFilter() {
-    this.sites_selected = "";
-    this.programs_selected = "";
-    this.month_selected = "";
-    this.week_selected = "";
-  },
+      this.sites_selected = "";
+      this.programs_selected = "";
+      this.month_selected = "";
+      this.week_selected = "";
+    },
     navigateToEdit(id) {
       this.$router.push(`/editcapfile/${id}`);
     },
@@ -258,7 +248,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://127.0.0.1:8000/api/classesall")
+        .get("http://127.0.0.1:8000/api/cstat")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -313,6 +303,25 @@ export default {
 };
 </script>
 <style>
+.table-responsive {
+  overflow: auto;
+}
+
+.datatable-container {
+  width: 100%;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
+}
 .dataTables_wrapper .dataTables_filter {
   float: left;
   padding-right: 30px;

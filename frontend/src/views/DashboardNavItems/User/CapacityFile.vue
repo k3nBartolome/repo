@@ -97,36 +97,42 @@
     </div>
   </div>
   <div class="py-2">
-    <div class="px-8">
-      <div class="overflow-x-auto">
-        <DataTable
-          :data="filteredData"
-          :columns="columns"
-          class="table min-w-full divide-y divide-gray-200 table-striped"
-          :options="{
-            responsive: true,
-            autoWidth: true,
-            dom: 'frtip',
-            language: {
-              search: 'Search',
-              zeroRecords: 'No data available',
-              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-              infoFiltered: '(Filtered from MAX records.)',
-              paginate: {
-                first: 'First',
-                previous: 'Prev',
-                next: 'Next',
-                last: 'Last',
+    <div class="pl-8 pr-8">
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <DataTable
+            :data="filteredData"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'frtip',
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
               },
-            },
-          }"
-        >
-          <thead class="truncate">
-            <tr>
-              <!-- ...existing code... -->
-            </tr>
-          </thead>
-        </DataTable>
+            }"
+          >
+            <thead class="truncate">
+              <tr>
+                <!-- ...existing code... -->
+              </tr>
+            </thead>
+          </DataTable>
+        </div>
       </div>
     </div>
   </div>
@@ -298,3 +304,23 @@ export default {
   },
 };
 </script>
+<style>
+.table-responsive {
+  overflow: auto;
+}
+
+.datatable-container {
+  width: 100%;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
+}</style>
