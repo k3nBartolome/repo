@@ -10,16 +10,19 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <form class="">
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+    <form class="">
+      <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div class="sm:col-span-2 md:col-span-1">
           <button
             type="button"
-            class="w-20 h-12 mt-2 ml-40 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            class="w-full h-12 mt-2 sm:mt-0 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
             @click="resetFilter"
           >
-          Reset Filters
+            Reset Filters
           </button>
-
+        </div>
+    
+        <div class="sm:col-span-2 md:col-span-1">
           <label class="block">
             Site
             <select
@@ -33,6 +36,9 @@
               </option>
             </select>
           </label>
+        </div>
+    
+        <div class="sm:col-span-2 md:col-span-1">
           <label class="block">
             Programs
             <select
@@ -45,6 +51,9 @@
               </option>
             </select>
           </label>
+        </div>
+    
+        <div class="sm:col-span-2 md:col-span-1">
           <label class="block">
             Month
             <select
@@ -67,6 +76,9 @@
               <option value="12">December</option>
             </select>
           </label>
+        </div>
+    
+        <div class="sm:col-span-2 md:col-span-1">
           <label class="block">
             Week Range
             <select
@@ -83,26 +95,29 @@
               </option>
             </select>
           </label>
-          <label class="block" style="display: none">
-            Class
-            <select
-              v-model="class_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getClasses"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="classes in filteredClasses"
-                :key="classes.id"
-                :value="classes.id"
-              >
-                {{ classes.site.name }} {{ classes.program.name }}
-                {{ classes.date_range.date_range }} {{ classes.total_target }}
-              </option>
-            </select>
-          </label>
         </div>
-      </form>
+    
+        <label class="block" style="display: none">
+          Class
+          <select
+            v-model="class_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            @change="getClasses"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option
+              v-for="classes in filteredClasses"
+              :key="classes.id"
+              :value="classes.id"
+            >
+              {{ classes.site.name }} {{ classes.program.name }}
+              {{ classes.date_range.date_range }} {{ classes.total_target }}
+            </option>
+          </select>
+        </label>
+      </div>
+    </form>
+    
     </div>
   </div>
   <div class="py-4">
@@ -118,6 +133,7 @@
               autoWidth: false,
               scrollX: true,
               dom: 'fBrtlip',
+              buttons: ['excel', 'csv'],
               language: {
                 search: 'Search',
                 zeroRecords: 'No data available',
@@ -159,12 +175,12 @@ import print from "datatables.net-buttons/js/buttons.print";
 // eslint-disable-next-line no-unused-vars
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
+import jszip from "jszip";
 // eslint-disable-next-line no-unused-vars
-
 import "bootstrap/dist/css/bootstrap.css";
 
 DataTable.use(DataTableLib);
-//DataTable.use(pdfmake);
+DataTable.use(jszip);
 DataTable.use(ButtonsHtml5);
 
 export default {
@@ -332,7 +348,9 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesall"
+        );
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -348,7 +366,9 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesstaffing"
+        );
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
