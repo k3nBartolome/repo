@@ -113,3 +113,5 @@ Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transact
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);
 Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
+//chart
+Route::get('countstatus', [ClassesController::class, 'countStatus']);

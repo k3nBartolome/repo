@@ -15,34 +15,58 @@ class ClassesController extends Controller
     {
         $minutes = 60;
         $data = DB::connection('secondary_sqlsrv')
-        ->table('PERX_DATA')
-        ->select(
-            'DateOfApplication',
-            'LastName',
-            'FirstName',
-            'MiddleName',
-            'MobileNo',
-            'Site',
-            'GenSource',
-            'SpecSource',
-            'Step',
-            'AppStep',
-            'PERX_HRID',
-            'PERX_NAME',
-            'OSS_HRID',
-            'OSS_FNAME',
-            'OSS_LNAME',
-            'OSS_LOB',
-            'OSS_SITE'
-        )->get();
+            ->table('PERX_DATA')
+            ->select(
+                'DateOfApplication',
+                'LastName',
+                'FirstName',
+                'MiddleName',
+                'MobileNo',
+                'Site',
+                'GenSource',
+                'SpecSource',
+                'Step',
+                'AppStep',
+                'PERX_HRID',
+                'PERX_NAME',
+                'OSS_HRID',
+                'OSS_FNAME',
+                'OSS_LNAME',
+                'OSS_LOB',
+                'OSS_SITE'
+            )->get();
 
         $data = cache()->remember('perx_data', $minutes, function () use ($data) {
             return $data;
         });
 
         return response()->json([
-        'perx' => $data,
-    ]);
+            'perx' => $data,
+        ]);
+    }
+    public function countStatus()
+    {
+        $counts = [
+            'active' => Classes::whereHas('site', function ($query) {
+                $query->where('country', '=', 'Philippines');
+            })
+                ->where('status', 'active')
+                ->count(),
+
+            'cancelled' => Classes::whereHas('site', function ($query) {
+                $query->where('country', '=', 'Philippines');
+            })
+                ->where('status', 'cancelled')
+                ->count(),
+
+            'moved' => Classes::whereHas('site', function ($query) {
+                $query->where('country', '=', 'Philippines');
+            })
+                ->where('status', 'moved')
+                ->count(),
+        ];
+
+        return $counts;
     }
 
     public function store(Request $request)
