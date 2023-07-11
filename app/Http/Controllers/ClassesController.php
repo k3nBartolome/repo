@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
-{   
+{
 
     public function index()
     {
@@ -47,8 +47,9 @@ class ClassesController extends Controller
     }
     public function sumTotalTarget()
     {
-        $total = Classes::sum('total_target');
-        
+        $total = Classes::where('status', 'active')
+            ->sum('total_target');
+
         return response()->json(['total_target' => $total]);
     }
     public function countStatus()
