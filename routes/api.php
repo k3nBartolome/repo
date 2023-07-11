@@ -115,3 +115,4 @@ Route::get('daterange', [DateRangeController::class, 'index']);
 Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
 //chart
 Route::get('countstatus', [ClassesController::class, 'countStatus']);
+Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);

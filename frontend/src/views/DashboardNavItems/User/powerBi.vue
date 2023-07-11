@@ -10,114 +10,119 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-    <form class="">
-      <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
-        <div class="sm:col-span-2 md:col-span-1">
-          <button
-            type="button"
-            class="w-full h-12 mt-2 sm:mt-0 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
-            @click="resetFilter"
-          >
-            Reset Filters
-          </button>
-        </div>
-    
-        <div class="sm:col-span-2 md:col-span-1">
-          <label class="block">
-            Site
-            <select
-              v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getPrograms"
+      <form class="">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
+          <div class="sm:col-span-2 md:col-span-1">
+            <button
+              type="button"
+              class="w-full h-12 mt-2 sm:mt-0 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+              @click="resetFilter"
             >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-    
-        <div class="sm:col-span-2 md:col-span-1">
-          <label class="block">
-            Programs
+              Reset Filters
+            </button>
+          </div>
+
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Site
+              <select
+                v-model="sites_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                @change="getPrograms"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="site in sites" :key="site.id" :value="site.id">
+                  {{ site.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Programs
+              <select
+                v-model="programs_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option
+                  v-for="program in programs"
+                  :key="program.id"
+                  :value="program.id"
+                >
+                  {{ program.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Month
+              <select
+                v-model="month_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                @change="getDateRange"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Week Range
+              <select
+                v-model="week_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option
+                  v-for="daterange in daterange"
+                  :key="daterange.id"
+                  :value="daterange.id"
+                >
+                  {{ daterange.date_range }}
+                </option>
+              </select>
+            </label>
+          </div>
+
+          <label class="block" style="display: none">
+            Class
             <select
-              v-model="programs_selected"
+              v-model="class_selected"
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
-                {{ program.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-    
-        <div class="sm:col-span-2 md:col-span-1">
-          <label class="block">
-            Month
-            <select
-              v-model="month_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getDateRange"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </label>
-        </div>
-    
-        <div class="sm:col-span-2 md:col-span-1">
-          <label class="block">
-            Week Range
-            <select
-              v-model="week_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getClasses"
             >
               <option disabled value="" selected>Please select one</option>
               <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
+                v-for="classes in filteredClasses"
+                :key="classes.id"
+                :value="classes.id"
               >
-                {{ daterange.date_range }}
+                {{ classes.site.name }} {{ classes.program.name }}
+                {{ classes.date_range.date_range }} {{ classes.total_target }}
               </option>
             </select>
           </label>
         </div>
-    
-        <label class="block" style="display: none">
-          Class
-          <select
-            v-model="class_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            @change="getClasses"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="classes in filteredClasses"
-              :key="classes.id"
-              :value="classes.id"
-            >
-              {{ classes.site.name }} {{ classes.program.name }}
-              {{ classes.date_range.date_range }} {{ classes.total_target }}
-            </option>
-          </select>
-        </label>
-      </div>
-    </form>
-    
+      </form>
     </div>
   </div>
   <div class="py-4">
@@ -199,19 +204,11 @@ export default {
       class_selected: "",
       columns: [
         { data: "id", title: "ID" },
-        {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data, type, row) {
-            const classSelected = row.classes ? row.classes.id : "";
-            return `<button class="btn btn-primary" data-id="${data}" onclick="window.vm.navigateToEdit(${data}, '${classSelected}')">Edit</button>`;
-          },
-        },
         { data: "classes.site.country", title: "Country" },
+        { data: "classes.site.region", title: "Region" },
         { data: "classes.site.name", title: "Site" },
         { data: "classes.program.name", title: "Program" },
+        { data: "classes.date_range.month", title: "Month" },
         { data: "classes.date_range.date_range", title: "Hiring Week" },
         { data: "classes.total_target", title: "Target" },
         { data: "classes.wave_no", title: "Wave#" },

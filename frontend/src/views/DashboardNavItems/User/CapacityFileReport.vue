@@ -175,9 +175,11 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         { data: "site.country", title: "Country" },
+        { data: "site.region", title: "Region" },
         { data: "status", title: "status" },
         { data: "site.name", title: "Site" },
         { data: "program.name", title: "Program" },
+        { data: "date_range.month", title: "Month" },
         { data: "date_range.date_range", title: "Hiring Week" },
         { data: "total_target", title: "Total Target" },
         { data: "original_start_date", title: "Original Start Date" },

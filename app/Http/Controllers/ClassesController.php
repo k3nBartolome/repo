@@ -10,7 +10,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
-{
+{   
+
     public function index()
     {
         $minutes = 60;
@@ -43,6 +44,12 @@ class ClassesController extends Controller
         return response()->json([
             'perx' => $data,
         ]);
+    }
+    public function sumTotalTarget()
+    {
+        $total = Classes::sum('total_target');
+        
+        return response()->json(['total_target' => $total]);
     }
     public function countStatus()
     {
