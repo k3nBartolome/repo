@@ -88,7 +88,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://127.0.0.1:8000/api/programs/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
         .then((response) => {
             this.programs = response.data.data
           const programObj = this.programs;
@@ -107,7 +107,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -126,7 +126,7 @@ export default {
       };
       axios
         .put(
-          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
           formData
         )
         .then((response) => {

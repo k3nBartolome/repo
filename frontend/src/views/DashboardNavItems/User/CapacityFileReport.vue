@@ -257,7 +257,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://127.0.0.1:8000/api/cstat")
+        .get("http://10.109.2.112:8081/api/cstat")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -268,7 +268,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites")
+        .get("http://10.109.2.112:8081/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -283,7 +283,7 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -299,7 +299,7 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
