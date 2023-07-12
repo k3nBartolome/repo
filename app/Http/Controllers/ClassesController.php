@@ -174,22 +174,19 @@ class ClassesController extends Controller
     }
 
     public function classesall()
-    {
-        $minutes = 60;
+{
+    $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
 
-        $classes = Cache::remember('classesall', $minutes, function () {
-            return Classes::whereHas('site', function ($query) {
-                $query->where('country', '=', 'Philippines');
-            })
-                ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                ->where('status', 'Active')
-                ->get();
-        });
+    return response()->json([
+        'classes' => $classes,
+    ]);
+}
 
-        return response()->json([
-            'classes' => $classes,
-        ]);
-    }
 
     public function cStat()
     {

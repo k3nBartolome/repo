@@ -16,28 +16,20 @@ class ClassStaffingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        $minutes = 60;
-        $classStaffing = Cache::remember('classStaffing', $minutes, function () {
-            $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
-            ->where('active_status', '1')
-            ->get();
+{
+    $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+        ->where('active_status', '1')
+        ->get();
 
-            if ($classStaffing->isEmpty()) {
-                return null;
-            }
+    if ($classStaffing->isEmpty()) {
+        return response()->json(['error' => 'Classes not found'], 404);
+    }
 
-            return $classStaffing;
-        });
-
-        if ($classStaffing === null) {
-            return response()->json(['error' => 'Classes not found'], 404);
-        }
-
-        return response()->json([
+    return response()->json([
         'class_staffing' => $classStaffing,
     ]);
-    }
+}
+
 
     /**
      * Show the form for creating a new resource.
