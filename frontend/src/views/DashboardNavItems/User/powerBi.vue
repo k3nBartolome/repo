@@ -11,19 +11,16 @@
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
       <form class="">
-        <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
+        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6">
           <div class="sm:col-span-2 md:col-span-1">
             <button
               type="button"
-              class="w-full h-12 mt-2 sm:mt-0 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+              class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded sm:mt-0 hover:bg-gray-600"
               @click="resetFilter"
             >
               Reset Filters
             </button>
           </div>
-
           <div class="sm:col-span-2 md:col-span-1">
             <label class="block">
               Site
@@ -39,7 +36,6 @@
               </select>
             </label>
           </div>
-
           <div class="sm:col-span-2 md:col-span-1">
             <label class="block">
               Programs
@@ -48,17 +44,12 @@
                 class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               >
                 <option disabled value="" selected>Please select one</option>
-                <option
-                  v-for="program in programs"
-                  :key="program.id"
-                  :value="program.id"
-                >
+                <option v-for="program in programs" :key="program.id" :value="program.id">
                   {{ program.name }}
                 </option>
               </select>
             </label>
           </div>
-
           <div class="sm:col-span-2 md:col-span-1">
             <label class="block">
               Month
@@ -83,7 +74,6 @@
               </select>
             </label>
           </div>
-
           <div class="sm:col-span-2 md:col-span-1">
             <label class="block">
               Week Range
@@ -99,6 +89,19 @@
                 >
                   {{ daterange.date_range }}
                 </option>
+              </select>
+            </label>
+          </div>
+          <div class="col-span-6 md:col-span-1">
+            <label class="block">
+              Status
+              <select
+                v-model="active_status"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
               </select>
             </label>
           </div>
@@ -202,6 +205,7 @@ export default {
       sites_selected: "",
       month_selected: "",
       class_selected: "",
+      active_status: "",
       columns: [
         { data: "id", title: "ID" },
         { data: "classes.site.country", title: "Country" },
@@ -245,6 +249,13 @@ export default {
         { data: "deficit_total", title: "Total Deficit" },
         { data: "additional_remarks", title: "Additional Remarks" },
         { data: "pipeline", title: "Pipeline" },
+        {
+          data: "active_status",
+          title: "Active Status",
+          render: function (data) {
+            return data === 1 ? "Active" : "Inactive";
+          },
+        },
       ],
     };
   },
@@ -258,12 +269,20 @@ export default {
         this.programs_selected = null;
         this.week_selected = null;
         this.month_selected = null;
+        this.active_status = null;
       },
     },
     programs_selected: {
       immediate: true,
       handler() {
         this.getClasses();
+        this.class_selected = "";
+        this.updateClassSelected();
+      },
+    },
+    active_status: {
+      immediate: true,
+      handler() {
         this.class_selected = "";
         this.updateClassSelected();
       },
@@ -307,6 +326,12 @@ export default {
           return weekId === this.week_selected;
         });
       }
+      if (this.active_status !== null) {
+        filteredData = filteredData.filter((class_staffing) => {
+          const status = class_staffing.active_status;
+          return status === (this.active_status === "1" ? 1 : 0);
+        });
+      }
 
       return filteredData;
     },
@@ -325,6 +350,7 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
+      this.active_status = "";
     },
     navigateToEdit(id, classSelected) {
       this.$router.push({
@@ -345,9 +371,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall"
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -363,9 +387,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesstaffing"
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing2");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -375,7 +397,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/sites");
+        const response = await axios.get("http://127.0.0.1:8000/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -390,7 +412,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -406,7 +428,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);

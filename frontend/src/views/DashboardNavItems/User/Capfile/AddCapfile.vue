@@ -9,7 +9,7 @@
   </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
-      <div class="px-12 py-6 mx-auto font-semibold bg-white border border-2  border-orange-600 max-w-7xl sm:px-2 lg:px-2">
+      <div class="px-12 py-6 mx-auto font-semibold bg-white border border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
             Site
@@ -243,7 +243,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -255,7 +255,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs")
+        .get("http://127.0.0.1:8000/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -267,7 +267,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -300,7 +300,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData)
+        .post("http://127.0.0.1:8000/api/classes/", formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

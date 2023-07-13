@@ -12,69 +12,85 @@
     >
       <form class="">
         <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
-          <label class="block">
-            Site
-            <select
-              v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getPrograms"
+          <div class="sm:col-span-2 md:col-span-1">
+            <button
+              type="button"
+              class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded sm:mt-0 hover:bg-gray-600"
+              @click="resetFilter"
             >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
-          <label class="block">
-            Programs
-            <select
-              v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
-                {{ program.name }}
-              </option>
-            </select>
-          </label>
-          <label class="block">
-            Month
-            <select
-              v-model="month_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getDateRange"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </label>
-          <label class="block">
-            Week Range
-            <select
-              v-model="week_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
+              Reset Filters
+            </button>
+          </div>
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Site
+              <select
+                v-model="sites_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                @change="getPrograms"
               >
-                {{ daterange.date_range }}
-              </option>
-            </select>
-          </label>
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="site in sites" :key="site.id" :value="site.id">
+                  {{ site.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Programs
+              <select
+                v-model="programs_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="program in programs" :key="program.id" :value="program.id">
+                  {{ program.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Month
+              <select
+                v-model="month_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" @change="getDateRange"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="1">January</option>
+                <option value="2">February</option>
+                <option value="3">March</option>
+                <option value="4">April</option>
+                <option value="5">May</option>
+                <option value="6">June</option>
+                <option value="7">July</option>
+                <option value="8">August</option>
+                <option value="9">September</option>
+                <option value="10">October</option>
+                <option value="11">November</option>
+                <option value="12">December</option>
+              </select>
+            </label>
+          </div>
+          <div class="sm:col-span-2 md:col-span-1">
+            <label class="block">
+              Week Range
+              <select
+                v-model="week_selected"
+                class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option
+                  v-for="daterange in daterange"
+                  :key="daterange.id"
+                  :value="daterange.id"
+                >
+                  {{ daterange.date_range }}
+                </option>
+              </select>
+            </label>
+          </div>
           <label class="block" style="display: none">
             Class
             <select
@@ -93,26 +109,6 @@
               </option>
             </select>
           </label>
-          <router-link
-            :to="{
-              path: `/addstaffing/}`,
-              query: {
-                program: programs_selected,
-                site: sites_selected,
-                daterange: week_selected,
-                class_selected: class_selected,
-              },
-            }"
-          >
-            <button
-            v-if="!classStaffingExists"
-            type="submit"
-            :disabled="classStaffingExists"
-              class="float-right px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-building"></i> Add
-            </button>
-          </router-link>
         </div>
       </form>
     </div>
@@ -211,6 +207,7 @@ export default {
         { data: "classes.site.name", title: "Site" },
         { data: "classes.program.name", title: "Program" },
         { data: "classes.date_range.month", title: "Month" },
+        { data: "classes.date_range.month_num", title: "Month Number" },
         { data: "classes.date_range.date_range", title: "Hiring Week" },
         { data: "classes.total_target", title: "Target" },
         { data: "pipeline", title: "Pipeline" },
@@ -277,6 +274,15 @@ export default {
         this.updateClassSelected();
       },
     },
+    month_selected: {
+      immediate: true,
+      handler() {
+        this.class_selected = "";
+        this.week_selected = null;
+        this.updateClassSelected();
+
+      },
+    },
   },
 
   computed: {
@@ -311,13 +317,14 @@ export default {
           return class_staffing.classes.program.id === this.programs_selected;
         });
       }
-
       if (this.week_selected) {
         filteredData = filteredData.filter((class_staffing) => {
           const weekId = class_staffing.classes.date_range.id;
           return weekId === this.week_selected;
         });
       }
+      
+
 
       return filteredData;
     },
@@ -331,6 +338,12 @@ export default {
     this.getDateRange();
   },
   methods: {
+    resetFilter() {
+      this.sites_selected = "";
+      this.programs_selected = "";
+      this.month_selected = "";
+      this.week_selected = "";
+    },
     navigateToEdit(id, classSelected) {
       this.$router.push({
         path: `/updatestaffing/${id}`,
@@ -350,7 +363,7 @@ export default {
     },
     async getClasses() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesall");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
         this.classesall = response.data.classes;
         console.log(response.data.classes);
 
@@ -366,7 +379,7 @@ export default {
     },
     async getClassesAll() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing");
+        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);
       } catch (error) {
@@ -376,7 +389,7 @@ export default {
 
     async getSites() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/sites");
+        const response = await axios.get("http://127.0.0.1:8000/api/sites");
         this.sites = response.data.data;
         console.log(response.data.data);
       } catch (error) {
@@ -391,7 +404,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
         );
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -407,7 +420,7 @@ export default {
 
       try {
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
         );
         this.daterange = response.data.data;
         console.log(response.data.data);

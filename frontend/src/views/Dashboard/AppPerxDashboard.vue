@@ -12,7 +12,7 @@
         <DataTable
           :data="perx"
           :columns="columns"
-          class="min-w-full divide-y divide-gray-200 table table-striped"
+          class="table min-w-full divide-y divide-gray-200 table-striped"
           :options="{
             responsive: true,
             autoWidth: true,
@@ -97,7 +97,7 @@ export default {
   methods: {
     async getPerx() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes")
+        .get("http://127.0.0.1:8000/api/classes")
         .then((response) => {
           this.perx = response.data.perx;
           console.log(response.data.perx);

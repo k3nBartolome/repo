@@ -109,6 +109,7 @@ Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
 Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'show']);
 Route::put('updateclassesstaffing/{id}', [ClassStaffingController::class, 'update']);
 Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
+Route::get('classesstaffing2', [ClassStaffingController::class, 'index2']);
 Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transaction']);
 //dateRange
 Route::get('daterange', [DateRangeController::class, 'index']);

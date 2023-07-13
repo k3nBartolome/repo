@@ -177,7 +177,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("http://10.109.2.112:8081/api/programs_activate/" + id, form)
+        .put("http://127.0.0.1:8000/api/programs_activate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -194,7 +194,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("http://10.109.2.112:8081/api/programs_deactivate/" + id, form)
+        .put("http://127.0.0.1:8000/api/programs_deactivate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -207,7 +207,7 @@ export default {
     },
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs")
+        .get("http://127.0.0.1:8000/api/programs")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -218,7 +218,7 @@ export default {
     },
     async getPrograms2() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs2")
+        .get("http://127.0.0.1:8000/api/programs2")
         .then((response) => {
           this.programs2 = response.data.data;
           console.log(response.data.data);
@@ -230,7 +230,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -249,7 +249,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData)
+        .post("http://127.0.0.1:8000/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";

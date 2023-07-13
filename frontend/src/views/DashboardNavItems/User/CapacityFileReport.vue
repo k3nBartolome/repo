@@ -7,95 +7,106 @@
     </div>
   </header>
   <div class="py-8">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6">
-        <button
-          type="button"
-          class="w-20 h-12 mt-2 font-semibold text-white bg-gray-500 rounded ml-28 hover:bg-gray-600 block"
-          @click="resetFilter"
-        >
-          Reset Filters
-        </button>
-        <label class="block">
-          Site
-          <select
-            v-model="sites_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            @change="getPrograms"
+    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
+      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-1 md:grid-cols-6">
+        <div class="col-span-6 md:col-span-1">
+          <button
+            type="button"
+            class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            @click="resetFilter"
           >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.id" :value="site.id">
-              {{ site.name }}
-            </option>
-          </select>
-        </label>
-        <label class="block">
-          Programs
-          <select
-            v-model="programs_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="program in programs" :key="program.id" :value="program.id">
-              {{ program.name }}
-            </option>
-          </select>
-        </label>
-        <label class="block">
-          Month
-          <select
-            v-model="month_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            @change="getDateRange"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="1">January</option>
-            <option value="2">February</option>
-            <option value="3">March</option>
-            <option value="4">April</option>
-            <option value="5">May</option>
-            <option value="6">June</option>
-            <option value="7">July</option>
-            <option value="8">August</option>
-            <option value="9">September</option>
-            <option value="10">October</option>
-            <option value="11">November</option>
-            <option value="12">December</option>
-          </select>
-        </label>
-        <label class="block">
-          Week Range
-          <select
-            v-model="week_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="daterange in daterange"
-              :key="daterange.id"
-              :value="daterange.id"
+            Reset Filters
+          </button>
+        </div>
+        <div class="col-span-6 md:col-span-1">
+          <label class="block">
+            Site
+            <select
+              v-model="sites_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getPrograms"
             >
-              {{ daterange.date_range }}
-            </option>
-          </select>
-        </label>
-        <label class="block">
-          Status
-          <select
-            v-model="status"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Active">Active</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Moved">Moved</option>
-          </select>
-        </label>
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="col-span-6 md:col-span-1">
+          <label class="block">
+            Programs
+            <select
+              v-model="programs_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="program in programs" :key="program.id" :value="program.id">
+                {{ program.name }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="col-span-6 md:col-span-1">
+          <label class="block">
+            Month
+            <select
+              v-model="month_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              @change="getDateRange"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="1">January</option>
+              <option value="2">February</option>
+              <option value="3">March</option>
+              <option value="4">April</option>
+              <option value="5">May</option>
+              <option value="6">June</option>
+              <option value="7">July</option>
+              <option value="8">August</option>
+              <option value="9">September</option>
+              <option value="10">October</option>
+              <option value="11">November</option>
+              <option value="12">December</option>
+            </select>
+          </label>
+        </div>
+        <div class="col-span-6 md:col-span-1">
+          <label class="block">
+            Week Range
+            <select
+              v-model="week_selected"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option
+                v-for="daterange in daterange"
+                :key="daterange.id"
+                :value="daterange.id"
+              >
+                {{ daterange.date_range }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="col-span-6 md:col-span-1">
+          <label class="block">
+            Status
+            <select
+              v-model="status"
+              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Active">Active</option>
+              <option value="Cancelled">Cancelled</option>
+              <option value="Moved">Moved</option>
+            </select>
+          </label>
+        </div>
       </form>
     </div>
   </div>
+  
   <div class="py-2">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -112,6 +123,7 @@
               ordering: true,
               scrollX: true,
               dom: 'fBrtlip',
+              buttons: ['excel', 'csv'],
               language: {
                 search: 'Search',
                 zeroRecords: 'No data available',
@@ -257,7 +269,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/cstat")
+        .get("http://127.0.0.1:8000/api/cstat")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -268,7 +280,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -283,7 +295,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -299,7 +311,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`)
+        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);

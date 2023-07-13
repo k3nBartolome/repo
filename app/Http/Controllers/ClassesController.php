@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
+use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,6 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-
     public function index()
     {
         $minutes = 60;
@@ -45,6 +45,7 @@ class ClassesController extends Controller
             'perx' => $data,
         ]);
     }
+
     public function sumTotalTarget()
     {
         $total = Classes::where('status', 'active')
@@ -52,6 +53,7 @@ class ClassesController extends Controller
 
         return response()->json(['total_target' => $total]);
     }
+
     public function countStatus()
     {
         $counts = [
@@ -113,8 +115,41 @@ class ClassesController extends Controller
         $class->save();
         $class->pushedback_id = $class->id;
         $class->save();
+        $classStaffing = new ClassStaffing();
+        $classStaffing->classes_id = $class->id;
+        $classStaffing->show_ups_internal = '0';
+        $classStaffing->show_ups_external = '0';
+        $classStaffing->show_ups_total = '0';
+        $classStaffing->deficit = '0';
+        $classStaffing->percentage = '0';
+        $classStaffing->status = '0';
+        $classStaffing->day_1 = '0';
+        $classStaffing->day_2 = '0';
+        $classStaffing->day_3 = '0';
+        $classStaffing->day_4 = '0';
+        $classStaffing->day_5 = '0';
+        $classStaffing->day_6 = '0';
+        $classStaffing->total_endorsed = '0';
+        $classStaffing->internals_hires = '0';
+        $classStaffing->additional_extended_jo = '0';
+        $classStaffing->with_jo = '0';
+        $classStaffing->pending_jo = '0';
+        $classStaffing->pending_berlitz = '0';
+        $classStaffing->pending_ov = '0';
+        $classStaffing->pending_pre_emps = '0';
+        $classStaffing->classes_number = '0';
+        $classStaffing->pipeline_total = '0';
+        $classStaffing->pipeline_target = '0';
+        $classStaffing->cap_starts = '0';
+        $classStaffing->internals_hires_all = '0';
+        $classStaffing->pipeline = '0';
+        $classStaffing->additional_remarks = '0';
+        $classStaffing->transaction = 'Add Class Staffing';
+        $classStaffing->active_status = 1;
+        $classStaffing->save();
+        $classStaffing->class_staffing_id = $classStaffing->id;
+        $classStaffing->save();
 
-        // Return the updated class as a resource.
         return new ClassesResource($class);
     }
 
@@ -189,18 +224,17 @@ class ClassesController extends Controller
     }
 
     public function cStat()
-{
-    $classes = Classes::whereHas('site', function ($query) {
+    {
+        $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'Philippines');
         })
         ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
         ->get();
 
-    return response()->json([
+        return response()->json([
         'classes' => $classes,
     ]);
-}
-
+    }
 
     public function classesallInd()
     {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Validator;
 
 class ClassStaffingController extends Controller
@@ -16,20 +15,33 @@ class ClassStaffingController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-{
-    $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+    {
+        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
         ->where('active_status', '1')
         ->get();
 
-    if ($classStaffing->isEmpty()) {
-        return response()->json(['error' => 'Classes not found'], 404);
-    }
+        if ($classStaffing->isEmpty()) {
+            return response()->json(['error' => 'Classes not found'], 404);
+        }
 
-    return response()->json([
+        return response()->json([
         'class_staffing' => $classStaffing,
     ]);
-}
+    }
 
+    public function index2()
+    {
+        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+        ->get();
+
+        if ($classStaffing->isEmpty()) {
+            return response()->json(['error' => 'Classes not found'], 404);
+        }
+
+        return response()->json([
+        'class_staffing' => $classStaffing,
+    ]);
+    }
 
     /**
      * Show the form for creating a new resource.
