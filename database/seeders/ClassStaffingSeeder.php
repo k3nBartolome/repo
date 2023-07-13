@@ -4,7 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ClassStaffing;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class ClassStaffingSeeder extends Seeder
 {
@@ -15,8 +15,7 @@ class ClassStaffingSeeder extends Seeder
      */
     public function run()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS=0');
-
+        Schema::disableForeignKeyConstraints();
         $classIds = [
             141, 142, 193, 198, 201, 205, 207, 211, 213, 251, 270, 271, 274, 275, 283, 286, 318, 335, 336, 339, 348, 353, 356, 357, 359,
             360, 361, 362, 381, 383, 401, 403, 411, 415, 425, 429, 430, 432, 434, 437, 455, 459, 465, 466, 499, 501, 502, 503, 504,
@@ -76,6 +75,5 @@ class ClassStaffingSeeder extends Seeder
                 $classStaffing->save();
             }
         }
-        DB::statement('SET FOREIGN_KEY_CHECKS=1');
-    }
+        Schema::enableForeignKeyConstraints();}
 }

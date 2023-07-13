@@ -175,12 +175,25 @@ class ClassesController extends Controller
     }
 
     public function classesall()
+    {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'Active')
+            ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
+    public function cStat()
 {
     $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'Philippines');
         })
         ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-        ->where('status', 'Active')
         ->get();
 
     return response()->json([
@@ -188,22 +201,6 @@ class ClassesController extends Controller
     ]);
 }
 
-
-    public function cStat()
-    {
-        $minutes = 60;
-        $classes = Cache::remember('cstat', $minutes, function () {
-            return Classes::whereHas('site', function ($query) {
-                $query->where('country', '=', 'Philippines');
-            })
-                ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                ->get();
-        });
-
-        return response()->json([
-            'classes' => $classes,
-        ]);
-    }
 
     public function classesallInd()
     {
