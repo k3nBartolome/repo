@@ -7,8 +7,12 @@
     </div>
   </header>
   <div class="py-8">
-    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-1 md:grid-cols-6">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
+      <form
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-1 md:grid-cols-6"
+      >
         <div class="col-span-6 md:col-span-1">
           <button
             type="button"
@@ -41,7 +45,11 @@
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -106,7 +114,7 @@
       </form>
     </div>
   </div>
-  
+
   <div class="py-2">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -144,6 +152,15 @@
               </tr>
             </thead>
           </DataTable>
+          <div class="flex justify-between mt-4">
+            <div>
+              <span class="font-semibold">Total Targets:</span>
+              <span>{{ getTotalTargetsByFilters }}</span>
+            </div>
+            <div>
+              <!-- Add any other buttons or elements aligned with the filters -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -204,6 +221,34 @@ export default {
     };
   },
   computed: {
+    getTotalTargetsByFilters() {
+      let filteredData = [...this.classes];
+
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.site.id === this.sites_selected;
+        });
+      }
+
+      if (this.programs_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.program.id === this.programs_selected;
+        });
+      }
+
+      if (this.week_selected) {
+        filteredData = filteredData.filter((classes) => {
+          const weekId = classes.date_range.id;
+          return weekId === this.week_selected;
+        });
+      }
+
+      const totalTargets = filteredData.reduce(
+        (total, item) => total + item.total_target,
+        0
+      );
+      return totalTargets;
+    },
     classExists() {
       return this.classes.some((c) => {
         return (
@@ -295,7 +340,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -311,7 +358,9 @@ export default {
       }
 
       await axios
-        .get(`http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+        )
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
