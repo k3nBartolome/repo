@@ -157,9 +157,6 @@
               <span class="font-semibold">Total Targets:</span>
               <span>{{ getTotalTargetsByFilters }}</span>
             </div>
-            <div>
-              <!-- Add any other buttons or elements aligned with the filters -->
-            </div>
           </div>
         </div>
       </div>
@@ -240,6 +237,12 @@ export default {
         filteredData = filteredData.filter((classes) => {
           const weekId = classes.date_range.id;
           return weekId === this.week_selected;
+        });
+      }
+      if (this.status) {
+        filteredData = filteredData.filter((classes) => {
+          const status = classes.status;
+          return status === this.status;
         });
       }
 
