@@ -13,34 +13,35 @@ use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
-        public function login(Request $request)
-        {
-            $request->validate([
-                'email'=>'required|email|exists:users,email',
-                'password'=>'required|min:8'
-            ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:8'
+        ]);
 
-            $credentials = $request->only(['email', 'password']);
+        $credentials = $request->only(['email', 'password']);
 
-            if (Auth::attempt($credentials)) {
-                $user = Auth::user();
-                $token = $user->createToken('Personal Token')->plainTextToken;
-                $role = $user->roles->first()->name;
-                $user_id =Auth::user()->id;
-
-                return response()->json([
-                    'status' => 'success',
-                    'user'=>$user,
-                    'token' => $token,
-                    'role'  => $role,
-                    'user_id'=>$user_id
-                    
-                ], 200);
-            }
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+            $token = $user->createToken('Personal Token')->plainTextToken;
+            $role = $user->roles->first()->name;
+            $permissions = $user->getAllPermissions()->pluck('name');
+            $user_id = Auth::user()->id;
 
             return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid Credentials'
-            ], 401);
+                'status' => 'success',
+                'user' => $user,
+                'token' => $token,
+                'role' => $role,
+                'permissions' => $permissions,
+                'user_id' => $user_id
+            ], 200);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Invalid Credentials'
+        ], 401);
+    }
 }

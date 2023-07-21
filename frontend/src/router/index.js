@@ -53,6 +53,9 @@ import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
 import StaffingTracker from "@/views/DashboardNavItems/User/StaffingTracker.vue";
 import AddStaffingTracker from "@/views/DashboardNavItems/User/AddStaffingTracker.vue";
 import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffingTracker.vue";
+import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vue";
+import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
+import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
 
 const routes = [
   {
@@ -255,6 +258,23 @@ const routes = [
         path: "/staffing",
         name: "StaffingTracker",
         component: StaffingTracker,
+      },
+      {
+        path: "/inventory",
+        name: "inventoryTracker",
+        component: inventoryTracker,
+        children: [
+          {
+            path: "supply_manager", // Add your desired child route path
+            name: "supplyManager",
+            component: supplyManager,
+          },
+          {
+            path: "dashboard_manager", // Add your desired child route path
+            name: "dashboardManager",
+            component: dashboardManager,
+          },
+        ],
       },
       {
         path: "/addstaffing/:id",

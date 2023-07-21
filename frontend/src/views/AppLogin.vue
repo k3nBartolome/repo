@@ -76,19 +76,19 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken", "setRole","setUserId"]),
+    ...mapMutations(["setUser", "setToken", "setRole", "setUserId", "setPermissions"]),
     async login(e) {
       e.preventDefault();
       let user;
       let role;
       let token;
       let user_id;
+      let permissions;
       let isLogin;
       await axios
         .post("http://127.0.0.1:8000/api/login", {
           email: this.email,
           password: this.password,
-
         })
         .then(function (response) {
           isLogin = true;
@@ -96,6 +96,7 @@ export default {
           token = response.data.token;
           role = response.data.role;
           user_id = response.data.user_id;
+          permissions = response.data.permissions;
           console.log(response.data);
         })
         .catch(function (error) {
@@ -103,17 +104,16 @@ export default {
           isLogin = false;
         });
       if (isLogin) {
-          this.setUser(user);
-          this.setToken(token);
-          this.setRole(role);
-          this.setUserId(user_id);
-        if(role ==='admin'){
-          this.$router.push({ path: "/admin_dashboard"});
-        }
-        else if (role === 'user') {
-        this.$router.push({ path: "/capfile" });
-        }
-        else{
+        this.setUser(user);
+        this.setToken(token);
+        this.setRole(role);
+        this.setUserId(user_id);
+        this.setPermissions(permissions);
+        if (role === "admin") {
+          this.$router.push({ path: "/admin_dashboard" });
+        } else if (role === "user") {
+          this.$router.push({ path: "/capfile" });
+        } else {
           this.$router.push({ path: "/perx_manager" });
         }
       } else {

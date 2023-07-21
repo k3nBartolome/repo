@@ -313,43 +313,70 @@ export default {
       this.$router.push(`/pushbackcapfile/${id}`);
     },
     async getClassesAll() {
-      await axios
-        .get("http://127.0.0.1:8000/api/cstat")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/cstat",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
           this.classes = response.data.classes;
           console.log(response.data.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching classes");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getSites() {
-      await axios
-        .get("http://127.0.0.1:8000/api/sites")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
           this.sites = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getPrograms() {
       if (!this.sites_selected) {
-        return; // do nothing if no site is selected
+        return;
       }
 
-      await axios
-        .get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
-        )
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
           this.programs = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     async getDateRange() {
@@ -357,17 +384,26 @@ export default {
         return;
       }
 
-      await axios
-        .get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
-        )
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
           this.daterange = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

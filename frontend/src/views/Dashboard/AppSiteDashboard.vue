@@ -171,8 +171,15 @@ export default {
         is_active: 1,
         updated_by: this.$store.state.user_id,
       };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
       axios
-        .put("http://127.0.0.1:8000/api/sites_activate/" + id, form)
+        .put(`http://127.0.0.1:8000/api/sites_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -183,13 +190,21 @@ export default {
           console.log(error.response.data);
         });
     },
+
     deactivateSite(id) {
       const form = {
         is_active: 0,
         updated_by: this.$store.state.user_id,
       };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
       axios
-        .put("http://127.0.0.1:8000/api/sites_deactivate/" + id, form)
+        .put(`http://127.0.0.1:8000/api/sites_deactivate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -200,28 +215,55 @@ export default {
           console.log(error.response.data);
         });
     },
+
     async getSites() {
-      await axios
-        .get("http://127.0.0.1:8000/api/sites")
-        .then((response) => {
-          this.sites = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        const token = this.$store.state.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        await axios
+          .get("http://127.0.0.1:8000/api/sites", config)
+          .then((response) => {
+            console.log("Response received:", response.data);
+            this.sites = response.data.data;
+            console.log("Sites data:", this.sites);
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+          });
+      } catch (error) {
+        console.log("Error:", error);
+      }
     },
+
     async getSites2() {
-      await axios
-        .get("http://127.0.0.1:8000/api/sites2")
-        .then((response) => {
-          this.sites2 = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        const token = this.$store.state.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        await axios
+          .get("http://127.0.0.1:8000/api/sites2", config)
+          .then((response) => {
+            console.log("Response received:", response.data);
+            this.sites2 = response.data.data;
+            console.log("Sites data:", this.sites);
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+          });
+      } catch (error) {
+        console.log("Error:", error);
+      }
     },
+
     addSite() {
       const formData = {
         name: this.name,
@@ -231,8 +273,16 @@ export default {
         is_active: 1,
         created_by: this.$store.state.user_id,
       };
+
+      const token = this.$store.state.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
       axios
-        .post("http://127.0.0.1:8000/api/sites", formData)
+        .post("http://127.0.0.1:8000/api/sites", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

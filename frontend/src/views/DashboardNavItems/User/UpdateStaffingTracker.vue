@@ -986,16 +986,26 @@ export default {
   },
   methods: {
     async getTransaction() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classestransaction/" + this.$route.params.id)
-        .then((response) => {
-          this.class_transaction = response.data.class;
-          console.log(response.data.class);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+  try {
+    const token = this.$store.state.token;
+    const id = this.$route.params.id;
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/classestransaction/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    this.class_transaction = response.data.class;
+    console.log(response.data.class);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
     syncShowUpsTotal() {
       this.show_ups_total = this.show_ups_total_computed;
       this.internals_hires_all = this.all_internals_hires_computed;
@@ -1024,21 +1034,34 @@ export default {
     },
 
     async getClassesAll() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classesall")
-        .then((response) => {
-          this.classesall = response.data.classes;
-          console.log(response.data.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getClassesStaffing() {
-      try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesstaffing/" + this.$route.params.id
-        );
+  try {
+    const token = this.$store.state.token;
+
+    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.classesall = response.data.classes;
+    console.log(response.data.classes);
+  } catch (error) {
+    console.log(error);
+  }
+},
+async getClassesStaffing() {
+  try {
+    const token = this.$store.state.token;
+    const id = this.$route.params.id;
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/classesstaffing/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
         const classStaffingObj = response.data.class;
 
         this.day_1 = classStaffingObj.day_1;
@@ -1072,15 +1095,23 @@ export default {
         this.over_hires = classStaffingObj.over_hires;
         this.additional_remarks = classStaffingObj.additional_remarks;
       } catch (error) {
-        console.log(error);
-      }
-    },
-    async getClasses() {
-      try {
-        if (this.class_selected) {
-          const response = await axios.get(
-            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
-          );
+    console.log(error);
+  }
+},
+async getClasses() {
+  try {
+    const token = this.$store.state.token;
+    const classSelected = this.$route.query.class_selected;
+
+    if (classSelected) {
+      const response = await axios.get(
+        `http://127.0.0.1:8000/api/classes/${classSelected}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
           const classObj = response.data.class;
           console.log(classObj);
           this.type_of_hiring = classObj.type_of_hiring;
@@ -1098,58 +1129,75 @@ export default {
           this.erf_number = classObj.erf_number;
           this.wave_no = classObj.wave_no;
         } else {
-          console.log("No class selected");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+      console.log("No class selected");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
     async getSites() {
-      await axios
-        .get("http://127.0.0.1:8000/api/sites")
-        .then((response) => {
-          this.sites = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getPrograms() {
-      await axios
-        .get("http://127.0.0.1:8000/api/programs")
-        .then((response) => {
-          this.programs = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    },
+  try {
+    const token = this.$store.state.token;
 
-   async getDateRange() {
-      console.log(this.training_start);
-      await axios
-        .get("http://127.0.0.1:8000/api/daterange")
-        .then((response) => {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
+    const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-          for (let i = 0; i < this.daterange.length; i++) {
-            const range = this.daterange[i];
-            if (
-              this.training_start >= range.week_start &&
-              this.training_start <= range.week_end
-            ) {
-              this.hiring_week = range.id;
-              break;
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+    this.sites = response.data.data;
+    console.log(response.data.data);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+async getPrograms() {
+  try {
+    const token = this.$store.state.token;
+
+    const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.programs = response.data.data;
+    console.log(response.data.data);
+  } catch (error) {
+    console.error(error);
+  }
+},
+
+async getDateRange() {
+  console.log(this.training_start);
+  try {
+    const token = this.$store.state.token;
+
+    const response = await axios.get("http://127.0.0.1:8000/api/daterange", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.daterange = response.data.data;
+    console.log(response.data.data);
+
+    for (let i = 0; i < this.daterange.length; i++) {
+      const range = this.daterange[i];
+      if (
+        this.training_start >= range.week_start &&
+        this.training_start <= range.week_end
+      ) {
+        this.hiring_week = range.id;
+        break;
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+
     updateClass() {
       const formData = {
         day_1: this.day_1,
@@ -1191,11 +1239,18 @@ export default {
         date_range_id: this.hiring_week,
         updated_by: this.$store.state.user_id,
       };
-      axios
-        .put(
-          "http://127.0.0.1:8000/api/updateclassesstaffing/" + this.$route.params.id,
-          formData
-        )
+      const config = {
+    headers: {
+      Authorization: `Bearer ${this.$store.state.token}`,
+    },
+  };
+
+  axios
+    .put(
+      `http://127.0.0.1:8000/api/updateclassesstaffing/${this.$route.params.id}`,
+      formData,
+      config
+    )
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";

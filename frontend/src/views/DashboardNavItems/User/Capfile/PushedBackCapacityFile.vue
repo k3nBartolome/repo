@@ -458,166 +458,210 @@ export default {
     syncNoticeWeeks: function () {
       this.notice_weeks = this.notice_weeks_computed;
     },
-    async getSites() {
-      console.log(this.sites_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/sites")
-        .then((response) => {
+     async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
           this.sites = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getPrograms() {
-      console.log(this.programs_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/programs")
-        .then((response) => {
-          this.programs = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getDateRange() {
-      console.log(this.agreed_start_date);
-      await axios
-        .get("http://127.0.0.1:8000/api/daterange")
-        .then((response) => {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
+  console.log(this.programs_selected);
+  try {
+    const token = this.$store.state.token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
 
-          for (let i = 0; i < this.daterange.length; i++) {
-            const range = this.daterange[i];
-            if (
-              this.agreed_start_date >= range.week_start &&
-              this.agreed_start_date <= range.week_end
-            ) {
-              this.date_selected = range.id;
-              break;
-            }
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getClasses() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
-        .then((response) => {
-          const data = response.data;
-          const classObj = data.class;
-          this.sites_selected = classObj.site.id;
-          this.programs_selected = classObj.program.id;
-          this.type_of_hiring = classObj.type_of_hiring;
-          this.external_target = classObj.external_target;
-          this.internal_target = classObj.internal_target;
-          this.total_target = classObj.total_target;
-          this.original_start_date = classObj.original_start_date;
-          this.notice_days = classObj.notice_days;
-          this.notice_weeks = classObj.notice_weeks;
-          this.date_selected = classObj.date_range.id;
-          this.with_erf = classObj.with_erf;
-          this.category = classObj.category;
-          this.within_sla = classObj.within_sla;
-          this.agreed_start_date = classObj.agreed_start_date;
-          this.erf_number = classObj.erf_number;
-          this.approved_by = classObj.approved_by;
+    const response = await axios.get("http://127.0.0.1:8000/api/programs", { headers });
 
-          console.log(classObj);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async getTransaction() {
-      await axios
-        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
-        .then((response) => {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    pushClass() {
-      const formData = {
-        site_id: this.sites_selected,
-        program_id: this.programs_selected,
-        type_of_hiring: this.type_of_hiring,
-        external_target: this.external_target,
-        internal_target: this.internal_target,
-        total_target: this.total_target,
-        notice_days: this.notice_days,
-        notice_weeks: this.notice_weeks,
-        with_erf: this.with_erf,
-        category: this.category,
-        original_start_date: this.original_start_date,
-        wfm_date_requested: this.wfm_date_requested,
-        within_sla: this.within_sla,
-        remarks: this.remarks,
-        requested_by: this.requested_by,
-        erf_number: this.erf_number,
-        date_range_id: this.date_selected,
-        approved_status: "pending",
-        status: "Active",
-        updated_by: this.$store.state.user_id,
-        agreed_start_date: this.agreed_start_date,
-        changes: this.changes,
-        approved_by: this.approved_by,
-        ta: this.ta,
-        wf: this.wf,
-        tr: this.tr,
-        cl: this.cl,
-        op: this.op,
-      };
-      axios
-        .put(
-          "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
-          formData
-        )
-        .then((response) => {
-          console.log(response.data);
-          this.site_id = "";
-          this.program_id = "";
-          this.type_of_hiring = "";
-          this.external_target = "";
-          this.internal_target = "";
-          this.total_target = "";
-          this.notice_days = "";
-          this.notice_weeks = "";
-          this.with_erf = "";
-          this.erf_number = "";
-          this.category = "";
-          this.original_start_date = "";
-          this.wfm_date_requested = "";
-          this.within_sla = "";
-          this.remarks = "";
-          this.requested_by = "";
-          this.date_range_id = "";
-          this.approved_status = "";
-          this.updated_by = "";
-          this.agreed_start_date = "";
-          this.approved_by = "";
-          this.changes = "";
-          this.ta = "";
-          this.wf = "";
-          this.tr = "";
-          this.cl = "";
-          this.op = "";
-          this.$router.push("/capfile", () => {
-            location.reload();
-          });
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-    },
+    if (response.status === 200) {
+      this.programs = response.data.data;
+      console.log(response.data.data);
+    } else {
+      console.log("Error fetching programs");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+async getDateRange() {
+  console.log(this.agreed_start_date);
+  try {
+    const token = this.$store.state.token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get("http://127.0.0.1:8000/api/daterange", { headers });
+
+    if (response.status === 200) {
+      this.daterange = response.data.data;
+      console.log(response.data.data);
+
+      for (let i = 0; i < this.daterange.length; i++) {
+        const range = this.daterange[i];
+        if (
+          this.agreed_start_date >= range.week_start &&
+          this.agreed_start_date <= range.week_end
+        ) {
+          this.date_selected = range.id;
+          break;
+        }
+      }
+    } else {
+      console.log("Error fetching date range");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+,
+async getClasses() {
+  try {
+    const token = this.$store.state.token;
+    const response = await axios.get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = response.data;
+    const classObj = data.class;
+    this.sites_selected = classObj.site.id;
+    this.programs_selected = classObj.program.id;
+    this.type_of_hiring = classObj.type_of_hiring;
+    this.external_target = classObj.external_target;
+    this.internal_target = classObj.internal_target;
+    this.total_target = classObj.total_target;
+    this.original_start_date = classObj.original_start_date;
+    this.notice_days = classObj.notice_days;
+    this.notice_weeks = classObj.notice_weeks;
+    this.date_selected = classObj.date_range.id;
+    this.with_erf = classObj.with_erf;
+    this.category = classObj.category;
+    this.within_sla = classObj.within_sla;
+    this.agreed_start_date = classObj.agreed_start_date;
+    this.erf_number = classObj.erf_number;
+    this.approved_by = classObj.approved_by;
+
+    console.log(classObj);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+async getTransaction() {
+  try {
+    const token = this.$store.state.token;
+    const response = await axios.get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.classes = response.data.classes;
+    console.log(response.data.classes);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+pushClass() {
+  const formData = {
+    site_id: this.sites_selected,
+    program_id: this.programs_selected,
+    type_of_hiring: this.type_of_hiring,
+    external_target: this.external_target,
+    internal_target: this.internal_target,
+    total_target: this.total_target,
+    notice_days: this.notice_days,
+    notice_weeks: this.notice_weeks,
+    with_erf: this.with_erf,
+    category: this.category,
+    original_start_date: this.original_start_date,
+    wfm_date_requested: this.wfm_date_requested,
+    within_sla: this.within_sla,
+    remarks: this.remarks,
+    requested_by: this.requested_by,
+    erf_number: this.erf_number,
+    date_range_id: this.date_selected,
+    approved_status: "pending",
+    status: "Active",
+    updated_by: this.$store.state.user_id,
+    agreed_start_date: this.agreed_start_date,
+    changes: this.changes,
+    approved_by: this.approved_by,
+    ta: this.ta,
+    wf: this.wf,
+    tr: this.tr,
+    cl: this.cl,
+    op: this.op,
+  };
+
+  const token = this.$store.state.token;
+
+  axios
+    .put(
+      "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(response.data);
+      this.site_id = "";
+      this.program_id = "";
+      this.type_of_hiring = "";
+      this.external_target = "";
+      this.internal_target = "";
+      this.total_target = "";
+      this.notice_days = "";
+      this.notice_weeks = "";
+      this.with_erf = "";
+      this.erf_number = "";
+      this.category = "";
+      this.original_start_date = "";
+      this.wfm_date_requested = "";
+      this.within_sla = "";
+      this.remarks = "";
+      this.requested_by = "";
+      this.date_range_id = "";
+      this.approved_status = "";
+      this.updated_by = "";
+      this.agreed_start_date = "";
+      this.approved_by = "";
+      this.changes = "";
+      this.ta = "";
+      this.wf = "";
+      this.tr = "";
+      this.cl = "";
+      this.op = "";
+
+      this.$router.push("/capfile", () => {
+        location.reload();
+      });
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+    });
+},
+
   },
 };
 </script>

@@ -1,9 +1,7 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h1 class="text-xl font-bold text-center">
-        CANCEL CLASS
-      </h1>
+      <h1 class="text-xl font-bold text-center">CANCEL CLASS</h1>
     </div>
   </header>
   <div class="px-12 py-8">
@@ -37,7 +35,11 @@
               @change="getPrograms"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -187,9 +189,13 @@
               @change="syncNoticeDays"
             />
           </label>
-          <label class="block">Approved by
-            <select required v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+          <label class="block"
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -211,12 +217,30 @@
               v-model="cancelled_by"
               value="Talent Acquisition"
             />Talent Acquisition
-            <input type="checkbox" v-model="cancelled_by" value="Workforce" />Workforce
-            <input type="checkbox" v-model="cancelled_by" value="Training" />Training
-            <input type="checkbox" v-model="cancelled_by" value="Client" />Client
-            <input type="checkbox" v-model="cancelled_by" value="Operation" />Operation
+            <input
+              type="checkbox"
+              v-model="cancelled_by"
+              value="Workforce"
+            />Workforce
+            <input
+              type="checkbox"
+              v-model="cancelled_by"
+              value="Training"
+            />Training
+            <input
+              type="checkbox"
+              v-model="cancelled_by"
+              value="Client"
+            />Client
+            <input
+              type="checkbox"
+              v-model="cancelled_by"
+              value="Operation"
+            />Operation
 
-            <label class="block py-6" v-if="cancelled_by.includes('Talent Acquisition')"
+            <label
+              class="block py-6"
+              v-if="cancelled_by.includes('Talent Acquisition')"
               >Talent Acquisition
               <input
                 type="text"
@@ -281,8 +305,12 @@
         </div>
         <div class="flex justify-between">
           <router-link to="/capfile">
-          <button class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600">
-            <i class="fa fa-chevron-circle-left "></i> Back</button></router-link>
+            <button
+              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-chevron-circle-left"></i> Back
+            </button></router-link
+          >
         </div>
       </div>
     </form>
@@ -398,81 +426,126 @@ export default {
       this.notice_weeks = this.notice_weeks_computed;
     },
     async getSites() {
-      console.log(this.sites_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/sites")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
           this.sites = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getPrograms() {
       console.log(this.programs_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/programs")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers,
+        });
+
+        if (response.status === 200) {
           this.programs = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     async getTransaction() {
-      await axios
-        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
-        .then((response) => {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.classes = response.data.classes;
+        console.log(response.data.classes);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getDateRange() {
       console.log(this.date_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/daterange")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/daterange",
+          { headers }
+        );
+
+        if (response.status === 200) {
           this.daterange = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getClasses() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
-        .then((response) => {
-          const data = response.data;
-          const classObj = data.class;
-          this.sites_selected = classObj.site.id;
-          this.programs_selected = classObj.program.id;
-          this.type_of_hiring = classObj.type_of_hiring;
-          this.external_target = classObj.external_target;
-          this.internal_target = classObj.internal_target;
-          this.total_target = classObj.total_target;
-          this.original_start_date = classObj.original_start_date;
-          this.cancelled_date = classObj.cancelled_date;
-          this.notice_days = classObj.notice_days;
-          this.notice_weeks = classObj.notice_weeks;
-          this.date_selected = classObj.date_range.id;
-          this.category = classObj.category;
-          this.within_sla = classObj.within_sla;
-          this.agreed_start_date = classObj.agreed_start_date;
-          this.changes = classObj.changes;
-          this.approved_by = classObj.approved_by;
+      const token = this.$store.state.token;
 
-          console.log(classObj);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classes/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = response.data;
+        const classObj = data.class;
+        this.sites_selected = classObj.site.id;
+        this.programs_selected = classObj.program.id;
+        this.type_of_hiring = classObj.type_of_hiring;
+        this.external_target = classObj.external_target;
+        this.internal_target = classObj.internal_target;
+        this.total_target = classObj.total_target;
+        this.original_start_date = classObj.original_start_date;
+        this.cancelled_date = classObj.cancelled_date;
+        this.notice_days = classObj.notice_days;
+        this.notice_weeks = classObj.notice_weeks;
+        this.date_selected = classObj.date_range.id;
+        this.category = classObj.category;
+        this.within_sla = classObj.within_sla;
+        this.agreed_start_date = classObj.agreed_start_date;
+        this.changes = classObj.changes;
+        this.approved_by = classObj.approved_by;
+
+        console.log(classObj);
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     cancelClass() {
       const formData = {
         site_id: this.sites_selected,
@@ -490,10 +563,18 @@ export default {
         cl: this.cl,
         op: this.op,
       };
+
+      const token = this.$store.state.token;
+
       axios
         .put(
           "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((response) => {
           console.log(response.data);

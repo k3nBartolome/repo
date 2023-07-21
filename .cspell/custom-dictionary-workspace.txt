@@ -1,1 +1,10 @@
 # Custom Dictionary Words
+classesallgua
+classesallindia
+classesalljam
+classesstaffing
+classestransaction
+countstatus
+daterange
+sumtotaltarget
+updateclassesstaffing

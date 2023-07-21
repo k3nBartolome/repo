@@ -362,52 +362,88 @@ export default {
       }
     },
     async getClasses() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall");
-        this.classesall = response.data.classes;
-        console.log(response.data.classes);
+  try {
+    const token = this.$store.state.token;
 
-        const filteredClasses = this.filteredClasses; // Get the filtered classes
-        if (filteredClasses.length > 0) {
-          this.class_selected = filteredClasses[0].id; // Select the first class from the filtered classes
+    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.classesall = response.data.classes;
+    console.log(response.data.classes);
+
+    const filteredClasses = this.filteredClasses;
+    if (filteredClasses.length > 0) {
+      this.class_selected = filteredClasses[0].id;
+    } else {
+      this.class_selected = "";
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+async getClassesAll() {
+  try {
+    const token = this.$store.state.token;
+
+    const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    this.class_staffing = response.data.class_staffing;
+    console.log(response.data.class_staffing);
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data;
+          console.log(response.data.data);
         } else {
-          this.class_selected = ""; // Reset the selection if there are no matching classes
+          console.log("Error fetching sites");
         }
       } catch (error) {
         console.log(error);
       }
     },
-    async getClassesAll() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing");
-        this.class_staffing = response.data.class_staffing;
-        console.log(response.data.class_staffing);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
-    async getSites() {
-      try {
-        const response = await axios.get("http://127.0.0.1:8000/api/sites");
-        this.sites = response.data.data;
-        console.log(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     async getPrograms() {
       if (!this.sites_selected) {
-        return; // Do nothing if no site is selected
+        return;
       }
 
       try {
+        const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        this.programs = response.data.data;
-        console.log(response.data.data);
+
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
       } catch (error) {
         console.error(error);
       }
@@ -419,11 +455,22 @@ export default {
       }
 
       try {
+        const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        this.daterange = response.data.data;
-        console.log(response.data.data);
+
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching date range");
+        }
       } catch (error) {
         console.log(error);
       }

@@ -31,10 +31,17 @@
                 </li></router-link
               >
         <router-link to="/staffing">
-          <li
+          <li v-if="isAdmin"
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >
             Staffing Tracker
+          </li></router-link
+        >
+        <router-link to="/inventory">
+          <li v-if="isAdmin"
+            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
+          >
+            Inventory Tracker
           </li></router-link
         >
         <div class="py-4">
@@ -144,6 +151,16 @@ export default {
       isDropdown3Open: false,
 
     };
+  },
+  computed: {
+    isAdmin() {
+      const userRole = this.$store.state.role;
+      return userRole === "admin" || userRole === "user";
+    },
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
   },
   methods: {
     toggleDropdown() {
