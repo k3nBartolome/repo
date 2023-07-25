@@ -35,6 +35,7 @@
         "jquery": "^3.7.0",
         "js": "^0.1.0",
         "pdfmake": "^0.2.7",
+        "tw-elements": "^1.0.0-beta2",
         "v-toaster": "^1.0.3",
         "vue-axios": "^3.5.2",
         "vue-multiselect": "^2.1.7",

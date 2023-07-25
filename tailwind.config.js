@@ -3,6 +3,7 @@ module.exports = {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/**/*.vue",
+    "./node_modules/tw-elements/dist/js/**/*.js"
   ],
   target: 'relaxed',
   prefix: '',
@@ -746,7 +747,6 @@ module.exports = {
     transitionDelay: ['responsive']
   },
   corePlugins: {},
-  plugins: [
-    
-  ]
+  plugins: [require("tw-elements/dist/plugin.cjs")],
+  darkMode: "class"
 }

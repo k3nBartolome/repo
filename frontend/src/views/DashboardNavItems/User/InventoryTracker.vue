@@ -1,12 +1,19 @@
 
 <template>
+  
   <div class="flex flex-wrap px-4 py-1 md:py-6 md:px-0">
+    <router-link to="/inventory/dashboard_manager">
+      <button class="tab bg-orange-300">Dashboard</button>
+    </router-link>
     <router-link to="/inventory/supply_manager">
       <button class="tab bg-green-300">Supply Manager</button>
     </router-link>
-    <router-link to="/inventory/dashboard_manager">
-    <button class="tab bg-orange-300">Dashboard</button>
-  </router-link>
+    <router-link to="/inventory/supply_manager">
+      <button class="tab bg-indigo-300">Request List</button>
+    </router-link>
+  <router-link to="/inventory/supply_manager">
+    <button class="tab bg-pink-300">Site Request</button>
+  </router-link>  
   <router-link to="/inventory/supply_manager">
     <button class="tab bg-blue-300">Purchase Request</button>
   </router-link>
@@ -15,9 +22,6 @@
   </router-link>
   <router-link to="/inventory/supply_manager">
     <button class="tab bg-pink-300">Site Request</button>
-  </router-link>
-  <router-link to="/inventory/supply_manager">
-    <button class="tab bg-indigo-300">Request List</button>
   </router-link>
   </div>
   <main class="flex flex-col h-screen">

@@ -8,6 +8,7 @@ use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\ItemsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -117,4 +118,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     // DateRange
     Route::get('daterange', [DateRangeController::class, 'index']);
     Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
+    //Items
+    Route::post('items', [ItemsController::class, 'store']);
+    Route::get('items', [ItemsController::class, 'index']);
 });

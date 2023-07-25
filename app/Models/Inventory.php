@@ -37,6 +37,7 @@ class Inventory extends Model
         'received_by',
         'processed_by',
         'requested_by',
+        'quantity_approved',
     ];
 
     public function site()

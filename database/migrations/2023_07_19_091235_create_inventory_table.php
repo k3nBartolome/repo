@@ -18,6 +18,7 @@ class CreateInventoryTable extends Migration
             $table->unsignedBigInteger('inventory_id');
             $table->string('transaction_no');
             $table->string('transaction_type');
+            $table->string('quantity_aprroved');
             $table->string('request_type');
             $table->string('status');
             $table->string('award_status');
@@ -32,6 +33,7 @@ class CreateInventoryTable extends Migration
             $table->string('awardee_hrid');
             $table->string('file_name');
             $table->string('path');
+            $table->boolean('is_active');
             $table->unsignedBigInteger('item_id');
             $table->unsignedBigInteger('site_id');
             $table->unsignedBigInteger('released_by');

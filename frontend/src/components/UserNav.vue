@@ -37,7 +37,7 @@
             Staffing Tracker
           </li></router-link
         >
-        <router-link to="/inventory">
+        <router-link to="/inventory/dashboard_manager">
           <li v-if="isAdmin"
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >

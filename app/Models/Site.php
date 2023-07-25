@@ -23,6 +23,10 @@ class Site extends Model
     {
         return $this->hasMany(User::class);
     }
+    public function items()
+    {
+        return $this->hasMany(Items::class);
+    }
 
     public function createdBy()
     {
