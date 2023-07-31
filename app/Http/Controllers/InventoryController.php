@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Items;
 use App\Models\Inventory;
+use App\Models\Items;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
 {
@@ -13,9 +14,121 @@ class InventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function requestItem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_id' => 'required',
+            'site_id' => 'required',
+            'quantity_approved' => 'required',
+            'requested_by' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        $inventory = new Inventory();
+        $inventory->fill($request->all());
+        $inventory->status = 'Pending';
+        $inventory->transaction_type = 'Site Request';
+        $inventory->save();
+        $inventory->transaction_no = $inventory->id;
+        $inventory->inventory_id = $inventory->id;
+        $inventory->save();
+
+        $requestedItem = Items::find($request->item_id);
+        $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->save();
+
+        return response()->json([
+            'Request' => $inventory,
+        ]);
+    }
+
+    public function approvedItem(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'approved_by' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $inventory = Inventory::find($id);
+        $inventory->fill($request->all());
+        $inventory->save();
+
+        return new ClassesResource($class);
+    }
+
     public function index()
     {
-        //
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+        ])
+        ->where('status', 'Pending')
+        ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function approved()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+        ])
+        ->where('status', 'Approved')
+        ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function denied()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+        ])
+        ->where('status', 'Denied')
+        ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function allstatus()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+        ])
+        ->get();
+
+        return response()->json(['inventory' => $inventory]);
     }
 
     /**
@@ -25,94 +138,58 @@ class InventoryController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\c  $c
+     * @param \App\Models\c $c
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(c $c)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\c  $c
+     * @param \App\Models\c $c
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(c $c)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\c  $c
+     * @param \App\Models\c $c
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, c $c)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\c  $c
+     * @param \App\Models\c $c
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(c $c)
     {
-        //
-    }
-    public function requestItem(Request $request)
-    {
-        $this->validate($request, [
-            'item_id' => 'required|exists:items,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
-        $item = Item::find($request->input('item_id'));
-
-        if (!$item) {
-            return response()->json(['message' => 'Item not found.'], 404);
-        }
-
-        $requestedQuantity = $request->input('quantity');
-        $remainingQuantity = max(0, $item->quantity - $requestedQuantity);
-
-        if ($remainingQuantity === 0) {
-            return response()->json(['message' => 'Item quantity is not sufficient.'], 400);
-        }
-
-        // Store the inventory request
-        $inventory = new Inventory([
-            'item_id' => $item->id,
-            'quantity_approved' => $requestedQuantity,
-            'status' => 'Pending', // Set the initial status as 'Pending'
-            // Add other relevant data like 'requested_by', 'date_requested', etc.
-        ]);
-
-        $inventory->save();
-
-        return response()->json(['message' => 'Item request submitted successfully.'], 200);
     }
 }

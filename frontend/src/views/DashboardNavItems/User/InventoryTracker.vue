@@ -1,7 +1,7 @@
 
 <template>
-  
-  <div class="flex flex-wrap px-4 py-1 md:py-6 md:px-0">
+
+  <div class="flex flex-wrap px-12 py-1 md:py-6 md:px-12">
     <router-link to="/inventory/dashboard_manager">
       <button class="tab bg-orange-300">Dashboard</button>
     </router-link>
@@ -13,7 +13,7 @@
     </router-link>
   <router-link to="/inventory/site_request_manager">
     <button class="tab bg-pink-300">Site Request</button>
-  </router-link>  
+  </router-link>
   <router-link to="/inventory/supply_manager">
     <button class="tab bg-blue-300">Purchase Request</button>
   </router-link>
@@ -23,14 +23,14 @@
   </div>
   <main class="flex flex-col h-screen">
     <div class="flex flex-1 px-4 py-2 md:px-1 ">
-      <div class=" py-6 w-full"> 
+      <div class=" py-6 w-full">
         <router-view />
       </div>
     </div>
   </main>
 </template>
 <script>
-  
+
 </script>
 <style>
   .tabs {
@@ -52,7 +52,7 @@
   main {
     display: flex;
     flex-direction: column;
-    height: 100%; 
+    height: 100%;
   }
 
   .flex {

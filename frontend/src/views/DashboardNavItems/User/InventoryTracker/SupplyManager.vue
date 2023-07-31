@@ -186,9 +186,7 @@
     import pdfFonts from "pdfmake/build/vfs_fonts";
     import "datatables.net-responsive-bs5";
     // eslint-disable-next-line no-unused-vars
-    
     import "bootstrap/dist/css/bootstrap.css";
-    import 'bootstrap-vue/dist/bootstrap-vue.css'
     
     DataTable.use(DataTableLib);
     //DataTable.use(pdfmake);
@@ -215,6 +213,8 @@
             { data: "site.name", title: "Site" },
             { data: "item_name", title: "Item" },
             { data: "quantity", title: "Quantity" },
+            { data: "cost", title: "Price" },
+            { data: "total_cost", title: "Total Price" },
             { data: "budget_code", title: "Budget Code" },
             { data: "type", title: "Type" },
             { data: "category", title: "Category" },

@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Controllers\API\User\RoleController;
@@ -6,9 +7,10 @@ use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
+use App\Http\Controllers\InventoryController;
+use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\SiteController;
-use App\Http\Controllers\ItemsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -121,4 +123,10 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     //Items
     Route::post('items', [ItemsController::class, 'store']);
     Route::get('items', [ItemsController::class, 'index']);
+    //Inventory
+    Route::post('inventory', [InventoryController::class, 'requestItem']);
+    Route::get('inventory', [InventoryController::class, 'index']);
+    Route::get('inventory/approved', [InventoryController::class, 'approved']);
+    Route::get('inventory/denied', [InventoryController::class, 'denied']);
+    Route::get('inventory/allstatus', [InventoryController::class, 'allstatus']);
 });
