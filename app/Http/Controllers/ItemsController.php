@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
 use App\Models\Items;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -15,9 +16,14 @@ class ItemsController extends Controller
      */
     public function index()
     {
-        $items = Items::with(['createdBy','site'])
+        $items = Items::with(['createdBy', 'site'])
             ->where('is_active', 1)
             ->get();
+
+        foreach ($items as $item) {
+            $requestedQuantity = Inventory::where('item_id', $item->id)->sum('quantity_approved');
+            $item->remaining_quantity = max(0, $item->quantity - $requestedQuantity);
+        }
 
         return response()->json(['items' => $items]);
     }
@@ -44,6 +50,8 @@ class ItemsController extends Controller
             'item_name' => 'required|max:255',
             'quantity' => 'required',
             'type' => 'required',
+            'cost' => 'required',
+            'total_cost' => 'required',
             'site_id' => 'required|exists:sites,id',
             'budget_code' => 'required',
             'category' => 'required',
@@ -56,7 +64,6 @@ class ItemsController extends Controller
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-       
         $items = new Items();
         $items->fill($request->all());
         $items->save();
@@ -64,8 +71,8 @@ class ItemsController extends Controller
         $items->save();
 
         return response()->json([
-        'items' => $items,
-    ]);
+            'items' => $items,
+        ]);
     }
 
     /**

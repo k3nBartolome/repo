@@ -18,7 +18,7 @@ class CreateInventoryTable extends Migration
             $table->unsignedBigInteger('inventory_id');
             $table->string('transaction_no');
             $table->string('transaction_type');
-            $table->string('quantity_aprroved');
+            $table->string('quantity_approved');
             $table->string('request_type');
             $table->string('status');
             $table->string('award_status');

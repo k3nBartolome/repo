@@ -3,7 +3,7 @@
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          ADD Supply
+          ADD Request
         </button>
       </h1>
     </div>
@@ -14,7 +14,7 @@
         <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
         <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Add Supply</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Add Request</h2>
           </header>
           <button @click="showModal = false" class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -36,13 +36,12 @@
             <div class="col-span-1">
               <label class="block">
                 Item Name
-                <input type="text" v-model="item_name" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity
-                <input type="number" v-model="quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
+                <select @change="onItemSelected" v-model="item_selected" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" >
+                  <option disabled value="" selected>Please select one</option>
+                  <option v-for="items in items" :key="items" :value="items.id">
+                    {{ items.item_name }}
+                  </option>
+                </select>
               </label>
             </div>
             <div class="col-span-1">
@@ -52,59 +51,15 @@
               </label>
             </div>
             <div class="col-span-1">
-              <label class="block mb-2"> <!-- Add the mb-2 class to create some space below the label -->
-                Category
+              <label class="block">
+                Quantity Available
+                <input type="number" readonly v-model="quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
               </label>
-              <div class="flex items-center"> <!-- Wrap the radio buttons and labels inside a flex container -->
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Normal"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Normal Item</label>
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Premium"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Premium Item</label>
-                </div>
-              </div>
             </div>
             <div class="col-span-1">
-              <label class="block mb-2"> <!-- Add the mb-2 class to create some space below the label -->
-                Type
-              </label>
-              <div class="flex items-center"> <!-- Wrap the radio buttons and labels inside a flex container -->
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Non-Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Non-Food</label>
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Food</label>
-                </div>
-              </div>
-            </div>
-            <div class="col-span-1"  v-if="type === 'Food'">
               <label class="block">
-                Expiration Date
-                <input type="date" v-model="date_expiry" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
+                Quantity
+                <input type="number" v-model="quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -189,6 +144,7 @@
           sites: [],
           items: [],
           sites_selected: "",
+          items_selected: "",
           item_name: "",
           quantity: "",
           budget_code: "",
@@ -213,6 +169,15 @@
       computed: {
         
       },
+      watch: {
+    items_selected(newItemId) {
+      const selectedItem = this.items.find((item) => item.id === newItemId);
+      if (selectedItem) {
+        this.budget_code = selectedItem.budget_code;
+        this.quantity = selectedItem.quantity;
+      }
+    },
+  },
       mounted() {
         window.vm = this;
         this.getSites();
@@ -220,19 +185,32 @@
         
       },
       methods: {
+        onItemSelected() {
+      const selectedItem = this.items.find((item) => item.id === this.items_selected);
+
+      if (selectedItem) {
+        this.budget_code = selectedItem.budget_code;
+        this.quantity = selectedItem.quantity;
+      }},
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://127.0.0.1:8000/api/items", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             });
     
             if (response.status === 200) {
-              this.items = response.data.items;
-              console.log(response.data.items);
-            } else {
+        this.items = response.data.items;
+        console.log(response.data.items);
+
+        if (this.items.length > 0) {
+          this.budget_code = this.items[0].budget_code;
+          this.quantity = this.items[0].quantity;
+          this.items_selected = this.items[0].id;
+        }
+      } else {
               console.log("Error fetching items");
             }
           } catch (error) {
@@ -242,7 +220,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -271,7 +249,7 @@
     created_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/items", formData, {
+    .post("http://127.0.0.1:8000/api/items", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

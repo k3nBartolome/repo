@@ -22,6 +22,8 @@ class Items extends Model
         'site_id',
         'is_active',
         'created_by',
+        'cost',
+        'total_cost',
     ];
 
     public function inventoryRecords()

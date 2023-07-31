@@ -47,6 +47,18 @@
             </div>
             <div class="col-span-1">
               <label class="block">
+                Price
+                <input type="number" v-model="cost" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Total Price
+                <input type="number" readonly v-model="total_cost" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
                 Budget Code
                 <input type="text" v-model="budget_code" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
               </label>
@@ -192,6 +204,8 @@
           item_name: "",
           quantity: "",
           budget_code: "",
+          cost: "",
+          total_cost: "",
           type: "Non-Food",
           category: "Normal",
           date_expiry: "",
@@ -210,6 +224,14 @@
           ],
         };
       },
+      watch: {
+    quantity: function () {
+      this.updateTotalPrice();
+    },
+    cost: function () {
+      this.updateTotalPrice();
+    },
+  },
       computed: {
         
       },
@@ -220,10 +242,13 @@
         
       },
       methods: {
+        updateTotalPrice() {
+      this.total_cost = this.quantity * this.cost;
+        },
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://127.0.0.1:8000/api/items", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -242,7 +267,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -263,6 +288,8 @@
     item_name: this.item_name,
     quantity: this.quantity,
     type: this.type,
+    cost: this.cost,
+    total_cost: this.total_cost,
     category: this.category,
     budget_code: this.budget_code,
     date_expiry: this.date_expiry,
@@ -271,7 +298,7 @@
     created_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/items", formData, {
+    .post("http://127.0.0.1:8000/api/items", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },
@@ -282,6 +309,8 @@
       this.quantity = "";
       this.sites_selected = "";
       this.type = "";
+      this.cost = "";
+      this.total_cost = "";
       this.category = "";
       this.budget_code = "";
       this.date_expiry = "";

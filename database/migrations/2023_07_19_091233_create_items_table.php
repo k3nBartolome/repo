@@ -18,7 +18,9 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('item_less_id')->nullable();
             $table->string('item_name');
             $table->integer('quantity')->default(0);
-            $table->string('budget_code');
+            $table->decimal('cost');
+            $table->decimal('total_cost', 10, 2);
+            $table->string('budget_code', 10, 2);
             $table->string('type');
             $table->string('category');
             $table->date('date_expiry')->nullable();

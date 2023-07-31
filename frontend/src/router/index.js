@@ -56,6 +56,8 @@ import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffing
 import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vue";
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
+import siteRequestManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestManager.vue";
+import requestManager from "@/views/DashboardNavItems/User/InventoryTracker/RequestManager.vue";
 
 const routes = [
   {
@@ -265,14 +267,24 @@ const routes = [
         component: inventoryTracker,
         children: [
           {
-            path: "supply_manager", // Add your desired child route path
+            path: "supply_manager",
             name: "supplyManager",
             component: supplyManager,
           },
           {
-            path: "dashboard_manager", // Add your desired child route path
+            path: "dashboard_manager",
             name: "dashboardManager",
             component: dashboardManager,
+          },
+          {
+            path: "request_manager",
+            name: "requestManager",
+            component: requestManager,
+          },
+          {
+            path: "site_request_manager",
+            name: "siteRequestManager",
+            component: siteRequestManager,
           },
         ],
       },

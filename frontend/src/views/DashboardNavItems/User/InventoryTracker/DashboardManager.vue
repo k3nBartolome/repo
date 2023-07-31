@@ -8,6 +8,7 @@
     </header>
     <div class="py-2">
         <div class="pl-8 pr-8">
+          
         </div>
       </div>
     </template>
@@ -31,4 +32,6 @@
     };
     </script>
     <style>
+
+    
     </style>
