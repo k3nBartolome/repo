@@ -309,6 +309,9 @@ export default {
           this.items_selected = "";
           this.quantity_approved = "";
           this.sites_selected = "";
+          this.getItems();
+          this.getInventory();
+          this.showModal = false;
         })
         .catch((error) => {
           console.log(error.response.data);

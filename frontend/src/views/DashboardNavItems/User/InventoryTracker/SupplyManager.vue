@@ -125,10 +125,10 @@
               </button>
             </div>
           </form>
-          
+
         </div>
       </div>
-      
+
         </div>
     </div>
     <div class="py-2">
@@ -171,7 +171,7 @@
         </div>
       </div>
     </template>
-    
+
     <script>
     import axios from "axios";
     import DataTable from "datatables.net-vue3";
@@ -187,11 +187,11 @@
     import "datatables.net-responsive-bs5";
     // eslint-disable-next-line no-unused-vars
     import "bootstrap/dist/css/bootstrap.css";
-    
+
     DataTable.use(DataTableLib);
     //DataTable.use(pdfmake);
     DataTable.use(ButtonsHtml5);
-    
+
     export default {
       components: { DataTable },
       data() {
@@ -233,13 +233,13 @@
     },
   },
       computed: {
-        
+
       },
       mounted() {
         window.vm = this;
         this.getSites();
         this.getItems();
-        
+
       },
       methods: {
         updateTotalPrice() {
@@ -253,7 +253,7 @@
                 Authorization: `Bearer ${token}`,
               },
             });
-    
+
             if (response.status === 200) {
               this.items = response.data.items;
               console.log(response.data.items);
@@ -272,7 +272,7 @@
                 Authorization: `Bearer ${token}`,
               },
             });
-    
+
             if (response.status === 200) {
               this.sites = response.data.data;
               console.log(response.data.data);
@@ -287,6 +287,7 @@
   const formData = {
     item_name: this.item_name,
     quantity: this.quantity,
+    original_quantity: this.quantity,
     type: this.type,
     cost: this.cost,
     total_cost: this.total_cost,
@@ -314,6 +315,7 @@
       this.category = "";
       this.budget_code = "";
       this.date_expiry = "";
+      this.getItems();
     })
     .catch((error) => {
       console.log(error.response.data);
@@ -326,19 +328,19 @@
     .table-responsive {
       overflow: auto;
     }
-    
+
     .datatable-container {
       width: 100%;
     }
-    
+
     .table {
       white-space: nowrap;
     }
-    
+
     .table thead th {
       padding: 8px;
     }
-    
+
     .table tbody td {
       padding: 8px;
     }
@@ -353,7 +355,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .modal-content {
       background-color: #fff;
       padding: 20px;

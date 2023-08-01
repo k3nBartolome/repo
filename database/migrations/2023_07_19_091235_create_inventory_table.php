@@ -19,7 +19,6 @@ class CreateInventoryTable extends Migration
             $table->string('transaction_no')->nullable();
             $table->string('transaction_type')->nullable();
             $table->string('quantity_approved')->nullable();
-            $table->string('request_type')->nullable();
             $table->string('status')->nullable();
             $table->string('award_status')->nullable();
             $table->string('denial_reason')->nullable();

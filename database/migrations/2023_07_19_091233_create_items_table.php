@@ -18,6 +18,7 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('item_less_id')->nullable();
             $table->string('item_name');
             $table->integer('quantity')->default(0);
+            $table->integer('original_quantity');
             $table->decimal('cost');
             $table->decimal('total_cost', 10, 2);
             $table->string('budget_code', 10, 2);
@@ -30,7 +31,6 @@ class CreateItemsTable extends Migration
             $table->unsignedBigInteger('site_id');
             $table->foreign('site_id')->references('id')->on('sites');
             $table->timestamps();
-
         });
     }
 

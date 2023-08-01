@@ -55,9 +55,36 @@ class InventoryController extends Controller
 
         $inventory = Inventory::find($id);
         $inventory->fill($request->all());
+        $inventory->status = 'Approved';
         $inventory->save();
 
-        return new ClassesResource($class);
+        return response()->json([
+            'Request' => $inventory,
+        ]);
+    }
+
+    public function deniedItem(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'denied_by' => 'required',
+            'denial_reason' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $inventory = Inventory::find($id);
+        $inventory->fill($request->all());
+        $inventory->status = 'Denied';
+        $inventory->save();
+
+        $requestedItem = Items::find($inventory->item_id);
+        $requestedItem->quantity += $inventory->quantity_approved;
+        $requestedItem->save();
+
+        return response()->json([
+            'Request' => $inventory,
+        ]);
     }
 
     public function index()

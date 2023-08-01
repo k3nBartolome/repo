@@ -125,6 +125,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('items', [ItemsController::class, 'index']);
     //Inventory
     Route::post('inventory', [InventoryController::class, 'requestItem']);
+    Route::put('inventory/denied/{id}', [InventoryController::class, 'deniedItem']);
+    Route::put('inventory/approved/{id}', [InventoryController::class, 'approvedItem']);
     Route::get('inventory', [InventoryController::class, 'index']);
     Route::get('inventory/approved', [InventoryController::class, 'approved']);
     Route::get('inventory/denied', [InventoryController::class, 'denied']);

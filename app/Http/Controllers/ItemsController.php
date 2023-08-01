@@ -18,6 +18,7 @@ class ItemsController extends Controller
     {
         $items = Items::with(['createdBy', 'site'])
             ->where('is_active', 1)
+            ->where('quantity', '<>', 0)
             ->get();
 
         foreach ($items as $item) {
@@ -35,13 +36,11 @@ class ItemsController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -49,6 +48,7 @@ class ItemsController extends Controller
         $validator = Validator::make($request->all(), [
             'item_name' => 'required|max:255',
             'quantity' => 'required',
+            'original_quantity' => 'required',
             'type' => 'required',
             'cost' => 'required',
             'total_cost' => 'required',
@@ -78,45 +78,44 @@ class ItemsController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
-        //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
-        //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
     }
 }

@@ -1,9 +1,78 @@
 <template>
+  <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="myTab" data-tabs-toggle="#myTabContent" role="tablist">
+        <li class="mr-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="false">Pending Request</button>
+        </li>
+        <li class="mr-2" role="presentation">
+            <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="settings-tab" data-tabs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">Approved Request</button>
+        </li>
+        <li role="presentation">
+            <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300" id="contacts-tab" data-tabs-target="#contacts" type="button" role="tab" aria-controls="contacts" aria-selected="false">Denied Request</button>
+        </li>
+    </ul>
+  </div>
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">Request Manager</h1>
     </div>
   </header>
+  <div class="py-1">
+    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+      <div
+        class="modal fixed inset-0 z-50 flex items-center justify-center"
+        v-if="showModal"
+      >
+        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
+          </header>
+          <button
+            @click="showModal = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <form
+            @submit.prevent="deniedRequest(deniedRequestId)"
+            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+          >
+            <div class="col-span-1">
+              <label class="block"
+                >Denial Reason
+                <textarea
+                  v-model="denial_reason"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="flex justify-end mt-4">
+              <button
+                type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -71,6 +140,9 @@ export default {
     return {
       sites: [],
       inventory: [],
+      denial_reason: "",
+      showModal: false,
+      deniedRequestId: null,
       columns: [
         { data: "id", title: "ID" },
         {
@@ -79,9 +151,8 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}">Approve</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}">Deny</button>
-  `;
+            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>`;
           },
         },
         { data: "site.name", title: "Site" },
@@ -99,6 +170,54 @@ export default {
     this.getInventory();
   },
   methods: {
+    openModalForDenial(id) {
+      this.deniedRequestId = id;
+      this.showModal = true;
+    },
+    approvedRequest(id) {
+      const form = {
+        approved_by: this.$store.state.user_id,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
+        .then((response) => {
+          console.log(response.data.data);
+          this.getInventory();
+        })
+        .catch((error) => {
+          console.log(error.response.data.data);
+        });
+    },
+    deniedRequest(id) {
+      const form = {
+        denied_by: this.$store.state.user_id,
+        denial_reason: this.denial_reason,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
+        .then((response) => {
+          console.log(response.data.data);
+          this.getInventory();
+          this.showModal = false;
+        })
+        .catch((error) => {
+          console.log(error.response.data.data);
+        });
+    },
     async getInventory() {
       try {
         const token = this.$store.state.token;
