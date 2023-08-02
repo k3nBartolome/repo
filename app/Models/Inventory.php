@@ -36,7 +36,7 @@ class Inventory extends Model
         'approved_by',
         'denied_by',
         'received_by',
-        'processed_by',
+        //'processed_by',
         'requested_by',
         'quantity_approved',
     ];

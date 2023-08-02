@@ -115,10 +115,10 @@
               </button>
             </div>
           </form>
-          
+
         </div>
       </div>
-      
+
         </div>
     </div>
     <div class="py-2">
@@ -161,7 +161,7 @@
         </div>
       </div>
     </template>
-    
+
     <script>
     import axios from "axios";
     import DataTable from "datatables.net-vue3";
@@ -176,13 +176,13 @@
     import pdfFonts from "pdfmake/build/vfs_fonts";
     import "datatables.net-responsive-bs5";
     // eslint-disable-next-line no-unused-vars
-    
+
     import "bootstrap/dist/css/bootstrap.css";
-    
+
     DataTable.use(DataTableLib);
     //DataTable.use(pdfmake);
     DataTable.use(ButtonsHtml5);
-    
+
     export default {
       components: { DataTable },
       data() {
@@ -212,24 +212,24 @@
         };
       },
       computed: {
-        
+
       },
       mounted() {
         window.vm = this;
         this.getSites();
         this.getItems();
-        
+
       },
       methods: {
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://127.0.0.1:8000/api/items", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             });
-    
+
             if (response.status === 200) {
               this.items = response.data.items;
               console.log(response.data.items);
@@ -243,12 +243,12 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
             });
-    
+
             if (response.status === 200) {
               this.sites = response.data.data;
               console.log(response.data.data);
@@ -272,7 +272,7 @@
     created_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/items", formData, {
+    .post("http://127.0.0.1:8000/api/items", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },
@@ -298,19 +298,19 @@
     .table-responsive {
       overflow: auto;
     }
-    
+
     .datatable-container {
       width: 100%;
     }
-    
+
     .table {
       white-space: nowrap;
     }
-    
+
     .table thead th {
       padding: 8px;
     }
-    
+
     .table tbody td {
       padding: 8px;
     }
@@ -325,7 +325,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     .modal-content {
       background-color: #fff;
       padding: 20px;
