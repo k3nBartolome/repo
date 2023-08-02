@@ -112,55 +112,94 @@ export default {
   },
   methods: {
     async getRoles() {
-      console.log(this.roles_selected)
-      await axios.get('http://127.0.0.1:8000/api/list_role')
-        .then((response) => {
-          this.roles = response.data.data;
-          console.log(response.data.data)
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    async postUser() {
-      await axios.post('http://127.0.0.1:8000/api/create_user', {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.get('http://10.109.2.112:8081/api/list_role', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        this.roles = response.data.data;
+        console.log(response.data.data);
+      } else {
+        console.log("Error fetching roles");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async postUser() {
+    try {
+      const token = this.$store.state.token;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const postData = {
         name: this.name,
         role: this.roles_selected,
         email: this.email,
         password: this.password,
+      };
 
-      })
-        .then((response) => {
-          console.log(response.data.data),
-          this.getUsers();
-        })
-        .catch((error) => {
-          console.log(error)
-        })
-    },
-    async getUsers() {
-      await axios
-        .get("http://127.0.0.1:8000/api/list_user")
-        .then((response) => {
-          this.users = response.data.data;
-          console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
-    async deleteUsers(user_id) {
-      await axios
-        .delete("http://127.0.0.1:8000/api/delete_user/" + user_id)
-        .then((response) => {
-          this.users = response.data.data;
-          console.log(response.data.data);
-          this.getUsers();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    },
+      const response = await axios.post('http://10.109.2.112:8081/api/create_user', postData, config);
+
+      if (response.status === 200) {
+        console.log(response.data.data);
+        this.getUsers();
+      } else {
+        console.log("Error posting user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getUsers() {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.get("http://10.109.2.112:8081/api/list_user", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        this.users = response.data.data;
+        console.log(response.data.data);
+      } else {
+        console.log("Error fetching users");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async deleteUsers(user_id) {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.delete(`http://10.109.2.112:8081/api/delete_user/${user_id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response.status === 200) {
+        this.users = response.data.data;
+        console.log(response.data.data);
+        this.getUsers();
+      } else {
+        console.log("Error deleting user");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
     slicedRoles(roles) {
       return roles.toString().toUpperCase();
     },

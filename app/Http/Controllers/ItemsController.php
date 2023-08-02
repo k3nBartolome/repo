@@ -17,15 +17,10 @@ class ItemsController extends Controller
     public function index()
     {
         $items = Items::with(['createdBy', 'site'])
-        ->where('is_active', 1)
-        ->where('category', 'Normal')
-        ->where('quantity', '>', 0)
-        ->get();
-
-        foreach ($items as $item) {
-            $requestedQuantity = Inventory::where('item_id', $item->id)->sum('quantity_approved');
-            $item->remaining_quantity = max(0, $item->quantity - $requestedQuantity);
-        }
+            ->where('is_active', 1)
+            ->where('category', 'Normal')
+            ->where('quantity', '>', 0)
+            ->get();
 
         return response()->json(['items' => $items]);
     }
@@ -33,10 +28,10 @@ class ItemsController extends Controller
     public function index2()
     {
         $items = Items::with(['createdBy', 'site'])
-        ->where('is_active', 1)
-        ->where('category', 'Premium')
-        ->where('quantity', '>', 0)
-        ->get();
+            ->where('is_active', 1)
+            ->where('category', 'Premium')
+            ->where('quantity', '>', 0)
+            ->get();
 
         foreach ($items as $item) {
             $requestedQuantity = Inventory::where('item_id', $item->id)->sum('quantity_approved');
