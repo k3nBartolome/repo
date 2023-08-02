@@ -57,7 +57,12 @@ import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vu
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
 import siteRequestManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestManager.vue";
+import purchaseManager from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseManager.vue";
+import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
 import requestManager from "@/views/DashboardNavItems/User/InventoryTracker/RequestManager.vue";
+import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerPending.vue";
+import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
+import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
 
 const routes = [
   {
@@ -277,14 +282,41 @@ const routes = [
             component: dashboardManager,
           },
           {
-            path: "request_manager",
+            path: "/request_manager",
             name: "requestManager",
             component: requestManager,
+            children: [
+              {
+                path: "pending",
+                name: "requestManagerPending",
+                component: requestManagerPending,
+              },
+              {
+                path: "approved",
+                name: "requestManagerApproved",
+                component: requestManagerApproved,
+              },
+              {
+                path: "denied",
+                name: "requestManagerDenied",
+                component: requestManagerDenied,
+              },
+            ],
           },
           {
             path: "site_request_manager",
             name: "siteRequestManager",
             component: siteRequestManager,
+          },
+          {
+            path: "purchase_manager",
+            name: "purchaseManager",
+            component: purchaseManager,
+          },
+          {
+            path: "award_manager",
+            name: "awardManager",
+            component: awardManager,
           },
         ],
       },

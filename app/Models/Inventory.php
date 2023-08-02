@@ -18,6 +18,7 @@ class Inventory extends Model
         'request_type',
         'status',
         'award_status',
+        'received_status',
         'denial_reason',
         'remarks',
         'date_released',

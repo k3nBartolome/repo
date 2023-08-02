@@ -8,22 +8,22 @@
     <router-link to="/inventory/supply_manager">
       <button class="tab bg-green-300">Supply Manager</button>
     </router-link>
-    <router-link to="/inventory/request_manager">
+    <router-link to="/request_manager/pending">
       <button class="tab bg-indigo-300">Request List</button>
     </router-link>
   <router-link to="/inventory/site_request_manager">
     <button class="tab bg-pink-300">Site Request</button>
   </router-link>
-  <router-link to="/inventory/supply_manager">
+  <router-link to="/inventory/purchase_manager">
     <button class="tab bg-blue-300">Purchase Request</button>
   </router-link>
-  <router-link to="/inventory/supply_manager">
+  <router-link to="/inventory/award_manager">
     <button class="tab bg-yellow-300">Award Item</button>
   </router-link>
   </div>
   <main class="flex flex-col h-screen">
-    <div class="flex flex-1 px-4 py-2 md:px-1 ">
-      <div class=" py-6 w-full">
+    <div class="flex flex-1 px-2 pt-1 md:px-1 ">
+      <div class=" py-2 w-full">
         <router-view />
       </div>
     </div>

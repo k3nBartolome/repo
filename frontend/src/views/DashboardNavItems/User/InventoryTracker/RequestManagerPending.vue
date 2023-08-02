@@ -1,16 +1,4 @@
 <template>
-  <header class="w-full">
-    <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button
-          @click="showModal = true"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
-        >
-          ADD Request
-        </button>
-      </h1>
-    </div>
-  </header>
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
@@ -20,7 +8,7 @@
         <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
         <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Add Request</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
           </header>
           <button
             @click="showModal = false"
@@ -42,65 +30,14 @@
             </svg>
           </button>
           <form
-            @submit.prevent="addRequest"
+            @submit.prevent="deniedRequest(deniedRequestId)"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
             <div class="col-span-1">
-              <label class="block">
-                Site
-                <select
-                  v-model="sites_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                >
-                  <option disabled value="" selected>Please select one</option>
-                  <option v-for="site in sites" :key="site.id" :value="site.id">
-                    {{ site.name }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Item Name
-                <select
-                  @change="onItemSelected"
-                  v-model="items_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                >
-                  <option disabled value="" selected>Please select one</option>
-                  <option v-for="items in items" :key="items" :value="items.id">
-                    {{ items.item_name }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Budget Code
-                <input
-                  type="text"
-                  v-model="budget_code"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity Available
-                <input
-                  type="number"
-                  readonly
-                  v-model="quantity"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity Request
-                <input
-                  type="number"
-                  v-model="quantity_approved"
+              <label class="block"
+                >Denial Reason
+                <textarea
+                  v-model="denial_reason"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
@@ -184,69 +121,84 @@ export default {
   data() {
     return {
       sites: [],
-      items: [],
       inventory: [],
-      sites_selected: "",
-      items_selected: "",
-      item_name: "",
-      quantity: "",
-      quantity_approved: "",
-      budget_code: "",
+      denial_reason: "",
       showModal: false,
+      deniedRequestId: null,
       columns: [
         { data: "id", title: "ID" },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>`;
+          },
+        },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approve Status" },
-
       ],
     };
   },
   computed: {},
-  watch: {
-    items_selected(newItemId) {
-      const selectedItem = this.items.find((item) => item.id === newItemId);
-      if (selectedItem) {
-        this.budget_code = selectedItem.budget_code;
-        this.quantity = selectedItem.quantity;
-      }
-    },
-  },
   mounted() {
     window.vm = this;
     this.getSites();
-    this.getItems();
     this.getInventory();
   },
   methods: {
-    onItemSelected() {
-      const selectedItem = this.items.find((item) => item.id === this.items_selected);
-
-      if (selectedItem) {
-        this.budget_code = selectedItem.budget_code;
-        this.quantity = selectedItem.quantity;
-      }
+    openModalForDenial(id) {
+      this.deniedRequestId = id;
+      this.showModal = true;
     },
-    async getItems() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/items", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    approvedRequest(id) {
+      const form = {
+        approved_by: this.$store.state.user_id,
+      };
 
-        if (response.status === 200) {
-          this.items = response.data.items;
-          console.log(response.data.items);
-        } else {
-          console.log("Error fetching items");
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
+        .then((response) => {
+          console.log(response.data.data);
+          this.getInventory();
+        })
+        .catch((error) => {
+          console.log(error.response.data.data);
+        });
+    },
+    deniedRequest(id) {
+      const form = {
+        denied_by: this.$store.state.user_id,
+        denial_reason: this.denial_reason,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
+        .then((response) => {
+          console.log(response.data.data);
+          this.getInventory();
+          this.showModal = false;
+        })
+        .catch((error) => {
+          console.log(error.response.data.data);
+        });
     },
     async getInventory() {
       try {
@@ -285,37 +237,6 @@ export default {
       } catch (error) {
         console.log(error);
       }
-    },
-    addRequest() {
-      if (this.quantity_approved > this.quantity) {
-        alert("Quantity Requested cannot exceed Quantity Available.");
-        return;
-      }
-      const formData = {
-        item_id: this.items_selected,
-        site_id: this.sites_selected,
-        quantity_approved: this.quantity_approved,
-        is_active: 1,
-        requested_by: this.$store.state.user_id,
-      };
-      axios
-        .post("http://127.0.0.1:8000/api/inventory", formData, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.items_selected = "";
-          this.quantity_approved = "";
-          this.sites_selected = "";
-          this.getItems();
-          this.getInventory();
-          this.showModal = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
     },
   },
 };

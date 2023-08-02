@@ -172,101 +172,100 @@ export default {
       this.$router.push(`/program_management/edit/${id}`);
     },
     activateProgram(id) {
-  const form = {
-    is_active: 1,
-    updated_by: this.$store.state.user_id,
-  };
+      const form = {
+        is_active: 1,
+        updated_by: this.$store.state.user_id,
+      };
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${this.$store.state.token}`,
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
+        .then((response) => {
+          // Handle the response
+          console.log(response.data);
+          this.is_active = "";
+          this.getPrograms();
+          this.getPrograms2();
+        })
+        .catch((error) => {
+          // Handle the error
+          console.log(error.response.data);
+        });
     },
-  };
 
-  axios
-    .put(`http://10.109.2.112:8081/api/programs_activate/${id}`, form, config)
-    .then((response) => {
-      // Handle the response
-      console.log(response.data);
-      this.is_active = "";
-      this.getPrograms();
-      this.getPrograms2();
-    })
-    .catch((error) => {
-      // Handle the error
-      console.log(error.response.data);
-    });
-},
+    deactivateProgram(id) {
+      const form = {
+        is_active: 0,
+        updated_by: this.$store.state.user_id,
+      };
 
-deactivateProgram(id) {
-  const form = {
-    is_active: 0,
-    updated_by: this.$store.state.user_id,
-  };
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${this.$store.state.token}`,
+      axios
+        .put(`http://127.0.0.1:8000/api/programs_deactivate/${id}`, form, config)
+        .then((response) => {
+          // Handle the response
+          console.log(response.data);
+          this.is_active = "";
+          this.getPrograms();
+          this.getPrograms2();
+        })
+        .catch((error) => {
+          // Handle the error
+          console.log(error.response.data);
+        });
     },
-  };
+    async getPrograms() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        });
 
-  axios
-    .put(`http://10.109.2.112:8081/api/programs_deactivate/${id}`, form, config)
-    .then((response) => {
-      // Handle the response
-      console.log(response.data);
-      this.is_active = "";
-      this.getPrograms();
-      this.getPrograms2();
-    })
-    .catch((error) => {
-      // Handle the error
-      console.log(error.response.data);
-    });
-}
-,
-async getPrograms() {
-  try {
-    const response = await axios.get("http://10.109.2.112:8081/api/programs", {
-      headers: {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      },
-    });
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-    if (response.status === 200) {
-      this.programs = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+    async getPrograms2() {
+      try {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs2", {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        });
 
-async getPrograms2() {
-  try {
-    const response = await axios.get("http://10.109.2.112:8081/api/programs2", {
-      headers: {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      },
-    });
+        if (response.status === 200) {
+          this.programs2 = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs2");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-    if (response.status === 200) {
-      this.programs2 = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs2");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-     async getSites() {
+    async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -283,33 +282,32 @@ async getPrograms2() {
       }
     },
     addProgram() {
-  const formData = {
-    name: this.name,
-    description: this.description,
-    program_group: this.program_group,
-    site_id: this.sites_selected,
-    is_active: 1,
-    created_by: this.$store.state.user_id,
-  };
-  axios
-    .post("http://10.109.2.112:8081/api/programs", formData, {
-      headers: {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-      this.name = "";
-      this.description = "";
-      this.program_group = "";
-      this.sites_selected = "";
-      this.getPrograms();
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-    });
-}
-,
+      const formData = {
+        name: this.name,
+        description: this.description,
+        program_group: this.program_group,
+        site_id: this.sites_selected,
+        is_active: 1,
+        created_by: this.$store.state.user_id,
+      };
+      axios
+        .post("http://127.0.0.1:8000/api/programs", formData, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.name = "";
+          this.description = "";
+          this.program_group = "";
+          this.sites_selected = "";
+          this.getPrograms();
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    },
   },
 };
 </script>

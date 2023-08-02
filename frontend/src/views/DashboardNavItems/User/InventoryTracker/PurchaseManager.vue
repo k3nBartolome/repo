@@ -3,7 +3,7 @@
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          ADD Supply
+          ADD Purchase Request
         </button>
       </h1>
     </div>
@@ -176,7 +176,6 @@
     // eslint-disable-next-line no-unused-vars
     
     import "bootstrap/dist/css/bootstrap.css";
-    import 'bootstrap-vue/dist/bootstrap-vue.css'
     
     DataTable.use(DataTableLib);
     //DataTable.use(pdfmake);
@@ -223,7 +222,7 @@
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://127.0.0.1:8000/api/items", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -242,7 +241,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -271,7 +270,7 @@
     created_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/items", formData, {
+    .post("http://127.0.0.1:8000/api/items", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

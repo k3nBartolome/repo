@@ -1,13 +1,15 @@
-<template>
-  <header class="w-full">
-    <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          ADD Supply
-        </button>
-      </h1>
-    </div>
-  </header>
+<template><header class="w-full">
+  <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
+    <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
+      <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2">
+        Award Normal Item
+      </button>
+      <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        Award Premium Item
+      </button>
+    </h1>
+  </div>
+</header>
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div class="modal fixed inset-0 z-50 flex items-center justify-center" v-if="showModal">
@@ -47,18 +49,6 @@
             </div>
             <div class="col-span-1">
               <label class="block">
-                Price
-                <input type="number" v-model="cost" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Total Price
-                <input type="number" readonly v-model="total_cost" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
                 Budget Code
                 <input type="text" v-model="budget_code" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
               </label>
@@ -89,10 +79,10 @@
               </div>
             </div>
             <div class="col-span-1">
-              <label class="block mb-2">
+              <label class="block mb-2"> <!-- Add the mb-2 class to create some space below the label -->
                 Type
               </label>
-              <div class="flex items-center">
+              <div class="flex items-center"> <!-- Wrap the radio buttons and labels inside a flex container -->
                 <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
                   <input
                     class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
@@ -119,20 +109,16 @@
                 <input type="date" v-model="date_expiry" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
               </label>
             </div>
-            <div class="flex justify-between mt-4">
-              <button @click="showModal = false" type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
-                Cancel
-              </button>
-              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+            <div class="flex justify-end mt-4">
+              <button type="submit"  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 Submit
               </button>
             </div>
-
           </form>
-
+          
         </div>
       </div>
-
+      
         </div>
     </div>
     <div class="py-2">
@@ -175,7 +161,7 @@
         </div>
       </div>
     </template>
-
+    
     <script>
     import axios from "axios";
     import DataTable from "datatables.net-vue3";
@@ -190,12 +176,13 @@
     import pdfFonts from "pdfmake/build/vfs_fonts";
     import "datatables.net-responsive-bs5";
     // eslint-disable-next-line no-unused-vars
+    
     import "bootstrap/dist/css/bootstrap.css";
-
+    
     DataTable.use(DataTableLib);
     //DataTable.use(pdfmake);
     DataTable.use(ButtonsHtml5);
-
+    
     export default {
       components: { DataTable },
       data() {
@@ -206,8 +193,6 @@
           item_name: "",
           quantity: "",
           budget_code: "",
-          cost: "",
-          total_cost: "",
           type: "Non-Food",
           category: "Normal",
           date_expiry: "",
@@ -217,8 +202,6 @@
             { data: "site.name", title: "Site" },
             { data: "item_name", title: "Item" },
             { data: "quantity", title: "Quantity" },
-            { data: "cost", title: "Price" },
-            { data: "total_cost", title: "Total Price" },
             { data: "budget_code", title: "Budget Code" },
             { data: "type", title: "Type" },
             { data: "category", title: "Category" },
@@ -228,27 +211,16 @@
           ],
         };
       },
-      watch: {
-    quantity: function () {
-      this.updateTotalPrice();
-    },
-    cost: function () {
-      this.updateTotalPrice();
-    },
-  },
       computed: {
-
+        
       },
       mounted() {
         window.vm = this;
         this.getSites();
         this.getItems();
-
+        
       },
       methods: {
-        updateTotalPrice() {
-      this.total_cost = this.quantity * this.cost;
-        },
         async getItems() {
           try {
             const token = this.$store.state.token;
@@ -257,7 +229,7 @@
                 Authorization: `Bearer ${token}`,
               },
             });
-
+    
             if (response.status === 200) {
               this.items = response.data.items;
               console.log(response.data.items);
@@ -276,7 +248,7 @@
                 Authorization: `Bearer ${token}`,
               },
             });
-
+    
             if (response.status === 200) {
               this.sites = response.data.data;
               console.log(response.data.data);
@@ -291,10 +263,7 @@
   const formData = {
     item_name: this.item_name,
     quantity: this.quantity,
-    original_quantity: this.quantity,
     type: this.type,
-    cost: this.cost,
-    total_cost: this.total_cost,
     category: this.category,
     budget_code: this.budget_code,
     date_expiry: this.date_expiry,
@@ -314,12 +283,9 @@
       this.quantity = "";
       this.sites_selected = "";
       this.type = "";
-      this.cost = "";
-      this.total_cost = "";
       this.category = "";
       this.budget_code = "";
       this.date_expiry = "";
-      this.getItems();
     })
     .catch((error) => {
       console.log(error.response.data);
@@ -332,19 +298,19 @@
     .table-responsive {
       overflow: auto;
     }
-
+    
     .datatable-container {
       width: 100%;
     }
-
+    
     .table {
       white-space: nowrap;
     }
-
+    
     .table thead th {
       padding: 8px;
     }
-
+    
     .table tbody td {
       padding: 8px;
     }
@@ -359,7 +325,7 @@
       align-items: center;
       justify-content: center;
     }
-
+    
     .modal-content {
       background-color: #fff;
       padding: 20px;
