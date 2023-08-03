@@ -131,7 +131,7 @@ export default {
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approve Status" },
+        { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
         { data: "denied_by.name", title: "Denied By" },
         { data: "denial_reason", title: "Denial Reason" },
