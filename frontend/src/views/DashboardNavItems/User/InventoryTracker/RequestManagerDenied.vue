@@ -132,9 +132,7 @@ export default {
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approve Status" },
-        { data: "status", title: "Approve Status" },
         { data: "requested_by.name", title: "Requested By" },
-        { data: "approved_by.name", title: "Approve By" },
         { data: "denied_by.name", title: "Denied By" },
         { data: "denial_reason", title: "Denial Reason" },
       ],
@@ -163,7 +161,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/inventory/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -185,7 +183,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -198,7 +196,7 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventory/denied", {
+        const response = await axios.get("http://10.109.2.112:8081/api/inventory/denied", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -217,7 +215,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
