@@ -4,9 +4,9 @@
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
           @click="showModal = true"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2"
         >
-          ADD Request
+          Award Normal Item
         </button>
       </h1>
     </div>
@@ -20,7 +20,9 @@
         <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
         <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Add Request</h2>
+            <h2 class="text-lg font-semibold text-gray-800">
+              Award Normal Item
+            </h2>
           </header>
           <button
             @click="showModal = false"
@@ -42,7 +44,7 @@
             </svg>
           </button>
           <form
-            @submit.prevent="addRequest"
+            @submit.prevent="AwardNormalItem"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
             <div class="col-span-1">
@@ -123,7 +125,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="inventory"
+            :data="site_items"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -184,23 +186,24 @@ export default {
   data() {
     return {
       sites: [],
-      items: [],
-      inventory: [],
+      site_items: [],
       sites_selected: "",
-      items_selected: "",
       item_name: "",
       quantity: "",
-      quantity_approved: "",
       budget_code: "",
+      type: "Non-Food",
+      category: "Normal",
+      date_expiry: "",
       showModal: false,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
-        { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approval Status" },
-
+        { data: "item_name", title: "Item" },
+        { data: "quantity", title: "Quantity" },
+        { data: "budget_code", title: "Budget Code" },
+        { data: "type", title: "Type" },
+        { data: "category", title: "Category" },
+        { data: "date_expiry", title: "Expiration Date" },
       ],
     };
   },
@@ -218,11 +221,12 @@ export default {
     window.vm = this;
     this.getSites();
     this.getItems();
-    this.getInventory();
   },
   methods: {
     onItemSelected() {
-      const selectedItem = this.items.find((item) => item.id === this.items_selected);
+      const selectedItem = this.items.find(
+        (item) => item.id === this.items_selected
+      );
 
       if (selectedItem) {
         this.budget_code = selectedItem.budget_code;
@@ -232,36 +236,17 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/items", {
+        const response = await axios.get("http://127.0.0.1:8000/api/siteinventory", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.status === 200) {
-          this.items = response.data.items;
+          this.site_items = response.data.items;
           console.log(response.data.items);
         } else {
           console.log("Error fetching items");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getInventory() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.inventory = response.data.inventory;
-          console.log(response.data.inventory);
-        } else {
-          console.log("Error fetching inventory");
         }
       } catch (error) {
         console.log(error);
@@ -286,32 +271,33 @@ export default {
         console.log(error);
       }
     },
-    addRequest() {
-      if (this.quantity_approved > this.quantity) {
-        alert("Quantity Requested cannot exceed Quantity Available.");
-        return;
-      }
+    AwardNormalItem() {
       const formData = {
-        item_id: this.items_selected,
+        item_name: this.item_name,
+        quantity: this.quantity,
+        type: this.type,
+        category: this.category,
+        budget_code: this.budget_code,
+        date_expiry: this.date_expiry,
         site_id: this.sites_selected,
-        quantity_approved: this.quantity_approved,
         is_active: 1,
-        requested_by: this.$store.state.user_id,
+        created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/inventory", formData, {
+        .post("http://127.0.0.1:8000/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
         })
         .then((response) => {
           console.log(response.data);
-          this.items_selected = "";
-          this.quantity_approved = "";
+          this.item_name = "";
+          this.quantity = "";
           this.sites_selected = "";
-          this.getItems();
-          this.getInventory();
-          this.showModal = false;
+          this.type = "";
+          this.category = "";
+          this.budget_code = "";
+          this.date_expiry = "";
         })
         .catch((error) => {
           console.log(error.response.data);

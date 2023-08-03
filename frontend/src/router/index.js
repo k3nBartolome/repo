@@ -1,4 +1,7 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory
+} from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
 import ContactUs from "@/views/ContactUs";
@@ -61,18 +64,21 @@ import siteRequestReceived from "@/views/DashboardNavItems/User/InventoryTracker
 import siteRequest from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequest.vue";
 import purchaseManager from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseManager.vue";
 import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
+import awardNormal from "@/views/DashboardNavItems/User/InventoryTracker/AwardNormal.vue";
+import awardPremium from "@/views/DashboardNavItems/User/InventoryTracker/AwardPremium.vue";
 import requestManager from "@/views/DashboardNavItems/User/InventoryTracker/RequestManager.vue";
 import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerPending.vue";
 import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
 import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
 
-const routes = [
-  {
+const routes = [{
     path: "/",
     component: AppUserLayoutGuatemala,
-    meta: { requiresAuth: true, requiresRole: "user" },
-    children: [
-      {
+    meta: {
+      requiresAuth: true,
+      requiresRole: "user"
+    },
+    children: [{
         path: "/capfileguatemala",
         name: "capacityFileGuatemala",
         component: capacityFileGuatemala,
@@ -132,9 +138,11 @@ const routes = [
   {
     path: "/",
     component: AppUserLayoutJamaica,
-    meta: { requiresAuth: true, requiresRole: "user" },
-    children: [
-      {
+    meta: {
+      requiresAuth: true,
+      requiresRole: "user"
+    },
+    children: [{
         path: "/capfilejamaica",
         name: "capacityFileJamaica",
         component: capacityFileJamaica,
@@ -194,9 +202,11 @@ const routes = [
   {
     path: "/",
     component: AppUserLayoutIndia,
-    meta: { requiresAuth: true, requiresRole: "user" },
-    children: [
-      {
+    meta: {
+      requiresAuth: true,
+      requiresRole: "user"
+    },
+    children: [{
         path: "/capfileindia",
         name: "capacityFileIndia",
         component: capacityFileIndia,
@@ -256,9 +266,11 @@ const routes = [
   {
     path: "/",
     component: AppUserLayout,
-    meta: { requiresAuth: true, requiresRole: "user" },
-    children: [
-      {
+    meta: {
+      requiresAuth: true,
+      requiresRole: "user"
+    },
+    children: [{
         path: "/capfile",
         name: "capacityFile",
         component: capacityFile,
@@ -272,8 +284,7 @@ const routes = [
         path: "/inventory",
         name: "inventoryTracker",
         component: inventoryTracker,
-        children: [
-          {
+        children: [{
             path: "supply_manager",
             name: "supplyManager",
             component: supplyManager,
@@ -287,8 +298,7 @@ const routes = [
             path: "/request_manager",
             name: "requestManager",
             component: requestManager,
-            children: [
-              {
+            children: [{
                 path: "pending",
                 name: "requestManagerPending",
                 component: requestManagerPending,
@@ -309,8 +319,7 @@ const routes = [
             path: "/site_request_manager",
             name: "siteRequestManager",
             component: siteRequestManager,
-            children: [
-              {
+            children: [{
                 path: "request",
                 name: "siteRequest",
                 component: siteRequest,
@@ -328,9 +337,20 @@ const routes = [
             component: purchaseManager,
           },
           {
-            path: "award_manager",
+            path: "/award_manager",
             name: "awardManager",
             component: awardManager,
+            children: [{
+                path: "normal",
+                name: "awardNormal",
+                component: awardNormal,
+              },
+              {
+                path: "premium",
+                name: "awardPremium",
+                component: awardPremium,
+              },
+            ],
           },
         ],
       },
@@ -403,8 +423,7 @@ const routes = [
       requiresAuth: true,
       requiresRole: "admin",
     },
-    children: [
-      {
+    children: [{
         path: "/admin_dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
@@ -423,13 +442,11 @@ const routes = [
       requiresAuth: true,
       requiresRole: "perx",
     },
-    children: [
-      {
-        path: "/perx_manager",
-        name: "Perx",
-        component: AppPerxDashboard,
-      },
-    ],
+    children: [{
+      path: "/perx_manager",
+      name: "Perx",
+      component: AppPerxDashboard,
+    }, ],
   },
   {
     path: "/auth",
@@ -438,8 +455,7 @@ const routes = [
     meta: {
       isGuest: true,
     },
-    children: [
-      {
+    children: [{
         path: "/login",
         name: "login",
         component: AppLogin,

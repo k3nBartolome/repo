@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Inventory;
 use App\Models\Items;
+use App\Models\SiteInventory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,6 +18,16 @@ class ItemsController extends Controller
     public function index()
     {
         $items = Items::with(['createdBy', 'site'])
+            ->where('is_active', 1)
+            ->where('category', 'Normal')
+            ->where('quantity', '>', 0)
+            ->get();
+
+        return response()->json(['items' => $items]);
+    }
+    public function index3()
+    {
+        $items = SiteInventory::with(['site'])
             ->where('is_active', 1)
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)

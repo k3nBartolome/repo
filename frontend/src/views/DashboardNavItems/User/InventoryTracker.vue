@@ -17,7 +17,7 @@
   <router-link to="/inventory/purchase_manager">
     <button class="tab bg-blue-300">Purchase Request</button>
   </router-link>
-  <router-link to="/inventory/award_manager">
+  <router-link to="/award_manager/normal">
     <button class="tab bg-yellow-300">Award Item</button>
   </router-link>
   </div>

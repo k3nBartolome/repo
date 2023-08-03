@@ -25,4 +25,8 @@ class SiteInventory extends Model
         'cost',
         'total_cost',
     ];
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site_id');
+    }
 }
