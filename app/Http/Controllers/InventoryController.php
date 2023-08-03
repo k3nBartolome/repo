@@ -192,8 +192,9 @@ class InventoryController extends Controller
             'requestedBy',
         ])
         ->where('status', 'Approved')
-        ->where('approved_status', '')
-        ->get();
+->whereNull('approved_status')
+->get();
+
 
         return response()->json(['inventory' => $inventory]);
     }
