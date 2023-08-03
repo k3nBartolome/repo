@@ -34,9 +34,9 @@ class Inventory extends Model
         'site_id',
         'released_by',
         'approved_by',
+        'approved_status',
         'denied_by',
         'received_by',
-        //'processed_by',
         'requested_by',
         'quantity_approved',
     ];

@@ -57,6 +57,8 @@ import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vu
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
 import siteRequestManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestManager.vue";
+import siteRequestReceived from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestReceived.vue";
+import siteRequest from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequest.vue";
 import purchaseManager from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseManager.vue";
 import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
 import requestManager from "@/views/DashboardNavItems/User/InventoryTracker/RequestManager.vue";
@@ -304,9 +306,21 @@ const routes = [
             ],
           },
           {
-            path: "site_request_manager",
+            path: "/site_request_manager",
             name: "siteRequestManager",
             component: siteRequestManager,
+            children: [
+              {
+                path: "request",
+                name: "siteRequest",
+                component: siteRequest,
+              },
+              {
+                path: "received",
+                name: "siteRequestReceived",
+                component: siteRequestReceived,
+              },
+            ],
           },
           {
             path: "purchase_manager",

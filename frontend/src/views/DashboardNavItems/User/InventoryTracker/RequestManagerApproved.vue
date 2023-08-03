@@ -132,6 +132,8 @@ export default {
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approve Status" },
+        { data: "requested_by.name", title: "Requested By" },
+        { data: "approved_by.name", title: "Approve By" },
       ],
     };
   },

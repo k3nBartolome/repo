@@ -11,7 +11,7 @@
     <router-link to="/request_manager/pending">
       <button class="tab bg-indigo-300">Request List</button>
     </router-link>
-  <router-link to="/inventory/site_request_manager">
+  <router-link to="/site_request_manager/request">
     <button class="tab bg-pink-300">Site Request</button>
   </router-link>
   <router-link to="/inventory/purchase_manager">

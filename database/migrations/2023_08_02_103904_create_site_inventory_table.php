@@ -26,8 +26,6 @@ class CreateSiteInventoryTable extends Migration
             $table->string('category');
             $table->date('date_expiry')->nullable();
             $table->boolean('is_active')->nullable();
-            $table->unsignedBigInteger('created_by');
-            $table->foreign('created_by')->references('id')->on('users');
             $table->unsignedBigInteger('site_id');
             $table->foreign('site_id')->references('id')->on('sites');
             $table->timestamps();
