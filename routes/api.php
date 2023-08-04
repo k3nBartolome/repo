@@ -136,4 +136,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('inventory/approved/pending', [InventoryController::class, 'approvedPending']);
     Route::get('inventory/denied', [InventoryController::class, 'denied']);
     Route::get('inventory/allstatus', [InventoryController::class, 'allstatus']);
+    Route::post('award', [InventoryController::class, 'awardNormalItem']);
+    Route::post('award2', [InventoryController::class, 'awardPremiumItem']);
 });

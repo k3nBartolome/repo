@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Award;
+use App\Models\AwardPremium;
 use App\Models\Inventory;
 use App\Models\Items;
 use App\Models\SiteInventory;
@@ -45,6 +47,70 @@ class InventoryController extends Controller
         ]);
     }
 
+    public function awardNormalItem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'inventory_item_id' => 'required',
+            'site_id' => 'required',
+            'awarded_quantity' => 'required',
+            'awardee_name' => 'required',
+            'awardee_hrid' => 'required',
+            'processed_by' => 'required',
+            'released_by' => 'required',
+            'remarks' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        $award = new Award();
+        $award->fill($request->all());
+        $award->save();
+        $award->award_status = 'Awarded';
+        $award->date_released = now();
+        $award->save();
+
+        $requestedItem = SiteInventory::find($request->inventory_item_id);
+        $requestedItem->quantity -= $request->awarded_quantity;
+        $requestedItem->save();
+
+        return response()->json([
+            'Award' => $award,
+        ]);
+    }
+
+    public function awardPremiumItem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_id' => 'required',
+            'site_id' => 'required',
+            'awarded_quantity' => 'required',
+            'awardee_name' => 'required',
+            'awardee_hrid' => 'required',
+            'processed_by' => 'required',
+            'released_by' => 'required',
+            'remarks' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+        $award = new AwardPremium();
+        $award->fill($request->all());
+        $award->save();
+        $award->award_status = 'Awarded';
+        $award->date_released = now();
+        $award->save();
+
+        $requestedItem = Items::find($request->item_id);
+        $requestedItem->quantity -= $request->awarded_quantity;
+        $requestedItem->save();
+
+        return response()->json([
+            'Award' => $award,
+        ]);
+    }
+
     public function approvedItem(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
@@ -67,7 +133,7 @@ class InventoryController extends Controller
     public function receivedItem(Request $request, $id)
     {
         $inventory = Inventory::find($id);
-    
+
         $validator = Validator::make($request->all(), [
             'received_by' => 'required',
         ]);
@@ -76,9 +142,9 @@ class InventoryController extends Controller
         }
         $inventory->approved_status = 'Received';
         $inventory->save();
-    
+
         $totalCost = $inventory->item->cost * $inventory->quantity_approved;
-    
+
         $site_inventory = new SiteInventory();
         $site_inventory->item_name = $inventory->item->item_name;
         $site_inventory->quantity = $inventory->quantity_approved;
@@ -92,15 +158,12 @@ class InventoryController extends Controller
         $site_inventory->cost = $inventory->item->cost;
         $site_inventory->total_cost = $totalCost;
 
-    
         $site_inventory->save();
-    
+
         return response()->json([
             'Request' => $inventory,
         ]);
     }
-
-    
 
     public function deniedItem(Request $request, $id)
     {
@@ -138,8 +201,8 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->where('status', 'Pending')
-        ->get();
+            ->where('status', 'Pending')
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
@@ -156,11 +219,12 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->where('status', 'Approved')
-        ->get();
+            ->where('status', 'Approved')
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
+
     public function approvedReceived()
     {
         $inventory = Inventory::with([
@@ -173,12 +237,13 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->where('status', 'Approved')
-        ->where('approved_status', 'Received')
-        ->get();
+            ->where('status', 'Approved')
+            ->where('approved_status', 'Received')
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
+
     public function approvedPending()
     {
         $inventory = Inventory::with([
@@ -191,10 +256,9 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->where('status', 'Approved')
-->whereNull('approved_status')
-->get();
-
+            ->where('status', 'Approved')
+            ->whereNull('approved_status')
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
@@ -211,8 +275,8 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->where('status', 'Denied')
-        ->get();
+            ->where('status', 'Denied')
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
@@ -229,7 +293,7 @@ class InventoryController extends Controller
             'processedBy',
             'requestedBy',
         ])
-        ->get();
+            ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
