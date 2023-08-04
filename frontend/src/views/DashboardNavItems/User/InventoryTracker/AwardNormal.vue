@@ -4,7 +4,7 @@
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
           @click="showModal = true"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mr-2"
+          class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           Award Normal Item
         </button>
@@ -14,11 +14,11 @@
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
-        class="modal fixed inset-0 z-50 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
       >
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">
               Award Normal Item
@@ -70,8 +70,8 @@
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option disabled value="" selected>Please select one</option>
-                  <option v-for="items in items" :key="items" :value="items.id">
-                    {{ items.item_name }}
+                  <option v-for="site_items in site_items" :key="site_items" :value="site_items.id">
+                    {{ site_items.item_name }}
                   </option>
                 </select>
               </label>
@@ -99,10 +99,39 @@
             </div>
             <div class="col-span-1">
               <label class="block">
-                Quantity Request
+                Awardee Name
+                <input
+                  type="text"
+                  v-model="awardee_name"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Awardee HRID
+                <input
+                  type="text"
+                  v-model="awardee_hrid"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Awarded Quantity
                 <input
                   type="number"
-                  v-model="quantity_approved"
+                  v-model="awarded_quantity"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block"
+                >Remarks
+                <textarea
+                  v-model="remarks"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
@@ -110,7 +139,7 @@
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Submit
               </button>
@@ -190,10 +219,12 @@ export default {
       sites_selected: "",
       item_name: "",
       quantity: "",
+      items_selected: "",
+      remarks: "",
+      awardee_name: "",
+      awardee_hrid: "",
+      awarded_quantity: "",
       budget_code: "",
-      type: "Non-Food",
-      category: "Normal",
-      date_expiry: "",
       showModal: false,
       columns: [
         { data: "id", title: "ID" },
@@ -210,7 +241,7 @@ export default {
   computed: {},
   watch: {
     items_selected(newItemId) {
-      const selectedItem = this.items.find((item) => item.id === newItemId);
+      const selectedItem = this.site_items.find((site_items) => site_items.id === newItemId);
       if (selectedItem) {
         this.budget_code = selectedItem.budget_code;
         this.quantity = selectedItem.quantity;
@@ -224,8 +255,8 @@ export default {
   },
   methods: {
     onItemSelected() {
-      const selectedItem = this.items.find(
-        (item) => item.id === this.items_selected
+      const selectedItem = this.site_items.find(
+        (site_items) => site_items.id === this.items_selected
       );
 
       if (selectedItem) {
@@ -236,7 +267,7 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/siteinventory", {
+        const response = await axios.get("http://127.0.0.1:8000/api/siteinventory", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -255,7 +286,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -272,32 +303,36 @@ export default {
       }
     },
     AwardNormalItem() {
+      if (this.awarded_quantity > this.quantity) {
+        alert("Quantity Awarded cannot exceed Quantity Available.");
+        return;
+      }
       const formData = {
-        item_name: this.item_name,
-        quantity: this.quantity,
-        type: this.type,
-        category: this.category,
-        budget_code: this.budget_code,
-        date_expiry: this.date_expiry,
+        inventory_item_id: this.items_selected,
         site_id: this.sites_selected,
-        is_active: 1,
-        created_by: this.$store.state.user_id,
+        awarded_quantity: this.awarded_quantity,
+        awardee_name: this.awardee_name,
+        remarks: this.remarks,
+        awardee_hrid: this.awardee_hrid,
+        released_by: this.$store.state.user_id,
+        processed_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items", formData, {
+        .post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
         })
         .then((response) => {
           console.log(response.data);
-          this.item_name = "";
-          this.quantity = "";
+          this.items_selected = "";
+          this.awarded_quantity = "";
           this.sites_selected = "";
-          this.type = "";
-          this.category = "";
-          this.budget_code = "";
-          this.date_expiry = "";
+          this.awardee_name = "";
+          this.awardee_hrid = "";
+          this.remarks = "";
+          this.getItems();
+          this.showModal = false;
         })
         .catch((error) => {
           console.log(error.response.data);

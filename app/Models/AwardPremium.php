@@ -5,11 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Award extends Model
+class AwardPremium extends Model
 {
     use HasFactory;
-    protected $table = 'award';
-
+    protected $table = 'award_premium';
     protected $fillable = [
         'award_status',
         'remarks',
@@ -19,7 +18,7 @@ class Award extends Model
         'date_released',
         'file_name',
         'path',
-        'inventory_item_id',
+        'item_id',
         'processed_by',
         'released_by',
         'site_id',
