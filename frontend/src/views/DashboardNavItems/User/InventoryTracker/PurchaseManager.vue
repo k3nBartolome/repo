@@ -1,165 +1,31 @@
 <template>
-  <header class="w-full">
-    <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-          ADD Purchase Request
-        </button>
-      </h1>
-    </div>
-  </header>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <div class="modal fixed inset-0 z-50 flex items-center justify-center" v-if="showModal">
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
-          <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Add Supply</h2>
-          </header>
-          <button @click="showModal = false" class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
-          <form @submit.prevent="addItems" class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1">
-            <div class="col-span-1">
-              <label class="block">
-                Site
-                <select v-model="sites_selected" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" >
-                  <option disabled value="" selected>Please select one</option>
-                  <option v-for="site in sites" :key="site.id" :value="site.id">
-                    {{ site.name }}
-                  </option>
-                </select>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Item Name
-                <input type="text" v-model="item_name" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity
-                <input type="number" v-model="quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Budget Code
-                <input type="text" v-model="budget_code" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block mb-2"> <!-- Add the mb-2 class to create some space below the label -->
-                Category
-              </label>
-              <div class="flex items-center"> <!-- Wrap the radio buttons and labels inside a flex container -->
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Normal"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Normal Item</label>
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Premium"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Premium Item</label>
-                </div>
-              </div>
-            </div>
-            <div class="col-span-1">
-              <label class="block mb-2"> <!-- Add the mb-2 class to create some space below the label -->
-                Type
-              </label>
-              <div class="flex items-center"> <!-- Wrap the radio buttons and labels inside a flex container -->
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Non-Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Non-Food</label>
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer">Food</label>
-                </div>
-              </div>
-            </div>
-            <div class="col-span-1"  v-if="type === 'Food'">
-              <label class="block">
-                Expiration Date
-                <input type="date" v-model="date_expiry" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"  />
-              </label>
-            </div>
-            <div class="flex justify-end mt-4">
-              <button type="submit"  class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                Submit
-              </button>
-            </div>
-          </form>
-
-        </div>
+  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex -mb-px text-sm font-medium text-center">
+      <router-link to="/purchase_manager/pending">
+      <li class="mr-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Pending Request</button>
+      </li>
+    </router-link>
+    <router-link to="/purchase_manager/approved">
+      <li class="mr-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Approved Request</button>
+      </li>
+    </router-link>
+    <router-link to="/purchase_manager/denied">
+      <li role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Denied Request</button>
+      </li>
+    </router-link>
+    </ul>
+  </div>
+  <main class="flex flex-col h-screen">
+    <div class="flex flex-1 px-4 py-2 md:px-1 ">
+      <div class="w-full py-6 ">
+        <router-view />
       </div>
-
-        </div>
     </div>
-    <div class="py-2">
-        <div class="pl-8 pr-8">
-          <div class="scroll">
-            <div class="w-2/3 mx-auto datatable-container">
-              <DataTable
-                :data="items"
-                :columns="columns"
-                class="table divide-y divide-gray-200 table-auto table-striped"
-                :options="{
-                  responsive: false,
-                  autoWidth: false,
-                  pageLength: 10,
-                  lengthChange: true,
-                  ordering: true,
-                  scrollX: true,
-                  dom: 'frtip',
-                  language: {
-                    search: 'Search',
-                    zeroRecords: 'No data available',
-                    info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                    infoFiltered: '(Filtered from MAX records)',
-                    paginate: {
-                      first: 'First',
-                      previous: 'Prev',
-                      next: 'Next',
-                      last: 'Last',
-                    },
-                  },
-                }"
-              >
-                <thead class="truncate">
-                  <tr>
-                  </tr>
-                </thead>
-              </DataTable>
-            </div>
-          </div>
-        </div>
-      </div>
-    </template>
-
+  </main>
+</template>
     <script>
     import axios from "axios";
     import DataTable from "datatables.net-vue3";
@@ -330,9 +196,7 @@
       border-radius: 8px;
       max-width: 400px;
     }
-    /* Updated Radio Button Styles */
 input[type="radio"] {
-  /* Hide the default radio button */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -347,12 +211,10 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-  /* Add custom styling for the checked state */
-  border-color: #3b71ca; /* Blue color for checked state */
+  border-color: #3b71ca;
 }
 
 input[type="radio"]:checked::before {
-  /* Add the blue dot inside the checked radio button */
   content: "";
   position: absolute;
   top: 50%;
@@ -361,10 +223,8 @@ input[type="radio"]:checked::before {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #3b71ca; /* Blue color for the dot */
+  background-color: #3b71ca; /
 }
-
-/* Optional: Increase the size of the radio button and the blue dot */
 input[type="radio"] {
   width: 20px;
   height: 20px;

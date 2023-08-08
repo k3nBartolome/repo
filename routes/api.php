@@ -10,6 +10,7 @@ use App\Http\Controllers\DateRangeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
+use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
@@ -138,4 +139,9 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('inventory/allstatus', [InventoryController::class, 'allstatus']);
     Route::post('award', [InventoryController::class, 'awardNormalItem']);
     Route::post('award2', [InventoryController::class, 'awardPremiumItem']);
+    // Purchase Request
+    Route::post('purchase', [PurchaseRequestController::class, 'store']);
+    Route::get('purchase', [PurchaseRequestController::class, 'index']);
+    Route::get('purchase2', [PurchaseRequestController::class, 'index2']);
+    Route::get('purchase3', [PurchaseRequestController::class, 'index3']);
 });

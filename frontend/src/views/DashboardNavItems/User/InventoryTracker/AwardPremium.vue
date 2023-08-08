@@ -209,7 +209,6 @@ import "bootstrap/dist/css/bootstrap.css";
 DataTable.use(DataTableLib);
 //DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
-
 export default {
   components: { DataTable },
   data() {

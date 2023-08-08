@@ -317,6 +317,7 @@ export default {
         released_by: this.$store.state.user_id,
         processed_by: this.$store.state.user_id,
       };
+
       axios
         .post("http://10.109.2.112:8081/api/award", formData, {
           headers: {
