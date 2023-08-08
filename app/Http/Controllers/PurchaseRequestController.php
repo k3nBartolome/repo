@@ -64,6 +64,7 @@ class PurchaseRequestController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'denied_by' => 'required',
+            'denial_reason' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);

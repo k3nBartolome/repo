@@ -30,7 +30,7 @@
             </svg>
           </button>
           <form
-            @submit.prevent="deniedRequest(deniedRequestId)"
+            @submit.prevent="deniedPurchase(deniedPurchaseId)"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
             <div class="col-span-1">
@@ -124,15 +124,26 @@ export default {
       purchase: [],
       denial_reason: "",
       showModal: false,
-      deniedRequestId: null,
+      deniedPurchaseId: null,
       columns: [
         { data: "id", title: "ID" },
-            { data: "site.name", title: "Site" },
-            { data: "item_name", title: "Item" },
-            { data: "quantity", title: "Quantity" },
-            { data: "estimated_cost", title: "Estimated Cost Per Item" },
-            { data: "total_estimated_cost", title: "Total Estimated Cost" },
-            { data: "requested_by.name", title: "Requested By" },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedPurchase(${data})">Approve</button>
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>`;
+          },
+        },
+        { data: "site.name", title: "Site" },
+        { data: "item_name", title: "Item" },
+        { data: "quantity", title: "Quantity" },
+        { data: "estimated_cost", title: "Estimated Cost Per Item" },
+        { data: "total_estimated_cost", title: "Total Estimated Cost" },
+        { data: "requested_by.name", title: "Requested By" },
+        
       ],
     };
   },
@@ -144,10 +155,10 @@ export default {
   },
   methods: {
     openModalForDenial(id) {
-      this.deniedRequestId = id;
+      this.deniedPurchaseId = id;
       this.showModal = true;
     },
-    approvedRequest(id) {
+    approvedPurchase(id) {
       const form = {
         approved_by: this.$store.state.user_id,
       };
@@ -159,7 +170,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/purchase/approved/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/purchase/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -168,7 +179,7 @@ export default {
           console.log(error.response.data.data);
         });
     },
-    deniedRequest(id) {
+    deniedPurchase(id) {
       const form = {
         denied_by: this.$store.state.user_id,
         denial_reason: this.denial_reason,
@@ -181,7 +192,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/purchase/denied/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/purchase/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -194,7 +205,7 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
+        const response = await axios.get("http://127.0.0.1:8000/api/purchase", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -213,7 +224,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

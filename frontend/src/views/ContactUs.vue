@@ -1,4 +1,13 @@
 <script>
+export default {
+  methods: {
+     handleLinkClick() {
+      this.$nextTick(() => {
+        window.location.reload();
+      });
+    },
+  },
+};
 </script>
 <template>
     <div class="min-h-screen bg-orange-300">

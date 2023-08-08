@@ -160,15 +160,15 @@
       },
       mounted() {
         window.vm = this;
-        this.getSites();
         this.getPurchase();
+        this.getSites();
 
       },
       methods: {
         async getPurchase() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
+            const response = await axios.get("http://127.0.0.1:8000/api/purchase", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -187,7 +187,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -213,7 +213,7 @@
     requested_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/purchase", formData, {
+    .post("http://127.0.0.1:8000/api/purchase", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

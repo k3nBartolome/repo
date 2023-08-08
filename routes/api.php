@@ -144,4 +144,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('purchase', [PurchaseRequestController::class, 'index']);
     Route::get('purchase2', [PurchaseRequestController::class, 'index2']);
     Route::get('purchase3', [PurchaseRequestController::class, 'index3']);
+    Route::put('purchase/approved/{id}', [PurchaseRequestController::class, 'approvedPurchase']);
+    Route::put('purchase/denied/{id}', [PurchaseRequestController::class, 'deniedPurchase']);
 });

@@ -1,7 +1,11 @@
 <template>
   <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex -mb-px text-sm font-medium text-center">
-      <router-link to="/purchase_manager/pending">
+      <router-link to="/purchase_manager/request">
+        <li class="mr-2" role="presentation">
+          <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Add Request</button>
+        </li>
+      </router-link><router-link to="/purchase_manager/pending">
       <li class="mr-2" role="presentation">
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Pending Request</button>
       </li>
@@ -27,16 +31,13 @@
   </main>
 </template>
 <script>
-// computed: {
-//     isAdmin() {
-//       const userRole = this.$store.state.role;
-//       return userRole === "admin" || userRole === "user";
-//     },
-//     isUser() {
-//       const userRole = this.$store.state.role;
-//       return userRole === "user";
-//     },
-//   },
+export default {
+ mounted() {
+    this.$router.afterEach(() => {
+      window.location.reload();
+    });
+  },
+};
 </script>
 <style>
   main {
@@ -51,4 +52,3 @@
   }
 
 </style>
-    

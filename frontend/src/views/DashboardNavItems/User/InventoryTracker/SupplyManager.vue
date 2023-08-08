@@ -2,7 +2,7 @@
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button @click="showModal = true" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+        <button @click="showModal = true" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
           ADD Supply
         </button>
       </h1>
@@ -10,9 +10,9 @@
   </header>
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <div class="modal fixed inset-0 z-50 flex items-center justify-center" v-if="showModal">
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+      <div class="fixed inset-0 z-50 flex items-center justify-center modal" v-if="showModal">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Add Supply</h2>
           </header>
@@ -120,10 +120,10 @@
               </label>
             </div>
             <div class="flex justify-between mt-4">
-              <button @click="showModal = false" type="button" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+              <button @click="showModal = false" type="button" class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600">
                 Cancel
               </button>
-              <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+              <button type="submit" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
                 Submit
               </button>
             </div>
@@ -252,7 +252,7 @@
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://127.0.0.1:8000/api/items", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -271,7 +271,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -303,7 +303,7 @@
     created_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/items", formData, {
+    .post("http://127.0.0.1:8000/api/items", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

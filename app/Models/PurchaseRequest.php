@@ -20,6 +20,7 @@ class PurchaseRequest extends Model
         'requested_by',
         'approved_by',
         'denied_by',
+        'denial_reason',
         'site_id',
     ];
 

@@ -27,16 +27,13 @@
   </main>
 </template>
 <script>
-// computed: {
-//     isAdmin() {
-//       const userRole = this.$store.state.role;
-//       return userRole === "admin" || userRole === "user";
-//     },
-//     isUser() {
-//       const userRole = this.$store.state.role;
-//       return userRole === "user";
-//     },
-//   },
+export default {
+  mounted() {
+    this.$router.afterEach(() => {
+      window.location.reload();
+    });
+  },
+};
 </script>
 <style>
   main {

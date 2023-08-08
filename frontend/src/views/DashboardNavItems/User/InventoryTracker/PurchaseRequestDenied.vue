@@ -2,11 +2,11 @@
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
-        class="modal fixed inset-0 z-50 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
       >
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
           </header>
@@ -45,7 +45,7 @@
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Submit
               </button>
@@ -60,7 +60,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="inventory"
+            :data="purchase"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -121,111 +121,42 @@ export default {
   data() {
     return {
       sites: [],
-      inventory: [],
+      purchase: [],
       denial_reason: "",
       showModal: false,
       deniedRequestId: null,
       columns: [
         { data: "id", title: "ID" },
-        { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
-        { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approval Status" },
-        { data: "requested_by.name", title: "Requested By" },
-        { data: "denied_by.name", title: "Denied By" },
-        { data: "denial_reason", title: "Denial Reason" },
+            { data: "site.name", title: "Site" },
+            { data: "item_name", title: "Item" },
+            { data: "quantity", title: "Quantity" },
+            { data: "estimated_cost", title: "Estimated Cost Per Item" },
+            { data: "total_estimated_cost", title: "Total Estimated Cost" },
+            { data: "requested_by.name", title: "Requested By" },
+           // { data: "denied_by.name", title: "Denied By" },
       ],
     };
   },
   computed: {},
   mounted() {
     window.vm = this;
-    this.getSites();
-    this.getInventory();
+    this.getPurchase();
   },
   methods: {
-    openModalForDenial(id) {
-      this.deniedRequestId = id;
-      this.showModal = true;
-    },
-    approvedRequest(id) {
-      const form = {
-        approved_by: this.$store.state.user_id,
-      };
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-      };
-
-      axios
-        .put(`http://10.109.2.112:8081/api/inventory/approved/${id}`, form, config)
-        .then((response) => {
-          console.log(response.data.data);
-          this.getInventory();
-        })
-        .catch((error) => {
-          console.log(error.response.data.data);
-        });
-    },
-    deniedRequest(id) {
-      const form = {
-        denied_by: this.$store.state.user_id,
-        denial_reason: this.denial_reason,
-      };
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-      };
-
-      axios
-        .put(`http://10.109.2.112:8081/api/inventory/denied/${id}`, form, config)
-        .then((response) => {
-          console.log(response.data.data);
-          this.getInventory();
-          this.showModal = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data.data);
-        });
-    },
-    async getInventory() {
+    async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/inventory/denied", {
+        const response = await axios.get("http://127.0.0.1:8000/api/purchase3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.status === 200) {
-          this.inventory = response.data.inventory;
-          console.log(response.data.inventory);
+          this.purchase = response.data.purchase;
+          console.log(response.data.purchase);
         } else {
-          console.log("Error fetching inventory");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getSites() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.sites = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching sites");
+          console.log("Error fetching purchase");
         }
       } catch (error) {
         console.log(error);
@@ -253,67 +184,5 @@ export default {
 
 .table tbody td {
   padding: 8px;
-}
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-content {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
-}
-/* Updated Radio Button Styles */
-input[type="radio"] {
-  /* Hide the default radio button */
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  outline: none;
-  margin-right: 8px;
-  cursor: pointer;
-  position: relative;
-}
-
-input[type="radio"]:checked {
-  /* Add custom styling for the checked state */
-  border-color: #3b71ca; /* Blue color for checked state */
-}
-
-input[type="radio"]:checked::before {
-  /* Add the blue dot inside the checked radio button */
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background-color: #3b71ca; /* Blue color for the dot */
-}
-
-/* Optional: Increase the size of the radio button and the blue dot */
-input[type="radio"] {
-  width: 20px;
-  height: 20px;
-}
-
-input[type="radio"]:checked::before {
-  width: 10px;
-  height: 10px;
 }
 </style>

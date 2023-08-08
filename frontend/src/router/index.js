@@ -66,10 +66,10 @@ import purchaseManager from "@/views/DashboardNavItems/User/InventoryTracker/Pur
 import purchasePending from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestPending.vue";
 import purchaseApproved from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestApproved.vue";
 import purchaseDenied from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestDenied.vue";
+import purchaseRequest from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequest.vue";
 import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
 import awardNormal from "@/views/DashboardNavItems/User/InventoryTracker/AwardNormal.vue";
 import awardPremium from "@/views/DashboardNavItems/User/InventoryTracker/AwardPremium.vue";
-import requestManager from "@/views/DashboardNavItems/User/InventoryTracker/RequestManager.vue";
 import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerPending.vue";
 import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
 import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
@@ -298,10 +298,20 @@ const routes = [{
             component: dashboardManager,
           },
           {
-            path: "/request_manager",
-            name: "requestManager",
-            component: requestManager,
+            path: "/site_request_manager",
+            name: "siteRequestManager",
+            component: siteRequestManager,
             children: [{
+                path: "request",
+                name: "siteRequest",
+                component: siteRequest,
+              },
+              {
+                path: "received",
+                name: "siteRequestReceived",
+                component: siteRequestReceived,
+              },
+              {
                 path: "pending",
                 name: "requestManagerPending",
                 component: requestManagerPending,
@@ -319,22 +329,6 @@ const routes = [{
             ],
           },
           {
-            path: "/site_request_manager",
-            name: "siteRequestManager",
-            component: siteRequestManager,
-            children: [{
-                path: "request",
-                name: "siteRequest",
-                component: siteRequest,
-              },
-              {
-                path: "received",
-                name: "siteRequestReceived",
-                component: siteRequestReceived,
-              },
-            ],
-          },
-          {
             path: "/purchase_manager",
             name: "purchaseManager",
             component: purchaseManager,
@@ -342,6 +336,11 @@ const routes = [{
               path: "pending",
               name: "requestPending",
               component: purchasePending,
+            },
+            {
+              path: "request",
+              name: "purchaseRequest",
+              component: purchaseRequest,
             },
             {
               path: "approved",
