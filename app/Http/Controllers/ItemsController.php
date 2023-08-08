@@ -44,11 +44,6 @@ class ItemsController extends Controller
             ->where('quantity', '>', 0)
             ->get();
 
-        foreach ($items as $item) {
-            $requestedQuantity = Inventory::where('item_id', $item->id)->sum('quantity_approved');
-            $item->remaining_quantity = max(0, $item->quantity - $requestedQuantity);
-        }
-
         return response()->json(['items' => $items]);
     }
 
