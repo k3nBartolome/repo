@@ -4,6 +4,7 @@ use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Controllers\API\User\RoleController;
 use App\Http\Controllers\API\User\UserController;
+use App\Http\Controllers\AwardController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
@@ -126,6 +127,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('items', [ItemsController::class, 'index']);
     Route::get('items2', [ItemsController::class, 'index2']);
     Route::get('siteinventory', [ItemsController::class, 'index3']);
+    Route::get('items_selected/{siteId}', [ItemsController::class, 'index4']);
+    Route::get('items_selected2/{siteId}', [ItemsController::class, 'index5']);
     //Inventory
     Route::post('inventory', [InventoryController::class, 'requestItem']);
     Route::put('inventory/denied/{id}', [InventoryController::class, 'deniedItem']);
@@ -146,4 +149,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(functio
     Route::get('purchase3', [PurchaseRequestController::class, 'index3']);
     Route::put('purchase/approved/{id}', [PurchaseRequestController::class, 'approvedPurchase']);
     Route::put('purchase/denied/{id}', [PurchaseRequestController::class, 'deniedPurchase']);
+    // Awarded
+    Route::get('awarded/normal', [AwardController::class, 'awardedNormal']);
+    Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
 });

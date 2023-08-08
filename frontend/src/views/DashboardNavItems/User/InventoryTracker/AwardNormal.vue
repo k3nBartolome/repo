@@ -20,9 +20,7 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">
-              Award Normal Item
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-800">Award Normal Item</h2>
           </header>
           <button
             @click="showModal = false"
@@ -51,6 +49,7 @@
               <label class="block">
                 Site
                 <select
+                  @change="getItems"
                   v-model="sites_selected"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
@@ -70,7 +69,11 @@
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option disabled value="" selected>Please select one</option>
-                  <option v-for="site_items in site_items" :key="site_items" :value="site_items.id">
+                  <option
+                    v-for="site_items in site_items"
+                    :key="site_items"
+                    :value="site_items.id"
+                  >
                     {{ site_items.item_name }}
                   </option>
                 </select>
@@ -154,7 +157,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="site_items"
+            :data="award"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -215,6 +218,7 @@ export default {
   data() {
     return {
       sites: [],
+      award: [],
       site_items: [],
       sites_selected: "",
       item_name: "",
@@ -229,29 +233,42 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
-        { data: "item_name", title: "Item" },
-        { data: "quantity", title: "Quantity" },
-        { data: "budget_code", title: "Budget Code" },
-        { data: "type", title: "Type" },
-        { data: "category", title: "Category" },
-        { data: "date_expiry", title: "Expiration Date" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
+        { data: "site.name", title: "Site" },
       ],
     };
   },
   computed: {},
   watch: {
     items_selected(newItemId) {
-      const selectedItem = this.site_items.find((site_items) => site_items.id === newItemId);
+      const selectedItem = this.site_items.find(
+        (site_items) => site_items.id === newItemId
+      );
       if (selectedItem) {
         this.budget_code = selectedItem.budget_code;
         this.quantity = selectedItem.quantity;
       }
+    },
+    sites_selected: {
+      immediate: true,
+      handler() {
+        this.getItems();
+        this.budget_code = null;
+        this.quantity = null;
+        this.item_name = null;
+      },
     },
   },
   mounted() {
     window.vm = this;
     this.getSites();
     this.getItems();
+    this.getAward();
   },
   methods: {
     onItemSelected() {
@@ -265,28 +282,36 @@ export default {
       }
     },
     async getItems() {
+      if (!this.sites_selected) {
+        return;
+      }
+
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/siteinventory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/items_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
-          this.site_items = response.data.items;
+          this.site_items = response.data.items; // Update to site_items instead of items
           console.log(response.data.items);
         } else {
           console.log("Error fetching items");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
+
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -297,6 +322,25 @@ export default {
           console.log(response.data.data);
         } else {
           console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAward() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/normal", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.award = response.data.awarded;
+          console.log(response.data.awarded);
+        } else {
+          console.log("Error fetching awarded");
         }
       } catch (error) {
         console.log(error);
@@ -319,7 +363,7 @@ export default {
       };
 
       axios
-        .post("http://10.109.2.112:8081/api/award", formData, {
+        .post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

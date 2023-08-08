@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Inventory;
 use App\Models\Items;
 use App\Models\SiteInventory;
 use Illuminate\Http\Request;
@@ -25,6 +24,7 @@ class ItemsController extends Controller
 
         return response()->json(['items' => $items]);
     }
+
     public function index3()
     {
         $items = SiteInventory::with(['site'])
@@ -32,6 +32,30 @@ class ItemsController extends Controller
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
             ->get();
+
+        return response()->json(['items' => $items]);
+    }
+
+    public function index4($siteId)
+    {
+        $items = SiteInventory::with(['site'])
+        ->where('site_id', $siteId)
+        ->where('is_active', 1)
+        ->where('category', 'Normal')
+        ->where('quantity', '>', 0)
+        ->get();
+
+        return response()->json(['items' => $items]);
+    }
+
+    public function index5($siteId)
+    {
+        $items = Items::with(['site'])
+        ->where('site_id', $siteId)
+        ->where('is_active', 1)
+        ->where('category', 'Premium')
+        ->where('quantity', '>', 0)
+        ->get();
 
         return response()->json(['items' => $items]);
     }
