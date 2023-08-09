@@ -2,9 +2,9 @@
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button
+        <button v-if="isUser || isRemx || isSourcing"
           @click="showModal = true"
-          class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+          class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
           ADD Request
         </button>
@@ -14,11 +14,11 @@
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
-        class="modal fixed inset-0 z-50 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
       >
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Add Request</h2>
           </header>
@@ -108,7 +108,7 @@
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Submit
               </button>
@@ -204,7 +204,24 @@ export default {
       ],
     };
   },
-  computed: {},
+  computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
   watch: {
     items_selected(newItemId) {
       const selectedItem = this.items.find((item) => item.id === newItemId);

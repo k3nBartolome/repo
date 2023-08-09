@@ -24,27 +24,27 @@
         class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
       >
               <router-link to="/capfile"
-                ><li
+                ><li v-if="isUser"
                   class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
                 >
                   Capacity File 
                 </li></router-link
               >
         <router-link to="/staffing">
-          <li v-if="isAdmin"
+          <li v-if="isUser"
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >
             Staffing Tracker
           </li></router-link
         >
         <router-link to="/inventory/dashboard_manager">
-          <li v-if="isAdmin"
+          <li v-if="isUser || isRemx || isBudget || isSourcing"
             class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
           >
             Inventory Tracker
           </li></router-link
         >
-        <div class="py-4">
+        <div class="py-4" v-if="isUser">
           <div class="relative inline-block">
             <button
               @click="toggleDropdown3"
@@ -64,7 +64,7 @@
             </li></router-link
           >
               <router-link to="/capfile_report"
-                ><li
+                ><li 
                   class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
                 >
                   Capacity File
@@ -73,7 +73,7 @@
             </div>
           </div>
         </div>
-        <div class="py-4">
+        <div class="py-4" v-if="isUser">
           <div class="relative inline-block">
             <button
               @click="toggleDropdown"
@@ -153,13 +153,21 @@ export default {
     };
   },
   computed: {
-    isAdmin() {
-      const userRole = this.$store.state.role;
-      return userRole === "admin" || userRole === "user";
-    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
     },
   },
   methods: {

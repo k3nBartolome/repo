@@ -137,7 +137,24 @@ export default {
       ],
     };
   },
-  computed: {},
+   computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
   mounted() {
     window.vm = this;
     this.getSites();

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-1 px-2 border-b border-gray-200 dark:border-gray-700">
+  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex -mb-px text-sm font-medium text-center">
       <router-link to="/request_manager/pending">
       <li class="mr-2" role="presentation">
@@ -20,7 +20,7 @@
   </div>
   <main class="flex flex-col h-screen">
     <div class="flex flex-1 px-4 py-2 md:px-1 ">
-      <div class=" py-6 w-full">
+      <div class="w-full py-6 ">
         <router-view />
       </div>
     </div>
@@ -32,6 +32,24 @@ export default {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+  },
+  computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
   },
 };
 </script>

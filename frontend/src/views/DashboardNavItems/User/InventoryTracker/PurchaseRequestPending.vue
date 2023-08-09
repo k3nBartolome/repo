@@ -128,15 +128,27 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedPurchase(${data})">Approve</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>`;
-          },
-        },
+        data: "id",
+        title: "Actions",
+        orderable: false,
+        searchable: false,
+        render: function (data) {
+          const isUser = this.isUser;
+          const isRemx = this.isRemx;
+
+          return `
+            ${isUser || isRemx ? `
+              <button class="w-20 text-xs btn btn-primary" data-id="${data}" @click="approvedPurchase(${data})">Approve</button>
+              <button
+                class="w-20 text-xs btn btn-danger"
+                data-id="${data}"
+                ${!window.vm.showModal ? `@click="openModalForDenial(${data})"` : ''}
+              >
+                Deny
+              </button>` : ''}
+          `;
+        }.bind(this), // Bind the render function to the component's context
+      },
         { data: "site.name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
@@ -147,7 +159,24 @@ export default {
       ],
     };
   },
-  computed: {},
+   computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
   mounted() {
     window.vm = this;
     this.getSites();

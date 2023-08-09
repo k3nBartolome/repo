@@ -2,11 +2,11 @@
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
-        class="modal fixed inset-0 z-50 flex items-center justify-center"
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
       >
-        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
-        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
           </header>
@@ -45,7 +45,7 @@
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
               >
                 Submit
               </button>
@@ -133,10 +133,15 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>`;
-          },
-        },
+          const isUser = this.isUser;
+          const isRemx = this.isRemx;
+
+          return `
+            ${isUser || isRemx ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>` : ''}
+          `;
+        }.bind(this), // Bind the render function to the component's context
+      },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
@@ -146,7 +151,24 @@ export default {
       ],
     };
   },
-  computed: {},
+   computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
   mounted() {
     window.vm = this;
     this.getSites();

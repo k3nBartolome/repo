@@ -166,7 +166,24 @@ export default {
     this.getSites();
     window.vm = this;
   },
-  computed: {},
+   computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
   methods: {
     navigateToEdit(id) {
       this.$router.push(`/program_management/edit/${id}`);
@@ -184,7 +201,7 @@ export default {
       };
 
       axios
-        .put(`i/programs_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
         .then((response) => {
           // Handle the response
           console.log(response.data);
@@ -211,7 +228,7 @@ export default {
       };
 
       axios
-        .put(`i/programs_deactivate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_deactivate/${id}`, form, config)
         .then((response) => {
           // Handle the response
           console.log(response.data);
@@ -226,7 +243,7 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("i/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -245,7 +262,7 @@ export default {
 
     async getPrograms2() {
       try {
-        const response = await axios.get("i/programs2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs2", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -265,7 +282,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -291,7 +308,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("i/programs", formData, {
+        .post("http://127.0.0.1:8000/api/programs", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

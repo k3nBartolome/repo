@@ -2,20 +2,20 @@
   <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex -mb-px text-sm font-medium text-center">
       <router-link to="/purchase_manager/request">
-        <li class="mr-2" role="presentation">
+        <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
           <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Add Request</button>
         </li>
       </router-link><router-link to="/purchase_manager/pending">
-      <li class="mr-2" role="presentation">
+      <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Pending Request</button>
       </li>
     </router-link>
-    <router-link to="/purchase_manager/approved">
-      <li class="mr-2" role="presentation">
+    <router-link to="/purchase_manager/approved" >
+      <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Approved Request</button>
       </li>
     </router-link>
-    <router-link to="/purchase_manager/denied">
+    <router-link to="/purchase_manager/denied" v-if="isUser || isRemx || isBudget || isSourcing">
       <li role="presentation">
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Denied Request</button>
       </li>
@@ -36,6 +36,24 @@ export default {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+  },
+  computed: {
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
   },
 };
 </script>

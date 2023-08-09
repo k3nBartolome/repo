@@ -30,7 +30,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('logout', [AuthController::class, 'logout']);
 
-Route::middleware(['auth:sanctum', 'role_permission:admin,user'])->group(function () {
+Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,remx'])->group(function () {
     // User Routes
     Route::post('/create_user', [UserController::class, 'store']);
     Route::put('/update_user/{id}', [UserController::class, 'update']);

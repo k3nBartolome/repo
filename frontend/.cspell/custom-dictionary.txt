@@ -48,6 +48,8 @@ pushbackcapfilejamaica
 pushedback
 record
 registros
+remx
+Remx
 resgistros
 sched
 Sheryll

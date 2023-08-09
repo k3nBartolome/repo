@@ -80,11 +80,12 @@ export default {
     async login(e) {
       e.preventDefault();
       let user;
-      let role;
+      let role; // Ensure you're declaring the role variable here
       let token;
       let user_id;
       let permissions;
       let isLogin;
+
       await axios
         .post("http://127.0.0.1:8000/api/login", {
           email: this.email,
@@ -94,7 +95,7 @@ export default {
           isLogin = true;
           user = response.data.user;
           token = response.data.token;
-          role = response.data.role;
+          role = response.data.role; // Set the role value from the response
           user_id = response.data.user_id;
           permissions = response.data.permissions;
           console.log(response.data);
@@ -103,17 +104,27 @@ export default {
           console.log(error);
           isLogin = false;
         });
+
       if (isLogin) {
         this.setUser(user);
         this.setToken(token);
-        this.setRole(role);
+        this.setRole(role); // Set the user's role
         this.setUserId(user_id);
         this.setPermissions(permissions);
+
+        console.log("Logged in with role:", role);
+
         if (role === "admin") {
+          console.log("Redirecting to admin_dashboard");
           this.$router.push({ path: "/admin_dashboard" });
         } else if (role === "user") {
+          console.log("Redirecting to capfile");
           this.$router.push({ path: "/capfile" });
+        } else if (role === "remx" || role === "sourcing" || role === "budget") {
+          console.log("Redirecting to dashboard_manager");
+          this.$router.push({ path: "/inventory/dashboard_manager" });
         } else {
+          console.log("Redirecting to perx_manager");
           this.$router.push({ path: "/perx_manager" });
         }
       } else {
