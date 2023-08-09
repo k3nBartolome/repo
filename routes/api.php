@@ -125,6 +125,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     //Items
     Route::post('items', [ItemsController::class, 'store']);
     Route::get('items', [ItemsController::class, 'index']);
+    Route::get('itemsboth', [ItemsController::class, 'indexboth']);
     Route::get('items2', [ItemsController::class, 'index2']);
     Route::get('siteinventory', [ItemsController::class, 'index3']);
     Route::get('items_selected/{siteId}', [ItemsController::class, 'index4']);

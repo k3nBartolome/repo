@@ -267,7 +267,7 @@
         async getItems() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/items", {
+            const response = await axios.get("http://10.109.2.112:8081/api/itemsboth", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },

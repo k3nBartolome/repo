@@ -24,6 +24,15 @@ class ItemsController extends Controller
 
         return response()->json(['items' => $items]);
     }
+    public function indexboth()
+    {
+        $items = Items::with(['createdBy', 'site'])
+            ->where('is_active', 1)
+            ->where('quantity', '>', 0)
+            ->get();
+
+        return response()->json(['items' => $items]);
+    }
 
     public function index3()
     {
