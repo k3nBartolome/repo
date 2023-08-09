@@ -228,6 +228,13 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
+        { data: "items.item_name", title: "Item Name" },
+        { data: "awarded_quantity", title: "Awarded Quantity" },
+        { data: "awardee_hrid", title: "Awardee ID" },
+        { data: "awardee_name", title: "Awardee Name" },
+        { data: "released_by.name", title: "Released By" },
+        { data: "date_released", title: "Date Released" },
+        { data: "remarks", title: "Remarks" },
       ],
     };
   },
