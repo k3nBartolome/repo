@@ -8,7 +8,7 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Receive Request</h2>
           </header>
           <button
             @click="showModal = false"
@@ -30,16 +30,25 @@
             </svg>
           </button>
           <form
-            @submit.prevent="deniedRequest(deniedRequestId)"
+            @submit.prevent="receivedRequest(receivedId)"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
             <div class="col-span-1">
               <label class="block"
-                >Denial Reason
-                <textarea
-                  v-model="denial_reason"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
+                >Receive Request
+                  <select
+                    v-model="receive_status"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option value="complete">Complete</option>
+                    <option value="partial">Partial</option>
+                  </select>
+              </label>
+            </div>
+            <div class="col-span-1" v-if="receive_status === 'partial'">
+              <label class="block">
+                Quantity Received
+                <input type="text" v-model="qunatity_received" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -122,9 +131,10 @@ export default {
     return {
       sites: [],
       inventory: [],
-      denial_reason: "",
+      receive_status: "",
+      qunatity_received: "",
       showModal: false,
-      deniedRequestId: null,
+      siteRequestId: null,
       columns: [
         { data: "id", title: "ID" },
         {
@@ -138,7 +148,7 @@ export default {
           const isSourcing = this.isSourcing;
 
           return `
-            ${isUser || isRemx || isSourcing ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.receivedRequest(${data})">Received</button>` : ''}
+            ${isUser || isRemx || isSourcing ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForReceived(${data})">Received</button>` : ''}
           `;
         }.bind(this), // Bind the render function to the component's context
       },
@@ -175,8 +185,8 @@ export default {
     this.getInventory();
   },
   methods: {
-    openModalForDenial(id) {
-      this.deniedRequestId = id;
+    openModalForReceived(id) {
+      this.receivedId = id;
       this.showModal = true;
     },
     receivedRequest(id) {

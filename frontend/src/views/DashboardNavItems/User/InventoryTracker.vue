@@ -11,9 +11,9 @@
     <router-link to="/site_request_manager/request" v-if="isUser || isRemx || isBudget || isSourcing">
       <button class="bg-pink-300 tab">Site Request</button>
     </router-link>
-    <router-link to="/purchase_manager/pending" v-if="isUser || isRemx || isBudget || isSourcing">
+    <!-- <router-link to="/purchase_manager/pending" v-if="isUser || isRemx || isBudget || isSourcing">
       <button class="bg-blue-300 tab">Purchase Request</button>
-    </router-link>
+    </router-link> -->
     <router-link to="/award_manager/normal" v-if="isUser || isRemx || isBudget || isSourcing">
       <button class="bg-yellow-300 tab">Award Item</button>
     </router-link>

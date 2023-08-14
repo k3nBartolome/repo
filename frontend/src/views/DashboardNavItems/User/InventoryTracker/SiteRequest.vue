@@ -2,7 +2,8 @@
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button v-if="isUser || isRemx || isSourcing"
+        <button
+          v-if="isUser || isRemx || isSourcing"
           @click="showModal = true"
           class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
@@ -60,6 +61,40 @@
               </label>
             </div>
             <div class="col-span-1">
+              <label class="block mb-2"> Category </label>
+              <div class="flex items-center">
+                <div
+                  class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                >
+                  <input
+                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                    type="radio"
+                    v-model="category"
+                    value="Normal"
+                    checked
+                  />
+                  <label
+                    class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                    >Normal Item</label
+                  >
+                </div>
+                <div
+                  class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                >
+                <input
+                class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                type="radio"
+                v-model="category"
+                value="Premium"
+              />
+                  <label
+                    class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                    >Premium Item</label
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="col-span-1">
               <label class="block">
                 Item Name
                 <select
@@ -68,8 +103,12 @@
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option disabled value="" selected>Please select one</option>
-                  <option v-for="items in items" :key="items" :value="items.id">
-                    {{ items.item_name }}
+                  <option
+                    v-for="item in filteredItems"
+                    :key="item.id"
+                    :value="item.id"
+                  >
+                    {{ item.item_name }}
                   </option>
                 </select>
               </label>
@@ -188,6 +227,7 @@ export default {
       inventory: [],
       sites_selected: "",
       items_selected: "",
+      category: "Normal",
       item_name: "",
       quantity: "",
       quantity_approved: "",
@@ -200,7 +240,6 @@ export default {
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
-
       ],
     };
   },
@@ -221,8 +260,20 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
+    filteredItems() {
+      if (this.category === "Normal") {
+        return this.items.filter((item) => item.category === "Normal");
+      } else if (this.category === "Premium") {
+        return this.items.filter((item) => item.category === "Premium");
+      } else {
+        return this.items;
+      }
+    },
   },
   watch: {
+    category() {
+      this.getItems();
+    },
     items_selected(newItemId) {
       const selectedItem = this.items.find((item) => item.id === newItemId);
       if (selectedItem) {
@@ -239,7 +290,9 @@ export default {
   },
   methods: {
     onItemSelected() {
-      const selectedItem = this.items.find((item) => item.id === this.items_selected);
+      const selectedItem = this.items.find(
+        (item) => item.id === this.items_selected
+      );
 
       if (selectedItem) {
         this.budget_code = selectedItem.budget_code;
@@ -247,13 +300,20 @@ export default {
       }
     },
     async getItems() {
+      if (!this.category) {
+        return;
+      }
+
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/items", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/itemseparate?category=${this.category}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.items = response.data.items;
@@ -262,17 +322,21 @@ export default {
           console.log("Error fetching items");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
+
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventory",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;

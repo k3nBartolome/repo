@@ -33,6 +33,24 @@ class ItemsController extends Controller
 
         return response()->json(['items' => $items]);
     }
+    public function indexseparate(Request $request)
+    {
+        $category = $request->input('category');
+
+        $itemsQuery = Items::with(['createdBy', 'site'])
+            ->where('is_active', 1)
+            ->where('quantity', '>', 0);
+
+        if ($category === 'Premium') {
+            $itemsQuery->where('category', 'Premium');
+        } elseif ($category === 'Normal') {
+            $itemsQuery->where('category', 'Normal');
+        }
+
+        $items = $itemsQuery->get();
+
+        return response()->json(['items' => $items]);
+    }
 
     public function index3()
     {
@@ -48,11 +66,11 @@ class ItemsController extends Controller
     public function index4($siteId)
     {
         $items = SiteInventory::with(['site'])
-        ->where('site_id', $siteId)
-        ->where('is_active', 1)
-        ->where('category', 'Normal')
-        ->where('quantity', '>', 0)
-        ->get();
+            ->where('site_id', $siteId)
+            ->where('is_active', 1)
+            ->where('category', 'Normal')
+            ->where('quantity', '>', 0)
+            ->get();
 
         return response()->json(['items' => $items]);
     }
@@ -60,11 +78,11 @@ class ItemsController extends Controller
     public function index5($siteId)
     {
         $items = Items::with(['site'])
-        ->where('site_id', $siteId)
-        ->where('is_active', 1)
-        ->where('category', 'Premium')
-        ->where('quantity', '>', 0)
-        ->get();
+            ->where('site_id', $siteId)
+            ->where('is_active', 1)
+            ->where('category', 'Premium')
+            ->where('quantity', '>', 0)
+            ->get();
 
         return response()->json(['items' => $items]);
     }

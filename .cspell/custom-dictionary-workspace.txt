@@ -1,4 +1,5 @@
 # Custom Dictionary Words
+allstatus
 classesallgua
 classesallindia
 classesalljam
@@ -6,5 +7,11 @@ classesstaffing
 classestransaction
 countstatus
 daterange
+indexboth
+indexseparate
+itemsboth
+itemseparate
+remx
+siteinventory
 sumtotaltarget
 updateclassesstaffing
