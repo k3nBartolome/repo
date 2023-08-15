@@ -155,7 +155,7 @@ export default {
         { data: "estimated_cost", title: "Estimated Cost Per Item" },
         { data: "total_estimated_cost", title: "Total Estimated Cost" },
         { data: "requested_by.name", title: "Requested By" },
-        
+
       ],
     };
   },

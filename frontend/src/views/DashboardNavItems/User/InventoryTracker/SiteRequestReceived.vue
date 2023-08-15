@@ -37,7 +37,7 @@
               <label class="block"
                 >Receive Request
                   <select
-                    v-model="receive_status"
+                    v-model="received_status"
                     class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   >
                     <option value="complete">Complete</option>
@@ -45,10 +45,10 @@
                   </select>
               </label>
             </div>
-            <div class="col-span-1" v-if="receive_status === 'partial'">
+            <div class="col-span-1" v-if="received_status === 'partial'">
               <label class="block">
                 Quantity Received
-                <input type="text" v-model="qunatity_received" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
+                <input type="text" v-model="received_quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -131,8 +131,8 @@ export default {
     return {
       sites: [],
       inventory: [],
-      receive_status: "",
-      qunatity_received: "",
+      received_status: "",
+      received_quantity: "",
       showModal: false,
       siteRequestId: null,
       columns: [
@@ -192,6 +192,8 @@ export default {
     receivedRequest(id) {
       const form = {
         received_by: this.$store.state.user_id,
+        received_quantity: this.received_quantity,
+        received_status: this.received_status,
       };
 
       const config = {

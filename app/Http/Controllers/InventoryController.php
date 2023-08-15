@@ -135,19 +135,27 @@ class InventoryController extends Controller
         $inventory = Inventory::find($id);
 
         $validator = Validator::make($request->all(), [
-            'received_by' => 'required',
-        ]);
+        'received_by' => 'required',
+        'received_status' => 'required',
+        'received_quantity' => 'nullable',
+    ]);
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $inventory->approved_status = 'Received';
+        if ($request->input('received_status') === 'partial') {
+            $inventory->approved_status = null;
+        } elseif ($request->input('received_status') === 'complete') {
+            $inventory->approved_status = 'Received';
+        }
+        $inventory->fill($request->all());
         $inventory->save();
 
-        $totalCost = $inventory->item->cost * $inventory->quantity_approved;
+        $totalCost = $inventory->item->cost * $request->input('received_quantity');
 
         $site_inventory = new SiteInventory();
+        $site_inventory->item_less_id = $inventory->item->id;
         $site_inventory->item_name = $inventory->item->item_name;
-        $site_inventory->quantity = $inventory->quantity_approved;
+        $site_inventory->quantity = $request->input('received_quantity');
         $site_inventory->original_quantity = $inventory->quantity_approved;
         $site_inventory->budget_code = $inventory->item->budget_code;
         $site_inventory->type = $inventory->item->type;
@@ -161,8 +169,8 @@ class InventoryController extends Controller
         $site_inventory->save();
 
         return response()->json([
-            'Request' => $inventory,
-        ]);
+        'Request' => $inventory,
+    ]);
     }
 
     public function deniedItem(Request $request, $id)
