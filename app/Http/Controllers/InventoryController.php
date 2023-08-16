@@ -34,12 +34,15 @@ class InventoryController extends Controller
         $inventory->status = 'Pending';
         $inventory->transaction_type = 'Site Request';
         $inventory->save();
+        $inventory->original_request = $inventory->quantity_approved;
         $inventory->transaction_no = $inventory->id;
         $inventory->inventory_id = $inventory->id;
+        $inventory->date_requested = now();
         $inventory->save();
 
         $requestedItem = Items::find($request->item_id);
         $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->total_cost -= $request->quantity_approved * $requestedItem->cost;
         $requestedItem->save();
 
         return response()->json([
@@ -123,6 +126,7 @@ class InventoryController extends Controller
         $inventory = Inventory::find($id);
         $inventory->fill($request->all());
         $inventory->status = 'Approved';
+        $inventory->date_approved = now();
         $inventory->save();
 
         return response()->json([
@@ -139,37 +143,56 @@ class InventoryController extends Controller
             'received_status' => 'required',
             'received_quantity' => 'nullable',
         ]);
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
+
         if ($request->input('received_status') === 'partial') {
             $inventory->approved_status = null;
+            $inventory->received_quantity = $request->input('received_quantity');
         } elseif ($request->input('received_status') === 'complete') {
             $inventory->approved_status = 'Received';
+            $inventory->received_quantity = $inventory->quantity_approved;
         }
-        $receivedQuantity = $request->input('received_quantity');
-        $inventory->quantity_approved -= $receivedQuantity;
 
-        $inventory->fill($request->all());
+        $inventory->fill([
+            'received_by' => $request->input('received_by'),
+            'received_status' => $request->input('received_status'),
+        ]);
+        $inventory->date_received = now();
         $inventory->save();
 
-        $totalCost = $inventory->item->cost * $request->input('received_quantity');
+        $totalCost = $inventory->item->cost * $inventory->received_quantity;
 
-        $site_inventory = new SiteInventory();
-        $site_inventory->item_less_id = $inventory->item->id;
-        $site_inventory->item_name = $inventory->item->item_name;
-        $site_inventory->quantity = $request->input('received_quantity');
-        $site_inventory->original_quantity = $request->input('received_quantity');
-        $site_inventory->budget_code = $inventory->item->budget_code;
-        $site_inventory->type = $inventory->item->type;
-        $site_inventory->category = $inventory->item->category;
-        $site_inventory->date_expiry = $inventory->item->date_expiry;
-        $site_inventory->site_id = $inventory->site_id;
-        $site_inventory->is_active = $inventory->item->is_active;
-        $site_inventory->cost = $inventory->item->cost;
-        $site_inventory->total_cost = $totalCost;
+        $siteInventory = SiteInventory::where('item_name', $inventory->item->item_name)
+            ->where('budget_code', $inventory->item->budget_code)
+            ->first();
 
-        $site_inventory->save();
+        if ($siteInventory) {
+            $siteInventory->quantity += $inventory->received_quantity;
+            $siteInventory->original_quantity += $inventory->received_quantity;
+            $siteInventory->total_cost += $totalCost;
+            $siteInventory->save();
+        } else {
+            $siteInventory = new SiteInventory();
+            $siteInventory->item_less_id = $inventory->item->id;
+            $siteInventory->item_name = $inventory->item->item_name;
+            $siteInventory->quantity = $inventory->received_quantity;
+            $siteInventory->original_quantity = $inventory->received_quantity;
+            $siteInventory->budget_code = $inventory->item->budget_code;
+            $siteInventory->type = $inventory->item->type;
+            $siteInventory->category = $inventory->item->category;
+            $siteInventory->date_expiry = $inventory->item->date_expiry;
+            $siteInventory->site_id = $inventory->site_id;
+            $siteInventory->is_active = $inventory->item->is_active;
+            $siteInventory->cost = $inventory->item->cost;
+            $siteInventory->total_cost = $totalCost;
+
+            $siteInventory->save();
+        }
+        $inventory->quantity_approved -= $inventory->received_quantity;
+        $inventory->save();
 
         return response()->json([
             'Request' => $inventory,
@@ -189,6 +212,7 @@ class InventoryController extends Controller
         $inventory = Inventory::find($id);
         $inventory->fill($request->all());
         $inventory->status = 'Denied';
+        $inventory->date_denied = now();
         $inventory->save();
 
         $requestedItem = Items::find($inventory->item_id);

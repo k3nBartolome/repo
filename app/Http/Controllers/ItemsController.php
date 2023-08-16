@@ -24,6 +24,7 @@ class ItemsController extends Controller
 
         return response()->json(['items' => $items]);
     }
+
     public function indexboth()
     {
         $items = Items::with(['createdBy', 'site'])
@@ -33,6 +34,7 @@ class ItemsController extends Controller
 
         return response()->json(['items' => $items]);
     }
+
     public function indexseparate(Request $request)
     {
         $category = $request->input('category');
@@ -77,7 +79,7 @@ class ItemsController extends Controller
 
     public function index5($siteId)
     {
-        $items = Items::with(['site'])
+        $items = SiteInventory::with(['site'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Premium')
@@ -89,7 +91,7 @@ class ItemsController extends Controller
 
     public function index2()
     {
-        $items = Items::with(['createdBy', 'site'])
+        $items = SiteInventory::with(['site'])
             ->where('is_active', 1)
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)
