@@ -58,6 +58,9 @@
                     {{ site.name }}
                   </option>
                 </select>
+                <p v-if="errors.sites_selected" class="text-red-500 text-xs mt-1">
+                  {{ errors.sites_selected }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -111,6 +114,9 @@
                     {{ item.item_name }}
                   </option>
                 </select>
+                <p v-if="errors.items_selected" class="text-red-500 text-xs mt-1">
+                  {{ errors.items_selected }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -142,6 +148,9 @@
                   v-model="quantity_approved"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
+                <p v-if="errors.quantity_approved" class="text-red-500 text-xs mt-1">
+                  {{ errors.quantity_approved }}
+                </p>
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -232,6 +241,7 @@ export default {
       quantity: "",
       quantity_approved: "",
       budget_code: "",
+      errors: {},
       showModal: false,
       columns: [
         { data: "id", title: "ID" },
@@ -368,8 +378,19 @@ export default {
       }
     },
     addRequest() {
-      if (this.quantity_approved > this.quantity) {
-        alert("Quantity Requested cannot exceed Quantity Available.");
+      this.errors = {};
+      if (!this.sites_selected) {
+        this.errors.sites_selected = "Site is required.";
+      }
+      if (!this.items_selected) {
+        this.errors.items_selected = "Item Name is required.";
+      }
+      if (!this.quantity_approved) {
+      this.errors.quantity_approved = "Quantity Request is required.";
+    } else if (parseInt(this.quantity_approved) > parseInt(this.quantity)) {
+      this.errors.quantity_approved = "Quantity Request cannot exceed available quantity.";
+    }
+      if (Object.keys(this.errors).length > 0) {
         return;
       }
       const formData = {

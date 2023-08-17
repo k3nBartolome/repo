@@ -15,7 +15,7 @@ class AwardController extends Controller
      */
     public function awardedNormal()
     {
-        $awarded = Award::with(['site','items','processedBy', 'releasedBy'])
+        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
         ->where('award_status', 'Awarded')
             ->get();
 
@@ -24,7 +24,7 @@ class AwardController extends Controller
 
     public function awardedPremium()
     {
-        $awarded = AwardPremium::with(['site','items','processedBy', 'releasedBy'])
+        $awarded = AwardPremium::with(['site', 'items', 'processedBy', 'releasedBy'])
             ->where('award_status', 'Awarded')
             ->get();
 
