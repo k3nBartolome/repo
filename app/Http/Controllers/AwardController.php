@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Award;
-use App\Models\AwardPremium;
 use Illuminate\Http\Request;
 
 class AwardController extends Controller
@@ -17,15 +16,6 @@ class AwardController extends Controller
     {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
         ->where('award_status', 'Awarded')
-            ->get();
-
-        return response()->json(['awarded' => $awarded]);
-    }
-
-    public function awardedPremium()
-    {
-        $awarded = AwardPremium::with(['site', 'items', 'processedBy', 'releasedBy'])
-            ->where('award_status', 'Awarded')
             ->get();
 
         return response()->json(['awarded' => $awarded]);

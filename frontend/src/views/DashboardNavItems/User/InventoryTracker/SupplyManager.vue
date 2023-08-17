@@ -303,7 +303,11 @@ export default {
         { data: "type", title: "Type" },
         { data: "category", title: "Category" },
         { data: "date_expiry", title: "Expiration Date" },
-        { data: "date_added", title: "Added Date" },
+        {
+    data: "date_added",
+    title: "Added Date",
+    render: (data) => data ? data.slice(0, -3) : "",
+  },
         { data: "created_by.name", title: "Added By" },
       ],
     };
@@ -357,7 +361,7 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/itemsboth", {
+        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -376,7 +380,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -438,7 +442,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items", formData, {
+        .post("http://127.0.0.1:8000/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
