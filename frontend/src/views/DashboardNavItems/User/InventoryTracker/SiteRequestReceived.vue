@@ -36,21 +36,29 @@
             <div class="col-span-1">
               <label class="block"
                 >Receive Request
-                  <select
-                    v-model="received_status"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  >
-                    <option value="complete">Complete</option>
-                    <option value="partial">Partial</option>
-                  </select>
+                <select
+                  v-model="received_status"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option value="complete">Complete</option>
+                  <option value="partial">Partial</option>
+                </select>
               </label>
             </div>
             <div class="col-span-1" v-if="received_status === 'partial'">
               <label class="block">
                 Quantity Received
-                <input type="text" v-model="received_quantity" class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200" />
+                <input
+                  type="text"
+                  v-model="received_quantity"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+                <p v-if="errors.received_quantity" class="text-red-500 text-xs mt-1">
+                  {{ errors.received_quantity }}
+                </p>
               </label>
             </div>
+
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
@@ -134,6 +142,7 @@ export default {
       received_status: "",
       received_quantity: "",
       showModal: false,
+      errors: {},
       siteRequestId: null,
       columns: [
         { data: "id", title: "ID" },
@@ -143,26 +152,30 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-          const isUser = this.isUser;
-          const isRemx = this.isRemx;
-          const isSourcing = this.isSourcing;
+            const isUser = this.isUser;
+            const isRemx = this.isRemx;
+            const isSourcing = this.isSourcing;
 
-          return `
-            ${isUser || isRemx || isSourcing ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForReceived(${data})">Received</button>` : ''}
+            return `
+            ${
+              isUser || isRemx || isSourcing
+                ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForReceived(${data})">Received</button>`
+                : ""
+            }
           `;
-        }.bind(this), // Bind the render function to the component's context
-      },
+          }.bind(this),
+        },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
-        { data: "approved_by.name", title: "Approve By" },
+        { data: "approved_by.name", title: "Approved By" },
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -180,6 +193,17 @@ export default {
       return userRole === "sourcing";
     },
   },
+  watch: {
+    received_quantity(newValue) {
+      const quantityApproved = this.inventory.find(item => item.id === this.receivedId)?.quantity_approved.toString();
+
+      if (newValue === quantityApproved) {
+        this.received_status = 'complete';
+      } else if (this.received_status === 'complete') {
+        this.received_status = '';
+      }
+    },
+  },
   mounted() {
     window.vm = this;
     this.getInventory();
@@ -190,6 +214,21 @@ export default {
       this.showModal = true;
     },
     receivedRequest(id) {
+      this.errors = {};
+      if (this.received_status === "partial" && !this.received_quantity) {
+        this.errors.received_quantity = "Quantity Received is required.";
+      } else if (
+        this.received_status === "partial" &&
+        parseInt(this.received_quantity) >
+          parseInt(this.inventory.find((item) => item.id === id).quantity_approved)
+      ) {
+        this.errors.received_quantity =
+          "Quantity Received cannot exceed Quantity Requested.";
+      }
+
+      if (Object.keys(this.errors).length > 0) {
+        return;
+      }
       const form = {
         received_by: this.$store.state.user_id,
         received_quantity: this.received_quantity,
@@ -215,11 +254,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventory/approved/pending", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventory/approved/pending",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
@@ -254,5 +296,4 @@ export default {
 .table tbody td {
   padding: 8px;
 }
-
 </style>

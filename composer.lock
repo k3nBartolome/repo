@@ -2623,7 +2623,7 @@
                     "homepage": "https://github.com/kylekatarnls"
                 }
             ],
-            "description": "An API extension for DateTime that supports 281 different languages.",
+            "description": "An API extension for datetime that supports 281 different languages.",
             "homepage": "https://carbon.nesbot.com",
             "keywords": [
                 "date",

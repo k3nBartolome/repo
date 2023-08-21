@@ -7,6 +7,7 @@ use App\Models\AwardPremium;
 use App\Models\Inventory;
 use App\Models\Items;
 use App\Models\SiteInventory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -37,7 +38,7 @@ class InventoryController extends Controller
         $inventory->original_request = $inventory->quantity_approved;
         $inventory->transaction_no = $inventory->id;
         $inventory->inventory_id = $inventory->id;
-        $inventory->date_requested = now();
+        $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
         $requestedItem = Items::find($request->item_id);
@@ -70,7 +71,7 @@ class InventoryController extends Controller
         $award->fill($request->all());
         $award->save();
         $award->award_status = 'Awarded';
-        $award->date_released = now();
+        $award->date_released = Carbon::now()->format('Y-m-d H:i');
         $award->save();
 
         $requestedItem = SiteInventory::find($request->inventory_item_id);
@@ -102,7 +103,7 @@ class InventoryController extends Controller
         $award->fill($request->all());
         $award->save();
         $award->award_status = 'Awarded';
-        $award->date_released = now();
+        $award->date_released = Carbon::now()->format('Y-m-d H:i');
         $award->save();
 
         $requestedItem = Items::find($request->item_id);
@@ -126,7 +127,7 @@ class InventoryController extends Controller
         $inventory = Inventory::find($id);
         $inventory->fill($request->all());
         $inventory->status = 'Approved';
-        $inventory->date_approved = now();
+        $inventory->date_approved = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
         return response()->json([
@@ -160,7 +161,7 @@ class InventoryController extends Controller
             'received_by' => $request->input('received_by'),
             'received_status' => $request->input('received_status'),
         ]);
-        $inventory->date_received = now();
+        $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
         $totalCost = $inventory->item->cost * $inventory->received_quantity;
@@ -212,7 +213,7 @@ class InventoryController extends Controller
         $inventory = Inventory::find($id);
         $inventory->fill($request->all());
         $inventory->status = 'Denied';
-        $inventory->date_denied = now();
+        $inventory->date_denied = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
         $requestedItem = Items::find($inventory->item_id);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Items;
 use App\Models\SiteInventory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -137,6 +138,7 @@ class ItemsController extends Controller
 
         $items = new Items();
         $items->fill($request->all());
+        $items->date_added = Carbon::now()->format('Y-m-d H:i');
         $items->save();
         $items->item_less_id = $items->id;
         $items->save();
