@@ -1,27 +1,49 @@
 <template>
   <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
-    <ul class="flex -mb-px text-sm font-medium text-center">
-    <router-link to="/dashboard_manager/request">
-      <li class="mr-2" role="presentation">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Requests</button>
-      </li>
-    </router-link>
-    <router-link to="/dashboard_manager/supply">
-      <li role="presentation">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Available Supply</button>
-      </li>
-    </router-link>
-    <router-link to="/dashboard_manager/site_supply">
-      <li role="presentation">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Available Site Supply</button>
-      </li>
-    </router-link>
-    <router-link to="/dashboard_manager/awarded">
-      <li role="presentation">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Awarded Items</button>
-      </li>
-    </router-link>
-    </ul>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3 col-sm-6">
+          <router-link to="/dashboard_manager/request" class="link-button">
+            <button
+              class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/request') }"
+            >
+              Requests
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <router-link to="/dashboard_manager/supply" class="link-button">
+            <button
+              class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/supply') }"
+            >
+              Available Supply
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <router-link to="/dashboard_manager/site_supply" class="link-button">
+            <button
+              class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/site_supply') }"
+            >
+              Available Site Supply
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <router-link to="/dashboard_manager/awarded" class="link-button">
+            <button
+              class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/awarded') }"
+            >
+              Awarded Items
+            </button>
+          </router-link>
+        </div>
+      </div>
+    </div>
   </div>
   <main class="flex flex-col h-screen">
     <div class="flex flex-1 px-4 py-2 md:px-1 ">
@@ -56,18 +78,61 @@ export default {
       return userRole === "sourcing";
     },
   },
+  methods: {
+    isActiveTab(route) {
+      return this.$route.path === route;
+    },
+  },
 };
 </script>
 <style>
-  main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
-  .selected-tab {
-    border-color: #6366f1;
-    color: #6366f1;
-    font-weight: bold;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.selected-tab {
+  border-color: #6366f1;
+  color: #6366f1;
+  font-weight: bold;
+}
+.tab-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+  text-align: center;
+  color: black;
+  text-decoration: none !important;
+}
 
+.tab-button:hover {
+  color: #6366f1;
+}
+
+@media (min-width: 576px) {
+  .tab-button {
+    padding: 1rem 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .tab-button {
+    padding: 1rem 0.5rem;
+  }
+}
+.link-button {
+  text-decoration: none;
+}
 </style>

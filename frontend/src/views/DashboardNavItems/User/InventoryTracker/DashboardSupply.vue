@@ -1,167 +1,81 @@
 <template>
-    <header class="w-full">
-        <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-          <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-            Report Dashboard
-          </h1>
+  <div class="py-1">
+    <div class="pl-2 pr-2">
+      <div class="row mb-4">
+        <div class="col-md-3 col-sm-6">
+          <div class="card card-small">
+            <div class="card-body">
+              <h6 class="card-title">Total Awards</h6>
+              <p class="card-text"></p>
+            </div>
+          </div>
         </div>
-    </header>
-      <div class="flex flex-col h-screen p-8">
-        <div class="flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-          <div class="bg-white p-4 rounded shadow-md">
-            <div class="scroll">
-              <div class="w-2/3 mx-auto datatable-container">
-                <h2>Awarded Items</h2>
-                <DataTable
-                  :data="award"
-                  :columns="columns"
-                  class="table divide-y divide-gray-200 table-auto table-striped"
-                  :options="{
-                    responsive: false,
-                    autoWidth: false,
-                    pageLength: 10,
-                    lengthChange: true,
-                    ordering: true,
-                    scrollX: true,
-                    dom: 'frtip',
-                    language: {
-                      search: 'Search',
-                      zeroRecords: 'No data available',
-                      info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                      infoFiltered: '(Filtered from MAX records)',
-                      paginate: {
-                        first: 'First',
-                        previous: 'Prev',
-                        next: 'Next',
-                        last: 'Last',
-                      },
-                    },
-                  }"
-                >
-                  <thead class="truncate">
-                    <tr></tr>
-                  </thead>
-                </DataTable>
-              </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card card-small">
+            <div class="card-body">
+              <h6 class="card-title">Total Awards</h6>
+              <p class="card-text"></p>
             </div>
           </div>
-          <div class="bg-white p-4 rounded shadow-md">
-            <div class="scroll">
-              <div class="w-2/3 mx-auto datatable-container">
-                <h2>Supply Inventory</h2>
-                <DataTable
-                  :data="items"
-                  :columns="columns2"
-                  class="table divide-y divide-gray-200 table-auto table-striped"
-                  :options="{
-                    responsive: false,
-                    autoWidth: false,
-                    pageLength: 10,
-                    lengthChange: true,
-                    ordering: true,
-                    scrollX: true,
-                    dom: 'frtip',
-                    language: {
-                      search: 'Search',
-                      zeroRecords: 'No data available',
-                      info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                      infoFiltered: '(Filtered from MAX records)',
-                      paginate: {
-                        first: 'First',
-                        previous: 'Prev',
-                        next: 'Next',
-                        last: 'Last',
-                      },
-                    },
-                  }"
-                >
-                  <thead class="truncate">
-                    <tr></tr>
-                  </thead>
-                </DataTable>
-              </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card card-small">
+            <div class="card-body">
+              <h6 class="card-title">Total Awards</h6>
+              <p class="card-text"></p>
             </div>
           </div>
-          <div class="bg-white p-4 rounded shadow-md">
-            <div class="scroll">
-              <div class="w-2/3 mx-auto datatable-container">
-                <h2>Site Inventory</h2>
-                <DataTable
-                  :data="items2"
-                  :columns="columns3"
-                  class="table divide-y divide-gray-200 table-auto table-striped"
-                  :options="{
-                    responsive: false,
-                    autoWidth: false,
-                    pageLength: 10,
-                    lengthChange: true,
-                    ordering: true,
-                    scrollX: true,
-                    dom: 'frtip',
-                    language: {
-                      search: 'Search',
-                      zeroRecords: 'No data available',
-                      info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                      infoFiltered: '(Filtered from MAX records)',
-                      paginate: {
-                        first: 'First',
-                        previous: 'Prev',
-                        next: 'Next',
-                        last: 'Last',
-                      },
-                    },
-                  }"
-                >
-                  <thead class="truncate">
-                    <tr></tr>
-                  </thead>
-                </DataTable>
-              </div>
-            </div>
-          </div>
-          <div class="bg-white p-4 rounded shadow-md">
-            <div class="scroll">
-              <div class="w-2/3 mx-auto datatable-container">
-                <h2>Requests</h2>
-                <DataTable
-                  :data="inventory"
-                  :columns="columns4"
-                  class="table divide-y divide-gray-200 table-auto table-striped"
-                  :options="{
-                    responsive: false,
-                    autoWidth: false,
-                    pageLength: 10,
-                    lengthChange: true,
-                    ordering: true,
-                    scrollX: true,
-                    dom: 'frtip',
-                    language: {
-                      search: 'Search',
-                      zeroRecords: 'No data available',
-                      info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                      infoFiltered: '(Filtered from MAX records)',
-                      paginate: {
-                        first: 'First',
-                        previous: 'Prev',
-                        next: 'Next',
-                        last: 'Last',
-                      },
-                    },
-                  }"
-                >
-                  <thead class="truncate">
-                    <tr></tr>
-                  </thead>
-                </DataTable>
-              </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+          <div class="card card-small">
+            <div class="card-body">
+              <h6 class="card-title">Total Awards</h6>
+              <p class="card-text"></p>
             </div>
           </div>
         </div>
       </div>
-    </template>
-    
-    
-    <script>
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <h2>Supply Inventory</h2>
+          <DataTable
+            :data="items"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'fBrtlip',
+              buttons: ['excel', 'csv'],
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
+              },
+            }"
+          >
+            <thead class="truncate">
+              <tr></tr>
+            </thead>
+          </DataTable>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -194,19 +108,6 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
-        { data: "items.item_name", title: "Item Name" },
-        { data: "awarded_quantity", title: "Awarded Quantity" },
-        { data: "awardee_hrid", title: "Awardee ID" },
-        { data: "awardee_name", title: "Awardee Name" },
-        { data: "released_by.name", title: "Released By" },
-        { data: "date_released", title: "Date Released",
-    render: (data) => data ? data.slice(0, -3) : "", },
-        { data: "remarks", title: "Remarks" },
-        
-      ],
-      columns2: [
-        { data: "id", title: "ID" },
-        { data: "site.name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "cost", title: "Price" },
@@ -216,47 +117,16 @@ export default {
         { data: "category", title: "Category" },
         { data: "date_expiry", title: "Expiration Date" },
         {
-    data: "date_added",
-    title: "Added Date",
-    render: (data) => data ? data.slice(0, -3) : "",
-  },
-  
+          data: "date_added",
+          title: "Added Date",
+          render: (data) => (data ? data.slice(0, -3) : ""),
+        },
+
         { data: "created_by.name", title: "Added By" },
-      ],
-      columns3: [
-        { data: "id", title: "ID" },
-        { data: "site.name", title: "Site" },
-        { data: "item_name", title: "Item" },
-        { data: "quantity", title: "Quantity" },
-        { data: "cost", title: "Price" },
-        { data: "total_cost", title: "Total Price" },
-        { data: "budget_code", title: "Budget Code" },
-        { data: "type", title: "Type" },
-        { data: "category", title: "Category" },
-        { data: "date_expiry", title: "Expiration Date" },
-        {
-    data: "date_added",
-    title: "Added Date",
-    render: (data) => data ? data.slice(0, -3) : "",
-  },
-  
-        
-      ],
-      columns4: [
-        { data: "id", title: "ID" },
-        { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
-        { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approval Status" },
-        { data: "requested_by.name", title: "Requested By" },
-        //{ data: "approved_by.name", title: "Approved By" },
-       // { data: "denied_by.name", title: "Denied By" },
-        { data: "denial_reason", title: "Denial Reason" },
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -274,17 +144,11 @@ export default {
       return userRole === "sourcing";
     },
   },
-  watch: {
-    
-    
-  },
+  watch: {},
   mounted() {
     window.vm = this;
     this.getSites();
-     this.getItems();
-    this.getItems2();
-     this.getAward();
-     this.getInventory();
+    this.getItems();
   },
   methods: {
     async getSites() {
@@ -301,44 +165,6 @@ export default {
           console.log(response.data.data);
         } else {
           console.log("Error fetching sites");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getInventory() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.inventory = response.data.inventory;
-          console.log(response.data.inventory);
-        } else {
-          console.log("Error fetching inventory");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAward() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/awarded/both", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.award = response.data.awarded;
-          console.log(response.data.awarded);
-        } else {
-          console.log("Error fetching awarded");
         }
       } catch (error) {
         console.log(error);
@@ -363,25 +189,27 @@ export default {
         console.log(error);
       }
     },
-    async getItems2() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth2", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.items2 = response.data.items;
-          console.log(response.data.items);
-        } else {
-          console.log("Error fetching items");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
   },
 };
 </script>
+<style>
+.table-responsive {
+  overflow: auto;
+}
+
+.datatable-container {
+  width: 100%;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
+}
+</style>

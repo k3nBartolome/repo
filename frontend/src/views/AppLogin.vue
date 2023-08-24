@@ -122,7 +122,7 @@ export default {
           this.$router.push({ path: "/capfile" });
         } else if (role === "remx" || role === "sourcing" || role === "budget") {
           console.log("Redirecting to dashboard_manager");
-          this.$router.push({ path: "/inventory/dashboard_manager" });
+          this.$router.push({ path: "/dashboard_manager/request" });
         } else {
           console.log("Redirecting to perx_manager");
           this.$router.push({ path: "/perx_manager" });
