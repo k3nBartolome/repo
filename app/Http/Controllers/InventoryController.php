@@ -9,6 +9,7 @@ use App\Models\Items;
 use App\Models\SiteInventory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class InventoryController extends Controller
@@ -62,25 +63,39 @@ class InventoryController extends Controller
             'processed_by' => 'required',
             'released_by' => 'required',
             'remarks' => 'required',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-        $award = new Award();
-        $award->fill($request->all());
-        $award->save();
-        $award->award_status = 'Awarded';
-        $award->date_released = Carbon::now()->format('Y-m-d H:i');
-        $award->save();
 
-        $requestedItem = SiteInventory::find($request->inventory_item_id);
-        $requestedItem->quantity -= $request->awarded_quantity;
-        $requestedItem->save();
+        try {
+            DB::beginTransaction();
 
-        return response()->json([
-            'Award' => $award,
-        ]);
+            $imagePath = $request->file('file_name')->store('storage', 'public');
+
+            $award = new Award();
+            $award->fill($request->all());
+            $award->path = $imagePath;
+            $award->award_status = 'Awarded';
+            $award->date_released = Carbon::now()->format('Y-m-d H:i');
+            $award->save();
+
+            $requestedItem = SiteInventory::find($request->inventory_item_id);
+            $requestedItem->quantity -= $request->awarded_quantity;
+            $requestedItem->save();
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Item awarded successfully.',
+                'Award' => $award,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollback();
+            return response()->json(['error' => 'An error occurred while awarding the item.'], 500);
+        }
     }
 
     public function awardPremiumItem(Request $request)
@@ -106,7 +121,7 @@ class InventoryController extends Controller
         $award->date_released = Carbon::now()->format('Y-m-d H:i');
         $award->save();
 
-        $requestedItem = Items::find($request->item_id);
+        $requestedItem = SiteInventory::find($request->item_id);
         $requestedItem->quantity -= $request->awarded_quantity;
         $requestedItem->save();
 
@@ -238,6 +253,22 @@ class InventoryController extends Controller
             'requestedBy',
         ])
             ->where('status', 'Pending')
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+    public function indexAll()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+        ])
             ->get();
 
         return response()->json(['inventory' => $inventory]);

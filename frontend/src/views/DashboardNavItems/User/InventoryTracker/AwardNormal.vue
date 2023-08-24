@@ -2,7 +2,8 @@
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button v-if="isUser || isRemx || isSourcing"
+        <button
+          v-if="isUser || isRemx || isSourcing"
           @click="showModal = true"
           class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
@@ -20,7 +21,9 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Award Normal Item</h2>
+            <h2 class="text-lg font-semibold text-gray-800">
+              Award Normal Item
+            </h2>
           </header>
           <button
             @click="showModal = false"
@@ -58,6 +61,12 @@
                     {{ site.name }}
                   </option>
                 </select>
+                <p
+                  v-if="errors.sites_selected"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  {{ errors.sites_selected }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -77,6 +86,12 @@
                     {{ site_items.item_name }}
                   </option>
                 </select>
+                <p
+                  v-if="errors.items_selected"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  {{ errors.items_selected }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -108,6 +123,9 @@
                   v-model="awardee_name"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
+                <p v-if="errors.awardee_name" class="text-red-500 text-xs mt-1">
+                  {{ errors.awardee_name }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -118,6 +136,9 @@
                   v-model="awardee_hrid"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
+                <p v-if="errors.awardee_hrid" class="text-red-500 text-xs mt-1">
+                  {{ errors.awardee_hrid }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -128,6 +149,12 @@
                   v-model="awarded_quantity"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
+                <p
+                  v-if="errors.awarded_quantity"
+                  class="text-red-500 text-xs mt-1"
+                >
+                  {{ errors.awarded_quantity }}
+                </p>
               </label>
             </div>
             <div class="col-span-1">
@@ -137,6 +164,15 @@
                   v-model="remarks"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
+                <p v-if="errors.remarks" class="text-red-500 text-xs mt-1">
+                  {{ errors.remarks }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                <input type="file" @change="handleFileChange" />
+                <img :src="previewImage" v-if="previewImage" alt="Preview" />
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -217,12 +253,15 @@ export default {
   components: { DataTable },
   data() {
     return {
+      selectedFile: null,
+      previewImage: null,
       sites: [],
       award: [],
       site_items: [],
       sites_selected: "",
       item_name: "",
       quantity: "",
+      errors: {},
       items_selected: "",
       remarks: "",
       awardee_name: "",
@@ -240,11 +279,23 @@ export default {
         { data: "released_by.name", title: "Released By" },
         { data: "date_released", title: "Date Released" },
         { data: "remarks", title: "Remarks" },
-        
+        {
+          data: "image_path",
+          title: "Image",
+          render: (data, type, ) => {
+            if (type === "display" && data) {
+              return `<img src="${data}" alt="Image" width="100" height="200" loading="lazy"/>`;
+            }
+            return "";
+          },
+        },
       ],
     };
   },
-   computed: {
+  computed: {
+    imageSource() {
+      return this.capturedImage ? this.capturedImage : this.selectedImage;
+    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -289,6 +340,10 @@ export default {
     this.getAward();
   },
   methods: {
+    handleFileChange(event) {
+      this.selectedFile = event.target.files[0];
+      this.previewImage = URL.createObjectURL(this.selectedFile);
+    },
     onItemSelected() {
       const selectedItem = this.site_items.find(
         (site_items) => site_items.id === this.items_selected
@@ -348,11 +403,14 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/awarded/normal", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/awarded/normal",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.award = response.data.awarded;
@@ -364,42 +422,78 @@ export default {
         console.log(error);
       }
     },
-    AwardNormalItem() {
-      if (this.awarded_quantity > this.quantity) {
-        alert("Quantity Awarded cannot exceed Quantity Available.");
+
+    async AwardNormalItem() {
+      this.errors = {};
+
+      if (!this.sites_selected) {
+        this.errors.sites_selected = "Site is required.";
+      }
+      if (!this.items_selected) {
+        this.errors.items_selected = "Item Name is required.";
+      }
+      if (!this.awardee_name) {
+        this.errors.awardee_name = "Awardee Name is required.";
+      }
+      if (!this.awardee_hrid) {
+        this.errors.awardee_hrid = "Awardee ID is required.";
+      }
+      if (!this.remarks) {
+        this.errors.remarks = "Remarks is required.";
+      }
+      if (!this.awarded_quantity) {
+        this.errors.awarded_quantity = "Quantity Awarded is required.";
+      } else if (parseInt(this.awarded_quantity) > parseInt(this.quantity)) {
+        this.errors.awarded_quantity =
+          "Quantity Awarded cannot exceed available quantity.";
+      }
+      if (!this.selectedFile) {
+        this.errors.file_name = "Image is required.";
+      }
+
+      if (Object.keys(this.errors).length > 0) {
         return;
       }
-      const formData = {
-        inventory_item_id: this.items_selected,
-        site_id: this.sites_selected,
-        awarded_quantity: this.awarded_quantity,
-        awardee_name: this.awardee_name,
-        remarks: this.remarks,
-        awardee_hrid: this.awardee_hrid,
-        released_by: this.$store.state.user_id,
-        processed_by: this.$store.state.user_id,
-      };
+      const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
+      formData.append("inventory_item_id", this.items_selected);
+      formData.append("site_id", this.sites_selected);
+      formData.append("awarded_quantity", this.awarded_quantity);
+      formData.append("awardee_name", this.awardee_name);
+      formData.append("remarks", this.remarks);
+      formData.append("awardee_hrid", this.awardee_hrid);
+      formData.append("released_by", this.$store.state.user_id);
+      formData.append("processed_by", this.$store.state.user_id);
 
-      axios
-        .post("http://127.0.0.1:8000/api/award", formData, {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.items_selected = "";
-          this.awarded_quantity = "";
-          this.sites_selected = "";
-          this.awardee_name = "";
-          this.awardee_hrid = "";
-          this.remarks = "";
-          this.getItems();
-          this.showModal = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/award",
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Awarded:", response.data.Award);
+        this.showModal = false;
+        this.clearForm();
+        this.getItems();
+        this.getAward();
+      } catch (error) {
+        console.error("Error awarding:", error.response.data);
+      }
+    },
+    clearForm() {
+      this.items_selected = "";
+      this.awarded_quantity = "";
+      this.sites_selected = "";
+      this.awardee_name = "";
+      this.awardee_hrid = "";
+      this.remarks = "";
+      this.selectedFile = null;
     },
   },
 };

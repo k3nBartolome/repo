@@ -2,7 +2,7 @@
 <template>
 
   <div class="flex flex-wrap px-12 py-1 md:py-6 md:px-12">
-    <router-link to="/inventory/dashboard_manager" >
+    <router-link to="/dashboard_manager/request" >
       <button class="bg-orange-300 tab" v-if="isUser || isRemx || isBudget || isSourcing">Dashboard</button>
     </router-link>
     <router-link to="/inventory/supply_manager" v-if="isUser || isRemx || isBudget">

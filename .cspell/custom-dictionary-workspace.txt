@@ -9,6 +9,7 @@ countstatus
 daterange
 indexboth
 indexseparate
+inventoryall
 itemsboth
 itemseparate
 remx

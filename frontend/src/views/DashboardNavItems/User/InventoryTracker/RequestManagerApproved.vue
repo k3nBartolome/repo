@@ -133,7 +133,7 @@ export default {
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
-        { data: "approved_by.name", title: "Approve By" },
+        { data: "approved_by.name", title: "Approved By" },
       ],
     };
   },

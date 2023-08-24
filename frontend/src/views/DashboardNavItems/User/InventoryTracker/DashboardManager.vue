@@ -1,25 +1,44 @@
 <template>
-    <header class="w-full">
-        <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-          <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-            Report Dashboard
-          </h1>
-        </div>
-    </header>
-    <div class="py-2">
-        <div class="pl-8 pr-8">
-          
-        </div>
+  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
+    <ul class="flex -mb-px text-sm font-medium text-center">
+    <router-link to="/dashboard_manager/request">
+      <li class="mr-2" role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Requests</button>
+      </li>
+    </router-link>
+    <router-link to="/dashboard_manager/supply">
+      <li role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Available Supply</button>
+      </li>
+    </router-link>
+    <router-link to="/dashboard_manager/site_supply">
+      <li role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Available Site Supply</button>
+      </li>
+    </router-link>
+    <router-link to="/dashboard_manager/awarded">
+      <li role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Awarded Items</button>
+      </li>
+    </router-link>
+    </ul>
+  </div>
+  <main class="flex flex-col h-screen">
+    <div class="flex flex-1 px-4 py-2 md:px-1 ">
+      <div class="w-full py-6 ">
+        <router-view />
       </div>
-    </template>
-    
-    <script>
-    export default {
-      data() {
-        return {
-        }
-      },
-      computed: {
+    </div>
+  </main>
+</template>
+<script>
+export default {
+  mounted() {
+    this.$router.afterEach(() => {
+      window.location.reload();
+    });
+  },
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -37,16 +56,18 @@
       return userRole === "sourcing";
     },
   },
-      mounted() {
-        window.vm = this;
-        
-      },
-      methods: {
-       
-      },
-    };
-    </script>
-    <style>
+};
+</script>
+<style>
+  main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .selected-tab {
+    border-color: #6366f1;
+    color: #6366f1;
+    font-weight: bold;
+  }
 
-    
-    </style>
+</style>

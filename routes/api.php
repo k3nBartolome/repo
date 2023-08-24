@@ -126,6 +126,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::post('items', [ItemsController::class, 'store']);
     Route::get('items', [ItemsController::class, 'index']);
     Route::get('itemsboth', [ItemsController::class, 'indexboth']);
+    Route::get('itemsboth2', [ItemsController::class, 'indexboth2']);
     Route::get('itemseparate', [ItemsController::class, 'indexseparate']);
     Route::get('items2', [ItemsController::class, 'index2']);
     Route::get('siteinventory', [ItemsController::class, 'index3']);
@@ -137,6 +138,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::put('inventory/received/{id}', [InventoryController::class, 'receivedItem']);
     Route::put('inventory/approved/{id}', [InventoryController::class, 'approvedItem']);
     Route::get('inventory', [InventoryController::class, 'index']);
+    Route::get('inventoryall', [InventoryController::class, 'indexAll']);
     Route::get('inventory/approved', [InventoryController::class, 'approved']);
     Route::get('inventory/approved/received', [InventoryController::class, 'approvedReceived']);
     Route::get('inventory/approved/pending', [InventoryController::class, 'approvedPending']);
@@ -154,4 +156,5 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     // Awarded
     Route::get('awarded/normal', [AwardController::class, 'awardedNormal']);
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
+    Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });

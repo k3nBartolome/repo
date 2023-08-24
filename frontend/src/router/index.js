@@ -29,6 +29,10 @@ import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffing
 import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vue";
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
+import dashboardAwarded from "@/views/DashboardNavItems/User/InventoryTracker/DashboardAwarded.vue";
+import dashboardRequest from "@/views/DashboardNavItems/User/InventoryTracker/DashboardRequests.vue";
+import dashboardSupply from "@/views/DashboardNavItems/User/InventoryTracker/DashboardSupply.vue";
+import dashboardSiteSupply from "@/views/DashboardNavItems/User/InventoryTracker/DashboardSiteSupply.vue";
 import siteRequestManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestManager.vue";
 import siteRequestReceived from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestReceived.vue";
 import siteRequest from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequest.vue";
@@ -71,9 +75,30 @@ const routes = [{
             component: supplyManager,
           },
           {
-            path: "dashboard_manager",
+            path: "/dashboard_manager",
             name: "dashboardManager",
             component: dashboardManager,
+            children: [{
+              path: "request",
+              name: "dashboardRequest",
+              component: dashboardRequest,
+            },
+            {
+              path: "supply",
+              name: "dashboardSupply",
+              component: dashboardSupply,
+            },
+            {
+              path: "site_supply",
+              name: "dashboardSiteSupply",
+              component: dashboardSiteSupply,
+            },
+            {
+              path: "awarded",
+              name: "dashboardAwarded",
+              component: dashboardAwarded,
+            },
+          ],
           },
           {
             path: "/site_request_manager",

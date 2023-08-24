@@ -15,7 +15,37 @@ class AwardController extends Controller
     public function awardedNormal()
     {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
-        ->where('award_status', 'Awarded')
+            ->where('award_status', 'Awarded')
+            ->whereHas('items', function ($query) {
+                $query->whereIn('category', ['Normal']);
+            })
+            ->get();
+
+        foreach ($awarded as $award) {
+            $award->image_path = asset('storage/' . $award->path);
+        }
+
+        return response()->json(['awarded' => $awarded]);
+    }
+
+    public function awardedPremium()
+    {
+        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
+            ->where('award_status', 'Awarded')
+            ->whereHas('items', function ($query) {
+                $query->whereIn('category', ['Premium']);
+            })
+            ->get();
+
+        return response()->json(['awarded' => $awarded]);
+    }
+    public function awardedBoth()
+    {
+        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
+            ->where('award_status', 'Awarded')
+            ->whereHas('items', function ($query) {
+                $query->whereIn('category', ['Normal', 'Premium']);
+            })
             ->get();
 
         return response()->json(['awarded' => $awarded]);
