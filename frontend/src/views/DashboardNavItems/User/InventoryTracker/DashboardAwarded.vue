@@ -119,6 +119,16 @@ export default {
           render: (data) => (data ? data.slice(0, -3) : ""),
         },
         { data: "remarks", title: "Remarks" },
+        {
+          data: "image_path",
+          title: "Image",
+          render: (data, type) => {
+            if (type === "display" && data) {
+              return `<img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>`;
+            }
+            return "";
+          },
+        },
       ],
     };
   },

@@ -35,7 +35,12 @@ class AwardController extends Controller
             ->whereHas('items', function ($query) {
                 $query->whereIn('category', ['Premium']);
             })
+
             ->get();
+
+        foreach ($awarded as $award) {
+            $award->image_path = asset('storage/' . $award->path);
+        }
 
         return response()->json(['awarded' => $awarded]);
     }
@@ -47,6 +52,10 @@ class AwardController extends Controller
                 $query->whereIn('category', ['Normal', 'Premium']);
             })
             ->get();
+
+        foreach ($awarded as $award) {
+            $award->image_path = asset('storage/' . $award->path);
+        }
 
         return response()->json(['awarded' => $awarded]);
     }

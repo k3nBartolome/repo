@@ -282,9 +282,9 @@ export default {
         {
           data: "image_path",
           title: "Image",
-          render: (data, type, ) => {
+          render: (data, type) => {
             if (type === "display" && data) {
-              return `<img src="${data}" alt="Image" width="100" height="200" loading="lazy"/>`;
+              return `<img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>`;
             }
             return "";
           },
@@ -340,9 +340,84 @@ export default {
     this.getAward();
   },
   methods: {
-    handleFileChange(event) {
-      this.selectedFile = event.target.files[0];
-      this.previewImage = URL.createObjectURL(this.selectedFile);
+    async handleFileChange(event) {
+      const selectedFile = event.target.files[0];
+
+      if (!selectedFile) {
+        // Handle the case when no file is selected
+        return;
+      }
+
+      const maxSizeInBytes = 2 * 1024 * 1024; // 25 MB
+
+      if (selectedFile.size > maxSizeInBytes) {
+        try {
+          const image = new Image();
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            image.src = event.target.result;
+
+            image.onload = async () => {
+              const canvas = document.createElement("canvas");
+              canvas.width = image.width;
+              canvas.height = image.height;
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(image, 0, 0, image.width, image.height);
+
+              canvas.toBlob(async (blob) => {
+                const compressedBlob = await this.compressBlob(
+                  blob,
+                  maxSizeInBytes
+                );
+                this.selectedFile = compressedBlob;
+                this.previewImage = URL.createObjectURL(compressedBlob);
+              });
+            };
+          };
+
+          reader.readAsDataURL(selectedFile);
+        } catch (error) {
+          console.error("Error compressing image:", error);
+          // Handle the error appropriately, e.g., show an error message to the user
+        }
+      } else {
+        // If the file size is within the limit, proceed without compression
+        this.selectedFile = selectedFile;
+        this.previewImage = URL.createObjectURL(selectedFile);
+      }
+    },
+
+    async compressBlob(blob, maxSize) {
+      const maxQuality = 0.8; // Adjust the quality as needed
+      let compressedBlob = blob;
+
+      while (compressedBlob.size > maxSize) {
+        const image = new Image();
+        const reader = new FileReader();
+
+        await new Promise((resolve) => {
+          reader.onload = (event) => {
+            image.src = event.target.result;
+            image.onload = resolve;
+          };
+          reader.readAsDataURL(compressedBlob);
+        });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width * 0.9; // Adjust the scale factor as needed
+        canvas.height = image.height * 0.9;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        compressedBlob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, "image/jpeg", maxQuality);
+        });
+      }
+
+      return compressedBlob;
     },
     onItemSelected() {
       const selectedItem = this.site_items.find(

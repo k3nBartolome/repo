@@ -5,7 +5,7 @@
         <div class="col-md-3 col-sm-6">
           <div class="card card-small">
             <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
+              <h6 class="card-title">Pening</h6>
               <p class="card-text"></p>
             </div>
           </div>
@@ -35,48 +35,82 @@
           </div>
         </div>
       </div>
-        <div class="scroll">
-          <div class="w-2/3 mx-auto datatable-container">
-                <h2>Requests</h2>
-                <DataTable
-                  :data="inventory"
-                  :columns="columns"
-                  class="table divide-y divide-gray-200 table-auto table-striped"
-                  :options="{
-                    responsive: false,
-                    autoWidth: false,
-                    pageLength: 10,
-                    lengthChange: true,
-                    ordering: true,
-                    scrollX: true,
-                    dom: 'fBrtlip',
-              buttons: ['excel', 'csv'],
-                    language: {
-                      search: 'Search',
-                      zeroRecords: 'No data available',
-                      info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                      infoFiltered: '(Filtered from MAX records)',
-                      paginate: {
-                        first: 'First',
-                        previous: 'Prev',
-                        next: 'Next',
-                        last: 'Last',
-                      },
-                    },
-                  }"
-                >
-                  <thead class="truncate">
-                    <tr></tr>
-                  </thead>
-                </DataTable>
-              </div>
+      <div class="py-1">
+        <div
+          class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+        >
+          <form
+            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6"
+          >
+            <div class="col-span-6 md:col-span-1">
+              <button
+                type="button"
+                class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+                @click="resetFilter"
+              >
+                Reset Filters
+              </button>
             </div>
-          </div>
+            <div class="col-span-6 md:col-span-1">
+              <label class="block">
+                Site
+                <select
+                  v-model="sites_selected"
+                  class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                  @change="getPrograms"
+                >
+                  <option disabled value="" selected>Please select one</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
+              </label>
+            </div>
+          </form>
         </div>
-    </template>
-    
-    
-    <script>
+      </div>
+
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <h2>Requests</h2>
+          <DataTable
+            :data="inventory"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'fBrtlip',
+              buttons: ['excel', 'csv'],
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
+              },
+            }"
+          >
+            <thead class="truncate">
+              <tr></tr>
+            </thead>
+          </DataTable>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -116,17 +150,17 @@ export default {
         { data: "requested_by.name", title: "Requested By" },
         { data: "approved_by.name", title: "Approved By" },
         {
-    data: "denied_by.name",
-    title: "Denied By",
-    render: (data, type, row) => {
-      return row.denied_by ? row.denied_by.name : "N/A";
-    },
-  },
+          data: "denied_by.name",
+          title: "Denied By",
+          render: (data, type, row) => {
+            return row.denied_by ? row.denied_by.name : "N/A";
+          },
+        },
         { data: "denial_reason", title: "Denial Reason" },
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -144,14 +178,11 @@ export default {
       return userRole === "sourcing";
     },
   },
-  watch: {
-    
-    
-  },
+  watch: {},
   mounted() {
     window.vm = this;
     this.getSites();
-     this.getInventory();
+    this.getInventory();
   },
   methods: {
     async getSites() {
@@ -176,11 +207,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventoryall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
