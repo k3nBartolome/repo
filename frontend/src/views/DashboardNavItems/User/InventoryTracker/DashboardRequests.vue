@@ -1,62 +1,99 @@
 <template>
-  <div class="py-1">
+  <div class="py-0">
     <div class="pl-2 pr-2">
-      <div class="row mb-4">
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Pening</h6>
-              <p class="card-text"></p>
+      <div class="flex flex-wrap mb-2">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-green-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Request</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalRequest }}<span class="text-green-400"></span>
+                </h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-blue-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Approved</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalApproved }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-orange-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Denied</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalDenied }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-purple-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Pending</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalPending }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-red-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Partial</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalPartialReceived }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Complete</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalCompleteReceived }}</h3>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="py-1">
-        <div
-          class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-        >
-          <form
-            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6"
-          >
-            <div class="col-span-6 md:col-span-1">
-              <button
-                type="button"
-                class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
-                @click="resetFilter"
-              >
-                Reset Filters
-              </button>
-            </div>
-            <div class="col-span-6 md:col-span-1">
-              <label class="block">
+
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <div class="flex items-center col-span-6 space-x-2 md:col-span-4">
+            <div class="flex items-center space-x-2">
+              <label class="block font-semibold">
                 Site
                 <select
                   v-model="sites_selected"
-                  class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                  class="block w-full mt-1 bg-white border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
                   @change="getPrograms"
                 >
                   <option disabled value="" selected>Please select one</option>
@@ -65,16 +102,23 @@
                   </option>
                 </select>
               </label>
+              <button
+                @click="resetFilter"
+                class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-gray-500 rounded hover:bg-gray-600"
+              >
+                Reset
+              </button>
             </div>
-          </form>
-        </div>
-      </div>
-
-      <div class="scroll">
-        <div class="w-2/3 mx-auto datatable-container">
-          <h2>Requests</h2>
+            <button
+              @click="exportToExcel"
+              class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-blue-500 rounded hover:bg-blue-600"
+            >
+              Export
+            </button>
+          </div>
           <DataTable
-            :data="inventory"
+            ref="dataTable"
+            :data="filteredInventory"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -84,7 +128,7 @@
               lengthChange: true,
               ordering: true,
               scrollX: true,
-              dom: 'fBrtlip',
+              dom: 'frtlip',
               buttons: ['excel', 'csv'],
               language: {
                 search: 'Search',
@@ -111,6 +155,8 @@
 </template>
 
 <script>
+import { utils, writeFile } from "xlsx";
+
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -136,6 +182,15 @@ export default {
   data() {
     return {
       sites: [],
+      filteredTotalRequest: 0,
+      filteredTotalApproved: 0,
+      filteredTotalDenied: 0,
+      filteredTotalPending: 0,
+      totalPartialReceived: 0,
+      totalCompleteReceived: 0,
+      filteredTotalPartialReceived: 0,
+      filteredTotalCompleteReceived: 0,
+      sites_selected: "",
       award: [],
       items: [],
       inventory: [],
@@ -177,14 +232,80 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
+    filteredInventory() {
+      let filteredData = [...this.inventory];
+
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((item) => {
+          return item.site.id === this.sites_selected;
+        });
+      }
+      return filteredData;
+    },
   },
-  watch: {},
+  watch: {
+    sites_selected: "getInventory",
+  },
+
   mounted() {
     window.vm = this;
     this.getSites();
     this.getInventory();
   },
   methods: {
+    generateExcelData(data) {
+      const customHeaders = [
+        "ID",
+        "Site",
+        "Item Name",
+        "Budget Code",
+        "Quantity Requested",
+        "Approval Status",
+        "Requested By",
+        "Approved By",
+        "Denied By",
+        "Denial Reason",
+        "Date Approved",
+      ];
+
+      const excelData = [
+        customHeaders,
+        ...data.map((item) => [
+          item.id,
+          item.site.name,
+          item.item.item_name,
+          item.item.budget_code,
+          item.quantity_approved,
+          item.status,
+          item.requested_by.name,
+          item.approved_by.name,
+          item.denied_by ? item.denied_by.name : "N/A",
+          item.denial_reason,
+          item.date_approved,
+        ]),
+      ];
+
+      return excelData;
+    },
+
+    exportToExcel() {
+      const filteredData = this.filteredInventory;
+
+      if (this.sites_selected) {
+        const excelData = this.generateExcelData(filteredData);
+        const worksheet = utils.aoa_to_sheet(excelData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, "Inventory Data");
+        writeFile(workbook, "inventory_export.xlsx");
+      } else {
+        const excelData = this.generateExcelData(this.inventory);
+        const worksheet = utils.aoa_to_sheet(excelData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, "Inventory Data");
+        writeFile(workbook, "inventory_export.xlsx");
+      }
+    },
+
     async getSites() {
       try {
         const token = this.$store.state.token;
@@ -207,18 +328,53 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventoryall",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
-          console.log(response.data.inventory);
+
+          // Calculate the overall counts
+          this.totalRequest = this.inventory.length;
+          this.totalApproved = this.inventory.filter(
+            (item) => item.status === "Approved"
+          ).length;
+          this.totalDenied = this.inventory.filter(
+            (item) => item.status === "Denied"
+          ).length;
+          this.totalPending = this.inventory.filter(
+            (item) => item.status === "Pending"
+          ).length;
+          this.totalPartialReceived = this.inventory.filter(
+            (item) => item.received_status === "partial"
+          ).length;
+          this.totalCompleteReceived = this.inventory.filter(
+            (item) => item.received_status === "complete"
+          ).length;
+
+          // Calculate the filtered counts based on the selected site
+          const filteredData = this.filteredInventory;
+          this.filteredTotalRequest = filteredData.length;
+          this.filteredTotalApproved = filteredData.filter(
+            (item) => item.status === "Approved"
+          ).length;
+          this.filteredTotalDenied = filteredData.filter(
+            (item) => item.status === "Denied"
+          ).length;
+          this.filteredTotalPending = filteredData.filter(
+            (item) => item.status === "Pending"
+          ).length;
+          this.filteredTotalPartialReceived = filteredData.filter(
+            (item) => item.received_status === "partial"
+          ).length;
+          this.filteredTotalCompleteReceived = filteredData.filter(
+            (item) => item.received_status === "complete"
+          ).length;
+
+          // ... your existing code
         } else {
           console.log("Error fetching inventory");
         }
@@ -248,5 +404,14 @@ export default {
 
 .table tbody td {
   padding: 8px;
+}
+.card-stats {
+  width: 100%;
+  max-width: 400px; /* Set the maximum width of the card */
+  margin-bottom: 20px;
+}
+
+.card-stats .card-body {
+  padding: 10px;
 }
 </style>

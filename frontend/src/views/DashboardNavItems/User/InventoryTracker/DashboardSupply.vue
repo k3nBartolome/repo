@@ -49,7 +49,7 @@
               lengthChange: true,
               ordering: true,
               scrollX: true,
-              dom: 'fBrtlip',
+              dom: 'frtlip',
               buttons: ['excel', 'csv'],
               language: {
                 search: 'Search',

@@ -34,6 +34,8 @@ managementguatemala
 managementindia
 managementjamaica
 Monstrando
+officedocument
+openxmlformats
 Overhires
 pdfmake
 perx
@@ -54,6 +56,7 @@ resgistros
 sched
 Sheryll
 sitemanagementedit
+spreadsheetml
 syncShowUps
 Tomzer
 tooltiptext

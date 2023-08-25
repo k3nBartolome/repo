@@ -246,6 +246,7 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
+         this.showModal= false;
         })
         .catch((error) => {
           console.log(error.response.data.data);

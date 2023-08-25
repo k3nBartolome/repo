@@ -94,6 +94,7 @@ class InventoryController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollback();
+
             return response()->json(['error' => 'An error occurred while awarding the item.'], 500);
         }
     }
@@ -257,6 +258,7 @@ class InventoryController extends Controller
 
         return response()->json(['inventory' => $inventory]);
     }
+
     public function indexAll()
     {
         $inventory = Inventory::with([

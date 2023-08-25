@@ -1,7 +1,7 @@
 <template>
   <div class="py-1">
     <div class="pl-2 pr-2">
-      <div class="row mb-4">
+      <div class="mb-4 row">
         <div class="col-md-3 col-sm-6">
           <div class="card card-small">
             <div class="card-body">
@@ -49,7 +49,7 @@
               lengthChange: true,
               ordering: true,
               scrollX: true,
-              dom: 'fBrtlip',
+              dom: 'frtlip',
               buttons: ['excel', 'csv'],
               language: {
                 search: 'Search',

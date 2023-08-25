@@ -2,7 +2,8 @@
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
-        <button v-if="isUser || isRemx || isSourcing"
+        <button
+          v-if="isUser || isRemx || isSourcing"
           @click="showModal = true"
           class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
@@ -45,119 +46,127 @@
             @submit.prevent="AwardPremiumItem"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
-          <div class="col-span-1">
-            <label class="block">
-              Site
-              <select
-                @change="getItems"
-                v-model="sites_selected"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              >
-                <option disabled value="" selected>Please select one</option>
-                <option v-for="site in sites" :key="site.id" :value="site.id">
-                  {{ site.name }}
-                </option>
-              </select>
-              <p v-if="errors.sites_selected" class="text-red-500 text-xs mt-1">
-                {{ errors.sites_selected }}
-              </p>
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Item Name
-              <select
-                @change="onItemSelected"
-                v-model="items_selected"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              >
-                <option disabled value="" selected>Please select one</option>
-                <option
-                  v-for="site_items in site_items"
-                  :key="site_items"
-                  :value="site_items.id"
+            <div class="col-span-1">
+              <label class="block">
+                Site
+                <select
+                  @change="getItems"
+                  v-model="sites_selected"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
-                  {{ site_items.item_name }}
-                </option>
-              </select>
-               <p v-if="errors.items_selected" class="text-red-500 text-xs mt-1">
-                {{ errors.items_selected }}
-              </p>
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Budget Code
-              <input
-                type="text"
-                v-model="budget_code"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Quantity Available
-              <input
-                type="number"
-                readonly
-                v-model="quantity"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Awardee Name
-              <input
-                type="text"
-                v-model="awardee_name"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-              <p v-if="errors.awardee_name" class="text-red-500 text-xs mt-1">
-                {{ errors.awardee_name }}
-              </p>
-            </label>
-
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Awardee HRID
-              <input
-                type="text"
-                v-model="awardee_hrid"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-              <p v-if="errors.awardee_hrid" class="text-red-500 text-xs mt-1">
-                {{ errors.awardee_hrid }}
-              </p>
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Awarded Quantity
-              <input
-                type="number"
-                v-model="awarded_quantity"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-               <p v-if="errors.awarded_quantity" class="text-red-500 text-xs mt-1">
-                {{ errors.awarded_quantity }}
-              </p>
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block"
-              >Remarks
-              <textarea
-                v-model="remarks"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-              <p v-if="errors.remarks" class="text-red-500 text-xs mt-1">
-                {{ errors.remarks }}
-              </p>
-            </label>
-          </div>
+                  <option disabled value="" selected>Please select one</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
+                <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
+                  {{ errors.sites_selected }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Item Name
+                <select
+                  @change="onItemSelected"
+                  v-model="items_selected"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option disabled value="" selected>Please select one</option>
+                  <option
+                    v-for="site_items in site_items"
+                    :key="site_items"
+                    :value="site_items.id"
+                  >
+                    {{ site_items.item_name }}
+                  </option>
+                </select>
+                <p v-if="errors.items_selected" class="mt-1 text-xs text-red-500">
+                  {{ errors.items_selected }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Budget Code
+                <input
+                  type="text"
+                  v-model="budget_code"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Quantity Available
+                <input
+                  type="number"
+                  readonly
+                  v-model="quantity"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Awardee Name
+                <input
+                  type="text"
+                  v-model="awardee_name"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+                <p v-if="errors.awardee_name" class="mt-1 text-xs text-red-500">
+                  {{ errors.awardee_name }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Awardee HRID
+                <input
+                  type="text"
+                  v-model="awardee_hrid"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+                <p v-if="errors.awardee_hrid" class="mt-1 text-xs text-red-500">
+                  {{ errors.awardee_hrid }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Awarded Quantity
+                <input
+                  type="number"
+                  v-model="awarded_quantity"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+                <p v-if="errors.awarded_quantity" class="mt-1 text-xs text-red-500">
+                  {{ errors.awarded_quantity }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block"
+                >Remarks
+                <textarea
+                  v-model="remarks"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+                <p v-if="errors.remarks" class="mt-1 text-xs text-red-500">
+                  {{ errors.remarks }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                <input type="file" @change="handleFileChange" />
+                <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                  {{ errors.file_name }}
+                </p>
+              </label>
+            </div>
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
@@ -236,6 +245,8 @@ export default {
   components: { DataTable },
   data() {
     return {
+      selectedFile: null,
+      previewImage: null,
       sites: [],
       award: [],
       site_items: [],
@@ -263,18 +274,20 @@ export default {
         {
           data: "image_path",
           title: "Image",
-          render: (data, type, ) => {
+          render: (data, type) => {
             if (type === "display" && data) {
-              return `<img src="${data}" alt="Image" width="100" height="200" loading="lazy"/>`;
+              return `<img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>`;
             }
             return "";
           },
         },
-        
       ],
     };
   },
-   computed: {
+  computed: {
+    imageSource() {
+      return this.capturedImage ? this.capturedImage : this.selectedImage;
+    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -319,6 +332,85 @@ export default {
     this.getAward();
   },
   methods: {
+    async handleFileChange(event) {
+      const selectedFile = event.target.files[0];
+
+      if (!selectedFile) {
+        // Handle the case when no file is selected
+        return;
+      }
+
+      const maxSizeInBytes = 2 * 1024 * 1024; // 25 MB
+
+      if (selectedFile.size > maxSizeInBytes) {
+        try {
+          const image = new Image();
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            image.src = event.target.result;
+
+            image.onload = async () => {
+              const canvas = document.createElement("canvas");
+              canvas.width = image.width;
+              canvas.height = image.height;
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(image, 0, 0, image.width, image.height);
+
+              canvas.toBlob(async (blob) => {
+                const compressedBlob = await this.compressBlob(
+                  blob,
+                  maxSizeInBytes
+                );
+                this.selectedFile = compressedBlob;
+                this.previewImage = URL.createObjectURL(compressedBlob);
+              });
+            };
+          };
+
+          reader.readAsDataURL(selectedFile);
+        } catch (error) {
+          console.error("Error compressing image:", error);
+          // Handle the error appropriately, e.g., show an error message to the user
+        }
+      } else {
+        // If the file size is within the limit, proceed without compression
+        this.selectedFile = selectedFile;
+        this.previewImage = URL.createObjectURL(selectedFile);
+      }
+    },
+
+    async compressBlob(blob, maxSize) {
+      const maxQuality = 0.8; // Adjust the quality as needed
+      let compressedBlob = blob;
+
+      while (compressedBlob.size > maxSize) {
+        const image = new Image();
+        const reader = new FileReader();
+
+        await new Promise((resolve) => {
+          reader.onload = (event) => {
+            image.src = event.target.result;
+            image.onload = resolve;
+          };
+          reader.readAsDataURL(compressedBlob);
+        });
+
+        const canvas = document.createElement("canvas");
+        canvas.width = image.width * 0.9; // Adjust the scale factor as needed
+        canvas.height = image.height * 0.9;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+        compressedBlob = await new Promise((resolve) => {
+          canvas.toBlob(resolve, "image/jpeg", maxQuality);
+        });
+      }
+
+      return compressedBlob;
+    },
     onItemSelected() {
       const selectedItem = this.site_items.find(
         (site_items) => site_items.id === this.items_selected
@@ -402,7 +494,7 @@ export default {
       if (!this.items_selected) {
         this.errors.items_selected = "Item Name is required.";
       }
-       if (!this.awardee_name) {
+      if (!this.awardee_name) {
         this.errors.awardee_name = "Awardee Name is required.";
       }
       if (!this.awardee_hrid) {
@@ -412,10 +504,17 @@ export default {
         this.errors.remarks = "Remarks is required.";
       }
       if (!this.awarded_quantity) {
-      this.errors.awarded_quantity = "Quantity Awarded is required.";
-    } else if (parseInt(this.awarded_quantity) > parseInt(this.quantity)) {
-      this.errors.awarded_quantity = "Quantity Awarded cannot exceed available quantity.";
-    }
+        this.errors.awarded_quantity = "Quantity Awarded is required.";
+      } else if (parseInt(this.awarded_quantity) > parseInt(this.quantity)) {
+        this.errors.awarded_quantity =
+          "Quantity Awarded cannot exceed available quantity.";
+      }
+      if (!this.selectedFile) {
+        this.errors.file_name = "Image is required.";
+        return;
+      } else {
+        this.errors.file_name = null;
+      }
       if (Object.keys(this.errors).length > 0) {
         return;
       }

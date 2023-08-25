@@ -63,7 +63,7 @@
                 </select>
                 <p
                   v-if="errors.sites_selected"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.sites_selected }}
                 </p>
@@ -88,7 +88,7 @@
                 </select>
                 <p
                   v-if="errors.items_selected"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.items_selected }}
                 </p>
@@ -123,7 +123,7 @@
                   v-model="awardee_name"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.awardee_name" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.awardee_name" class="mt-1 text-xs text-red-500">
                   {{ errors.awardee_name }}
                 </p>
               </label>
@@ -136,7 +136,7 @@
                   v-model="awardee_hrid"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.awardee_hrid" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.awardee_hrid" class="mt-1 text-xs text-red-500">
                   {{ errors.awardee_hrid }}
                 </p>
               </label>
@@ -151,7 +151,7 @@
                 />
                 <p
                   v-if="errors.awarded_quantity"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.awarded_quantity }}
                 </p>
@@ -164,7 +164,7 @@
                   v-model="remarks"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.remarks" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.remarks" class="mt-1 text-xs text-red-500">
                   {{ errors.remarks }}
                 </p>
               </label>
@@ -173,6 +173,9 @@
               <label class="block">
                 <input type="file" @change="handleFileChange" />
                 <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+      {{ errors.file_name }}
+    </p>
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -524,6 +527,9 @@ export default {
       }
       if (!this.selectedFile) {
         this.errors.file_name = "Image is required.";
+        return;
+      } else {
+        this.errors.file_name = null;
       }
 
       if (Object.keys(this.errors).length > 0) {
