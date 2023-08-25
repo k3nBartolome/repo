@@ -64,7 +64,9 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Partial</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalPartialReceived }}</h3>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalPartialReceived }}
+                </h3>
               </div>
             </div>
           </div>
@@ -78,7 +80,9 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Complete</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalCompleteReceived }}</h3>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalCompleteReceived }}
+                </h3>
               </div>
             </div>
           </div>
@@ -202,8 +206,20 @@ export default {
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
-        { data: "requested_by.name", title: "Requested By" },
-        { data: "approved_by.name", title: "Approved By" },
+        {
+          data: "requested_by.name",
+          title: "Requested By",
+          render: (data, type, row) => {
+            return row.requested_by ? row.requested_by.name : "N/A";
+          },
+        },
+        {
+          data: "approved_by.name",
+          title: "approved By",
+          render: (data, type, row) => {
+            return row.approved_by ? row.approved_by.name : "N/A";
+          },
+        },
         {
           data: "denied_by.name",
           title: "Denied By",
@@ -277,8 +293,8 @@ export default {
           item.item.budget_code,
           item.quantity_approved,
           item.status,
-          item.requested_by.name,
-          item.approved_by.name,
+          item.requested_by ? item.requested_by.name : "N/A",
+          item.approved_by ? item.approved_by.name : "N/A",
           item.denied_by ? item.denied_by.name : "N/A",
           item.denial_reason,
           item.date_approved,
@@ -309,7 +325,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -328,11 +344,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/inventoryall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
