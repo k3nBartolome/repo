@@ -23,27 +23,27 @@
         :class="showMenu ? 'flex' : 'hidden'"
         class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
       >
-        <router-link to="/capfile">
-          <li
+        <router-link to="/capfile" class="link-button">
+          <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/capfile') }"
             v-if="isUser"
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-          >
+                      >
             Capacity File
           </li>
         </router-link>
-        <router-link to="/staffing">
-          <li
+        <router-link to="/staffing" class="link-button">
+          <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/staffing') }"
             v-if="isUser"
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-          >
+                      >
             Staffing Tracker
           </li>
         </router-link>
-        <router-link to="/dashboard_manager/request">
-          <li
+        <router-link to="/dashboard_manager/request" class="link-button">
+          <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/request') }"
             v-if="isUser || isRemx || isBudget || isSourcing"
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-          >
+                      >
             Inventory Tracker
           </li>
         </router-link>
@@ -59,17 +59,17 @@
               v-show="isDropdown3Open"
               class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
             >
-              <router-link to="/staffing_report">
-                <li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
+              <router-link to="/staffing_report" class="link-button">
+                <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/staffing_report') }"
+                                  >
                   Staffing Tracker
                 </li>
               </router-link>
-              <router-link to="/capfile_report">
-                <li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
+              <router-link to="/capfile_report" class="link-button">
+                <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/capfile_report') }"
+                                  >
                   Capacity File
                 </li>
               </router-link>
@@ -88,17 +88,17 @@
               v-show="isDropdownOpen"
               class="absolute z-10 py-2 bg-white rounded shadow-md"
             >
-              <router-link to="/site_management">
-                <li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
+              <router-link to="/site_management" class="link-button">
+                <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/site_management') }"
+                                  >
                   Sites
                 </li>
               </router-link>
-              <router-link to="/program_management">
-                <li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
+              <router-link to="/program_management" class="link-button">
+                <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/program_management') }"
+                                  >
                   Programs
                 </li>
               </router-link>
@@ -118,7 +118,7 @@
             <option value="/capfilejamaica" class="flex items-center">JAM</option>
             <option value="/capfileguatemala" class="flex items-center">GUA</option>
           </select>
-          <div class="relative inline-block">
+          <div class="relative inline-block" >
             <button
               @click="toggleDropdown2"
               class="px-4 py-2 font-bold text-black rounded cursor-pointer"
@@ -144,7 +144,7 @@
               v-show="isDropdown2Open"
               class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14"
             >
-              <router-link to="/login">
+              <router-link to="/login" class="link-button">
                 <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
                   <i class="bg-red-600 fa fa-sign-out"></i> Logout
                 </li>
@@ -195,6 +195,9 @@ export default {
     },
   },
   methods: {
+    isActiveTab(route) {
+      return this.$route.path === route;
+    },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen;
     },
@@ -211,7 +214,53 @@ export default {
 };
 </script>
 <style>
-button:focus {
-  outline: none;
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.selected-tab {
+  border-color: #6366f1;
+  color: #6366f1;
+  font-weight: bold;
+}
+.tab-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+  text-align: center;
+  color: black;
+  text-decoration: none !important;
+}
+
+.tab-button:hover {
+  color: #6366f1;
+}
+
+@media (min-width: 576px) {
+  .tab-button {
+    padding: 1rem 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .tab-button {
+    padding: 1rem 0.5rem;
+  }
+}
+.link-button {
+  text-decoration: none;
 }
 </style>

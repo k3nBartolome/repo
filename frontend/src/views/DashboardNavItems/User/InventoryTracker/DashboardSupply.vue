@@ -1,43 +1,94 @@
 <template>
-  <div class="py-1">
+  <div class="py-0">
     <div class="pl-2 pr-2">
-      <div class="row mb-4">
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+      <div class="flex flex-wrap mb-2">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-green-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Supply</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalSupply }}<span class="text-green-400"></span>
+                </h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-purple-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Quantity Total</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalOriginalQuantiy }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-blue-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Dispatched</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalDispatched }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-orange-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Remaining</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalRemaining }}</h3>
+              </div>
             </div>
           </div>
         </div>
+        
       </div>
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
-          <h2>Supply Inventory</h2>
+          <div class="flex items-center col-span-6 space-x-2 md:col-span-4">
+            <div class="flex items-center space-x-2">
+              <label class="block font-semibold">
+                Site
+                <select
+                  v-model="sites_selected"
+                  class="block w-full mt-1 bg-white border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                  @change="getPrograms"
+                >
+                  <option disabled value="" selected>Please select one</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
+              </label>
+              <button
+                @click="resetFilter"
+                class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-gray-500 rounded hover:bg-gray-600"
+              >
+                Reset
+              </button>
+            </div>
+            <button
+              @click="exportToExcel"
+              class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-blue-500 rounded hover:bg-blue-600"
+            >
+              Export
+            </button>
+          </div>
           <DataTable
             :data="items"
             :columns="columns"
@@ -76,6 +127,8 @@
 </template>
 
 <script>
+import { utils, writeFile } from "xlsx";
+
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -101,10 +154,12 @@ export default {
   data() {
     return {
       sites: [],
-      award: [],
       items: [],
-      inventory: [],
-      items2: [],
+      sites_selected: "",
+      filteredTotalSupply: 0,
+      filteredTotalDispatched: 0,
+      filteredTotalRemaining: 0,
+      filteredTotalOriginalQuantiy: 0,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
@@ -143,18 +198,63 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
+    filteredItems() {
+      let filteredData = [...this.items];
+
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((item) => {
+          return item.site.id === this.sites_selected;
+        });
+      }
+      return filteredData;
+    },
   },
-  watch: {},
+  watch: {
+    sites_selected: "getItems",
+  },
   mounted() {
     window.vm = this;
     this.getSites();
     this.getItems();
   },
   methods: {
+    generateExcelData(data) {
+      const customHeaders = [
+        "ID",
+      ];
+
+      const excelData = [
+        customHeaders,
+        ...data.map((item) => [
+          item.id,
+          
+        ]),
+      ];
+
+      return excelData;
+    },
+
+    exportToExcel() {
+      const filteredData = this.filteredItems;
+
+      if (this.sites_selected) {
+        const excelData = this.generateExcelData(filteredData);
+        const worksheet = utils.aoa_to_sheet(excelData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, "Supply Data");
+        writeFile(workbook, "supply_export.xlsx");
+      } else {
+        const excelData = this.generateExcelData(this.items);
+        const worksheet = utils.aoa_to_sheet(excelData);
+        const workbook = utils.book_new();
+        utils.book_append_sheet(workbook, worksheet, "Supply Data");
+        writeFile(workbook, "supply_export.xlsx");
+      }
+    },
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -173,15 +273,35 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/itemsboth", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
+        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+          if (response.status === 200) {
           this.items = response.data.items;
-          console.log(response.data.items);
+
+          
+          this.totalItems = this.items.length;
+          
+
+          
+          const filteredData = this.filteredItems;
+          this.filteredTotalSupply = filteredData.length;
+          this.filteredTotalOriginalQuantiy = filteredData.reduce((sum, item) => {
+        
+          return sum + item.original_quantity;
+        
+          }, 0);
+          this.filteredTotalRemaining = filteredData.reduce((sum, item) => {
+        
+        return sum + item.quantity;
+      
+        }, 0);
+        this.filteredTotalDispatched = this.filteredTotalRemaining - this.filteredTotalOriginalQuantiy;
+
+this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
         } else {
           console.log("Error fetching items");
         }

@@ -1,36 +1,89 @@
 <template>
-  <div class="py-1">
+  <div class="py-0">
     <div class="pl-2 pr-2">
-      <div class="mb-4 row">
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+      <div class="flex flex-wrap mb-2">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-green-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Request</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalRequest }}<span class="text-green-400"></span>
+                </h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-blue-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Approved</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalApproved }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-orange-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Denied</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalDenied }}</h3>
+              </div>
             </div>
           </div>
         </div>
-        <div class="col-md-3 col-sm-6">
-          <div class="card card-small">
-            <div class="card-body">
-              <h6 class="card-title">Total Awards</h6>
-              <p class="card-text"></p>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-purple-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Total Pending</h5>
+                <h3 class="text-3xl text-white">{{ filteredTotalPending }}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-red-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Partial</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalPartialReceived }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Complete</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalCompleteReceived }}
+                </h3>
+              </div>
             </div>
           </div>
         </div>
@@ -160,7 +213,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -179,7 +232,7 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/awarded/both", {
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/both", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -218,43 +271,16 @@ export default {
 .table tbody td {
   padding: 8px;
 }
-.dataTables_wrapper .dataTables_filter {
-  float: left;
-  padding-right: 30px;
+.card-stats {
+  width: 100%;
+  max-width: 400px;
+  margin-bottom: 20px;
 }
 
-.dataTables_wrapper .dataTables_Buttons {
-  float: left;
-  margin-top: 30px;
+.card-stats .card-body {
+  padding: 10px;
 }
-
-.dataTables_wrapper .dataTables_pagination {
-  float: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dataTables_wrapper .dataTables_length {
-  float: left;
-  padding-right: 15px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.dataTables_wrapper .dt-buttons .btn {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  padding: 8px 12px;
-  margin-right: 8px;
-  margin-top: 15px;
-}
-.card-small {
-  padding: 0.75rem;
-}
-
-.card-small .card-title {
-  font-size: 1rem;
+.link-button {
+  text-decoration: none;
 }
 </style>

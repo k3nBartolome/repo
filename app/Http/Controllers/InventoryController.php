@@ -44,7 +44,6 @@ class InventoryController extends Controller
 
         $requestedItem = Items::find($request->item_id);
         $requestedItem->quantity -= $request->quantity_approved;
-        $requestedItem->total_cost -= $request->quantity_approved * $requestedItem->cost;
         $requestedItem->save();
 
         return response()->json([

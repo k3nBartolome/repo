@@ -30,7 +30,6 @@ class ItemsController extends Controller
     {
         $items = Items::with(['createdBy', 'site'])
             ->where('is_active', 1)
-            ->where('quantity', '>', 0)
             ->get();
 
         return response()->json(['items' => $items]);
@@ -39,7 +38,6 @@ class ItemsController extends Controller
     {
         $items = SiteInventory::with(['createdBy', 'site'])
             ->where('is_active', 1)
-            ->where('quantity', '>', 0)
             ->get();
 
         return response()->json(['items' => $items]);

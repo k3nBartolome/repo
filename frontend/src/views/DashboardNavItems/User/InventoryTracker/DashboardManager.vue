@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
+  <div class="px-0 pt-1 border-b border-gray-200 dark:border-gray-700">
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sm-6">

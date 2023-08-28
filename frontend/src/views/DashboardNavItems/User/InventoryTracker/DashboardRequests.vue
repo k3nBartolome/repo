@@ -190,7 +190,6 @@ export default {
       filteredTotalApproved: 0,
       filteredTotalDenied: 0,
       filteredTotalPending: 0,
-      totalPartialReceived: 0,
       totalCompleteReceived: 0,
       filteredTotalPartialReceived: 0,
       filteredTotalCompleteReceived: 0,
@@ -325,7 +324,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -345,7 +344,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventoryall",
+          "http://127.0.0.1:8000/api/inventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -356,7 +355,7 @@ export default {
         if (response.status === 200) {
           this.inventory = response.data.inventory;
 
-          // Calculate the overall counts
+          
           this.totalRequest = this.inventory.length;
           this.totalApproved = this.inventory.filter(
             (item) => item.status === "Approved"
@@ -374,7 +373,7 @@ export default {
             (item) => item.received_status === "complete"
           ).length;
 
-          // Calculate the filtered counts based on the selected site
+          
           const filteredData = this.filteredInventory;
           this.filteredTotalRequest = filteredData.length;
           this.filteredTotalApproved = filteredData.filter(
@@ -392,8 +391,6 @@ export default {
           this.filteredTotalCompleteReceived = filteredData.filter(
             (item) => item.received_status === "complete"
           ).length;
-
-          // ... your existing code
         } else {
           console.log("Error fetching inventory");
         }
@@ -426,11 +423,14 @@ export default {
 }
 .card-stats {
   width: 100%;
-  max-width: 400px; /* Set the maximum width of the card */
+  max-width: 400px;
   margin-bottom: 20px;
 }
 
 .card-stats .card-body {
   padding: 10px;
+}
+.link-button {
+  text-decoration: none;
 }
 </style>
