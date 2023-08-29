@@ -9,7 +9,7 @@
                 <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
               </div>
               <div class="flex-1 text-right">
-                <h5 class="text-white">Total Supply</h5>
+                <h5 class="text-white">No. of Items</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalSupply }}<span class="text-green-400"></span>
                 </h3>
@@ -25,7 +25,7 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Quantity Total</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalOriginalQuantiy }}</h3>
+                <h3 class="text-3xl text-white">{{ filteredTotalOriginalQuantity }}</h3>
               </div>
             </div>
           </div>
@@ -56,7 +56,37 @@
             </div>
           </div>
         </div>
-        
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-red-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Premium Item</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalPremium }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+          <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              <div class="flex-shrink pl-1 pr-4">
+                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
+              </div>
+              <div class="flex-1 text-right">
+                <h5 class="text-white">Normal Item</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalNormal }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -90,7 +120,7 @@
             </button>
           </div>
           <DataTable
-            :data="items"
+            :data="filteredItemsWithNonZeroQuantity"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -159,7 +189,9 @@ export default {
       filteredTotalSupply: 0,
       filteredTotalDispatched: 0,
       filteredTotalRemaining: 0,
-      filteredTotalOriginalQuantiy: 0,
+      filteredTotalOriginalQuantity: 0,
+      filteredTotalNormal: 0,
+      filteredTotalPremium: 0,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
@@ -208,6 +240,9 @@ export default {
       }
       return filteredData;
     },
+    filteredItemsWithNonZeroQuantity() {
+      return this.filteredItems.filter((item) => item.quantity !== 0);
+    },
   },
   watch: {
     sites_selected: "getItems",
@@ -227,7 +262,7 @@ export default {
         customHeaders,
         ...data.map((item) => [
           item.id,
-          
+
         ]),
       ];
 
@@ -282,24 +317,36 @@ export default {
           if (response.status === 200) {
           this.items = response.data.items;
 
-          
-          this.totalItems = this.items.length;
-          
 
-          
+          this.totalItems = this.items.length;
+
+
+
           const filteredData = this.filteredItems;
           this.filteredTotalSupply = filteredData.length;
-          this.filteredTotalOriginalQuantiy = filteredData.reduce((sum, item) => {
-        
+          this.filteredTotalOriginalQuantity = filteredData.reduce((sum, item) => {
+
           return sum + item.original_quantity;
-        
+
           }, 0);
           this.filteredTotalRemaining = filteredData.reduce((sum, item) => {
-        
+
         return sum + item.quantity;
-      
+
         }, 0);
-        this.filteredTotalDispatched = this.filteredTotalRemaining - this.filteredTotalOriginalQuantiy;
+        this.filteredTotalNormal = filteredData.reduce((sum, item) => {
+            if (item.category === "Normal") {
+              return sum + item.quantity;
+            }
+            return sum;
+          }, 0);
+          this.filteredTotalPremium = filteredData.reduce((sum, item) => {
+            if (item.category === "Premium") {
+              return sum + item.quantity;
+            }
+            return sum;
+          }, 0);
+        this.filteredTotalDispatched = this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;
 
 this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
         } else {

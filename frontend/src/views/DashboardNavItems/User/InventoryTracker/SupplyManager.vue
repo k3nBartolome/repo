@@ -361,7 +361,7 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth", {
+        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -426,7 +426,7 @@ export default {
       if (Object.keys(this.errors).length > 0) {
         console.log("Form has errors");
         return;
-      } 
+      }
       const formData = {
         item_name: this.item_name,
         quantity: this.quantity,

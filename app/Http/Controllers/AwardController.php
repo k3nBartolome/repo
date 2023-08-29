@@ -22,7 +22,7 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
+            $award->image_path = asset('storage/'.$award->path);
         }
 
         return response()->json(['awarded' => $awarded]);
@@ -39,11 +39,12 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
+            $award->image_path = asset('storage/'.$award->path);
         }
 
         return response()->json(['awarded' => $awarded]);
     }
+
     public function awardedBoth()
     {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
@@ -54,7 +55,7 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
+            $award->image_path = asset('storage/'.$award->path);
         }
 
         return response()->json(['awarded' => $awarded]);

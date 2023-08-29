@@ -340,7 +340,7 @@ export default {
         return;
       }
 
-      const maxSizeInBytes = 2 * 1024 * 1024; // 25 MB
+      const maxSizeInBytes = 2 * 1024;
 
       if (selectedFile.size > maxSizeInBytes) {
         try {
@@ -351,66 +351,85 @@ export default {
             image.src = event.target.result;
 
             image.onload = async () => {
+              const maxWidth = 800; // Adjust the desired max width
+              const quality = 0.8; // Adjust the desired quality
+
               const canvas = document.createElement("canvas");
-              canvas.width = image.width;
-              canvas.height = image.height;
+              let width = image.width;
+              let height = image.height;
+
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+
+              canvas.width = width;
+              canvas.height = height;
 
               const ctx = canvas.getContext("2d");
-              ctx.drawImage(image, 0, 0, image.width, image.height);
+              ctx.drawImage(image, 0, 0, width, height);
 
-              canvas.toBlob(async (blob) => {
-                const compressedBlob = await this.compressBlob(
-                  blob,
-                  maxSizeInBytes
-                );
-                this.selectedFile = compressedBlob;
-                this.previewImage = URL.createObjectURL(compressedBlob);
-              });
+              canvas.toBlob(
+                async (blob) => {
+                  this.selectedFile = blob;
+                  this.previewImage = URL.createObjectURL(blob);
+                },
+                "image/jpeg",
+                quality
+              );
             };
           };
 
           reader.readAsDataURL(selectedFile);
         } catch (error) {
           console.error("Error compressing image:", error);
-          // Handle the error appropriately, e.g., show an error message to the user
         }
       } else {
-        // If the file size is within the limit, proceed without compression
         this.selectedFile = selectedFile;
         this.previewImage = URL.createObjectURL(selectedFile);
       }
     },
 
     async compressBlob(blob, maxSize) {
-      const maxQuality = 0.8; // Adjust the quality as needed
-      let compressedBlob = blob;
+      const image = new Image();
+      const reader = new FileReader();
+      const maxQuality = 0.8;
 
-      while (compressedBlob.size > maxSize) {
-        const image = new Image();
-        const reader = new FileReader();
+      const compressedBlob = await new Promise((resolve) => {
+        reader.onload = (event) => {
+          image.src = event.target.result;
 
-        await new Promise((resolve) => {
-          reader.onload = (event) => {
-            image.src = event.target.result;
-            image.onload = resolve;
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // Calculate the new dimensions while maintaining the aspect ratio
+            let newWidth = image.width;
+            let newHeight = image.height;
+
+            if (image.size > maxSize) {
+              const scaleFactor = Math.sqrt(image.size / maxSize);
+              newWidth = Math.floor(image.width / scaleFactor);
+              newHeight = Math.floor(image.height / scaleFactor);
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            // Draw the resized image on the canvas
+            ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+            // Convert canvas content to blob with specified format and quality
+            canvas.toBlob(resolve, "image/jpeg", maxQuality);
           };
-          reader.readAsDataURL(compressedBlob);
-        });
+        };
 
-        const canvas = document.createElement("canvas");
-        canvas.width = image.width * 0.9; // Adjust the scale factor as needed
-        canvas.height = image.height * 0.9;
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        compressedBlob = await new Promise((resolve) => {
-          canvas.toBlob(resolve, "image/jpeg", maxQuality);
-        });
-      }
+        reader.readAsDataURL(blob);
+      });
 
       return compressedBlob;
     },
+
     onItemSelected() {
       const selectedItem = this.site_items.find(
         (site_items) => site_items.id === this.items_selected
@@ -438,7 +457,7 @@ export default {
         );
 
         if (response.status === 200) {
-          this.site_items = response.data.items; // Update to site_items instead of items
+          this.site_items = response.data.items;
           console.log(response.data.items);
         } else {
           console.log("Error fetching items");
@@ -486,8 +505,9 @@ export default {
         console.log(error);
       }
     },
-    AwardPremiumItem() {
+    async AwardPremiumItem() {
       this.errors = {};
+
       if (!this.sites_selected) {
         this.errors.sites_selected = "Site is required.";
       }
@@ -509,47 +529,46 @@ export default {
         this.errors.awarded_quantity =
           "Quantity Awarded cannot exceed available quantity.";
       }
-      if (!this.selectedFile) {
-        this.errors.file_name = "Image is required.";
-        return;
-      } else {
-        this.errors.file_name = null;
-      }
+
       if (Object.keys(this.errors).length > 0) {
         return;
       }
-      const formData = {
-        inventory_item_id: this.items_selected,
-        site_id: this.sites_selected,
-        awarded_quantity: this.awarded_quantity,
-        awardee_name: this.awardee_name,
-        remarks: this.remarks,
-        awardee_hrid: this.awardee_hrid,
-        released_by: this.$store.state.user_id,
-        processed_by: this.$store.state.user_id,
-      };
+      const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
+      formData.append("inventory_item_id", this.items_selected);
+      formData.append("site_id", this.sites_selected);
+      formData.append("awarded_quantity", this.awarded_quantity);
+      formData.append("awardee_name", this.awardee_name);
+      formData.append("remarks", this.remarks);
+      formData.append("awardee_hrid", this.awardee_hrid);
+      formData.append("released_by", this.$store.state.user_id);
+      formData.append("processed_by", this.$store.state.user_id);
 
-      axios
-        .post("http://127.0.0.1:8000/api/award", formData, {
+      try {
+        const response = await axios.post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
+            "Content-Type": "multipart/form-data",
           },
-        })
-        .then((response) => {
-          console.log(response.data);
-          this.items_selected = "";
-          this.awarded_quantity = "";
-          this.sites_selected = "";
-          this.awardee_name = "";
-          this.awardee_hrid = "";
-          this.remarks = "";
-          this.getItems();
-          this.getAward();
-          this.showModal = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data);
         });
+
+        console.log("Awarded:", response.data.Award);
+        this.showModal = false;
+        this.clearForm();
+        this.getItems();
+        this.getAward();
+      } catch (error) {
+        console.error("Error awarding:", error.response.data);
+      }
+    },
+    clearForm() {
+      this.items_selected = "";
+      this.awarded_quantity = "";
+      this.sites_selected = "";
+      this.awardee_name = "";
+      this.awardee_hrid = "";
+      this.remarks = "";
+      this.selectedFile = null;
     },
   },
 };

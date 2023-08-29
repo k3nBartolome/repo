@@ -31,13 +31,18 @@ class InventoryController extends Controller
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
+
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->status = 'Pending';
         $inventory->transaction_type = 'Site Request';
         $inventory->save();
+
+        // Get the current inventory ID and format it as a transaction number.
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+
+        $inventory->transaction_no = $formattedTransactionNumber;
         $inventory->original_request = $inventory->quantity_approved;
-        $inventory->transaction_no = $inventory->id;
         $inventory->inventory_id = $inventory->id;
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();

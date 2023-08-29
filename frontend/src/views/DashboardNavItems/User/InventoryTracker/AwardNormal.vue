@@ -21,9 +21,7 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">
-              Award Normal Item
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-800">Award Normal Item</h2>
           </header>
           <button
             @click="showModal = false"
@@ -61,10 +59,7 @@
                     {{ site.name }}
                   </option>
                 </select>
-                <p
-                  v-if="errors.sites_selected"
-                  class="mt-1 text-xs text-red-500"
-                >
+                <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
                   {{ errors.sites_selected }}
                 </p>
               </label>
@@ -86,10 +81,7 @@
                     {{ site_items.item_name }}
                   </option>
                 </select>
-                <p
-                  v-if="errors.items_selected"
-                  class="mt-1 text-xs text-red-500"
-                >
+                <p v-if="errors.items_selected" class="mt-1 text-xs text-red-500">
                   {{ errors.items_selected }}
                 </p>
               </label>
@@ -149,10 +141,7 @@
                   v-model="awarded_quantity"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p
-                  v-if="errors.awarded_quantity"
-                  class="mt-1 text-xs text-red-500"
-                >
+                <p v-if="errors.awarded_quantity" class="mt-1 text-xs text-red-500">
                   {{ errors.awarded_quantity }}
                 </p>
               </label>
@@ -174,8 +163,8 @@
                 <input type="file" @change="handleFileChange" />
                 <img :src="previewImage" v-if="previewImage" alt="Preview" />
                 <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
-      {{ errors.file_name }}
-    </p>
+                  {{ errors.file_name }}
+                </p>
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -232,6 +221,7 @@
 </template>
 
 <script>
+
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -351,7 +341,7 @@ export default {
         return;
       }
 
-      const maxSizeInBytes = 2 * 1024 * 1024; // 25 MB
+      const maxSizeInBytes = 2 * 1024 * 1024;
 
       if (selectedFile.size > maxSizeInBytes) {
         try {
@@ -362,66 +352,85 @@ export default {
             image.src = event.target.result;
 
             image.onload = async () => {
+              const maxWidth = 800; // Adjust the desired max width
+              const quality = 0.8; // Adjust the desired quality
+
               const canvas = document.createElement("canvas");
-              canvas.width = image.width;
-              canvas.height = image.height;
+              let width = image.width;
+              let height = image.height;
+
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+
+              canvas.width = width;
+              canvas.height = height;
 
               const ctx = canvas.getContext("2d");
-              ctx.drawImage(image, 0, 0, image.width, image.height);
+              ctx.drawImage(image, 0, 0, width, height);
 
-              canvas.toBlob(async (blob) => {
-                const compressedBlob = await this.compressBlob(
-                  blob,
-                  maxSizeInBytes
-                );
-                this.selectedFile = compressedBlob;
-                this.previewImage = URL.createObjectURL(compressedBlob);
-              });
+              canvas.toBlob(
+                async (blob) => {
+                  this.selectedFile = blob;
+                  this.previewImage = URL.createObjectURL(blob);
+                },
+                "image/jpeg",
+                quality
+              );
             };
           };
 
           reader.readAsDataURL(selectedFile);
         } catch (error) {
           console.error("Error compressing image:", error);
-          // Handle the error appropriately, e.g., show an error message to the user
         }
       } else {
-        // If the file size is within the limit, proceed without compression
         this.selectedFile = selectedFile;
         this.previewImage = URL.createObjectURL(selectedFile);
       }
     },
 
     async compressBlob(blob, maxSize) {
-      const maxQuality = 0.8; // Adjust the quality as needed
-      let compressedBlob = blob;
+      const image = new Image();
+      const reader = new FileReader();
+      const maxQuality = 0.8;
 
-      while (compressedBlob.size > maxSize) {
-        const image = new Image();
-        const reader = new FileReader();
+      const compressedBlob = await new Promise((resolve) => {
+        reader.onload = (event) => {
+          image.src = event.target.result;
 
-        await new Promise((resolve) => {
-          reader.onload = (event) => {
-            image.src = event.target.result;
-            image.onload = resolve;
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            // Calculate the new dimensions while maintaining the aspect ratio
+            let newWidth = image.width;
+            let newHeight = image.height;
+
+            if (image.size > maxSize) {
+              const scaleFactor = Math.sqrt(image.size / maxSize);
+              newWidth = Math.floor(image.width / scaleFactor);
+              newHeight = Math.floor(image.height / scaleFactor);
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            // Draw the resized image on the canvas
+            ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+            // Convert canvas content to blob with specified format and quality
+            canvas.toBlob(resolve, "image/jpeg", maxQuality);
           };
-          reader.readAsDataURL(compressedBlob);
-        });
+        };
 
-        const canvas = document.createElement("canvas");
-        canvas.width = image.width * 0.9; // Adjust the scale factor as needed
-        canvas.height = image.height * 0.9;
-
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-        compressedBlob = await new Promise((resolve) => {
-          canvas.toBlob(resolve, "image/jpeg", maxQuality);
-        });
-      }
+        reader.readAsDataURL(blob);
+      });
 
       return compressedBlob;
     },
+
     onItemSelected() {
       const selectedItem = this.site_items.find(
         (site_items) => site_items.id === this.items_selected
@@ -481,14 +490,11 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/awarded/normal",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/normal", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 200) {
           this.award = response.data.awarded;
@@ -525,12 +531,6 @@ export default {
         this.errors.awarded_quantity =
           "Quantity Awarded cannot exceed available quantity.";
       }
-      if (!this.selectedFile) {
-        this.errors.file_name = "Image is required.";
-        return;
-      } else {
-        this.errors.file_name = null;
-      }
 
       if (Object.keys(this.errors).length > 0) {
         return;
@@ -547,16 +547,12 @@ export default {
       formData.append("processed_by", this.$store.state.user_id);
 
       try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/award",
-          formData,
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.token}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
+        const response = await axios.post("http://127.0.0.1:8000/api/award", formData, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
 
         console.log("Awarded:", response.data.Award);
         this.showModal = false;

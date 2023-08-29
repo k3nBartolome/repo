@@ -126,6 +126,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::post('items', [ItemsController::class, 'store']);
     Route::get('items', [ItemsController::class, 'index']);
     Route::get('itemsboth', [ItemsController::class, 'indexboth']);
+    Route::get('itemsboth3', [ItemsController::class, 'indexboth3']);
     Route::get('itemsboth2', [ItemsController::class, 'indexboth2']);
     Route::get('itemseparate', [ItemsController::class, 'indexseparate']);
     Route::get('items2', [ItemsController::class, 'index2']);
