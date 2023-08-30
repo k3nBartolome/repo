@@ -24,7 +24,7 @@
                 <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
               </div>
               <div class="flex-1 text-right">
-                <h5 class="text-white">Released Items</h5>
+                <h5 class="text-white">Released Items Quantity</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalQuantity }}</h3>
               </div>
             </div>
