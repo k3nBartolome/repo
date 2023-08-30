@@ -210,8 +210,8 @@ export default {
         { data: "category", title: "Category" },
         { data: "date_expiry", title: "Expiration Date" },
         {
-          data: "date_added",
-          title: "Added Date",
+          data: "date_received",
+          title: "Date Received",
           render: (data) => (data ? data.slice(0, -3) : ""),
         },
       ],
@@ -245,7 +245,7 @@ export default {
       return filteredData;
     },
     filteredItemsWithNonZeroQuantity() {
-      return this.filteredItems.filter(item => item.quantity !== 0);
+      return this.filteredItems.filter((item) => item.quantity !== 0);
     },
   },
   watch: {
@@ -258,21 +258,41 @@ export default {
   },
   methods: {
     generateExcelData(data) {
-      const customHeaders = ["ID"];
+      const customHeaders = [
+        "ID",
+        "Site",
+        "Item Name",
+        "Available",
+        "Original Quantity",
+        "Cost",
+        "Type",
+        "Total Cost",
+        "Category",
+        "Expiration Date",
+        "Received By",
+        "Date Received",
+        "Budget Code",
+        
+      ];
 
-      const excelData = [customHeaders, ...data.map((item) => [
-        item.id,
-        item.site.name,
-        item.item_name,
-        item.quantity,
-        item.original_quantity,
-        item.type,
-        item.category,
-        item.date_expiry,
-        item.received_by ? item.received_by.name : "N/A",
-        item.date_received,
-        item.budget_code,
-        ])];
+      const excelData = [
+        customHeaders,
+        ...data.map((item) => [
+          item.id,
+          item.site.name,
+          item.item_name,
+          item.quantity,
+          item.original_quantity,
+          item.cost,
+          item.total_cost,
+          item.type,
+          item.category,
+          item.date_expiry,
+          item.received_by ? item.received_by.name : "N/A",
+          item.date_received,
+          item.budget_code,
+        ]),
+      ];
 
       return excelData;
     },
@@ -297,7 +317,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -316,14 +336,11 @@ export default {
     async getItems2() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/itemsboth2",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth2", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (response.status === 200) {
           this.items = response.data.items;
 
@@ -331,27 +348,24 @@ export default {
 
           const filteredData = this.filteredItems;
           this.filteredTotalSupply = filteredData.length;
-          this.filteredTotalOriginalQuantity = filteredData.reduce(
-            (sum, item) => {
-              return sum + item.original_quantity;
-            },
-            0
-          );
+          this.filteredTotalOriginalQuantity = filteredData.reduce((sum, item) => {
+            return sum + item.original_quantity;
+          }, 0);
           this.filteredTotalRemaining = filteredData.reduce((sum, item) => {
             return sum + item.quantity;
           }, 0);
           this.filteredTotalNormal = filteredData.reduce((sum, item) => {
-  if (item.category === "Normal") {
-    return sum + item.quantity;
-  }
-  return sum;
-}, 0);
-this.filteredTotalPremium = filteredData.reduce((sum, item) => {
-  if (item.category === "Premium") {
-    return sum + item.quantity;
-  }
-  return sum;
-}, 0);
+            if (item.category === "Normal") {
+              return sum + item.quantity;
+            }
+            return sum;
+          }, 0);
+          this.filteredTotalPremium = filteredData.reduce((sum, item) => {
+            if (item.category === "Premium") {
+              return sum + item.quantity;
+            }
+            return sum;
+          }, 0);
 
           this.filteredTotalDispatched =
             this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;

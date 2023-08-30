@@ -9,13 +9,15 @@
       <button class="bg-green-300 tab">Supply Manager</button>
     </router-link>
     <router-link to="/site_request_manager/request" v-if="isUser || isRemx || isBudget || isSourcing">
-      <button class="bg-pink-300 tab">Site Request</button>
+      <button class="bg-pink-300 tab">
+        Site Request
+        <span v-if="Total > 0" class="count-notification">{{ Total }}</span>
+      </button>
     </router-link>
-    <!-- <router-link to="/purchase_manager/pending" v-if="isUser || isRemx || isBudget || isSourcing">
-      <button class="bg-blue-300 tab">Purchase Request</button>
-    </router-link> -->
+
+
     <router-link to="/award_manager/normal" v-if="isUser || isRemx || isBudget || isSourcing">
-      <button class="bg-yellow-300 tab">Award Item</button>
+      <button class="bg-yellow-300 tab">Release Item</button>
     </router-link>
   </div>
   <main class="flex flex-col h-screen">
@@ -27,11 +29,21 @@
   </main>
 </template>
 <script>
+import axios from "axios";
 export default {
+   data() {
+    return {
+      inventory: [],
+      totalPending: "",
+      totalReceived: "",
+      Total:""
+    };
+  },
  mounted() {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+    this.getInventory();
   },
   computed: {
     isUser() {
@@ -51,6 +63,36 @@ export default {
       return userRole === "sourcing";
     },
   },
+methods: {
+  async getInventory() {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/inventoryall",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        this.inventory = response.data.inventory;
+
+        const pendingItems = this.inventory.filter(item => item.status === "Pending");
+        const receivedItems = this.inventory.filter(item => item.status === "Approved" && item.approved_status === null);
+
+        this.totalPending = pendingItems.length;
+        this.totalReceived = receivedItems.length;
+        this.Total = this.totalPending + this.totalReceived;
+      } else {
+        console.log("Error fetching inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+},
 };
 </script>
 <style>
@@ -79,4 +121,12 @@ export default {
   .flex {
     flex: 1;
   }
+  .count-notification {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 5px;
+  }
+
 </style>

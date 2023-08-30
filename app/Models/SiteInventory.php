@@ -30,8 +30,14 @@ class SiteInventory extends Model
     {
         return $this->belongsTo(Site::class, 'site_id');
     }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function receivedBy()
+    {
+        return $this->belongsTo(User::class, 'received_by');
     }
 }

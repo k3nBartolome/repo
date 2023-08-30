@@ -3,12 +3,12 @@
     <ul class="flex -mb-px text-sm font-medium text-center">
     <router-link to="/award_manager/normal">
       <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Award Normal Item</button>
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Released Normal Item</button>
       </li>
     </router-link>
     <router-link to="/award_manager/premium" v-if="isUser || isRemx || isBudget">
       <li role="presentation">
-        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Award Premium Item</button>
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Released Premiuml Item</button>
       </li>
     </router-link>
     </ul>

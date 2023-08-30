@@ -20,6 +20,7 @@
             role="tab"
           >
             Pending Request
+            <span v-if="totalPending > 0" class="count-notification">{{ totalPending }}</span>
           </button>
         </li>
       </router-link>
@@ -53,6 +54,7 @@
             role="tab"
           >
             Receive
+            <span v-if="totalReceived > 0" class="count-notification">{{ totalReceived }}</span>
           </button>
         </li>
       </router-link>
@@ -67,11 +69,21 @@
   </main>
 </template>
 <script>
+import axios from "axios";
 export default {
-  mounted() {
+   data() {
+    return {
+      inventory: [],
+      totalPending: "",
+      totalReceived: "",
+      Total:""
+    };
+  },
+ mounted() {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+    this.getInventory();
   },
   computed: {
     isUser() {
@@ -91,17 +103,71 @@ export default {
       return userRole === "sourcing";
     },
   },
+methods: {
+  async getInventory() {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.get(
+        "http://127.0.0.1:8000/api/inventoryall",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        this.inventory = response.data.inventory;
+
+        const pendingItems = this.inventory.filter(item => item.status === "Pending");
+        const receivedItems = this.inventory.filter(item => item.status === "Approved" && item.approved_status === null);
+
+        this.totalPending = pendingItems.length;
+        this.totalReceived = receivedItems.length;
+        this.Total = this.totalPending + this.totalReceived;
+      } else {
+        console.log("Error fetching inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+},
 };
 </script>
 <style>
-main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.selected-tab {
-  border-color: #6366f1;
-  color: #6366f1;
-  font-weight: bold;
-}
+  .tabs {
+    display: flex;
+  }
+
+  .tab {
+    padding: 8px 16px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+    margin-right: 4px;
+  }
+
+  .tab:last-child {
+    margin-right: 0;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .flex {
+    flex: 1;
+  }
+  .count-notification {
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 6px;
+    margin-left: 5px;
+  }
+
 </style>
+

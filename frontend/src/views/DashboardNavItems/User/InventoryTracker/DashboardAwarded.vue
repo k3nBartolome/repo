@@ -56,7 +56,7 @@
             </div>
           </div>
         </div>
-        <!-- 
+        <!--
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
@@ -194,7 +194,7 @@ export default {
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
         { data: "items.item_name", title: "Item Name" },
-        { data: "awarded_quantity", title: "Awarded Quantity" },
+        { data: "awarded_quantity", title: "Released Quantity" },
         { data: "awardee_hrid", title: "Awardee ID" },
         { data: "awardee_name", title: "Awardee Name" },
         { data: "released_by.name", title: "Released By" },
@@ -257,12 +257,30 @@ export default {
     generateExcelData(data) {
       const customHeaders = [
         "ID",
+        "Site",
+        "Awardee ID",
+        "Awardee Name",
+        "Date Released",
+        "Item Name",
+        "Released Quantity",
+        "Category",
+        "Type",
+        "Released By",
       ];
 
       const excelData = [
         customHeaders,
         ...data.map((item) => [
           item.id,
+          item.site.name,
+          item.awardee_hrid,
+          item.awardee_name,
+          item.date_released,
+          item.items.item_name,
+          item.awarded_quantity,
+          item.items.category,
+          item.items.type,
+          item.released_by ? item.released_by.name : "N/A",
 
         ]),
       ];
@@ -290,7 +308,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -309,7 +327,7 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/awarded/both", {
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/both", {
             headers: {
               Authorization: `Bearer ${token}`,
             },

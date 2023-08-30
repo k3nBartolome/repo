@@ -194,6 +194,8 @@ class InventoryController extends Controller
             $siteInventory->quantity += $inventory->received_quantity;
             $siteInventory->original_quantity += $inventory->received_quantity;
             $siteInventory->total_cost += $totalCost;
+            $siteInventory->received_by = $inventory->received_by;
+            $siteInventory->date_received = $inventory->date_received;
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
@@ -207,6 +209,8 @@ class InventoryController extends Controller
             $siteInventory->date_expiry = $inventory->item->date_expiry;
             $siteInventory->site_id = $inventory->site_id;
             $siteInventory->is_active = $inventory->item->is_active;
+            $siteInventory->received_by = $inventory->received_by;
+            $siteInventory->date_received = $inventory->date_received;
             $siteInventory->cost = $inventory->item->cost;
             $siteInventory->total_cost = $totalCost;
 

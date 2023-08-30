@@ -7,7 +7,7 @@
           @click="showModal = true"
           class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
-          Award Premium Item
+          Released Premiuml Item
         </button>
       </h1>
     </div>
@@ -21,7 +21,7 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Award Premium Item</h2>
+            <h2 class="text-lg font-semibold text-gray-800">Released Premiuml Item</h2>
           </header>
           <button
             @click="showModal = false"
@@ -448,7 +448,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/items_selected2/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/items_selected2/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -470,7 +470,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -489,7 +489,7 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/awarded/premium", {
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/premium", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -545,7 +545,7 @@ export default {
       formData.append("processed_by", this.$store.state.user_id);
 
       try {
-        const response = await axios.post("http://10.109.2.112:8081/api/award", formData, {
+        const response = await axios.post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
             "Content-Type": "multipart/form-data",

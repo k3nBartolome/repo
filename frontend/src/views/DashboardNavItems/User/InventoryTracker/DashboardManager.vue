@@ -38,7 +38,7 @@
               class="tab-button"
               :class="{ 'selected-tab': isActiveTab('/dashboard_manager/awarded') }"
             >
-              Awarded Items
+              Released Item
             </button>
           </router-link>
         </div>

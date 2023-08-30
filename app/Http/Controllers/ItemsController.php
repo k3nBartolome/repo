@@ -47,7 +47,7 @@ class ItemsController extends Controller
 
     public function indexboth2()
     {
-        $items = SiteInventory::with(['createdBy', 'site'])
+        $items = SiteInventory::with(['createdBy', 'receivedBy', 'site'])
             ->where('is_active', 1)
             ->get();
 
