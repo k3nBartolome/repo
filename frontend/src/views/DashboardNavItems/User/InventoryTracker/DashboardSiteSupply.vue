@@ -260,7 +260,19 @@ export default {
     generateExcelData(data) {
       const customHeaders = ["ID"];
 
-      const excelData = [customHeaders, ...data.map((item) => [item.id])];
+      const excelData = [customHeaders, ...data.map((item) => [
+        item.id,
+        item.site.name,
+        item.item_name,
+        item.quantity,
+        item.original_quantity,
+        item.type,
+        item.category,
+        item.date_expiry,
+        item.received_by ? item.received_by.name : "N/A",
+        item.date_received,
+        item.budget_code,
+        ])];
 
       return excelData;
     },

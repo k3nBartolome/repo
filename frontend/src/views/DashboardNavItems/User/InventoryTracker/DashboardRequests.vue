@@ -292,11 +292,18 @@ export default {
           item.item.budget_code,
           item.quantity_approved,
           item.status,
+          item.original_request,
+          item.received_quantity,
           item.requested_by ? item.requested_by.name : "N/A",
           item.approved_by ? item.approved_by.name : "N/A",
           item.denied_by ? item.denied_by.name : "N/A",
           item.denial_reason,
+          item.date_requested,
           item.date_approved,
+          item.date_denied,
+          item.date_received,
+          item.approved_status,
+          item.received_status,
         ]),
       ];
 

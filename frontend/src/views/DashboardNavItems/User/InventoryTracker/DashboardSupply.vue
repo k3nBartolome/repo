@@ -25,7 +25,9 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Quantity Total</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalOriginalQuantity }}</h3>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalOriginalQuantity }}
+                </h3>
               </div>
             </div>
           </div>
@@ -38,7 +40,9 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Dispatched</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalDispatched }}</h3>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalDispatched }}
+                </h3>
               </div>
             </div>
           </div>
@@ -51,7 +55,9 @@
               </div>
               <div class="flex-1 text-right">
                 <h5 class="text-white">Remaining</h5>
-                <h3 class="text-3xl text-white">{{ filteredTotalRemaining }}</h3>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalRemaining }}
+                </h3>
               </div>
             </div>
           </div>
@@ -254,15 +260,22 @@ export default {
   },
   methods: {
     generateExcelData(data) {
-      const customHeaders = [
-        "ID",
-      ];
+      const customHeaders = ["ID"];
 
       const excelData = [
         customHeaders,
         ...data.map((item) => [
           item.id,
-
+          item.site.name,
+          item.item_name,
+          item.quantity,
+          item.original_quantity,
+          item.type,
+          item.category,
+          item.date_expiry,
+          item.received_by ? item.received_by.name : "N/A",
+          item.date_received,
+          item.budget_code,
         ]),
       ];
 
@@ -308,33 +321,31 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth", {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/itemsboth",
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-          if (response.status === 200) {
+        if (response.status === 200) {
           this.items = response.data.items;
-
 
           this.totalItems = this.items.length;
 
-
-
           const filteredData = this.filteredItems;
           this.filteredTotalSupply = filteredData.length;
-          this.filteredTotalOriginalQuantity = filteredData.reduce((sum, item) => {
-
-          return sum + item.original_quantity;
-
-          }, 0);
+          this.filteredTotalOriginalQuantity = filteredData.reduce(
+            (sum, item) => {
+              return sum + item.original_quantity;
+            },
+            0
+          );
           this.filteredTotalRemaining = filteredData.reduce((sum, item) => {
-
-        return sum + item.quantity;
-
-        }, 0);
-        this.filteredTotalNormal = filteredData.reduce((sum, item) => {
+            return sum + item.quantity;
+          }, 0);
+          this.filteredTotalNormal = filteredData.reduce((sum, item) => {
             if (item.category === "Normal") {
               return sum + item.quantity;
             }
@@ -346,9 +357,10 @@ export default {
             }
             return sum;
           }, 0);
-        this.filteredTotalDispatched = this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;
+          this.filteredTotalDispatched =
+            this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;
 
-this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
+          this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
         } else {
           console.log("Error fetching items");
         }
