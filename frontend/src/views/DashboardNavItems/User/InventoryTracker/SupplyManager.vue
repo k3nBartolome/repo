@@ -42,6 +42,7 @@
               ></path>
             </svg>
           </button>
+          <div class="modal-scrollable-content">
           <form
             @submit.prevent="addItems"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
@@ -58,7 +59,7 @@
                     {{ site.name }}
                   </option>
                 </select>
-                <p v-if="errors.sites_selected" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
                   {{ errors.sites_selected }}
                 </p>
               </label>
@@ -71,7 +72,7 @@
                   v-model="item_name"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.item_name" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.item_name" class="mt-1 text-xs text-red-500">
                   {{ errors.item_name }}
                 </p>
               </label>
@@ -84,7 +85,7 @@
                   v-model="quantity"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.quantity" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.quantity" class="mt-1 text-xs text-red-500">
                   {{ errors.quantity }}
                 </p>
               </label>
@@ -97,7 +98,7 @@
                   v-model="cost"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.cost" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.cost" class="mt-1 text-xs text-red-500">
                   {{ errors.cost }}
                 </p>
               </label>
@@ -122,10 +123,10 @@
                   @input="validateBudgetCode"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.budget_code" class="text-red-500 text-xs mt-1">
+                <p v-if="errors.budget_code" class="mt-1 text-xs text-red-500">
                   {{ errors.budget_code }}
                 </p>
-                <p v-else-if="budgetCodeValid" class="text-green-500 text-xs mt-1">
+                <p v-else-if="budgetCodeValid" class="mt-1 text-xs text-green-500">
                   Budget Code is valid.
                 </p>
               </label>
@@ -213,6 +214,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
@@ -503,7 +505,18 @@ export default {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-content form {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.modal-scrollable-content {
+  max-height: 70vh;
+  overflow-y: auto;
 }
 /* Updated Radio Button Styles */
 input[type="radio"] {

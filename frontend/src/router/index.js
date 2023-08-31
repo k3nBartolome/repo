@@ -47,6 +47,7 @@ import awardPremium from "@/views/DashboardNavItems/User/InventoryTracker/AwardP
 import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerPending.vue";
 import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
 import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
+import requestManagerCancelled from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerCancelled.vue";
 
 const routes = [{
     path: "/",
@@ -128,6 +129,11 @@ const routes = [{
                 path: "denied",
                 name: "requestManagerDenied",
                 component: requestManagerDenied,
+              },
+              {
+                path: "cancelled",
+                name: "requestManagerCancelled",
+                component: requestManagerCancelled,
               },
             ],
           },

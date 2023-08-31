@@ -14,10 +14,7 @@
   </header>
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <div
-        class="fixed inset-0 z-50 flex items-center justify-center modal"
-        v-if="showModal"
-      >
+      <div class="fixed inset-0 z-50 flex items-center justify-center modal" v-if="showModal">
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
@@ -42,7 +39,8 @@
               ></path>
             </svg>
           </button>
-          <form
+          <div class="modal-scrollable-content">
+            <form
             @submit.prevent="AwardNormalItem"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
@@ -179,6 +177,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
@@ -337,7 +336,7 @@ export default {
       const selectedFile = event.target.files[0];
 
       if (!selectedFile) {
-        // Handle the case when no file is selected
+
         return;
       }
 
@@ -352,15 +351,15 @@ export default {
             image.src = event.target.result;
 
             image.onload = async () => {
-              const maxWidth = 800; // Adjust the desired max width
-              const quality = 0.8; // Adjust the desired quality
+              const maxWidth = 800;
+              const quality = 0.8;
 
               const canvas = document.createElement("canvas");
               let width = image.width;
               let height = image.height;
 
               if (width > maxWidth) {
-                height *= maxWidth / width;
+                height *= maxWidth
                 width = maxWidth;
               }
 
@@ -390,7 +389,6 @@ export default {
         this.previewImage = URL.createObjectURL(selectedFile);
       }
     },
-
     async compressBlob(blob, maxSize) {
       const image = new Image();
       const reader = new FileReader();
@@ -404,7 +402,7 @@ export default {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
 
-            // Calculate the new dimensions while maintaining the aspect ratio
+
             let newWidth = image.width;
             let newHeight = image.height;
 
@@ -417,10 +415,10 @@ export default {
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-            // Draw the resized image on the canvas
+
             ctx.drawImage(image, 0, 0, newWidth, newHeight);
 
-            // Convert canvas content to blob with specified format and quality
+
             canvas.toBlob(resolve, "image/jpeg", maxQuality);
           };
         };
@@ -611,11 +609,21 @@ export default {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
 }
-/* Updated Radio Button Styles */
+
+.modal-content form {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.modal-scrollable-content {
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
 input[type="radio"] {
-  /* Hide the default radio button */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -630,12 +638,10 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked {
-  /* Add custom styling for the checked state */
-  border-color: #3b71ca; /* Blue color for checked state */
+  border-color: #3b71ca;
 }
 
 input[type="radio"]:checked::before {
-  /* Add the blue dot inside the checked radio button */
   content: "";
   position: absolute;
   top: 50%;
@@ -644,10 +650,9 @@ input[type="radio"]:checked::before {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background-color: #3b71ca; /* Blue color for the dot */
+  background-color: #3b71ca;
 }
 
-/* Optional: Increase the size of the radio button and the blue dot */
 input[type="radio"] {
   width: 20px;
   height: 20px;

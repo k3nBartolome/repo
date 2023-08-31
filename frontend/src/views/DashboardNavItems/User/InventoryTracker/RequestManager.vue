@@ -16,6 +16,11 @@
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Denied Request</button>
       </li>
     </router-link>
+    <router-link to="/request_manager/cancelled">
+      <li role="presentation">
+        <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Cancelled Request</button>
+      </li>
+    </router-link>
     </ul>
   </div>
   <main class="flex flex-col h-screen">

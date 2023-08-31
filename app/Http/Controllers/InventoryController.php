@@ -56,6 +56,70 @@ class InventoryController extends Controller
         ]);
     }
 
+    /*  public function awardNormalItem(Request $request)
+{
+     $validator = Validator::make($request->all(), [
+         'inventory_item_id' => 'required',
+         'site_id' => 'required',
+         'awarded_quantity' => 'required',
+         'awardee_name' => 'required',
+         'awardee_hrid' => 'required',
+         'processed_by' => 'required',
+         'released_by' => 'required',
+         'remarks' => 'required',
+         'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
+     ]);
+
+     if ($validator->fails()) {
+         return response()->json(['error' => $validator->errors()], 400);
+     }
+
+     try {
+         DB::beginTransaction();
+
+         // Upload the image
+         $imageData = $request->file('file_name');
+         $imageName = $award->id . '_image'; // Use a unique name based on the award ID
+
+         $imageController = new ImageController();
+         $imageUploadRequest = new Request([
+             'image' => base64_encode(file_get_contents($imageData->path())), // Convert image to base64
+             'names' => $imageName,
+         ]);
+         $uploadResponse = $imageController->uploadImage($imageUploadRequest);
+
+         if ($uploadResponse->getStatusCode() !== 200) {
+             DB::rollback();
+             return response()->json(['error' => 'An error occurred while uploading the image.'], 500);
+         }
+
+         // Continue with award process
+         $imagePath = $uploadResponse->getData()->path; // Adjust this based on your response structure
+
+         $award = new Award();
+         $award->fill($request->all());
+         $award->path = $imagePath;
+         $award->award_status = 'Awarded';
+         $award->date_released = Carbon::now()->format('Y-m-d H:i');
+         $award->save();
+
+         $requestedItem = SiteInventory::find($request->inventory_item_id);
+         $requestedItem->quantity -= $request->awarded_quantity;
+         $requestedItem->save();
+
+         DB::commit();
+
+         return response()->json([
+             'message' => 'Item awarded successfully.',
+             'Award' => $award,
+         ]);
+     } catch (\Exception $e) {
+         DB::rollback();
+
+         return response()->json(['error' => 'An error occurred while awarding the item.'], 500);
+     }
+} */
+
     public function awardNormalItem(Request $request)
     {
         $validator = Validator::make($request->all(), [

@@ -47,7 +47,8 @@
             Inventory Tracker
           </li>
         </router-link>
-        <div class="py-4" v-if="isUser">
+        <li class="tab-button">
+        <div v-if="isUser">
           <div class="relative inline-block">
             <button
               @click="toggleDropdown3"
@@ -76,7 +77,9 @@
             </div>
           </div>
         </div>
-        <div class="py-4" v-if="isUser">
+      </li>
+      <li class="tab-button">
+        <div v-if="isUser">
           <div class="relative inline-block">
             <button
               @click="toggleDropdown"
@@ -105,6 +108,7 @@
             </div>
           </div>
         </div>
+      </li>
       </ul>
       <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
         <div class="py-4">

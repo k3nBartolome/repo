@@ -42,6 +42,7 @@
               ></path>
             </svg>
           </button>
+          <div class="modal-scrollable-content">
           <form
             @submit.prevent="AwardPremiumItem"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
@@ -178,6 +179,7 @@
           </form>
         </div>
       </div>
+    </div>
     </div>
   </div>
   <div class="py-2">
@@ -609,7 +611,18 @@ export default {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-content form {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+.modal-scrollable-content {
+  max-height: 70vh;
+  overflow-y: auto;
 }
 /* Updated Radio Button Styles */
 input[type="radio"] {

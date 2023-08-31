@@ -2,11 +2,11 @@
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
-        class="fixed inset-0 z-50 flex items-center justify-center modal"
+        class="modal fixed inset-0 z-50 flex items-center justify-center"
         v-if="showModal"
       >
-        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
-        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+        <div class="modal-overlay absolute inset-0 bg-black opacity-50"></div>
+        <div class="modal-content bg-white rounded shadow-lg p-4 max-w-sm">
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
           </header>
@@ -45,7 +45,7 @@
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
-                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded"
               >
                 Submit
               </button>
