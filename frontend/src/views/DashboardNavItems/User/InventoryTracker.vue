@@ -1,28 +1,8 @@
 
 <template>
-
-  <div class="flex flex-wrap px-12 py-1 md:py-6 md:px-12">
-    <router-link to="/dashboard_manager/request" >
-      <button class="bg-orange-300 tab" v-if="isUser || isRemx || isBudget || isSourcing">Dashboard</button>
-    </router-link>
-    <router-link to="/inventory/supply_manager" v-if="isUser || isRemx || isBudget">
-      <button class="bg-green-300 tab">Supply Manager</button>
-    </router-link>
-    <router-link to="/site_request_manager/request" v-if="isUser || isRemx || isBudget || isSourcing">
-      <button class="bg-pink-300 tab">
-        Site Request
-        <span v-if="Total > 0" class="count-notification">{{ Total }}</span>
-      </button>
-    </router-link>
-
-
-    <router-link to="/award_manager/normal" v-if="isUser || isRemx || isBudget || isSourcing">
-      <button class="bg-yellow-300 tab">Release Item</button>
-    </router-link>
-  </div>
   <main class="flex flex-col h-screen">
-    <div class="flex flex-1 px-2 pt-1 md:px-1 ">
-      <div class="w-full py-2 ">
+    <div class="flex flex-1 px-2  md:px-1 ">
+      <div class="w-full py-0">
         <router-view />
       </div>
     </div>

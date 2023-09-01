@@ -1,9 +1,8 @@
 <template>
-  <div class="bg-white">
-    <nav class="container px-6 py-2 mx-auto md:flex md:justify-between md:items-center">
+  <div class="bg-red-200">
+    <nav class="container px-6 py-0 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
-        <!-- Mobile menu button -->
         <div @click="toggleNav" class="flex md:hidden">
           <button
             type="button"
@@ -18,7 +17,6 @@
           </button>
         </div>
       </div>
-      <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
       <ul
         :class="showMenu ? 'flex' : 'hidden'"
         class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
@@ -47,6 +45,51 @@
             Inventory Tracker
           </li>
         </router-link>
+        <li class="tab-button">
+          <div v-if="isUser">
+            <div class="relative inline-block">
+              <button
+                @click="toggleDropdown4"
+                class="px-4 py-2 text-black rounded cursor-pointer"
+              >
+              Inventory Tracker
+              </button>
+              <div
+                v-show="isDropdown4Open"
+                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
+              >
+              <router-link to="/dashboard_manager/request" class="link-button">
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
+                :class="{ 'selected-tab': isActiveTab('//dashboard_manager/request') }"
+                                    >
+                    Dashboard
+                  </li>
+                </router-link>
+                <router-link to="/inventory/supply_manager" class="link-button">
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget"
+                :class="{ 'selected-tab': isActiveTab('/inventory/supply_manager') }"
+                                    >
+                    Supply Manager
+                  </li>
+                </router-link>
+                <router-link to="/site_request_manager/request" class="link-button">
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
+                :class="{ 'selected-tab': isActiveTab('/site_request_manager/request') }"
+                                    >
+                    Site Request
+                  </li>
+                </router-link>
+                <router-link to="/award_manager/normal" class="link-button">
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
+                :class="{ 'selected-tab': isActiveTab('/award_manager/normal') }"
+                                    >
+                    Release Item
+                  </li>
+                </router-link>
+              </div>
+            </div>
+          </div>
+        </li>
         <li class="tab-button">
         <div v-if="isUser">
           <div class="relative inline-block">
@@ -178,6 +221,7 @@ export default {
       isDropdownOpen: false,
       isDropdown2Open: false,
       isDropdown3Open: false,
+      isDropdown4Open: false,
     };
   },
   computed: {
@@ -210,6 +254,9 @@ export default {
     },
     toggleDropdown3() {
       this.isDropdown3Open = !this.isDropdown3Open;
+    },
+    toggleDropdown4() {
+      this.isDropdown4Open = !this.isDropdown4Open;
     },
     navigateToPage() {
       this.$router.push(this.selectedOption);

@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
+  <div class="px-2 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex -mb-px text-sm font-medium text-center">
     <router-link to="/award_manager/normal">
       <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">

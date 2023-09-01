@@ -14,7 +14,10 @@
   </header>
   <div class="py-1">
     <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <div class="fixed inset-0 z-50 flex items-center justify-center modal" v-if="showModal">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
+        v-if="showModal"
+      >
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
@@ -41,143 +44,143 @@
           </button>
           <div class="modal-scrollable-content">
             <form
-            @submit.prevent="AwardNormalItem"
-            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
-          >
-            <div class="col-span-1">
-              <label class="block">
-                Site
-                <select
-                  @change="getItems"
-                  v-model="sites_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                >
-                  <option disabled value="" selected>Please select one</option>
-                  <option v-for="site in sites" :key="site.id" :value="site.id">
-                    {{ site.name }}
-                  </option>
-                </select>
-                <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
-                  {{ errors.sites_selected }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Item Name
-                <select
-                  @change="onItemSelected"
-                  v-model="items_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                >
-                  <option disabled value="" selected>Please select one</option>
-                  <option
-                    v-for="site_items in site_items"
-                    :key="site_items"
-                    :value="site_items.id"
+              @submit.prevent="AwardNormalItem"
+              class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+            >
+              <div class="col-span-1">
+                <label class="block">
+                  Site
+                  <select
+                    @change="getItems"
+                    v-model="sites_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   >
-                    {{ site_items.item_name }}
-                  </option>
-                </select>
-                <p v-if="errors.items_selected" class="mt-1 text-xs text-red-500">
-                  {{ errors.items_selected }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Budget Code
-                <input
-                  type="text"
-                  v-model="budget_code"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity Available
-                <input
-                  type="number"
-                  readonly
-                  v-model="quantity"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Awardee Name
-                <input
-                  type="text"
-                  v-model="awardee_name"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.awardee_name" class="mt-1 text-xs text-red-500">
-                  {{ errors.awardee_name }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Awardee HRID
-                <input
-                  type="text"
-                  v-model="awardee_hrid"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.awardee_hrid" class="mt-1 text-xs text-red-500">
-                  {{ errors.awardee_hrid }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Awarded Quantity
-                <input
-                  type="number"
-                  v-model="awarded_quantity"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.awarded_quantity" class="mt-1 text-xs text-red-500">
-                  {{ errors.awarded_quantity }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block"
-                >Remarks
-                <textarea
-                  v-model="remarks"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.remarks" class="mt-1 text-xs text-red-500">
-                  {{ errors.remarks }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                <input type="file" @change="handleFileChange" />
-                <img :src="previewImage" v-if="previewImage" alt="Preview" />
-                <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
-                  {{ errors.file_name }}
-                </p>
-              </label>
-            </div>
-            <div class="flex justify-end mt-4">
-              <button
-                type="submit"
-                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+                    <option disabled value="" selected>Please select one</option>
+                    <option v-for="site in sites" :key="site.id" :value="site.id">
+                      {{ site.name }}
+                    </option>
+                  </select>
+                  <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
+                    {{ errors.sites_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Item Name
+                  <select
+                    @change="onItemSelected"
+                    v-model="items_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option disabled value="" selected>Please select one</option>
+                    <option
+                      v-for="site_items in site_items"
+                      :key="site_items"
+                      :value="site_items.id"
+                    >
+                      {{ site_items.item_name }}
+                    </option>
+                  </select>
+                  <p v-if="errors.items_selected" class="mt-1 text-xs text-red-500">
+                    {{ errors.items_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Budget Code
+                  <input
+                    type="text"
+                    v-model="budget_code"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Quantity Available
+                  <input
+                    type="number"
+                    readonly
+                    v-model="quantity"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Awardee Name
+                  <input
+                    type="text"
+                    v-model="awardee_name"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.awardee_name" class="mt-1 text-xs text-red-500">
+                    {{ errors.awardee_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Awardee HRID
+                  <input
+                    type="text"
+                    v-model="awardee_hrid"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.awardee_hrid" class="mt-1 text-xs text-red-500">
+                    {{ errors.awardee_hrid }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Awarded Quantity
+                  <input
+                    type="number"
+                    v-model="awarded_quantity"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.awarded_quantity" class="mt-1 text-xs text-red-500">
+                    {{ errors.awarded_quantity }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block"
+                  >Remarks
+                  <textarea
+                    v-model="remarks"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.remarks" class="mt-1 text-xs text-red-500">
+                    {{ errors.remarks }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  <input type="file" @change="handleFileChange" />
+                  <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                  <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                    {{ errors.file_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="flex justify-end mt-4">
+                <button
+                  type="submit"
+                  class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
@@ -220,7 +223,6 @@
 </template>
 
 <script>
-
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
@@ -336,7 +338,6 @@ export default {
       const selectedFile = event.target.files[0];
 
       if (!selectedFile) {
-
         return;
       }
 
@@ -359,7 +360,7 @@ export default {
               let height = image.height;
 
               if (width > maxWidth) {
-                height *= maxWidth
+                height *= maxWidth;
                 width = maxWidth;
               }
 
@@ -402,7 +403,6 @@ export default {
             const canvas = document.createElement("canvas");
             const ctx = canvas.getContext("2d");
 
-
             let newWidth = image.width;
             let newHeight = image.height;
 
@@ -415,9 +415,7 @@ export default {
             canvas.width = newWidth;
             canvas.height = newHeight;
 
-
             ctx.drawImage(image, 0, 0, newWidth, newHeight);
-
 
             canvas.toBlob(resolve, "image/jpeg", maxQuality);
           };
@@ -456,7 +454,7 @@ export default {
         );
 
         if (response.status === 200) {
-          this.site_items = response.data.items; // Update to site_items instead of items
+          this.site_items = response.data.items;
           console.log(response.data.items);
         } else {
           console.log("Error fetching items");

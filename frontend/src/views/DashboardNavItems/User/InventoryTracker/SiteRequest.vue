@@ -414,6 +414,9 @@ export default {
           this.getItems();
           this.getInventory();
           this.showModal = false;
+          this.$router.push("/site_request_manager/request", () => {
+          location.reload();
+        });
         })
         .catch((error) => {
           console.log(error.response.data);
