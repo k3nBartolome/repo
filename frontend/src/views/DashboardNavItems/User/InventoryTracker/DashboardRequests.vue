@@ -357,18 +357,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventoryall",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
-
 
           this.totalRequest = this.inventory.length;
           this.totalApproved = this.inventory.filter(
@@ -386,7 +382,6 @@ export default {
           this.totalCompleteReceived = this.inventory.filter(
             (item) => item.received_status === "complete"
           ).length;
-
 
           const filteredData = this.filteredInventory;
           this.filteredTotalRequest = filteredData.length;

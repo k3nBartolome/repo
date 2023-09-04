@@ -40,4 +40,9 @@ class SiteInventory extends Model
     {
         return $this->belongsTo(User::class, 'received_by');
     }
+
+    public function transferredBy()
+    {
+        return $this->belongsTo(User::class, 'transferred_by');
+    }
 }

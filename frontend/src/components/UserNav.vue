@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-red-200">
+  <div class="bg-white">
     <nav class="container px-6 py-0 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
@@ -37,14 +37,14 @@
             Staffing Tracker
           </li>
         </router-link>
-        <router-link to="/dashboard_manager/request" class="link-button">
+       <!--  <router-link to="/dashboard_manager/request" class="link-button">
           <li class="tab-button"
               :class="{ 'selected-tab': isActiveTab('/dashboard_manager/request') }"
             v-if="isUser || isRemx || isBudget || isSourcing"
                       >
             Inventory Tracker
           </li>
-        </router-link>
+        </router-link> -->
         <li class="tab-button">
           <div v-if="isUser">
             <div class="relative inline-block">
@@ -70,6 +70,13 @@
                 :class="{ 'selected-tab': isActiveTab('/inventory/supply_manager') }"
                                     >
                     Supply Manager
+                  </li>
+                </router-link>
+                <router-link to="/inventory/site_supply_manager" class="link-button">
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget"
+                :class="{ 'selected-tab': isActiveTab('/inventory/site_supply_manager') }"
+                                    >
+                    Site Supply Manager
                   </li>
                 </router-link>
                 <router-link to="/site_request_manager/request" class="link-button">

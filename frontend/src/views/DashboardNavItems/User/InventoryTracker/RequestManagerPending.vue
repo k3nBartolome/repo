@@ -53,6 +53,58 @@
           </form>
         </div>
       </div>
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
+        v-if="showModalCancel"
+      >
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Deny Request</h2>
+          </header>
+          <button
+            @click="showModalCancel = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <form
+            @submit.prevent="cancelledRequest(cancelledRequestId)"
+            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+          >
+            <div class="col-span-1">
+              <label class="block"
+                >Cancellation Reason
+                <textarea
+                  v-model="cancellation_reason"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="flex justify-end mt-4">
+              <button
+                type="submit"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
   <div class="py-2">
@@ -123,8 +175,11 @@ export default {
       sites: [],
       inventory: [],
       denial_reason: "",
+      cancellation_reason: "",
       showModal: false,
+      showModalCancel:false,
       deniedRequestId: null,
+      cancelledRequestId: null,
       columns: [
         { data: "id", title: "ID" },
         {
@@ -138,9 +193,10 @@ export default {
 
           return `
             ${isUser || isRemx ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>` : ''}
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>
+                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>` : ''}
           `;
-        }.bind(this), // Bind the render function to the component's context
+        }.bind(this),
       },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
@@ -178,6 +234,10 @@ export default {
     openModalForDenial(id) {
       this.deniedRequestId = id;
       this.showModal = true;
+    },
+    openModalForCancellation(id) {
+      this.cancelledRequestId = id;
+      this.showModalCancel = true;
     },
     approvedRequest(id) {
       const form = {
@@ -218,6 +278,29 @@ export default {
           console.log(response.data.data);
           this.getInventory();
           this.showModal = false;
+        })
+        .catch((error) => {
+          console.log(error.response.data.data);
+        });
+    },
+    cancelledRequest(id) {
+      const form = {
+        cancelled_by: this.$store.state.user_id,
+        cancellation_reason: this.cancellation_reason,
+      };
+
+      const config = {
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
+
+      axios
+        .put(`http://127.0.0.1:8000/api/inventory/cancel/${id}`, form, config)
+        .then((response) => {
+          console.log(response.data.data);
+          this.getInventory();
+          this.showModalCancel = false;
         })
         .catch((error) => {
           console.log(error.response.data.data);

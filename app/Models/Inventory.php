@@ -41,7 +41,13 @@ class Inventory extends Model
         'quantity_approved',
         'received_status',
         'received_quantity',
-
+        'transferred_by',
+        'transferred_from',
+        'transferred_to',
+        'transferred_date',
+        'cancelled_by',
+        'cancelled_date',
+        'cancellation_reason',
     ];
 
     public function site()
@@ -80,6 +86,16 @@ class Inventory extends Model
     }
 
     public function requestedBy()
+    {
+        return $this->belongsTo(User::class, 'requested_by');
+    }
+
+    public function transferredBy()
+    {
+        return $this->belongsTo(User::class, 'requested_by');
+    }
+
+    public function cancelledBy()
     {
         return $this->belongsTo(User::class, 'requested_by');
     }

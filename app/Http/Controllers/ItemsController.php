@@ -75,7 +75,7 @@ class ItemsController extends Controller
 
     public function index3()
     {
-        $items = SiteInventory::with(['site'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
             ->where('is_active', 1)
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
@@ -84,9 +84,19 @@ class ItemsController extends Controller
         return response()->json(['items' => $items]);
     }
 
+    public function indexAllSite()
+    {
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+            ->where('is_active', 1)
+            ->where('quantity', '>', 0)
+            ->get();
+
+        return response()->json(['items' => $items]);
+    }
+
     public function index4($siteId)
     {
-        $items = SiteInventory::with(['site'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Normal')
@@ -98,7 +108,7 @@ class ItemsController extends Controller
 
     public function index5($siteId)
     {
-        $items = SiteInventory::with(['site'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Premium')
@@ -110,7 +120,7 @@ class ItemsController extends Controller
 
     public function index2()
     {
-        $items = SiteInventory::with(['site'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
             ->where('is_active', 1)
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)

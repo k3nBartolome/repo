@@ -28,6 +28,7 @@ import AddStaffingTracker from "@/views/DashboardNavItems/User/AddStaffingTracke
 import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffingTracker.vue";
 import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vue";
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
+import siteSupplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteSupplyManager.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
 import dashboardAwarded from "@/views/DashboardNavItems/User/InventoryTracker/DashboardAwarded.vue";
 import dashboardRequest from "@/views/DashboardNavItems/User/InventoryTracker/DashboardRequests.vue";
@@ -36,11 +37,6 @@ import dashboardSiteSupply from "@/views/DashboardNavItems/User/InventoryTracker
 import siteRequestManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestManager.vue";
 import siteRequestReceived from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequestReceived.vue";
 import siteRequest from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequest.vue";
-import purchaseManager from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseManager.vue";
-import purchasePending from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestPending.vue";
-import purchaseApproved from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestApproved.vue";
-import purchaseDenied from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequestDenied.vue";
-import purchaseRequest from "@/views/DashboardNavItems/User/InventoryTracker/PurchaseRequest.vue";
 import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
 import awardNormal from "@/views/DashboardNavItems/User/InventoryTracker/AwardNormal.vue";
 import awardPremium from "@/views/DashboardNavItems/User/InventoryTracker/AwardPremium.vue";
@@ -138,29 +134,10 @@ const routes = [{
             ],
           },
           {
-            path: "/purchase_manager",
-            name: "purchaseManager",
-            component: purchaseManager,
-            children: [{
-              path: "pending",
-              name: "requestPending",
-              component: purchasePending,
-            },
-            {
-              path: "request",
-              name: "purchaseRequest",
-              component: purchaseRequest,
-            },
-            {
-              path: "approved",
-              name: "requestApproved",
-              component: purchaseApproved,
-            },
-            {
-              path: "denied",
-              name: "requestDenied",
-              component: purchaseDenied,
-            },]},
+            path: "site_supply_manager",
+            name: "siteSupplyManager",
+            component: siteSupplyManager,
+          },
           {
             path: "/award_manager",
             name: "awardManager",

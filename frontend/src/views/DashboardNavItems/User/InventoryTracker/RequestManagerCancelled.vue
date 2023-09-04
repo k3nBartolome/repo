@@ -133,8 +133,8 @@ export default {
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
-        { data: "denied_by.name", title: "Denied By" },
-        { data: "denial_reason", title: "Denial Reason" },
+        { data: "cancelled_by.name", title: "Cancelled By" },
+        { data: "cancellation_reason", title: "Cancellation Reason" },
       ],
     };
   },
@@ -162,58 +162,10 @@ export default {
     this.getInventory();
   },
   methods: {
-    openModalForDenial(id) {
-      this.deniedRequestId = id;
-      this.showModal = true;
-    },
-    approvedRequest(id) {
-      const form = {
-        approved_by: this.$store.state.user_id,
-      };
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-      };
-
-      axios
-        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
-        .then((response) => {
-          console.log(response.data.data);
-          this.getInventory();
-        })
-        .catch((error) => {
-          console.log(error.response.data.data);
-        });
-    },
-    deniedRequest(id) {
-      const form = {
-        denied_by: this.$store.state.user_id,
-        denial_reason: this.denial_reason,
-      };
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${this.$store.state.token}`,
-        },
-      };
-
-      axios
-        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
-        .then((response) => {
-          console.log(response.data.data);
-          this.getInventory();
-          this.showModal = false;
-        })
-        .catch((error) => {
-          console.log(error.response.data.data);
-        });
-    },
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventory/denied", {
+        const response = await axios.get("http://127.0.0.1:8000/api/inventory/cancelled", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
