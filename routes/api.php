@@ -136,8 +136,10 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('items_selected2/{siteId}', [ItemsController::class, 'index5']);
     //Inventory
     Route::post('inventory', [InventoryController::class, 'requestItem']);
+    Route::post('transfer', [InventoryController::class, 'transferItem']);
     Route::put('inventory/cancel/{id}', [InventoryController::class, 'cancelledItem']);
     Route::put('inventory/denied/{id}', [InventoryController::class, 'deniedItem']);
+    //Route::put('inventory/transfer/{id}', [InventoryController::class, 'transferItem']);
     Route::put('inventory/received/{id}', [InventoryController::class, 'receivedItem']);
     Route::put('inventory/approved/{id}', [InventoryController::class, 'approvedItem']);
     Route::get('inventory', [InventoryController::class, 'index']);
@@ -148,6 +150,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('inventory/denied', [InventoryController::class, 'denied']);
     Route::get('inventory/cancelled', [InventoryController::class, 'cancelled']);
     Route::get('inventory/allstatus', [InventoryController::class, 'allstatus']);
+    Route::get('inventory/alltransfer', [InventoryController::class, 'alltransfer']);
+    Route::get('inventory/allrequest', [InventoryController::class, 'request']);
     Route::post('award', [InventoryController::class, 'awardNormalItem']);
     Route::post('award2', [InventoryController::class, 'awardPremiumItem']);
     // Purchase Request

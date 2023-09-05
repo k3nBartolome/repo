@@ -322,7 +322,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-        ])
+        ])->where('transaction_type', 'Site Request')
             ->where('status', 'Pending')
             ->get();
 
@@ -342,7 +342,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-        ])
+        ])->where('transaction_type', 'Site Request')
             ->get();
 
         return response()->json(['inventory' => $inventory]);
@@ -361,7 +361,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-        ])
+        ])->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->get();
 
@@ -382,6 +382,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
         ])
+            ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->where('approved_status', 'Received')
             ->get();
@@ -403,6 +404,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
         ])
+            ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->whereNull('approved_status')
             ->get();
@@ -423,7 +425,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-        ])
+        ])->where('transaction_type', 'Site Request')
             ->where('status', 'Denied')
             ->get();
 
@@ -444,6 +446,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
         ])
+        ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
             ->get();
 
@@ -463,7 +466,45 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+        ])->where('transaction_type', 'Site Request')
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function allrequest()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
         ])
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function alltransfer()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+        ])->where('transaction_type', 'Transfer Request')
             ->get();
 
         return response()->json(['inventory' => $inventory]);

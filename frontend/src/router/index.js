@@ -1,7 +1,4 @@
-import {
-  createRouter,
-  createWebHashHistory
-} from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
 import ContactUs from "@/views/ContactUs";
@@ -29,6 +26,8 @@ import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffing
 import inventoryTracker from "@/views/DashboardNavItems/User/InventoryTracker.vue";
 import supplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SupplyManager.vue";
 import siteSupplyManager from "@/views/DashboardNavItems/User/InventoryTracker/SiteSupplyManager.vue";
+import siteSupplyStock from "@/views/DashboardNavItems/User/InventoryTracker/SiteSupplyStock.vue";
+import siteTransfer from "@/views/DashboardNavItems/User/InventoryTracker/SiteTransferRequest.vue";
 import dashboardManager from "@/views/DashboardNavItems/User/InventoryTracker/DashboardManager.vue";
 import dashboardAwarded from "@/views/DashboardNavItems/User/InventoryTracker/DashboardAwarded.vue";
 import dashboardRequest from "@/views/DashboardNavItems/User/InventoryTracker/DashboardRequests.vue";
@@ -45,14 +44,16 @@ import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTrac
 import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
 import requestManagerCancelled from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerCancelled.vue";
 
-const routes = [{
+const routes = [
+  {
     path: "/",
     component: AppUserLayout,
     meta: {
       requiresAuth: true,
-      requiresRoles: ["user", "remx", "sourcing", "budget"]
+      requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
-    children: [{
+    children: [
+      {
         path: "/capfile",
         name: "capacityFile",
         component: capacityFile,
@@ -66,7 +67,8 @@ const routes = [{
         path: "/inventory",
         name: "inventoryTracker",
         component: inventoryTracker,
-        children: [{
+        children: [
+          {
             path: "supply_manager",
             name: "supplyManager",
             component: supplyManager,
@@ -75,33 +77,52 @@ const routes = [{
             path: "/dashboard_manager",
             name: "dashboardManager",
             component: dashboardManager,
-            children: [{
-              path: "request",
-              name: "dashboardRequest",
-              component: dashboardRequest,
-            },
-            {
-              path: "supply",
-              name: "dashboardSupply",
-              component: dashboardSupply,
-            },
-            {
-              path: "site_supply",
-              name: "dashboardSiteSupply",
-              component: dashboardSiteSupply,
-            },
-            {
-              path: "awarded",
-              name: "dashboardAwarded",
-              component: dashboardAwarded,
-            },
-          ],
+            children: [
+              {
+                path: "request",
+                name: "dashboardRequest",
+                component: dashboardRequest,
+              },
+              {
+                path: "supply",
+                name: "dashboardSupply",
+                component: dashboardSupply,
+              },
+              {
+                path: "site_supply",
+                name: "dashboardSiteSupply",
+                component: dashboardSiteSupply,
+              },
+              {
+                path: "awarded",
+                name: "dashboardAwarded",
+                component: dashboardAwarded,
+              },
+            ],
+          },
+          {
+            path: "/site_supply_manager",
+            name: "siteSupplyManager",
+            component: siteSupplyManager,
+            children: [
+              {
+                path: "stocks",
+                name: "siteSupplyStock",
+                component: siteSupplyStock,
+              },
+              {
+                path: "transfer",
+                name: "siteTransfer",
+                component: siteTransfer,
+              },
+            ],
           },
           {
             path: "/site_request_manager",
             name: "siteRequestManager",
             component: siteRequestManager,
-            children: [{
+            children: [
+              {
                 path: "request",
                 name: "siteRequest",
                 component: siteRequest,
@@ -134,15 +155,11 @@ const routes = [{
             ],
           },
           {
-            path: "site_supply_manager",
-            name: "siteSupplyManager",
-            component: siteSupplyManager,
-          },
-          {
             path: "/award_manager",
             name: "awardManager",
             component: awardManager,
-            children: [{
+            children: [
+              {
                 path: "normal",
                 name: "awardNormal",
                 component: awardNormal,
@@ -225,7 +242,8 @@ const routes = [{
       requiresAuth: true,
       requiresRole: "admin",
     },
-    children: [{
+    children: [
+      {
         path: "/admin_dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
@@ -244,11 +262,13 @@ const routes = [{
       requiresAuth: true,
       requiresRole: "perx",
     },
-    children: [{
-      path: "/perx_manager",
-      name: "Perx",
-      component: AppPerxDashboard,
-    }, ],
+    children: [
+      {
+        path: "/perx_manager",
+        name: "Perx",
+        component: AppPerxDashboard,
+      },
+    ],
   },
   {
     path: "/auth",
@@ -257,7 +277,8 @@ const routes = [{
     meta: {
       isGuest: true,
     },
-    children: [{
+    children: [
+      {
         path: "/login",
         name: "login",
         component: AppLogin,
@@ -302,6 +323,5 @@ router.beforeEach((to, from, next) => {
     next();
   }
 });
-
 
 export default router;

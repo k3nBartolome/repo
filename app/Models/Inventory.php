@@ -92,11 +92,11 @@ class Inventory extends Model
 
     public function transferredBy()
     {
-        return $this->belongsTo(User::class, 'requested_by');
+        return $this->belongsTo(User::class, 'transferred_by');
     }
 
     public function cancelledBy()
     {
-        return $this->belongsTo(User::class, 'requested_by');
+        return $this->belongsTo(User::class, 'cancelled_by');
     }
 }
