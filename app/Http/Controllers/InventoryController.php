@@ -83,7 +83,7 @@ class InventoryController extends Controller
         $inventory->save();
 
         $requestedItem = SiteInventory::find($request->item_id);
-        $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->quantity -= $request->transferred_quantity;
         $requestedItem->save();
 
         return response()->json([
@@ -446,7 +446,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
         ])
-        ->where('transaction_type', 'Site Request')
+            ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
             ->get();
 

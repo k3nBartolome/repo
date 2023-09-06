@@ -1,5 +1,7 @@
 # Custom Dictionary Words
+allrequest
 allstatus
+alltransfer
 classesallgua
 classesallindia
 classesalljam

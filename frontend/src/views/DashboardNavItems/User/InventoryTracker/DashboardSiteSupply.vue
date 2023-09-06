@@ -5,10 +5,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">No. of Items</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalSupply }}<span class="text-green-400"></span>
@@ -20,10 +18,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Quantity Total</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalOriginalQuantity }}
@@ -35,10 +31,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Dispatched</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalDispatched }}
@@ -50,10 +44,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Remaining</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalRemaining }}
@@ -65,10 +57,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Premium Item</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalPremium }}
@@ -81,10 +71,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Normal Item</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalNormal }}

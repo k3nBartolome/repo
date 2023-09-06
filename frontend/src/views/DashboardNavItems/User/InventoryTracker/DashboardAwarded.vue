@@ -5,13 +5,12 @@
         <div class="w-full px-1 py-3 sm:w-1/4 md:w-1/4 lg:w-1/4 xl:w-1/4">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">No. of Released</h5>
                 <h3 class="text-3xl text-white">
-                  {{ filteredTotalReleased }}<span class="text-green-400"></span>
+                  {{ filteredTotalReleased
+                  }}<span class="text-green-400"></span>
                 </h3>
               </div>
             </div>
@@ -20,10 +19,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Released Quantity</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalQuantity }}</h3>
               </div>
@@ -33,10 +30,8 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Premium</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalPremium }}</h3>
               </div>
@@ -46,48 +41,18 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
+              
+              <div class="flex-1 text-left">
                 <h5 class="text-white">Normal</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalNormal }}</h3>
               </div>
             </div>
           </div>
         </div>
-        <!--
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
-          <div class="p-2 bg-red-600 border rounded shadow card-stats">
-            <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
-                <h5 class="text-white">Partial</h5>
-                <h3 class="text-3xl text-white">
-                  {{ filteredTotalPartialReceived }}
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
-          <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
-            <div class="flex flex-row items-center">
-              <div class="flex-shrink pl-1 pr-4">
-                <i class="fa fa-wallet fa-2x fa-fw fa-inverse"></i>
-              </div>
-              <div class="flex-1 text-right">
-                <h5 class="text-white">Complete</h5>
-                <h3 class="text-3xl text-white">
-                  {{ filteredTotalCompleteReceived }}
-                </h3>
-              </div>
-            </div>
-          </div>
-        </div> -->
+      </div>
+      <div class="image-modal">
+        <button class="close-button" @click="closeImageModal">Close</button>
+        <img class="enlarged-image" @click.stop="" alt="Enlarged Image" />
       </div>
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -209,7 +174,9 @@ export default {
           title: "Image",
           render: (data, type) => {
             if (type === "display" && data) {
-              return `<img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>`;
+              return `<button onclick="window.vm.openImageModal('${data}')">
+                <img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>
+              </button>`;
             }
             return "";
           },
@@ -234,7 +201,7 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
-   filteredItems() {
+    filteredItems() {
       let filteredData = [...this.award];
 
       if (this.sites_selected) {
@@ -254,6 +221,18 @@ export default {
     this.getAward();
   },
   methods: {
+    openImageModal(imageUrl) {
+      const modal = document.querySelector(".image-modal");
+      const enlargedImage = document.querySelector(".enlarged-image");
+
+      enlargedImage.src = imageUrl;
+      modal.style.display = "flex";
+    },
+    closeImageModal() {
+      const modal = document.querySelector(".image-modal");
+
+      modal.style.display = "none";
+    },
     generateExcelData(data) {
       const customHeaders = [
         "ID",
@@ -281,7 +260,6 @@ export default {
           item.items.category,
           item.items.type,
           item.released_by ? item.released_by.name : "N/A",
-
         ]),
       ];
 
@@ -327,29 +305,26 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/awarded/both", {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/awarded/both",
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-          if (response.status === 200) {
+        if (response.status === 200) {
           this.award = response.data.awarded;
 
-
           this.total = this.award.length;
-
-
 
           const filteredData = this.filteredItems;
           this.filteredTotalReleased = filteredData.length;
 
           this.filteredTotalQuantity = filteredData.reduce((sum, item) => {
-
-        return sum + item.awarded_quantity;
-
-        }, 0);
-        this.filteredTotalNormal = filteredData.reduce((sum, item) => {
+            return sum + item.awarded_quantity;
+          }, 0);
+          this.filteredTotalNormal = filteredData.reduce((sum, item) => {
             if (item.items.category === "Normal") {
               return sum + item.awarded_quantity;
             }
@@ -361,8 +336,7 @@ export default {
             }
             return sum;
           }, 0);
-
-        }  else {
+        } else {
           console.log("Error fetching awarded");
         }
       } catch (error) {
@@ -403,5 +377,35 @@ export default {
 }
 .link-button {
   text-decoration: none;
+}
+.image-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styles for the enlarged image */
+.enlarged-image {
+  max-width: 90%;
+  max-height: 90%;
+  display: block;
+}
+
+/* Styles for the close button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>

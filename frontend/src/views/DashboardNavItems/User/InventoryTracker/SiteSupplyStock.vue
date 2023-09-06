@@ -41,12 +41,21 @@
                     v-model="sites_selected"
                     class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   >
-                    <option disabled value="" selected>Please select one</option>
-                    <option v-for="site in sites" :key="site.id" :value="site.id">
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="site in sites"
+                      :key="site.id"
+                      :value="site.id"
+                    >
                       {{ site.name }}
                     </option>
                   </select>
-                  <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
+                  <p
+                    v-if="errors.sites_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
                     {{ errors.sites_selected }}
                   </p>
                 </label>
@@ -58,42 +67,57 @@
                     v-model="sites1_selected"
                     class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   >
-                    <option disabled value="" selected>Please select one</option>
-                    <option v-for="site in sites" :key="site.id" :value="site.id">
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="site in sites"
+                      :key="site.id"
+                      :value="site.id"
+                    >
                       {{ site.name }}
                     </option>
                   </select>
-                  <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
+                  <p
+                    v-if="errors.sites_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
                     {{ errors.sites_selected }}
                   </p>
                 </label>
               </div>
               <div class="col-span-1 hidden">
-              <label class="block">
-                Item Name
-                <select
-                  @change="onItemSelected"
-                  v-model="items_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                >
-                  <option disabled value="" selected>Please select one</option>
-                  <option
-                    v-for="item in items"
-                    :key="item.id"
-                    :value="item.id"
+                <label class="block">
+                  Item Name
+                  <select
+                    @change="onItemSelected"
+                    v-model="items_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   >
-                    {{ item.item_name }}
-                  </option>
-                </select>
-                <p v-if="errors.items_selected" class="text-red-500 text-xs mt-1">
-                  {{ errors.items_selected }}
-                </p>
-              </label>
-            </div>
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="item in items"
+                      :key="item.id"
+                      :value="item.id"
+                    >
+                      {{ item.item_name }}
+                    </option>
+                  </select>
+                  <p
+                    v-if="errors.items_selected"
+                    class="text-red-500 text-xs mt-1"
+                  >
+                    {{ errors.items_selected }}
+                  </p>
+                </label>
+              </div>
               <div class="col-span-1">
                 <label class="block">
                   Quantity Available
-                  <input readonly
+                  <input
+                    readonly
                     type="number"
                     v-model="quantity"
                     class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
@@ -111,7 +135,10 @@
                     v-model="transferred_quantity"
                     class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                   />
-                  <p v-if="errors.transferred_quantity" class="mt-1 text-xs text-red-500">
+                  <p
+                    v-if="errors.transferred_quantity"
+                    class="mt-1 text-xs text-red-500"
+                  >
                     {{ errors.transferred_quantity }}
                   </p>
                 </label>
@@ -206,8 +233,8 @@ export default {
       sites_selected: "",
       sites1_selected: "",
       items_selected: "",
-      quantity:"",
-      transferred_quantity:"",
+      quantity: "",
+      transferred_quantity: "",
       showModal: false,
       errors: {},
       columns: [
@@ -262,9 +289,7 @@ export default {
       ],
     };
   },
-  watch: {
-
-  },
+  watch: {},
   computed: {
     isUser() {
       const userRole = this.$store.state.role;
@@ -290,23 +315,26 @@ export default {
   },
   methods: {
     openModalForTransfer(id) {
-  const clickedItem = this.items.find(item => item.id === id);
-  if (clickedItem) {
-    this.quantity = clickedItem.quantity;
-    this.sites1_selected = clickedItem.site_id;
-    this.items_selected = clickedItem.id;
-  }
-  // Show the modal
-  this.showModal = true;
-},
+      const clickedItem = this.items.find((item) => item.id === id);
+      if (clickedItem) {
+        this.quantity = clickedItem.quantity;
+        this.sites1_selected = clickedItem.site_id;
+        this.items_selected = clickedItem.id;
+      }
+      // Show the modal
+      this.showModal = true;
+    },
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/siteinventoryall", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/siteinventoryall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.items = response.data.items;
@@ -343,10 +371,13 @@ export default {
         this.errors.sites_selected = "Site is required.";
       }
       if (!this.transferred_quantity) {
-      this.errors.transferred_quantity = "Quantity Request is required.";
-    } else if (parseInt(this.transferred_quantity) > parseInt(this.quantity)) {
-      this.errors.transferred_quantity = "Quantity Request cannot exceed available quantity.";
-    }
+        this.errors.transferred_quantity = "Quantity Request is required.";
+      } else if (
+        parseInt(this.transferred_quantity) > parseInt(this.quantity)
+      ) {
+        this.errors.transferred_quantity =
+          "Quantity Request cannot exceed available quantity.";
+      }
       if (Object.keys(this.errors).length > 0) {
         return;
       }
@@ -363,18 +394,21 @@ export default {
           },
         })
         .then((response) => {
-          console.log(response.data);
-          this.transferred_quantity = "";
-          this.sites_selected = "";
-          this.getItems();
-          this.getInventory();
-          this.showModal = false;
-          this.$router.push("/inventory/site_supply_manager", () => {
-          location.reload();
-        });
+          if (response && response.data && response.data.Request) {
+            console.log(response.data.Request);
+            // ... rest of your code
+          } else {
+            console.error("Response or Request property is undefined.");
+          }
         })
         .catch((error) => {
-          console.log(error.response.data);
+          if (error.response && error.response.data) {
+            console.log(error.response.data);
+          } else {
+            console.error(
+              "Error response or error.response.data is undefined."
+            );
+          }
         });
     },
   },

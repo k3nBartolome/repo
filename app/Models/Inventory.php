@@ -43,6 +43,7 @@ class Inventory extends Model
         'received_quantity',
         'transferred_by',
         'transferred_from',
+        'transferred_quantity',
         'transferred_to',
         'transferred_date',
         'cancelled_by',
