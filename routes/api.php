@@ -141,6 +141,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::put('inventory/denied/{id}', [InventoryController::class, 'deniedItem']);
     //Route::put('inventory/transfer/{id}', [InventoryController::class, 'transferItem']);
     Route::put('inventory/received/{id}', [InventoryController::class, 'receivedItem']);
+    Route::put('inventory/transfer/{id}', [InventoryController::class, 'receivedTransfer']);
     Route::put('inventory/approved/{id}', [InventoryController::class, 'approvedItem']);
     Route::get('inventory', [InventoryController::class, 'index']);
     Route::get('inventoryall', [InventoryController::class, 'indexAll']);

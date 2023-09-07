@@ -169,9 +169,7 @@ export default {
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approval Status" },
         { data: "transferred_by.name", title: "Transferred By" },
-        { data: "approved_by.name", title: "Approved By" },
       ],
     };
   },
@@ -233,6 +231,7 @@ export default {
         received_by: this.$store.state.user_id,
         received_quantity: this.received_quantity,
         received_status: this.received_status,
+
       };
 
       const config = {
@@ -242,7 +241,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();

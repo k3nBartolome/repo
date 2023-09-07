@@ -61,8 +61,10 @@ class InventoryController extends Controller
         $validator = Validator::make($request->all(), [
             'item_id' => 'required',
             'site_id' => 'required',
-            'transferred_quantity' => 'required',
+            'quantity_approved' => 'required',
             'transferred_by' => 'required',
+            'transferred_from' => 'required',
+            'transferred_to' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -71,19 +73,22 @@ class InventoryController extends Controller
 
         $inventory = new Inventory();
         $inventory->fill($request->all());
-        $inventory->status = 'Approved';
         $inventory->transaction_type = 'Transfer Request';
+        $inventory->transferred_by = $inventory->transferred_by;
+        $inventory->transferred_from = $inventory->transferred_from;
+        $inventory->transferred_to = $inventory->transferred_to;
+
         $inventory->save();
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
 
         $inventory->transaction_no = $formattedTransactionNumber;
-        $inventory->original_request = $inventory->transferred_quantity;
+        $inventory->original_request = $inventory->quantity_approved;
         $inventory->inventory_id = $inventory->id;
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
         $requestedItem = SiteInventory::find($request->item_id);
-        $requestedItem->quantity -= $request->transferred_quantity;
+        $requestedItem->quantity -= $request->quantity_approved;
         $requestedItem->save();
 
         return response()->json([
@@ -249,6 +254,85 @@ class InventoryController extends Controller
             $siteInventory->cost = $inventory->item->cost;
             $siteInventory->total_cost = $totalCost;
 
+            $siteInventory->save();
+        }
+        $inventory->quantity_approved -= $inventory->received_quantity;
+        $inventory->save();
+
+        return response()->json([
+            'Request' => $inventory,
+        ]);
+    }
+
+    public function receivedTransfer(Request $request, $id)
+    {
+        $inventory = Inventory::find($id);
+
+        $validator = Validator::make($request->all(), [
+            'received_by' => 'required',
+            'received_status' => 'required',
+            'received_quantity' => 'nullable',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
+        }
+
+        if ($request->input('received_status') === 'partial') {
+            $inventory->approved_status = null;
+            $inventory->received_quantity = $request->input('received_quantity');
+            $inventory->status = 'Transferred';
+        } elseif ($request->input('received_status') === 'complete') {
+            $inventory->approved_status = 'Received';
+            $inventory->received_quantity = $inventory->quantity_approved;
+            $inventory->status = 'Transferred';
+        }
+
+        $inventory->fill([
+            'received_by' => $request->input('received_by'),
+            'received_status' => $request->input('received_status'),
+        ]);
+        $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
+        $inventory->save();
+
+        $totalCost = $inventory->item->cost * $inventory->received_quantity;
+
+        $siteInventory = SiteInventory::where('item_name', $inventory->item->item_name)
+        ->where('budget_code', $inventory->item->budget_code)
+        ->where('site_id', $inventory->site_id)
+
+            ->first();
+
+        if ($siteInventory) {
+            $siteInventory->site_id = $inventory->site_id;
+            $siteInventory->quantity += $inventory->received_quantity;
+            $siteInventory->original_quantity += $inventory->received_quantity;
+            $siteInventory->total_cost += $totalCost;
+            $siteInventory->received_by = $inventory->received_by;
+            $siteInventory->transferred_by = $inventory->transferred_by;
+            $siteInventory->transferred_date = $inventory->transferred_date;
+            $siteInventory->transferred_from = $inventory->transferred_from;
+            $siteInventory->save();
+        } else {
+            $siteInventory = new SiteInventory();
+            $siteInventory->site_id = $inventory->site_id;
+            $siteInventory->item_less_id = $inventory->item->id;
+            $siteInventory->item_name = $inventory->item->item_name;
+            $siteInventory->quantity = $inventory->received_quantity;
+            $siteInventory->original_quantity = $inventory->received_quantity;
+            $siteInventory->budget_code = $inventory->item->budget_code;
+            $siteInventory->type = $inventory->item->type;
+            $siteInventory->category = $inventory->item->category;
+            $siteInventory->date_expiry = $inventory->item->date_expiry;
+            $siteInventory->site_id = $inventory->site_id;
+            $siteInventory->is_active = $inventory->item->is_active;
+            $siteInventory->received_by = $inventory->received_by;
+            $siteInventory->date_received = $inventory->date_received;
+            $siteInventory->cost = $inventory->item->cost;
+            $siteInventory->total_cost = $totalCost;
+            $siteInventory->transferred_by = $inventory->transferred_by;
+            $siteInventory->transferred_date = $inventory->transferred_date;
+            $siteInventory->transferred_from = $inventory->transferred_from;
             $siteInventory->save();
         }
         $inventory->quantity_approved -= $inventory->received_quantity;
@@ -485,7 +569,8 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-        ])
+            ])->where('transaction_type', 'Transfer Request')
+
             ->get();
 
         return response()->json(['inventory' => $inventory]);
@@ -505,6 +590,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
         ])->where('transaction_type', 'Transfer Request')
+        ->where('status', '!=', 'Transferred')
             ->get();
 
         return response()->json(['inventory' => $inventory]);

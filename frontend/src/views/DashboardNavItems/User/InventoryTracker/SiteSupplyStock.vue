@@ -384,8 +384,10 @@ export default {
       const formData = {
         item_id: this.items_selected,
         site_id: this.sites_selected,
-        transferred_quantity: this.transferred_quantity,
+        quantity_approved: this.transferred_quantity,
         transferred_by: this.$store.state.user_id,
+        transferred_to: this.sites_selected,
+        transferred_from: this.sites1_selected,
       };
       axios
         .post("http://127.0.0.1:8000/api/transfer", formData, {

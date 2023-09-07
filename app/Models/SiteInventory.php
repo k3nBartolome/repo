@@ -24,6 +24,11 @@ class SiteInventory extends Model
         'created_by',
         'cost',
         'total_cost',
+        'transferred_by',
+        'transferred_from',
+        'transferred_quantity',
+        'transferred_to',
+        'transferred_date',
     ];
 
     public function site()
