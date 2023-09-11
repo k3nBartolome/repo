@@ -31,6 +31,7 @@ class Inventory extends Model
         'file_name',
         'path',
         'item_id',
+        'inventory_item_id',
         'site_id',
         'released_by',
         'approved_by',
@@ -59,6 +60,11 @@ class Inventory extends Model
     public function item()
     {
         return $this->belongsTo(Items::class, 'item_id');
+    }
+
+    public function siteInventory()
+    {
+        return $this->belongsTo(SiteInventory::class, 'inventory_item_id');
     }
 
     public function releasedBy()

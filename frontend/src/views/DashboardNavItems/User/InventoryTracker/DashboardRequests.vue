@@ -2,7 +2,7 @@
   <div class="py-0">
     <div class="pl-2 pr-2">
       <div class="flex flex-wrap mb-2">
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -15,7 +15,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -48,7 +48,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -62,12 +62,38 @@
           </div>
         </div>
 
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
               <div class="flex-1 text-left">
                 <h5 class="text-white">Complete</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalCompleteReceived }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
+          <div class="p-2 bg-pink-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              
+              <div class="flex-1 text-left">
+                <h5 class="text-white">Transferred</h5>
+                <h3 class="text-3xl text-white">
+                  {{ filteredTotalCompleteReceived }}
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
+          <div class="p-2 bg-indigo-600 border rounded shadow card-stats">
+            <div class="flex flex-row items-center">
+              
+              <div class="flex-1 text-left">
+                <h5 class="text-white">Cancelled</h5>
                 <h3 class="text-3xl text-white">
                   {{ filteredTotalCompleteReceived }}
                 </h3>
@@ -189,8 +215,32 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
+        {
+    data: null,
+    title: "Item Name",
+    render: (data, type, row) => {
+      if (row.site_inventory && row.site_inventory.item_name) {
+        return row.site_inventory.item_name;
+      } else if (row.item && row.item.item_name) {
+        return row.item.item_name;
+      } else {
+        return "N/A";
+      }
+    },
+  },
+  {
+    data: null,
+    title: "Budget Code",
+    render: (data, type, row) => {
+      if (row.site_inventory && row.site_inventory.budget_code) {
+        return row.site_inventory.budget_code;
+      } else if (row.item && row.item.budget_code) {
+        return row.item.budget_code;
+      } else {
+        return "N/A";
+      }
+    },
+  },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         {
@@ -245,6 +295,7 @@ export default {
       }
       return filteredData;
     },
+    
   },
   watch: {
     sites_selected: "getInventory",
@@ -345,7 +396,7 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/inventoryall", {
+        const response = await axios.get("http://127.0.0.1:8000/api/inventoryalltransaction", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

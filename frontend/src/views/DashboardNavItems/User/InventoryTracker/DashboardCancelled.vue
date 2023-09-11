@@ -2,7 +2,7 @@
   <div class="py-0">
     <div class="pl-2 pr-2">
       <div class="flex flex-wrap mb-2">
-        <div class="w-full px-1 py-3 sm:w-1/4 md:w-1/4 lg:w-1/4 xl:w-1/4">
+        <div class="w-full px-1 py-3 sm:w-1/4 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -15,7 +15,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/4">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -37,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -48,8 +48,8 @@
             </div>
           </div>
         </div>
-        <!--
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+       
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               
@@ -62,8 +62,8 @@
             </div>
           </div>
         </div>
-
-        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
+ <!--
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
               

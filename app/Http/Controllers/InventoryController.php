@@ -59,7 +59,7 @@ class InventoryController extends Controller
     public function transferItem(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'item_id' => 'required',
+            'inventory_item_id' => 'required',
             'site_id' => 'required',
             'quantity_approved' => 'required',
             'transferred_by' => 'required',
@@ -87,7 +87,7 @@ class InventoryController extends Controller
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
-        $requestedItem = SiteInventory::find($request->item_id);
+        $requestedItem = SiteInventory::find($request->inventory_item_id);
         $requestedItem->quantity -= $request->quantity_approved;
         $requestedItem->save();
 
@@ -279,13 +279,13 @@ class InventoryController extends Controller
         }
 
         if ($request->input('received_status') === 'partial') {
+            $inventory->status = 'Transferred Partial';
             $inventory->approved_status = null;
             $inventory->received_quantity = $request->input('received_quantity');
-            $inventory->status = 'Transferred';
         } elseif ($request->input('received_status') === 'complete') {
+            $inventory->status = 'Transferred All';
             $inventory->approved_status = 'Received';
             $inventory->received_quantity = $inventory->quantity_approved;
-            $inventory->status = 'Transferred';
         }
 
         $inventory->fill([
@@ -295,16 +295,15 @@ class InventoryController extends Controller
         $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
 
-        $totalCost = $inventory->item->cost * $inventory->received_quantity;
+        $totalCost = $inventory->siteInventory->cost * $inventory->received_quantity;
 
-        $siteInventory = SiteInventory::where('item_name', $inventory->item->item_name)
-        ->where('budget_code', $inventory->item->budget_code)
-        ->where('site_id', $inventory->site_id)
-
-            ->first();
+        $siteInventory = SiteInventory::where('item_name', $inventory->siteInventory->item_name)
+        ->where('budget_code', $inventory->siteInventory->budget_code)
+        ->where('site_id', $inventory->transferred_to)
+        ->first();
 
         if ($siteInventory) {
-            $siteInventory->site_id = $inventory->site_id;
+            $siteInventory->site_id = $inventory->transferred_to;
             $siteInventory->quantity += $inventory->received_quantity;
             $siteInventory->original_quantity += $inventory->received_quantity;
             $siteInventory->total_cost += $totalCost;
@@ -315,20 +314,20 @@ class InventoryController extends Controller
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
-            $siteInventory->site_id = $inventory->site_id;
-            $siteInventory->item_less_id = $inventory->item->id;
-            $siteInventory->item_name = $inventory->item->item_name;
+            $siteInventory->site_id = $inventory->transferred_to;
+            $siteInventory->item_less_id = $inventory->siteInventory->id;
+            $siteInventory->item_name = $inventory->siteInventory->item_name;
             $siteInventory->quantity = $inventory->received_quantity;
             $siteInventory->original_quantity = $inventory->received_quantity;
-            $siteInventory->budget_code = $inventory->item->budget_code;
-            $siteInventory->type = $inventory->item->type;
-            $siteInventory->category = $inventory->item->category;
-            $siteInventory->date_expiry = $inventory->item->date_expiry;
+            $siteInventory->budget_code = $inventory->siteInventory->budget_code;
+            $siteInventory->type = $inventory->siteInventory->type;
+            $siteInventory->category = $inventory->siteInventory->category;
+            $siteInventory->date_expiry = $inventory->siteInventory->date_expiry;
             $siteInventory->site_id = $inventory->site_id;
-            $siteInventory->is_active = $inventory->item->is_active;
+            $siteInventory->is_active = $inventory->siteInventory->is_active;
             $siteInventory->received_by = $inventory->received_by;
             $siteInventory->date_received = $inventory->date_received;
-            $siteInventory->cost = $inventory->item->cost;
+            $siteInventory->cost = $inventory->siteInventory->cost;
             $siteInventory->total_cost = $totalCost;
             $siteInventory->transferred_by = $inventory->transferred_by;
             $siteInventory->transferred_date = $inventory->transferred_date;
@@ -406,6 +405,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Pending')
             ->get();
@@ -426,7 +426,28 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Site Request')
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function indexAllTransaction()
+    {
+        $inventory = Inventory::with([
+            'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+            'siteInventory',
+        ])
             ->get();
 
         return response()->json(['inventory' => $inventory]);
@@ -445,6 +466,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->get();
@@ -465,6 +487,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -487,6 +510,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -509,6 +533,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Denied')
             ->get();
@@ -529,6 +554,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
@@ -550,6 +576,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -569,6 +596,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
             ])->where('transaction_type', 'Transfer Request')
 
             ->get();
@@ -589,8 +617,9 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            'siteInventory',
         ])->where('transaction_type', 'Transfer Request')
-        ->where('status', '!=', 'Transferred')
+        ->where('status', null)
             ->get();
 
         return response()->json(['inventory' => $inventory]);
