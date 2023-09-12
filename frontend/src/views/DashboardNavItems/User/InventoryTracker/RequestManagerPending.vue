@@ -183,20 +183,31 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-          const isUser = this.isUser;
-          const isRemx = this.isRemx;
+    data: null,
+    title: "Actions",
+    orderable: false,
+    searchable: false,
+    render: function (data) {
+      const isUser = this.isUser;
+      const isRemx = this.isRemx;
+      //const isSourcing = this.isSourcing;
+      const requestedById = data.requested_by ? data.requested_by.id : null;
+  console.log("Requested By ID:", requestedById);
 
-          return `
-            ${isUser || isRemx ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.approvedRequest(${data})">Approve</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForDenial(${data})">Deny</button>
-                    <button class="w-20 text-xs btn btn-danger" data-id="${data}" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>` : ''}
-          `;
-        }.bind(this),
+  return `
+      ${isRemx || isUser
+        
+        ? `<button class="w-20 text-xs btn btn-primary" @click="approvedRequest(${data})">Approve</button>
+           <button class="w-20 text-xs btn btn-danger" @click="openModalForDenial(${data})">Deny</button>`
+        : ''
+      }
+      
+      ${requestedById === this.$store.state.user_id
+        ? `<button class="w-20 text-xs btn btn-danger" @click="openModalForCancellation(${data})">Cancel</button>`
+        : ''
+      }
+  `;
+}.bind(this),
       },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
@@ -204,6 +215,7 @@ export default {
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
+        { data: "requested_by.id", title: "Requested By" },
       ],
     };
   },

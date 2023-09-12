@@ -47,7 +47,7 @@
         </router-link> -->
         <li class="tab-button">
           <div v-if="isUser">
-            <div class="relative inline-block">
+            <div class="relative inline-block py-0">
               <button
                 @click="toggleDropdown4"
                 class="px-4 py-2 text-black rounded cursor-pointer"
@@ -294,7 +294,7 @@ main {
 .tab-button {
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 0;
   border: none;
   background-color: transparent;
   border-bottom: 2px solid transparent;
@@ -303,19 +303,25 @@ main {
   color: black;
   text-decoration: none !important;
 }
-
+.tab-button li {
+  margin-top: 0px; /* Adjust as needed */
+  margin-bottom: 0px; /* Adjust as needed */
+}
 .tab-button:hover {
   color: #6366f1;
 }
-
+li.tab-button > div > div > ul > li {
+  margin-top: 0px; /* Adjust as needed */
+  margin-bottom: 0px; /* Adjust as needed */
+}
 @media (min-width: 576px) {
   .tab-button {
-    padding: 1rem 0.75rem;
+    padding: 0;
   }
 }
 @media (min-width: 768px) {
   .tab-button {
-    padding: 1rem 0.5rem;
+    padding: 0;
   }
 }
 .link-button {
