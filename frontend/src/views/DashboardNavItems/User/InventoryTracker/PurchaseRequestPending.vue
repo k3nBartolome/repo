@@ -1,6 +1,6 @@
 <template>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
         class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
@@ -55,7 +55,7 @@
       </div>
     </div>
   </div>
-  <div class="py-2">
+  <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">

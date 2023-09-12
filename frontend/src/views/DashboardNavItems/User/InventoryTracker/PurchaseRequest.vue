@@ -9,8 +9,8 @@
       </h1>
     </div>
   </header>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div class="fixed inset-0 z-50 flex items-center justify-center modal" v-if="showModal">
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
@@ -70,7 +70,7 @@
 
         </div>
     </div>
-    <div class="py-2">
+    <div class="py-0">
         <div class="pl-8 pr-8">
           <div class="scroll">
             <div class="w-2/3 mx-auto datatable-container">

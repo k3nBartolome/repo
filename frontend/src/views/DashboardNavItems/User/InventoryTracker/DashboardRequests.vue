@@ -82,7 +82,7 @@
               <div class="flex-1 text-left">
                 <h5 class="text-white">Transferred</h5>
                 <h3 class="text-3xl text-white">
-                  {{ filteredTotalCompleteReceived }}
+                  {{ filteredTotalTransferred }}
                 </h3>
               </div>
             </div>
@@ -95,7 +95,7 @@
               <div class="flex-1 text-left">
                 <h5 class="text-white">Cancelled</h5>
                 <h3 class="text-3xl text-white">
-                  {{ filteredTotalCompleteReceived }}
+                  {{ filteredTotalCancelled }}
                 </h3>
               </div>
             </div>
@@ -207,6 +207,8 @@ export default {
       totalCompleteReceived: 0,
       filteredTotalPartialReceived: 0,
       filteredTotalCompleteReceived: 0,
+      filteredTotalTransferred: 0,
+      filteredTotalCancelled: 0,
       sites_selected: "",
       award: [],
       items: [],
@@ -433,11 +435,18 @@ export default {
           this.filteredTotalPending = filteredData.filter(
             (item) => item.status === "Pending"
           ).length;
-          this.filteredTotalPartialReceived = filteredData.filter(
-            (item) => item.received_status === "partial"
+          this.filteredTotalApproved = filteredData.filter(
+            (item) => item.status === "Approved"
           ).length;
-          this.filteredTotalCompleteReceived = filteredData.filter(
-            (item) => item.received_status === "complete"
+          this.filteredTotalApproved = filteredData.filter(
+            (item) => item.status === "Approved"
+          ).length;
+          this.filteredTotalTransferred = filteredData.filter(
+  (item) => item.status === "Transferred All" || item.status === "Transferred Partial"
+).length;
+
+          this.filteredTotalCancelled = filteredData.filter(
+            (item) => item.status === "Cancelled"
           ).length;
         } else {
           console.log("Error fetching inventory");

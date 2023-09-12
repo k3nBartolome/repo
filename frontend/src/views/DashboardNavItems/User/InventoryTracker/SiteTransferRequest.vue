@@ -1,6 +1,6 @@
 <template>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
         class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
@@ -53,7 +53,10 @@
                   v-model="received_quantity"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.received_quantity" class="text-red-500 text-xs mt-1">
+                <p
+                  v-if="errors.received_quantity"
+                  class="text-red-500 text-xs mt-1"
+                >
                   {{ errors.received_quantity }}
                 </p>
               </label>
@@ -72,7 +75,7 @@
       </div>
     </div>
   </div>
-  <div class="py-2">
+  <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -166,8 +169,32 @@ export default {
           }.bind(this),
         },
         { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
+        {
+          data: null,
+          title: "Item Name",
+          render: (data, type, row) => {
+            if (row.site_inventory && row.site_inventory.item_name) {
+              return row.site_inventory.item_name;
+            } else if (row.item && row.item.item_name) {
+              return row.item.item_name;
+            } else {
+              return "N/A";
+            }
+          },
+        },
+        {
+          data: null,
+          title: "Budget Code",
+          render: (data, type, row) => {
+            if (row.site_inventory && row.site_inventory.budget_code) {
+              return row.site_inventory.budget_code;
+            } else if (row.item && row.item.budget_code) {
+              return row.item.budget_code;
+            } else {
+              return "N/A";
+            }
+          },
+        },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "transferred_by.name", title: "Transferred By" },
       ],
@@ -193,12 +220,14 @@ export default {
   },
   watch: {
     received_quantity(newValue) {
-      const quantityApproved = this.inventory.find(item => item.id === this.receivedId)?.quantity_approved.toString();
+      const quantityApproved = this.inventory
+        .find((item) => item.id === this.receivedId)
+        ?.quantity_approved.toString();
 
       if (newValue === quantityApproved) {
-        this.received_status = 'complete';
-      } else if (this.received_status === 'complete') {
-        this.received_status = '';
+        this.received_status = "complete";
+      } else if (this.received_status === "complete") {
+        this.received_status = "";
       }
     },
   },
@@ -218,7 +247,9 @@ export default {
       } else if (
         this.received_status === "partial" &&
         parseInt(this.received_quantity) >
-          parseInt(this.inventory.find((item) => item.id === id).quantity_approved)
+          parseInt(
+            this.inventory.find((item) => item.id === id).quantity_approved
+          )
       ) {
         this.errors.received_quantity =
           "Quantity Received cannot exceed Quantity Requested.";
@@ -231,7 +262,6 @@ export default {
         received_by: this.$store.state.user_id,
         received_quantity: this.received_quantity,
         received_status: this.received_status,
-
       };
 
       const config = {
@@ -245,7 +275,7 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
-         this.showModal= false;
+          this.showModal = false;
         })
         .catch((error) => {
           console.log(error.response.data.data);

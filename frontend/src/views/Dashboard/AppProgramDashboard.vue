@@ -64,7 +64,7 @@
       </form>
     </div>
   </div>
-  <div class="py-2">
+  <div class="py-0">
     <div class="px-8">
       <div class="overflow-x-auto">
         <DataTable

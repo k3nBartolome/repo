@@ -1,6 +1,6 @@
 <template>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
         class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
@@ -107,7 +107,7 @@
       </div>
     </div>
   </div>
-  <div class="py-2">
+  <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -255,9 +255,12 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
+          this.$router.push("/site_request_manager/pending", () => {
+          location.reload();
+        });
         })
         .catch((error) => {
-          console.log(error.response.data.data);
+          console.log(error.response.data);
         });
     },
     deniedRequest(id) {
@@ -278,9 +281,13 @@ export default {
           console.log(response.data.data);
           this.getInventory();
           this.showModal = false;
+          
+          this.$router.push("/site_request_manager/pending", () => {
+          location.reload();
+        });
         })
         .catch((error) => {
-          console.log(error.response.data.data);
+          console.log(error.response.data);
         });
     },
     cancelledRequest(id) {
@@ -301,9 +308,12 @@ export default {
           console.log(response.data.data);
           this.getInventory();
           this.showModalCancel = false;
+          this.$router.push("/site_request_manager/pending", () => {
+          location.reload();
+        });
         })
         .catch((error) => {
-          console.log(error.response.data.data);
+          console.log(error.response.data);
         });
     },
     async getInventory() {

@@ -1,6 +1,6 @@
 <template>
-  <div class="py-1">
-    <div class="px-1 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
         class="fixed inset-0 z-50 flex items-center justify-center modal"
         v-if="showModal"
@@ -72,7 +72,7 @@
       </div>
     </div>
   </div>
-  <div class="py-2">
+  <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
@@ -100,6 +100,12 @@
                   last: 'Last',
                 },
               },
+              columnDefs: [
+      {
+        targets: [8], // Index of the column to hide (zero-based index)
+        visible: false, // Set to true to show, false to hide
+      },
+    ],
             }"
           >
             <thead class="truncate">
@@ -145,34 +151,39 @@ export default {
       errors: {},
       siteRequestId: null,
       columns: [
-        { data: "id", title: "ID" },
-        {
-          data: "id",
-          title: "Actions",
-          orderable: false,
-          searchable: false,
-          render: function (data) {
-            const isUser = this.isUser;
-            const isRemx = this.isRemx;
-            const isSourcing = this.isSourcing;
+  { data: "id", title: "ID" },
+  {
+    data: null,
+    title: "Actions",
+    orderable: false,
+    searchable: false,
+    render: function (data) {
+      //const isUser = this.isUser;
+      //const isRemx = this.isRemx;
+      //const isSourcing = this.isSourcing;
+      const requestedById = data.requested_by ? data.requested_by.id : null;
 
-            return `
-            ${
-              isUser || isRemx || isSourcing
-                ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForReceived(${data})">Received</button>`
-                : ""
-            }
-          `;
-          }.bind(this),
-        },
-        { data: "site.name", title: "Site" },
-        { data: "item.item_name", title: "Item Name" },
-        { data: "item.budget_code", title: "Budget Code" },
-        { data: "quantity_approved", title: "Quantity Requested" },
-        { data: "status", title: "Approval Status" },
-        { data: "requested_by.name", title: "Requested By" },
-        { data: "approved_by.name", title: "Approved By" },
-      ],
+      //console.log("Requested By ID:", requestedById);
+
+      return `
+        ${
+          requestedById ===  this.$store.state.user_id
+            ? `<button class="w-20 text-xs btn btn-primary" data-id="${data.id}" onclick="window.vm.openModalForReceived(${data.id})">Received</button>`
+            : ""
+        }
+      `;
+    }.bind(this),
+  },
+  { data: "site.name", title: "Site" },
+  { data: "item.item_name", title: "Item Name" },
+  { data: "item.budget_code", title: "Budget Code" },
+  { data: "quantity_approved", title: "Quantity Requested" },
+  { data: "status", title: "Approval Status" },
+  { data: "requested_by.name", title: "Requested By" },
+  { data: "requested_by.id", title: "" },
+  { data: "approved_by.name", title: "Approved By" },
+],
+
     };
   },
   computed: {
@@ -247,9 +258,12 @@ export default {
           console.log(response.data.data);
           this.getInventory();
          this.showModal= false;
+         this.$router.push("/site_request_manager/received", () => {
+          location.reload();
+        });
         })
         .catch((error) => {
-          console.log(error.response.data.data);
+          console.log(error.response.data);
         });
     },
     async getInventory() {

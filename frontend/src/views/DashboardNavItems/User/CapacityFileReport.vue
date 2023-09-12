@@ -115,7 +115,7 @@
     </div>
   </div>
 
-  <div class="py-2">
+  <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
