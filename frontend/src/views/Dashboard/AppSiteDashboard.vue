@@ -179,7 +179,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/sites_activate/${id}`, form, config)
+        .put(`/sites_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -204,7 +204,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/sites_deactivate/${id}`, form, config)
+        .put(`/sites_deactivate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -226,7 +226,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8081/api/sites", config)
+          .get("/sites", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -250,7 +250,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8081/api/sites2", config)
+          .get("/sites2", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites2 = response.data.data;
@@ -282,7 +282,7 @@ export default {
       };
 
       axios
-        .post("http://10.109.2.112:8081/api/sites", formData, config)
+        .post("/sites", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

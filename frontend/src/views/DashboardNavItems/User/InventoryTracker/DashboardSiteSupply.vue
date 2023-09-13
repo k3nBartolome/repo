@@ -5,7 +5,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">No. of Items</h5>
                 <h3 class="text-3xl text-white">
@@ -18,7 +18,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">Quantity Total</h5>
                 <h3 class="text-3xl text-white">
@@ -31,7 +31,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">Dispatched</h5>
                 <h3 class="text-3xl text-white">
@@ -44,7 +44,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">Remaining</h5>
                 <h3 class="text-3xl text-white">
@@ -57,7 +57,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">Premium Item</h5>
                 <h3 class="text-3xl text-white">
@@ -71,7 +71,7 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
+
               <div class="flex-1 text-left">
                 <h5 class="text-white">Normal Item</h5>
                 <h3 class="text-3xl text-white">
@@ -260,7 +260,7 @@ export default {
         "Received By",
         "Date Received",
         "Budget Code",
-        
+
       ];
 
       const excelData = [
@@ -305,7 +305,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -324,7 +324,7 @@ export default {
     async getItems2() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/itemsboth2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/itemsboth2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

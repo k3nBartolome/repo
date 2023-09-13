@@ -5,7 +5,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Total Request</h5>
                 <h3 class="text-3xl text-white">
@@ -18,7 +17,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Total Approved</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalApproved }}</h3>
@@ -29,7 +27,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Total Denied</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalDenied }}</h3>
@@ -40,7 +37,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Total Pending</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalPending }}</h3>
@@ -51,7 +47,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Partial</h5>
                 <h3 class="text-3xl text-white">
@@ -65,7 +60,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Complete</h5>
                 <h3 class="text-3xl text-white">
@@ -75,10 +69,9 @@
             </div>
           </div>
         </div>
-         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
+        <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-pink-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Transferred</h5>
                 <h3 class="text-3xl text-white">
@@ -91,7 +84,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-xl:w-1/8">
           <div class="p-2 bg-indigo-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-              
               <div class="flex-1 text-left">
                 <h5 class="text-white">Cancelled</h5>
                 <h3 class="text-3xl text-white">
@@ -297,7 +289,6 @@ export default {
       }
       return filteredData;
     },
-    
   },
   watch: {
     sites_selected: "getInventory",
@@ -310,53 +301,74 @@ export default {
   },
   methods: {
     generateExcelData(data) {
-      const customHeaders = [
-        "ID",
-        "Site",
-        "Item Name",
-        "Budget Code",
-        "Quantity Remaining",
-        "Approval Status",
-        "Original Quantity",
-        "Received Quantity",
-        "Requested By",
-        "Approved By",
-        "Denied By",
-        "Denial Reason",
-        "Date Requested",
-        "Date Approved",
-        "Date Denied",
-        "Date Received",
-        "Received Status",
-        "Received Type",
-      ];
+      console.log("filteredTotalRequest:", this.filteredTotalRequest);
+  console.log("filteredTotalApproved:", this.filteredTotalApproved);
+  const customHeaders = [
+    "ID",
+    "Site",
+    "Item Name",
+    "Budget Code",
+    "Quantity Remaining",
+    "Approval Status",
+    "Original Quantity",
+    "Received Quantity",
+    "Requested By",
+    "Approved By",
+    "Denied By",
+    "Denial Reason",
+    "Date Requested",
+    "Date Approved",
+    "Date Denied",
+    "Date Received",
+    "Received Status",
+    "Received Type",
+  ];
 
-      const excelData = [
-        customHeaders,
-        ...data.map((item) => [
-          item.id,
-          item.site.name,
-          item.item.item_name,
-          item.item.budget_code,
-          item.quantity_approved,
-          item.status,
-          item.original_request,
-          item.received_quantity,
-          item.requested_by ? item.requested_by.name : "N/A",
-          item.approved_by ? item.approved_by.name : "N/A",
-          item.denied_by ? item.denied_by.name : "N/A",
-          item.denial_reason,
-          item.date_requested,
-          item.date_approved,
-          item.date_denied,
-          item.date_received,
-          item.approved_status,
-          item.received_status,
-        ]),
-      ];
+  const customValues = [
+    ["Total Request", this.filteredTotalRequest],
+    ["Total Approved", this.filteredTotalApproved],
+    ["Total Denied", this.filteredTotalDenied],
+    ["Total Pending", this.filteredTotalPending],
+    ["Partial", this.filteredTotalPartialReceived],
+    ["Complete", this.filteredTotalCompleteReceived],
+    ["Transferred", this.filteredTotalTransferred],
+    ["Cancelled", this.filteredTotalCancelled],
+  ];
 
-      return excelData;
-    },
+  const excelData = [
+    customHeaders, // Header row
+    ...data.map((item) => {
+      const siteName = item.site && item.site.name ? item.site.name : "N/A";
+      const itemName = (item.site_inventory && item.site_inventory.item_name) || (item.item && item.item.item_name) || "N/A";
+      const budgetCode = (item.site_inventory && item.site_inventory.budget_code) || (item.item && item.item.budget_code) || "N/A";
+
+      return [
+        item.id,
+        siteName,
+        itemName,
+        budgetCode,
+        item.quantity_approved,
+        item.status,
+        item.original_request,
+        item.received_quantity,
+        item.requested_by ? item.requested_by.name : "N/A",
+        item.approved_by ? item.approved_by.name : "N/A",
+        item.denied_by ? item.denied_by.name : "N/A",
+        item.denial_reason,
+        item.date_requested,
+        item.date_approved,
+        item.date_denied,
+        item.date_received,
+        item.approved_status,
+        item.received_status,
+      ];
+    }),
+    ...customValues,
+  ];
+  console.log("excelData:", excelData);
+  return excelData;
+},
+
 
     exportToExcel() {
       const filteredData = this.filteredInventory;
@@ -379,7 +391,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -398,11 +410,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/inventoryalltransaction", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventoryalltransaction",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
@@ -435,15 +450,16 @@ export default {
           this.filteredTotalPending = filteredData.filter(
             (item) => item.status === "Pending"
           ).length;
-          this.filteredTotalApproved = filteredData.filter(
-            (item) => item.status === "Approved"
-          ).length;
-          this.filteredTotalApproved = filteredData.filter(
-            (item) => item.status === "Approved"
-          ).length;
+          this.filteredTotalPartialReceived = filteredData.filter(
+        (item) => item.received_status === "partial"
+      ).length;
+      this.filteredTotalCompleteReceived = filteredData.filter(
+        (item) => item.received_status === "complete"
+      ).length;
           this.filteredTotalTransferred = filteredData.filter(
-  (item) => item.status === "Transferred All" || item.status === "Transferred Partial"
-).length;
+            (item) =>
+              item.status === "Transferred All" || item.status === "Transferred Partial"
+          ).length;
 
           this.filteredTotalCancelled = filteredData.filter(
             (item) => item.status === "Cancelled"
