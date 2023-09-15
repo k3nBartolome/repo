@@ -98,6 +98,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
     Route::get('classesall', [ClassesController::class, 'classesAll']);
     Route::get('cstat', [ClassesController::class, 'cstat']);
+    Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
     Route::get('classesallindia', [ClassesController::class, 'classesAllInd']);
     Route::get('classesalljam', [ClassesController::class, 'classesAllJam']);
     Route::get('classesallgua', [ClassesController::class, 'classesAllGua']);

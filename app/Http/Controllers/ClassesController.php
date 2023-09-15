@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
+use App\Models\DateRange;
+use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -233,6 +235,88 @@ class ClassesController extends Controller
 
         return response()->json([
         'classes' => $classes,
+    ]);
+    }
+
+    public function dashboardClasses()
+    {
+        $programs = Program::all();
+        $dateRanges = DateRange::all();
+
+        $classes = [];
+        foreach ($programs as $program) {
+            $programClasses = [];
+            foreach ($dateRanges as $dateRange) {
+                $class = Classes::where('site_id', $program->site_id)
+                ->where('program_id', $program->id)
+                ->where('date_range_id', $dateRange->id)
+                ->where('status', 'Active')
+                ->first();
+                $totalTarget = $class ? $class->total_target : 0;
+                $programClasses[] = [
+                'date_range_id' => $dateRange->id,
+                'class_id' => $class ? $class->id : 0,
+                'date_range' => $dateRange->date_range,
+                'month' => $dateRange->month,
+                'total_target' => $totalTarget,
+            ];
+            }
+            $classes[] = [
+            'site_id' => $program->site_id,
+            'site_name' => $program->site->name,
+            'program_name' => $program->name,
+            'program_id' => $program->id,
+            'classes' => $programClasses,
+        ];
+        }
+
+        $groupedClasses = [];
+
+        foreach ($classes as $class) {
+            $siteId = $class['site_name'];
+            $siteName = $class['site_id'];
+            $programName = $class['program_name'];
+            $programId = $class['program_id'];
+
+            if (!isset($groupedClasses[$siteId][$programName])) {
+                $groupedClasses[$siteId][$programName] = [
+                'date_ranges' => [],
+                'total_target' => 0,
+            ];
+            }
+
+            $dateRanges = $class['classes'];
+
+            foreach ($dateRanges as $dateRange) {
+                $dateRangeName = $dateRange['date_range'];
+                $dateRangeMonth = $dateRange['month'];
+                $totalTarget = $dateRange['total_target'];
+                $dateRangeId = $dateRange['date_range_id'];
+                $classId = $dateRange['class_id'];
+
+                if (!isset($groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth])) {
+                    $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth] = [
+                    'total_target' => 0,
+                    'program_id' => $programId,
+                    'month' => $dateRangeMonth,
+                    'date_ranges' => [], 
+                ];
+                }
+
+                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth]['total_target'] += $totalTarget;
+
+               
+                $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth]['date_ranges'][] = [
+                'date_range_id' => $dateRangeId,
+                'class_id' => $classId,
+                'date_range' => $dateRangeName,
+                'total_target' => $totalTarget,
+            ];
+            }
+        }
+
+        return response()->json([
+        'classes' => $groupedClasses,
     ]);
     }
 

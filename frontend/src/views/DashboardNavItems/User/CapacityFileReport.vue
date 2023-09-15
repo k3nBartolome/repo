@@ -1,169 +1,7 @@
 <template>
-  <header class="w-full bg-green-300">
-    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Reports
-      </h1>
-    </div>
-  </header>
-  <div class="py-8">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-1 md:grid-cols-6"
-      >
-        <div class="col-span-6 md:col-span-1">
-          <button
-            type="button"
-            class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
-            @click="resetFilter"
-          >
-            Reset Filters
-          </button>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Site
-            <select
-              v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getPrograms"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Programs
-            <select
-              v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
-                {{ program.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Month
-            <select
-              v-model="month_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getDateRange"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Week Range
-            <select
-              v-model="week_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
-              >
-                {{ daterange.date_range }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Status
-            <select
-              v-model="status"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="Active">Active</option>
-              <option value="Cancelled">Cancelled</option>
-              <option value="Moved">Moved</option>
-            </select>
-          </label>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <div class="py-0">
-    <div class="pl-8 pr-8">
-      <div class="scroll">
-        <div class="w-2/3 mx-auto datatable-container">
-          <DataTable
-            :data="filteredData"
-            :columns="columns"
-            class="table divide-y divide-gray-200 table-auto table-striped"
-            :options="{
-              responsive: false,
-              autoWidth: false,
-              pageLength: 10,
-              lengthChange: true,
-              ordering: true,
-              scrollX: true,
-              dom: 'fBrtlip',
-              buttons: ['excel', 'csv'],
-              language: {
-                search: 'Search',
-                zeroRecords: 'No data available',
-                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-                infoFiltered: '(Filtered from MAX records)',
-                paginate: {
-                  first: 'First',
-                  previous: 'Prev',
-                  next: 'Next',
-                  last: 'Last',
-                },
-              },
-            }"
-          >
-            <thead class="truncate">
-              <tr>
-                <!-- ...existing code... -->
-              </tr>
-            </thead>
-          </DataTable>
-          <div class="flex justify-between mt-4">
-            <div>
-              <span class="font-semibold">Total Targets:</span>
-              <span>{{ getTotalTargetsByFilters }}</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<h5 class="px-2">Dashboard</h5>
 </template>
-
+s
 <script>
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
@@ -186,7 +24,6 @@ DataTable.use(DataTableLib);
 DataTable.use(ButtonsHtml5);
 
 export default {
-  components: { DataTable },
   data() {
     return {
       classes: [],
@@ -218,7 +55,7 @@ export default {
     };
   },
   computed: {
-    getTotalTargetsByFilters() {
+    /* getTotalTargetsByFilters() {
       let filteredData = [...this.classes];
 
       if (this.sites_selected) {
@@ -289,7 +126,7 @@ export default {
       }
 
       return filteredData;
-    },
+    },*/
   },
   mounted() {
     window.vm = this;
@@ -316,26 +153,28 @@ export default {
       this.$router.push(`/pushbackcapfile/${id}`);
     },
     async getClassesAll() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/cstat",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+  try {
+    const token = this.$store.state.token;
+    const response = await axios.get("http://127.0.0.1:8000/api/classesdashboard", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
-        if (response.status === 200) {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
-        } else {
-          console.log("Error fetching classes");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    if (response.status === 200) {
+      // Request was successful, update the 'classes' data
+      this.classes = response.data.classes;
+      console.log("Classes fetched successfully:", this.classes);
+    } else {
+      // Handle unexpected status codes (e.g., 404, 500, etc.)
+      console.error("Error fetching classes. Status code:", response.status);
+    }
+  } catch (error) {
+    // Handle network errors or other exceptions
+    console.error("An error occurred:", error);
+  }
+},
+
     async getSites() {
       try {
         const token = this.$store.state.token;
