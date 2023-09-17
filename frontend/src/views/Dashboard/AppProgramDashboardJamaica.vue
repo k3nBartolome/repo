@@ -228,7 +228,7 @@ export default {
         is_active:1,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("/programs_activate/"+ id, form)
+      axios.put("http://127.0.0.1:8000/api/programs_activate/"+ id, form)
         .then(response => {
           console.log(response.data);
           this.is_active = "";
@@ -244,7 +244,7 @@ export default {
         is_active:0,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("/programs_deactivate/"+ id, form)
+      axios.put("http://127.0.0.1:8000/api/programs_deactivate/"+ id, form)
         .then(response => {
           console.log(response.data);
           this.is_active = "";
@@ -257,7 +257,7 @@ export default {
     },
     async getPrograms3() {
       await axios
-        .get("/programs5")
+        .get("http://127.0.0.1:8000/api/programs5")
         .then((response) => {
           this.programs5 = response.data.data;
           console.log(response.data.data);
@@ -269,7 +269,7 @@ export default {
     },
     async getPrograms4() {
       await axios
-        .get("/programs6")
+        .get("http://127.0.0.1:8000/api/programs6")
         .then((response) => {
           this.programs6 = response.data.data;
           console.log(response.data.data);
@@ -282,7 +282,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("/sites5")
+        .get("http://127.0.0.1:8000/api/sites5")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -301,7 +301,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("/programs", formData)
+        .post("http://127.0.0.1:8000/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";

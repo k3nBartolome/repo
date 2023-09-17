@@ -281,7 +281,6 @@ class ClassesController extends Controller
             if (!isset($groupedClasses[$siteId][$programName])) {
                 $groupedClasses[$siteId][$programName] = [
                 'date_ranges' => [],
-                'total_target' => 0,
             ];
             }
 
@@ -299,19 +298,32 @@ class ClassesController extends Controller
                     'total_target' => 0,
                     'program_id' => $programId,
                     'month' => $dateRangeMonth,
-                    'date_ranges' => [], 
+                    'date_ranges' => [], // Initialize date_ranges array
                 ];
                 }
 
                 $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth]['total_target'] += $totalTarget;
 
-               
+                // Add the date_range data to the date_ranges array
                 $groupedClasses[$siteId][$programName]['date_ranges'][$dateRangeMonth]['date_ranges'][] = [
                 'date_range_id' => $dateRangeId,
                 'class_id' => $classId,
                 'date_range' => $dateRangeName,
                 'total_target' => $totalTarget,
             ];
+            }
+        }
+
+        // Calculate the total target for each month in a program at a site
+        foreach ($groupedClasses as &$siteData) {
+            foreach ($siteData as &$programData) {
+                foreach ($programData['date_ranges'] as $month => &$monthData) {
+                    $totalTarget = 0;
+                    foreach ($monthData['date_ranges'] as $dateRange) {
+                        $totalTarget += $dateRange['total_target'];
+                    }
+                    $monthData['total_target'] = $totalTarget;
+                }
             }
         }
 
