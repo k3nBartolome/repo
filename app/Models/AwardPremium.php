@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class AwardPremium extends Model
 {
-    use Notifiable;
     use HasFactory;
     protected $table = 'award_premium';
     protected $fillable = [
@@ -24,17 +23,14 @@ class AwardPremium extends Model
         'released_by',
         'site_id',
     ];
-
     public function site()
     {
         return $this->belongsTo(Site::class, 'site_id');
     }
-
     public function items()
     {
         return $this->belongsTo(Items::class, 'item_id');
     }
-
     public function releasedBy()
     {
         return $this->belongsTo(User::class, 'released_by');

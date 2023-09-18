@@ -151,9 +151,6 @@ class ClassesController extends Controller
         $classStaffing->save();
         $classStaffing->class_staffing_id = $classStaffing->id;
         $classStaffing->save();
-        $recipientEmail = 'padillakryss@gmail.com.com';
-        $notification = new ClassesNotification($recipientEmail);
-        $user->notify($notification);
 
         return new ClassesResource($class);
     }

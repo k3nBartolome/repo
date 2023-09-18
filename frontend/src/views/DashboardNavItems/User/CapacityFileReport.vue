@@ -155,17 +155,18 @@ export default {
     async getClassesAll() {
   try {
     const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/classesdashboard", {
+    const response = await axios.get("http://127.0.0.1:8000/api/classesdashboard", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (response.status === 200) {
-
+      // Request was successful, update the 'classes' data
       this.classes = response.data.classes;
       console.log("Classes fetched successfully:", this.classes);
     } else {
+      // Handle unexpected status codes (e.g., 404, 500, etc.)
       console.error("Error fetching classes. Status code:", response.status);
     }
   } catch (error) {
@@ -177,7 +178,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -201,7 +202,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -228,7 +229,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
