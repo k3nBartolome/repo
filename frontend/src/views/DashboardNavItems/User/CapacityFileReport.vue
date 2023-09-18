@@ -162,11 +162,10 @@ export default {
     });
 
     if (response.status === 200) {
-      // Request was successful, update the 'classes' data
+
       this.classes = response.data.classes;
       console.log("Classes fetched successfully:", this.classes);
     } else {
-      // Handle unexpected status codes (e.g., 404, 500, etc.)
       console.error("Error fetching classes. Status code:", response.status);
     }
   } catch (error) {

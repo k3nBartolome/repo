@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Classes extends Model
 {
+    use Notifiable;
     use HasFactory;
     protected $casts = [
         'requested_by' => 'array',
