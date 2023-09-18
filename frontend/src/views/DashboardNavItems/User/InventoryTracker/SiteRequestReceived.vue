@@ -158,12 +158,6 @@ export default {
     orderable: false,
     searchable: false,
     render: function (data) {
-      //const isUser = this.isUser;
-      //const isRemx = this.isRemx;
-      //const isSourcing = this.isSourcing;
-      const requestedById = data.requested_by ? data.requested_by.id : null;
-
-      //console.log("Requested By ID:", requestedById);
 
       return `
         ${
