@@ -14,7 +14,7 @@ return [
     | If ['*'] is provided to allowed_methods, allowed_origins or allowed_headers
     | all methods / origins / headers are allowed.
     |
-    */
+     */
 
     /*
      * You can enable CORS for 1 or multiple paths.
@@ -23,14 +23,14 @@ return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
 
     /*
-    * Matches the request method. `['*']` allows all methods.
-    */
+     * Matches the request method. `['*']` allows all methods.
+     */
     'allowed_methods' => ['*'],
 
     /*
      * Matches the request origin. `['*']` allows all origins. Wildcards can be used, eg `*.mydomain.com`
      */
-    'allowed_origins' => ['http://localhost:8080'],
+    'allowed_origins' => ['http://10.109.2.112:8080'],
     /*
      * Patterns that can be used with `preg_match` to match the origin.
      */
