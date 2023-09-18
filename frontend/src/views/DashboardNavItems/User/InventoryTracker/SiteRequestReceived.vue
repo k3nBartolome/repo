@@ -158,6 +158,9 @@ export default {
     orderable: false,
     searchable: false,
     render: function (data) {
+      const requestedById = data.requested_by ? data.requested_by.id : null;
+
+
 
       return `
         ${
