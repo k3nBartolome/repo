@@ -7,9 +7,11 @@ use App\Models\Classes;
 use App\Models\ClassStaffing;
 use App\Models\DateRange;
 use App\Models\Program;
+use App\Notifications\ClassNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
@@ -151,6 +153,10 @@ class ClassesController extends Controller
         $classStaffing->save();
         $classStaffing->class_staffing_id = $classStaffing->id;
         $classStaffing->save();
+
+        $customEmail = 'padillakryss@gmail.com';
+
+        Notification::route('mail', $customEmail)->notify(new ClassNotification($customEmail));
 
         return new ClassesResource($class);
     }
