@@ -1,6 +1,34 @@
 <template>
-<h5 class="px-2">Dashboard</h5>
+  <table class="border-2 border-black align-center">
+    <thead>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr v-for="(siteData, siteName) in classes" :key="siteName">
+        <td>
+          {{ siteName }}
+          <table >
+            <tbody v-for="(programData, programName) in siteData" :key="programName">
+              <tr v-for="(daterangeData, daterangeName) in programData" :key="daterangeName">
+                {{ programName }}
+                <tbody v-for="(totaltargetData, monthName) in daterangeData" :key="monthName">
+                  <tbody v-for="(totalTarget, month) in totaltargetData" :key="month">
+                    <tr v-for="(totalTarget1, month1) in totalTarget" :key="month1">
+                <td>
+                  {{totalTargetData}}
+                </td>
+              </tr>
+            </tbody>
+              </tbody>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
+
 s
 <script>
 import axios from "axios";
@@ -153,27 +181,27 @@ export default {
       this.$router.push(`/pushbackcapfile/${id}`);
     },
     async getClassesAll() {
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get("http://127.0.0.1:8000/api/classesdashboard", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/classesdashboard", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (response.status === 200) {
-      // Request was successful, update the 'classes' data
-      this.classes = response.data.classes;
-      console.log("Classes fetched successfully:", this.classes);
-    } else {
-      // Handle unexpected status codes (e.g., 404, 500, etc.)
-      console.error("Error fetching classes. Status code:", response.status);
-    }
-  } catch (error) {
-    // Handle network errors or other exceptions
-    console.error("An error occurred:", error);
-  }
-},
+        if (response.status === 200) {
+          // Request was successful, update the 'classes' data
+          this.classes = response.data.classes;
+          console.log("Classes fetched successfully:", this.classes);
+        } else {
+          // Handle unexpected status codes (e.g., 404, 500, etc.)
+          console.error("Error fetching classes. Status code:", response.status);
+        }
+      } catch (error) {
+        // Handle network errors or other exceptions
+        console.error("An error occurred:", error);
+      }
+    },
 
     async getSites() {
       try {
@@ -251,55 +279,10 @@ export default {
 };
 </script>
 <style>
-.table-responsive {
-  overflow: auto;
+table {
+  border-collapse: separate;
 }
-
-.datatable-container {
-  width: 100%;
-}
-
-.table {
-  white-space: nowrap;
-}
-
-.table thead th {
-  padding: 8px;
-}
-
-.table tbody td {
-  padding: 8px;
-}
-.dataTables_wrapper .dataTables_filter {
-  float: left;
-  padding-right: 30px;
-}
-
-.dataTables_wrapper .dataTables_Buttons {
-  float: left;
-  margin-top: 30px;
-}
-
-.dataTables_wrapper .dataTables_pagination {
-  float: left;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.dataTables_wrapper .dataTables_length {
-  float: left;
-  padding-right: 15px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.dataTables_wrapper .dt-buttons .btn {
-  background-color: #007bff;
-  color: #fff;
-  border-radius: 4px;
-  padding: 8px 12px;
-  margin-right: 8px;
-  margin-top: 15px;
+td {
+  border: 1px solid #000; /* Replace with your desired border color */
 }
 </style>
