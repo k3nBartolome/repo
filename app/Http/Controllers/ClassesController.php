@@ -243,103 +243,103 @@ class ClassesController extends Controller
         'classes' => $classes,
     ]);
     }
-    public function dashboardClasses()
+
+    /*   public function dashboardClasses()
 {
-    $programs = Program::all();
-    $dateRanges = DateRange::all();
+      $programs = Program::all();
+      $dateRanges = DateRange::all();
 
-    $groupedClasses = [];
+      $groupedClasses = [];
 
-    foreach ($programs as $program) {
-        $siteName = $program->site->name;
-        $programName = $program->name;
-        $programId = $program->id;
+      foreach ($programs as $program) {
+          $siteName = $program->site->name;
+          $programName = $program->name;
+          $programId = $program->id;
 
-        foreach ($dateRanges as $dateRange) {
-            $dateRangeName = $dateRange->date_range;
-            $dateRangeMonth = $dateRange->month;
+          foreach ($dateRanges as $dateRange) {
+              $dateRangeName = $dateRange->date_range;
+              $dateRangeMonth = $dateRange->month;
 
-            $class = Classes::where([
-                'site_id' => $program->site_id,
-                'program_id' => $programId,
-                'date_range_id' => $dateRange->id,
-                'status' => 'Active'
-            ])->first();
+              $class = Classes::where([
+                  'site_id' => $program->site_id,
+                  'program_id' => $programId,
+                  'date_range_id' => $dateRange->id,
+                  'status' => 'Active'
+              ])->first();
 
-            $totalTarget = $class ? $class->total_target : 0;
+              $totalTarget = $class ? $class->total_target : 0;
 
-            // Build the result structure directly with a flat array.
-            $groupedClasses[] = [
-                'site_name' => $siteName,
-                'program_name' => $programName,
-                'date_range' => $dateRangeName,
-                'month' => $dateRangeMonth,
-                'total_target' => $totalTarget,
-            ];
-        }
-    }
+              // Build the result structure directly with a flat array.
+              $groupedClasses[] = [
+                  'site_name' => $siteName,
+                  'program_name' => $programName,
+                  'date_range' => $dateRangeName,
+                  'month' => $dateRangeMonth,
+                  'total_target' => $totalTarget,
+              ];
+          }
+      }
 
-    // Calculate total_target for each month.
-    $result = [];
-    foreach ($groupedClasses as $class) {
-        $siteName = $class['site_name'];
-        $programName = $class['program_name'];
-        $dateRangeMonth = $class['month'];
+      // Calculate total_target for each month.
+      $result = [];
+      foreach ($groupedClasses as $class) {
+          $siteName = $class['site_name'];
+          $programName = $class['program_name'];
+          $dateRangeMonth = $class['month'];
 
-        if (!isset($result[$siteName][$programName][$dateRangeMonth])) {
-            $result[$siteName][$programName][$dateRangeMonth] = 0;
-        }
+          if (!isset($result[$siteName][$programName][$dateRangeMonth])) {
+              $result[$siteName][$programName][$dateRangeMonth] = 0;
+          }
 
-        $result[$siteName][$programName][$dateRangeMonth] += $class['total_target'];
-    }
+          $result[$siteName][$programName][$dateRangeMonth] += $class['total_target'];
+      }
 
-    return response()->json([
-        'classes' => $result,
-    ]);
-}
-
-   /*  public function dashboardClasses()
-{
-    $programs = Program::all();
-    $dateRanges = DateRange::all();
-
-    $groupedClasses = [];
-
-    foreach ($programs as $program) {
-        $siteName = $program->site->name;
-        $programName = $program->name;
-        $programId = $program->id;
-
-        foreach ($dateRanges as $dateRange) {
-            $dateRangeName = $dateRange->date_range;
-            $dateRangeMonth = $dateRange->month;
-
-            $class = Classes::where([
-                'site_id' => $program->site_id,
-                'program_id' => $programId,
-                'date_range_id' => $dateRange->id,
-                'status' => 'Active'
-            ])->first();
-
-            $totalTarget = $class ? $class->total_target : 0;
-
-            $groupedClasses[$siteName][$programName]['date_ranges'][$dateRangeMonth][$dateRangeName]['total_target'] = $totalTarget;
-        }
-    }
-
-    foreach ($groupedClasses as &$siteData) {
-        foreach ($siteData as &$programData) {
-            foreach ($programData['date_ranges'] as $month => &$monthData) {
-                $monthData['total_target'] = array_sum(array_column($monthData, 'total_target'));
-            }
-        }
-    }
-
-    return response()->json([
-        'classes' => $groupedClasses,
-    ]);
+      return response()->json([
+          'classes' => $result,
+      ]);
 } */
 
+    /*  public function dashboardClasses()
+{
+     $programs = Program::all();
+     $dateRanges = DateRange::all();
+
+     $groupedClasses = [];
+
+     foreach ($programs as $program) {
+         $siteName = $program->site->name;
+         $programName = $program->name;
+         $programId = $program->id;
+
+         foreach ($dateRanges as $dateRange) {
+             $dateRangeName = $dateRange->date_range;
+             $dateRangeMonth = $dateRange->month;
+
+             $class = Classes::where([
+                 'site_id' => $program->site_id,
+                 'program_id' => $programId,
+                 'date_range_id' => $dateRange->id,
+                 'status' => 'Active'
+             ])->first();
+
+             $totalTarget = $class ? $class->total_target : 0;
+
+             $groupedClasses[$siteName][$programName]['date_ranges'][$dateRangeMonth][$dateRangeName]['total_target'] = $totalTarget;
+         }
+     }
+
+     foreach ($groupedClasses as &$siteData) {
+         foreach ($siteData as &$programData) {
+             foreach ($programData['date_ranges'] as $month => &$monthData) {
+                 $monthData['total_target'] = array_sum(array_column($monthData, 'total_target'));
+             }
+         }
+     }
+
+     return response()->json([
+         'classes' => $groupedClasses,
+     ]);
+} */
 
     /* public function dashboardClasses()
     {
@@ -428,6 +428,187 @@ class ClassesController extends Controller
         return response()->json([
         'classes' => $groupedClasses,
     ]);
+    } */
+    /* public function dashboardClasses()
+    {
+        // Fetch programs with their associated site
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
+
+        $groupedClasses = [];
+
+        foreach ($programs as $program) {
+            $siteId = $program->site_id;
+            $siteName = $program->site->name;
+            $programName = $program->name;
+            $programId = $program->id;
+
+            foreach ($dateRanges as $dateRange) {
+                $class = Classes::where('site_id', $siteId)
+                ->where('program_id', $programId)
+                ->where('date_range_id', $dateRange->id)
+                ->where('status', 'Active')
+                ->first();
+
+                $totalTarget = $class ? $class->total_target : 0;
+
+                if (!isset($groupedClasses[$siteName][$programName][$dateRange->month])) {
+                    $groupedClasses[$siteName][$programName][$dateRange->month] = [
+                    'total_target' => 0,
+                    'date_ranges' => [],
+                ];
+                }
+
+                $groupedClasses[$siteName][$programName][$dateRange->month]['total_target'] += $totalTarget;
+                $groupedClasses[$siteName][$programName][$dateRange->month]['date_ranges'][] = [
+                'date_range' => $dateRange->date_range,
+                'total_target' => $totalTarget,
+            ];
+            }
+        }
+
+        // Calculate the total_target for each month and for the entire program
+        foreach ($groupedClasses as &$siteData) {
+            foreach ($siteData as &$programData) {
+                $programTotal = 0;
+                foreach ($programData as $month => &$monthData) {
+                    $totalTarget = array_sum(array_column($monthData['date_ranges'], 'total_target'));
+                    $monthData['total_target'] = $totalTarget;
+                    $programTotal += $totalTarget;
+                }
+                $programData['program_total_target'] = $programTotal;
+            }
+        }
+
+        return response()->json([
+        'classes' => $groupedClasses,
+    ]);
+    } */
+
+    /*   public function dashboardClasses()
+      {
+          // Fetch programs with their associated site
+          $programs = Program::with('site')->get();
+          $dateRanges = DateRange::all();
+
+          $groupedClasses = [];
+
+          foreach ($programs as $program) {
+              $siteName = $program->site->name;
+              $programName = $program->name;
+
+              foreach ($dateRanges as $dateRange) {
+                  $daterangeName = $dateRange->date_range;
+                  $programId = $program->id;
+                  $month = $dateRange->month;
+
+                  $classes = Classes::where('site_id', $program->site_id)
+                  ->where('program_id', $programId)
+                  ->where('date_range_id', $dateRange->id)
+                  ->where('status', 'Active')
+                  ->get();
+
+                  $totalTarget = $classes->sum('total_target');
+
+                  // Populate the data structure directly
+                  if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                      $groupedClasses[$siteName][$programName][$month] = [
+                      'total_target' => 0,
+                      'date_ranges' => [],
+                  ];
+                  }
+
+                  $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+                  $groupedClasses[$siteName][$programName][$month]['date_ranges'][$daterangeName] = $totalTarget;
+              }
+          }
+
+          return response()->json([
+          'classes' => $groupedClasses,
+      ]);
+      } */
+    public function dashboardClasses()
+    {
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
+
+        $groupedClasses = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->site->name;
+            $programName = $program->name;
+
+            foreach ($dateRanges as $dateRange) {
+                $daterangeName = $dateRange->date_range;
+                $programId = $program->id;
+                $month = $dateRange->month;
+
+                $classes = Classes::where('site_id', $program->site_id)
+                       ->where('program_id', $programId)
+                       ->where('date_range_id', $dateRange->id)
+                       ->where('status', 'Active')
+                       ->get();
+
+                $totalTarget = $classes->sum('total_target');
+
+                if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                    $groupedClasses[$siteName][$programName][$month] = [
+                           'total_target' => 0,
+                           'date_ranges' => [],
+                       ];
+                }
+
+                $groupedClasses[$siteName][$programName][$month]['date_ranges'][$daterangeName] = [
+                       'total_target' => $totalTarget,
+                   ];
+                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+            }
+        }
+
+        logger('Grouped Classes:', $groupedClasses);
+
+    return response()->json([
+        'classes' => $groupedClasses,
+    ]);
+    }
+
+    /* public function dashboardClasses()
+    {
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
+
+        $flatClasses = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->site->name;
+            $programName = $program->name;
+
+            foreach ($dateRanges as $dateRange) {
+                $daterangeName = $dateRange->date_range;
+                $programId = $program->id;
+                $month = $dateRange->month;
+
+                $classes = Classes::where('site_id', $program->site_id)
+                      ->where('program_id', $programId)
+                      ->where('date_range_id', $dateRange->id)
+                      ->where('status', 'Active')
+                      ->get();
+
+                $totalTarget = $classes->sum('total_target');
+
+                $flatClasses[] = [
+                    'site_name' => $siteName,
+                    'program_name' => $programName,
+                    'month' => $month,
+                    'date_range' => $daterangeName,
+                    'total_target' => $totalTarget,
+                ];
+            }
+        }
+
+        return response()->json([
+            'classes' => $flatClasses,
+        ]);
     } */
 
     public function classesallInd()
