@@ -1288,7 +1288,7 @@ async getDateRange() {
           this.erf_number = "";
           this.agreed_start_date = "";
           this.date_range_id= "";
-          this.$router.push("http://127.0.0.1:8000/api/staffing", () => {
+          this.$router.push("/staffing", () => {
             location.reload();
           });
         })

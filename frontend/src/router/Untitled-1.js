@@ -47,8 +47,8 @@ import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGua
       },
       {
         path: "/staffing_report",
-        name: "powerBi",
-        component: powerBi,
+        name: "St affingTrackerReport",
+        component: St affingTrackerReport,
       },
       {
         path: "/pushbackcapfileguatemala/:id",
@@ -111,8 +111,8 @@ import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGua
       },
       {
         path: "/staffing_report",
-        name: "powerBi",
-        component: powerBi,
+        name: "St affingTrackerReport",
+        component: St affingTrackerReport,
       },
       {
         path: "/pushbackcapfilejamaica/:id",
@@ -175,8 +175,8 @@ import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGua
       },
       {
         path: "/staffing_report",
-        name: "powerBi",
-        component: powerBi,
+        name: "St affingTrackerReport",
+        component: St affingTrackerReport,
       },
       {
         path: "/pushbackcapfileindia/:id",

@@ -19,7 +19,7 @@ import ProgramManagement from "@/views/Dashboard/AppProgramDashboard.vue";
 import pushbackCapacityFile from "@/views/DashboardNavItems/User/Capfile/PushedBackCapacityFile.vue";
 import cancelCapacityFile from "@/views/DashboardNavItems/User/Capfile/CancelCapacityFile.vue";
 import editCapFile from "@/views/DashboardNavItems/User/Capfile/EditCapfile.vue";
-import powerBi from "@/views/DashboardNavItems/User/powerBi.vue";
+import StaffingTrackerReport from "@/views/DashboardNavItems/User/StaffingTrackerReport.vue";
 import StaffingTracker from "@/views/DashboardNavItems/User/StaffingTracker.vue";
 import AddStaffingTracker from "@/views/DashboardNavItems/User/AddStaffingTracker.vue";
 import UpdateStaffingTracker from "@/views/DashboardNavItems/User/UpdateStaffingTracker.vue";
@@ -185,8 +185,8 @@ const routes = [
       },
       {
         path: "/staffing_report",
-        name: "powerBi",
-        component: powerBi,
+        name: "StaffingTrackerReport",
+        component: StaffingTrackerReport,
       },
       {
         path: "/capfile_report",

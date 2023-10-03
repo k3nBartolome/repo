@@ -43,6 +43,153 @@ class ClassStaffingController extends Controller
     ]);
     }
 
+    /* public function mps()
+    {
+        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+        ->where('active_status', '1')
+        ->get();
+    } */
+
+    public function mps()
+    {
+        $totalTarget = Classes::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('total_target');
+
+        $totalInternal = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('show_ups_internal');
+
+        $totalExternal = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('show_ups_external');
+
+        $totalShowups = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('show_ups_total');
+
+        $totalCapsStarts = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('cap_starts');
+
+        $fillRate = 0;
+        if ($totalCapsStarts != 0) {
+            $fillRate = ($totalTarget / $totalCapsStarts) * 100;
+        }
+        $totalDay1 = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('day_1');
+        $totalDay2 = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('day_2');
+        $totalDay3 = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('day_3');
+        $totalDay4 = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('day_4');
+        $totalDay5 = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])->sum('day_5');
+        $fillRateDay1 = ($totalDay1 != 0) ? ($totalTarget / $totalDay1) * 100 : 0;
+        $fillRateDay2 = ($totalDay2 != 0) ? ($totalTarget / $totalDay2) * 100 : 0;
+        $fillRateDay3 = ($totalDay3 != 0) ? ($totalTarget / $totalDay3) * 100 : 0;
+        $fillRateDay4 = ($totalDay4 != 0) ? ($totalTarget / $totalDay4) * 100 : 0;
+        $fillRateDay5 = ($totalDay5 != 0) ? ($totalTarget / $totalDay5) * 100 : 0;
+        $totalFilled = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])
+        ->where('status', 'FILLED')
+        ->sum('classes_number');
+
+        $totalOpen = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])
+        ->where('status', 'OPEN')
+        ->sum('classes_number');
+        $totalClasses = ClassStaffing::with([
+            'classes.site',
+            'classes.program',
+            'classes.dateRange',
+            'classes.createdByUser',
+            'classes.updatedByUser',
+        ])
+        ->sum('classes_number');
+        $mps = [
+            'total_target' => $totalTarget,
+            'internal' => $totalInternal,
+            'external' => $totalExternal,
+            'overall starts' => $totalShowups,
+            'fill rate' => $fillRate,
+            'day 1' => $totalDay1,
+            'fill_rate_on_day_1' => $fillRateDay1,
+            'day 2' => $totalDay2,
+            'fill_rate_on_day_2' => $fillRateDay2,
+            'day 3' => $totalDay3,
+            'fill_rate_on_day_3' => $fillRateDay3,
+            'day 4' => $totalDay4,
+            'fill_rate_on_day_4' => $fillRateDay4,
+            'day 5' => $totalDay5,
+            'fill_rate_on_day5' => $fillRateDay5,
+            'total_classes' => $totalClasses,
+            'total_filled' => $totalFilled,
+            'total_open' => $totalOpen,
+            'filled_classes' => '',
+        ];
+
+        return response()->json([
+            'mps' => $mps,
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -968,7 +968,7 @@ export default {
           this.over_hires = "";
           this.additional_remarks = "";
           this.class_selected = "";
-          this.$router.push("http://127.0.0.1:8000/api/staffing", () => {
+          this.$router.push("/staffing", () => {
             location.reload();
           });
         })
@@ -1085,7 +1085,7 @@ export default {
         this.over_hires = "";
         this.additional_remarks = "";
         this.class_selected = "";
-        this.$router.push("http://127.0.0.1:8000/api/staffing", () => {
+        this.$router.push("/staffing", () => {
           location.reload();
         });
       })
