@@ -119,7 +119,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
     Route::get('classesstaffing2', [ClassStaffingController::class, 'index2']);
     Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transaction']);
-    Route::get('mps', [ClassStaffingController::class, 'mps']);
+
     // DateRange
     Route::get('daterange', [DateRangeController::class, 'index']);
     Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
@@ -169,3 +169,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
+Route::get('mps', [ClassStaffingController::class, 'mps']);

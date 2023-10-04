@@ -133,6 +133,8 @@ class ClassesController extends Controller
         $classStaffing->day_4 = '0';
         $classStaffing->day_5 = '0';
         $classStaffing->day_6 = '0';
+        $classStaffing->open = '0';
+        $classStaffing->filled = '0';
         $classStaffing->total_endorsed = '0';
         $classStaffing->internals_hires = '0';
         $classStaffing->additional_extended_jo = '0';

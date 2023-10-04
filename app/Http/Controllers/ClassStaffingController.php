@@ -52,142 +52,60 @@ class ClassStaffingController extends Controller
 
     public function mps()
     {
-        $totalTarget = Classes::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('total_target');
+        $withRelations = [
+        'classes.site',
+        'classes.program',
+        'classes.dateRange',
+        'classes.createdByUser',
+        'classes.updatedByUser',
+    ];
+        $withRelations2 = [
+        'site', 'program', 'dateRange', 'createdByUser', 'updatedByUser',
+    ];
 
-        $totalInternal = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('show_ups_internal');
+        $classStaffingQuery = ClassStaffing::with($withRelations);
+        $classesQuery = Classes::with($withRelations2);
+    
+        $totalTarget = $classesQuery->sum('total_target');
+        $totalInternal = $classStaffingQuery->sum('show_ups_internal');
+        $totalExternal = $classStaffingQuery->sum('show_ups_external');
+        $totalShowups = $classStaffingQuery->sum('show_ups_total');
+        $totalCapsStarts = $classStaffingQuery->sum('cap_starts');
+        $totalDay1 = $classStaffingQuery->sum('day_1');
+        $totalDay2 = $classStaffingQuery->sum('day_2');
+        $totalDay3 = $classStaffingQuery->sum('day_3');
+        $totalDay4 = $classStaffingQuery->sum('day_4');
+        $totalDay5 = $classStaffingQuery->sum('day_5');
 
-        $totalExternal = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('show_ups_external');
+        $totalFilled = $classStaffingQuery->where('status', 'FILLED')->sum('classes_number');
 
-        $totalShowups = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('show_ups_total');
+        $filledClasses = ($totalTarget != 0) ? (($totalFilled / $totalTarget) * 100) : 0;
 
-        $totalCapsStarts = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('cap_starts');
-
-        $fillRate = 0;
-        if ($totalCapsStarts != 0) {
-            $fillRate = ($totalTarget / $totalCapsStarts) * 100;
-        }
-        $totalDay1 = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('day_1');
-        $totalDay2 = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('day_2');
-        $totalDay3 = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('day_3');
-        $totalDay4 = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('day_4');
-        $totalDay5 = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])->sum('day_5');
-        $fillRateDay1 = ($totalDay1 != 0) ? ($totalTarget / $totalDay1) * 100 : 0;
-        $fillRateDay2 = ($totalDay2 != 0) ? ($totalTarget / $totalDay2) * 100 : 0;
-        $fillRateDay3 = ($totalDay3 != 0) ? ($totalTarget / $totalDay3) * 100 : 0;
-        $fillRateDay4 = ($totalDay4 != 0) ? ($totalTarget / $totalDay4) * 100 : 0;
-        $fillRateDay5 = ($totalDay5 != 0) ? ($totalTarget / $totalDay5) * 100 : 0;
-        $totalFilled = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])
-        ->where('status', 'FILLED')
-        ->sum('classes_number');
-
-        $totalOpen = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])
-        ->where('status', 'OPEN')
-        ->sum('classes_number');
-        $totalClasses = ClassStaffing::with([
-            'classes.site',
-            'classes.program',
-            'classes.dateRange',
-            'classes.createdByUser',
-            'classes.updatedByUser',
-        ])
-        ->sum('classes_number');
         $mps = [
-            'total_target' => $totalTarget,
-            'internal' => $totalInternal,
-            'external' => $totalExternal,
-            'overall starts' => $totalShowups,
-            'fill rate' => $fillRate,
-            'day 1' => $totalDay1,
-            'fill_rate_on_day_1' => $fillRateDay1,
-            'day 2' => $totalDay2,
-            'fill_rate_on_day_2' => $fillRateDay2,
-            'day 3' => $totalDay3,
-            'fill_rate_on_day_3' => $fillRateDay3,
-            'day 4' => $totalDay4,
-            'fill_rate_on_day_4' => $fillRateDay4,
-            'day 5' => $totalDay5,
-            'fill_rate_on_day5' => $fillRateDay5,
-            'total_classes' => $totalClasses,
-            'total_filled' => $totalFilled,
-            'total_open' => $totalOpen,
-            'filled_classes' => '',
-        ];
+        'total_target' => $totalTarget,
+        'internal' => $totalInternal,
+        'external' => $totalExternal,
+        'overall starts' => $totalShowups,
+        'fill rate' => ($totalCapsStarts != 0) ? (($totalTarget / $totalCapsStarts) * 100) : 0,
+        'day 1' => $totalDay1,
+        'fill_rate_on_day_1' => ($totalDay1 != 0) ? ($totalTarget / $totalDay1) * 100 : 0,
+        'day 2' => $totalDay2,
+        'fill_rate_on_day_2' => ($totalDay2 != 0) ? ($totalTarget / $totalDay2) * 100 : 0,
+        'day 3' => $totalDay3,
+        'fill_rate_on_day_3' => ($totalDay3 != 0) ? ($totalTarget / $totalDay3) * 100 : 0,
+        'day 4' => $totalDay4,
+        'fill_rate_on_day_4' => ($totalDay4 != 0) ? ($totalTarget / $totalDay4) * 100 : 0,
+        'day 5' => $totalDay5,
+        'fill_rate_on_day5' => ($totalDay5 != 0) ? ($totalTarget / $totalDay5) * 100 : 0,
+        'total_classes' => $classStaffingQuery->sum('classes_number'),
+        'total_filled' => $totalFilled, // Use the calculated totalFilled value here
+        'total_open' => $classStaffingQuery->where('status', 'OPEN')->sum('classes_number'),
+        'filled_classes' => $filledClasses,
+    ];
 
         return response()->json([
-            'mps' => $mps,
-        ]);
+        'mps' => $mps,
+    ]);
     }
 
     /**
@@ -219,6 +137,8 @@ class ClassStaffingController extends Controller
             'day_4' => 'required',
             'day_5' => 'required',
             'day_6' => 'required',
+            'open' => 'required',
+            'filled' => 'required',
             'total_endorsed' => 'required',
             'internals_hires' => 'required',
             'additional_extended_jo' => 'required',

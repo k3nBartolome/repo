@@ -335,6 +335,26 @@
               required
             />
           </label>
+          <label class="block">
+            Open
+            <input
+              disabled
+              type="number"
+              v-model="open"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Filled
+            <input
+              disabled
+              type="number"
+              v-model="filled"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
         </div>
       </div>
     </div>
@@ -718,6 +738,8 @@ export default {
       deficit: "",
       percentage: "",
       status: "",
+      open: "",
+      filled: "",
       internals_hires: "",
       externals_hires: "",
       additional_extended_jo: "",
@@ -765,7 +787,7 @@ export default {
       const showUpsValue = Number(parseFloat(this.show_ups_total));
 
       if (isNaN(targetValue) || isNaN(showUpsValue)) {
-        return 0; // Treat invalid or empty values as 0
+        return 0;
       }
 
       if (targetValue - showUpsValue < 0) {
@@ -904,6 +926,18 @@ export default {
 
       return result;
     },
+    filled_computed() {
+      const modResult = this.total_endorsed % 15;
+      if (modResult > 1) {
+        return Math.floor(this.total_endorsed / 15) + 1;
+      } else {
+        return Math.floor(this.total_endorsed / 15);
+      }
+    },
+    open_computed() {
+      const result = this.classes_number - this.filled;
+      return result < 0 ? 0 : result;
+    },
   },
   watch: {
     training_start: {
@@ -974,6 +1008,14 @@ export default {
       handler: "syncPipelineTarget",
       immediate: true,
     },
+    total_endorsed: {
+      handler: "syncPipelineTarget",
+      immediate: true,
+    },
+    open: {
+      handler: "syncOpen",
+      immediate: true,
+    },
   },
   mounted() {
     this.getSites();
@@ -986,25 +1028,25 @@ export default {
   },
   methods: {
     async getTransaction() {
-  try {
-    const token = this.$store.state.token;
-    const id = this.$route.params.id;
+      try {
+        const token = this.$store.state.token;
+        const id = this.$route.params.id;
 
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/classestransaction/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/classestransaction/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.class_transaction = response.data.class;
+        console.log(response.data.class);
+      } catch (error) {
+        console.log(error);
       }
-    );
-
-    this.class_transaction = response.data.class;
-    console.log(response.data.class);
-  } catch (error) {
-    console.log(error);
-  }
-},
+    },
 
     syncShowUpsTotal() {
       this.show_ups_total = this.show_ups_total_computed;
@@ -1019,49 +1061,58 @@ export default {
       this.internals_hires_all = this.all_internals_hires_computed;
       this.deficit_total = this.deficit_total_computed;
       this.pipeline_target = this.pipeline_target_computed;
+      this.open = this.open_computed;
     },
     syncEndorsedTotal() {
       this.total_endorsed = this.total_endorsed_computed;
+      this.open = this.filled_computed;
+      this.filled = this.filled_computed;
     },
     syncPipelineTotal() {
       this.pipeline_total = this.pipeline_total_computed;
       this.pipeline = this.pipeline_computed;
       this.deficit_total = this.deficit_total_computed;
+      this.filled = this.filled_computed;
     },
     syncPipelineTarget() {
       this.pipeline_target = this.pipeline_target_computed;
       this.deficit_total = this.deficit_total_computed;
+      this.filled = this.filled_computed;
+    },
+    syncOpen() {
+      this.open = this.open_computed;
+      this.filled = this.filled_computed;
     },
 
     async getClassesAll() {
-  try {
-    const token = this.$store.state.token;
+      try {
+        const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    this.classesall = response.data.classes;
-    console.log(response.data.classes);
-  } catch (error) {
-    console.log(error);
-  }
-},
-async getClassesStaffing() {
-  try {
-    const token = this.$store.state.token;
-    const id = this.$route.params.id;
-
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/classesstaffing/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        this.classesall = response.data.classes;
+        console.log(response.data.classes);
+      } catch (error) {
+        console.log(error);
       }
-    );
+    },
+    async getClassesStaffing() {
+      try {
+        const token = this.$store.state.token;
+        const id = this.$route.params.id;
+
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/classesstaffing/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const classStaffingObj = response.data.class;
 
         this.day_1 = classStaffingObj.day_1;
@@ -1095,23 +1146,23 @@ async getClassesStaffing() {
         this.over_hires = classStaffingObj.over_hires;
         this.additional_remarks = classStaffingObj.additional_remarks;
       } catch (error) {
-    console.log(error);
-  }
-},
-async getClasses() {
-  try {
-    const token = this.$store.state.token;
-    const classSelected = this.$route.query.class_selected;
+        console.log(error);
+      }
+    },
+    async getClasses() {
+      try {
+        const token = this.$store.state.token;
+        const classSelected = this.$route.query.class_selected;
 
-    if (classSelected) {
-      const response = await axios.get(
-        `http://127.0.0.1:8000/api/classes/${classSelected}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+        if (classSelected) {
+          const response = await axios.get(
+            `http://127.0.0.1:8000/api/classes/${classSelected}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
           const classObj = response.data.class;
           console.log(classObj);
           this.type_of_hiring = classObj.type_of_hiring;
@@ -1129,74 +1180,74 @@ async getClasses() {
           this.erf_number = classObj.erf_number;
           this.wave_no = classObj.wave_no;
         } else {
-      console.log("No class selected");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
-    async getSites() {
-  try {
-    const token = this.$store.state.token;
-
-    const response = await axios.get("http://127.0.0.1:8000/api/sites", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    this.sites = response.data.data;
-    console.log(response.data.data);
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-async getPrograms() {
-  try {
-    const token = this.$store.state.token;
-
-    const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    this.programs = response.data.data;
-    console.log(response.data.data);
-  } catch (error) {
-    console.error(error);
-  }
-},
-
-async getDateRange() {
-  console.log(this.training_start);
-  try {
-    const token = this.$store.state.token;
-
-    const response = await axios.get("http://127.0.0.1:8000/api/daterange", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    this.daterange = response.data.data;
-    console.log(response.data.data);
-
-    for (let i = 0; i < this.daterange.length; i++) {
-      const range = this.daterange[i];
-      if (
-        this.training_start >= range.week_start &&
-        this.training_start <= range.week_end
-      ) {
-        this.hiring_week = range.id;
-        break;
+          console.log("No class selected");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+    },
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        this.sites = response.data.data;
+        console.log(response.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getPrograms() {
+      try {
+        const token = this.$store.state.token;
+
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        this.programs = response.data.data;
+        console.log(response.data.data);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getDateRange() {
+      console.log(this.training_start);
+      try {
+        const token = this.$store.state.token;
+
+        const response = await axios.get("http://127.0.0.1:8000/api/daterange", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        this.daterange = response.data.data;
+        console.log(response.data.data);
+
+        for (let i = 0; i < this.daterange.length; i++) {
+          const range = this.daterange[i];
+          if (
+            this.training_start >= range.week_start &&
+            this.training_start <= range.week_end
+          ) {
+            this.hiring_week = range.id;
+            break;
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     updateClass() {
       const formData = {
@@ -1208,6 +1259,8 @@ async getDateRange() {
         day_6: this.day_6,
         day_7: this.day_7,
         day_8: this.day_8,
+        open: this.open,
+        filled: this.filled,
         total_endorsed: this.total_endorsed,
         show_ups_internal: this.show_ups_internal,
         show_ups_external: this.show_ups_external,
@@ -1240,17 +1293,17 @@ async getDateRange() {
         updated_by: this.$store.state.user_id,
       };
       const config = {
-    headers: {
-      Authorization: `Bearer ${this.$store.state.token}`,
-    },
-  };
+        headers: {
+          Authorization: `Bearer ${this.$store.state.token}`,
+        },
+      };
 
-  axios
-    .put(
-      `http://127.0.0.1:8000/api/updateclassesstaffing/${this.$route.params.id}`,
-      formData,
-      config
-    )
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/updateclassesstaffing/${this.$route.params.id}`,
+          formData,
+          config
+        )
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -1259,6 +1312,8 @@ async getDateRange() {
           this.day_4 = "";
           this.day_5 = "";
           this.day_6 = "";
+          this.open = "";
+          this.filled = "";
           this.total_endorsed = "";
           this.show_ups_internal = "";
           this.show_ups_external = "";
@@ -1287,7 +1342,7 @@ async getDateRange() {
           this.wave_no = "";
           this.erf_number = "";
           this.agreed_start_date = "";
-          this.date_range_id= "";
+          this.date_range_id = "";
           this.$router.push("/staffing", () => {
             location.reload();
           });
