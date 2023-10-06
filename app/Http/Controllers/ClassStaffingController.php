@@ -215,7 +215,7 @@ class ClassStaffingController extends Controller
         foreach ($dateRangeIds as $dateRangeId) {
             $group = $groupedStaffing->get($dateRangeId, collect());
             $computedSums[$dateRangeId] = [
-                'month' => $group->isEmpty() ? null : $group->first()->month_num,
+                'month' => $group->isEmpty() ? null : $group->first()->month,
         'week_name' => $group->isEmpty() ? null : $group->first()->week_name,
         'program_name' => $group->isEmpty() ? null : $group->first()->program_name,
         'site_name' => $group->isEmpty() ? null : $group->first()->site_name,
