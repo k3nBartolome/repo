@@ -170,3 +170,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
 Route::get('mps', [ClassStaffingController::class, 'mps']);
+Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);

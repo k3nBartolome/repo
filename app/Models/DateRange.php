@@ -13,6 +13,7 @@ class DateRange extends Model
         'month_num',
         'month',
         'year',
+        'date_id',
     ];
 
     public function classes()

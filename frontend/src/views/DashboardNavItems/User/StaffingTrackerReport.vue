@@ -9,39 +9,51 @@
   <div class="py-2 overflow-x-auto">
     <table class="w-full border-collapse">
       <thead>
-        <tr>
-          <th class="py-2 px-4 text-left">Month</th>
-          <th class="py-2 px-4 text-left">Target</th>
-          <th class="py-2 px-4 text-left">Internal</th>
-          <th class="py-2 px-4 text-left">External</th>
-          <th class="py-2 px-4 text-left">Overall Starts</th>
-          <th class="py-2 px-4 text-left">Day1</th>
-          <th class="py-2 px-4 text-left">Day2</th>
-          <th class="py-2 px-4 text-left">Day3</th>
-          <th class="py-2 px-4 text-left">Day4</th>
-          <th class="py-2 px-4 text-left">Day5</th>
-          <th class="py-2 px-4 text-left">Total Classes</th>
-          <th class="py-2 px-4 text-left">Filled</th>
-          <th class="py-2 px-4 text-left">Open</th>
+        <tr class="border-black border-2">
+          <th class="py-2 px-4 text-left truncate">Month</th>
+          <th class="py-2 px-4 text-left truncate">Week</th>
+          <th class="py-2 px-4 text-left truncate">Site</th>
+          <th class="py-2 px-4 text-left truncate">Program</th>
+          <th class="py-2 px-4 text-left truncate">Target</th>
+          <th class="py-2 px-4 text-left truncate">Internal</th>
+          <th class="py-2 px-4 text-left truncate">External</th>
+          <th class="py-2 px-4 text-left truncate">Overall Starts</th>
+          <th class="py-2 px-4 text-left truncate">Day1</th>
+          <th class="py-2 px-4 text-left truncate">Day2</th>
+          <th class="py-2 px-4 text-left truncate">Day3</th>
+          <th class="py-2 px-4 text-left truncate">Day4</th>
+          <th class="py-2 px-4 text-left truncate">Day5</th>
+          <th class="py-2 px-4 text-left truncate">Total Classes</th>
+          <th class="py-2 px-4 text-left truncate">Filled</th>
+          <th class="py-2 px-4 text-left truncate">Open</th>
         </tr>
       </thead>
       <tbody v-for="(mps, index) in mps" :key="index">
-        <tr>
-          <td class="border-b">
-            <div class="py-2 px-4">{{ mps.month }}</div>
+        <tr class="border-black border-2">
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps.month }}
           </td>
-          <td class="py-2 px-4 border">{{ mps.total_target }}</td>
-          <td class="py-2 px-4 border">{{ mps.internal }}</td>
-          <td class="py-2 px-4 border">{{ mps.external }}</td>
-          <td class="py-2 px-4 border">{{ mps.total }}</td>
-          <td class="py-2 px-4 border">{{ mps.day_1 }}</td>
-          <td class="py-2 px-4 border">{{ mps.day_2 }}</td>
-          <td class="py-2 px-4 border">{{ mps.day_3 }}</td>
-          <td class="py-2 px-4 border">{{ mps.day_4 }}</td>
-          <td class="py-2 px-4 border">{{ mps.day_5 }}</td>
-          <td class="py-2 px-4 border">{{ mps.classes }}</td>
-          <td class="py-2 px-4 border">{{ mps.filled }}</td>
-          <td class="py-2 px-4 border">{{ mps.open }}</td>
+          <td class="py-2 px-4 border text-left truncate">
+           {{ mps.week_name }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+           {{ mps.site_name }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps.program_name }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.total_target }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.internal }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.external }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.total }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.day_1 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.day_2 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.day_3 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.day_4 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.day_5 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.classes }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.filled }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps.open }}</td>
         </tr>
       </tbody>
     </table>
@@ -81,7 +93,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://127.0.0.1:8000/api/mps", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

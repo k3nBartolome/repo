@@ -59,6 +59,8 @@ class ClassStaffing extends Model
         'transaction',
         'updated_by',
         'created_by',
+        'open',
+        'filled',
     ];
 
     public function classes()

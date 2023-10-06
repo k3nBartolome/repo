@@ -10,6 +10,7 @@ class Site extends Model
     use HasFactory;
 
     protected $fillable = [
+        'site_id',
         'name',
         'description',
         'site_director',
@@ -23,6 +24,7 @@ class Site extends Model
     {
         return $this->hasMany(User::class);
     }
+
     public function items()
     {
         return $this->hasMany(Items::class);
