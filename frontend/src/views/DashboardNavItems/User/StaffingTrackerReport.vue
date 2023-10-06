@@ -1,17 +1,52 @@
 <template>
   <header class="w-full bg-orange-300">
-    <div class="flex items-center w-full max-w-screen-xl py-0 sm:px-2 lg:px-2">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
       <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker Reports
       </h1>
     </div>
   </header>
-  <div class="px-2">
-
+  <div class="py-2 overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="py-2 px-4 text-left">Month</th>
+          <th class="py-2 px-4 text-left">Target</th>
+          <th class="py-2 px-4 text-left">Internal</th>
+          <th class="py-2 px-4 text-left">External</th>
+          <th class="py-2 px-4 text-left">Overall Starts</th>
+          <th class="py-2 px-4 text-left">Day1</th>
+          <th class="py-2 px-4 text-left">Day2</th>
+          <th class="py-2 px-4 text-left">Day3</th>
+          <th class="py-2 px-4 text-left">Day4</th>
+          <th class="py-2 px-4 text-left">Day5</th>
+          <th class="py-2 px-4 text-left">Total Classes</th>
+          <th class="py-2 px-4 text-left">Filled</th>
+          <th class="py-2 px-4 text-left">Open</th>
+        </tr>
+      </thead>
+      <tbody v-for="(mps, index) in mps" :key="index">
+        <tr>
+          <td class="border-b">
+            <div class="py-2 px-4">{{ mps.month }}</div>
+          </td>
+          <td class="py-2 px-4 border">{{ mps.total_target }}</td>
+          <td class="py-2 px-4 border">{{ mps.internal }}</td>
+          <td class="py-2 px-4 border">{{ mps.external }}</td>
+          <td class="py-2 px-4 border">{{ mps.total }}</td>
+          <td class="py-2 px-4 border">{{ mps.day_1 }}</td>
+          <td class="py-2 px-4 border">{{ mps.day_2 }}</td>
+          <td class="py-2 px-4 border">{{ mps.day_3 }}</td>
+          <td class="py-2 px-4 border">{{ mps.day_4 }}</td>
+          <td class="py-2 px-4 border">{{ mps.day_5 }}</td>
+          <td class="py-2 px-4 border">{{ mps.classes }}</td>
+          <td class="py-2 px-4 border">{{ mps.filled }}</td>
+          <td class="py-2 px-4 border">{{ mps.open }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-
 </template>
-
 <script>
 import axios from "axios";
 export default {
@@ -31,11 +66,8 @@ export default {
       active_status: "",
     };
   },
-  watch: {
-  },
-  computed: {
-
-  },
+  computed: {},
+  watch: {},
   mounted() {
     this.getClassesAll();
     this.getClasses();
@@ -46,63 +78,68 @@ export default {
   },
   methods: {
     async getStaffing() {
-  try {
-    const token = this.$store.state.token;
+      try {
+        const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/mps", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get("http://127.0.0.1:8000/api/mps", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    this.mps = response.data.mps;
-    console.log(response.data.mps );
-  } catch (error) {
-    console.log(error);
-  }
-},
+        this.mps = response.data.mps;
+        console.log(response.data.mps);
+      } catch (error) {
+        console.log(error);
+      }
+    },
     async getClasses() {
-  try {
-    const token = this.$store.state.token;
+      try {
+        const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    this.classesall = response.data.classes;
-    console.log(response.data.classes);
+        this.classesall = response.data.classes;
+        console.log(response.data.classes);
 
-    const filteredClasses = this.filteredClasses;
-    if (filteredClasses.length > 0) {
-      this.class_selected = filteredClasses[0].id;
-    } else {
-      this.class_selected = "";
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
-async getClassesAll() {
-  try {
-    const token = this.$store.state.token;
+        const filteredClasses = this.filteredClasses;
+        if (filteredClasses.length > 0) {
+          this.class_selected = filteredClasses[0].id;
+        } else {
+          this.class_selected = "";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getClassesAll() {
+      try {
+        const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing2", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesstaffing2",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    this.class_staffing = response.data.class_staffing;
-    console.log(response.data.class_staffing);
-  } catch (error) {
-    console.log(error);
-  }
-},
+        this.class_staffing = response.data.class_staffing;
+        console.log(response.data.class_staffing);
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-
-async getSites() {
+    async getSites() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get("http://127.0.0.1:8000/api/sites", {

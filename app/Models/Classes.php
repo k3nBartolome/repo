@@ -85,6 +85,6 @@ class Classes extends Model
 
     public function classes()
     {
-        return $this->hasMany(ClassStaffing::ClassStaffing, 'classes_id');
+        return $this->hasMany(ClassStaffing::class, 'classes_id');
     }
 }

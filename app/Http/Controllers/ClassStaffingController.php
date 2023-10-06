@@ -6,6 +6,7 @@ use App\Models\Classes;
 use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class ClassStaffingController extends Controller
 {
@@ -42,14 +43,124 @@ class ClassStaffingController extends Controller
         'class_staffing' => $classStaffing,
     ]);
     }
+    
+    public function mps($dateRangeId = null, $monthNum = null, $siteId = null, $programId = null)
+{
+    $staffing = DB::table('class_staffing')
+    ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+    ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+    ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+    ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+    ->select(
+        'class_staffing.*',
+        'classes.*', 
+        'sites.*',
+        'programs.*',
+        'date_ranges.*',
+        DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+        DB::raw('COALESCE(date_ranges.month, 0) as month'),
+        DB::raw('COALESCE(date_ranges.id, 0) as date_range_id'),
+        DB::raw('COALESCE(sites.id, 0) as site_id'),
+        DB::raw('COALESCE(programs.id, 0) as program_id')
+    )
+    ->where('class_staffing.active_status', 1);
 
-    /* public function mps()
-    {
-        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
-        ->where('active_status', '1')
-        ->get();
-    } */
+if ($dateRangeId !== null) {
+    $staffing->where('date_ranges.id', $dateRangeId);
+}
 
+if ($monthNum !== null) {
+    $staffing->orWhere('date_ranges.month_num', $monthNum);
+}
+
+if ($siteId !== null) {
+    $staffing->where('sites.id', $siteId);
+}
+
+if ($programId !== null) {
+    $staffing->where('programs.id', $programId);
+}
+
+$staffing = $staffing->get();
+
+$monthNames = [
+    1 => 'January',
+    2 => 'February',
+    3 => 'March',
+    4 => 'April',
+    5 => 'May',
+    6 => 'June',
+    7 => 'July',
+    8 => 'August',
+    9 => 'September',
+    10 => 'October',
+    11 => 'November',
+    12 => 'December',
+];
+
+$groupedStaffing = $staffing->groupBy([
+    'month_num',
+]);
+
+$computedSums = [];
+
+$allMonthNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+$grandTotals = [
+    'total_target' => 0,
+    'internal' => 0,
+    'external' => 0,
+    'total' => 0,
+    'cap_starts' => 0,
+    'day_1' => 0,
+    'day_2' => 0,
+    'day_3' => 0,
+    'day_4' => 0,
+    'day_5' => 0,
+    'filled' => 0,
+    'open' => 0,
+    'classes' => 0,
+];
+
+foreach ($allMonthNums as $monthNum) {
+    $group = $groupedStaffing->get($monthNum, collect());
+    $monthName = $monthNames[$monthNum];
+    $computedSums[$monthName] = [
+    'month' => $monthName,
+        'total_target' => $group->sum('total_target'),
+        'internal' => $group->sum('show_ups_internal'),
+        'external' => $group->sum('show_ups_external'),
+        'total' => $group->sum('show_ups_total'),
+        'cap_starts' => $group->sum('cap_starts'),
+        'day_1' => $group->sum('day_1'),
+        'day_2' => $group->sum('day_2'),
+        'day_3' => $group->sum('day_3'),
+        'day_4' => $group->sum('day_4'),
+        'day_5' => $group->sum('day_5'),
+        'filled' => $group->sum('open'),
+        'open' => $group->sum('filled'),
+        'classes' => $group->sum('classes_number'),
+    ];
+
+    foreach ($grandTotals as $key => $value) {
+        $grandTotals[$key] += $computedSums[$monthName][$key];
+    }
+}
+
+$computedSums['Grand Total'] = $grandTotals;
+
+return response()->json([
+    'mps' => $computedSums,
+]);
+
+}
+
+
+
+    
+
+
+    /* 
     public function mps()
     {
         $withRelations = [
@@ -98,7 +209,7 @@ class ClassStaffingController extends Controller
         'day 5' => $totalDay5,
         'fill_rate_on_day5' => ($totalDay5 != 0) ? ($totalTarget / $totalDay5) * 100 : 0,
         'total_classes' => $classStaffingQuery->sum('classes_number'),
-        'total_filled' => $totalFilled, // Use the calculated totalFilled value here
+        'total_filled' => $totalFilled,
         'total_open' => $classStaffingQuery->where('status', 'OPEN')->sum('classes_number'),
         'filled_classes' => $filledClasses,
     ];
@@ -106,7 +217,7 @@ class ClassStaffingController extends Controller
         return response()->json([
         'mps' => $mps,
     ]);
-    }
+    } */
 
     /**
      * Show the form for creating a new resource.
