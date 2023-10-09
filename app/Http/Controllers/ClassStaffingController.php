@@ -192,6 +192,8 @@ class ClassStaffingController extends Controller
 
         $staffing = $staffing->get();
         $dateRangeIds = DB::table('date_ranges')->distinct()->pluck('date_id')->toArray();
+        $siteIds = DB::table('sites')->distinct()->pluck('site_id')->toArray();
+        $programIds = DB::table('programs')->distinct()->pluck('program_id')->toArray();
         $groupedStaffing = $staffing->groupBy('month_num');
 
         $computedSums = [];
@@ -213,8 +215,10 @@ class ClassStaffingController extends Controller
         ];
 
         foreach ($dateRangeIds as $dateRangeId) {
-            $group = $groupedStaffing->get($dateRangeId, collect());
-            $computedSums[$dateRangeId] = [
+            foreach ($siteIds as $siteId) {
+                foreach ($programIds as $programId) {
+            $group = $groupedStaffing->get($programId, collect());
+            $computedSums[$programId] = [
                 'month' => $group->isEmpty() ? null : $group->first()->month,
         'week_name' => $group->isEmpty() ? null : $group->first()->week_name,
         'program_name' => $group->isEmpty() ? null : $group->first()->program_name,
@@ -238,7 +242,7 @@ class ClassStaffingController extends Controller
             }
             if (!$group->isEmpty()) {
            
-            }
+            }}}
         }
     
         $computedSums[] = [

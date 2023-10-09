@@ -10,6 +10,7 @@
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-black border-2">
+          <th class="py-2 px-4 text-left truncate"></th>
           <th class="py-2 px-4 text-left truncate">Month</th>
           <th class="py-2 px-4 text-left truncate">Week</th>
           <th class="py-2 px-4 text-left truncate">Site</th>
@@ -30,6 +31,9 @@
       </thead>
       <tbody v-for="(mps, index) in mps" :key="index">
         <tr class="border-black border-2">
+          <td class="py-2 px-4 border text-left truncate">
+            {{ index }}
+          </td>
           <td class="py-2 px-4 border text-left truncate">
             {{ mps.month }}
           </td>
