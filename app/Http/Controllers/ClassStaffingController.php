@@ -192,9 +192,7 @@ class ClassStaffingController extends Controller
 
         $staffing = $staffing->get();
         $dateRangeIds = DB::table('date_ranges')->distinct()->pluck('date_id')->toArray();
-        $siteIds = DB::table('sites')->distinct()->pluck('site_id')->toArray();
-        $programIds = DB::table('programs')->distinct()->pluck('program_id')->toArray();
-        $groupedStaffing = $staffing->groupBy('month_num');
+        $groupedStaffing = $staffing->groupBy('date_range_id');
 
         $computedSums = [];
 
@@ -214,15 +212,12 @@ class ClassStaffingController extends Controller
             'classes' => 0,
         ];
 
-        foreach ($dateRangeIds as $dateRangeId) {
-            foreach ($siteIds as $siteId) {
-                foreach ($programIds as $programId) {
-            $group = $groupedStaffing->get($programId, collect());
-            $computedSums[$programId] = [
-                'month' => $group->isEmpty() ? null : $group->first()->month,
-        'week_name' => $group->isEmpty() ? null : $group->first()->week_name,
-        'program_name' => $group->isEmpty() ? null : $group->first()->program_name,
-        'site_name' => $group->isEmpty() ? null : $group->first()->site_name,
+        foreach ($groupedStaffing as $monthNum => $group) {
+            $computedSums[$monthNum] = [
+                'month' => $group->first()->month,
+                'week_name' => $group->first()->week_name,
+                'program_name' => $group->first()->site_name,
+                'site_name' => $group->first()->program_name,
                 'total_target' => $group->sum('total_target'),
                 'internal' => $group->sum('show_ups_internal'),
                 'external' => $group->sum('show_ups_external'),
@@ -237,16 +232,14 @@ class ClassStaffingController extends Controller
                 'open' => $group->sum('filled'),
                 'classes' => $group->sum('classes_number'),
             ];
+
             foreach ($grandTotals as $key => $value) {
-                $grandTotals[$key] += $computedSums[$dateRangeId][$key];
+                $grandTotals[$key] += $computedSums[$monthNum][$key];
             }
-            if (!$group->isEmpty()) {
-           
-            }}}
         }
-    
+
         $computedSums[] = [
-            'month_num' => 'Grand Total',
+            'month' => 'Total',
             'week_name' => '',
             'total_target' => $grandTotals['total_target'],
             'internal' => $grandTotals['internal'],
@@ -262,11 +255,12 @@ class ClassStaffingController extends Controller
             'open' => $grandTotals['open'],
             'classes' => $grandTotals['classes'],
         ];
-    
+
         return response()->json([
             'mps' => $computedSums,
         ]);
     }
+
 
     /*     public function mps($dateRangeId = null, $monthNum = null, $siteId = null, $programId = null)
         {
