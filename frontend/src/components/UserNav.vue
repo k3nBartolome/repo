@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="nav-container sticky top-0 z-50 bg-white">
     <nav class="container px-6 py-0 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
@@ -272,6 +272,12 @@ export default {
 };
 </script>
 <style>
+.sticky {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 50; /* Adjust the z-index as needed */
+}
 * {
   margin: 0;
   padding: 0;

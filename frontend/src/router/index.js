@@ -43,6 +43,9 @@ import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTrack
 import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
 import requestManagerDenied from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerDenied.vue";
 import requestManagerCancelled from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerCancelled.vue";
+import staffingTrackerMonthDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerMonthDashboard.vue";
+import staffingTrackerSiteDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerSiteDashboard.vue";
+import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerWeekDashboard.vue";
 
 const routes = [
   {
@@ -187,6 +190,23 @@ const routes = [
         path: "/staffing_report",
         name: "StaffingTrackerReport",
         component: StaffingTrackerReport,
+        children: [
+          {
+            path: "site",
+            name: "staffingTrackerSiteDashboard",
+            component: staffingTrackerSiteDashboard,
+          },
+          {
+            path: "week",
+            name: "staffingTrackerWeekDashboard",
+            component: staffingTrackerWeekDashboard,
+          },
+          {
+            path: "month",
+            name: "staffingTrackerMonthDashboard",
+            component: staffingTrackerMonthDashboard,
+          },
+        ],
       },
       {
         path: "/capfile_report",

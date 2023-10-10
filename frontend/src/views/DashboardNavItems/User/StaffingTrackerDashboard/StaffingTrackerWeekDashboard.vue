@@ -12,6 +12,7 @@
         <tr class="border-black border-2">
           <th class="py-2 px-4 text-left truncate"></th>
           <th class="py-2 px-4 text-left truncate">Month</th>
+          <th class="py-2 px-4 text-left truncate">Week</th>
           <th class="py-2 px-4 text-left truncate">Site</th>
           <th class="py-2 px-4 text-left truncate">Program</th>
           <th class="py-2 px-4 text-left truncate">Target</th>
@@ -28,46 +29,42 @@
           <th class="py-2 px-4 text-left truncate">Open</th>
         </tr>
       </thead>
-      <tbody v-for="(mps1, index) in mps" :key="index">
-        <template v-for="(mps2, index2) in mps1" :key="index2">
-        <tr class="border-black border-2" v-for="(mps3, index3) in mps2" :key="index3">
-          <td class="py-2 px-4 border text-left truncate">
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.month }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-           {{ mps3.site_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.program_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total_target }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.internal }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.external }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_1 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_2 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_3 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_4 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_5 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.classes }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.filled }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.open }}</td>
+      <tbody>
+        <tr
+          class="border-black border-2"
+          v-for="(mps4, index4) in mps"
+          :key="index4"
+        >
+          <td class="py-2 px-4 border text-left truncate"></td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.month }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.week_name }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.site_name }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.program_name }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.total_target }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.internal }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.external }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.total }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_1 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_2 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_3 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_4 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_5 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.classes }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.filled }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.open }}</td>
         </tr>
-        
-        </template>
       </tbody>
     </table>
   </div>
 </template>
+
 <script>
 import axios from "axios";
 export default {
   data() {
     return {
       mps: [],
-      grand_totals:[],
+      grand_totals: [],
       class_staffing: [],
       classesall: [],
       programs: [],
@@ -96,7 +93,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://127.0.0.1:8000/api/mpssite", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -112,14 +109,11 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesall",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         this.classesall = response.data.classes;
         console.log(response.data.classes);
@@ -138,14 +132,11 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesstaffing2",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing2", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         this.class_staffing = response.data.class_staffing;
         console.log(response.data.class_staffing);

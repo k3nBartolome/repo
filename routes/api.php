@@ -172,3 +172,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 Route::get('mps', [ClassStaffingController::class, 'mps']);
 Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
 Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
