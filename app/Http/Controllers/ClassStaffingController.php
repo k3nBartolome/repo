@@ -166,12 +166,12 @@ class ClassStaffingController extends Controller
                 'date_ranges.*',
                 DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
                 DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
-                DB::raw('COALESCE(date_ranges.month, 0) as month'),
-                DB::raw('COALESCE(date_ranges.date_range, 0) as week_name'),
+                DB::raw('COALESCE(date_ranges.month, null) as month'),
+                DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
                 DB::raw('COALESCE(sites.site_id, 0) as site_id'),
                 DB::raw('COALESCE(programs.program_id, 0) as program_id'),
-                DB::raw('COALESCE(sites.name, 0) as site_name'),
-                DB::raw('COALESCE(programs.name, 0) as program_name'),
+                DB::raw('COALESCE(sites.name, null) as site_name'),
+                DB::raw('COALESCE(programs.name, null) as program_name'),
             )
             ->where('class_staffing.active_status', 1);
 
@@ -198,12 +198,12 @@ class ClassStaffingController extends Controller
                 'classes' => 0,
             ];
 
-        foreach ($uniqueMonths as $month) {
-            $computedSums[$month] = [];
-
-            foreach ($uniqueSiteIds as $siteId) {
-                $computedSums[$month][$siteId] = [];
-                $siteGrandTotals = [
+            foreach ($uniqueMonths as $month) {
+                $computedSums[$month] = [];
+            
+                foreach ($uniqueSiteIds as $siteId) {
+                    $computedSums[$month][$siteId] = [];
+                    $siteGrandTotals = [
                         'total_target' => 0,
                         'internal' => 0,
                         'external' => 0,
@@ -218,42 +218,62 @@ class ClassStaffingController extends Controller
                         'open' => 0,
                         'classes' => 0,
                     ];
-
-                foreach ($uniqueProgramIds as $programId) {
-                    $MonthSiteProgram = $staffing
+            
+                    foreach ($uniqueProgramIds as $programId) {
+                        $MonthSiteProgram = $staffing
                             ->where('month_num', $month)
                             ->where('site_id', $siteId)
                             ->where('program_id', $programId);
-
-                    if ($MonthSiteProgram->count() > 0) {
-                        $computedSums[$month][$siteId][$programId] = [
+            
+                        $sums = [
+                            'total_target' => $MonthSiteProgram->sum('total_target'),
+                            'internal' => $MonthSiteProgram->sum('show_ups_internal'),
+                            'external' => $MonthSiteProgram->sum('show_ups_external'),
+                            'total' => $MonthSiteProgram->sum('show_ups_total'),
+                            'cap_starts' => $MonthSiteProgram->sum('cap_starts'),
+                            'day_1' => $MonthSiteProgram->sum('day_1'),
+                            'day_2' => $MonthSiteProgram->sum('day_2'),
+                            'day_3' => $MonthSiteProgram->sum('day_3'),
+                            'day_4' => $MonthSiteProgram->sum('day_4'),
+                            'day_5' => $MonthSiteProgram->sum('day_5'),
+                            'filled' => $MonthSiteProgram->sum('open'),
+                            'open' => $MonthSiteProgram->sum('filled'),
+                            'classes' => $MonthSiteProgram->sum('classes_number'),
+                        ];
+            
+                        // Check if any of the sums is greater than 0
+                        if (array_sum($sums) > 0) {
+                            $computedSums[$month][$siteId][$programId] = [
                                 'month' => $MonthSiteProgram->first()->month,
                                 'site_name' => $MonthSiteProgram->first()->site_name,
                                 'program_name' => $MonthSiteProgram->first()->program_name,
-                                'total_target' => $MonthSiteProgram->sum('total_target'),
-                                'internal' => $MonthSiteProgram->sum('show_ups_internal'),
-                                'external' => $MonthSiteProgram->sum('show_ups_external'),
-                                'total' => $MonthSiteProgram->sum('show_ups_total'),
-                                'cap_starts' => $MonthSiteProgram->sum('cap_starts'),
-                                'day_1' => $MonthSiteProgram->sum('day_1'),
-                                'day_2' => $MonthSiteProgram->sum('day_2'),
-                                'day_3' => $MonthSiteProgram->sum('day_3'),
-                                'day_4' => $MonthSiteProgram->sum('day_4'),
-                                'day_5' => $MonthSiteProgram->sum('day_5'),
-                                'filled' => $MonthSiteProgram->sum('open'),
-                                'open' => $MonthSiteProgram->sum('filled'),
-                                'classes' => $MonthSiteProgram->sum('classes_number'),
+                                'total_target' => $sums['total_target'],
+                                'internal' => $sums['internal'],
+                                'external' => $sums['external'],
+                                'total' => $sums['total'],
+                                'cap_starts' => $sums['cap_starts'],
+                                'day_1' => $sums['day_1'],
+                                'day_2' => $sums['day_2'],
+                                'day_3' => $sums['day_3'],
+                                'day_4' => $sums['day_4'],
+                                'day_5' => $sums['day_5'],
+                                'filled' => $sums['filled'],
+                                'open' => $sums['open'],
+                                'classes' => $sums['classes'],
                             ];
-
-                        foreach ($siteGrandTotals as $key => $value) {
-                            $siteGrandTotals[$key] += $computedSums[$month][$siteId][$programId][$key];
+            
+                            foreach ($siteGrandTotals as $key => $value) {
+                                $siteGrandTotals[$key] += $sums[$key];
+                            }
                         }
                     }
+            
+                    // Check if any of the siteGrandTotals is greater than 0
+                    if (array_sum($siteGrandTotals) > 0) {
+                        $computedSums[$month][$siteId]['site_grand_totals'] = $siteGrandTotals;
+                    }
                 }
-
-                $computedSums[$month][$siteId]['site_grand_totals'] = $siteGrandTotals;
             }
-        }
 
         $response = [
                 'mps' => $computedSums,
@@ -287,7 +307,6 @@ class ClassStaffingController extends Controller
 
             $staffing = $staffing->get();
     
-            // Get unique site_ids from the results
             $uniqueSiteIds = $staffing->pluck('site_id')->unique();
         
             $computedSums = [];
