@@ -87,7 +87,7 @@ export default {
       let isLogin;
 
       await axios
-        .post("http://10.109.2.112:8081/api/login", {
+        .post("http://i/login", {
           email: this.email,
           password: this.password,
         })
