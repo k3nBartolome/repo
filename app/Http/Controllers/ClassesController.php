@@ -13,9 +13,12 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Validator;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class ClassesController extends Controller
 {
+    
     public function index()
     {
         $minutes = 60;
@@ -49,6 +52,32 @@ class ClassesController extends Controller
             'perx' => $data,
         ]);
     }
+    public function perxFilter(Request $request)
+{
+    $query = DB::connection('mysql')
+        ->table('sites');
+
+    if ($request->has('filter_name')) {
+        $query->where('name', 'like', '%' . $request->input('filter_name') . '%');
+    }
+
+    if ($request->has('filter_region')) {
+        $query->where('region', 'like', '%' . $request->input('filter_region')  . '%');
+    }
+    
+    if ($request->has('filter_country')) {
+        $query->where('country', 'like', '%' . $request->input('filter_country')  . '%');
+    }
+
+    $data = $query->get();
+
+    return response()->json([
+        'perx' => $data,
+    ]);
+}
+
+
+
 
     public function sumTotalTarget()
     {
