@@ -506,7 +506,7 @@ export default {
     async getClassesAll() {
   try {
     const token = this.$store.state.token;
-    const response = await axios.get("http://127.0.0.1:8000/api/classesall",{
+    const response = await axios.get("http://10.109.2.112:8081/api/classesall",{
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -525,7 +525,7 @@ export default {
      async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -549,13 +549,13 @@ export default {
 
   await axios
     .delete(
-      `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+      `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
       { headers }
     )
     .then((response) => {
       this.classes = response.data.data;
       console.log(response.data.data);
-      this.$router.push("http://127.0.0.1:8000/api/capfile", () => {
+      this.$router.push("http://10.109.2.112:8081/api/capfile", () => {
         location.reload();
       });
     })
@@ -572,7 +572,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://127.0.0.1:8000/api/programs", { headers });
+    const response = await axios.get("http://10.109.2.112:8081/api/programs", { headers });
 
     if (response.status === 200) {
       this.programs = response.data.data;
@@ -592,7 +592,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://127.0.0.1:8000/api/daterange", { headers });
+    const response = await axios.get("http://10.109.2.112:8081/api/daterange", { headers });
 
     if (response.status === 200) {
       this.daterange = response.data.data;
@@ -623,7 +623,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get(`http://127.0.0.1:8000/api/classes/${this.$route.params.id}`, { headers });
+    const response = await axios.get(`http://10.109.2.112:8081/api/classes/${this.$route.params.id}`, { headers });
 
     if (response.status === 200) {
       const data = response.data;
@@ -664,7 +664,7 @@ async getTransaction() {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get(`http://127.0.0.1:8000/api/transaction/${this.$route.params.id}`, { headers });
+    const response = await axios.get(`http://10.109.2.112:8081/api/transaction/${this.$route.params.id}`, { headers });
 
     if (response.status === 200) {
       this.classes = response.data.classes;
@@ -717,7 +717,7 @@ async getTransaction() {
 
   axios
     .put(
-      `http://127.0.0.1:8000/api/classes/edit/${this.$route.params.id}`,
+      `http://10.109.2.112:8081/api/classes/edit/${this.$route.params.id}`,
       formData,
       { headers }
     )
@@ -751,7 +751,7 @@ async getTransaction() {
       this.cl = "";
       this.op = "";
       this.wave_no = "";
-      this.$router.push("http://127.0.0.1:8000/api/capfile", () => {
+      this.$router.push("http://10.109.2.112:8081/api/capfile", () => {
         location.reload();
       });
     })

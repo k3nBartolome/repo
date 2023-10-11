@@ -1,18 +1,30 @@
 <template>
-  <div>
-    <input v-model="filterName" placeholder="Filter by Name" />
-    <input v-model="filterRegion" placeholder="Filter by Region" />
-    <input v-model="filterCountry" placeholder="Filter by Country" />
-    <button @click="fetchData">Filter</button>
-    <button @click="exportToExcel">Export to Excel</button>
+  <div class="p-4">
+    <div class="mb-4">
+      <input v-model="filterLastName" placeholder="Filter by Last Name" class="p-2 border rounded-lg" />
+      <input v-model="filterFirstName" placeholder="Filter by First Name" class="p-2 border rounded-lg" />
+      <input v-model="filterMiddleName" placeholder="Filter by Middle Name" class="p-2 border rounded-lg" />
+      <button @click="fetchData" class="px-4 py-2 bg-blue-500 text-white rounded-lg">Filter</button>
+    </div>
 
-    <ul v-if="sites.length > 0">
-      <li v-for="site in sites" :key="site.id">
-        {{ site.name }} - {{ site.region }} - {{ site.country }}
-      </li>
-    </ul>
-    
-    <p v-else>No data available</p>
+    <table v-if="perx.length > 0" class="w-full border-collapse">
+      <thead>
+        <tr class="bg-gray-200">
+          <th class="border p-2">First Name</th>
+          <th class="border p-2">Last Name</th>
+          <th class="border p-2">Middle Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="person in perx" :key="person.id" class="border">
+          <td class="border p-2">{{ person.FirstName }}</td>
+          <td class="border p-2">{{ person.LastName }}</td>
+          <td class="border p-2">{{ person.MiddleName }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p v-else class="mt-4">No data available</p>
   </div>
 </template>
 
@@ -21,64 +33,35 @@ import axios from "axios";
 export default {
   data() {
     return {
-      filterName: "",
-      filterRegion: "",
-      filterCountry: "",
-      sites: [],
+      filterLastName: "",
+      filterFirstName: "",
+      filterMiddleName: "",
+      perx: [],
     };
   },
   methods: {
     async fetchData() {
+  console.log("Filter LastName:", this.filterLastName);
+  console.log("Filter FirstName:", this.filterFirstName);
+  console.log("Filter MiddleName:", this.filterMiddleName);
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/perxfilter", {
+        const response = await axios.get("http://10.109.2.112:8081/api/perxfilter", {
           params: {
-            filter_name: this.filterName,
-            filter_region: this.filterRegion,
-            filter_country: this.filterCountry,
+            filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_middlename: this.filterMiddleName,
           },
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        this.sites = response.data.perx;
+        this.perx = response.data.perx;
       } catch (error) {
         console.error("Error fetching data", error);
       }
     },
-    exportToExcel() {
-  try {
-    const token = this.$store.state.token;
-    axios
-      .get("http://127.0.0.1:8000/api/export", {
-        params: {
-          filter_name: this.filterName,
-          filter_region: this.filterRegion,
-          filter_country: this.filterCountry,
-        },
-        responseType: "blob",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        const blob = new Blob([response.data], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "exported-data.xlsx";
-        link.click();
-      })
-      .catch((error) => {
-        console.error("Error exporting data", error);
-      });
-  } catch (error) {
-    console.error("Error fetching token", error);
-  }
-},
-
-
   },
 };
 </script>
