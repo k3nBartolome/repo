@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class ClassesController extends Controller
 {
-    public function perxFilter(Request $request)
+    /* public function perxFilter(Request $request)
     {
         $query = DB::connection('secondary_sqlsrv')
             ->table('PERX_DATA');
@@ -48,8 +48,42 @@ class ClassesController extends Controller
         return response()->json([
             'perx' => $data,
         ]);
-    }
+    } */
+    public function perxFilter(Request $request)
+    {
+        $query = DB::connection('mysql')
+            ->table('sites');
 
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+
+            if (!empty($filterLastName)) {
+                $query->where('name', 'LIKE', '%' . $filterLastName . '%');
+            }
+        }
+
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+
+            if (!empty($filterFirstName)) {
+                $query->where('region', 'LIKE', '%' . $filterFirstName . '%');
+            }
+        }
+
+        if ($request->has('filter_middlename')) {
+            $filterMiddleName = $request->input('filter_middlename');
+
+            if (!empty($filterMiddleName)) {
+                $query->where('country', 'LIKE', '%' . $filterMiddleName . '%');
+            }
+        }
+
+        $data = $query->get();
+
+        return response()->json([
+            'perx' => $data,
+        ]);
+    } 
     public function index()
     {
         $minutes = 60;

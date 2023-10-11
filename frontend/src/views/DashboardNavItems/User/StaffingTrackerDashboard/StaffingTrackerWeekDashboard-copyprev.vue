@@ -1,4 +1,4 @@
-public function perxFilter(Request $request)
+<!-- public function perxFilter(Request $request)
 {
     $query = DB::connection('mysql')
         ->table('sites');
@@ -44,3 +44,9 @@ public function perxFilter(Request $request)
         'perx' => $data,
     ]);
 }
+ -->
+ <template>
+    <div>
+        <h1>asd</h1>
+    </div>
+ </template>
