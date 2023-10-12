@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-zip": "*",
         "beyondcode/laravel-websockets": "^2.0@beta",
         "doctrine/dbal": "^3.6",
         "fruitcake/laravel-cors": "^3.0",
@@ -15,7 +16,7 @@
         "laravel/sanctum": "^2.15",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
-        "maatwebsite/excel": "*",
+        "phpoffice/phpspreadsheet": "^1.12",
         "psr/simple-cache": "1.0",
         "spatie/laravel-permission": "^5.7"
     },

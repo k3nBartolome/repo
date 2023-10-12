@@ -308,7 +308,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://i/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -328,7 +328,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/itemsboth",
+          "http://i/itemsboth",
           {
             headers: {
               Authorization: `Bearer ${token}`,

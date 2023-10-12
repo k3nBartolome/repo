@@ -68,8 +68,8 @@
     </DataTable>
   </div>
 </template>
-  
-  
+
+
   <script>
   import axios from "axios";
   import DataTable from "datatables.net-vue3";
@@ -86,11 +86,11 @@
   import jszip from "jszip";
   // eslint-disable-next-line no-unused-vars
   import "bootstrap/dist/css/bootstrap.css";
-  
+
   DataTable.use(DataTableLib);
   DataTable.use(jszip);
   DataTable.use(ButtonsHtml5);
-  
+
   export default {
     components: { DataTable },
     data() {
@@ -131,7 +131,7 @@
       async exportToExcel() {
     try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/export", {
+        const response = await axios.get("http://i/export", {
             params: {
                 filter_lastname: this.filterLastName,
                 filter_firstname: this.filterFirstName,
@@ -154,7 +154,7 @@
     console.log("Filter MiddleName:", this.filterMiddleName);
         try {
           const token = this.$store.state.token;
-          const response = await axios.get("http://10.109.2.112:8081/api/perxfilter", {
+          const response = await axios.get("http://i/perxfilter", {
             params: {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
@@ -165,7 +165,7 @@
               Authorization: `Bearer ${token}`,
             },
           });
-  
+
           this.perx = response.data.perx;
         } catch (error) {
           console.error("Error fetching data", error);

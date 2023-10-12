@@ -64,45 +64,48 @@ class ClassesController extends Controller
     }
     public function exportFilteredData(Request $request)
 {
-    $query = DB::connection('secondary_sqlsrv')
-        ->table('PERX_DATA');
+    $query = DB::connection('secondary_sqlsrv')->table('PERX_DATA');
+
+    // Define an array to store filter conditions
+    $filters = [];
 
     if ($request->has('filter_lastname')) {
         $filterLastName = $request->input('filter_lastname');
-
         if (!empty($filterLastName)) {
-            $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            $filters[] = ['LastName', 'LIKE', '%' . $filterLastName . '%'];
         }
     }
 
     if ($request->has('filter_firstname')) {
         $filterFirstName = $request->input('filter_firstname');
-
         if (!empty($filterFirstName)) {
-            $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            $filters[] = ['FirstName', 'LIKE', '%' . $filterFirstName . '%'];
         }
     }
 
     if ($request->has('filter_middlename')) {
         $filterMiddleName = $request->input('filter_middlename');
-
         if (!empty($filterMiddleName)) {
-            $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
+            $filters[] = ['MiddleName', 'LIKE', '%' . $filterMiddleName . '%'];
         }
     }
 
     if ($request->has('filter_contact')) {
         $filterContact = $request->input('filter_contact');
-
         if (!empty($filterContact)) {
-            $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+            $filters[] = ['MobileNo', 'LIKE', '%' . $filterContact . '%'];
         }
+    }
+
+    // Apply all the filter conditions
+    if (!empty($filters)) {
+        $query->where($filters);
     }
 
     $data = $query->get();
 
     // Convert the data from stdClass objects to arrays
-    $dataArray = $data->toArray(); // Use the toArray() method to convert the collection to an array
+    $dataArray = $data->toArray();
 
     $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
@@ -134,7 +137,7 @@ class ClassesController extends Controller
         'OSS_SITE',
     ];
 
-    $sheet->fromArray(array($headings), NULL, 'A1');
+    $sheet->fromArray([$headings], NULL, 'A1');
 
     // Set styles for headings
     $styleArray = [
@@ -153,12 +156,15 @@ class ClassesController extends Controller
 
     $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
 
+    // Send the HTTP headers
     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     header('Content-Disposition: attachment;filename="filtered_perx_data.xlsx"');
     header('Cache-Control: max-age=0');
 
+    // Save the spreadsheet to the output stream
     $writer->save('php://output');
 }
+
 
    
     /* public function perxFilter(Request $request)
