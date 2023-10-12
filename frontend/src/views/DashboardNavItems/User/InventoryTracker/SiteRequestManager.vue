@@ -113,7 +113,7 @@ methods: {
     try {
       const token = this.$store.state.token;
       const response = await axios.get(
-        "http://i/inventoryall",
+        "http://10.109.2.112:8081/api/inventoryall",
         {
           headers: {
             Authorization: `Bearer ${token}`,

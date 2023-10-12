@@ -199,7 +199,7 @@ export default {
       };
 
       axios
-        .put(`http://i/purchase/approved/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/purchase/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -221,7 +221,7 @@ export default {
       };
 
       axios
-        .put(`http://i/purchase/denied/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/purchase/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -234,7 +234,7 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/purchase", {
+        const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -253,7 +253,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

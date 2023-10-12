@@ -2,27 +2,27 @@
 
 namespace App\Exports;
 
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class MyExport
+class MyExport implements FromCollection, WithHeadings
 {
-    private $data;
+    protected $data;
 
     public function __construct(array $data)
     {
-        $this->data = $data;
+        $this->data = collect($data);
     }
 
-    public function export()
+    public function collection()
     {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
+        return $this->data;
+    }
 
-        // Add headings
-        $headings = [
+    public function headings(): array
+    {
+        return [
             'ApplicantId',
             'ApplicationInfoId',
             'DateOfApplication',
@@ -47,24 +47,5 @@ class MyExport
             'OSS_LOB',
             'OSS_SITE',
         ];
-
-        $sheet->fromArray([$headings], null, 'A1');
-        
-        // Add data
-        $row = 2;
-        foreach ($this->data as $item) {
-            $sheet->fromArray([$item], null, 'A' . $row);
-            $row++;
-        }
-
-        // Apply styles
-        $sheet->getStyle('1')->applyFromArray([
-            'font' => ['bold' => true],
-            'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
-        ]);
-
-        // Create a writer and save the file
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('filtered_perx_data.xlsx');
     }
 }

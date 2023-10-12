@@ -323,7 +323,7 @@ export default {
     async getSites7() {
       console.log(this.sites_selected);
       await axios
-        .get("http://i/sites7")
+        .get("http://10.109.2.112:8081/api/sites7")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -335,7 +335,7 @@ export default {
     async getPrograms7() {
       console.log(this.programs_selected);
       await axios
-        .get("http://i/programs7")
+        .get("http://10.109.2.112:8081/api/programs7")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -347,7 +347,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://i/daterange")
+        .get("http://10.109.2.112:8081/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -380,7 +380,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://i/classes/", formData)
+        .post("http://10.109.2.112:8081/api/classes/", formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -403,7 +403,7 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
-          this.$router.push("http://i/capfileguatemala", () => {
+          this.$router.push("http://10.109.2.112:8081/api/capfileguatemala", () => {
             location.reload();
           });
         })

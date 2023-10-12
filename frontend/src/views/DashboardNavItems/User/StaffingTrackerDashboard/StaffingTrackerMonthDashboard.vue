@@ -79,7 +79,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://i/mpsmonth", {
+        const response = await axios.get("http://10.109.2.112:8081/api/mpsmonth", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -96,7 +96,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://i/classesall",
+          "http://10.109.2.112:8081/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://i/classesstaffing2",
+          "http://10.109.2.112:8081/api/classesstaffing2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -140,7 +140,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -164,7 +164,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://i/programs_selected/${this.sites_selected}`,
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -191,7 +191,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://i/daterange_selected/${this.month_selected}`,
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

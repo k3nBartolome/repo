@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MyExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
@@ -11,162 +12,100 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use Maatwebsite\Excel\Facades\Excel;
 
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\IOFactory;
-use App\Exports\MyExport;
 class ClassesController extends Controller
 {
     public function perxFilter(Request $request)
-    {
-        $query = DB::connection('secondary_sqlsrv')
-            ->table('PERX_DATA');
-
-        if ($request->has('filter_lastname')) {
-            $filterLastName = $request->input('filter_lastname');
-
-            if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
-            }
-        }
-
-        if ($request->has('filter_firstname')) {
-            $filterFirstName = $request->input('filter_firstname');
-
-            if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
-            }
-        }
-
-        if ($request->has('filter_middlename')) {
-            $filterMiddleName = $request->input('filter_middlename');
-
-            if (!empty($filterMiddleName)) {
-                $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
-            }
-        }
-        if ($request->has('filter_contact')) {
-            $filterContact = $request->input('filter_contact');
-
-            if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
-            }
-        }
-
-        $data = $query->get();
-
-        return response()->json([
-            'perx' => $data,
-        ]);
-    }
-    public function exportFilteredData(Request $request)
 {
-    $query = DB::connection('secondary_sqlsrv')->table('PERX_DATA');
-
-    // Define an array to store filter conditions
-    $filters = [];
+    $query = DB::connection('secondary_sqlsrv')
+        ->table('PERX_DATA');
 
     if ($request->has('filter_lastname')) {
         $filterLastName = $request->input('filter_lastname');
+
         if (!empty($filterLastName)) {
-            $filters[] = ['LastName', 'LIKE', '%' . $filterLastName . '%'];
+            $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
         }
     }
 
     if ($request->has('filter_firstname')) {
         $filterFirstName = $request->input('filter_firstname');
+
         if (!empty($filterFirstName)) {
-            $filters[] = ['FirstName', 'LIKE', '%' . $filterFirstName . '%'];
+            $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
         }
     }
 
     if ($request->has('filter_middlename')) {
         $filterMiddleName = $request->input('filter_middlename');
+
         if (!empty($filterMiddleName)) {
-            $filters[] = ['MiddleName', 'LIKE', '%' . $filterMiddleName . '%'];
+            $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
         }
     }
 
     if ($request->has('filter_contact')) {
         $filterContact = $request->input('filter_contact');
+
         if (!empty($filterContact)) {
-            $filters[] = ['MobileNo', 'LIKE', '%' . $filterContact . '%'];
+            $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
         }
     }
 
-    // Apply all the filter conditions
-    if (!empty($filters)) {
-        $query->where($filters);
-    }
+    $filteredData = $query->get();
 
-    $data = $query->get();
-
-    // Convert the data from stdClass objects to arrays
-    $dataArray = $data->toArray();
-
-    $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
-    $sheet = $spreadsheet->getActiveSheet();
-
-    // Set headings
-    $headings = [
-        'ApplicantId',
-        'ApplicationInfoId',
-        'DateOfApplication',
-        'LastName',
-        'FirstName',
-        'MiddleName',
-        'MobileNo',
-        'Site',
-        'GenSource',
-        'SpecSource',
-        'Step',
-        'AppStep',
-        'PERX_HRID',
-        'PERX_Last_Day',
-        'PERX_Retract',
-        'PERX_NAME',
-        'OSS_HRID',
-        'OSS_Last_Day',
-        'OSS_Retract',
-        'OSS_FNAME',
-        'OSS_LNAME',
-        'OSS_LOB',
-        'OSS_SITE',
-    ];
-
-    $sheet->fromArray([$headings], NULL, 'A1');
-
-    // Set styles for headings
-    $styleArray = [
-        'font' => [
-            'bold' => true,
-        ],
-        'alignment' => [
-            'horizontal' => Alignment::HORIZONTAL_CENTER,
-        ],
-    ];
-
-    $sheet->getStyle('A1:U1')->applyFromArray($styleArray);
-
-    // Set data
-    $sheet->fromArray($dataArray, NULL, 'A2');
-
-    $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
-
-    // Send the HTTP headers
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="filtered_perx_data.xlsx"');
-    header('Cache-Control: max-age=0');
-
-    // Save the spreadsheet to the output stream
-    $writer->save('php://output');
+    return response()->json([
+        'perx' => $filteredData,
+    ]);
 }
 
+public function exportFilteredData(Request $request)
+{
+    $query = DB::connection('secondary_sqlsrv')
+        ->table('PERX_DATA');
 
-   
+    if ($request->has('filter_lastname')) {
+        $filterLastName = $request->input('filter_lastname');
+
+        if (!empty($filterLastName)) {
+            $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+        }
+    }
+
+    if ($request->has('filter_firstname')) {
+        $filterFirstName = $request->input('filter_firstname');
+
+        if (!empty($filterFirstName)) {
+            $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+        }
+    }
+
+    if ($request->has('filter_middlename')) {
+        $filterMiddleName = $request->input('filter_middlename');
+
+        if (!empty($filterMiddleName)) {
+            $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
+        }
+    }
+
+    if ($request->has('filter_contact')) {
+        $filterContact = $request->input('filter_contact');
+
+        if (!empty($filterContact)) {
+            $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+        }
+    }
+
+    $filteredData = $query->get();
+
+    // Convert the object to an array
+    $filteredDataArray = $filteredData->toArray();
+
+    // Export the filtered data to an Excel file
+    return Excel::download(new MyExport($filteredDataArray), 'filtered_perx_data.xlsx');
+}
+
     /* public function perxFilter(Request $request)
     {
     $query = DB::connection('mysql')

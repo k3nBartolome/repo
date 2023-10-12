@@ -363,7 +363,7 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/itemsboth3", {
+        const response = await axios.get("http://10.109.2.112:8081/api/itemsboth3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -382,7 +382,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -444,7 +444,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://i/items", formData, {
+        .post("http://10.109.2.112:8081/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
