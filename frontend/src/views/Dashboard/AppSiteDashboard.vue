@@ -1,11 +1,11 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Site Manager
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -226,7 +226,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8081/api/sites", config)
+          .get("http://127.0.0.1:8000/api/sites", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -250,7 +250,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8081/api/sites2", config)
+          .get("http://127.0.0.1:8000/api/sites2", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites2 = response.data.data;
@@ -282,7 +282,7 @@ export default {
       };
 
       axios
-        .post("http://10.109.2.112:8081/api/sites", formData, config)
+        .post("http://127.0.0.1:8000/api/sites", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

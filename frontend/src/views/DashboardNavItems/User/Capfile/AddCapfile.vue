@@ -2,9 +2,9 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h1 class="text-xl font-bold text-center">ADD CLASS</h1>
-    </div>
-  </header>
+      <h2 class="text-xl font-bold text-center">ADD CLASS</h2>
+        </div>
+      </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
       <div
@@ -327,7 +327,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -351,7 +351,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/programs", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/programs", { headers });
 
     if (response.status === 200) {
       this.programs = response.data.data;
@@ -372,7 +372,7 @@ async getDateRange() {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/daterange", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/daterange", { headers });
 
     if (response.status === 200) {
       this.daterange = response.data.data;
@@ -413,7 +413,7 @@ async getDateRange() {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

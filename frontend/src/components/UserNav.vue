@@ -37,14 +37,14 @@
             Staffing Tracker
           </li>
         </router-link>
-       <!--  <router-link to="/dashboard_manager/request" class="link-button">
+       <router-link to="/perx" class="link-button">
           <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/request') }"
-            v-if="isUser || isRemx || isBudget || isSourcing"
+              :class="{ 'selected-tab': isActiveTab('/perx') }"
+            v-if="isUser|| isBudget || isSourcing"
                       >
-            Inventory Tracker
+            Perx Tool
           </li>
-        </router-link> -->
+        </router-link>
         <li class="tab-button">
           <div v-if="isUser">
             <div class="relative inline-block py-0">

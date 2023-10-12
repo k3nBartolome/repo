@@ -1,11 +1,11 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-2 bg-gray-100">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -825,7 +825,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "http://10.109.2.112:8081/api/classes/" + this.$route.query.class_selected
+            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -852,7 +852,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -863,7 +863,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -878,7 +878,7 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -889,7 +889,7 @@ export default {
     },
     async getDateRange() {
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -934,7 +934,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -979,7 +979,7 @@ export default {
   },
   async getSites() {
     await axios
-      .get("http://10.109.2.112:8081/api/sites")
+      .get("http://127.0.0.1:8000/api/sites")
       .then((response) => {
         this.sites = response.data.data;
         console.log(response.data.data);
@@ -994,7 +994,7 @@ export default {
     }
 
     await axios
-      .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+      .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
       .then((response) => {
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -1006,7 +1006,7 @@ export default {
 
   async getDateRange() {
     await axios
-      .get("http://10.109.2.112:8081/api/daterange")
+      .get("http://127.0.0.1:8000/api/daterange")
       .then((response) => {
         this.daterange = response.data.data;
         console.log(response.data.data);
@@ -1051,7 +1051,7 @@ export default {
       created_by: this.$store.state.user_id,
     };
     axios
-      .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+      .post("http://127.0.0.1:8000/api/classesstaffing", formData)
       .then((response) => {
         console.log(response.data);
         this.day_1 = "";

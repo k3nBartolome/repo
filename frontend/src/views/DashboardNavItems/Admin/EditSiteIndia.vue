@@ -1,9 +1,9 @@
 <template>
     <header class="w-full bg-white shadow">
       <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-        <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+        <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
           Site Manager
-        </h1>
+        </h2>
       </div>
     </header>
     <div class="py-8">
@@ -60,7 +60,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/sites/" + this.$route.params.id)
         .then((response) => {
             this.sites = response.data.data
           const siteObj = this.sites;
@@ -84,7 +84,7 @@ export default {
         region: this.region,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://10.109.2.112:8081/api/sites/"+ this.$route.params.id, formData)
+      axios.put("http://127.0.0.1:8000/api/sites/"+ this.$route.params.id, formData)
         .then(response => {
           console.log(response.data);
           this.name = '';
@@ -92,7 +92,7 @@ export default {
           this.siteDirector = '';
           this.region = '';
           this.updated_by = '';
-          this.$router.push("http://10.109.2.112:8081/api/site_managementindia", () => {
+          this.$router.push("http://127.0.0.1:8000/api/site_managementindia", () => {
             location.reload();
           });
         })

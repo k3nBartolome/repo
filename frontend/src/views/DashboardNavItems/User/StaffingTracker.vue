@@ -1,11 +1,11 @@
 <template>
   <header class="w-full bg-orange-300">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-8 bg-white">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -365,7 +365,7 @@ export default {
   try {
     const token = this.$store.state.token;
 
-    const response = await axios.get("http://10.109.2.112:8081/api/classesall", {
+    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -389,7 +389,7 @@ async getClassesAll() {
   try {
     const token = this.$store.state.token;
 
-    const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing", {
+    const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -406,7 +406,7 @@ async getClassesAll() {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -430,7 +430,7 @@ async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -457,7 +457,7 @@ async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

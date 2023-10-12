@@ -1,4 +1,11 @@
 <template>
+  <header class="w-full bg-white">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+        Perx Audit Tool
+      </h2>
+    </div>
+  </header>
   <div class="p-4">
     <div class="mb-4 flex flex-wrap space-y-2 md:space-y-0 md:space-x-2">
       <input
@@ -34,8 +41,12 @@
         Export
       </button>
     </div>
-    <div v-if="filterLoading" class="text-center text-blue-500 font-bold">Rendering...</div>
-    <div v-if="exportLoading" class="text-center text-blue-500 font-bold">Exporting...</div>
+    <div v-if="filterLoading" class="text-center text-blue-500 font-bold">
+      Rendering...
+    </div>
+    <div v-if="exportLoading" class="text-center text-blue-500 font-bold">
+      Exporting...
+    </div>
     <DataTable
       :data="perx"
       :columns="columns"
@@ -140,17 +151,20 @@ export default {
       this.filterLoading = true; // Set filter loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/perxfilter", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterFirstName,
-            filter_middlename: this.filterMiddleName,
-            filter_contact: this.filterContact,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/perxfilter",
+          {
+            params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterFirstName,
+              filter_middlename: this.filterMiddleName,
+              filter_contact: this.filterContact,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         this.perx = response.data.perx;
       } catch (error) {

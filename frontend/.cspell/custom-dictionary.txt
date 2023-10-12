@@ -27,6 +27,8 @@ Filtrados
 Firstname
 frtlip
 hoverable
+hrid
+HRID
 jszip
 Lastname
 li
@@ -34,6 +36,7 @@ managementguatamela
 managementguatemala
 managementindia
 managementjamaica
+middlename
 Monstrando
 officedocument
 openxmlformats
@@ -41,7 +44,6 @@ Overhires
 pdfmake
 perx
 Perx
-St affingTrackerReport
 programmanagementedit
 Punzalan
 pushbackcapfile
@@ -54,10 +56,12 @@ registros
 remx
 Remx
 resgistros
+rtlip
 sched
 Sheryll
 sitemanagementedit
 spreadsheetml
+StaffingTrackerReport
 syncShowUps
 Tomzer
 tooltiptext

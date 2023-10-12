@@ -4,9 +4,9 @@
     <div class="items-center w-full py-2">
       <h1 class="text-xl font-bold text-center">
         ADD CLASS
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
       <div class="px-12 py-6 mx-auto font-semibold bg-white border border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
@@ -243,7 +243,7 @@ export default {
     async getSites3() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites3")
+        .get("http://127.0.0.1:8000/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -255,7 +255,7 @@ export default {
     async getPrograms3() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs3")
+        .get("http://127.0.0.1:8000/api/programs3")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -267,7 +267,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -300,7 +300,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData)
+        .post("http://127.0.0.1:8000/api/classes/", formData)
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -323,7 +323,7 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
-          this.$router.push("http://10.109.2.112:8081/api/capfileindia", () => {
+          this.$router.push("http://127.0.0.1:8000/api/capfileindia", () => {
             location.reload();
           });
         })

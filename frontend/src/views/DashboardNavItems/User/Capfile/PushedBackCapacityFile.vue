@@ -1,11 +1,11 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h1 class="text-xl font-bold text-center">
+      <h2 class="text-xl font-bold text-center">
         PUSHBACK CLASS
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
       <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
@@ -461,7 +461,7 @@ export default {
      async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -485,7 +485,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/programs", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/programs", { headers });
 
     if (response.status === 200) {
       this.programs = response.data.data;
@@ -505,7 +505,7 @@ async getDateRange() {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/daterange", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/daterange", { headers });
 
     if (response.status === 200) {
       this.daterange = response.data.data;
@@ -532,7 +532,7 @@ async getDateRange() {
 async getClasses() {
   try {
     const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id, {
+    const response = await axios.get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -566,7 +566,7 @@ async getClasses() {
 async getTransaction() {
   try {
     const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id, {
+    const response = await axios.get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -615,7 +615,7 @@ pushClass() {
 
   axios
     .put(
-      "http://10.109.2.112:8081/api/classes/pushedback/" + this.$route.params.id,
+      "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
       formData,
       {
         headers: {
@@ -653,7 +653,7 @@ pushClass() {
       this.cl = "";
       this.op = "";
 
-      this.$router.push("http://10.109.2.112:8081/api/capfile", () => {
+      this.$router.push("http://127.0.0.1:8000/api/capfile", () => {
         location.reload();
       });
     })

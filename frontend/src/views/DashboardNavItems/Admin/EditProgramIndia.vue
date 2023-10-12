@@ -1,11 +1,11 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Program Manager
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -88,7 +88,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/programs/" + this.$route.params.id)
         .then((response) => {
             this.programs = response.data.data
           const programObj = this.programs;
@@ -107,7 +107,7 @@ export default {
      async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -142,7 +142,7 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.$router.push("http://10.109.2.112:8081/api/program_managementindia", () => {
+          this.$router.push("http://127.0.0.1:8000/api/program_managementindia", () => {
             location.reload();
           });
         })

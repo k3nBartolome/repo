@@ -3,9 +3,9 @@
     <div class="items-center w-full py-2">
       <h1 class="text-xl font-bold text-center">
         PUSHBACK CLASS
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
       <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
@@ -461,7 +461,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites5")
+        .get("http://127.0.0.1:8000/api/sites5")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -473,7 +473,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs5")
+        .get("http://127.0.0.1:8000/api/programs5")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -485,7 +485,7 @@ export default {
     async getDateRange() {
       console.log(this.agreed_start_date);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -507,7 +507,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -536,7 +536,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -578,7 +578,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/pushedback/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/pushedback/" + this.$route.params.id,
           formData
         )
         .then((response) => {
@@ -610,7 +610,7 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("http://10.109.2.112:8081/api/capfileindia", () => {
+          this.$router.push("http://127.0.0.1:8000/api/capfileindia", () => {
             location.reload();
           });
         })

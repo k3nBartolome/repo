@@ -2,13 +2,13 @@
 <template>
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button @click="showModal = true" class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">
           ADD Purchase Request
         </button>
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div class="fixed inset-0 z-50 flex items-center justify-center modal" v-if="showModal">
@@ -183,7 +183,7 @@
         async getPurchase() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
+            const response = await axios.get("http://127.0.0.1:8000/api/purchase", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -202,7 +202,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://127.0.0.1:8000/api/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -228,7 +228,7 @@
     requested_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/purchase", formData, {
+    .post("http://127.0.0.1:8000/api/purchase", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

@@ -1,7 +1,7 @@
 <template>
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      <h1 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
+      <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
           v-if="isUser || isRemx || isSourcing"
           @click="showModal = true"
@@ -9,9 +9,9 @@
         >
           Released Normal Item
         </button>
-      </h1>
-    </div>
-  </header>
+      </h2>
+        </div>
+      </header>
   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
@@ -445,7 +445,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/items_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/items_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -467,7 +467,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -486,7 +486,7 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/awarded/normal", {
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/normal", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -543,7 +543,7 @@ export default {
       formData.append("processed_by", this.$store.state.user_id);
 
       try {
-        const response = await axios.post("http://10.109.2.112:8081/api/award", formData, {
+        const response = await axios.post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
             "Content-Type": "multipart/form-data",

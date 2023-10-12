@@ -46,6 +46,7 @@ import requestManagerCancelled from "@/views/DashboardNavItems/User/InventoryTra
 import staffingTrackerMonthDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerMonthDashboard.vue";
 import staffingTrackerSiteDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerSiteDashboard.vue";
 import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerWeekDashboard.vue";
+import perxAuditTools from "@/views/DashboardNavItems/User/PerxAuditTools.vue";
 
 const routes = [
   {
@@ -65,6 +66,11 @@ const routes = [
         path: "/staffing",
         name: "StaffingTracker",
         component: StaffingTracker,
+      },
+      {
+        path: "/perx",
+        name: "perxAuditTools",
+        component: perxAuditTools,
       },
       {
         path: "/inventory",
