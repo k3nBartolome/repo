@@ -109,7 +109,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
     Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
     Route::get('perxfilter', [ClassesController::class, 'perxFilter']);
-    Route::get('export', [ClassesController::class, 'exportToExcel']);
+    Route::get('export', [ClassesController::class, 'exportFilteredData']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);

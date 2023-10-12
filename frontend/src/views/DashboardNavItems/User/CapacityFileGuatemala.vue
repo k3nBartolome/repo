@@ -228,7 +228,7 @@ export default {
   methods: {
     async getClassesAll() {
       await axios
-        .get("http://i/classesallgua")
+        .get("http://10.109.2.112:8081/api/classesallgua")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.data);
@@ -239,7 +239,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://i/sites7")
+        .get("http://10.109.2.112:8081/api/sites7")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -255,7 +255,7 @@ export default {
 
       await axios
         .get(
-          `http://i/programs_selected/${this.sites_selected}`
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
         )
         .then((response) => {
           this.programs = response.data.data;
@@ -273,7 +273,7 @@ export default {
 
       await axios
         .get(
-          `http://i/daterange_selected/${this.month_selected}`
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
         )
         .then((response) => {
           this.daterange = response.data.data;
