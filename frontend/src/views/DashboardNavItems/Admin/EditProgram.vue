@@ -88,7 +88,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://127.0.0.1:8000/api/programs/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
         .then((response) => {
             this.programs = response.data.data
           const programObj = this.programs;
@@ -107,7 +107,7 @@ export default {
      async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -142,7 +142,7 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.$router.push("http://127.0.0.1:8000/api/program_management", () => {
+          this.$router.push("http://10.109.2.112:8081/api/program_management", () => {
             location.reload();
           });
         })

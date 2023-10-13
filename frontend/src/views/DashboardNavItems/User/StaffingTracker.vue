@@ -365,7 +365,7 @@ export default {
   try {
     const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/classesall", {
+    const response = await axios.get("http://10.109.2.112:8081/api/classesall", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -389,7 +389,7 @@ async getClassesAll() {
   try {
     const token = this.$store.state.token;
 
-    const response = await axios.get("http://127.0.0.1:8000/api/classesstaffing", {
+    const response = await axios.get("http://10.109.2.112:8081/api/classesstaffing", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -406,7 +406,7 @@ async getClassesAll() {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -430,7 +430,7 @@ async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -457,7 +457,7 @@ async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

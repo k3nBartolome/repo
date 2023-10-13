@@ -37,16 +37,34 @@
             Staffing Tracker
           </li>
         </router-link>
-       <router-link to="/perx" class="link-button">
-          <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/perx') }"
-            v-if="isUser|| isBudget || isSourcing"
-                      >
-            Perx Tool
-          </li>
-        </router-link>
+       
         <li class="tab-button">
-          <div v-if="isUser">
+          <div v-if="isUser|| isBudget || isSourcing">
+            <div class="relative inline-block py-0">
+              <button
+                @click="toggleDropdown5"
+                class="px-4 py-2 text-black rounded cursor-pointer"
+              >
+              Budget
+              </button>
+              <div
+                v-show="isDropdown5Open"
+                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
+              >
+              <router-link to="/perx" class="link-button">
+                <li class="tab-button"
+                    :class="{ 'selected-tab': isActiveTab('/perx') }"
+                  v-if="isUser|| isBudget || isSourcing"
+                            >
+                  PERX Tool
+                </li>
+              </router-link>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tab-button">
+          <div v-if="isUser|| isBudget">
             <div class="relative inline-block py-0">
               <button
                 @click="toggleDropdown4"
@@ -229,6 +247,7 @@ export default {
       isDropdown2Open: false,
       isDropdown3Open: false,
       isDropdown4Open: false,
+      isDropdown5Open: false,
     };
   },
   computed: {
@@ -264,6 +283,9 @@ export default {
     },
     toggleDropdown4() {
       this.isDropdown4Open = !this.isDropdown4Open;
+    },
+    toggleDropdown5() {
+      this.isDropdown5Open = !this.isDropdown5Open;
     },
     navigateToPage() {
       this.$router.push(this.selectedOption);

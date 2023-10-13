@@ -60,7 +60,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites/" + this.$route.params.id)
+        .get("http://10.109.2.112:8081/api/sites/" + this.$route.params.id)
         .then((response) => {
             this.sites = response.data.data
           const siteObj = this.sites;
@@ -84,7 +84,7 @@ export default {
         region: this.region,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://127.0.0.1:8000/api/sites/"+ this.$route.params.id, formData)
+      axios.put("http://10.109.2.112:8081/api/sites/"+ this.$route.params.id, formData)
         .then(response => {
           console.log(response.data);
           this.name = '';
@@ -92,7 +92,7 @@ export default {
           this.siteDirector = '';
           this.region = '';
           this.updated_by = '';
-          this.$router.push("http://127.0.0.1:8000/api/site_managementindia", () => {
+          this.$router.push("http://10.109.2.112:8081/api/site_managementindia", () => {
             location.reload();
           });
         })

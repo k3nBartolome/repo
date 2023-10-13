@@ -1,91 +1,110 @@
 <template>
-  <header class="w-full bg-white">
-    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Perx Audit Tool
-      </h2>
-    </div>
-  </header>
-  <div class="p-4">
-    <div class="mb-4 flex flex-wrap space-y-2 md:space-y-0 md:space-x-2">
-      <input
-        v-model="filterLastName"
-        placeholder="Filter by Last Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterFirstName"
-        placeholder="Filter by First Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterMiddleName"
-        placeholder="Filter by Middle Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterContact"
-        placeholder="Filter by Mobile No."
-        class="p-2 border rounded-lg"
-      />
-      <button
-        @click="fetchData"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        Filter
-      </button>
-      <button
-        @click="exportToExcel"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        Export
-      </button>
-    </div>
-    <div v-if="filterLoading" class="text-center text-blue-500 font-bold">
-      Rendering...
-    </div>
-    <div v-if="exportLoading" class="text-center text-blue-500 font-bold">
-      Exporting...
-    </div>
-    <DataTable
-      :data="perx"
-      :columns="columns"
-      class="table divide-y divide-gray-200 table-auto table-striped"
-      :options="{
-        responsive: true,
-        autoWidth: false,
-        pageLength: 10,
-        lengthChange: true,
-        ordering: true,
-        scrollX: true,
-        dom: 'rtlip',
-        language: {
-          search: 'Search',
-          zeroRecords: 'No data available',
-          info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-          infoFiltered: '(Filtered from MAX records)',
-          paginate: {
-            first: 'First',
-            previous: 'Prev',
-            next: 'Next',
-            last: 'Last',
+  <div>
+    <header class="bg-white p-4">
+      <div class="max-w-screen-xl mx-auto">
+        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool</h2>
+      </div>
+    </header>
+    <div class="bg-gray-100 p-4">
+        <div class="mb-4 md:flex md:space-x-2 md:items-center">
+          <div class="w-full md:w-1/4 relative">
+            <input
+              v-model="filterLastName"
+              placeholder="Filter by Last Name"
+              class="p-2 border rounded-lg w-full"
+              @input="validateLastName"
+            />
+            <div v-if="filterLastNameError" class="absolute top-full left-0 text-red-500 text-sm">
+              {{ filterLastNameError }}
+            </div>
+          </div>
+          <div class="w-full md:w-1/4">
+            <input
+              v-model="filterFirstName"
+              placeholder="Filter by First Name"
+              class="p-2 border rounded-lg w-full"
+            />
+          </div>
+          <div class="w-full md:w-1/4">
+            <input
+              v-model="filterMiddleName"
+              placeholder="Filter by Middle Name"
+              class="p-2 border rounded-lg w-full"
+            />
+          </div>
+          <div class="w-full md:w-1/4 relative">
+            <input
+              v-model="filterContact"
+              placeholder="Filter by Mobile No."
+              class="p-2 border rounded-lg w-full"
+              @input="validateContact"
+            />
+            <div v-if="filterContactError" class="absolute top-full left-0 text-red-500 text-sm">
+              {{ filterContactError }}
+            </div>
+          </div>
+          <div class="w-full md:w-1/4">
+            <button
+              @click="fetchData"
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            >
+              Filter
+            </button>
+          </div>
+          <div class="w-full md:w-1/4">
+            <button
+              @click="exportToExcel"
+              class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            >
+              Export
+            </button>
+          </div>
+        </div>
+        <div v-if="filterLoading || exportLoading" class="text-center text-blue-500 font-bold">
+          {{ filterLoading ? 'Rendering...' : 'Exporting...' }}
+        </div>
+        <DataTable
+        :data="perx"
+        :columns="columns"
+        class="table divide-y divide-gray-200 table-auto table-striped"
+        :options="{
+          responsive: true,
+          autoWidth: false,
+          pageLength: 10,
+          lengthChange: true,
+          ordering: true,
+          scrollX: true,
+          dom: 'rtlip',
+          language: {
+            search: 'Search',
+            zeroRecords: 'No data available',
+            info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+            infoFiltered: '(Filtered from MAX records)',
+            paginate: {
+              first: 'First',
+              previous: 'Prev',
+              next: 'Next',
+              last: 'Last',
+            },
           },
-        },
-      }"
-    >
-      <thead class="truncate">
-        <tr>
-          <!-- Add your table headers here -->
-        </tr>
-      </thead>
-      <tbody class="truncate">
-        <tr v-for="item in perx" :key="item.id">
-          <!-- Add your table row data here -->
-        </tr>
-      </tbody>
-    </DataTable>
+        }"
+      >
+        <thead class="truncate">
+          <tr>
+            <!-- Add your table headers here -->
+          </tr>
+        </thead>
+        <tbody class="truncate">
+          <tr v-for="item in perx" :key="item.id">
+            <!-- Add your table row data here -->
+          </tr>
+        </tbody>
+      </DataTable>
+    </div>
   </div>
-</template>
+  </template>
+
+
 
 <script>
 import axios from "axios";
@@ -116,10 +135,12 @@ export default {
       filterFirstName: "",
       filterMiddleName: "",
       filterContact: "",
+      filterLastNameError: "",
+      filterContactError: "",
       perx: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
-        { data: "ApplicationInfoId", title: "ApplicationInfoId" },
+        { data: "ApplicationInfoId", title: "SR ID" },
         { data: "DateOfApplication", title: "DateOfApplication" },
         { data: "LastName", title: "LastName" },
         { data: "FirstName", title: "FirstName" },
@@ -142,17 +163,33 @@ export default {
         { data: "OSS_LOB", title: "OSS_LOB" },
         { data: "OSS_SITE", title: "OSS_SITE" },
       ],
-      filterLoading: false, // Add the filter loading state
-      exportLoading: false, // Add the export loading state
+      filterLoading: false,
+      exportLoading: false,
     };
   },
   methods: {
+    validateLastName() {
+      this.filterLastNameError = "";
+      if (this.filterLastName && this.filterLastName.length < 2) {
+        this.filterLastNameError =
+          "Last Name must be at least 2 characters long.";
+      }
+    },
+    validateContact() {
+      this.filterContactError = "";
+      if (this.filterContact && this.filterContact.length < 4) {
+        this.filterContactError =
+          "Mobile No must be at least 4 characters long.";
+      }
+    },
+
     async fetchData() {
-      this.filterLoading = true; // Set filter loading to true before making the request
+    
+      this.filterLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilter",
+          "http://10.109.2.112:8081/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -177,17 +214,20 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/export", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterMiddleName,
-            filter_middlename: this.filterContact,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/export",
+          {
+            params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterMiddleName,
+              filter_middlename: this.filterContact,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
