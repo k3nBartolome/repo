@@ -88,7 +88,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
+        .get("http://i/programs/" + this.$route.params.id)
         .then((response) => {
             this.programs = response.data.data
           const programObj = this.programs;
@@ -107,7 +107,7 @@ export default {
      async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://i/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -133,7 +133,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://i/programs/" + this.$route.params.id,
           formData
         )
         .then((response) => {
@@ -142,7 +142,7 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.$router.push("http://10.109.2.112:8081/api/program_managementjamaica", () => {
+          this.$router.push("http://i/program_managementjamaica", () => {
             location.reload();
           });
         })

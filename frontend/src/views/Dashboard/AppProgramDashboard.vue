@@ -243,7 +243,7 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://i/programs", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -262,7 +262,7 @@ export default {
 
     async getPrograms2() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs2", {
+        const response = await axios.get("http://i/programs2", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -282,7 +282,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://i/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -308,7 +308,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData, {
+        .post("http://i/programs", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

@@ -140,7 +140,7 @@ export default {
       this.filterLoading = true; // Set filter loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/perxfilter", {
+        const response = await axios.get("http://i/perxfilter", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
@@ -163,7 +163,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/export", {
+        const response = await axios.get("http://i/export", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterMiddleName,

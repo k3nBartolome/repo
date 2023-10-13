@@ -184,12 +184,12 @@ export default {
     },
 
     async fetchData() {
-    
+
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://i/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -215,7 +215,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/export",
+          "http://i/export",
           {
             params: {
               filter_lastname: this.filterLastName,

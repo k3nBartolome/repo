@@ -183,7 +183,7 @@
         async getPurchase() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
+            const response = await axios.get("http://i/purchase", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -202,7 +202,7 @@
         async getSites() {
           try {
             const token = this.$store.state.token;
-            const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+            const response = await axios.get("http://i/sites", {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
@@ -228,7 +228,7 @@
     requested_by: this.$store.state.user_id,
   };
   axios
-    .post("http://10.109.2.112:8081/api/purchase", formData, {
+    .post("http://i/purchase", formData, {
       headers: {
         Authorization: `Bearer ${this.$store.state.token}`,
       },

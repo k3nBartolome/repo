@@ -163,7 +163,7 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/purchase3", {
+        const response = await axios.get("http://i/purchase3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
