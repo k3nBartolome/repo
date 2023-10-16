@@ -271,7 +271,7 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/transfer/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -285,7 +285,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://i/inventory/alltransfer",
+          "http://127.0.0.1:8000/api/inventory/alltransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

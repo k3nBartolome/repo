@@ -17,7 +17,7 @@
             type="text"
             disabled
             v-model="country"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -27,7 +27,7 @@
             disabled
             type="text"
             v-model="region"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -36,7 +36,7 @@
           <select
             disabled
             v-model="site_selected"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
             <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -49,7 +49,7 @@
           <select
             disabled
             v-model="program_selected"
-            class="block w-full mt-1 border border-2 bg-gray-200 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getPrograms"
           >
@@ -63,7 +63,7 @@
           <select
             disabled
             v-model="type_of_hiring"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option value="attrition">Attrition</option>
             <option value="growth">Growth</option>
@@ -76,7 +76,7 @@
             disabled
             type="text"
             v-model="year"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -86,7 +86,7 @@
             disabled
             type="text"
             v-model="month"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -95,7 +95,7 @@
           <select
             disabled
             v-model="hiring_week"
-            class="block w-full mt-1 border border-2 rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getDateRange"
           >
@@ -114,7 +114,7 @@
             disabled
             type="date"
             v-model="training_start"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -124,7 +124,7 @@
             disabled
             type="text"
             v-model="internal_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -134,7 +134,7 @@
             disabled
             type="text"
             v-model="external_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -144,7 +144,7 @@
             disabled
             type="number"
             v-model="total_target"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -154,7 +154,7 @@
             disabled
             type="text"
             v-model="wave_no"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -164,7 +164,7 @@
             disabled
             type="text"
             v-model="erf_number"
-            class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
           />
         </label>
@@ -237,7 +237,7 @@
               disabled
               type="number"
               v-model="total_endorsed"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -275,7 +275,7 @@
               disabled
               type="number"
               v-model="show_ups_total"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -285,7 +285,7 @@
               disabled
               type="number"
               v-model="deficit"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -295,7 +295,7 @@
               disabled
               type="text"
               v-model="percentage"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -335,7 +335,7 @@
               disabled
               type="number"
               v-model="over_hires"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -406,7 +406,7 @@
               disabled
               type="number"
               v-model="classes_number"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -416,7 +416,7 @@
               disabled
               type="number"
               v-model="pipeline_total"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -426,7 +426,7 @@
               disabled
               type="number"
               v-model="cap_starts"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -436,7 +436,7 @@
               disabled
               type="number"
               v-model="internals_hires_all"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 bg-gray-200 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -446,7 +446,7 @@
               disabled
               type="number"
               v-model="pipeline_target"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
           </label>
@@ -472,7 +472,7 @@
             <textarea
               disabled
               v-model="pipeline"
-              class="block w-full mt-1 border rounded-md bg-gray-200 focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
+              class="block w-full mt-1 bg-gray-200 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100 h-100"
               required
             />
           </label>
@@ -825,7 +825,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "http://i/classes/" + this.$route.query.class_selected
+            "http://127.0.0.1:8000/api/classes/" + this.$route.query.class_selected
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -852,7 +852,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://i/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -863,7 +863,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://i/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -878,7 +878,7 @@ export default {
       }
 
       await axios
-        .get(`http://i/programs_selected/${this.sites_selected}`)
+        .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -889,7 +889,7 @@ export default {
     },
     async getDateRange() {
       await axios
-        .get("http://i/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -934,7 +934,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://i/classesstaffing", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -979,7 +979,7 @@ export default {
   },
   async getSites() {
     await axios
-      .get("http://i/sites")
+      .get("http://127.0.0.1:8000/api/sites")
       .then((response) => {
         this.sites = response.data.data;
         console.log(response.data.data);
@@ -994,7 +994,7 @@ export default {
     }
 
     await axios
-      .get(`http://i/programs_selected/${this.sites_selected}`)
+      .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
       .then((response) => {
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -1006,7 +1006,7 @@ export default {
 
   async getDateRange() {
     await axios
-      .get("http://i/daterange")
+      .get("http://127.0.0.1:8000/api/daterange")
       .then((response) => {
         this.daterange = response.data.data;
         console.log(response.data.data);
@@ -1051,7 +1051,7 @@ export default {
       created_by: this.$store.state.user_id,
     };
     axios
-      .post("http://i/classesstaffing", formData)
+      .post("http://127.0.0.1:8000/api/classesstaffing", formData)
       .then((response) => {
         console.log(response.data);
         this.day_1 = "";

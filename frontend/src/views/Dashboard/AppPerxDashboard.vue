@@ -97,7 +97,7 @@ export default {
   methods: {
     async getPerx() {
       await axios
-        .get("http://i/classes")
+        .get("http://127.0.0.1:8000/api/classes")
         .then((response) => {
           this.perx = response.data.perx;
           console.log(response.data.perx);

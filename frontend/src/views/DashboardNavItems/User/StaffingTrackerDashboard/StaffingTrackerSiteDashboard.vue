@@ -96,7 +96,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://i/mpssite", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpssite", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -113,7 +113,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://i/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -139,7 +139,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://i/classesstaffing2",
+          "http://127.0.0.1:8000/api/classesstaffing2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -157,7 +157,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -181,7 +181,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://i/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -208,7 +208,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://i/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

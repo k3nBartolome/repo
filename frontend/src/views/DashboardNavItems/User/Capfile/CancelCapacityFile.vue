@@ -428,7 +428,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -452,7 +452,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://i/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -471,7 +471,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://i/transaction/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -494,7 +494,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://i/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -513,7 +513,7 @@ export default {
 
       try {
         const response = await axios.get(
-          "http://i/classes/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -568,7 +568,7 @@ export default {
 
       axios
         .put(
-          "http://i/classes/cancel/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {
@@ -591,7 +591,7 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("http://i/capfile", () => {
+          this.$router.push("http://127.0.0.1:8000/api/capfile", () => {
             location.reload();
           });
         })

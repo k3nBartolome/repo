@@ -263,11 +263,11 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/approved/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
-          this.$router.push("http://i/site_request_manager/pending", () => {
+          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
           location.reload();
         });
         })
@@ -288,13 +288,13 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/denied/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.showModal = false;
 
-          this.$router.push("http://i/site_request_manager/pending", () => {
+          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
           location.reload();
         });
         })
@@ -315,12 +315,12 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/cancel/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/cancel/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.showModalCancel = false;
-          this.$router.push("http://i/site_request_manager/pending", () => {
+          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
           location.reload();
         });
         })
@@ -331,7 +331,7 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/inventory", {
+        const response = await axios.get("http://127.0.0.1:8000/api/inventory", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -350,7 +350,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

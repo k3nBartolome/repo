@@ -327,7 +327,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -351,7 +351,7 @@ export default {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://i/programs", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/programs", { headers });
 
     if (response.status === 200) {
       this.programs = response.data.data;
@@ -372,7 +372,7 @@ async getDateRange() {
       Authorization: `Bearer ${token}`,
     };
 
-    const response = await axios.get("http://i/daterange", { headers });
+    const response = await axios.get("http://127.0.0.1:8000/api/daterange", { headers });
 
     if (response.status === 200) {
       this.daterange = response.data.data;
@@ -413,7 +413,7 @@ async getDateRange() {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://i/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

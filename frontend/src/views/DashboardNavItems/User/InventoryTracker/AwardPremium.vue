@@ -450,7 +450,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://i/items_selected2/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/items_selected2/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -472,7 +472,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -491,7 +491,7 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/awarded/premium", {
+        const response = await axios.get("http://127.0.0.1:8000/api/awarded/premium", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -547,7 +547,7 @@ export default {
       formData.append("processed_by", this.$store.state.user_id);
 
       try {
-        const response = await axios.post("http://i/award", formData, {
+        const response = await axios.post("http://127.0.0.1:8000/api/award", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
             "Content-Type": "multipart/form-data",

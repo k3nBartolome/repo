@@ -178,7 +178,7 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/approved/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -200,7 +200,7 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/denied/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -213,7 +213,7 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/inventory/denied", {
+        const response = await axios.get("http://127.0.0.1:8000/api/inventory/denied", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -232,7 +232,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://i/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

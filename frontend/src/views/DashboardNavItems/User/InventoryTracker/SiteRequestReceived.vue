@@ -250,12 +250,12 @@ export default {
       };
 
       axios
-        .put(`http://i/inventory/received/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
          this.showModal= false;
-         this.$router.push("http://i/site_request_manager/received", () => {
+         this.$router.push("http://127.0.0.1:8000/api/site_request_manager/received", () => {
           location.reload();
         });
         })
@@ -267,7 +267,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://i/inventory/approved/pending",
+          "http://127.0.0.1:8000/api/inventory/approved/pending",
           {
             headers: {
               Authorization: `Bearer ${token}`,
