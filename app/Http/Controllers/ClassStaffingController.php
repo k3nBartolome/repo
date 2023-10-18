@@ -218,7 +218,6 @@ class ClassStaffingController extends Controller
                             ->where('date_range_id', $dateRangeId)
                             ->where('site_id', $siteId)
                             ->where('program_id', $programId);
-                           
 
                         $sums = [
                             'total_target' => $MonthSiteProgram->sum('total_target'),
@@ -296,7 +295,7 @@ class ClassStaffingController extends Controller
 
         $staffing = $staffing->get();
 
-        $uniqueMonthNum = $staffing->pluck('site_id')->unique();
+        $uniqueMonthNum = $staffing->pluck('month_num')->unique();
 
         $computedSums = [];
 
@@ -320,6 +319,66 @@ class ClassStaffingController extends Controller
                     'filled' => $monthGroup->sum('open'),
                     'open' => $monthGroup->sum('filled'),
                     'classes' => $monthGroup->sum('classes_number'),
+                ];
+        }
+
+        $response = [
+                'mps' => $computedSums,
+            ];
+
+        return response()->json($response);
+    }
+
+    public function mpsSite()
+    {
+        $staffing = DB::table('class_staffing')
+            ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+            ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+            ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+            ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+            ->select(
+                'class_staffing.*',
+                'classes.*',
+                'sites.*',
+                'programs.*',
+                'date_ranges.*',
+                DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+                DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+                DB::raw('COALESCE(date_ranges.month, 0) as month'),
+                DB::raw('COALESCE(date_ranges.date_range, 0) as week_name'),
+                DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+                DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+                DB::raw('COALESCE(sites.name, 0) as site_name'),
+                DB::raw('COALESCE(programs.name, 0) as program_name'),
+            )
+            ->where('class_staffing.active_status', 1);
+
+        $staffing = $staffing->get();
+
+        $uniqueSiteIds = $staffing->pluck('site_id')->unique();
+
+        $computedSums = [];
+
+        foreach ($uniqueSiteIds as $uniqueSiteId) {
+            $siteGroup = $staffing->where('site_id', $uniqueSiteId);
+
+            $siteName = $siteGroup->first()->site_name;
+
+            $computedSums[$uniqueSiteId] = [
+                    'site' => $siteName,
+                    'total_target' => $siteGroup->sum('total_target'),
+                    'internal' => $siteGroup->sum('show_ups_internal'),
+                    'external' => $siteGroup->sum('show_ups_external'),
+                    'total' => $siteGroup->sum('show_ups_total'),
+                    'cap_starts' => $siteGroup->sum('cap_starts'),
+                    'day_1' => $siteGroup->sum('day_1'),
+                    'day_2' => $siteGroup->sum('day_2'),
+                    'day_3' => $siteGroup->sum('day_3'),
+                    'day_4' => $siteGroup->sum('day_4'),
+                    'day_5' => $siteGroup->sum('day_5'),
+                    'filled' => $siteGroup->sum('open'),
+                    'open' => $siteGroup->sum('filled'),
+                    'classes' => $siteGroup->sum('classes_number'),
                 ];
         }
 

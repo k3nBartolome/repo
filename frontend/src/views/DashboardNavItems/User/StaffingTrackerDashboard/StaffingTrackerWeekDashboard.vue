@@ -1,195 +1,286 @@
 <template>
-  <div class="p-4">
-    <div class="mb-4 flex flex-wrap space-y-2 md:space-y-0 md:space-x-2">
-      <input
-        v-model="filterLastName"
-        placeholder="Filter by Last Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterFirstName"
-        placeholder="Filter by First Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterMiddleName"
-        placeholder="Filter by Middle Name"
-        class="p-2 border rounded-lg"
-      />
-      <input
-        v-model="filterContact"
-        placeholder="Filter by Mobile No."
-        class="p-2 border rounded-lg"
-      />
-      <button
-        @click="fetchData"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        Filter
-      </button>
-      <button
-        @click="exportToExcel"
-        class="px-4 py-2 bg-blue-500 text-white rounded-lg"
-      >
-        Export
-      </button>
-    </div>
-    <div v-if="filterLoading" class="text-center text-blue-500 font-bold">Rendering...</div>
-    <div v-if="exportLoading" class="text-center text-blue-500 font-bold">Exporting...</div>
-    <DataTable
-      :data="perx"
-      :columns="columns"
-      class="table divide-y divide-gray-200 table-auto table-striped"
-      :options="{
-        responsive: true,
-        autoWidth: false,
-        pageLength: 10,
-        lengthChange: true,
-        ordering: true,
-        scrollX: true,
-        dom: 'rtlip',
-        language: {
-          search: 'Search',
-          zeroRecords: 'No data available',
-          info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-          infoFiltered: '(Filtered from MAX records)',
-          paginate: {
-            first: 'First',
-            previous: 'Prev',
-            next: 'Next',
-            last: 'Last',
-          },
-        },
-      }"
-    >
-      <thead class="truncate">
-        <tr>
-          <!-- Add your table headers here -->
+  <header class="w-full bg-orange-300">
+    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
+        Staffing Tracker Reports Month
+      </h2>
+        </div>
+      </header>
+  <div class="py-2 overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-black border-2">
+          <th class="py-2 px-4 text-left truncate"></th>
+          <th class="py-2 px-4 text-left truncate">Month</th>
+          <th class="py-2 px-4 text-left truncate">Site</th>
+          <th class="py-2 px-4 text-left truncate">Program</th>
+          <th class="py-2 px-4 text-left truncate">Target</th>
+          <th class="py-2 px-4 text-left truncate">Internal</th>
+          <th class="py-2 px-4 text-left truncate">External</th>
+          <th class="py-2 px-4 text-left truncate">Overall Starts</th>
+          <th class="py-2 px-4 text-left truncate">Day1</th>
+          <th class="py-2 px-4 text-left truncate">Day2</th>
+          <th class="py-2 px-4 text-left truncate">Day3</th>
+          <th class="py-2 px-4 text-left truncate">Day4</th>
+          <th class="py-2 px-4 text-left truncate">Day5</th>
+          <th class="py-2 px-4 text-left truncate">Total Classes</th>
+          <th class="py-2 px-4 text-left truncate">Filled</th>
+          <th class="py-2 px-4 text-left truncate">Open</th>
         </tr>
       </thead>
-      <tbody class="truncate">
-        <tr v-for="item in perx" :key="item.id">
-          <!-- Add your table row data here -->
+      <tbody v-for="(mps1, index) in mps" :key="index">
+        <template v-for="(mps2, index2) in mps1" :key="index2">
+          <template v-for="(mps3, index3) in mps2" :key="index3">
+          <tr class="border-black border-2" v-for="(mps4, index4) in mps3" :key="index4">
+          
+          <td class="py-2 px-4 border text-left truncate">
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps4.month }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+           {{ mps4.site_name }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps4.program_name }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.total_target }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.internal }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.external }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.total }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_1 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_2 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_3 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_4 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_5 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.classes }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.filled }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps4.open }}</td>
         </tr>
+      </template>
+        </template>
       </tbody>
-    </DataTable>
+    </table>
   </div>
 </template>
-
 <script>
 import axios from "axios";
-import DataTable from "datatables.net-vue3";
-import DataTableLib from "datatables.net-bs5";
-// eslint-disable-next-line no-unused-vars
-import Buttons from "datatables.net-buttons-bs5";
-import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
-// eslint-disable-next-line no-unused-vars
-import print from "datatables.net-buttons/js/buttons.print";
-//import pdfmake from "pdfmake";
-// eslint-disable-next-line no-unused-vars
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import "datatables.net-responsive-bs5";
-import jszip from "jszip";
-// eslint-disable-next-line no-unused-vars
-import "bootstrap/dist/css/bootstrap.css";
-
-DataTable.use(DataTableLib);
-DataTable.use(jszip);
-DataTable.use(ButtonsHtml5);
-
 export default {
-  components: { DataTable },
   data() {
     return {
-      filterLastName: "",
-      filterFirstName: "",
-      filterMiddleName: "",
-      filterContact: "",
-      perx: [],
-      columns: [
-        { data: "ApplicantId", title: "ApplicantId" },
-        { data: "ApplicationInfoId", title: "ApplicationInfoId" },
-        { data: "DateOfApplication", title: "DateOfApplication" },
-        { data: "LastName", title: "LastName" },
-        { data: "FirstName", title: "FirstName" },
-        { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNo", title: "MobileNo" },
-        { data: "Site", title: "Site" },
-        { data: "GenSource", title: "GenSource" },
-        { data: "SpecSource", title: "SpecSource" },
-        { data: "Step", title: "Step" },
-        { data: "AppStep", title: "AppStep" },
-        { data: "PERX_HRID", title: "PERX_HRID" },
-        { data: "PERX_Last_Day", title: "PERX_Last_Day" },
-        { data: "PERX_Retract", title: "PERX_Retract" },
-        { data: "PERX_NAME", title: "PERX_NAME" },
-        { data: "OSS_HRID", title: "OSS_HRID" },
-        { data: "OSS_Last_Day", title: "OSS_Last_Day" },
-        { data: "OSS_Retract", title: "OSS_Retract" },
-        { data: "OSS_FNAME", title: "OSS_FNAME" },
-        { data: "OSS_LNAME", title: "OSS_LNAME" },
-        { data: "OSS_LOB", title: "OSS_LOB" },
-        { data: "OSS_SITE", title: "OSS_SITE" },
-      ],
-      filterLoading: false, // Add the filter loading state
-      exportLoading: false, // Add the export loading state
+      mps: [],
+      grand_totals:[],
+      class_staffing: [],
+      classesall: [],
+      programs: [],
+      sites: [],
+      daterange: [],
+      week_selected: "",
+      programs_selected: "",
+      sites_selected: "",
+      mont_selected: "",
+      class_selected: "",
+      active_status: "",
     };
   },
+  computed: {},
+  watch: {},
+  mounted() {
+    this.getClassesAll();
+    this.getClasses();
+    this.getStaffing();
+    this.getSites();
+    this.getPrograms();
+    this.getDateRange();
+  },
   methods: {
-    async fetchData() {
-      this.filterLoading = true; // Set filter loading to true before making the request
+    async getStaffing() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/perxfilter", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterFirstName,
-            filter_middlename: this.filterMiddleName,
-            filter_contact: this.filterContact,
-          },
+
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        this.perx = response.data.perx;
+        this.mps = response.data.mps;
+        console.log(response.data.mps);
       } catch (error) {
-        console.error("Error fetching filtered data", error);
-      } finally {
-        this.filterLoading = false; // Set filter loading to false when the request completes
+        console.log(error);
       }
     },
-    async exportToExcel() {
-      this.exportLoading = true; // Set export loading to true before making the request
+    async getClasses() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/export", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterMiddleName,
-            filter_middlename: this.filterContact,
-          },
+
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.classesall = response.data.classes;
+        console.log(response.data.classes);
+
+        const filteredClasses = this.filteredClasses;
+        if (filteredClasses.length > 0) {
+          this.class_selected = filteredClasses[0].id;
+        } else {
+          this.class_selected = "";
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getClassesAll() {
+      try {
+        const token = this.$store.state.token;
+
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classesstaffing2",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.class_staffing = response.data.class_staffing;
+        console.log(response.data.class_staffing);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          responseType: "blob",
         });
 
-        const blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const url = window.URL.createObjectURL(blob);
-
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "filtered_perx_data.xlsx";
-        link.click();
+        if (response.status === 200) {
+          this.sites = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
       } catch (error) {
-        console.error("Error exporting filtered data to Excel", error);
-      } finally {
-        this.exportLoading = false; // Set export loading to false when the request completes
+        console.log(error);
+      }
+    },
+    async getPrograms() {
+      if (!this.sites_selected) {
+        return;
+      }
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getDateRange() {
+      if (!this.month_selected) {
+        return;
+      }
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },
 };
 </script>
+<style>
+.table-responsive {
+  overflow: auto;
+}
+
+.datatable-container {
+  width: 100%;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
+}
+.dataTables_wrapper .dataTables_filter {
+  float: left;
+  padding-right: 30px;
+}
+
+.dataTables_wrapper .dataTables_Buttons {
+  float: left;
+  margin-top: 30px;
+}
+
+.dataTables_wrapper .dataTables_pagination {
+  float: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dataTables_wrapper .dataTables_length {
+  float: left;
+  padding-right: 15px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dataTables_wrapper .dt-buttons .btn {
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin-right: 8px;
+  margin-top: 15px;
+}
+</style>

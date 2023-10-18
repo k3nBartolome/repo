@@ -11,7 +11,6 @@
       <thead>
         <tr class="border-black border-2">
           <th class="py-2 px-4 text-left truncate"></th>
-          <th class="py-2 px-4 text-left truncate">Month</th>
           <th class="py-2 px-4 text-left truncate">Site</th>
           <th class="py-2 px-4 text-left truncate">Program</th>
           <th class="py-2 px-4 text-left truncate">Target</th>
@@ -29,34 +28,25 @@
         </tr>
       </thead>
       <tbody v-for="(mps1, index) in mps" :key="index">
-        <template v-for="(mps2, index2) in mps1" :key="index2">
-        <tr class="border-black border-2" v-for="(mps3, index3) in mps2" :key="index3">
+        <tr >
           <td class="py-2 px-4 border text-left truncate">
           </td>
           <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.month }}
+            {{ mps1.site }}
           </td>
-          <td class="py-2 px-4 border text-left truncate">
-           {{ mps3.site_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.program_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total_target }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.internal }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.external }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_1 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_2 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_3 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_4 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_5 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.classes }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.filled }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.open }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.total_target }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.internal }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.external }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.total }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_1 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_2 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_3 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_4 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_5 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.classes }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.filled }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.open }}</td>
         </tr>
-
-        </template>
       </tbody>
     </table>
   </div>
