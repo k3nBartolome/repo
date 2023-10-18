@@ -12,6 +12,7 @@
         <tr class="border-black border-2">
           <th class="py-2 px-4 text-left truncate"></th>
           <th class="py-2 px-4 text-left truncate">Month</th>
+         <th class="py-2 px-4 text-left truncate">Week</th>
           <th class="py-2 px-4 text-left truncate">Site</th>
           <th class="py-2 px-4 text-left truncate">Program</th>
           <th class="py-2 px-4 text-left truncate">Target</th>
@@ -32,11 +33,14 @@
         <template v-for="(mps2, index2) in mps1" :key="index2">
           <template v-for="(mps3, index3) in mps2" :key="index3">
           <tr class="border-black border-2" v-for="(mps4, index4) in mps3" :key="index4">
-          
+
           <td class="py-2 px-4 border text-left truncate">
           </td>
           <td class="py-2 px-4 border text-left truncate">
             {{ mps4.month }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps4.week_name }}
           </td>
           <td class="py-2 px-4 border text-left truncate">
            {{ mps4.site_name }}
