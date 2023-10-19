@@ -91,9 +91,6 @@
   </table>
 </div>
 </template>
-This code includes all the table cells and headers without any placeholder comments. You can customize it further as needed.
-
-
 
 
 
