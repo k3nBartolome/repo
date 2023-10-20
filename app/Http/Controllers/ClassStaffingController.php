@@ -665,8 +665,8 @@ class ClassStaffingController extends Controller
             'day_3' => $staffing->sum('day_3'),
             'day_4' => $staffing->sum('day_4'),
             'day_5' => $staffing->sum('day_5'),
-            'filled' => $staffing->sum('open'),
-            'open' => $staffing->sum('filled'),
+            'filled' => $staffing->sum('filled'),
+            'open' => $staffing->sum('open'),
             'classes' => $staffing->sum('classes_number'),
         ];
 
@@ -758,8 +758,8 @@ class ClassStaffingController extends Controller
             'day_3' => $staffing->sum('day_3'),
             'day_4' => $staffing->sum('day_4'),
             'day_5' => $staffing->sum('day_5'),
-            'filled' => $staffing->sum('open'),
-            'open' => $staffing->sum('filled'),
+            'filled' => $staffing->sum('filled'),
+            'open' => $staffing->sum('open'),
             'classes' => $staffing->sum('classes_number'),
         ];
             foreach ($grandTotals as $key => $value) {
