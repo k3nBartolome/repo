@@ -151,30 +151,25 @@ class ClassStaffingController extends Controller
 ]);
     }
 
-    /* public function mpsWeek()
+    public function mpsWeek(Request $request)
     {
+       // $monthNum = $request->input('month_num', 1);
         $uniqueMonths = DB::table('date_ranges')
-            ->select([DB::raw('COALESCE(month_num, 0) as month_num')])
-            ->distinct()
-            ->get()
-            ->pluck('month_num')
-            ->toArray();
-        $uniqueSiteIds = DB::table('sites')
-            ->select([DB::raw('COALESCE(site_id, 0) as site_id')])
-            ->distinct()
-            ->get()
-            ->pluck('site_id')
-            ->toArray();
-        $uniqueProgramIds = DB::table('programs')
-            ->select([DB::raw('COALESCE(program_id, 0) as program_id')])
-            ->distinct()
-            ->get()
-            ->pluck('program_id')
-            ->toArray();
-        $distinctDateRanges = DB::table('date_ranges')
             ->select([
-                'date_id',
-                DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                DB::raw('COALESCE(month_num, 0) as month_num'),
+                DB::raw('COALESCE(month, null) as month'), ])
+            ->distinct()
+            ->get();
+        $uniqueSiteIds = DB::table('sites')
+            ->select([
+                DB::raw('COALESCE(site_id, 0) as site_id'),
+                DB::raw('COALESCE(name, null) as site_name'), ])
+            ->get();
+
+        $distinctDateRanges = DB::table('date_ranges')
+        ->select([
+                DB::raw('COALESCE(date_id, 0) as date_id'),
+                DB::raw('COALESCE(date_range, null) as week_name'),
             ])
             ->distinct()
             ->get();
@@ -201,7 +196,10 @@ class ClassStaffingController extends Controller
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
                 ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
-                ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+                ->leftJoin('programs', function ($join) {
+                    $join->on('classes.program_id', '=', 'programs.id')
+                        ->on('sites.id', '=', 'programs.site_id');
+                })
                 ->select(
                     'class_staffing.*',
                     'classes.*',
@@ -221,18 +219,33 @@ class ClassStaffingController extends Controller
                 ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
             $computedSums[$dateRangeId] = [];
-            foreach ($uniqueMonths as $month) {
+            foreach ($uniqueMonths as $monthdata) {
+                $month = $monthdata->month_num;
+                $monthName = $monthdata->month;
+
                 $computedSums[$dateRangeId][$month] = [];
-                foreach ($uniqueSiteIds as $siteId) {
+                foreach ($uniqueSiteIds as $siteData) {
+                    $siteId = $siteData->site_id;
+                    $siteName = $siteData->site_name;
                     $computedSums[$dateRangeId][$month][$siteId] = [];
-                    foreach ($uniqueProgramIds as $programId) {
+                    $uniqueProgramIds = DB::table('programs')
+        ->where('site_id', $siteId)
+        ->select([
+            DB::raw('COALESCE(id, 0) as program_id'),
+            DB::raw('COALESCE(name, null) as program_name'),
+        ])
+        ->distinct()
+            ->get();
+                    foreach ($uniqueProgramIds as $programData) {
+                        $programId = $programData->program_id;
+                        $programName = $programData->program_name;
                         $computedSums[$dateRangeId][$month][$siteId][$programId] = [];
 
                         $WeekMonthSiteProgram = $staffing
-                            ->where('month_num', $month)
-                            ->where('site_id', $siteId)
-                            ->where('program_id', $programId)
-                            ->where('date_range_id', $dateRangeId);
+                        ->where('month_num', $month)
+                        ->where('date_range_id', $dateRangeId)
+                        ->where('site_id', $siteId)
+                        ->where('program_id', $programId);
 
                         $sums = [
                             'total_target' => $WeekMonthSiteProgram->sum('total_target'),
@@ -269,18 +282,27 @@ class ClassStaffingController extends Controller
                                 'filled' => $sums['filled'],
                                 'open' => $sums['open'],
                                 'classes' => $sums['classes'],
-                                'date_range_id' => $dateRangeId,
-                                'month_num' => $month,
-                                'site_id' => $siteId,
-                                'program_id' => $programId,
                             ];
                         } else {
                             $computedSums[$dateRangeId][$month][$siteId][$programId] = [
-                                'date_range_id' => $dateRangeId,
-                                'month_num' => $month,
-                                'site_id' => $siteId,
-                                'program_id' => $programId,
-                            ];
+                        'month' => $monthName,
+    'week_name' => $weekName,
+    'site_name' => $siteName,
+    'program_name' => $programName,
+    'total_target' => 0,
+        'internal' => 0,
+        'external' => 0,
+        'total' => 0,
+        'cap_starts' => 0,
+        'day_1' => 0,
+        'day_2' => 0,
+        'day_3' => 0,
+        'day_4' => 0,
+        'day_5' => 0,
+        'filled' => 0,
+        'open' => 0,
+        'classes' => 0,
+];
                         }
                     }
                 }
@@ -292,7 +314,7 @@ class ClassStaffingController extends Controller
         ];
 
         return response()->json($response);
-    } */
+    }
 
     /* public function mpsWeek()
     {
@@ -778,9 +800,6 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -878,9 +897,6 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit(ClassStaffing $ClassStaffing)
-    {
-    }
 
     /**
      * Update the specified resource in storage.
@@ -952,12 +968,9 @@ class ClassStaffingController extends Controller
     ]);
     }
 
-    /**
+    /*
      * Remove the specified resource from storage.
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ClassStaffing $ClassStaffing)
-    {
-    }
 }
