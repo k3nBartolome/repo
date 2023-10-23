@@ -1,65 +1,86 @@
 <template>
-  <header class="w-full bg-orange-300">
-    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Staffing Tracker Reports Month
-      </h2>
-        </div>
-      </header>
-  <div class="py-2 overflow-x-auto">
-    <table class="w-full border-collapse">
+  <div class="py-0">
+    <div class="px-6 py-0 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
+        <div class="mb-4 md:flex md:space-x-2 md:items-center">
+          <div class="relative w-full md:w-1/4">
+          <label class="block">Month</label>
+          <select
+            v-model="month_selected"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+      </div>
+    </div>
+  </div>
+</div>
+  <div class="py-6 overflow-x-auto">
+    <table class="w-full py-6 border-collapse ">
       <thead>
-        <tr class="border-black border-2">
-          <th class="py-2 px-4 text-left truncate"></th>
-          <th class="py-2 px-4 text-left truncate">Month</th>
-         <th class="py-2 px-4 text-left truncate">Week</th>
-          <th class="py-2 px-4 text-left truncate">Site</th>
-          <th class="py-2 px-4 text-left truncate">Program</th>
-          <th class="py-2 px-4 text-left truncate">Target</th>
-          <th class="py-2 px-4 text-left truncate">Internal</th>
-          <th class="py-2 px-4 text-left truncate">External</th>
-          <th class="py-2 px-4 text-left truncate">Overall Starts</th>
-          <th class="py-2 px-4 text-left truncate">Day1</th>
-          <th class="py-2 px-4 text-left truncate">Day2</th>
-          <th class="py-2 px-4 text-left truncate">Day3</th>
-          <th class="py-2 px-4 text-left truncate">Day4</th>
-          <th class="py-2 px-4 text-left truncate">Day5</th>
-          <th class="py-2 px-4 text-left truncate">Total Classes</th>
-          <th class="py-2 px-4 text-left truncate">Filled</th>
-          <th class="py-2 px-4 text-left truncate">Open</th>
+        <tr class="border-2 border-black">
+          <th class="px-4 py-2 text-left truncate"></th>
+
+          <th class="px-4 py-2 text-left truncate">Month</th>
+         <th class="px-4 py-2 text-left truncate">Week</th>
+          <th class="px-4 py-2 text-left truncate">Site</th>
+          <th class="px-4 py-2 text-left truncate">Program</th>
+          <th class="px-4 py-2 text-left truncate">Target</th>
+          <th class="px-4 py-2 text-left truncate">Internal</th>
+          <th class="px-4 py-2 text-left truncate">External</th>
+          <th class="px-4 py-2 text-left truncate">Overall Starts</th>
+          <th class="px-4 py-2 text-left truncate">Day1</th>
+          <th class="px-4 py-2 text-left truncate">Day2</th>
+          <th class="px-4 py-2 text-left truncate">Day3</th>
+          <th class="px-4 py-2 text-left truncate">Day4</th>
+          <th class="px-4 py-2 text-left truncate">Day5</th>
+          <th class="px-4 py-2 text-left truncate">Total Classes</th>
+          <th class="px-4 py-2 text-left truncate">Filled</th>
+          <th class="px-4 py-2 text-left truncate">Open</th>
         </tr>
       </thead>
       <tbody v-for="(mps1, index) in mps" :key="index">
         <template v-for="(mps2, index2) in mps1" :key="index2">
           <template v-for="(mps3, index3) in mps2" :key="index3">
-          <tr class="border-black border-2" v-for="(mps4, index4) in mps3" :key="index4">
+          <tr class="border-2 border-black" v-for="(mps4, index4) in mps3" :key="index4">
 
-          <td class="py-2 px-4 border text-left truncate">
+          <td class="px-4 py-2 text-left truncate border">
           </td>
-          <td class="py-2 px-4 border text-left truncate">
+          <td class="px-4 py-2 text-left truncate border">
             {{ mps4.month }}
           </td>
-          <td class="py-2 px-4 border text-left truncate">
+          <td class="px-4 py-2 text-left truncate border">
             {{ mps4.week_name }}
           </td>
-          <td class="py-2 px-4 border text-left truncate">
+          <td class="px-4 py-2 text-left truncate border">
            {{ mps4.site_name }}
           </td>
-          <td class="py-2 px-4 border text-left truncate">
+          <td class="px-4 py-2 text-left truncate border">
             {{ mps4.program_name }}
           </td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.total_target }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.internal }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.external }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.total }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_1 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_2 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_3 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_4 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.day_5 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.classes }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.filled }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps4.open }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.total_target }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.internal }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.external }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.total }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.day_1 }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.day_2 }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.day_3 }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.day_4 }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.day_5 }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.classes }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.filled }}</td>
+          <td class="px-4 py-2 text-left truncate border">{{ mps4.open }}</td>
         </tr>
       </template>
         </template>
@@ -82,20 +103,22 @@ export default {
       week_selected: "",
       programs_selected: "",
       sites_selected: "",
-      mont_selected: "",
+      month_selected: 1,
       class_selected: "",
       active_status: "",
     };
   },
   computed: {},
-  watch: {},
+  watch: {
+    month_selected: {
+      handler: "getStaffing",
+      immediate: true,
+    },
+  },
   mounted() {
-    this.getClassesAll();
-    this.getClasses();
+
     this.getStaffing();
-    this.getSites();
-    this.getPrograms();
-    this.getDateRange();
+
   },
   methods: {
     async getStaffing() {
