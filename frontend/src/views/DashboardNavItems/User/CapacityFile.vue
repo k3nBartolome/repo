@@ -261,7 +261,6 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
-    this.getClassesAll();
   },
   methods: {
     resetFilter() {

@@ -153,21 +153,33 @@ class ClassStaffingController extends Controller
 
     public function mpsWeek(Request $request)
     {
-        //$monthNum = $request->input('month_num');
+        $monthNum = $request->input('month_num');
+        $siteNum = $request->input('site_id');
+        $regionNum = $request->input('region');
+        $programNum = $request->input('program_id');
+        $dateNum = $request->input('date_id');
+
         $uniqueMonths = DB::table('date_ranges')
-            ->select([
-                DB::raw('COALESCE(month_num, 0) as month_num'),
-                DB::raw('COALESCE(month, null) as month'),
-            ])
-            //->where('month_num', $monthNum)
-            ->distinct()
-            ->get();
+    ->select([
+        DB::raw('COALESCE(month_num, 0) as month_num'),
+        DB::raw('COALESCE(month, null) as month'),
+    ]);
+        if (!empty($monthNum)) {
+            $uniqueMonths->where('month_num', $monthNum);
+        }
+
+        $uniqueMonths = $uniqueMonths->distinct()->get();
         $uniqueSiteIds = DB::table('sites')
             ->select([
                 DB::raw('COALESCE(site_id, 0) as site_id'),
-                DB::raw('COALESCE(name, null) as site_name'), ])
-            ->get();
-
+                DB::raw('COALESCE(name, null) as site_name'), ]);
+        if (!empty($siteNum)) {
+            $uniqueSiteIds->where('site_id', $siteNum);
+        }
+        if (!empty($regionNum)) {
+            $uniqueSiteIds->where('region', $regionNum);
+        }
+        $uniqueSiteIds = $uniqueSiteIds->distinct()->get();
 
         $computedSums = [];
         $grandTotals = [
@@ -216,14 +228,17 @@ class ClassStaffingController extends Controller
                 ->where('class_staffing.active_status', 1)
                 ->where('date_ranges.month_num', $month)
                 ->get();
-                $distinctDateRanges = DB::table('date_ranges')
+            $distinctDateRanges = DB::table('date_ranges')
+                ->where('month_num', $month)
                 ->select([
-                        DB::raw('COALESCE(date_id, 0) as date_id'),
-                        DB::raw('COALESCE(date_range, null) as week_name'),
-                    ])
-                    ->where('month_num', $month)
-                    ->distinct()
-                    ->get();
+                    DB::raw('COALESCE(date_id, 0) as date_id'),
+                    DB::raw('COALESCE(date_range, null) as week_name'),
+                ]);
+
+            if (!empty($dateNum)) {
+                $distinctDateRanges->where('date_id', $dateNum);
+            }
+            $distinctDateRanges = $distinctDateRanges->distinct()->get();
             foreach ($distinctDateRanges as $dateRangeData) {
                 $dateRangeId = $dateRangeData->date_id;
                 $weekName = $dateRangeData->week_name;
@@ -237,9 +252,11 @@ class ClassStaffingController extends Controller
         ->select([
             DB::raw('COALESCE(id, 0) as program_id'),
             DB::raw('COALESCE(name, null) as program_name'),
-        ])
-        ->distinct()
-            ->get();
+        ]);
+                    if (!empty($programNum)) {
+                        $uniqueProgramIds->where('program_id', $programNum);
+                    }
+                    $uniqueProgramIds = $uniqueProgramIds->distinct()->get();
                     foreach ($uniqueProgramIds as $programData) {
                         $programId = $programData->program_id;
                         $programName = $programData->program_name;

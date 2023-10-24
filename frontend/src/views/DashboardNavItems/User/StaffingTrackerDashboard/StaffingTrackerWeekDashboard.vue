@@ -1,12 +1,46 @@
 <template>
   <div class="py-0">
     <div class="px-6 py-0 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
-        <div class="mb-4 md:flex md:space-x-2 md:items-center">
-          <div class="relative w-full md:w-1/4">
-          <label class="block">Month</label>
+      <div class="col-span-6 md:col-span-1">
+        <label class="block">
+          Site
+          <select
+            v-model="sites_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            @change="getPrograms"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div class="col-span-6 md:col-span-1">
+        <label class="block">
+          Programs
+          <select
+            v-model="programs_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
+              {{ program.name }}
+            </option>
+          </select>
+        </label>
+      </div>
+      <div class="col-span-6 md:col-span-1">
+        <label class="block">
+          Month
           <select
             v-model="month_selected"
-            class="w-full p-2 border rounded-lg"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            @change="getDateRange"
           >
             <option disabled value="" selected>Please select one</option>
             <option value="1">January</option>
@@ -22,9 +56,27 @@
             <option value="11">November</option>
             <option value="12">December</option>
           </select>
+        </label>
+      </div>
+      <div class="col-span-6 md:col-span-1">
+        <label class="block">
+          Week Range
+          <select
+            v-model="week_selected"
+            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option
+              v-for="daterange in daterange"
+              :key="daterange.id"
+              :value="daterange.id"
+            >
+              {{ daterange.date_range }}
+            </option>
+          </select>
+        </label>
       </div>
     </div>
-  </div>
 </div>
   <div class="py-6 overflow-x-auto">
     <table class="w-full py-6 border-collapse ">
@@ -103,40 +155,59 @@ export default {
       week_selected: "",
       programs_selected: "",
       sites_selected: "",
-      month_selected: 1,
+      month_selected: "",
       class_selected: "",
       active_status: "",
     };
   },
   computed: {},
-  watch: {
+   watch: {
     month_selected: {
+      handler: "getStaffing",
+      immediate: true,
+    },
+      week_selected: {
+      handler: "getStaffing",
+      immediate: true,
+    },
+    sites_selected: {
+      handler: "getStaffing",
+      immediate: true,
+    },
+    programs_selected: {
       handler: "getStaffing",
       immediate: true,
     },
   },
   mounted() {
-
     this.getStaffing();
-
+    this.getSites();
+    this.getPrograms();
+    this.getDateRange();
   },
   methods: {
     async getStaffing() {
-      try {
-        const token = this.$store.state.token;
+  try {
+    const token = this.$store.state.token;
 
-        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+    const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        month_num: this.month_selected,
+        site_id: this.sites_selected,
+        program_id: this.programs_selected,
+        date_id: this.week_selected
+      },
+    });
 
-        this.mps = response.data.mps;
-        console.log(response.data.mps);
-      } catch (error) {
-        console.log(error);
-      }
-    },
+    this.mps = response.data.mps;
+    console.log(response.data.mps);
+  } catch (error) {
+    console.log(error);
+  }
+},
     async getClasses() {
       try {
         const token = this.$store.state.token;
