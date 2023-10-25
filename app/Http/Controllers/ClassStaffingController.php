@@ -170,15 +170,16 @@ class ClassStaffingController extends Controller
 
         $uniqueMonths = $uniqueMonths->distinct()->get();
         $uniqueSiteIds = DB::table('sites')
-            ->select([
-                DB::raw('COALESCE(site_id, 0) as site_id'),
-                DB::raw('COALESCE(name, null) as site_name'), ]);
+        ->select([
+            DB::raw('COALESCE(site_id, 0) as site_id'),
+            DB::raw('COALESCE(name, null) as site_name'),
+        ]);
+
         if (!empty($siteNum)) {
-            $uniqueSiteIds->where('site_id', $siteNum);
+            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
+            $uniqueSiteIds->whereIn('site_id', $siteNum);
         }
-        if (!empty($regionNum)) {
-            $uniqueSiteIds->where('region', $regionNum);
-        }
+
         $uniqueSiteIds = $uniqueSiteIds->distinct()->get();
 
         $computedSums = [];

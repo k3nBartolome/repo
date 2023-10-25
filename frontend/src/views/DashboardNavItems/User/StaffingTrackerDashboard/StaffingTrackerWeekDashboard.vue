@@ -1,24 +1,27 @@
 <template>
-  <div class="py-0">
-    <div class="px-6 py-0 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
-      <div class="col-span-6 md:col-span-1">
-        <label class="block">
-          Site
-          <select
-            v-model="sites_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            @change="getPrograms"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.id" :value="site.id">
-              {{ site.name }}
-            </option>
-          </select>
-        </label>
-      </div>
-      <div class="col-span-6 md:col-span-1">
-        <label class="block">
-          Programs
+  <div class="py-8">
+    <div class="px-6 py-4 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+        <div>
+          <div class="font-sans bg-surface-ground text-text-color p-4">
+            <div class="card">
+              <MultiSelect
+                v-model="sites_selected"
+                :options="sites"
+                filter
+                optionLabel="name"
+                placeholder="Select Sites"
+                class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+                :selected-items-class="'bg-orange-500 text-white'"
+                :panel-style="{ backgroundColor: 'white' }"
+                :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+              />
+            </div>
+          </div>
+        
+        </div>
+        <div>
+          <label class="block mb-2">Programs</label>
           <select
             v-model="programs_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -32,11 +35,9 @@
               {{ program.name }}
             </option>
           </select>
-        </label>
-      </div>
-      <div class="col-span-6 md:col-span-1">
-        <label class="block">
-          Month
+        </div>
+        <div>
+          <label class="block mb-2">Month</label>
           <select
             v-model="month_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -56,11 +57,9 @@
             <option value="11">November</option>
             <option value="12">December</option>
           </select>
-        </label>
-      </div>
-      <div class="col-span-6 md:col-span-1">
-        <label class="block">
-          Week Range
+        </div>
+        <div>
+          <label class="block mb-2">Week Range</label>
           <select
             v-model="week_selected"
             class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -74,34 +73,31 @@
               {{ daterange.date_range }}
             </option>
           </select>
-        </label>
+        </div>
       </div>
     </div>
-</div>
-  <div class="py-6 overflow-x-auto">
-    <table class="w-full py-6 border-collapse ">
-      <thead>
-        <tr class="border-2 border-black">
-          <th class="px-4 py-2 text-left truncate"></th>
-
-          <th class="px-4 py-2 text-left truncate">Month</th>
-         <th class="px-4 py-2 text-left truncate">Week</th>
-          <th class="px-4 py-2 text-left truncate">Site</th>
-          <th class="px-4 py-2 text-left truncate">Program</th>
-          <th class="px-4 py-2 text-left truncate">Target</th>
-          <th class="px-4 py-2 text-left truncate">Internal</th>
-          <th class="px-4 py-2 text-left truncate">External</th>
-          <th class="px-4 py-2 text-left truncate">Overall Starts</th>
-          <th class="px-4 py-2 text-left truncate">Day1</th>
-          <th class="px-4 py-2 text-left truncate">Day2</th>
-          <th class="px-4 py-2 text-left truncate">Day3</th>
-          <th class="px-4 py-2 text-left truncate">Day4</th>
-          <th class="px-4 py-2 text-left truncate">Day5</th>
-          <th class="px-4 py-2 text-left truncate">Total Classes</th>
-          <th class="px-4 py-2 text-left truncate">Filled</th>
-          <th class="px-4 py-2 text-left truncate">Open</th>
-        </tr>
-      </thead>
+    <div class="py-6 overflow-x-auto">
+      <table class="w-full table-auto">
+        <thead class="bg-gray-200">
+          <tr>
+            <th class="px-4 py-2 text-left">Month</th>
+            <th class="px-4 py-2 text-left">Week</th>
+            <th class="px-4 py-2 text-left">Site</th>
+            <th class="px-4 py-2 text-left">Program</th>
+            <th class="px-4 py-2 text-left">Target</th>
+            <th class="px-4 py-2 text-left">Internal</th>
+            <th class="px-4 py-2 text-left">External</th>
+            <th class="px-4 py-2 text-left">Overall Starts</th>
+            <th class="px-4 py-2 text-left">Day1</th>
+            <th class="px-4 py-2 text-left">Day2</th>
+            <th class="px-4 py-2 text-left">Day3</th>
+            <th class="px-4 py-2 text-left">Day4</th>
+            <th class="px-4 py-2 text-left">Day5</th>
+            <th class="px-4 py-2 text-left">Total Classes</th>
+            <th class="px-4 py-2 text-left">Filled</th>
+            <th class="px-4 py-2 text-left">Open</th>
+          </tr>
+        </thead>
       <tbody v-for="(mps1, index) in mps" :key="index">
         <template v-for="(mps2, index2) in mps1" :key="index2">
           <template v-for="(mps3, index3) in mps2" :key="index3">
@@ -139,10 +135,15 @@
       </tbody>
     </table>
   </div>
+   </div>
 </template>
 <script>
 import axios from "axios";
+import MultiSelect from 'primevue/multiselect';
 export default {
+  components: {
+    MultiSelect
+  },
   data() {
     return {
       mps: [],
@@ -154,7 +155,7 @@ export default {
       daterange: [],
       week_selected: "",
       programs_selected: "",
-      sites_selected: "",
+      sites_selected: [],
       month_selected: "",
       class_selected: "",
       active_status: "",
@@ -196,7 +197,7 @@ export default {
       },
       params: {
         month_num: this.month_selected,
-        site_id: this.sites_selected,
+        site_id: this.sites_selected.map(site => site.site_id),
         program_id: this.programs_selected,
         date_id: this.week_selected
       },
