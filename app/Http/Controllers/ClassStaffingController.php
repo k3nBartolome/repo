@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClassStaffingExports;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ClassStaffingController extends Controller
 {
@@ -155,7 +157,6 @@ class ClassStaffingController extends Controller
     {
         $monthNum = $request->input('month_num');
         $siteNum = $request->input('site_id');
-        $regionNum = $request->input('region');
         $programNum = $request->input('program_id');
         $dateNum = $request->input('date_id');
 
@@ -336,6 +337,225 @@ class ClassStaffingController extends Controller
         ];
 
         return response()->json($response);
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        $monthNum = $request->input('month_num');
+        $siteNum = $request->input('site_id');
+        $programNum = $request->input('program_id');
+        $dateNum = $request->input('date_id');
+
+        $uniqueMonths = DB::table('date_ranges')
+    ->select([
+        DB::raw('COALESCE(month_num, 0) as month_num'),
+        DB::raw('COALESCE(month, null) as month'),
+    ]);
+        if (!empty($monthNum)) {
+            $uniqueMonths->where('month_num', $monthNum);
+        }
+
+        $uniqueMonths = $uniqueMonths->distinct()->get();
+        $uniqueSiteIds = DB::table('sites')
+        ->select([
+            DB::raw('COALESCE(site_id, 0) as site_id'),
+            DB::raw('COALESCE(name, null) as site_name'),
+        ]);
+
+        if (!empty($siteNum)) {
+            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
+            $uniqueSiteIds->whereIn('site_id', $siteNum);
+        }
+
+        $uniqueSiteIds = $uniqueSiteIds->distinct()->get();
+
+        $computedSums = [];
+        $grandTotals = [
+            'total_target' => 0,
+            'internal' => 0,
+            'external' => 0,
+            'total' => 0,
+            'cap_starts' => 0,
+            'day_1' => 0,
+            'day_2' => 0,
+            'day_3' => 0,
+            'day_4' => 0,
+            'day_5' => 0,
+            'filled' => 0,
+            'open' => 0,
+            'classes' => 0,
+        ];
+        $computedSums = [];
+
+        foreach ($uniqueMonths as $monthdata) {
+            $month = $monthdata->month_num;
+            $monthName = $monthdata->month;
+            $staffing = DB::table('class_staffing')
+                ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+                ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+                ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+                ->leftJoin('programs', function ($join) {
+                    $join->on('classes.program_id', '=', 'programs.id')
+                        ->on('sites.id', '=', 'programs.site_id');
+                })
+                ->select(
+                    'class_staffing.*',
+                    'classes.*',
+                    'sites.*',
+                    'programs.*',
+                    'date_ranges.*',
+                    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+                    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+                    DB::raw('COALESCE(date_ranges.month, null) as month'),
+                    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+                    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+                    DB::raw('COALESCE(sites.name, null) as site_name'),
+                    DB::raw('COALESCE(programs.name, null) as program_name')
+                )
+                ->where('class_staffing.active_status', 1)
+                ->where('date_ranges.month_num', $month)
+                ->get();
+            $distinctDateRanges = DB::table('date_ranges')
+                ->where('month_num', $month)
+                ->select([
+                    DB::raw('COALESCE(date_id, 0) as date_id'),
+                    DB::raw('COALESCE(date_range, null) as week_name'),
+                ]);
+
+            if (!empty($dateNum)) {
+                $distinctDateRanges->where('date_id', $dateNum);
+            }
+            $distinctDateRanges = $distinctDateRanges->distinct()->get();
+            foreach ($distinctDateRanges as $dateRangeData) {
+                $dateRangeId = $dateRangeData->date_id;
+                $weekName = $dateRangeData->week_name;
+                $computedSums[$month][$dateRangeId] = [];
+                foreach ($uniqueSiteIds as $siteData) {
+                    $siteId = $siteData->site_id;
+                    $siteName = $siteData->site_name;
+                    $computedSums[$month][$dateRangeId][$siteId] = [];
+                    $uniqueProgramIds = DB::table('programs')
+        ->where('site_id', $siteId)
+        ->select([
+            DB::raw('COALESCE(id, 0) as program_id'),
+            DB::raw('COALESCE(name, null) as program_name'),
+        ]);
+                    if (!empty($programNum)) {
+                        $uniqueProgramIds->where('program_id', $programNum);
+                    }
+                    $uniqueProgramIds = $uniqueProgramIds->distinct()->get();
+                    foreach ($uniqueProgramIds as $programData) {
+                        $programId = $programData->program_id;
+                        $programName = $programData->program_name;
+                        $computedSums[$month][$dateRangeId][$siteId][$programId] = [];
+
+                        $WeekMonthSiteProgram = $staffing
+                        ->where('month_num', $month)
+                        ->where('date_range_id', $dateRangeId)
+                        ->where('site_id', $siteId)
+                        ->where('program_id', $programId);
+
+                        $sums = [
+                            'total_target' => $WeekMonthSiteProgram->sum('total_target'),
+                            'internal' => $WeekMonthSiteProgram->sum('show_ups_internal'),
+                            'external' => $WeekMonthSiteProgram->sum('show_ups_external'),
+                            'total' => $WeekMonthSiteProgram->sum('show_ups_total'),
+                            'cap_starts' => $WeekMonthSiteProgram->sum('cap_starts'),
+                            'day_1' => $WeekMonthSiteProgram->sum('day_1'),
+                            'day_2' => $WeekMonthSiteProgram->sum('day_2'),
+                            'day_3' => $WeekMonthSiteProgram->sum('day_3'),
+                            'day_4' => $WeekMonthSiteProgram->sum('day_4'),
+                            'day_5' => $WeekMonthSiteProgram->sum('day_5'),
+                            'filled' => $WeekMonthSiteProgram->sum('open'),
+                            'open' => $WeekMonthSiteProgram->sum('filled'),
+                            'classes' => $WeekMonthSiteProgram->sum('classes_number'),
+                        ];
+
+                        if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
+                            $computedSums[$month][$dateRangeId][$siteId][$programId] = [
+                                'month' => $WeekMonthSiteProgram->first()->month,
+                                'week_name' => $WeekMonthSiteProgram->first()->week_name,
+                                'site_name' => $WeekMonthSiteProgram->first()->site_name,
+                                'program_name' => $WeekMonthSiteProgram->first()->program_name,
+                                'total_target' => $sums['total_target'],
+                                'internal' => $sums['internal'],
+                                'external' => $sums['external'],
+                                'total' => $sums['total'],
+                                'cap_starts' => $sums['cap_starts'],
+                                'day_1' => $sums['day_1'],
+                                'day_2' => $sums['day_2'],
+                                'day_3' => $sums['day_3'],
+                                'day_4' => $sums['day_4'],
+                                'day_5' => $sums['day_5'],
+                                'filled' => $sums['filled'],
+                                'open' => $sums['open'],
+                                'classes' => $sums['classes'],
+                            ];
+                        } else {
+                            $computedSums[$month][$dateRangeId][$siteId][$programId] = [
+                        'month' => $monthName,
+    'week_name' => $weekName,
+    'site_name' => $siteName,
+    'program_name' => $programName,
+    'total_target' => 0,
+        'internal' => 0,
+        'external' => 0,
+        'total' => 0,
+        'cap_starts' => 0,
+        'day_1' => 0,
+        'day_2' => 0,
+        'day_3' => 0,
+        'day_4' => 0,
+        'day_5' => 0,
+        'filled' => 0,
+        'open' => 0,
+        'classes' => 0,
+];
+                        }
+                    }
+                }
+            }
+        }
+
+        $flattenedData = [];
+
+        foreach ($computedSums as $month => $monthData) {
+            foreach ($monthData as $dateRangeId => $dateRangeData) {
+                foreach ($dateRangeData as $siteId => $siteData) {
+                    foreach ($siteData as $programId => $programDetails) {
+                        if (!empty($programDetails)) {
+                            // Flatten the programDetails and add them to the flattenedData array
+                            $flattenedData[] = [
+                                'month' => $programDetails['month'],
+                                'week_name' => $programDetails['week_name'],
+                                'site_name' => $programDetails['site_name'],
+                                'program_name' => $programDetails['program_name'],
+                                'total_target' => $programDetails['total_target'] ?? 0,
+                    'internal' => $programDetails['internal'] ?? 0,
+                    'external' => $programDetails['external'] ?? 0,
+                    'total' => $programDetails['total'] ?? 0,
+                    'cap_starts' => $programDetails['cap_starts'] ?? 0,
+                    'day_1' => $programDetails['day_1'] ?? 0,
+                    'day_2' => $programDetails['day_2'] ?? 0,
+                    'day_3' => $programDetails['day_3'] ?? 0,
+                    'day_4' => $programDetails['day_4'] ?? 0,
+                    'day_5' => $programDetails['day_5'] ?? 0,
+                    'filled' => $programDetails['filled'] ?? 0,
+                    'open' => $programDetails['open'] ?? 0,
+                    'classes' => $programDetails['classes'] ?? 0,
+                            ];
+                        }
+                    }
+                }
+            }
+        }
+
+        $dataToExport = [
+            'mps' => $flattenedData,
+        ];
+
+        return Excel::download(new ClassStaffingExports($dataToExport), 'your_filename.xlsx');
     }
 
     /* public function mpsWeek()

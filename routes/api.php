@@ -122,6 +122,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesstaffing', [ClassStaffingController::class, 'index']);
     Route::get('classesstaffing2', [ClassStaffingController::class, 'index2']);
     Route::get('classestransaction/{id}', [ClassStaffingController::class, 'transaction']);
+    Route::get('export-to-excel', [ClassStaffingController::class, 'exportToExcel']);
 
     // DateRange
     Route::get('daterange', [DateRangeController::class, 'index']);
@@ -177,3 +178,4 @@ Route::get('mps', [ClassStaffingController::class, 'mps']);
 Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
 Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
 Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
+Route::get('programs_selected', [ProgramController::class, 'perSite']);

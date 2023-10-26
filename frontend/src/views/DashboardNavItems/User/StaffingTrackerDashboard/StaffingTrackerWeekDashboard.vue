@@ -2,74 +2,47 @@
   <div class="py-8">
     <div
       class="px-6 py-4 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
+    ><button @click="exportToExcel">Export to Excel</button>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
         <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div class="card">
-            <label class="block mb-2">Sites</label>
-            <MultiSelect
-              v-model="sites_selected"
-              :options="sites"
-              filter
-              optionLabel="name"
-              placeholder="Select Sites"
-              class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-              :selected-items-class="'bg-orange-500 text-white'"
-              :panel-style="{ backgroundColor: 'white' }"
-              :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-            />
+          <div>
+            <div class="card">
+              <label class="block mb-2">Sites</label>
+              <MultiSelect
+                v-model="sites_selected"
+                :options="sites"
+                filter
+                optionLabel="name"
+                placeholder="Select Sites"
+                class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+                :selected-items-class="'bg-orange-500 text-white'"
+                :panel-style="{ backgroundColor: 'white' }"
+                :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+                @change="getPrograms"
+              />
+            </div>
           </div>
         </div>
         <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div class="card">
-            <label class="block mb-2">Programs</label>
-            <MultiSelect
-              v-model="programs_selected"
-              :options="programs"
-              filter
-              optionLabel="name"
-              placeholder="Select Programs"
-              class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-              :selected-items-class="'bg-orange-500 text-white'"
-              :panel-style="{ backgroundColor: 'white' }"
-              :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-            />
-          </div>
-        </div>
-        <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div class="card">
-            <label class="block mb-2">Month</label>
-            <MultiSelect
-              v-model="month_selected"
-              :options="months"
-              filter
-              optionLabel="label"
-              placeholder="Select Month"
-              class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-              :selected-items-class="'bg-orange-500 text-white'"
-              :panel-style="{ backgroundColor: 'white' }"
-              :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-              @change="getDateRange"
-            />
-          </div>
-        </div>
-        <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div class="card">
-            <label class="block mb-2">Week Range</label>
-            <MultiSelect
-              v-model="week_selected"
-              :options="daterange"
-              filter
-              optionLabel="date_range"
-              placeholder="Select Week"
-              class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-              :selected-items-class="'bg-orange-500 text-white'"
-              :panel-style="{ backgroundColor: 'white' }"
-              :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-            />
+          <div>
+            <div class="card">
+              <label class="block mb-2">Programs</label>
+              <MultiSelect
+                v-model="programs_selected"
+                :options="programs"
+                filter
+                optionLabel="id"
+                placeholder="Select Programs"
+                class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+                :selected-items-class="'bg-orange-500 text-white'"
+                :panel-style="{ backgroundColor: 'white' }"
+                :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+              />
+            </div>
           </div>
         </div>
       </div>
+      <div></div>
     </div>
 
     <div class="py-6 overflow-x-auto">
@@ -102,7 +75,6 @@
                 v-for="(mps4, index4) in mps3"
                 :key="index4"
               >
-                <td class="px-4 py-2 text-left truncate border"></td>
                 <td class="px-4 py-2 text-left truncate border">
                   {{ mps4.month }}
                 </td>
@@ -215,7 +187,7 @@ export default {
     this.getStaffing();
     this.getSites();
     this.getPrograms();
-    this.getDateRange();
+    //this.getDateRange();
   },
   methods: {
     async getStaffing() {
@@ -227,10 +199,16 @@ export default {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            month_num: this.month_selected.map((month_num) => month_num.month_num),
+            month_num: this.month_selected.map(
+              (month_num) => month_num.month_num
+            ),
             site_id: this.sites_selected.map((site) => site.site_id),
-            program_id: this.programs_selected.map((program) => program.program_id),
-            date_id: this.week_selected.map((week_selected) => week_selected.date_id),
+            program_id: this.programs_selected.map(
+              (program) => program.program_id
+            ),
+            date_id: this.week_selected.map(
+              (week_selected) => week_selected.date_id
+            ),
           },
         });
 
@@ -238,6 +216,37 @@ export default {
         console.log(response.data.mps);
       } catch (error) {
         console.log(error);
+      }
+    },
+    async exportToExcel() {
+      // Set export loading to true before making the request
+      try {
+        const token = this.$store.state.token;
+
+        // Make an API request to trigger the Excel export
+        const response = await axios.get("http://127.0.0.1:8000/api/export-to-excel", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: 'blob', // Tell Axios to expect a binary response
+          params: {
+            // Include any parameters needed for the export
+            month_num: this.month_selected.map((month_num) => month_num.month_num),
+            site_id: this.sites_selected.map((site) => site.site_id),
+            program_id: this.programs_selected.map((program) => program.program_id),
+            date_id: this.week_selected.map((week_selected) => week_selected.date_id),
+          },
+        });
+
+        // Create a Blob and create a download link for the Excel file
+        const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'your_filename.xlsx';
+        a.click();
+      } catch (error) {
+        console.error('Error exporting data to Excel', error);
       }
     },
     async getSites() {
@@ -260,64 +269,34 @@ export default {
       }
     },
     async getPrograms() {
-      if (!this.sites_selected) {
-        return;
-      }
+  try {
+    const token = this.$store.state.token;
 
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              id: this.sites_selected.map((site) => site.id),
-            },
-          }
-        );
+    const response = await axios.get("http://127.0.0.1:8000/api/programs_selected", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        id: this.sites_selected.map((site) => site.site_id),
+      },
+    });
 
-        if (response.status === 200) {
-          this.programs = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching programs");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
+    if (Array.isArray(response.data)) {
+      this.programs = response.data.map((program) => ({
+        value: program.id,
+        label: program.name,
+      }));
+      console.log(this.programs);
+    } else {
+      console.error("Data is not in the expected array format");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+},
 
-    async getDateRange() {
-      if (!this.month_selected) {
-        return;
-      }
 
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              month_num: this.month_num.map((month_num) => month_num.month_num),
-            },
-          }
-        );
 
-        if (response.status === 200) {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching date range");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
   },
 };
 </script>

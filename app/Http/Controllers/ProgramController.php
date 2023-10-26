@@ -181,14 +181,14 @@ class ProgramController extends Controller
     {
         $siteNum = $request->input('id');
 
-        $query = Program::where('is_active', 1);
+        $query = Program::with(['site', 'user', 'createdByUser', 'classes'])->where('is_active', 1);
 
         if (!empty($siteNum)) {
             $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
             $query->whereIn('site_id', $siteNum);
         }
 
-        $programs = $query->get()->sortByDesc('name');
+        $programs = $query->get();
 
         return response()->json(['data' => $programs]);
     }
