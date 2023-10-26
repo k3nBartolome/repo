@@ -91,6 +91,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::put('programs_deactivate/{id}', [ProgramController::class, 'deactivate']);
     Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
     Route::get('programs_selected/{siteId}', [ProgramController::class, 'indexBySite']);
+    Route::get('programs_selected', [ProgramController::class, 'perSite']);
 
     // Classes Routes
     Route::get('classes', [ClassesController::class, 'index']);
@@ -125,6 +126,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     // DateRange
     Route::get('daterange', [DateRangeController::class, 'index']);
     Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
+    Route::get('daterange_selected', [DateRangeController::class, 'perMonth']);
     //Items
     Route::post('items', [ItemsController::class, 'store']);
     Route::get('items', [ItemsController::class, 'index']);

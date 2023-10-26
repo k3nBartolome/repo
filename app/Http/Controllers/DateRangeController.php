@@ -20,11 +20,20 @@ class DateRangeController extends Controller
         return DateRangeResource::collection(DateRange::all());
     }
 
-    public function indexByMonth($monthId)
+    public function perMonth(Request $request)
     {
-        $dateRanges = DateRange::where('month_num', $monthId)->get();
+        $dateNum = $request->input('month_num');
 
-        return DateRangeResource::collection($dateRanges);
+        $query = DateRange::where('year', 2023);
+
+        if (!empty($dateNum)) {
+            $dateNum = is_array($dateNum) ? $dateNum : [$dateNum];
+            $query->whereIn('month_num', $dateNum);
+        }
+
+        $daterange = $query->get();
+
+        return response()->json(['data' => $daterange]);
     }
 
     /**

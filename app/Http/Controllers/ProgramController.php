@@ -177,6 +177,22 @@ class ProgramController extends Controller
         return response()->json(['data' => $programs]);
     }
 
+    public function perSite(Request $request)
+    {
+        $siteNum = $request->input('id');
+
+        $query = Program::where('is_active', 1);
+
+        if (!empty($siteNum)) {
+            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
+            $query->whereIn('site_id', $siteNum);
+        }
+
+        $programs = $query->get()->sortByDesc('name');
+
+        return response()->json(['data' => $programs]);
+    }
+
     public function deactivate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
