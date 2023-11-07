@@ -61,7 +61,8 @@
             <select
               v-model="month_selected"
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getDateRange"
+              @change="onMonthSelected"
+
             >
               <option disabled value="" selected>Please select one</option>
               <option value="1">January</option>
@@ -262,6 +263,7 @@ export default {
     this.getPrograms();
     this.getDateRange();
   },
+ 
   methods: {
     resetFilter() {
       this.sites_selected = "";

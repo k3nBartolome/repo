@@ -36,6 +36,29 @@ class DateRangeController extends Controller
         return response()->json(['data' => $daterange]);
     }
 
+    public function byMonth(Request $request, $monthId)
+    {
+        $monthIdArray = explode(',', $monthId);
+
+        $allDaterange = [];
+
+        foreach ($monthIdArray as $monthId) {
+            $daterange = DateRange::where('month_num', $monthId)
+            ->get();
+
+            $allDaterange = array_merge($allDaterange, $daterange->toArray());
+        }
+
+        return response()->json(['data' => $allDaterange]);
+    }
+
+    public function getMonth()
+    {
+        $months = DateRange::select('month_num', 'month')->distinct()->get();
+
+        return response()->json(['data' => $months]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *

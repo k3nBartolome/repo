@@ -177,20 +177,22 @@ class ProgramController extends Controller
         return response()->json(['data' => $programs]);
     }
 
-    public function perSite(Request $request)
+    public function perSite(Request $request, $siteId)
     {
-        $siteNum = $request->input('id');
+        $siteIdsArray = explode(',', $siteId);
 
-        $query = Program::with(['site', 'user', 'createdByUser', 'classes'])->where('is_active', 1);
+        $allPrograms = [];
 
-        if (!empty($siteNum)) {
-            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
-            $query->whereIn('site_id', $siteNum);
+        foreach ($siteIdsArray as $siteId) {
+            $programs = Program::where('site_id', $siteId)
+            ->where('is_active', 1)
+            ->get()
+            ->sortByDesc('name');
+
+            $allPrograms = array_merge($allPrograms, $programs->toArray());
         }
 
-        $programs = $query->get();
-
-        return response()->json(['data' => $programs]);
+        return response()->json(['data' => $allPrograms]);
     }
 
     public function deactivate(Request $request, $id)

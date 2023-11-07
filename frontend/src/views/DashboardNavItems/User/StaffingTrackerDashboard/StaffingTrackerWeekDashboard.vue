@@ -1,48 +1,70 @@
 <template>
   <div class="py-8">
-    <div
-      class="px-6 py-4 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    ><button @click="exportToExcel">Export to Excel</button>
+    <div class="px-4 sm:px-6 lg:px-8">
+      <button @click="exportToExcel" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out">
+        Export to Excel
+      </button>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div>
-            <div class="card">
-              <label class="block mb-2">Sites</label>
-              <MultiSelect
-                v-model="sites_selected"
-                :options="sites"
-                filter
-                optionLabel="name"
-                placeholder="Select Sites"
-                class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-                :selected-items-class="'bg-orange-500 text-white'"
-                :panel-style="{ backgroundColor: 'white' }"
-                :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-                @change="getPrograms"
-              />
-            </div>
-          </div>
+        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+          <label class="block mb-2">Sites</label>
+          <MultiSelect
+            v-model="sites_selected"
+            :options="sites"
+            filter
+            optionLabel="name"
+            placeholder="Select Sites"
+            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            :selected-items-class="'bg-orange-500 text-white'"
+            :panel-style="{ backgroundColor: 'white' }"
+            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+            @change="getPrograms"
+          />
         </div>
-        <div class="font-sans bg-surface-ground text-text-color p-4">
-          <div>
-            <div class="card">
-              <label class="block mb-2">Programs</label>
-              <MultiSelect
-                v-model="programs_selected"
-                :options="programs"
-                filter
-                optionLabel="id"
-                placeholder="Select Programs"
-                class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-                :selected-items-class="'bg-orange-500 text-white'"
-                :panel-style="{ backgroundColor: 'white' }"
-                :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-              />
-            </div>
-          </div>
+        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+          <label class="block mb-2">Programs</label>
+          <MultiSelect
+            v-model="programs_selected"
+            :options="programs"
+            filter
+            optionLabel="name"
+            placeholder="Select Programs"
+            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            :selected-items-class="'bg-orange-500 text-white'"
+            :panel-style="{ backgroundColor: 'white' }"
+            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+          />
+        </div>
+        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+          <label class="block mb-2">Month</label>
+          <MultiSelect
+            v-model="month_selected"
+            :options="months"
+            filter
+            optionLabel="month"
+            placeholder="Select Month"
+            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            :selected-items-class="'bg-orange-500 text-white'"
+            :panel-style="{ backgroundColor: 'white' }"
+            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+            @change="getDateRange"
+          />
+        </div>
+        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+          <label class="block mb-2">Week</label>
+          <MultiSelect
+            v-model="week_selected"
+            :options="daterange"
+            filter
+            optionLabel="date_range"
+            placeholder="Select Date"
+            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            :selected-items-class="'bg-orange-500 text-white'"
+            :panel-style="{ backgroundColor: 'white' }"
+            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+          />
         </div>
       </div>
-      <div></div>
+      
     </div>
 
     <div class="py-6 overflow-x-auto">
@@ -148,20 +170,7 @@ export default {
       programs_selected: [],
       sites_selected: [],
       month_selected: [],
-      months: [
-        { value: 1, label: "January" },
-        { value: 2, label: "February" },
-        { value: 3, label: "March" },
-        { value: 4, label: "April" },
-        { value: 5, label: "May" },
-        { value: 6, label: "June" },
-        { value: 7, label: "July" },
-        { value: 8, label: "August" },
-        { value: 9, label: "September" },
-        { value: 10, label: "October" },
-        { value: 11, label: "November" },
-        { value: 12, label: "December" },
-      ],
+      months: [],
     };
   },
   computed: {},
@@ -187,7 +196,8 @@ export default {
     this.getStaffing();
     this.getSites();
     this.getPrograms();
-    //this.getDateRange();
+    this.getDateRange();
+    this.getMonth();
   },
   methods: {
     async getStaffing() {
@@ -214,6 +224,25 @@ export default {
 
         this.mps = response.data.mps;
         console.log(response.data.mps);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getMonth() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.months = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -268,36 +297,60 @@ export default {
         console.log(error);
       }
     },
-    async getPrograms() {
+    async getDateRange() {
+  if (!this.month_selected) {
+    return;
+  }
   try {
     const token = this.$store.state.token;
+    const monthId = this.month_selected.map((month) => month.month_num);
 
-    const response = await axios.get("http://127.0.0.1:8000/api/programs_selected", {
+    const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(',')}`;
+
+    const response = await axios.get(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      params: {
-        id: this.sites_selected.map((site) => site.site_id),
-      },
     });
 
-    if (Array.isArray(response.data)) {
-      this.programs = response.data.map((program) => ({
-        value: program.id,
-        label: program.name,
-      }));
-      console.log(this.programs);
+    if (response.status === 200) {
+      this.daterange = response.data.data;
+      console.log(response.data.data);
     } else {
-      console.error("Data is not in the expected array format");
+      console.log("Error fetching week");
     }
   } catch (error) {
     console.error(error);
   }
-},
+    },
+    async getPrograms() {
+  if (!this.sites_selected) {
+    return;
+  }
 
+  try {
+    const token = this.$store.state.token;
+    const siteId = this.sites_selected.map((site) => site.site_id);
 
+    const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(',')}`;
 
-  },
+    const response = await axios.get(url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.status === 200) {
+      this.programs = response.data.data;
+      console.log(response.data.data);
+    } else {
+      console.log("Error fetching programs");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+    }}
+
 };
 </script>
 <style>
