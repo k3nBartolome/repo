@@ -26,6 +26,7 @@ Emps
 Filtrados
 Firstname
 frtlip
+gtotal
 hoverable
 hrid
 HRID

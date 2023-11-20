@@ -2,6 +2,10 @@
 allrequest
 allstatus
 alltransfer
+autoload
+Autoload
+autoloader
+beyondcode
 classesall
 classesallgua
 classesallindia
@@ -11,8 +15,12 @@ classestransaction
 countstatus
 cstat
 daterange
+dbal
+dont
 emps
+fakerphp
 firstname
+guzzlehttp
 HRID
 indexboth
 indexseparate
@@ -20,6 +28,8 @@ inventoryall
 inventoryalltransaction
 itemsboth
 itemseparate
+laravel
+Laravel
 lastname
 leftjoin
 Maatwebsite
@@ -28,9 +38,11 @@ monthdata
 mpsmonth
 mpssite
 Nums
+nunomaduro
 perx
 PERX
 perxfilter
+phpunit
 pushedback
 Pushedback
 remx
@@ -38,3 +50,4 @@ siteinventory
 siteinventoryall
 sumtotaltarget
 updateclassesstaffing
+websockets

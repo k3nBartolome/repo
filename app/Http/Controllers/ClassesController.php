@@ -17,92 +17,92 @@ use Maatwebsite\Excel\Facades\Excel;
 class ClassesController extends Controller
 {
     public function perxFilter(Request $request)
-{
-    $query = DB::connection('secondary_sqlsrv')
+    {
+        $query = DB::connection('secondary_sqlsrv')
         ->table('PERX_DATA');
 
-    if ($request->has('filter_lastname')) {
-        $filterLastName = $request->input('filter_lastname');
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
 
-        if (!empty($filterLastName)) {
-            $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            if (!empty($filterLastName)) {
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_firstname')) {
-        $filterFirstName = $request->input('filter_firstname');
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
 
-        if (!empty($filterFirstName)) {
-            $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            if (!empty($filterFirstName)) {
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_middlename')) {
-        $filterMiddleName = $request->input('filter_middlename');
+        if ($request->has('filter_middlename')) {
+            $filterMiddleName = $request->input('filter_middlename');
 
-        if (!empty($filterMiddleName)) {
-            $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
+            if (!empty($filterMiddleName)) {
+                $query->where('MiddleName', 'LIKE', '%'.$filterMiddleName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_contact')) {
-        $filterContact = $request->input('filter_contact');
+        if ($request->has('filter_contact')) {
+            $filterContact = $request->input('filter_contact');
 
-        if (!empty($filterContact)) {
-            $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+            if (!empty($filterContact)) {
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+            }
         }
-    }
 
-    $filteredData = $query->get();
+        $filteredData = $query->get();
 
-    return response()->json([
+        return response()->json([
         'perx' => $filteredData,
     ]);
-}
+    }
 
-public function exportFilteredData(Request $request)
-{
-    $query = DB::connection('secondary_sqlsrv')
+    public function exportFilteredData(Request $request)
+    {
+        $query = DB::connection('secondary_sqlsrv')
         ->table('PERX_DATA');
 
-    if ($request->has('filter_lastname')) {
-        $filterLastName = $request->input('filter_lastname');
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
 
-        if (!empty($filterLastName)) {
-            $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            if (!empty($filterLastName)) {
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_firstname')) {
-        $filterFirstName = $request->input('filter_firstname');
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
 
-        if (!empty($filterFirstName)) {
-            $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            if (!empty($filterFirstName)) {
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_middlename')) {
-        $filterMiddleName = $request->input('filter_middlename');
+        if ($request->has('filter_middlename')) {
+            $filterMiddleName = $request->input('filter_middlename');
 
-        if (!empty($filterMiddleName)) {
-            $query->where('MiddleName', 'LIKE', '%' . $filterMiddleName . '%');
+            if (!empty($filterMiddleName)) {
+                $query->where('MiddleName', 'LIKE', '%'.$filterMiddleName.'%');
+            }
         }
-    }
 
-    if ($request->has('filter_contact')) {
-        $filterContact = $request->input('filter_contact');
+        if ($request->has('filter_contact')) {
+            $filterContact = $request->input('filter_contact');
 
-        if (!empty($filterContact)) {
-            $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+            if (!empty($filterContact)) {
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+            }
         }
+
+        $filteredData = $query->get();
+
+        $filteredDataArray = $filteredData->toArray();
+
+        return Excel::download(new MyExport($filteredDataArray), 'filtered_perx_data.xlsx');
     }
-
-    $filteredData = $query->get();
-
-    $filteredDataArray = $filteredData->toArray();
-
-    return Excel::download(new MyExport($filteredDataArray), 'filtered_perx_data.xlsx');
-}
 
     public function index()
     {
@@ -333,48 +333,72 @@ public function exportFilteredData(Request $request)
             'classes' => $classes,
         ]);
     }
+
     public function dashboardClasses()
-    {
-        $programs = Program::with('site')->get();
-        $dateRanges = DateRange::all();
+{
+    $programs = Program::with('site')->get();
+    $dateRanges = DateRange::all();
 
-        $groupedClasses = [];
+    $groupedClasses = [];
+    $grandTotalByMonth = [];
+    $grandTotalByProgram = [];
 
-        foreach ($programs as $program) {
-            $siteName = $program->site->name;
-            $programName = $program->name;
+    foreach ($programs as $program) {
+        $siteName = $program->site->name;
+        $programName = $program->name;
 
-            foreach ($dateRanges as $dateRange) {
-                $daterangeName = $dateRange->date_range;
-                $programId = $program->id;
-                $month = $dateRange->month;
+        // Initialize grand total for the program
+        if (!isset($grandTotalByProgram[$siteName])) {
+            $grandTotalByProgram[$siteName] = [];
+        }
+        $grandTotalByProgram[$siteName][$programName] = 0;
 
-                $classes = Classes::where('site_id', $program->site_id)
-                    ->where('program_id', $programId)
-                    ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Active')
-                    ->get();
+        foreach ($dateRanges as $dateRange) {
+            $daterangeName = $dateRange->date_range;
+            $programId = $program->id;
+            $month = $dateRange->month;
 
-                $totalTarget = $classes->sum('total_target');
+            $classes = Classes::where('site_id', $program->site_id)
+                ->where('program_id', $programId)
+                ->where('date_range_id', $dateRange->id)
+                ->where('status', 'Active')
+                ->get();
 
-                if (!isset($groupedClasses[$siteName][$programName][$month])) {
-                    $groupedClasses[$siteName][$programName][$month] = [
-                        'total_target' => 0,
-                    ];
-                }
-                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+            $totalTarget = $classes->sum('total_target');
+
+           
+            if (!isset($grandTotalByMonth[$month])) {
+                $grandTotalByMonth[$month] = 0;
+            }
+            $grandTotalByMonth[$month] += $totalTarget;
+
+            $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+
+            if (!isset($groupedClasses[$siteName][$programName][$month])) {
                 $groupedClasses[$siteName][$programName][$month] = [
-                    'total_target' => $totalTarget,
+                    'total_target' => 0,
                 ];
             }
+
+            $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
         }
-
-        logger('Grouped Classes:', $groupedClasses);
-
-        return response()->json([
-            'classes' => $groupedClasses,
-        ]);
     }
+
+    logger('Grouped Classes:', $groupedClasses);
+    logger('Grand Total By Month:', $grandTotalByMonth);
+    logger('Grand Total By Program:', $grandTotalByProgram);
+
+    $response = [
+        'classes' => $groupedClasses,
+        'grandTotal' => $grandTotalByMonth,
+        'grandTotal2' => $grandTotalByProgram,
+    ];
+
+    return response()->json($response);
+}
+
+    
+
     public function classesallInd()
     {
         $classes = Classes::whereHas('site', function ($query) {
