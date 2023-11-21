@@ -334,70 +334,82 @@ class ClassesController extends Controller
         ]);
     }
 
+    //hiring summary
     public function dashboardClasses()
-{
-    $programs = Program::with('site')->get();
-    $dateRanges = DateRange::all();
+    {
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
 
-    $groupedClasses = [];
-    $grandTotalByMonth = [];
-    $grandTotalByProgram = [];
+        $groupedClasses = [];
+        $grandTotalByMonth = [];
+        $grandTotalByProgram = [];
 
-    foreach ($programs as $program) {
-        $siteName = $program->site->name;
-        $programName = $program->name;
+        foreach ($programs as $program) {
+            $siteName = $program->site->name;
+            $programName = $program->name;
 
-        // Initialize grand total for the program
-        if (!isset($grandTotalByProgram[$siteName])) {
-            $grandTotalByProgram[$siteName] = [];
-        }
-        $grandTotalByProgram[$siteName][$programName] = 0;
+            // Initialize grand total for the program
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = [];
+            }
+            $grandTotalByProgram[$siteName][$programName] = 0;
 
-        foreach ($dateRanges as $dateRange) {
-            $daterangeName = $dateRange->date_range;
-            $programId = $program->id;
-            $month = $dateRange->month;
+            foreach ($dateRanges as $dateRange) {
+                $daterangeName = $dateRange->date_range;
+                $programId = $program->id;
+                $month = $dateRange->month;
 
-            $classes = Classes::where('site_id', $program->site_id)
+                $classes = Classes::where('site_id', $program->site_id)
                 ->where('program_id', $programId)
                 ->where('date_range_id', $dateRange->id)
                 ->where('status', 'Active')
                 ->get();
 
-            $totalTarget = $classes->sum('total_target');
+                $totalTarget = $classes->sum('total_target');
 
-           
-            if (!isset($grandTotalByMonth[$month])) {
-                $grandTotalByMonth[$month] = 0;
-            }
-            $grandTotalByMonth[$month] += $totalTarget;
+                if (!isset($grandTotalByMonth[$month])) {
+                    $grandTotalByMonth[$month] = 0;
+                }
+                $grandTotalByMonth[$month] += $totalTarget;
 
-            $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+                $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
-            if (!isset($groupedClasses[$siteName][$programName][$month])) {
-                $groupedClasses[$siteName][$programName][$month] = [
+                if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                    $groupedClasses[$siteName][$programName][$month] = [
                     'total_target' => 0,
                 ];
+                }
+
+                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
             }
-
-            $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
         }
-    }
 
-    logger('Grouped Classes:', $groupedClasses);
-    logger('Grand Total By Month:', $grandTotalByMonth);
-    logger('Grand Total By Program:', $grandTotalByProgram);
+        logger('Grouped Classes:', $groupedClasses);
+        logger('Grand Total By Month:', $grandTotalByMonth);
+        logger('Grand Total By Program:', $grandTotalByProgram);
 
-    $response = [
+        $response = [
         'classes' => $groupedClasses,
         'grandTotal' => $grandTotalByMonth,
         'grandTotal2' => $grandTotalByProgram,
     ];
 
-    return response()->json($response);
-}
+        return response()->json($response);
+    }
 
-    
+    //classes History
+    public function dashboardClasses2()
+    {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
 
     public function classesallInd()
     {
