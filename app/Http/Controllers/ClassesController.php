@@ -9,7 +9,6 @@ use App\Models\ClassStaffing;
 use App\Models\DateRange;
 use App\Models\Program;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -404,6 +403,34 @@ class ClassesController extends Controller
             $query->where('country', '=', 'Philippines');
         })
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
+    public function dashboardClasses3()
+    {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'cancelled')
+            ->get();
+
+        return response()->json([
+            'classes' => $classes,
+        ]);
+    }
+
+    public function dashboardClasses4()
+    {
+        $classes = Classes::whereHas('site', function ($query) {
+            $query->where('country', '=', 'Philippines');
+        })
+            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->where('status', 'moved')
             ->get();
 
         return response()->json([
