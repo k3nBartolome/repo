@@ -610,7 +610,7 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("http://127.0.0.1:8000/api/capfileguatamela", () => {
+          this.$router.push("/capfileguatamela", () => {
             location.reload();
           });
         })

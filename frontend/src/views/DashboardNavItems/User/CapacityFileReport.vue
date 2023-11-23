@@ -3,11 +3,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-3 col-sm-6">
-          <router-link to="/dashboard/capfile/summary" class="link-button">
+          <router-link to="/capfile/summary" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/dashboard/capfile/summary'),
+                'selected-tab': isActiveTab('/capfile/summary'),
               }"
             >
               Hiring Summary
@@ -15,11 +15,11 @@
           </router-link>
         </div>
         <div class="col-md-3 col-sm-6">
-          <router-link to="/dashboard/capfile/history" class="link-button">
+          <router-link to="/capfile/history" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/dashboard/capfile/history'),
+                'selected-tab': isActiveTab('/capfile/history'),
               }"
             >
               Class History
@@ -27,11 +27,11 @@
           </router-link>
         </div>
         <div class="col-md-3 col-sm-6">
-          <router-link to="/dashboard/capfile/cancelled" class="link-button">
+          <router-link to="/capfile/cancelled" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/dashboard/capfile/cancelled'),
+                'selected-tab': isActiveTab('/capfile/cancelled'),
               }"
             >
               Cancelled Class
@@ -39,11 +39,11 @@
           </router-link>
         </div>
         <div class="col-md-3 col-sm-6">
-          <router-link to="/dashboard/capfile/moved" class="link-button">
+          <router-link to="/capfile/moved" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/dashboard/capfile/moved'),
+                'selected-tab': isActiveTab('/capfile/moved'),
               }"
             >
               Moved Class

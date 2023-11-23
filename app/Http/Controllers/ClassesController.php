@@ -412,30 +412,127 @@ class ClassesController extends Controller
 
     public function dashboardClasses3()
     {
-        $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines');
-        })
-            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('status', 'cancelled')
-            ->get();
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
 
-        return response()->json([
-            'classes' => $classes,
-        ]);
+        $groupedClasses = [];
+        $grandTotalByMonth = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->site->name;
+            $programName = $program->name;
+
+            // Initialize grand total for the program
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = [];
+            }
+            $grandTotalByProgram[$siteName][$programName] = 0;
+
+            foreach ($dateRanges as $dateRange) {
+                $daterangeName = $dateRange->date_range;
+                $programId = $program->id;
+                $month = $dateRange->month;
+
+                $classes = Classes::where('site_id', $program->site_id)
+                ->where('program_id', $programId)
+                ->where('date_range_id', $dateRange->id)
+                ->where('status', 'Cancelled')
+                ->get();
+
+                $totalTarget = $classes->sum('total_target');
+
+                if (!isset($grandTotalByMonth[$month])) {
+                    $grandTotalByMonth[$month] = 0;
+                }
+                $grandTotalByMonth[$month] += $totalTarget;
+
+                $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                    $groupedClasses[$siteName][$programName][$month] = [
+                    'total_target' => 0,
+                ];
+                }
+
+                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+            }
+        }
+
+        logger('Grouped Classes:', $groupedClasses);
+        logger('Grand Total By Month:', $grandTotalByMonth);
+        logger('Grand Total By Program:', $grandTotalByProgram);
+
+        $response = [
+        'classes' => $groupedClasses,
+        'grandTotal' => $grandTotalByMonth,
+        'grandTotal2' => $grandTotalByProgram,
+    ];
+
+        return response()->json($response);
     }
+    
 
     public function dashboardClasses4()
     {
-        $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines');
-        })
-            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('status', 'moved')
-            ->get();
+        $programs = Program::with('site')->get();
+        $dateRanges = DateRange::all();
 
-        return response()->json([
-            'classes' => $classes,
-        ]);
+        $groupedClasses = [];
+        $grandTotalByMonth = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->site->name;
+            $programName = $program->name;
+
+            // Initialize grand total for the program
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = [];
+            }
+            $grandTotalByProgram[$siteName][$programName] = 0;
+
+            foreach ($dateRanges as $dateRange) {
+                $daterangeName = $dateRange->date_range;
+                $programId = $program->id;
+                $month = $dateRange->month;
+
+                $classes = Classes::where('site_id', $program->site_id)
+                ->where('program_id', $programId)
+                ->where('date_range_id', $dateRange->id)
+                ->where('status', 'Moved')
+                ->get();
+
+                $totalTarget = $classes->sum('total_target');
+
+                if (!isset($grandTotalByMonth[$month])) {
+                    $grandTotalByMonth[$month] = 0;
+                }
+                $grandTotalByMonth[$month] += $totalTarget;
+
+                $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                    $groupedClasses[$siteName][$programName][$month] = [
+                    'total_target' => 0,
+                ];
+                }
+
+                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+            }
+        }
+
+        logger('Grouped Classes:', $groupedClasses);
+        logger('Grand Total By Month:', $grandTotalByMonth);
+        logger('Grand Total By Program:', $grandTotalByProgram);
+
+        $response = [
+        'classes' => $groupedClasses,
+        'grandTotal' => $grandTotalByMonth,
+        'grandTotal2' => $grandTotalByProgram,
+    ];
+
+        return response()->json($response);
     }
 
     public function classesallInd()
@@ -597,12 +694,13 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-        $class->status = 'Cancelled';
+        $class->status = 'Cancelled Class';
         $class->save();
         $newClass = $class->replicate();
         $newClass->cancelled_by = json_encode($cancelled_by);
         $newClass->changes = 'Cancellation';
         $newClass->cancelled_date = $request->input('cancelled_date');
+        $newClass->status = 'Cancelled';
         $newClass->save();
 
         return new ClassesResource($class);

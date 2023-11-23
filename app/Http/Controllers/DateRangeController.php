@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\DateRangeResource;
 use App\Models\DateRange;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class DateRangeController extends Controller
 {
@@ -13,11 +14,18 @@ class DateRangeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
-        $date_range = DateRange::paginate(10);
-
-        return DateRangeResource::collection(DateRange::all());
+        $dateRanges = DateRange::paginate(10);
+    
+        return DateRangeResource::collection($dateRanges);
+    }
+    
+    public function indexByMonth($monthId): AnonymousResourceCollection
+    {
+        $dateRanges = DateRange::where('month_num', $monthId)->paginate(10);
+    
+        return DateRangeResource::collection($dateRanges);
     }
 
     public function perMonth(Request $request)
@@ -59,57 +67,9 @@ class DateRangeController extends Controller
         return response()->json(['data' => $months]);
     }
 
-    /**
+    /*
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show(DateRange $dateRange)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(DateRange $dateRange)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, DateRange $dateRange)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(DateRange $dateRange)
-    {
-    }
 }

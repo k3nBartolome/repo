@@ -1,89 +1,41 @@
 <template>
-  <div class="px-8 align-center">
-    <div class="px-2 align-center">
-      <div class="flex flex-wrap space-x-8 overflow-auto ">
-        <div class=" w-8/8">
-          <div class=" w-4/4">
-          <table
-            class="border-2 border-black align-center pr-0 pl-2"
+  <div class="py-0">
+    <div class="pl-8 pr-8">
+      <div class="scroll">
+        <div class="w-2/3 mx-auto datatable-container">
+          <DataTable
+            :data="classes"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'frtip',
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
+              },
+            }"
           >
-            <thead>
-              <tr class="border-4 border-black px-1">
-                <th class="border-2 border-black px-1">Site Name</th>
-                <th class="border-2 border-black px-1">Program Name</th>
-                <th class="border-2 border-black px-1">January</th>
-                <th class="border-2 border-black px-1">February</th>
-                <th class="border-2 border-black px-1">March</th>
-                <th class="border-2 border-black px-1">April</th>
-                <th class="border-2 border-black px-1">May</th>
-                <th class="border-2 border-black px-1">June</th>
-                <th class="border-2 border-black px-1">July</th>
-                <th class="border-2 border-black px-1">August</th>
-                <th class="border-2 border-black px-1">September</th>
-                <th class="border-2 border-black px-1">October</th>
-                <th class="border-2 border-black px-1">November</th>
-                <th class="border-2 border-black px-1">December</th>
+            <thead class="truncate">
+              <tr>
+                <!-- ...existing code... -->
               </tr>
             </thead>
-            <tbody >
-              <template v-for="(item, index) in classes" :key="index">
-                <tr v-for="(item1, index1) in item" :key="index1">
-                  <td class="border-4 border-black truncate px-2 font-semibold">
-                    {{ index }}
-                  </td>
-                  <td class="border-4 border-black truncate px-2 font-semibold">
-                    {{ index1 }}
-                  </td>
-                  <template v-for="(item2, index2) in item1" :key="index2">
-                    <template v-for="(item3, index3) in item2" :key="index3">
-                      <td
-                        class="border-2 border-black text-center font-semibold"
-                      >
-                        {{ item3 }}
-                      </td>
-                    </template>
-                  </template>
-                </tr>
-              </template>
-
-              <td
-                class="border-4 border-black truncate px-2 text-center font-bold"
-                colspan="2"
-              >
-                Grand Total
-              </td>
-              <template v-for="(total, gtotal) in grandTotal" :key="gtotal">
-                <td class="border-2 border-black text-center font-bold">
-                  {{ total }}
-                </td>
-              </template>
-            </tbody>
-          </table>
+          </DataTable>
         </div>
-        </div>
-        <div class="w-1/8">
-          <div class="w-1/4">
-          <table class="border-2 border-black align-center px-1">
-            <thead>
-              <tr class="border-4 border-black px-1">
-                <th class="border-2 border-black px-1">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="(total, gtotal) in grandTotal2" :key="gtotal">
-                <tr v-for="(total2, gtotal2) in total" :key="gtotal2">
-                  <td
-                    class="border-4 border-black truncate px-2 text-center font-bold"
-                    colspan="2"
-                  >
-                    {{ total2 }}
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
-      </div>
       </div>
     </div>
   </div>
@@ -91,12 +43,53 @@
 
 <script>
 import axios from "axios";
+import DataTable from "datatables.net-vue3";
+import DataTableLib from "datatables.net-bs5";
+// eslint-disable-next-line no-unused-vars
+import Buttons from "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+// eslint-disable-next-line no-unused-vars
+import print from "datatables.net-buttons/js/buttons.print";
+//import pdfmake from "pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
+import "datatables.net-responsive-bs5";
+import jszip from "jszip";
+// eslint-disable-next-line no-unused-vars
+import "bootstrap/dist/css/bootstrap.css";
+
+DataTable.use(DataTableLib);
+DataTable.use(jszip);
+DataTable.use(ButtonsHtml5);
+
 export default {
+  components: { DataTable },
   data() {
     return {
       classes: [],
       grandTotal: [],
       grandTotal2: [],
+      columns: [{ data: "site.region", title: "Region" },
+      { data: "site.name", title: "Site" },
+      { data: "program.name", title: "Program" },
+      { data: "date_range.date_range", title: " Hiring Week" },
+      { data: "external_target", title: "Externals" },
+      { data: "internal_target", title: "Internals" },
+      { data: "total_target", title: "Total Target" },
+      { data: "agreed_start_date", title: "Start Date" },
+      { data: "original_start_date", title: "Original Start Date" },
+      { data: "changes", title: "Changes" },
+      { data: "within_sla", title: "Within Sla" },
+      { data: "type_of_hiring", title: "Type of Hiring" },
+      { data: "category", title: "Category" },
+      { data: "with_erf", title: "With ERF" },
+      { data: "erf_number", title: "ERF#" },
+      { data: "wave_no", title: "Wave#" },
+      { data: "requested_by", title: "Requested By" },
+      { data: "notice_days", title: "Notice Days" },
+      { data: "notice_weeks", title: "Notice Weeks" },
+      { data: "remarks", title: "Remarks" },
+    ],
     };
   },
   computed: {},
@@ -108,7 +101,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboard2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,8 +111,6 @@ export default {
 
         if (response.status === 200) {
           this.classes = response.data.classes;
-          this.grandTotal = response.data.grandTotal;
-          this.grandTotal2 = response.data.grandTotal2;
         } else {
           console.error(
             "Error fetching classes. Status code:",

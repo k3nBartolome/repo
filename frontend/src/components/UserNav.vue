@@ -37,7 +37,7 @@
             Staffing Tracker
           </li>
         </router-link>
-       
+
         <li class="tab-button">
           <div v-if="isUser|| isBudget || isSourcing">
             <div class="relative inline-block py-0">
@@ -135,9 +135,9 @@
                   Staffing Tracker
                 </li>
               </router-link>
-              <router-link to="/capfile_report" class="link-button">
+              <router-link to="/capfile/summary" class="link-button">
                 <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/capfile_report') }"
+              :class="{ 'selected-tab': isActiveTab('/capfile/summary') }"
                                   >
                   Capacity File
                 </li>

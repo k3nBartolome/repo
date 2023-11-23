@@ -14,6 +14,10 @@ import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
 import SiteManagement from "@/views//Dashboard/AppSiteDashboard.vue";
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
 import capacityFileReport from "@/views/DashboardNavItems/User/CapacityFileReport.vue";
+import CapFileHiring from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileHiring.vue";
+import CapFileClassHistory from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileClassHistory";
+import CapFilePushedback from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFilePushedback";
+import CapFileCancelled from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileCancelled";
 import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.vue";
 import ProgramManagement from "@/views/Dashboard/AppProgramDashboard.vue";
 import pushbackCapacityFile from "@/views/DashboardNavItems/User/Capfile/PushedBackCapacityFile.vue";
@@ -215,9 +219,31 @@ const routes = [
         ],
       },
       {
-        path: "/capfile_report",
+        path: "/capfile",
         name: "capacityFileReport",
         component: capacityFileReport,
+        children: [
+          {
+            path: "history",
+            name: "CapFileClassHistory",
+            component: CapFileClassHistory,
+          },
+          {
+            path: "summary",
+            name: "CapFileHiring",
+            component: CapFileHiring,
+          },
+          {
+            path: "cancelled",
+            name: "CapFileCancelled",
+            component: CapFileCancelled,
+          },
+          {
+            path: "moved",
+            name: "CapFilePushedback",
+            component: CapFilePushedback,
+          },
+        ],
       },
       {
         path: "/pushbackcapfile/:id",

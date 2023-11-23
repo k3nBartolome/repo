@@ -262,9 +262,16 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
+    this.getClassesAll();
   },
  
   methods: {
+    onMonthSelected() {
+      
+      if (this.month_selected) {
+        this.getDateRange();
+      }
+    },
     resetFilter() {
       this.sites_selected = "";
       this.programs_selected = "";

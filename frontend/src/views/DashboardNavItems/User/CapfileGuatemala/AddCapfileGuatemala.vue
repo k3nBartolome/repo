@@ -403,7 +403,7 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
-          this.$router.push("http://127.0.0.1:8000/api/capfileguatemala", () => {
+          this.$router.push("/capfileguatemala", () => {
             location.reload();
           });
         })

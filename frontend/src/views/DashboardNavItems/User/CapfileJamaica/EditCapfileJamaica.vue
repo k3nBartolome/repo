@@ -535,7 +535,7 @@ export default {
         .then((response) => {
           this.classes = response.data.data;
           console.log(response.data.data);
-          this.$router.push("http://127.0.0.1:8000/api/capfile", () => {
+          this.$router.push("/capfile", () => {
             location.reload();
           });
         })
@@ -690,7 +690,7 @@ export default {
           this.cl = "";
           this.op = "";
           this.wave_no="";
-          this.$router.push("http://127.0.0.1:8000/api/capfilejamaica", () => {
+          this.$router.push("/capfilejamaica", () => {
             location.reload();
           });
         })
