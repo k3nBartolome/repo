@@ -334,9 +334,20 @@ class ClassesController extends Controller
     }
 
     //hiring summary
-    public function dashboardClasses()
+    public function dashboardClasses(Request $request)
     {
-        $programs = Program::with('site')->get();
+        $siteId = $request->input('site_id');
+        $programId = $request->input('program_id');
+
+        $programs = Program::with('site')
+        ->when(!empty($siteId), function ($query) use ($siteId) {
+            $query->whereIn('site_id', $siteId);
+        })
+        ->when(!empty($programId), function ($query) use ($programId) {
+            $query->whereIn('program_id', $programId);
+        })
+        ->get();
+
         $dateRanges = DateRange::all();
 
         $groupedClasses = [];
@@ -347,7 +358,6 @@ class ClassesController extends Controller
             $siteName = $program->site->name;
             $programName = $program->name;
 
-            // Initialize grand total for the program
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
             }
@@ -410,9 +420,20 @@ class ClassesController extends Controller
         ]);
     }
 
-    public function dashboardClasses3()
+    public function dashboardClasses3(Request $request)
     {
-        $programs = Program::with('site')->get();
+        $siteId = $request->input('site_id');
+        $programId = $request->input('program_id');
+
+        $programs = Program::with('site')
+        ->when(!empty($siteId), function ($query) use ($siteId) {
+            $query->whereIn('site_id', $siteId);
+        })
+        ->when(!empty($programId), function ($query) use ($programId) {
+            $query->whereIn('program_id', $programId);
+        })
+        ->get();
+
         $dateRanges = DateRange::all();
 
         $groupedClasses = [];
@@ -471,11 +492,21 @@ class ClassesController extends Controller
 
         return response()->json($response);
     }
-    
 
-    public function dashboardClasses4()
+    public function dashboardClasses4(Request $request)
     {
-        $programs = Program::with('site')->get();
+        $siteId = $request->input('site_id');
+        $programId = $request->input('program_id');
+
+        $programs = Program::with('site')
+        ->when(!empty($siteId), function ($query) use ($siteId) {
+            $query->whereIn('site_id', $siteId);
+        })
+        ->when(!empty($programId), function ($query) use ($programId) {
+            $query->whereIn('program_id', $programId);
+        })
+        ->get();
+
         $dateRanges = DateRange::all();
 
         $groupedClasses = [];

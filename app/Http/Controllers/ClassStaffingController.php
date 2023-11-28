@@ -166,8 +166,7 @@ class ClassStaffingController extends Controller
             DB::raw('COALESCE(month, null) as month'),
         ]);
         if (!empty($monthNum)) {
-            $siteNum = is_array($monthNum) ? $monthNum : [$monthNum];
-            $uniqueMonths->whereIn('month_num', $monthNum);
+             $uniqueMonths->whereIn('month_num', $monthNum);
         }
         $uniqueMonths = $uniqueMonths->distinct()->get();
 
@@ -667,14 +666,10 @@ class ClassStaffingController extends Controller
             'open' => $staffing->sum('open'),
             'classes' => $staffing->sum('classes_number'),
         ];
-
-            // Update the grand totals
             foreach ($grandTotals as $key => $value) {
                 $grandTotals[$key] += $computedSums[$monthName][$key];
             }
         }
-
-        // Add the grand totals to the computed sums
         $computedSums['Grand Total'] = $grandTotals;
 
         return response()->json([
