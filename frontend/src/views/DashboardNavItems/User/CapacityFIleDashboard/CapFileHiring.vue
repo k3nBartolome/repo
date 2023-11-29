@@ -1,10 +1,13 @@
 <template>
   <div class="py-8">
     <div class="px-4 sm:px-6 lg:px-8">
-      <button @click="exportToExcel" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out">
+      <button
+        @click="exportToExcel"
+        class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out"
+      >
         Export to Excel
       </button>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
+      <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2">
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Sites</label>
           <MultiSelect
@@ -34,95 +37,92 @@
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
           />
         </div>
-       
       </div>
     </div>
-    </div>
+  </div>
   <div class="px-8 align-center">
     <div class="px-2 align-center">
-      <div class="flex flex-wrap space-x-8 overflow-auto ">
-        <div class=" w-8/8">
-          <div class=" w-4/4">
-          <table
-            class="border-2 border-black align-center pr-0 pl-2"
-          >
-            <thead>
-              <tr class="border-4 border-black px-1">
-                <th class="border-2 border-black px-1">Site Name</th>
-                <th class="border-2 border-black px-1">Program Name</th>
-                <th class="border-2 border-black px-1">January</th>
-                <th class="border-2 border-black px-1">February</th>
-                <th class="border-2 border-black px-1">March</th>
-                <th class="border-2 border-black px-1">April</th>
-                <th class="border-2 border-black px-1">May</th>
-                <th class="border-2 border-black px-1">June</th>
-                <th class="border-2 border-black px-1">July</th>
-                <th class="border-2 border-black px-1">August</th>
-                <th class="border-2 border-black px-1">September</th>
-                <th class="border-2 border-black px-1">October</th>
-                <th class="border-2 border-black px-1">November</th>
-                <th class="border-2 border-black px-1">December</th>
-              </tr>
-            </thead>
-            <tbody >
-              <template v-for="(item, index) in classes" :key="index">
-                <tr v-for="(item1, index1) in item" :key="index1">
-                  <td class="border-4 border-black truncate px-2 font-semibold">
-                    {{ index }}
-                  </td>
-                  <td class="border-4 border-black truncate px-2 font-semibold">
-                    {{ index1 }}
-                  </td>
-                  <template v-for="(item2, index2) in item1" :key="index2">
-                    <template v-for="(item3, index3) in item2" :key="index3">
-                      <td
-                        class="border-2 border-black text-center font-semibold"
-                      >
-                        {{ item3 }}
-                      </td>
-                    </template>
-                  </template>
+      <div class="flex flex-wrap space-x-8 overflow-auto">
+        <div class="w-8/8">
+          <div class="w-4/4">
+            <table class="border-2 border-black align-center pr-0 pl-2">
+              <thead>
+                <tr class="border-4 border-black px-1">
+                  <th class="border-2 border-black px-1">Site Name</th>
+                  <th class="border-2 border-black px-1">Program Name</th>
+                  <th class="border-2 border-black px-1">January</th>
+                  <th class="border-2 border-black px-1">February</th>
+                  <th class="border-2 border-black px-1">March</th>
+                  <th class="border-2 border-black px-1">April</th>
+                  <th class="border-2 border-black px-1">May</th>
+                  <th class="border-2 border-black px-1">June</th>
+                  <th class="border-2 border-black px-1">July</th>
+                  <th class="border-2 border-black px-1">August</th>
+                  <th class="border-2 border-black px-1">September</th>
+                  <th class="border-2 border-black px-1">October</th>
+                  <th class="border-2 border-black px-1">November</th>
+                  <th class="border-2 border-black px-1">December</th>
+                  <th class="border-4 border-black px-1">Total</th>
                 </tr>
-              </template>
-
-              <td
-                class="border-4 border-black truncate px-2 text-center font-bold"
-                colspan="2"
-              >
-                Grand Total
-              </td>
-              <template v-for="(total, gtotal) in grandTotal" :key="gtotal">
-                <td class="border-2 border-black text-center font-bold">
-                  {{ total }}
-                </td>
-              </template>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <template v-for="(item, index) in classes" :key="index">
+                  <tr>
+                    <td
+                      class="border-4 border-black truncate px-2 font-semibold"
+                    >
+                      {{ item.Site }}
+                    </td>
+                    <td
+                      class="border-4 border-black truncate px-2 font-semibold"
+                    >
+                      {{ item.Program }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.January }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.February }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.March }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.April }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.May }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.June }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.July }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.August }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.September }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.October }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.November }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.December }}
+                    </td>
+                    <td class="border-4 border-black text-center font-semibold">
+                      {{ item.GrandTotalByProgram }}
+                    </td>
+                  </tr>
+                </template>
+              </tbody>
+            </table>
+          </div>
         </div>
-        </div>
-        <div class="w-1/8">
-          <div class="w-1/4">
-          <table class="border-2 border-black align-center px-1">
-            <thead>
-              <tr class="border-4 border-black px-1">
-                <th class="border-2 border-black px-1">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="(total, gtotal) in grandTotal2" :key="gtotal">
-                <tr v-for="(total2, gtotal2) in total" :key="gtotal2">
-                  <td
-                    class="border-4 border-black truncate px-2 text-center font-bold"
-                    colspan="2"
-                  >
-                    {{ total2 }}
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
-      </div>
       </div>
     </div>
   </div>
@@ -187,17 +187,17 @@ export default {
               Authorization: `Bearer ${token}`,
             },
             params: {
-            month_num: this.month_selected.map(
-              (month_num) => month_num.month_num
-            ),
-            site_id: this.sites_selected.map((site) => site.site_id),
-            program_id: this.programs_selected.map(
-              (program) => program.program_id
-            ),
-            date_id: this.week_selected.map(
-              (week_selected) => week_selected.date_id
-            ),
-          },
+              month_num: this.month_selected.map(
+                (month_num) => month_num.month_num
+              ),
+              site_id: this.sites_selected.map((site) => site.site_id),
+              program_id: this.programs_selected.map(
+                (program) => program.program_id
+              ),
+              date_id: this.week_selected.map(
+                (week_selected) => week_selected.date_id
+              ),
+            },
           }
         );
 
@@ -240,29 +240,32 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://127.0.0.1:8000/api/export-to-excel", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          responseType: 'blob', // Tell Axios to expect a binary response
+          responseType: "blob", // Tell Axios to expect a binary response
           params: {
             // Include any parameters needed for the export
-            month_num: this.month_selected.map((month_num) => month_num.month_num),
+
             site_id: this.sites_selected.map((site) => site.site_id),
-            program_id: this.programs_selected.map((program) => program.program_id),
-            date_id: this.week_selected.map((week_selected) => week_selected.date_id),
+            program_id: this.programs_selected.map(
+              (program) => program.program_id
+            ),
           },
         });
 
         // Create a Blob and create a download link for the Excel file
-        const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'your_filename.xlsx';
+        a.download = "your_filename.xlsx";
         a.click();
       } catch (error) {
-        console.error('Error exporting data to Excel', error);
+        console.error("Error exporting data to Excel", error);
       }
     },
     async getSites() {
@@ -285,58 +288,62 @@ export default {
       }
     },
     async getDateRange() {
-  if (!this.month_selected) {
-    return;
-  }
-  try {
-    const token = this.$store.state.token;
-    const monthId = this.month_selected.map((month) => month.month_num);
+      if (!this.month_selected) {
+        return;
+      }
+      try {
+        const token = this.$store.state.token;
+        const monthId = this.month_selected.map((month) => month.month_num);
 
-    const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(',')}`;
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
+          ","
+        )}`;
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (response.status === 200) {
-      this.daterange = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching week");
-    }
-  } catch (error) {
-    console.error(error);
-  }
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching week");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     async getPrograms() {
-  if (!this.sites_selected) {
-    return;
-  }
+      if (!this.sites_selected) {
+        return;
+      }
 
-  try {
-    const token = this.$store.state.token;
-    const siteId = this.sites_selected.map((site) => site.site_id);
+      try {
+        const token = this.$store.state.token;
+        const siteId = this.sites_selected.map((site) => site.site_id);
 
-    const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(',')}`;
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
+          ","
+        )}`;
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (response.status === 200) {
-      this.programs = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-    }}
-
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 };
 </script>

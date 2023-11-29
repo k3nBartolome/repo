@@ -111,6 +111,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
     Route::get('perxfilter', [ClassesController::class, 'perxFilter']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
+    Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);
