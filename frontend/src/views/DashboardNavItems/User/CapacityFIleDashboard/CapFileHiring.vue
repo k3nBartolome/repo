@@ -40,28 +40,31 @@
       </div>
     </div>
   </div>
-  <div class="px-8 align-center">
-    <div class="px-2 align-center">
-      <div class="flex flex-wrap space-x-8 overflow-auto">
-        <div class="w-8/8">
-          <div class="w-4/4">
-            <table class="border-2 border-black align-center pr-0 pl-2">
-              <thead>
+  
+    <div class="px-2 items-center">
+        <div
+          class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8"
+        >
+          <div
+            class="w-full lg:max-w-4xl mx-auto align-center"
+          >
+            <table class="border-2 border-black">
+              <thead class="sticky top-0 bg-white z-50">
                 <tr class="border-4 border-black px-1">
                   <th class="border-2 border-black px-1">Site Name</th>
                   <th class="border-2 border-black px-1">Program Name</th>
-                  <th class="border-2 border-black px-1">January</th>
-                  <th class="border-2 border-black px-1">February</th>
-                  <th class="border-2 border-black px-1">March</th>
-                  <th class="border-2 border-black px-1">April</th>
+                  <th class="border-2 border-black px-1">Jan</th>
+                  <th class="border-2 border-black px-1">Feb</th>
+                  <th class="border-2 border-black px-1">Mar</th>
+                  <th class="border-2 border-black px-1">Apr</th>
                   <th class="border-2 border-black px-1">May</th>
-                  <th class="border-2 border-black px-1">June</th>
-                  <th class="border-2 border-black px-1">July</th>
-                  <th class="border-2 border-black px-1">August</th>
-                  <th class="border-2 border-black px-1">September</th>
-                  <th class="border-2 border-black px-1">October</th>
-                  <th class="border-2 border-black px-1">November</th>
-                  <th class="border-2 border-black px-1">December</th>
+                  <th class="border-2 border-black px-1">Jun</th>
+                  <th class="border-2 border-black px-1">Jul</th>
+                  <th class="border-2 border-black px-1">Aug</th>
+                  <th class="border-2 border-black px-1">Sep</th>
+                  <th class="border-2 border-black px-1">Oct</th>
+                  <th class="border-2 border-black px-1">Nov</th>
+                  <th class="border-2 border-black px-1">Dec</th>
                   <th class="border-4 border-black px-1">Total</th>
                 </tr>
               </thead>
@@ -124,8 +127,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
 </template>
 
 <script>
