@@ -627,7 +627,6 @@ class ClassesController extends Controller
             $siteName = $program->site->name;
             $programName = $program->name;
 
-            // Initialize grand total for the program
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
             }
@@ -639,10 +638,10 @@ class ClassesController extends Controller
                 $month = $dateRange->month;
 
                 $classes = Classes::where('site_id', $program->site_id)
-                ->where('program_id', $programId)
-                ->where('date_range_id', $dateRange->id)
-                ->where('status', 'Cancelled')
-                ->get();
+                    ->where('program_id', $programId)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
 
@@ -655,23 +654,78 @@ class ClassesController extends Controller
 
                 if (!isset($groupedClasses[$siteName][$programName][$month])) {
                     $groupedClasses[$siteName][$programName][$month] = [
-                    'total_target' => 0,
-                ];
+                        'total_target' => 0,
+                    ];
                 }
 
                 $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
             }
         }
 
-        logger('Grouped Classes:', $groupedClasses);
-        logger('Grand Total By Month:', $grandTotalByMonth);
-        logger('Grand Total By Program:', $grandTotalByProgram);
+        $mappedGroupedClasses = [];
+
+        foreach ($groupedClasses as $siteName => $siteData) {
+            foreach ($siteData as $programName => $programData) {
+                $monthlyData = [
+                    'January' => 0,
+                    'February' => 0,
+                    'March' => 0,
+                    'April' => 0,
+                    'May' => 0,
+                    'June' => 0,
+                    'July' => 0,
+                    'August' => 0,
+                    'September' => 0,
+                    'October' => 0,
+                    'November' => 0,
+                    'December' => 0,
+                ];
+
+                foreach ($programData as $month => $monthData) {
+                    $monthlyData[$month] = isset($monthData['total_target']) ? $monthData['total_target'] : 0;
+                }
+
+                $mappedGroupedClasses[] = [
+                    'Site' => $siteName,
+                    'Program' => $programName,
+                    'January' => $monthlyData['January'],
+                    'February' => $monthlyData['February'],
+                    'March' => $monthlyData['March'],
+                    'April' => $monthlyData['April'],
+                    'May' => $monthlyData['May'],
+                    'June' => $monthlyData['June'],
+                    'July' => $monthlyData['July'],
+                    'August' => $monthlyData['August'],
+                    'September' => $monthlyData['September'],
+                    'October' => $monthlyData['October'],
+                    'November' => $monthlyData['November'],
+                    'December' => $monthlyData['December'],
+                    'GrandTotalByProgram' => isset($grandTotalByProgram[$siteName][$programName]) ? $grandTotalByProgram[$siteName][$programName] : 0,
+                ];
+            }
+
+        }
+        $mappedGroupedClasses[] = [
+            'Site' => 'Grand Total',
+            'Program' => '',
+            'January' => $grandTotalByMonth['January'],
+            'February' => $grandTotalByMonth['February'],
+            'March' => $grandTotalByMonth['March'],
+            'April' => $grandTotalByMonth['April'],
+            'May' => $grandTotalByMonth['May'],
+            'June' => $grandTotalByMonth['June'],
+            'July' => $grandTotalByMonth['July'],
+            'August' => $grandTotalByMonth['August'],
+            'September' => $grandTotalByMonth['September'],
+            'October' => $grandTotalByMonth['October'],
+            'November' => $grandTotalByMonth['November'],
+            'December' => $grandTotalByMonth['December'],
+            'GrandTotalByProgram' => isset($grandTotalByProgram[$siteName][$programName]) ? $grandTotalByProgram[$siteName][$programName] : 'Hotdog',
+        ];
 
         $response = [
-        'classes' => $groupedClasses,
-        'grandTotal' => $grandTotalByMonth,
-        'grandTotal2' => $grandTotalByProgram,
-    ];
+            'classes' => $mappedGroupedClasses
+        ];
 
         return response()->json($response);
     }
@@ -700,7 +754,6 @@ class ClassesController extends Controller
             $siteName = $program->site->name;
             $programName = $program->name;
 
-            // Initialize grand total for the program
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
             }
@@ -712,10 +765,10 @@ class ClassesController extends Controller
                 $month = $dateRange->month;
 
                 $classes = Classes::where('site_id', $program->site_id)
-                ->where('program_id', $programId)
-                ->where('date_range_id', $dateRange->id)
-                ->where('status', 'Moved')
-                ->get();
+                    ->where('program_id', $programId)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
 
@@ -728,23 +781,78 @@ class ClassesController extends Controller
 
                 if (!isset($groupedClasses[$siteName][$programName][$month])) {
                     $groupedClasses[$siteName][$programName][$month] = [
-                    'total_target' => 0,
-                ];
+                        'total_target' => 0,
+                    ];
                 }
 
                 $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
             }
         }
 
-        logger('Grouped Classes:', $groupedClasses);
-        logger('Grand Total By Month:', $grandTotalByMonth);
-        logger('Grand Total By Program:', $grandTotalByProgram);
+        $mappedGroupedClasses = [];
+
+        foreach ($groupedClasses as $siteName => $siteData) {
+            foreach ($siteData as $programName => $programData) {
+                $monthlyData = [
+                    'January' => 0,
+                    'February' => 0,
+                    'March' => 0,
+                    'April' => 0,
+                    'May' => 0,
+                    'June' => 0,
+                    'July' => 0,
+                    'August' => 0,
+                    'September' => 0,
+                    'October' => 0,
+                    'November' => 0,
+                    'December' => 0,
+                ];
+
+                foreach ($programData as $month => $monthData) {
+                    $monthlyData[$month] = isset($monthData['total_target']) ? $monthData['total_target'] : 0;
+                }
+
+                $mappedGroupedClasses[] = [
+                    'Site' => $siteName,
+                    'Program' => $programName,
+                    'January' => $monthlyData['January'],
+                    'February' => $monthlyData['February'],
+                    'March' => $monthlyData['March'],
+                    'April' => $monthlyData['April'],
+                    'May' => $monthlyData['May'],
+                    'June' => $monthlyData['June'],
+                    'July' => $monthlyData['July'],
+                    'August' => $monthlyData['August'],
+                    'September' => $monthlyData['September'],
+                    'October' => $monthlyData['October'],
+                    'November' => $monthlyData['November'],
+                    'December' => $monthlyData['December'],
+                    'GrandTotalByProgram' => isset($grandTotalByProgram[$siteName][$programName]) ? $grandTotalByProgram[$siteName][$programName] : 0,
+                ];
+            }
+
+        }
+        $mappedGroupedClasses[] = [
+            'Site' => 'Grand Total',
+            'Program' => '',
+            'January' => $grandTotalByMonth['January'],
+            'February' => $grandTotalByMonth['February'],
+            'March' => $grandTotalByMonth['March'],
+            'April' => $grandTotalByMonth['April'],
+            'May' => $grandTotalByMonth['May'],
+            'June' => $grandTotalByMonth['June'],
+            'July' => $grandTotalByMonth['July'],
+            'August' => $grandTotalByMonth['August'],
+            'September' => $grandTotalByMonth['September'],
+            'October' => $grandTotalByMonth['October'],
+            'November' => $grandTotalByMonth['November'],
+            'December' => $grandTotalByMonth['December'],
+            'GrandTotalByProgram' => isset($grandTotalByProgram[$siteName][$programName]) ? $grandTotalByProgram[$siteName][$programName] : 'Hotdog',
+        ];
 
         $response = [
-        'classes' => $groupedClasses,
-        'grandTotal' => $grandTotalByMonth,
-        'grandTotal2' => $grandTotalByProgram,
-    ];
+            'classes' => $mappedGroupedClasses
+        ];
 
         return response()->json($response);
     }
