@@ -11,18 +11,27 @@
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Sites</label>
           <MultiSelect
-            v-model="sites_selected"
-            :options="sites"
-            filter
-            optionLabel="name"
-            placeholder="Select Sites"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-            :selected-items-class="'bg-orange-500 text-white'"
-            :panel-style="{ backgroundColor: 'white' }"
-            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-            @change="getPrograms"
-          />
+    v-model="sites_selected"
+    :options="sites"
+    display="chip"
+    filter
+    checkboxContainer
+    headerCheckbox
+    checkboxIcon
+    filterPlaceholder="Search"
+    showToggleAll
+    optionLabel="name"
+    placeholder="Select Sites"
+    class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+    :selected-items-class="'bg-orange-500 text-white'"
+    :panel-style="{ backgroundColor: 'white' }"
+    :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+    @change="getPrograms"
+    style="--checkbox-size: 20px; --checkbox-background: #ffcc00; --checkbox-border: #000000;"
+  />
         </div>
+        
+
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Programs</label>
           <MultiSelect
@@ -40,7 +49,7 @@
       </div>
     </div>
   </div>
-  
+
     <div class="px-2 items-center">
         <div
           class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8"
@@ -131,7 +140,109 @@
 
 <script>
 import axios from "axios";
-import MultiSelect from "primevue/multiselect";
+/* eslint-disable no-unused-vars */
+import PrimeVue from "primevue/config";
+import AutoComplete from 'primevue/autocomplete';
+import Accordion from 'primevue/accordion';
+import AccordionTab from 'primevue/accordiontab';
+import AnimateOnScroll from 'primevue/animateonscroll';
+import Avatar from 'primevue/avatar';
+import AvatarGroup from 'primevue/avatargroup';
+import Badge from 'primevue/badge';
+import BadgeDirective from "primevue/badgedirective";
+import BlockUI from 'primevue/blockui';
+import Button from 'primevue/button';
+import Breadcrumb from 'primevue/breadcrumb';
+import Calendar from 'primevue/calendar';
+import Card from 'primevue/card';
+import CascadeSelect from 'primevue/cascadeselect';
+import Carousel from 'primevue/carousel';
+import Checkbox from 'primevue/checkbox';
+import Chip from 'primevue/chip';
+import Chips from 'primevue/chips';
+import ColorPicker from 'primevue/colorpicker';
+import Column from 'primevue/column';
+import ColumnGroup from 'primevue/columngroup';
+import ConfirmDialog from 'primevue/confirmdialog';
+import ConfirmPopup from 'primevue/confirmpopup';
+import ConfirmationService from 'primevue/confirmationservice';
+import ContextMenu from 'primevue/contextmenu';
+import DataTable from 'primevue/datatable';
+import DataView from 'primevue/dataview';
+import DataViewLayoutOptions from 'primevue/dataviewlayoutoptions';
+import DeferredContent from 'primevue/deferredcontent';
+import Dialog from 'primevue/dialog';
+import DialogService from 'primevue/dialogservice'
+import Divider from 'primevue/divider';
+import Dock from 'primevue/dock';
+import Dropdown from 'primevue/dropdown';
+import DynamicDialog from 'primevue/dynamicdialog';
+import Fieldset from 'primevue/fieldset';
+import FileUpload from 'primevue/fileupload';
+import FocusTrap from 'primevue/focustrap';
+import Galleria from 'primevue/galleria';
+import Image from 'primevue/image';
+import InlineMessage from 'primevue/inlinemessage';
+import Inplace from 'primevue/inplace';
+import InputSwitch from 'primevue/inputswitch';
+import InputText from 'primevue/inputtext';
+import InputMask from 'primevue/inputmask';
+import InputNumber from 'primevue/inputnumber';
+import Knob from 'primevue/knob';
+import Listbox from 'primevue/listbox';
+import MegaMenu from 'primevue/megamenu';
+import Menu from 'primevue/menu';
+import Menubar from 'primevue/menubar';
+import Message from 'primevue/message';
+import MultiSelect from 'primevue/multiselect';
+import OrderList from 'primevue/orderlist';
+import OrganizationChart from 'primevue/organizationchart';
+import OverlayPanel from 'primevue/overlaypanel';
+import Paginator from 'primevue/paginator';
+import Panel from 'primevue/panel';
+import PanelMenu from 'primevue/panelmenu';
+import Password from 'primevue/password';
+import PickList from 'primevue/picklist';
+import ProgressBar from 'primevue/progressbar';
+import ProgressSpinner from 'primevue/progressspinner';
+import Rating from 'primevue/rating';
+import RadioButton from 'primevue/radiobutton';
+import Ripple from 'primevue/ripple';
+import Row from 'primevue/row';
+import SelectButton from 'primevue/selectbutton';
+import ScrollPanel from 'primevue/scrollpanel';
+import ScrollTop from 'primevue/scrolltop';
+import Skeleton from 'primevue/skeleton';
+import Slider from 'primevue/slider';
+import Sidebar from 'primevue/sidebar';
+import SpeedDial from 'primevue/speeddial';
+import SplitButton from 'primevue/splitbutton';
+import Splitter from 'primevue/splitter';
+import SplitterPanel from 'primevue/splitterpanel';
+import Steps from 'primevue/steps';
+import StyleClass from 'primevue/styleclass';
+import TabMenu from 'primevue/tabmenu';
+import TieredMenu from 'primevue/tieredmenu';
+import Textarea from 'primevue/textarea';
+import Toast from 'primevue/toast';
+import ToastService from 'primevue/toastservice';
+import Toolbar from 'primevue/toolbar';
+import TabView from 'primevue/tabview';
+import TabPanel from 'primevue/tabpanel';
+import Tag from 'primevue/tag';
+import Terminal from 'primevue/terminal';
+import Timeline from 'primevue/timeline';
+import ToggleButton from 'primevue/togglebutton';
+import Tooltip from 'primevue/tooltip';
+import Tree from 'primevue/tree';
+import TreeSelect from 'primevue/treeselect';
+import TreeTable from 'primevue/treetable';
+import TriStateCheckbox from 'primevue/tristatecheckbox';
+import VirtualScroller from 'primevue/virtualscroller';
+import "primeflex/primeflex.css";
+import "primevue/resources/themes/lara-light-green/theme.css";
+import "primevue/resources/primevue.min.css"; /* Deprecated */
+import "primeicons/primeicons.css";
 export default {
   components: {
     MultiSelect,
@@ -348,3 +459,45 @@ export default {
   },
 };
 </script>
+<style>
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: var(--font-family);
+  font-weight: normal;
+  background: var(--surface-ground);
+  color: var(--text-color);
+  padding: 1rem;
+}
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}
+
+p {
+  line-height: 1.75;
+}
+.p-multiselect .p-checkbox .p-checkbox-box {
+  width: var(--checkbox-size);
+  height: var(--checkbox-size);
+  background-color: var(--checkbox-background);
+  border: 2px solid var(--checkbox-border);
+  border-color: var(--checkbox-border);
+}
+
+.p-multiselect .p-checkbox.p-highlight .p-checkbox-box {
+  background-color: var(--checkbox-background);
+  border-color: var(--checkbox-border);
+}
+
+.p-multiselect .p-checkbox .p-checkbox-icon {
+  font-size: var(--checkbox-size);
+  border-color: var(--checkbox-border);
+}
+
+</style>

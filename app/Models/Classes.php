@@ -84,6 +84,7 @@ class Classes extends Model
         return $this->belongsTo(User::class, 'updated_by');
     }
 
+    // @ts-ignore
     public function classes()
     {
         return $this->hasMany(ClassStaffing::class, 'classes_id');
