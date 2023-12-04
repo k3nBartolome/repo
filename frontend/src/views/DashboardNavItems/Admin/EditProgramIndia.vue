@@ -142,7 +142,7 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.$router.push("http://127.0.0.1:8000/api/program_managementindia", () => {
+          this.$router.push("/program_managementindia", () => {
             location.reload();
           });
         })

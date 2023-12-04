@@ -6,8 +6,13 @@ import router from '../src/router'
 import 'font-awesome/css/font-awesome.min.css'
 import PrimeVue from 'primevue/config';
 
+// Import PrimeVue styles (if you haven't already)
+
+
+// Import any other styles or global CSS files here
+
 createApp(App)
-.use(store)
-.use(router)
-.use(PrimeVue)
-.mount('#app')
+  .use(store)
+  .use(router)
+  .use(PrimeVue)
+  .mount('#app');

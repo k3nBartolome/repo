@@ -255,7 +255,7 @@ export default {
           console.log(response.data.data);
           this.getInventory();
          this.showModal= false;
-         this.$router.push("http://127.0.0.1:8000/api/site_request_manager/received", () => {
+         this.$router.push("/site_request_manager/received", () => {
           location.reload();
         });
         })

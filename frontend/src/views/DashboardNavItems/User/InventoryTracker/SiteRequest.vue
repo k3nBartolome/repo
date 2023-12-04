@@ -414,7 +414,7 @@ export default {
           this.getItems();
           this.getInventory();
           this.showModal = false;
-          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/request", () => {
+          this.$router.push("/site_request_manager/request", () => {
           location.reload();
         });
         })

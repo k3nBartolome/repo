@@ -183,7 +183,7 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-    data: null,
+    data: "id",
     title: "Actions",
     orderable: false,
     searchable: false,
@@ -197,13 +197,13 @@ export default {
   return `
       ${isRemx || isUser
 
-        ? `<button class="w-20 text-xs btn btn-primary" @click="approvedRequest(${data})">Approve</button>
-           <button class="w-20 text-xs btn btn-danger" @click="openModalForDenial(${data})">Deny</button>`
+        ? `<button class="w-20 text-xs btn btn-primary" onclick="window.vm.approvedRequest(${data})">Approve</button>
+           <button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForDenial(${data})">Deny</button>`
         : ''
       }
 
       ${requestedById === this.$store.state.user_id
-        ? `<button class="w-20 text-xs btn btn-danger" @click="openModalForCancellation(${data})">Cancel</button>`
+        ? `<button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>`
         : ''
       }
   `;
@@ -267,7 +267,7 @@ export default {
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
-          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
+          this.$router.push("/site_request_manager/pending", () => {
           location.reload();
         });
         })
@@ -294,7 +294,7 @@ export default {
           this.getInventory();
           this.showModal = false;
 
-          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
+          this.$router.push("/site_request_manager/pending", () => {
           location.reload();
         });
         })
@@ -320,7 +320,7 @@ export default {
           console.log(response.data.data);
           this.getInventory();
           this.showModalCancel = false;
-          this.$router.push("http://127.0.0.1:8000/api/site_request_manager/pending", () => {
+          this.$router.push("/site_request_manager/pending", () => {
           location.reload();
         });
         })

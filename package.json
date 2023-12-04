@@ -37,7 +37,6 @@
         "js": "^0.1.0",
         "laravel-echo": "^1.15.2",
         "pdfmake": "^0.2.7",
-        "primevue": "^3.37.0",
         "pusher-js": "^8.3.0",
         "tw-elements": "^1.0.0-beta2",
         "v-toaster": "^1.0.3",

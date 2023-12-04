@@ -92,7 +92,7 @@ export default {
           this.siteDirector = '';
           this.region = '';
           this.updated_by = '';
-          this.$router.push("http://127.0.0.1:8000/api/site_managementjamaica", () => {
+          this.$router.push("/site_managementjamaica", () => {
             location.reload();
           });
         })
