@@ -30,7 +30,7 @@
     style="--checkbox-size: 20px; --checkbox-background: #ffcc00; --checkbox-border: #000000;"
   />
         </div>
-        
+
 
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Programs</label>

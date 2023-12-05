@@ -264,10 +264,10 @@ export default {
     this.getDateRange();
     this.getClassesAll();
   },
- 
+
   methods: {
     onMonthSelected() {
-      
+
       if (this.month_selected) {
         this.getDateRange();
       }

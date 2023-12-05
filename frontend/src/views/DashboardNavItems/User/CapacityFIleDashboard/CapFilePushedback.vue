@@ -40,7 +40,7 @@
       </div>
     </div>
   </div>
-  
+
     <div class="px-2 items-center">
         <div
           class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8"
