@@ -335,62 +335,66 @@ export default {
   },
   methods: {
     async handleFileChange(event) {
-      const selectedFile = event.target.files[0];
+  const selectedFile = event.target.files[0];
 
-      if (!selectedFile) {
-        // Handle the case when no file is selected
-        return;
-      }
+  if (!selectedFile) {
+    return;
+  }
 
-      const maxSizeInBytes = 2 * 1024;
+  const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB threshold
 
-      if (selectedFile.size > maxSizeInBytes) {
-        try {
-          const image = new Image();
-          const reader = new FileReader();
+  if (selectedFile.size > maxSizeInBytes) {
+    try {
+      const image = new Image();
+      const reader = new FileReader();
 
-          reader.onload = (event) => {
-            image.src = event.target.result;
+      reader.onload = (event) => {
+        image.src = event.target.result;
 
-            image.onload = async () => {
-              const maxWidth = 800; // Adjust the desired max width
-              const quality = 0.8; // Adjust the desired quality
+        image.onload = async () => {
+          const maxWidth = 800;
+          const quality = 0.8;
 
-              const canvas = document.createElement("canvas");
-              let width = image.width;
-              let height = image.height;
+          // Calculate new dimensions to fit within maxWidth
+          let width = image.width;
+          let height = image.height;
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
 
-              if (width > maxWidth) {
-                height *= maxWidth / width;
-                width = maxWidth;
-              }
+          const canvas = document.createElement("canvas");
+          canvas.width = width;
+          canvas.height = height;
 
-              canvas.width = width;
-              canvas.height = height;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(image, 0, 0, width, height);
 
-              const ctx = canvas.getContext("2d");
-              ctx.drawImage(image, 0, 0, width, height);
+          canvas.toBlob(
+            async (blob) => {
+              this.selectedFile = blob;
+              this.previewImage = URL.createObjectURL(blob);
 
-              canvas.toBlob(
-                async (blob) => {
-                  this.selectedFile = blob;
-                  this.previewImage = URL.createObjectURL(blob);
-                },
-                "image/jpeg",
-                quality
-              );
-            };
-          };
+              console.log("Preview Image URL:", this.previewImage);
+            },
+            "image/jpeg",
+            quality
+          );
+        };
+      };
 
-          reader.readAsDataURL(selectedFile);
-        } catch (error) {
-          console.error("Error compressing image:", error);
-        }
-      } else {
-        this.selectedFile = selectedFile;
-        this.previewImage = URL.createObjectURL(selectedFile);
-      }
-    },
+      reader.readAsDataURL(selectedFile);
+    } catch (error) {
+      console.error("Error resizing image:", error);
+    }
+  } else {
+    // No need to resize for smaller images
+    this.selectedFile = selectedFile;
+    this.previewImage = URL.createObjectURL(selectedFile);
+
+    console.log("Preview Image URL:", this.previewImage);
+  }
+},
 
     async compressBlob(blob, maxSize) {
       const image = new Image();
