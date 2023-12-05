@@ -64,7 +64,7 @@
           </div>
         </li>
         <li class="tab-button">
-          <div v-if="isUser|| isBudget">
+          <div>
             <div class="relative inline-block py-0">
               <button
                 @click="toggleDropdown4"
@@ -84,7 +84,7 @@
                   </li>
                 </router-link>
                 <router-link to="/inventory/supply_manager" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget"
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
                 :class="{ 'selected-tab': isActiveTab('/inventory/supply_manager') }"
                                     >
                     Supply Manager
