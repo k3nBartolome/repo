@@ -27,8 +27,15 @@
           </div>
           <div class="w-full md:w-1/4">
             <input
-              v-model="filterMiddleName"
-              placeholder="Filter by Middle Name"
+              v-model="filterSite"
+              placeholder="Filter by Site"
+              class="p-2 border rounded-lg w-full"
+            />
+          </div>
+          <div class="w-full md:w-1/4">
+            <input
+              v-model="filterDate"
+              placeholder="Filter by Application Date"
               class="p-2 border rounded-lg w-full"
             />
           </div>
@@ -133,7 +140,8 @@ export default {
     return {
       filterLastName: "",
       filterFirstName: "",
-      filterMiddleName: "",
+      filterSite: "",
+      filterDate: "",
       filterContact: "",
       filterLastNameError: "",
       filterContactError: "",
@@ -189,12 +197,13 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://127.0.0.1:8000/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
-              filter_middlename: this.filterMiddleName,
+              filter_site: this.filterSite,
+              filter_date: this.filterDate,
               filter_contact: this.filterContact,
             },
             headers: {
@@ -215,12 +224,14 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/export",
+          "http://127.0.0.1:8000/api/export",
           {
             params: {
               filter_lastname: this.filterLastName,
-              filter_firstname: this.filterMiddleName,
-              filter_middlename: this.filterContact,
+              filter_firstname: this.filterFirstName,
+              filter_site: this.filterSite,
+              filter_date: this.filterDate,
+              filter_contact: this.filterContact,
             },
             headers: {
               Authorization: `Bearer ${token}`,

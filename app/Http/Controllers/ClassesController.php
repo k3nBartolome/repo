@@ -37,11 +37,18 @@ class ClassesController extends Controller
             }
         }
 
-        if ($request->has('filter_middlename')) {
-            $filterMiddleName = $request->input('filter_middlename');
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
 
             if (!empty($filterMiddleName)) {
-                $query->where('MiddleName', 'LIKE', '%'.$filterMiddleName.'%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+            }
+        }
+        if ($request->has('DateOfApplication')) {
+            $filterDate = $request->input('filter_date');
+
+            if (!empty($filterDate)) {
+                $query->where('DateOfApplication', 'LIKE', '%'.$filterDate.'%');
             }
         }
 
@@ -81,11 +88,18 @@ class ClassesController extends Controller
             }
         }
 
-        if ($request->has('filter_middlename')) {
-            $filterMiddleName = $request->input('filter_middlename');
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
 
             if (!empty($filterMiddleName)) {
-                $query->where('MiddleName', 'LIKE', '%'.$filterMiddleName.'%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+            }
+        }
+        if ($request->has('DateOfApplication')) {
+            $filterDate = $request->input('filter_date');
+
+            if (!empty($filterDate)) {
+                $query->where('DateOfApplication', 'LIKE', '%'.$filterDate.'%');
             }
         }
 
