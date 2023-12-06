@@ -114,7 +114,7 @@ export default {
     async getRoles() {
     try {
       const token = this.$store.state.token;
-      const response = await axios.get('http://127.0.0.1:8000/api/list_role', {
+      const response = await axios.get('http://10.109.2.112:8081/api/list_role', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -147,7 +147,7 @@ export default {
         password: this.password,
       };
 
-      const response = await axios.post('http://127.0.0.1:8000/api/create_user', postData, config);
+      const response = await axios.post('http://10.109.2.112:8081/api/create_user', postData, config);
 
       if (response.status === 200) {
         console.log(response.data.data);
@@ -163,7 +163,7 @@ export default {
   async getUsers() {
     try {
       const token = this.$store.state.token;
-      const response = await axios.get("http://127.0.0.1:8000/api/list_user", {
+      const response = await axios.get("http://10.109.2.112:8081/api/list_user", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -183,7 +183,7 @@ export default {
   async deleteUsers(user_id) {
     try {
       const token = this.$store.state.token;
-      const response = await axios.delete(`http://127.0.0.1:8000/api/delete_user/${user_id}`, {
+      const response = await axios.delete(`http://10.109.2.112:8081/api/delete_user/${user_id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
