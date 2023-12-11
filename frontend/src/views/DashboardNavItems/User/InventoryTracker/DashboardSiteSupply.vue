@@ -186,6 +186,7 @@ export default {
       filteredTotalNormal: 0,
       filteredTotalPremium: 0,
       filteredTotalOriginalQuantity: 0,
+      total:0,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
@@ -330,42 +331,49 @@ export default {
           },
         });
         if (response.status === 200) {
-          this.items = response.data.items;
+      this.items = response.data.items;
+      this.totalItems = this.items.length;
 
-          this.totalItems = this.items.length;
+      const filteredData = this.filteredItems;
+      this.filteredTotalSupply = filteredData.length;
+      this.filteredTotalOriginalQuantity = this.calculateSum(
+        filteredData,
+        "original_quantity"
+      );
+      this.filteredTotalRemaining = this.calculateSum(filteredData, "quantity");
+      this.filteredTotalNormal = this.calculateSumByCategory(
+        filteredData,
+        "Normal"
+      );
+      this.filteredTotalPremium = this.calculateSumByCategory(
+        filteredData,
+        "Premium"
+      );
 
-          const filteredData = this.filteredItems;
-          this.filteredTotalSupply = filteredData.length;
-          this.filteredTotalOriginalQuantity = filteredData.reduce((sum, item) => {
-            return sum + item.original_quantity;
-          }, 0);
-          this.filteredTotalRemaining = filteredData.reduce((sum, item) => {
-            return sum + item.quantity;
-          }, 0);
-          this.filteredTotalNormal = filteredData.reduce((sum, item) => {
-            if (item.category === "Normal") {
-              return sum + item.quantity;
-            }
-            return sum;
-          }, 0);
-          this.filteredTotalPremium = filteredData.reduce((sum, item) => {
-            if (item.category === "Premium") {
-              return sum + item.quantity;
-            }
-            return sum;
-          }, 0);
+      this.filteredTotalDispatched =
+        this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;
 
-          this.filteredTotalDispatched =
-            this.filteredTotalRemaining - this.filteredTotalOriginalQuantity;
+      this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
+    } else {
+      console.log("Error fetching items");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
 
-          this.filteredTotalDispatched = Math.abs(this.filteredTotalDispatched);
-        } else {
-          console.log("Error fetching items");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
+calculateSum(data, property) {
+  return data.reduce((sum, item) => (Number(item[property]) || 0) + sum, 0);
+},
+
+calculateSumByCategory(data, category) {
+  return data.reduce((sum, item) => {
+    if (item.category === category) {
+      return (Number(item.quantity) || 0) + sum;
+    }
+    return sum;
+  }, 0);
+},
   },
 };
 </script>
