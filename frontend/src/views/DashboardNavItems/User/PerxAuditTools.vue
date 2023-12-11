@@ -132,21 +132,39 @@
 </template>
 
 <script>
-/* eslint-disable */
 import axios from "axios";
+import "datatables.net-bs5/css/dataTables.bootstrap5.css";
+import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
+import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
+
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
+import "datatables.net-bs5/css/dataTables.bootstrap5.css";
+import "datatables.net-buttons-bs5";
+import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
+import "datatables.net-responsive-bs5";
+import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
+import "bootstrap/dist/js/bootstrap.bundle"; // Make sure to include Bootstrap JavaScript
+
+// Import DataTables extensions
 import Buttons from "datatables.net-buttons-bs5";
 import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
 import print from "datatables.net-buttons/js/buttons.print";
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import "datatables.net-responsive-bs5";
 import jszip from "jszip";
+// eslint-disable-next-line no-unused-vars
+import pdfMake from "pdfmake/build/pdfmake";
+// eslint-disable-next-line no-unused-vars
+import pdfFonts from "pdfmake/build/vfs_fonts";
 import "bootstrap/dist/css/bootstrap.css";
+
+// eslint-disable-next-line no-unused-vars
 import { format } from "date-fns";
+
 DataTable.use(DataTableLib);
 DataTable.use(jszip);
+DataTable.use(Buttons);
 DataTable.use(ButtonsHtml5);
+DataTable.use(print);
 
 export default {
   components: { DataTable },
@@ -232,7 +250,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://127.0.0.1:8000/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -261,7 +279,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/export",
+          "http://127.0.0.1:8000/api/export",
           {
             params: {
               filter_lastname: this.filterLastName,

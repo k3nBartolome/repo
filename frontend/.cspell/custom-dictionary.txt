@@ -16,6 +16,8 @@ capfileindia
 capfilejamaica
 capstart
 cascadeselect
+chartjs
+chartkick
 Cheryll
 Christito
 Classe
@@ -55,6 +57,7 @@ inputnumber
 inputswitch
 inputtext
 jszip
+laravel
 Lastname
 li
 managementguatamela
@@ -94,6 +97,8 @@ rtlip
 sched
 scrollpanel
 scrolltop
+searchbuilder
+searchpanes
 selectbutton
 Sheryll
 sitemanagementedit
@@ -106,6 +111,7 @@ styleclass
 syncShowUps
 tabmenu
 tabview
+tailwindcss
 tieredmenu
 toastservice
 togglebutton
