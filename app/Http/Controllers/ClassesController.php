@@ -44,11 +44,18 @@ class ClassesController extends Controller
                 $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
-        if ($request->has('DateOfApplication')) {
-            $filterDate = $request->input('filter_date');
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
 
-            if (!empty($filterDate)) {
-                $query->where('DateOfApplication', 'LIKE', '%' . $filterDate . '%');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd));
+
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+
+                $query->where('DateOfApplication', '>=', $startDate)
+                    ->where('DateOfApplication', '<', $endDate);
             }
         }
 
@@ -95,11 +102,19 @@ class ClassesController extends Controller
                 $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
-        if ($request->has('DateOfApplication')) {
-            $filterDate = $request->input('filter_date');
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
 
-            if (!empty($filterDate)) {
-                $query->where('DateOfApplication', 'LIKE', '%' . $filterDate . '%');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd));
+
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+
+                $query->where('DateOfApplication', '>=', $startDate)
+                    ->where('DateOfApplication', '<', $endDate);
             }
         }
 

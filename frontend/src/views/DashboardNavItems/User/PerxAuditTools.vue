@@ -6,71 +6,91 @@
       </div>
     </header>
     <div class="bg-gray-100 p-4">
-        <div class="mb-4 md:flex md:space-x-2 md:items-center">
-          <div class="w-full md:w-1/4 relative">
-            <input
-              v-model="filterLastName"
-              placeholder="Filter by Last Name"
-              class="p-2 border rounded-lg w-full"
-              @input="validateLastName"
-            />
-            <div v-if="filterLastNameError" class="absolute top-full left-0 text-red-500 text-sm">
-              {{ filterLastNameError }}
-            </div>
-          </div>
-          <div class="w-full md:w-1/4">
-            <input
-              v-model="filterFirstName"
-              placeholder="Filter by First Name"
-              class="p-2 border rounded-lg w-full"
-            />
-          </div>
-          <div class="w-full md:w-1/4">
-            <input
-              v-model="filterSite"
-              placeholder="Filter by Site"
-              class="p-2 border rounded-lg w-full"
-            />
-          </div>
-          <div class="w-full md:w-1/4">
-            <input
-              v-model="filterDate" type="date"
-              placeholder="Filter by Application Date"
-              class="p-2 border rounded-lg w-full"
-            />
-          </div>
-          <div class="w-full md:w-1/4 relative">
-            <input
-              v-model="filterContact"
-              placeholder="Filter by Mobile No."
-              class="p-2 border rounded-lg w-full"
-              @input="validateContact"
-            />
-            <div v-if="filterContactError" class="absolute top-full left-0 text-red-500 text-sm">
-              {{ filterContactError }}
-            </div>
-          </div>
-          <div class="w-full md:w-1/4">
-            <button
-              @click="fetchData"
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
-            >
-              Filter
-            </button>
-          </div>
-          <div class="w-full md:w-1/4">
-            <button
-              @click="exportToExcel"
-              class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
-            >
-              Export
-            </button>
+      <div class="mb-4 md:flex md:space-x-2 md:items-center">
+        <div class="w-full md:w-1/4 relative">
+          <input
+            v-model="filterLastName"
+            placeholder="Filter by Last Name"
+            class="p-2 border rounded-lg w-full"
+            @input="validateLastName"
+          />
+          <div
+            v-if="filterLastNameError"
+            class="absolute top-full left-0 text-red-500 text-sm"
+          >
+            {{ filterLastNameError }}
           </div>
         </div>
-        <div v-if="filterLoading || exportLoading" class="text-center text-blue-500 font-bold">
-          {{ filterLoading ? 'Rendering...' : 'Exporting...' }}
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterFirstName"
+            placeholder="Filter by First Name"
+            class="p-2 border rounded-lg w-full"
+          />
         </div>
-        <DataTable
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterSite"
+            placeholder="Filter by Site"
+            class="p-2 border rounded-lg w-full"
+          />
+        </div>
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterStartDate"
+            type="date"
+            placeholder="Start"
+            class="p-2 border rounded-lg w-full"
+            @input="updateFilterStartDate"
+          />
+        </div>
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterEndDate"
+            type="date"
+            placeholder="End by Site"
+            class="p-2 border rounded-lg w-full"
+            @input="updateFilterEndDate"
+          />
+        </div>
+        <div class="w-full md:w-1/4 relative">
+          <input
+            v-model="filterContact"
+            placeholder="Filter by Mobile No."
+            class="p-2 border rounded-lg w-full"
+            @input="validateContact"
+          />
+          <div
+            v-if="filterContactError"
+            class="absolute top-full left-0 text-red-500 text-sm"
+          >
+            {{ filterContactError }}
+          </div>
+        </div>
+        <div class="w-full md:w-1/4">
+          <button
+            @click="fetchData"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+          >
+            Filter
+          </button>
+        </div>
+        <div class="w-full md:w-1/4">
+          <button
+            @click="exportToExcel"
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+          >
+            Export
+          </button>
+        </div>
+      </div>
+      <div
+        v-if="filterLoading || exportLoading"
+        class="text-center text-blue-500 font-bold"
+      >
+        {{ filterLoading ? "Rendering..." : "Exporting..." }}
+      </div>
+      <DataTable
         :data="perx"
         :columns="columns"
         class="table divide-y divide-gray-200 table-auto table-striped"
@@ -109,27 +129,21 @@
       </DataTable>
     </div>
   </div>
-  </template>
-
-
+</template>
 
 <script>
+/* eslint-disable */
 import axios from "axios";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
-// eslint-disable-next-line no-unused-vars
 import Buttons from "datatables.net-buttons-bs5";
 import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
-// eslint-disable-next-line no-unused-vars
 import print from "datatables.net-buttons/js/buttons.print";
-//import pdfmake from "pdfmake";
-// eslint-disable-next-line no-unused-vars
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
 import jszip from "jszip";
-// eslint-disable-next-line no-unused-vars
 import "bootstrap/dist/css/bootstrap.css";
-
+import { format } from "date-fns";
 DataTable.use(DataTableLib);
 DataTable.use(jszip);
 DataTable.use(ButtonsHtml5);
@@ -141,7 +155,8 @@ export default {
       filterLastName: "",
       filterFirstName: "",
       filterSite: "",
-      filterDate: "",
+      filterStartDate: "",
+      filterEndDate: "",
       filterContact: "",
       filterLastNameError: "",
       filterContactError: "",
@@ -175,7 +190,28 @@ export default {
       exportLoading: false,
     };
   },
+  computed: {
+    formattedFilterDate() {
+      return this.filterDate
+        ? new Date(this.filterDate).toLocaleDateString("en-CA")
+        : "";
+    },
+  },
+
   methods: {
+    updateFilterStartDate(event) {
+      this.filterStartDate = event.target.value;
+    },
+
+    updateFilterEndDate(event) {
+      this.filterEndDate = event.target.value;
+    },
+
+    formatDateForInput(date) {
+      const formattedDate = new Date(date).toISOString().split("T")[0];
+      return formattedDate;
+    },
+
     validateLastName() {
       this.filterLastNameError = "";
       if (this.filterLastName && this.filterLastName.length < 2) {
@@ -192,7 +228,6 @@ export default {
     },
 
     async fetchData() {
-
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
@@ -203,7 +238,8 @@ export default {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
-              filter_date: this.filterDate,
+              filter_date_start: this.filterStartDate,
+              filter_date_end: this.filterEndDate,
               filter_contact: this.filterContact,
             },
             headers: {
@@ -216,9 +252,10 @@ export default {
       } catch (error) {
         console.error("Error fetching filtered data", error);
       } finally {
-        this.filterLoading = false; // Set filter loading to false when the request completes
+        this.filterLoading = false;
       }
     },
+
     async exportToExcel() {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
