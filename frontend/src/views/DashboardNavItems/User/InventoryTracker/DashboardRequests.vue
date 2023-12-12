@@ -300,6 +300,9 @@ export default {
     this.getInventory();
   },
   methods: {
+    resetFilter() {
+      this.sites_selected = "";
+    },
     generateExcelData(data) {
       console.log("filteredTotalRequest:", this.filteredTotalRequest);
   console.log("filteredTotalApproved:", this.filteredTotalApproved);

@@ -25,7 +25,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -33,7 +33,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -41,7 +41,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -52,7 +52,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -63,7 +63,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -83,7 +83,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -91,7 +91,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -99,7 +99,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -107,11 +107,10 @@ class ClassesController extends Controller
             $filterDateEnd = $request->input('filter_date_end');
 
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -122,7 +121,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -749,18 +748,16 @@ class ClassesController extends Controller
         $programId = $request->input('program_id');
 
         $programs = Program::with('site')
-            ->when(!empty($siteId), function ($query) use ($siteId) {
-                $query->whereIn('site_id', $siteId);
-            })
-            ->when(!empty($programId), function ($query) use ($programId) {
-                $query->whereIn('program_id', $programId);
-            })
-            ->get();
+        ->when(!empty($siteId), function ($query) use ($siteId) {
+            $query->whereIn('site_id', $siteId);
+        })
+        ->when(!empty($programId), function ($query) use ($programId) {
+            $query->whereIn('program_id', $programId);
+        })
+        ->get();
 
         $dateRanges = DateRange::all();
-
         $groupedClasses = [];
-        $grandTotalByMonth = [];
         $grandTotalByProgram = [];
 
         foreach ($programs as $program) {
@@ -770,7 +767,9 @@ class ClassesController extends Controller
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
             }
-            $grandTotalByProgram[$siteName][$programName] = 0;
+            if (!isset($grandTotalByProgram[$siteName][$programName])) {
+                $grandTotalByProgram[$siteName][$programName] = 0;
+            }
 
             foreach ($dateRanges as $dateRange) {
                 $daterangeName = $dateRange->date_range;
@@ -783,27 +782,28 @@ class ClassesController extends Controller
                     ->where('status', 'Active')
                     ->get();
 
-                $totalTargetByDate = $classes->sum('total_target');
+                $totalTarget = $classes->sum('total_target');
 
-                if (!isset($grandTotalByMonth[$month])) {
-                    $grandTotalByMonth[$month] = 0;
+                if (!isset($groupedClasses[$siteName])) {
+                    $groupedClasses[$siteName] = [];
                 }
-                $grandTotalByMonth[$month] += $totalTargetByDate;
-
-                $grandTotalByProgram[$siteName][$programName] += $totalTargetByDate;
-
+                if (!isset($groupedClasses[$siteName][$programName])) {
+                    $groupedClasses[$siteName][$programName] = [];
+                }
                 if (!isset($groupedClasses[$siteName][$programName][$month])) {
                     $groupedClasses[$siteName][$programName][$month] = [
                         'total_target' => 0,
-                        'daterange_names' => [], // Added line
+                        'date_ranges' => [],
                     ];
                 }
 
-                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTargetByDate;
-                $groupedClasses[$siteName][$programName][$month]['daterange_names'][] = [
-                    'date_range' => $daterangeName,
-                    'total_target' => $totalTargetByDate,
-                ]; // Adjusted line
+                $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+
+                // Add the date_range to the date_ranges array
+                $groupedClasses[$siteName][$programName][$month]['date_ranges'][$daterangeName] = [
+                    'total_target' => $totalTarget,
+                ];
             }
         }
 
@@ -811,73 +811,164 @@ class ClassesController extends Controller
 
         foreach ($groupedClasses as $siteName => $siteData) {
             foreach ($siteData as $programName => $programData) {
-                $monthlyData = [
-                    'January' => 0,
-                    'February' => 0,
-                    'March' => 0,
-                    'April' => 0,
-                    'May' => 0,
-                    'June' => 0,
-                    'July' => 0,
-                    'August' => 0,
-                    'September' => 0,
-                    'October' => 0,
-                    'November' => 0,
-                    'December' => 0,
-                ];
-
                 foreach ($programData as $month => $monthData) {
-                    $monthlyData[$month] = isset($monthData['total_target']) ? $monthData['total_target'] : 0;
-                }
+                    $mappedMonth = [
+                        'site_name' => $siteName,
+                        'program_name' => $programName,
+                        'month' => $month,
+                        'total_target' => $monthData['total_target'],
+                        'date_ranges' => [],
+                    ];
 
-                $mappedGroupedClasses[] = [
-                    'Site' => $siteName,
-                    'Program' => $programName,
-                    'January' => $monthlyData['January'],
-                    'February' => $monthlyData['February'],
-                    'March' => $monthlyData['March'],
-                    'April' => $monthlyData['April'],
-                    'May' => $monthlyData['May'],
-                    'June' => $monthlyData['June'],
-                    'July' => $monthlyData['July'],
-                    'August' => $monthlyData['August'],
-                    'September' => $monthlyData['September'],
-                    'October' => $monthlyData['October'],
-                    'November' => $monthlyData['November'],
-                    'December' => $monthlyData['December'],
-                    'GrandTotalByProgram' => $grandTotalByProgram[$siteName][$programName],
-                    'DateRangeNames' => $groupedClasses[$siteName][$programName][$month]['daterange_names'], // Updated line
-                ];
+                    foreach ($monthData['date_ranges'] as $daterangeName => $daterangeData) {
+                        $mappedDateRange = [
+                            'date_range' => $daterangeName,
+                            'total_target' => $daterangeData['total_target'],
+                        ];
+
+                        $mappedMonth['date_ranges'][] = $mappedDateRange;
+                    }
+
+                    $mappedGroupedClasses[] = $mappedMonth;
+                }
             }
         }
 
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'January' => $grandTotalByMonth['January'],
-            'February' => $grandTotalByMonth['February'],
-            'March' => $grandTotalByMonth['March'],
-            'April' => $grandTotalByMonth['April'],
-            'May' => $grandTotalByMonth['May'],
-            'June' => $grandTotalByMonth['June'],
-            'July' => $grandTotalByMonth['July'],
-            'August' => $grandTotalByMonth['August'],
-            'September' => $grandTotalByMonth['September'],
-            'October' => $grandTotalByMonth['October'],
-            'November' => $grandTotalByMonth['November'],
-            'December' => $grandTotalByMonth['December'],
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
-
         $response = [
             'classes' => $mappedGroupedClasses,
-            'mapped' => $groupedClasses,
         ];
 
         return response()->json($response);
     }
+
+    /*     public function dashboardClasses(Request $request)
+        {
+            $siteId = $request->input('site_id');
+            $programId = $request->input('program_id');
+
+            $programs = Program::with('site')
+                ->when(!empty($siteId), function ($query) use ($siteId) {
+                    $query->whereIn('site_id', $siteId);
+                })
+                ->when(!empty($programId), function ($query) use ($programId) {
+                    $query->whereIn('program_id', $programId);
+                })
+                ->get();
+
+            $dateRanges = DateRange::all();
+
+            $groupedClasses = [];
+            $grandTotalByMonth = [];
+            $grandTotalByProgram = [];
+
+            foreach ($programs as $program) {
+                $siteName = $program->site->name;
+                $programName = $program->name;
+
+                if (!isset($grandTotalByProgram[$siteName])) {
+                    $grandTotalByProgram[$siteName] = [];
+                }
+                $grandTotalByProgram[$siteName][$programName] = 0;
+
+                foreach ($dateRanges as $dateRange) {
+                    $daterangeName = $dateRange->date_range;
+                    $programId = $program->id;
+                    $month = $dateRange->month;
+
+                    $classes = Classes::where('site_id', $program->site_id)
+                        ->where('program_id', $programId)
+                        ->where('date_range_id', $dateRange->id)
+                        ->where('status', 'Active')
+                        ->get();
+
+                    $totalTarget = $classes->sum('total_target');
+
+                    if (!isset($grandTotalByMonth[$month])) {
+                        $grandTotalByMonth[$month] = 0;
+                    }
+                    $grandTotalByMonth[$month] += $totalTarget;
+
+                    $grandTotalByProgram[$siteName][$programName] += $totalTarget;
+
+                    if (!isset($groupedClasses[$siteName][$programName][$month])) {
+                        $groupedClasses[$siteName][$programName][$month] = [
+                            'total_target' => 0,
+                        ];
+                    }
+
+                    $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+                }
+            }
+
+            $mappedGroupedClasses = [];
+
+            foreach ($groupedClasses as $siteName => $siteData) {
+                foreach ($siteData as $programName => $programData) {
+                    $monthlyData = [
+                        'January' => 0,
+                        'February' => 0,
+                        'March' => 0,
+                        'April' => 0,
+                        'May' => 0,
+                        'June' => 0,
+                        'July' => 0,
+                        'August' => 0,
+                        'September' => 0,
+                        'October' => 0,
+                        'November' => 0,
+                        'December' => 0,
+                    ];
+
+                    foreach ($programData as $month => $monthData) {
+                        $monthlyData[$month] = isset($monthData['total_target']) ? $monthData['total_target'] : 0;
+                    }
+
+                    $mappedGroupedClasses[] = [
+                        'Site' => $siteName,
+                        'Program' => $programName,
+                        'January' => $monthlyData['January'],
+                        'February' => $monthlyData['February'],
+                        'March' => $monthlyData['March'],
+                        'April' => $monthlyData['April'],
+                        'May' => $monthlyData['May'],
+                        'June' => $monthlyData['June'],
+                        'July' => $monthlyData['July'],
+                        'August' => $monthlyData['August'],
+                        'September' => $monthlyData['September'],
+                        'October' => $monthlyData['October'],
+                        'November' => $monthlyData['November'],
+                        'December' => $monthlyData['December'],
+                        'GrandTotalByProgram' => $grandTotalByProgram[$siteName][$programName],
+                    ];
+                }
+            }
+
+            $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
+
+            $mappedGroupedClasses[] = [
+                'Site' => 'Grand Total',
+                'Program' => '',
+                'January' => $grandTotalByMonth['January'],
+                'February' => $grandTotalByMonth['February'],
+                'March' => $grandTotalByMonth['March'],
+                'April' => $grandTotalByMonth['April'],
+                'May' => $grandTotalByMonth['May'],
+                'June' => $grandTotalByMonth['June'],
+                'July' => $grandTotalByMonth['July'],
+                'August' => $grandTotalByMonth['August'],
+                'September' => $grandTotalByMonth['September'],
+                'October' => $grandTotalByMonth['October'],
+                'November' => $grandTotalByMonth['November'],
+                'December' => $grandTotalByMonth['December'],
+                'GrandTotalByProgram' => $grandTotalForAllPrograms,
+            ];
+
+            $response = [
+                'classes' => $mappedGroupedClasses,
+            ];
+
+            return response()->json($response);
+        } */
 
     public function dashboardClasses2()
     {

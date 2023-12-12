@@ -180,7 +180,7 @@
       </ul>
       <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
         <div class="py-4">
-          <select
+          <!-- <select
             v-model="selectedOption"
             @change="navigateToPage"
             class="border-gray-300 rounded focus:ring focus:ring-indigo-200 focus:border-indigo-500"
@@ -189,7 +189,7 @@
             <option value="/capfile" class="flex items-center">PH</option>
             <option value="/capfilejamaica" class="flex items-center">JAM</option>
             <option value="/capfileguatemala" class="flex items-center">GUA</option>
-          </select>
+          </select> -->
           <div class="relative inline-block" >
             <button
               @click="toggleDropdown2"

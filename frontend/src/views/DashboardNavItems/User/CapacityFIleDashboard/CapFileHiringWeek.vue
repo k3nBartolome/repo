@@ -79,20 +79,58 @@
               </thead>
               <tbody>
                 <template v-for="(item, index) in classes" :key="index">
-                  <template v-for="(item1, index1) in item" :key="index1">
-                    <template v-for="(item2, index2) in item1" :key="index2">
-                    <template v-for="(item3, index3) in item2" :key="index3">
                   <tr>
                     <td
                       class="border-4 border-black truncate px-2 font-semibold"
                     >
-                      {{ index3 }}
+                      {{ item.Site }}
+                    </td>
+                    <td
+                      class="border-4 border-black truncate px-2 font-semibold"
+                    >
+                      {{ item.Program }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.January }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.February }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.March }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.April }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.May }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.June }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.July }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.August }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.September }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.October }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.November }}
+                    </td>
+                    <td class="border-2 border-black text-center font-semibold">
+                      {{ item.December }}
+                    </td>
+                    <td class="border-4 border-black text-center font-semibold">
+                      {{ item.GrandTotalByProgram }}
                     </td>
                   </tr>
                 </template>
-              </template>
-            </template>
-          </template>
               </tbody>
             </table>
           </div>

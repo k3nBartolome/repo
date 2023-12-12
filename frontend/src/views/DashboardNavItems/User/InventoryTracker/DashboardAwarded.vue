@@ -222,6 +222,9 @@ export default {
     this.getAward();
   },
   methods: {
+    resetFilter() {
+      this.sites_selected = "";
+    },
     openImageModal(imageUrl) {
       const modal = document.querySelector(".image-modal");
       const enlargedImage = document.querySelector(".enlarged-image");

@@ -248,6 +248,9 @@ export default {
     this.getItems();
   },
   methods: {
+    resetFilter() {
+      this.sites_selected = "";
+    },
     generateExcelData(data) {
       const customHeaders = [
         "ID",
