@@ -25,7 +25,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -33,7 +33,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -41,7 +41,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -52,7 +52,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -63,7 +63,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 
@@ -83,7 +83,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -91,7 +91,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -99,7 +99,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -110,7 +110,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -121,7 +121,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 
@@ -891,7 +891,7 @@ class ClassesController extends Controller
             foreach ($dateRanges as $dateRange) {
                 $programId = $program->id;
                 $week = $dateRange->id;
-                $month =$dateRange->month;
+                $month = $dateRange->month;
 
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
@@ -907,7 +907,7 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
-                
+
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
 
@@ -942,50 +942,50 @@ class ClassesController extends Controller
                     '7' => 0,
                     '8' => 0,
                     '9' => 0,
-                    '10' =>0,
-                    '11' =>0,
-                    '12' =>0,
-                    '13' =>0,
-                    '14' =>0,
-                    '15' =>0,
-                    '16' =>0,
-                    '17' =>0,
-                    '18' =>0,
-                    '19' =>0,
-                    '20' =>0,
-                    '21' =>0,
-                    '22' =>0,
-                    '23' =>0,
-                    '24' =>0,
-                    '25' =>0,
-                    '26' =>0,
-                    '27' =>0,
-                    '28' =>0,
-                    '29' =>0,
-                    '30' =>0,
-                    '31' =>0,
-                    '32' =>0,
-                    '33' =>0,
-                    '34' =>0,
-                    '35' =>0,
-                    '36' =>0,
-                    '37' =>0,
-                    '38' =>0,
-                    '39' =>0,
-                    '40' =>0,
-                    '41' =>0,
-                    '42' =>0,
-                    '43' =>0,
-                    '44' =>0,
-                    '45' =>0,
-                    '46' =>0,
-                    '47' =>0,
-                    '48' =>0,
-                    '49' =>0,
-                    '50' =>0,
-                    '51' =>0,
-                    '52' =>0,
-                    
+                    '10' => 0,
+                    '11' => 0,
+                    '12' => 0,
+                    '13' => 0,
+                    '14' => 0,
+                    '15' => 0,
+                    '16' => 0,
+                    '17' => 0,
+                    '18' => 0,
+                    '19' => 0,
+                    '20' => 0,
+                    '21' => 0,
+                    '22' => 0,
+                    '23' => 0,
+                    '24' => 0,
+                    '25' => 0,
+                    '26' => 0,
+                    '27' => 0,
+                    '28' => 0,
+                    '29' => 0,
+                    '30' => 0,
+                    '31' => 0,
+                    '32' => 0,
+                    '33' => 0,
+                    '34' => 0,
+                    '35' => 0,
+                    '36' => 0,
+                    '37' => 0,
+                    '38' => 0,
+                    '39' => 0,
+                    '40' => 0,
+                    '41' => 0,
+                    '42' => 0,
+                    '43' => 0,
+                    '44' => 0,
+                    '45' => 0,
+                    '46' => 0,
+                    '47' => 0,
+                    '48' => 0,
+                    '49' => 0,
+                    '50' => 0,
+                    '51' => 0,
+                    '52' => 0,
+
 
                 ];
 
@@ -996,60 +996,72 @@ class ClassesController extends Controller
                 $mappedGroupedClasses[] = [
                     'Site' => $siteName,
                     'Program' => $programName,
-                    'Week1' => $weeklyData['1'],
-                    'Week2' => $weeklyData['2'],
-                    'Week3' => $weeklyData['3'],
-                    'Week4' => $weeklyData['4'],
-                    'Week5' => $weeklyData['5'],
-                    'Week6' => $weeklyData['6'],
-                    'Week7' => $weeklyData['7'],
-                    'Week8' => $weeklyData['8'],
-                    'Week9' => $weeklyData['9'],
-                    'Week10' => $weeklyData['10'],
-                    'Week11' => $weeklyData['11'],
-                    'Week12' => $weeklyData['12'],
-                    'Week13' => $weeklyData['13'],
-                    'Week14' => $weeklyData['14'],
-                    'Week15' => $weeklyData['15'],
-                    'Week16' => $weeklyData['16'],
-                    'Week17' => $weeklyData['17'],
-                    'Week18' => $weeklyData['18'],
-                    'Week19' => $weeklyData['19'],
-                    'Week20' => $weeklyData['21'],
-                    'Week21' => $weeklyData['21'],
-                    'Week22' => $weeklyData['21'],
-                    'Week23' => $weeklyData['23'],
-                    'Week24' => $weeklyData['24'],
-                    'Week25' => $weeklyData['25'],
-                    'Week26' => $weeklyData['26'],
-                    'Week27' => $weeklyData['27'],
-                    'Week28' => $weeklyData['28'],
-                    'Week29' => $weeklyData['29'],
-                    'Week30' => $weeklyData['30'],
-                    'Week31' => $weeklyData['31'],
-                    'Week32' => $weeklyData['32'],
-                    'Week33' => $weeklyData['33'],
-                    'Week34' => $weeklyData['34'],
-                    'Week35' => $weeklyData['35'],
-                    'Week36' => $weeklyData['36'],
-                    'Week37' => $weeklyData['37'],
-                    'Week38' => $weeklyData['38'],
-                    'Week39' => $weeklyData['39'],
-                    'Week40' => $weeklyData['40'],
-                    'Week41' => $weeklyData['41'],
-                    'Week42' => $weeklyData['42'],
-                    'Week43' => $weeklyData['43'],
-                    'Week44' => $weeklyData['44'],
-                    'Week45' => $weeklyData['45'],
-                    'Week46' => $weeklyData['46'],
-                    'Week47' => $weeklyData['47'],
-                    'Week48' => $weeklyData['48'],
-                    'Week49' => $weeklyData['49'],
-                    'Week50' => $weeklyData['50'],
-                    'Week51' => $weeklyData['51'],
-                    'Week52' => $weeklyData['52'],
-                    
-                    
+                    'Week1' => $weeklyData['1'] != 0 ? $weeklyData['1'] : '',
+                    'Week2' => $weeklyData['2'] != 0 ? $weeklyData['2'] : '',
+                    'Week3' => $weeklyData['3'] != 0 ? $weeklyData['3'] : '',
+                    'Week4' => $weeklyData['4'] != 0 ? $weeklyData['4'] : '',
+                    'Jan' => collect($weeklyData)->only([1, 2, 3, 4])->sum(),
+                    'Week5' => $weeklyData['5'] != 0 ? $weeklyData['5'] : '',
+                    'Week6' => $weeklyData['6'] != 0 ? $weeklyData['6'] : '',
+                    'Week7' => $weeklyData['7'] != 0 ? $weeklyData['7'] : '',
+                    'Week8' => $weeklyData['8'] != 0 ? $weeklyData['8'] : '',
+                    'Feb' => collect($weeklyData)->only([5, 6, 7, 8])->sum(),
+                    'Week9' => $weeklyData['9'] != 0 ? $weeklyData['9'] : '',
+                    'Week10' => $weeklyData['10'] != 0 ? $weeklyData['10'] : '',
+                    'Week11' => $weeklyData['11'] != 0 ? $weeklyData['11'] : '',
+                    'Week12' => $weeklyData['12'] != 0 ? $weeklyData['12'] : '',
+                    'Mar' => collect($weeklyData)->only([9, 10, 11, 12])->sum(),
+                    'Week13' => $weeklyData['13'] != 0 ? $weeklyData['13'] : '',
+                    'Week14' => $weeklyData['14'] != 0 ? $weeklyData['14'] : '',
+                    'Week15' => $weeklyData['15'] != 0 ? $weeklyData['15'] : '',
+                    'Week16' => $weeklyData['16'] != 0 ? $weeklyData['16'] : '',
+                    'Week17' => $weeklyData['17'] != 0 ? $weeklyData['17'] : '',
+                    'Apr' => collect($weeklyData)->only([13, 14, 15, 16, 17])->sum(),
+                    'Week18' => $weeklyData['18'] != 0 ? $weeklyData['18'] : '',
+                    'Week19' => $weeklyData['19'] != 0 ? $weeklyData['19'] : '',
+                    'Week20' => $weeklyData['21'] != 0 ? $weeklyData['21'] : '',
+                    'Week21' => $weeklyData['21'] != 0 ? $weeklyData['21'] : '',
+                    'May' => collect($weeklyData)->only([18, 19, 20, 21])->sum(),
+                    'Week22' => $weeklyData['21'] != 0 ? $weeklyData['21'] : '',
+                    'Week23' => $weeklyData['23'] != 0 ? $weeklyData['23'] : '',
+                    'Week24' => $weeklyData['24'] != 0 ? $weeklyData['24'] : '',
+                    'Week25' => $weeklyData['25'] != 0 ? $weeklyData['25'] : '',
+                    'Jun' => collect($weeklyData)->only([22, 23, 24, 25])->sum(),
+                    'Week26' => $weeklyData['26'] != 0 ? $weeklyData['26'] : '',
+                    'Week27' => $weeklyData['27'] != 0 ? $weeklyData['27'] : '',
+                    'Week28' => $weeklyData['28'] != 0 ? $weeklyData['28'] : '',
+                    'Week29' => $weeklyData['29'] != 0 ? $weeklyData['29'] : '',
+                    'Week30' => $weeklyData['30'] != 0 ? $weeklyData['30'] : '',
+                    'Jul' => collect($weeklyData)->only([26, 27, 28, 29, 30])->sum(),
+                    'Week31' => $weeklyData['31'] != 0 ? $weeklyData['31'] : '',
+                    'Week32' => $weeklyData['32'] != 0 ? $weeklyData['32'] : '',
+                    'Week33' => $weeklyData['33'] != 0 ? $weeklyData['33'] : '',
+                    'Week34' => $weeklyData['34'] != 0 ? $weeklyData['34'] : '',
+                    'Aug' => collect($weeklyData)->only([31, 32, 33, 34])->sum(),
+                    'Week35' => $weeklyData['35'] != 0 ? $weeklyData['35'] : '',
+                    'Week36' => $weeklyData['36'] != 0 ? $weeklyData['36'] : '',
+                    'Week37' => $weeklyData['37'] != 0 ? $weeklyData['37'] : '',
+                    'Week38' => $weeklyData['38'] != 0 ? $weeklyData['38'] : '',
+                    'Week39' => $weeklyData['39'] != 0 ? $weeklyData['39'] : '',
+                    'Sep' => collect($weeklyData)->only([35, 36, 37, 38, 39])->sum(),
+                    'Week40' => $weeklyData['40'] != 0 ? $weeklyData['40'] : '',
+                    'Week41' => $weeklyData['41'] != 0 ? $weeklyData['41'] : '',
+                    'Week42' => $weeklyData['42'] != 0 ? $weeklyData['42'] : '',
+                    'Week43' => $weeklyData['43'] != 0 ? $weeklyData['43'] : '',
+                    'Oct' => collect($weeklyData)->only([40, 41, 42, 43])->sum(),
+                    'Week44' => $weeklyData['44'] != 0 ? $weeklyData['44'] : '',
+                    'Week45' => $weeklyData['45'] != 0 ? $weeklyData['45'] : '',
+                    'Week46' => $weeklyData['46'] != 0 ? $weeklyData['46'] : '',
+                    'Week47' => $weeklyData['47'] != 0 ? $weeklyData['47'] : '',
+                    'Nov' => collect($weeklyData)->only([44, 45, 46, 47])->sum(),
+                    'Week48' => $weeklyData['48'] != 0 ? $weeklyData['48'] : '',
+                    'Week49' => $weeklyData['49'] != 0 ? $weeklyData['49'] : '',
+                    'Week50' => $weeklyData['50'] != 0 ? $weeklyData['50'] : '',
+                    'Week51' => $weeklyData['51'] != 0 ? $weeklyData['51'] : '',
+                    'Week52' => $weeklyData['52'] != 0 ? $weeklyData['52'] : '',
+                    'Dec' => collect($weeklyData)->only([48, 49, 50, 51, 52])->sum(),
+
+
                     'GrandTotalByProgram' => $grandTotalByProgram[$siteName][$programName],
                 ];
             }
@@ -1064,53 +1076,66 @@ class ClassesController extends Controller
             'Week2' => $grandTotalByWeek['2'],
             'Week3' => $grandTotalByWeek['3'],
             'Week4' => $grandTotalByWeek['4'],
+            'Jan' => collect($grandTotalByWeek)->only([1, 2, 3, 4])->sum(),
             'Week5' => $grandTotalByWeek['5'],
             'Week6' => $grandTotalByWeek['6'],
             'Week7' => $grandTotalByWeek['7'],
             'Week8' => $grandTotalByWeek['8'],
+            'Feb' => collect($grandTotalByWeek)->only([5, 6, 7, 8])->sum(),
             'Week9' => $grandTotalByWeek['9'],
             'Week10' => $grandTotalByWeek['10'],
             'Week11' => $grandTotalByWeek['11'],
             'Week12' => $grandTotalByWeek['12'],
+            'Mar' => collect($grandTotalByWeek)->only([9, 10, 11, 12])->sum(),
             'Week13' => $grandTotalByWeek['13'],
             'Week14' => $grandTotalByWeek['14'],
             'Week15' => $grandTotalByWeek['15'],
             'Week16' => $grandTotalByWeek['16'],
             'Week17' => $grandTotalByWeek['17'],
+            'Apr' => collect($grandTotalByWeek)->only([13, 14, 15, 16, 17])->sum(),
             'Week18' => $grandTotalByWeek['18'],
             'Week19' => $grandTotalByWeek['19'],
             'Week20' => $grandTotalByWeek['21'],
             'Week21' => $grandTotalByWeek['21'],
+            'May' => collect($grandTotalByWeek)->only([18, 19, 20, 21])->sum(),
             'Week22' => $grandTotalByWeek['21'],
             'Week23' => $grandTotalByWeek['23'],
             'Week24' => $grandTotalByWeek['24'],
             'Week25' => $grandTotalByWeek['25'],
+            'Jun' => collect($grandTotalByWeek)->only([22, 23, 24, 25])->sum(),
             'Week26' => $grandTotalByWeek['26'],
             'Week27' => $grandTotalByWeek['27'],
             'Week28' => $grandTotalByWeek['28'],
             'Week29' => $grandTotalByWeek['29'],
             'Week30' => $grandTotalByWeek['30'],
+            'July' => collect($grandTotalByWeek)->only([26, 27, 28, 29, 30])->sum(),
             'Week31' => $grandTotalByWeek['31'],
             'Week32' => $grandTotalByWeek['32'],
             'Week33' => $grandTotalByWeek['33'],
             'Week34' => $grandTotalByWeek['34'],
+            'Aug' => collect($grandTotalByWeek)->only([31, 32, 33, 34])->sum(),
             'Week35' => $grandTotalByWeek['35'],
             'Week36' => $grandTotalByWeek['36'],
             'Week37' => $grandTotalByWeek['37'],
             'Week38' => $grandTotalByWeek['38'],
             'Week39' => $grandTotalByWeek['39'],
+            'Sep' => collect($grandTotalByWeek)->only([35, 36, 37, 38, 39])->sum(),
             'Week40' => $grandTotalByWeek['40'],
             'Week41' => $grandTotalByWeek['41'],
             'Week42' => $grandTotalByWeek['42'],
             'Week43' => $grandTotalByWeek['43'],
+            'Oct' => collect($grandTotalByWeek)->only([40, 41, 42, 43])->sum(),
             'Week44' => $grandTotalByWeek['44'],
             'Week45' => $grandTotalByWeek['45'],
             'Week46' => $grandTotalByWeek['46'],
             'Week47' => $grandTotalByWeek['47'],
+            'Nov' => collect($grandTotalByWeek)->only([44, 45, 46, 47])->sum(),
             'Week48' => $grandTotalByWeek['48'],
             'Week49' => $grandTotalByWeek['49'],
             'Week50' => $grandTotalByWeek['50'],
             'Week51' => $grandTotalByWeek['51'],
+            'Week52' => $grandTotalByWeek['52'],
+            'Dec' => collect($grandTotalByWeek)->only([48, 49, 50, 51, 52])->sum(),
             'Week52' => $grandTotalByWeek['52'],
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
@@ -1120,7 +1145,7 @@ class ClassesController extends Controller
         ];
 
         return response()->json($response);
-    } 
+    }
 
     public function dashboardClasses2()
     {
