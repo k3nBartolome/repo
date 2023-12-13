@@ -6,7 +6,7 @@
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none" type="button" role="tab" >Released Normal Item</button>
       </li>
     </router-link>
-    <router-link to="/award_manager/premium" v-if="isUser || isRemx || isBudget">
+    <router-link to="/award_manager/premium" v-if="isUser || isRemx || isBudget || isSourcing">
       <li role="presentation">
         <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Released Premium Item</button>
       </li>

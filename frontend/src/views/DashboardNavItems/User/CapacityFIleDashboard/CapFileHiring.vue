@@ -13,13 +13,7 @@
           <MultiSelect
             v-model="sites_selected"
             :options="sites"
-            display="chip"
             filter
-            checkboxContainer
-            headerCheckbox
-            checkboxIcon
-            filterPlaceholder="Search"
-            showToggleAll
             optionLabel="name"
             placeholder="Select Sites"
             class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
@@ -27,14 +21,8 @@
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
             @change="getPrograms"
-            style="
-              --checkbox-size: 20px;
-              --checkbox-background: #ffcc00;
-              --checkbox-border: #000000;
-            "
           />
         </div>
-
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Programs</label>
           <MultiSelect
@@ -53,42 +41,148 @@
     </div>
   </div>
 
-  <div class="px-2 items-center">
-    <div class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8">
-      <div class="w-full lg:max-w-4xl mx-auto align-center">
+  <div class="px-2">
+    <div class="">
+      <div class="">
         <table class="border-2 border-black">
-          <thead class="sticky top-0 bg-white z-50">
+          <thead class="">
+            <tr class="border-4 border-black px-1 text-center">
+              <th class="border-2 border-black px-1" rowspan="2">Site Name</th>
+              <th class="border-2 border-black px-1" rowspan="2">Program Name</th>
+              <th class="border-2 border-black px-1" colspan="4">Jan</th>
+              <th class="border-2 border-black px-1" colspan="4">Feb</th>
+              <th class="border-2 border-black px-1" colspan="4">Mar</th>
+              <th class="border-2 border-black px-1" colspan="5">Apr</th>
+              <th class="border-2 border-black px-1" colspan="4">May</th>
+              <th class="border-2 border-black px-1" colspan="4">Jun</th>
+              <th class="border-2 border-black px-1" colspan="5">Jul</th>
+              <th class="border-2 border-black px-1" colspan="4">Aug</th>
+              <th class="border-2 border-black px-1" colspan="5">Sep</th>
+              <th class="border-2 border-black px-1" colspan="4">Oct</th>
+              <th class="border-2 border-black px-1" colspan="4">Nov</th>
+              <th class="border-2 border-black px-1" colspan="5">Dec</th>
+              <th class="border-4 border-black px-1" rowspan="2">Total</th>
+            </tr>
             <tr class="border-4 border-black px-1">
-              <th class="border-2 border-black px-1">Site Name</th>
-              <th class="border-2 border-black px-1">Program Name</th>
-              <th class="border-2 border-black px-1">Jan</th>
-              <th class="border-2 border-black px-1">Feb</th>
-              <th class="border-2 border-black px-1">Mar</th>
-              <th class="border-2 border-black px-1">Apr</th>
-              <th class="border-2 border-black px-1">May</th>
-              <th class="border-2 border-black px-1">Jun</th>
-              <th class="border-2 border-black px-1">Jul</th>
-              <th class="border-2 border-black px-1">Aug</th>
-              <th class="border-2 border-black px-1">Sep</th>
-              <th class="border-2 border-black px-1">Oct</th>
-              <th class="border-2 border-black px-1">Nov</th>
-              <th class="border-2 border-black px-1">Dec</th>
-              <th class="border-4 border-black px-1">Total</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">5</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">5</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">5</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">1</th>
+              <th class="border-2 border-black px-1">2</th>
+              <th class="border-2 border-black px-1">3</th>
+              <th class="border-2 border-black px-1">4</th>
+              <th class="border-2 border-black px-1">5</th>
             </tr>
           </thead>
           <tbody>
             <template v-for="(item, index) in classes" :key="index">
-              <template v-for="(item1, index1) in item" :key="index1">
-                <template v-for="(item2, index2) in item1" :key="index2">
-                  <tr>
-                    <td
-                      class="border-4 border-black truncate px-2 font-semibold"
-                    >
-                      {{ item2.months }}
-                    </td>
-                  </tr>
-                </template>
-              </template>
+              <tr>
+                <td class="border-4 border-black truncate px-2 font-semibold">
+                  {{ item.Site }}
+                </td>
+                <td class="border-4 border-black truncate px-2 font-semibold">
+                  {{ item.Program }}
+                </td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week1 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week2 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week3 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week4 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week5 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week6 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week7 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week8 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week9 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week10}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week11 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week12 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week13 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week14 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week15 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week16 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week17 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week18 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week19 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week20}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week21 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week22 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week23 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week24 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week25 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week26 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week27 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week28 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week29 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week30}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week31 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week32 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week33 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week34 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week35 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week36 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week37 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week38 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week39 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week40}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week41 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week42 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week43 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week44 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week45 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week46 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week47 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week48 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week49 }}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week50}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week51}}</td>
+                <td class="border-2 border-black text-center font-semibold">{{ item.Week52}}</td>
+                <td class="border-4 border-black text-center font-semibold">
+                  {{ item.GrandTotalByProgram }}
+                </td>
+              </tr>
             </template>
           </tbody>
         </table>
