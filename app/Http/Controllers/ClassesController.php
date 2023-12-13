@@ -757,8 +757,12 @@ class ClassesController extends Controller
         ->get();
 
         $dateRanges = DateRange::all();
+
+        $groupedClasses = [];
         $groupedClasses = [];
         $grandTotalByProgram = [];
+
+        $allDateRanges = $dateRanges->pluck('date_range')->unique();
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -771,14 +775,15 @@ class ClassesController extends Controller
                 $grandTotalByProgram[$siteName][$programName] = 0;
             }
 
-            foreach ($dateRanges as $dateRange) {
-                $daterangeName = $dateRange->date_range;
+            foreach ($allDateRanges as $daterangeName) {
                 $programId = $program->id;
-                $month = $dateRange->month;
+
+                // Extract month and week from the date range
+                [$month, $week] = explode(' ', $daterangeName);
 
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
-                    ->where('date_range_id', $dateRange->id)
+                    ->where('date_range_id', $daterangeName)
                     ->where('status', 'Active')
                     ->get();
 
@@ -788,20 +793,25 @@ class ClassesController extends Controller
                     $groupedClasses[$siteName] = [];
                 }
                 if (!isset($groupedClasses[$siteName][$programName])) {
-                    $groupedClasses[$siteName][$programName] = [];
-                }
-                if (!isset($groupedClasses[$siteName][$programName][$month])) {
-                    $groupedClasses[$siteName][$programName][$month] = [
+                    $groupedClasses[$siteName][$programName] = [
                         'total_target' => 0,
-                        'date_ranges' => [],
+                        'months' => [],
+                    ];
+                }
+                if (!isset($groupedClasses[$siteName][$programName]['months'][$month])) {
+                    $groupedClasses[$siteName][$programName]['months'][$month] = [
+                        'total_target' => 0,
+                        'weeks' => [],
                     ];
                 }
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
-                $groupedClasses[$siteName][$programName][$month]['total_target'] += $totalTarget;
+                $groupedClasses[$siteName][$programName]['total_target'] += $totalTarget;
+                $groupedClasses[$siteName][$programName]['months'][$month]['total_target'] += $totalTarget;
 
-                // Add the date_range to the date_ranges array
-                $groupedClasses[$siteName][$programName][$month]['date_ranges'][$daterangeName] = [
+                // Add the date_range to the weeks array
+                $groupedClasses[$siteName][$programName]['months'][$month]['weeks'][$week][] = [
+                    'date_range' => $daterangeName,
                     'total_target' => $totalTarget,
                 ];
             }
@@ -811,26 +821,33 @@ class ClassesController extends Controller
 
         foreach ($groupedClasses as $siteName => $siteData) {
             foreach ($siteData as $programName => $programData) {
-                foreach ($programData as $month => $monthData) {
+                $mappedProgram = [
+                    'site_name' => $siteName,
+                    'program_name' => $programName,
+                    'total_target' => $programData['total_target'],
+                    'months' => [],
+                ];
+
+                foreach ($programData['months'] as $month => $monthData) {
                     $mappedMonth = [
-                        'site_name' => $siteName,
-                        'program_name' => $programName,
                         'month' => $month,
                         'total_target' => $monthData['total_target'],
-                        'date_ranges' => [],
+                        'weeks' => [],
                     ];
 
-                    foreach ($monthData['date_ranges'] as $daterangeName => $daterangeData) {
-                        $mappedDateRange = [
-                            'date_range' => $daterangeName,
-                            'total_target' => $daterangeData['total_target'],
+                    foreach ($monthData['weeks'] as $week => $weekData) {
+                        $mappedWeek = [
+                            'week' => $week,
+                            'date_ranges' => $weekData,
                         ];
 
-                        $mappedMonth['date_ranges'][] = $mappedDateRange;
+                        $mappedMonth['weeks'][] = $mappedWeek;
                     }
 
-                    $mappedGroupedClasses[] = $mappedMonth;
+                    $mappedProgram['months'][] = $mappedMonth;
                 }
+
+                $mappedGroupedClasses[] = $mappedProgram;
             }
         }
 

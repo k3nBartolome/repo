@@ -11,26 +11,29 @@
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Sites</label>
           <MultiSelect
-    v-model="sites_selected"
-    :options="sites"
-    display="chip"
-    filter
-    checkboxContainer
-    headerCheckbox
-    checkboxIcon
-    filterPlaceholder="Search"
-    showToggleAll
-    optionLabel="name"
-    placeholder="Select Sites"
-    class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
-    :selected-items-class="'bg-orange-500 text-white'"
-    :panel-style="{ backgroundColor: 'white' }"
-    :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
-    @change="getPrograms"
-    style="--checkbox-size: 20px; --checkbox-background: #ffcc00; --checkbox-border: #000000;"
-  />
+            v-model="sites_selected"
+            :options="sites"
+            display="chip"
+            filter
+            checkboxContainer
+            headerCheckbox
+            checkboxIcon
+            filterPlaceholder="Search"
+            showToggleAll
+            optionLabel="name"
+            placeholder="Select Sites"
+            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            :selected-items-class="'bg-orange-500 text-white'"
+            :panel-style="{ backgroundColor: 'white' }"
+            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+            @change="getPrograms"
+            style="
+              --checkbox-size: 20px;
+              --checkbox-background: #ffcc00;
+              --checkbox-border: #000000;
+            "
+          />
         </div>
-
 
         <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
           <label class="block mb-2">Programs</label>
@@ -50,59 +53,53 @@
     </div>
   </div>
 
-    <div class="px-2 items-center">
-        <div
-          class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8"
-        >
-          <div
-            class="w-full lg:max-w-4xl mx-auto align-center"
-          >
-            <table class="border-2 border-black">
-              <thead class="sticky top-0 bg-white z-50">
-                <tr class="border-4 border-black px-1">
-                  <th class="border-2 border-black px-1">Site Name</th>
-                  <th class="border-2 border-black px-1">Program Name</th>
-                  <th class="border-2 border-black px-1">Jan</th>
-                  <th class="border-2 border-black px-1">Feb</th>
-                  <th class="border-2 border-black px-1">Mar</th>
-                  <th class="border-2 border-black px-1">Apr</th>
-                  <th class="border-2 border-black px-1">May</th>
-                  <th class="border-2 border-black px-1">Jun</th>
-                  <th class="border-2 border-black px-1">Jul</th>
-                  <th class="border-2 border-black px-1">Aug</th>
-                  <th class="border-2 border-black px-1">Sep</th>
-                  <th class="border-2 border-black px-1">Oct</th>
-                  <th class="border-2 border-black px-1">Nov</th>
-                  <th class="border-2 border-black px-1">Dec</th>
-                  <th class="border-4 border-black px-1">Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-for="(item, index) in classes" :key="index">
-                  <template v-for="(item1, index1) in item" :key="index1">
-                    <template v-for="(item2, index2) in item1" :key="index2">
-                    <template v-for="(item3, index3) in item2" :key="index3">
+  <div class="px-2 items-center">
+    <div class="flex flex-col lg:flex-wrap lg:flex-row lg:space-x-8">
+      <div class="w-full lg:max-w-4xl mx-auto align-center">
+        <table class="border-2 border-black">
+          <thead class="sticky top-0 bg-white z-50">
+            <tr class="border-4 border-black px-1">
+              <th class="border-2 border-black px-1">Site Name</th>
+              <th class="border-2 border-black px-1">Program Name</th>
+              <th class="border-2 border-black px-1">Jan</th>
+              <th class="border-2 border-black px-1">Feb</th>
+              <th class="border-2 border-black px-1">Mar</th>
+              <th class="border-2 border-black px-1">Apr</th>
+              <th class="border-2 border-black px-1">May</th>
+              <th class="border-2 border-black px-1">Jun</th>
+              <th class="border-2 border-black px-1">Jul</th>
+              <th class="border-2 border-black px-1">Aug</th>
+              <th class="border-2 border-black px-1">Sep</th>
+              <th class="border-2 border-black px-1">Oct</th>
+              <th class="border-2 border-black px-1">Nov</th>
+              <th class="border-2 border-black px-1">Dec</th>
+              <th class="border-4 border-black px-1">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="(item, index) in classes" :key="index">
+              <template v-for="(item1, index1) in item" :key="index1">
+                <template v-for="(item2, index2) in item1" :key="index2">
                   <tr>
                     <td
                       class="border-4 border-black truncate px-2 font-semibold"
                     >
-                      {{ index3 }}
+                      {{ item2.months }}
                     </td>
                   </tr>
                 </template>
               </template>
             </template>
-          </template>
-              </tbody>
-            </table>
-          </div>
-        </div>
+          </tbody>
+        </table>
       </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import axios from "axios";
-import MultiSelect from 'primevue/multiselect';
+import MultiSelect from "primevue/multiselect";
 
 export default {
   components: {
@@ -360,5 +357,4 @@ p {
   font-size: var(--checkbox-size);
   border-color: var(--checkbox-border);
 }
-
 </style>
