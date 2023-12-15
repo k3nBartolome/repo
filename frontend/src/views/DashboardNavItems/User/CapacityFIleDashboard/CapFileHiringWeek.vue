@@ -188,6 +188,9 @@ export default {
     },
   },
   methods: {
+    toggleMonthVisibility(month) {
+      month.visible = !month.visible;
+    },
     async getClassesAll() {
       try {
         const token = this.$store.state.token;
