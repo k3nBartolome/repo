@@ -135,6 +135,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('months', [DateRangeController::class, 'getMonth']);
     //Items
     Route::post('items', [ItemsController::class, 'store']);
+    Route::post('items_site_supply', [ItemsController::class, 'storeSiteSupply']);
     Route::get('items', [ItemsController::class, 'index']);
     Route::get('itemsboth', [ItemsController::class, 'indexboth']);
     Route::get('itemsboth3', [ItemsController::class, 'indexboth3']);

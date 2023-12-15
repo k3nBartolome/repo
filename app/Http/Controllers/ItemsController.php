@@ -176,6 +176,39 @@ class ItemsController extends Controller
         ]);
     }
 
+    public function storeSiteSupply(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_name' => 'required|max:255',
+            'quantity' => 'required',
+            'original_quantity' => 'required',
+            'type' => 'required',
+            'cost' => 'required',
+            'total_cost' => 'required',
+            'site_id' => 'required|exists:sites,id',
+            'budget_code' => 'required',
+            'category' => 'required',
+            'date_expiry' => 'nullable',
+            'is_active' => 'nullable|boolean',
+            'created_by' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $items = new SiteInventory();
+        $items->fill($request->all());
+        $items->date_added = Carbon::now()->format('Y-m-d H:i');
+        $items->save();
+        $items->item_less_id = $items->id;
+        $items->save();
+
+        return response()->json([
+            'items' => $items,
+        ]);
+    }
+
     /**
      * Display the specified resource.
      *
