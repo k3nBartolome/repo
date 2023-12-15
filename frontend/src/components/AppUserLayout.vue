@@ -3,7 +3,7 @@
     <div class="nav-container sticky-nav">
       <NavBar />
     </div>
-    <div>
+    <div class="w-full">
       <div>
         <router-view></router-view>
       </div>
