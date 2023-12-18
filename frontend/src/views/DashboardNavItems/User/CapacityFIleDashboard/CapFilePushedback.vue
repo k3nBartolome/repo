@@ -40,300 +40,919 @@
       </div>
     </div>
   </div>
-
-  <div class="px-2">
-    <div class="">
-      <div class="">
-        <table class="border-2 border-black">
+  <div class="px-2 overflow-x-auto overflow-y-auto">
+    <div class="p-4">
+      <div
+        class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto"
+      >
+        <table class="min-w-full border-collapse border-2 border-gray-500">
           <thead class="">
-            <tr class="border-4 border-black px-1 text-center">
-              <th class="border-2 border-black px-1" rowspan="2">Site Name</th>
-              <th class="border-2 border-black px-1" rowspan="2">
+            <tr class="border-4 border-gray-500 px-1 text-center">
+              <th
+                class="border-2 border-gray-500 px-1"
+                rowspan="3"
+                style="vertical-align: middle"
+              >
+                Site Name
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="3"
+              >
                 Program Name
               </th>
-              <th class="border-2 border-black px-1" colspan="5">Jan</th>
-              <th class="border-2 border-black px-1" colspan="5">Feb</th>
-              <th class="border-2 border-black px-1" colspan="5">Mar</th>
-              <th class="border-2 border-black px-1" colspan="6">Apr</th>
-              <th class="border-2 border-black px-1" colspan="5">May</th>
-              <th class="border-2 border-black px-1" colspan="5">Jun</th>
-              <th class="border-2 border-black px-1" colspan="6">Jul</th>
-              <th class="border-2 border-black px-1" colspan="5">Aug</th>
-              <th class="border-2 border-black px-1" colspan="6">Sep</th>
-              <th class="border-2 border-black px-1" colspan="5">Oct</th>
-              <th class="border-2 border-black px-1" colspan="5">Nov</th>
-              <th class="border-2 border-black px-1" colspan="6">Dec</th>
-              <th class="border-4 border-black px-1" rowspan="2">Total</th>
+              <th
+                :colspan="showJanColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showJanColumn,
+                  'bg-blue-500': showJanColumn,
+                }"
+                @click="toggleColumnVisibility('Jan')"
+              >
+                Jan
+              </th>
+              <th
+                :colspan="showFebColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showFebColumn,
+                  'bg-blue-500': showFebColumn,
+                }"
+                @click="toggleColumnVisibility('Feb')"
+              >
+                Feb
+              </th>
+              <th
+                :colspan="showMarColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showMarColumn,
+                  'bg-blue-500': showMarColumn,
+                }"
+                @click="toggleColumnVisibility('Mar')"
+              >
+                Mar
+              </th>
+              <th
+                :colspan="showAprColumn ? 6 : 1"
+                :class="{
+                  'bg-red-500': !showAprColumn,
+                  'bg-blue-500': showAprColumn,
+                }"
+                @click="toggleColumnVisibility('Apr')"
+              >
+                Apr
+              </th>
+              <th
+                :colspan="showMayColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showMayColumn,
+                  'bg-blue-500': showMayColumn,
+                }"
+                @click="toggleColumnVisibility('May')"
+              >
+                May
+              </th>
+              <th
+                :colspan="showJunColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showJunColumn,
+                  'bg-blue-500': showJunColumn,
+                }"
+                @click="toggleColumnVisibility('Jun')"
+              >
+                Jun
+              </th>
+              <th
+                :colspan="showJulColumn ? 6 : 1"
+                :class="{
+                  'bg-red-500': !showJulColumn,
+                  'bg-blue-500': showJulColumn,
+                }"
+                @click="toggleColumnVisibility('Jul')"
+              >
+                Jul
+              </th>
+              <th
+                :colspan="showAugColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showAugColumn,
+                  'bg-blue-500': showAugColumn,
+                }"
+                @click="toggleColumnVisibility('Aug')"
+              >
+                Aug
+              </th>
+              <th
+                :colspan="showSepColumn ? 6 : 1"
+                :class="{
+                  'bg-red-500': !showSepColumn,
+                  'bg-blue-500': showSepColumn,
+                }"
+                @click="toggleColumnVisibility('Sep')"
+              >
+                Sep
+              </th>
+              <th
+                :colspan="showOctColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showOctColumn,
+                  'bg-blue-500': showOctColumn,
+                }"
+                @click="toggleColumnVisibility('Oct')"
+              >
+                Oct
+              </th>
+              <th
+                :colspan="showNovColumn ? 5 : 1"
+                :class="{
+                  'bg-red-500': !showNovColumn,
+                  'bg-blue-500': showNovColumn,
+                }"
+                @click="toggleColumnVisibility('Nov')"
+              >
+                Nov
+              </th>
+              <th
+                :colspan="showDecColumn ? 6 : 1"
+                :class="{
+                  'bg-red-500': !showDecColumn,
+                  'bg-blue-500': showDecColumn,
+                }"
+                @click="toggleColumnVisibility('Dec')"
+              >
+                Dec
+              </th>
+              <th
+                class="border-4 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="3"
+              >
+                Total
+              </th>
             </tr>
-            <tr class="border-4 border-black px-1">
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Jan</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Feb</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Mar</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">5</th>
-              <th class="border-2 border-black px-1">Apr</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">May</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Jun</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">5</th>
-              <th class="border-2 border-black px-1">Jul</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Aug</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">5</th>
-              <th class="border-2 border-black px-1">Sep</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Oct</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">Nov</th>
-              <th class="border-2 border-black px-1">1</th>
-              <th class="border-2 border-black px-1">2</th>
-              <th class="border-2 border-black px-1">3</th>
-              <th class="border-2 border-black px-1">4</th>
-              <th class="border-2 border-black px-1">5</th>
-              <th class="border-2 border-black px-1">Dec</th>
+            <tr class="border-4 border-gray-500 px-1 text-center">
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 1
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 8
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 15
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 22
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Jan
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Jan 29
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 5
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 12
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 19
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Feb
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Feb 26
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 5
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 12
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 19
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Mar
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Mar 26
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 2
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 9
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 16
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 23
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Apr
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                Apr 30
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 7
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 14
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 21
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                May
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                May 28
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 4
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 11
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 18
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Jun
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jun 25
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 2
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 9
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 16
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 23
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Jul
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Jul 30
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 6
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 13
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 20
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Aug
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Aug 27
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 3
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 10
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 17
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 24
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Sep
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 1
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 8
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 15
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 22
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Oct
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Oct 29
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 5
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 12
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 19
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Nov
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Nov 26
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 3
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 10
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 17
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 24
+              </th>
+              <th
+                class="border-2 border-gray-500 px-1"
+                style="vertical-align: middle"
+                rowspan="2"
+              >
+                Dec
+              </th>
+            </tr>
+            <tr class="border-4 border-gray-500 px-1 text-center">
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 7
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 14
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 21
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJanColumn">
+                Jan 28
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 4
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 11
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 18
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showFebColumn">
+                Feb 25
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 4
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 11
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 18
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMarColumn">
+                Mar 25
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 1
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 8
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 15
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 22
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAprColumn">
+                Apr 29
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 6
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 13
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 20
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showMayColumn">
+                May 27
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 3
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 10
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 17
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJunColumn">
+                Jun 24
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 1
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 8
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 15
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 22
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showJulColumn">
+                Jul 29
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 5
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 12
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 19
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showAugColumn">
+                Aug 26
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 2
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 9
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 16
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 23
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showSepColumn">
+                Sep 30
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 7
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 14
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 21
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showOctColumn">
+                Oct 28
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 4
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 11
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 18
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showNovColumn">
+                Nov 25
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 2
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 9
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 16
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 23
+              </th>
+              <th class="border-2 border-gray-500 px-1" v-if="showDecColumn">
+                Dec 30
+              </th>
             </tr>
           </thead>
           <tbody>
             <template v-for="(item, index) in classes" :key="index">
               <tr>
-                <td class="border-4 border-black truncate px-2 font-semibold">
+                <td
+                  class="border-4 border-gray-500 truncate px-2 font-semibold"
+                >
                   {{ item.Site }}
                 </td>
-                <td class="border-4 border-black truncate px-2 font-semibold">
+                <td
+                  class="border-4 border-gray-500 truncate px-2 font-semibold"
+                >
                   {{ item.Program }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJanColumn"
+                >
                   {{ item.Week1 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJanColumn"
+                >
                   {{ item.Week2 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJanColumn"
+                >
                   {{ item.Week3 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJanColumn"
+                >
                   {{ item.Week4 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Jan }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showFebColumn"
+                >
                   {{ item.Week5 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showFebColumn"
+                >
                   {{ item.Week6 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showFebColumn"
+                >
                   {{ item.Week7 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showFebColumn"
+                >
                   {{ item.Week8 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Feb }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMarColumn"
+                >
                   {{ item.Week9 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMarColumn"
+                >
                   {{ item.Week10 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMarColumn"
+                >
                   {{ item.Week11 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMarColumn"
+                >
                   {{ item.Week12 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Mar }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAprColumn"
+                >
                   {{ item.Week13 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAprColumn"
+                >
                   {{ item.Week14 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAprColumn"
+                >
                   {{ item.Week15 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAprColumn"
+                >
                   {{ item.Week16 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAprColumn"
+                >
                   {{ item.Week17 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Apr }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMayColumn"
+                >
                   {{ item.Week18 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMayColumn"
+                >
                   {{ item.Week19 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMayColumn"
+                >
                   {{ item.Week20 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showMayColumn"
+                >
                   {{ item.Week21 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.May }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJunColumn"
+                >
                   {{ item.Week22 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJunColumn"
+                >
                   {{ item.Week23 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJunColumn"
+                >
                   {{ item.Week24 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJunColumn"
+                >
                   {{ item.Week25 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Jun }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJulColumn"
+                >
                   {{ item.Week26 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJulColumn"
+                >
                   {{ item.Week27 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJulColumn"
+                >
                   {{ item.Week28 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJulColumn"
+                >
                   {{ item.Week29 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showJulColumn"
+                >
                   {{ item.Week30 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Jul }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAugColumn"
+                >
                   {{ item.Week31 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAugColumn"
+                >
                   {{ item.Week32 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAugColumn"
+                >
                   {{ item.Week33 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showAugColumn"
+                >
                   {{ item.Week34 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Aug }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showSepColumn"
+                >
                   {{ item.Week35 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showSepColumn"
+                >
                   {{ item.Week36 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showSepColumn"
+                >
                   {{ item.Week37 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showSepColumn"
+                >
                   {{ item.Week38 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showSepColumn"
+                >
                   {{ item.Week39 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Sep }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showOctColumn"
+                >
                   {{ item.Week40 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showOctColumn"
+                >
                   {{ item.Week41 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showOctColumn"
+                >
                   {{ item.Week42 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showOctColumn"
+                >
                   {{ item.Week43 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Oct }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showNovColumn"
+                >
                   {{ item.Week44 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showNovColumn"
+                >
                   {{ item.Week45 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showNovColumn"
+                >
                   {{ item.Week46 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showNovColumn"
+                >
                   {{ item.Week47 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Nov }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showDecColumn"
+                >
                   {{ item.Week48 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showDecColumn"
+                >
                   {{ item.Week49 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showDecColumn"
+                >
                   {{ item.Week50 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showDecColumn"
+                >
                   {{ item.Week51 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td
+                  class="border-2 border-gray-500 text-center font-semibold"
+                  v-if="showDecColumn"
+                >
                   {{ item.Week52 }}
                 </td>
-                <td class="border-2 border-black text-center font-semibold">
+                <td class="border-2 border-gray-500 text-center font-semibold">
                   {{ item.Dec }}
                 </td>
-                <td class="border-4 border-black text-center font-semibold">
+                <td class="border-4 border-gray-500 text-center font-semibold">
                   {{ item.GrandTotalByProgram }}
                 </td>
               </tr>
@@ -365,6 +984,18 @@ export default {
       sites_selected: [],
       month_selected: [],
       months: [],
+      showJanColumn: true,
+      showFebColumn: true,
+      showMarColumn: true,
+      showAprColumn: true,
+      showMayColumn: true,
+      showJunColumn: true,
+      showJulColumn: true,
+      showAugColumn: true,
+      showSepColumn: true,
+      showOctColumn: true,
+      showNovColumn: true,
+      showDecColumn: true,
     };
   },
   computed: {},
@@ -394,6 +1025,20 @@ export default {
     },
   },
   methods: {
+    toggleColumnVisibility(month) {
+      if (month === "Jan") this.showJanColumn = !this.showJanColumn;
+      else if (month === "Feb") this.showFebColumn = !this.showFebColumn;
+      else if (month === "Mar") this.showMarColumn = !this.showMarColumn;
+      else if (month === "Apr") this.showAprColumn = !this.showAprColumn;
+      else if (month === "May") this.showMayColumn = !this.showMayColumn;
+      else if (month === "Jun") this.showJunColumn = !this.showJunColumn;
+      else if (month === "Jul") this.showJulColumn = !this.showJulColumn;
+      else if (month === "Aug") this.showAugColumn = !this.showAugColumn;
+      else if (month === "Sep") this.showSepColumn = !this.showSepColumn;
+      else if (month === "Oct") this.showOctColumn = !this.showOctColumn;
+      else if (month === "Nov") this.showNovColumn = !this.showNovColumn;
+      else if (month === "Dec") this.showDecColumn = !this.showDecColumn;
+    },
     async getClassesAll() {
       try {
         const token = this.$store.state.token;

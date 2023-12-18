@@ -25,7 +25,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -33,7 +33,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -41,7 +41,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -52,7 +52,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -63,7 +63,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 
@@ -83,7 +83,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -91,7 +91,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -99,7 +99,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -110,7 +110,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -121,7 +121,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 

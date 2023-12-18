@@ -53,7 +53,7 @@
       </div>
     </div>
   </div>
-  <main class="flex flex-col h-screen">
+  <main class="flex flex-col h-screen overflow-x-hidden">
     <div class="flex flex-1 px-4 py-2 md:px-1">
       <div class="w-full py-6">
         <router-view />
