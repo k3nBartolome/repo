@@ -3,7 +3,7 @@
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
-          v-if="isUser  || isSourcing"
+          v-if="isUser || isSourcing"
           @click="showModalSupply = true"
           class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
         >
@@ -542,9 +542,7 @@ export default {
           data: "date_received",
           title: "Received Date",
           render: (data, type, row) => {
-            return row.date_received
-              ? row.date_received.slice(0, -3)
-              : "N/A";
+            return row.date_received ? row.date_received.slice(0, -3) : "N/A";
           },
         },
 
@@ -573,9 +571,7 @@ export default {
           data: "date_added",
           title: "Added Date",
           render: (data, type, row) => {
-            return row.date_added
-              ? row.date_added.slice(0, -3)
-              : "N/A";
+            return row.date_added ? row.date_added.slice(0, -3) : "N/A";
           },
         },
       ],
@@ -641,7 +637,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/siteinventoryall",
+          "http://10.109.2.112:8081/api/siteinventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -662,7 +658,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -703,7 +699,7 @@ export default {
         transferred_from: this.sites1_selected,
       };
       axios
-        .post("http://127.0.0.1:8000/api/transfer", formData, {
+        .post("http://10.109.2.112:8081/api/transfer", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -772,7 +768,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/items_site_supply", formData, {
+        .post("http://10.109.2.112:8081/api/items_site_supply", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
