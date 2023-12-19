@@ -1,7 +1,10 @@
 <template>
   <div class="py-8">
     <div class="px-4 sm:px-6 lg:px-8">
-      <button @click="exportToExcel" class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out">
+      <button
+        @click="exportToExcel"
+        class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out"
+      >
         Export to Excel
       </button>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
@@ -64,7 +67,6 @@
           />
         </div>
       </div>
-
     </div>
 
     <div class="py-6 overflow-x-auto">
@@ -204,7 +206,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/mpsweek", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -231,7 +233,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/months", {
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -253,35 +255,46 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export-to-excel", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: 'blob', // Tell Axios to expect a binary response
-          params: {
-            // Include any parameters needed for the export
-            month_num: this.month_selected.map((month_num) => month_num.month_num),
-            site_id: this.sites_selected.map((site) => site.site_id),
-            program_id: this.programs_selected.map((program) => program.program_id),
-            date_id: this.week_selected.map((week_selected) => week_selected.date_id),
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/export-to-excel",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob", // Tell Axios to expect a binary response
+            params: {
+              // Include any parameters needed for the export
+              month_num: this.month_selected.map(
+                (month_num) => month_num.month_num
+              ),
+              site_id: this.sites_selected.map((site) => site.site_id),
+              program_id: this.programs_selected.map(
+                (program) => program.program_id
+              ),
+              date_id: this.week_selected.map(
+                (week_selected) => week_selected.date_id
+              ),
+            },
+          }
+        );
 
         // Create a Blob and create a download link for the Excel file
-        const blob = new Blob([response.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
         const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
+        const a = document.createElement("a");
         a.href = url;
-        a.download = 'your_filename.xlsx';
+        a.download = "your_filename.xlsx";
         a.click();
       } catch (error) {
-        console.error('Error exporting data to Excel', error);
+        console.error("Error exporting data to Excel", error);
       }
     },
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -298,59 +311,63 @@ export default {
       }
     },
     async getDateRange() {
-  if (!this.month_selected) {
-    return;
-  }
-  try {
-    const token = this.$store.state.token;
-    const monthId = this.month_selected.map((month) => month.month_num);
+      if (!this.month_selected) {
+        return;
+      }
+      try {
+        const token = this.$store.state.token;
+        const monthId = this.month_selected.map((month) => month.month_num);
 
-    const url = `http://10.109.2.112:8081/api/daterange_select/${monthId.join(',')}`;
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
+          ","
+        )}`;
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (response.status === 200) {
-      this.daterange = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching week");
-    }
-  } catch (error) {
-    console.error(error);
-  }
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching week");
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
     async getPrograms() {
-  if (!this.sites_selected) {
-    return;
-  }
+      if (!this.sites_selected) {
+        return;
+      }
 
-  try {
-    const token = this.$store.state.token;
-    const siteId = this.sites_selected.map((site) => site.site_id);
+      try {
+        const token = this.$store.state.token;
+        const siteId = this.sites_selected.map((site) => site.site_id);
 
-    const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(',')}`;
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
+          ","
+        )}`;
 
-    const response = await axios.get(url, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-    if (response.status === 200) {
-      this.programs = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-    }}
-
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 };
 </script>
 <style>

@@ -2,7 +2,11 @@
   <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
     <ul class="flex -mb-px text-sm font-medium text-center">
       <router-link to="/site_request_manager/request">
-        <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
+        <li
+          class="mr-2"
+          role="presentation"
+          v-if="isUser || isRemx || isBudget || isSourcing"
+        >
           <button
             class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
             type="button"
@@ -13,19 +17,29 @@
         </li>
       </router-link>
       <router-link to="/site_request_manager/pending">
-        <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
+        <li
+          class="mr-2"
+          role="presentation"
+          v-if="isUser || isRemx || isBudget || isSourcing"
+        >
           <button
             class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
             type="button"
             role="tab"
           >
             Pending Request
-            <span v-if="totalPending > 0" class="count-notification">{{ totalPending }}</span>
+            <span v-if="totalPending > 0" class="count-notification">{{
+              totalPending
+            }}</span>
           </button>
         </li>
       </router-link>
       <router-link to="/site_request_manager/approved">
-        <li class="mr-2" role="presentation" v-if="isUser || isRemx || isBudget || isSourcing">
+        <li
+          class="mr-2"
+          role="presentation"
+          v-if="isUser || isRemx || isBudget || isSourcing"
+        >
           <button
             class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
             type="button"
@@ -35,7 +49,10 @@
           </button>
         </li>
       </router-link>
-      <router-link to="/site_request_manager/denied" v-if="isUser || isRemx || isBudget || isSourcing">
+      <router-link
+        to="/site_request_manager/denied"
+        v-if="isUser || isRemx || isBudget || isSourcing"
+      >
         <li role="presentation">
           <button
             class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
@@ -46,7 +63,10 @@
           </button>
         </li>
       </router-link>
-      <router-link to="/site_request_manager/received" v-if="isUser || isRemx || isBudget || isSourcing">
+      <router-link
+        to="/site_request_manager/received"
+        v-if="isUser || isRemx || isBudget || isSourcing"
+      >
         <li role="presentation">
           <button
             class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
@@ -54,13 +74,21 @@
             role="tab"
           >
             Receive
-            <span v-if="totalReceived > 0" class="count-notification">{{ totalReceived }}</span>
+            <span v-if="totalReceived > 0" class="count-notification">{{
+              totalReceived
+            }}</span>
           </button>
         </li>
       </router-link>
       <router-link to="/site_request_manager/cancelled">
         <li role="presentation">
-          <button class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"  type="button" role="tab" >Cancelled Request</button>
+          <button
+            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            type="button"
+            role="tab"
+          >
+            Cancelled Request
+          </button>
         </li>
       </router-link>
     </ul>
@@ -76,15 +104,15 @@
 <script>
 import axios from "axios";
 export default {
-   data() {
+  data() {
     return {
       inventory: [],
       totalPending: "",
       totalReceived: "",
-      Total:""
+      Total: "",
     };
   },
- mounted() {
+  mounted() {
     this.$router.afterEach(() => {
       window.location.reload();
     });
@@ -108,71 +136,74 @@ export default {
       return userRole === "sourcing";
     },
   },
-methods: {
-  async getInventory() {
-    try {
-      const token = this.$store.state.token;
-      const response = await axios.get(
-        "http://10.109.2.112:8081/api/inventoryall",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+  methods: {
+    async getInventory() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventoryall",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.inventory = response.data.inventory;
+
+          const pendingItems = this.inventory.filter(
+            (item) => item.status === "Pending"
+          );
+          const receivedItems = this.inventory.filter(
+            (item) =>
+              item.status === "Approved" && item.approved_status === null
+          );
+
+          this.totalPending = pendingItems.length;
+          this.totalReceived = receivedItems.length;
+          this.Total = this.totalPending + this.totalReceived;
+        } else {
+          console.log("Error fetching inventory");
         }
-      );
-
-      if (response.status === 200) {
-        this.inventory = response.data.inventory;
-
-        const pendingItems = this.inventory.filter(item => item.status === "Pending");
-        const receivedItems = this.inventory.filter(item => item.status === "Approved" && item.approved_status === null);
-
-        this.totalPending = pendingItems.length;
-        this.totalReceived = receivedItems.length;
-        this.Total = this.totalPending + this.totalReceived;
-      } else {
-        console.log("Error fetching inventory");
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    },
   },
-},
 };
 </script>
 <style>
-  .tabs {
-    display: flex;
-  }
+.tabs {
+  display: flex;
+}
 
-  .tab {
-    padding: 8px 16px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-    border-bottom: none;
-    border-radius: 8px 8px 0 0;
-    margin-right: 4px;
-  }
+.tab {
+  padding: 8px 16px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  border-radius: 8px 8px 0 0;
+  margin-right: 4px;
+}
 
-  .tab:last-child {
-    margin-right: 0;
-  }
-  main {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-  }
+.tab:last-child {
+  margin-right: 0;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
 
-  .flex {
-    flex: 1;
-  }
-  .count-notification {
-    background-color: red;
-    color: white;
-    border-radius: 50%;
-    padding: 2px 6px;
-    margin-left: 5px;
-  }
-
+.flex {
+  flex: 1;
+}
+.count-notification {
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  margin-left: 5px;
+}
 </style>
-

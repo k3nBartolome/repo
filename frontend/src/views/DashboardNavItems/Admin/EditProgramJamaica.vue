@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Program Manager
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -88,15 +88,14 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/programs/" + this.$route.params.id)
         .then((response) => {
-            this.programs = response.data.data
+          this.programs = response.data.data;
           const programObj = this.programs;
           this.name = programObj.name;
           this.description = programObj.description;
           this.program_group = programObj.program_group;
           this.sites_selected = programObj.site_id;
-
 
           console.log(programObj);
         })
@@ -104,10 +103,10 @@ export default {
           console.log(error);
         });
     },
-     async getSites() {
+    async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -133,7 +132,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
           formData
         )
         .then((response) => {

@@ -1,6 +1,8 @@
 <template>
   <div class="py-8">
-    <div class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8">
+    <div
+      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    >
       <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
           <label class="block">
@@ -8,41 +10,41 @@
             <select
               v-model="sites_selected"
               class="w-full px-3 py-2 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          >
+            >
               <option disabled value="" selected>Please select one</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
                 {{ site.name }}
               </option>
             </select>
           </label>
-      </div>
-      <div>
-        <label class="block">Program</label>
-        <select
-          v-model="programs_selected"
-          class="w-full px-3 py-2 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-        >
-          <option disabled value="" selected>Please select one</option>
-          <option
-            v-for="program in programs"
-            :key="program.id"
-            :value="program.id"
+        </div>
+        <div>
+          <label class="block">Program</label>
+          <select
+            v-model="programs_selected"
+            class="w-full px-3 py-2 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
-            {{ program.name }}
-          </option>
-        </select>
-      </div>
-      <div>
-        <button
-          class="mt-4 px-4 py-2 text-white bg-red-600 rounded-md"
-          @click="resetFilters"
-        >
-          Reset Filters
-        </button>
+            <option disabled value="" selected>Please select one</option>
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
+              {{ program.name }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <button
+            class="mt-4 px-4 py-2 text-white bg-red-600 rounded-md"
+            @click="resetFilters"
+          >
+            Reset Filters
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
   <div class="py-2 overflow-x-auto">
     <table class="w-full border-collapse">
       <thead>
@@ -65,25 +67,31 @@
       </thead>
       <tbody v-for="(mps1, index) in mps" :key="index">
         <tr class="border-black border-2">
-          <td class="py-2 px-4 border text-left truncate">
-          </td>
+          <td class="py-2 px-4 border text-left truncate"></td>
           <td class="py-2 px-4 border text-left truncate">
             {{ mps1.month }}
           </td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.total_target }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.internal }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.external }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.total }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.day_1 }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.day_2 }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.day_3 }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.day_4 }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.day_5 }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.classes }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.filled }}</td>
-          <td class="py-2 px-4 border text-left truncate"> {{ mps1.open }}</td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps1.total_target }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps1.internal }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps1.external }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.total }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_1 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_2 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_3 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_4 }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.day_5 }}</td>
+          <td class="py-2 px-4 border text-left truncate">
+            {{ mps1.classes }}
+          </td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.filled }}</td>
+          <td class="py-2 px-4 border text-left truncate">{{ mps1.open }}</td>
         </tr>
-
       </tbody>
     </table>
   </div>
@@ -128,7 +136,7 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "http://10.109.2.112:8081/api/mpsmonth";
+        let apiUrl = "http://127.0.0.1:8000/api/mpsmonth";
         const params = {};
         if (this.sites_selected) {
           params.site_id = this.sites_selected;
@@ -153,7 +161,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -172,7 +180,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(`http://10.109.2.112:8081/api/programs`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/programs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -222,4 +230,3 @@ button {
   background-color: #e53e3e;
 }
 </style>
-

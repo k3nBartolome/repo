@@ -91,7 +91,7 @@
                   </li>
                 </router-link>
                 <router-link to="/site_supply_manager/stocks" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget"
+                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
                 :class="{ 'selected-tab': isActiveTab('/inventory/site_supply_manager') }"
                                     >
                     Site Supply Manager

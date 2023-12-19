@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Capacity File Manager
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -62,7 +62,6 @@
               v-model="month_selected"
               class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               @change="onMonthSelected"
-
             >
               <option disabled value="" selected>Please select one</option>
               <option value="1">January</option>
@@ -267,7 +266,6 @@ export default {
 
   methods: {
     onMonthSelected() {
-
       if (this.month_selected) {
         this.getDateRange();
       }
@@ -292,7 +290,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -313,7 +311,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -337,7 +335,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -364,7 +362,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

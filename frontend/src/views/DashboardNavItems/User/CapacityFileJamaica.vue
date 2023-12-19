@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Capacity File Manager Jamaica
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -228,7 +228,7 @@ export default {
   methods: {
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesalljam")
+        .get("http://127.0.0.1:8000/api/classesalljam")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.data);
@@ -239,7 +239,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites5")
+        .get("http://127.0.0.1:8000/api/sites5")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -255,7 +255,7 @@ export default {
 
       await axios
         .get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
         )
         .then((response) => {
           this.programs = response.data.data;
@@ -273,7 +273,7 @@ export default {
 
       await axios
         .get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`
         )
         .then((response) => {
           this.daterange = response.data.data;

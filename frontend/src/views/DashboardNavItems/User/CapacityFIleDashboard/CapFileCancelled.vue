@@ -67,6 +67,9 @@
                 :class="{
                   'bg-red-500': !showJanColumn,
                   'bg-blue-500': showJanColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Jan')"
               >
@@ -77,6 +80,9 @@
                 :class="{
                   'bg-red-500': !showFebColumn,
                   'bg-blue-500': showFebColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Feb')"
               >
@@ -87,6 +93,9 @@
                 :class="{
                   'bg-red-500': !showMarColumn,
                   'bg-blue-500': showMarColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Mar')"
               >
@@ -97,6 +106,9 @@
                 :class="{
                   'bg-red-500': !showAprColumn,
                   'bg-blue-500': showAprColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Apr')"
               >
@@ -107,6 +119,9 @@
                 :class="{
                   'bg-red-500': !showMayColumn,
                   'bg-blue-500': showMayColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('May')"
               >
@@ -117,6 +132,9 @@
                 :class="{
                   'bg-red-500': !showJunColumn,
                   'bg-blue-500': showJunColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Jun')"
               >
@@ -127,6 +145,9 @@
                 :class="{
                   'bg-red-500': !showJulColumn,
                   'bg-blue-500': showJulColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Jul')"
               >
@@ -137,6 +158,9 @@
                 :class="{
                   'bg-red-500': !showAugColumn,
                   'bg-blue-500': showAugColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Aug')"
               >
@@ -147,6 +171,9 @@
                 :class="{
                   'bg-red-500': !showSepColumn,
                   'bg-blue-500': showSepColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Sep')"
               >
@@ -157,6 +184,9 @@
                 :class="{
                   'bg-red-500': !showOctColumn,
                   'bg-blue-500': showOctColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Oct')"
               >
@@ -167,6 +197,9 @@
                 :class="{
                   'bg-red-500': !showNovColumn,
                   'bg-blue-500': showNovColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Nov')"
               >
@@ -177,6 +210,9 @@
                 :class="{
                   'bg-red-500': !showDecColumn,
                   'bg-blue-500': showDecColumn,
+                  border: true,
+                  'border-gray-200': true,
+                  'sm:border-none': true,
                 }"
                 @click="toggleColumnVisibility('Dec')"
               >
@@ -1043,7 +1079,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard3",
+          "http://127.0.0.1:8000/api/classesdashboard3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1080,7 +1116,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/months", {
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1102,7 +1138,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export3", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1133,7 +1169,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1157,7 +1193,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `http://10.109.2.112:8081/api/daterange_select/${monthId.join(
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -1186,7 +1222,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

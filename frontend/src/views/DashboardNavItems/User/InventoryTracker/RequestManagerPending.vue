@@ -177,38 +177,41 @@ export default {
       denial_reason: "",
       cancellation_reason: "",
       showModal: false,
-      showModalCancel:false,
+      showModalCancel: false,
       deniedRequestId: null,
       cancelledRequestId: null,
       columns: [
         { data: "id", title: "ID" },
         {
-    data: "id",
-    title: "Actions",
-    orderable: false,
-    searchable: false,
-    render: function (data) {
-      const isUser = this.isUser;
-      const isRemx = this.isRemx;
-      //const isSourcing = this.isSourcing;
-      const requestedById = data.requested_by ? data.requested_by.id : null;
-  console.log("Requested By ID:", requestedById);
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const isUser = this.isUser;
+            const isRemx = this.isRemx;
+            //const isSourcing = this.isSourcing;
+            const requestedById = data.requested_by
+              ? data.requested_by.id
+              : null;
+            console.log("Requested By ID:", requestedById);
 
-  return `
-      ${isRemx || isUser
-
-        ? `<button class="w-20 text-xs btn btn-primary" onclick="window.vm.approvedRequest(${data})">Approve</button>
+            return `
+      ${
+        isRemx || isUser
+          ? `<button class="w-20 text-xs btn btn-primary" onclick="window.vm.approvedRequest(${data})">Approve</button>
            <button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForDenial(${data})">Deny</button>`
-        : ''
+          : ""
       }
 
-      ${requestedById === this.$store.state.user_id
-        ? `<button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>`
-        : ''
+      ${
+        requestedById === this.$store.state.user_id
+          ? `<button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>`
+          : ""
       }
   `;
-}.bind(this),
-      },
+          }.bind(this),
+        },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
@@ -219,7 +222,7 @@ export default {
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -263,13 +266,13 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/inventory/approved/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.$router.push("/site_request_manager/pending", () => {
-          location.reload();
-        });
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -288,15 +291,15 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/inventory/denied/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.showModal = false;
 
           this.$router.push("/site_request_manager/pending", () => {
-          location.reload();
-        });
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -315,14 +318,14 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/inventory/cancel/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/cancel/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.showModalCancel = false;
           this.$router.push("/site_request_manager/pending", () => {
-          location.reload();
-        });
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -331,11 +334,14 @@ export default {
     async getInventory() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/inventory", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventory",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.inventory = response.data.inventory;
@@ -350,7 +356,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

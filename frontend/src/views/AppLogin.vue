@@ -76,7 +76,13 @@ export default {
     };
   },
   methods: {
-    ...mapMutations(["setUser", "setToken", "setRole", "setUserId", "setPermissions"]),
+    ...mapMutations([
+      "setUser",
+      "setToken",
+      "setRole",
+      "setUserId",
+      "setPermissions",
+    ]),
     async login(e) {
       e.preventDefault();
       let user;
@@ -87,7 +93,7 @@ export default {
       let isLogin;
 
       await axios
-        .post("http://10.109.2.112:8081/api/login", {
+        .post("http://127.0.0.1:8000/api/login", {
           email: this.email,
           password: this.password,
         })
@@ -120,7 +126,11 @@ export default {
         } else if (role === "user") {
           console.log("Redirecting to capfile");
           this.$router.push({ path: "/capfile" });
-        } else if (role === "remx" || role === "sourcing" || role === "budget") {
+        } else if (
+          role === "remx" ||
+          role === "sourcing" ||
+          role === "budget"
+        ) {
           console.log("Redirecting to dashboard_manager");
           this.$router.push({ path: "/dashboard_manager/request" });
         } else {

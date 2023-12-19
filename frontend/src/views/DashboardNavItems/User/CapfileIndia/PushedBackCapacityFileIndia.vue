@@ -1,14 +1,14 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h2 class="text-xl font-bold text-center">
-        PUSHBACK CLASS
-      </h2>
-        </div>
-      </header>
+      <h2 class="text-xl font-bold text-center">PUSHBACK CLASS</h2>
+    </div>
+  </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
-      <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
+      <div
+        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
+      >
         <div class="py-8 font-bold">
           <label class="block">
             Targets
@@ -64,7 +64,11 @@
               @change="getPrograms"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -220,9 +224,13 @@
             />
           </label>
 
-          <label class="block">Approved by
-            <select required v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+          <label class="block"
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -244,12 +252,30 @@
               v-model="requested_by"
               value="Talent Acquisition"
             />Talent Acquisition
-            <input type="checkbox" v-model="requested_by" value="Workforce" />Workforce
-            <input type="checkbox" v-model="requested_by" value="Training" />Training
-            <input type="checkbox" v-model="requested_by" value="Client" />Client
-            <input type="checkbox" v-model="requested_by" value="Operation" />Operation
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Workforce"
+            />Workforce
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Training"
+            />Training
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Client"
+            />Client
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Operation"
+            />Operation
 
-            <label class="block py-6" v-if="requested_by.includes('Talent Acquisition')"
+            <label
+              class="block py-6"
+              v-if="requested_by.includes('Talent Acquisition')"
               >Talent Acquisition
               <input
                 type="text"
@@ -314,8 +340,12 @@
         </div>
         <div class="flex justify-between">
           <router-link to="/capfile">
-          <button class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600">
-            <i class="fa fa-chevron-circle-left "></i> Back</button></router-link>
+            <button
+              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-chevron-circle-left"></i> Back
+            </button></router-link
+          >
         </div>
       </div>
     </form>
@@ -461,7 +491,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites3")
+        .get("http://127.0.0.1:8000/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -473,7 +503,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs3")
+        .get("http://127.0.0.1:8000/api/programs3")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -485,7 +515,7 @@ export default {
     async getDateRange() {
       console.log(this.agreed_start_date);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -507,7 +537,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -536,7 +566,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -578,7 +608,8 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/pushedback/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/pushedback/" +
+            this.$route.params.id,
           formData
         )
         .then((response) => {

@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker Reports Month
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-2 overflow-x-auto">
     <table class="w-full border-collapse">
       <thead>
@@ -30,32 +30,56 @@
       </thead>
       <tbody v-for="(mps1, index) in mps" :key="index">
         <template v-for="(mps2, index2) in mps1" :key="index2">
-        <tr class="border-black border-2" v-for="(mps3, index3) in mps2" :key="index3">
-          <td class="py-2 px-4 border text-left truncate">
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.month }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-           {{ mps3.site_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">
-            {{ mps3.program_name }}
-          </td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total_target }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.internal }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.external }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.total }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_1 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_2 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_3 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_4 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.day_5 }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.classes }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.filled }}</td>
-          <td class="py-2 px-4 border text-left truncate">{{ mps3.open }}</td>
-        </tr>
-
+          <tr
+            class="border-black border-2"
+            v-for="(mps3, index3) in mps2"
+            :key="index3"
+          >
+            <td class="py-2 px-4 border text-left truncate"></td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.month }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.site_name }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.program_name }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.total_target }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.internal }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.external }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.total }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.day_1 }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.day_2 }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.day_3 }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.day_4 }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.day_5 }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.classes }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">
+              {{ mps3.filled }}
+            </td>
+            <td class="py-2 px-4 border text-left truncate">{{ mps3.open }}</td>
+          </tr>
         </template>
       </tbody>
     </table>
@@ -67,7 +91,7 @@ export default {
   data() {
     return {
       mps: [],
-      grand_totals:[],
+      grand_totals: [],
       class_staffing: [],
       classesall: [],
       programs: [],
@@ -96,7 +120,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/mpssite", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpssite", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -113,7 +137,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -139,7 +163,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesstaffing2",
+          "http://127.0.0.1:8000/api/classesstaffing2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -157,7 +181,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -181,7 +205,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -208,7 +232,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

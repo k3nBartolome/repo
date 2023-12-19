@@ -10,8 +10,8 @@
           ADD Supply
         </button>
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
@@ -43,178 +43,205 @@
             </svg>
           </button>
           <div class="modal-scrollable-content">
-          <form
-            @submit.prevent="addItems"
-            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
-          >
-            <div class="col-span-1">
-              <label class="block">
-                Site
-                <select
-                  v-model="sites_selected"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+            <form
+              @submit.prevent="addItems"
+              class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+            >
+              <div class="col-span-1">
+                <label class="block">
+                  Site
+                  <select
+                    v-model="sites_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="site in sites"
+                      :key="site.id"
+                      :value="site.id"
+                    >
+                      {{ site.name }}
+                    </option>
+                  </select>
+                  <p
+                    v-if="errors.sites_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.sites_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Item Name
+                  <input
+                    type="text"
+                    v-model="item_name"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.item_name" class="mt-1 text-xs text-red-500">
+                    {{ errors.item_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Quantity
+                  <input
+                    type="number"
+                    v-model="quantity"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.quantity" class="mt-1 text-xs text-red-500">
+                    {{ errors.quantity }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Price
+                  <input
+                    type="text"
+                    v-model="cost"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.cost" class="mt-1 text-xs text-red-500">
+                    {{ errors.cost }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Total Price
+                  <input
+                    type="text"
+                    readonly
+                    v-model="total_cost"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Budget Code
+                  <input
+                    type="text"
+                    v-model="budget_code"
+                    @input="validateBudgetCode"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p
+                    v-if="errors.budget_code"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.budget_code }}
+                  </p>
+                  <p
+                    v-else-if="budgetCodeValid"
+                    class="mt-1 text-xs text-green-500"
+                  >
+                    Budget Code is valid.
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block mb-2"> Category </label>
+                <div class="flex items-center">
+                  <div
+                    class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                  >
+                    <input
+                      class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                      type="radio"
+                      v-model="category"
+                      value="Normal"
+                    />
+                    <label
+                      class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                      >Normal Item</label
+                    >
+                  </div>
+                  <div
+                    class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                  >
+                    <input
+                      class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                      type="radio"
+                      v-model="category"
+                      value="Premium"
+                    />
+                    <label
+                      class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                      >Premium Item</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-1">
+                <label class="block mb-2"> Type </label>
+                <div class="flex items-center">
+                  <div
+                    class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                  >
+                    <input
+                      class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                      type="radio"
+                      v-model="type"
+                      value="Non-Food"
+                    />
+                    <label
+                      class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                      >Non-Food</label
+                    >
+                  </div>
+                  <div
+                    class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
+                  >
+                    <input
+                      class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                      type="radio"
+                      v-model="type"
+                      value="Food"
+                    />
+                    <label
+                      class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
+                      >Food</label
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="col-span-1" v-if="type === 'Food'">
+                <label class="block">
+                  Expiration Date
+                  <input
+                    type="date"
+                    v-model="date_expiry"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                </label>
+              </div>
+              <div class="flex justify-between mt-4">
+                <button
+                  @click="showModal = false"
+                  type="button"
+                  class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
                 >
-                  <option disabled value="" selected>Please select one</option>
-                  <option v-for="site in sites" :key="site.id" :value="site.id">
-                    {{ site.name }}
-                  </option>
-                </select>
-                <p v-if="errors.sites_selected" class="mt-1 text-xs text-red-500">
-                  {{ errors.sites_selected }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Item Name
-                <input
-                  type="text"
-                  v-model="item_name"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.item_name" class="mt-1 text-xs text-red-500">
-                  {{ errors.item_name }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Quantity
-                <input
-                  type="number"
-                  v-model="quantity"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.quantity" class="mt-1 text-xs text-red-500">
-                  {{ errors.quantity }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Price
-                <input
-                  type="text"
-                  v-model="cost"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.cost" class="mt-1 text-xs text-red-500">
-                  {{ errors.cost }}
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Total Price
-                <input
-                  type="text"
-                  readonly
-                  v-model="total_cost"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block">
-                Budget Code
-                <input
-                  type="text"
-                  v-model="budget_code"
-                  @input="validateBudgetCode"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-                <p v-if="errors.budget_code" class="mt-1 text-xs text-red-500">
-                  {{ errors.budget_code }}
-                </p>
-                <p v-else-if="budgetCodeValid" class="mt-1 text-xs text-green-500">
-                  Budget Code is valid.
-                </p>
-              </label>
-            </div>
-            <div class="col-span-1">
-              <label class="block mb-2"> Category </label>
-              <div class="flex items-center">
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Normal"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                    >Normal Item</label
-                  >
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="category"
-                    value="Premium"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                    >Premium Item</label
-                  >
-                </div>
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                  Submit
+                </button>
               </div>
-            </div>
-            <div class="col-span-1">
-              <label class="block mb-2"> Type </label>
-              <div class="flex items-center">
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Non-Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                    >Non-Food</label
-                  >
-                </div>
-                <div class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]">
-                  <input
-                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                    type="radio"
-                    v-model="type"
-                    value="Food"
-                  />
-                  <label class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
-                    >Food</label
-                  >
-                </div>
-              </div>
-            </div>
-            <div class="col-span-1" v-if="type === 'Food'">
-              <label class="block">
-                Expiration Date
-                <input
-                  type="date"
-                  v-model="date_expiry"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
-              </label>
-            </div>
-            <div class="flex justify-between mt-4">
-              <button
-                @click="showModal = false"
-                type="button"
-                class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-              >
-                Submit
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
   <div class="py-0">
     <div class="pl-8 pr-8">
@@ -306,10 +333,10 @@ export default {
         { data: "category", title: "Category" },
         { data: "date_expiry", title: "Expiration Date" },
         {
-    data: "date_added",
-    title: "Added Date",
-    render: (data) => data ? data.slice(0, -3) : "",
-  },
+          data: "date_added",
+          title: "Added Date",
+          render: (data) => (data ? data.slice(0, -3) : ""),
+        },
         { data: "created_by.name", title: "Added By" },
       ],
     };
@@ -363,11 +390,14 @@ export default {
     async getItems() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/itemsboth3", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/itemsboth3",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.items = response.data.items;
@@ -382,7 +412,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -413,17 +443,17 @@ export default {
         this.errors.cost = "Price is required.";
       }
       if (!this.budget_code) {
-    this.errors.budget_code = "Budget Code is required.";
-  } else {
-    console.log("Validating budget code:", this.budget_code);
-    const budgetCodeRegex = /^REC[a-zA-Z0-9]{3}[0-9]{6}$/;
-    if (!budgetCodeRegex.test(this.budget_code)) {
-      this.errors.budget_code =
-        "Budget Code must start with 'REC', followed by 3 alphanumeric characters, and ending with 6 digits.";
-    } else {
-      console.log("Budget code is valid:", this.budget_code);
-    }
-  }
+        this.errors.budget_code = "Budget Code is required.";
+      } else {
+        console.log("Validating budget code:", this.budget_code);
+        const budgetCodeRegex = /^REC[a-zA-Z0-9]{3}[0-9]{6}$/;
+        if (!budgetCodeRegex.test(this.budget_code)) {
+          this.errors.budget_code =
+            "Budget Code must start with 'REC', followed by 3 alphanumeric characters, and ending with 6 digits.";
+        } else {
+          console.log("Budget code is valid:", this.budget_code);
+        }
+      }
 
       if (Object.keys(this.errors).length > 0) {
         console.log("Form has errors");
@@ -444,7 +474,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items", formData, {
+        .post("http://127.0.0.1:8000/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

@@ -4,13 +4,15 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Staffing Tracker
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-2 bg-gray-100">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <form class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+      <form
+        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+      >
         <label class="block">
           Country
           <input
@@ -53,7 +55,11 @@
             required
             @change="getPrograms"
           >
-            <option v-for="program in programs" :key="program.id" :value="program.id">
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
               {{ program.name }}
             </option>
           </select>
@@ -176,7 +182,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Day 1
             <input
@@ -248,7 +256,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Show-ups Internal
             <input
@@ -346,7 +356,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             With JO
             <input
@@ -399,7 +411,9 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
-        <div class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5">
+        <div
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        >
           <label class="block">
             Classes
             <input
@@ -565,10 +579,14 @@ export default {
         filtered = filtered.filter((c) => c.site.id === this.sites_selected);
       }
       if (this.programs_selected) {
-        filtered = filtered.filter((c) => c.program.id === this.programs_selected);
+        filtered = filtered.filter(
+          (c) => c.program.id === this.programs_selected
+        );
       }
       if (this.week_selected) {
-        filtered = filtered.filter((c) => c.date_range.id === this.week_selected);
+        filtered = filtered.filter(
+          (c) => c.date_range.id === this.week_selected
+        );
       }
       return filtered;
     },
@@ -641,7 +659,9 @@ export default {
         parseInt(this.pending_pre_emps) || 0,
       ];
 
-      return pipeline.reduce((total, pipeline) => total + pipeline, 0).toFixed();
+      return pipeline
+        .reduce((total, pipeline) => total + pipeline, 0)
+        .toFixed();
     },
     capstart_computed() {
       const show_ups_total = this.show_ups_total;
@@ -706,7 +726,10 @@ export default {
       const internals_hires = this.internals_hires;
       const with_jo = this.with_jo;
 
-      const minValue = Math.min(total_target, show_ups_total + internals_hires + with_jo);
+      const minValue = Math.min(
+        total_target,
+        show_ups_total + internals_hires + with_jo
+      );
       const result = total_target - minValue;
       return result;
     },
@@ -715,7 +738,8 @@ export default {
       const pipeline_total = this.pipeline_total;
       const total_target = this.total_target;
 
-      const result = pipeline_total > total_target ? total_target : pipeline_total;
+      const result =
+        pipeline_total > total_target ? total_target : pipeline_total;
 
       return result || 0;
     },
@@ -825,7 +849,8 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "http://10.109.2.112:8081/api/classes/" + this.$route.query.class_selected
+            "http://127.0.0.1:8000/api/classes/" +
+              this.$route.query.class_selected
           );
           const classObj = response.data.class;
           console.log(classObj);
@@ -852,7 +877,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("http://10.109.2.112:8081/api/classesall")
+        .get("http://127.0.0.1:8000/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -863,7 +888,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("http://10.109.2.112:8081/api/sites")
+        .get("http://127.0.0.1:8000/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -878,7 +903,9 @@ export default {
       }
 
       await axios
-        .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+        .get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`
+        )
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -889,7 +916,7 @@ export default {
     },
     async getDateRange() {
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -934,7 +961,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+        .post("http://127.0.0.1:8000/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -979,7 +1006,7 @@ export default {
   },
   async getSites() {
     await axios
-      .get("http://10.109.2.112:8081/api/sites")
+      .get("http://127.0.0.1:8000/api/sites")
       .then((response) => {
         this.sites = response.data.data;
         console.log(response.data.data);
@@ -994,7 +1021,7 @@ export default {
     }
 
     await axios
-      .get(`http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`)
+      .get(`http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`)
       .then((response) => {
         this.programs = response.data.data;
         console.log(response.data.data);
@@ -1006,7 +1033,7 @@ export default {
 
   async getDateRange() {
     await axios
-      .get("http://10.109.2.112:8081/api/daterange")
+      .get("http://127.0.0.1:8000/api/daterange")
       .then((response) => {
         this.daterange = response.data.data;
         console.log(response.data.data);
@@ -1051,7 +1078,7 @@ export default {
       created_by: this.$store.state.user_id,
     };
     axios
-      .post("http://10.109.2.112:8081/api/classesstaffing", formData)
+      .post("http://127.0.0.1:8000/api/classesstaffing", formData)
       .then((response) => {
         console.log(response.data);
         this.day_1 = "";

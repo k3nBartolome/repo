@@ -1,11 +1,9 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Perx
-      </h2>
-        </div>
-      </header>
+      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">Perx</h2>
+    </div>
+  </header>
   <div class="py-4">
     <div class="px-8">
       <div class="overflow-x-auto">
@@ -70,24 +68,23 @@ export default {
       perx: [],
       columns: [
         { data: "DateOfApplication", title: "Date of Application" },
-            { data: "LastName", title: "Lastname" },
-            { data: "FirstName", title: "Firstname" },
-            { data: "MiddleName", title: "MiddleName" },
-            { data: "MobileNo", title: "Mobile#" },
-            { data: "Site", title: "SITE" },
-            { data: "GenSource", title: "Gen Source" },
-            { data: "SpecSource", title: "Spec Source" },
-            { data: "Step", title: "Step" },
-            { data: "AppStep", title: "App Step" },
-            { data: "PERX_HRID", title: "PERX HRID" },
-            { data: "PERX_NAME", title: "PERX NAME" },
-            { data: "OSS_HRID", title: "OSS HRID" },
-            { data: "OSS_FNAME", title: "OSS FNAME" },
-            { data: "OSS_LNAME", title: "OSS LNAME" },
-            { data: "OSS_LOB", title: "OSS LOB" },
-            { data: "OSS_SITE", title: "OSS SITE" },
-],
-
+        { data: "LastName", title: "Lastname" },
+        { data: "FirstName", title: "Firstname" },
+        { data: "MiddleName", title: "MiddleName" },
+        { data: "MobileNo", title: "Mobile#" },
+        { data: "Site", title: "SITE" },
+        { data: "GenSource", title: "Gen Source" },
+        { data: "SpecSource", title: "Spec Source" },
+        { data: "Step", title: "Step" },
+        { data: "AppStep", title: "App Step" },
+        { data: "PERX_HRID", title: "PERX HRID" },
+        { data: "PERX_NAME", title: "PERX NAME" },
+        { data: "OSS_HRID", title: "OSS HRID" },
+        { data: "OSS_FNAME", title: "OSS FNAME" },
+        { data: "OSS_LNAME", title: "OSS LNAME" },
+        { data: "OSS_LOB", title: "OSS LOB" },
+        { data: "OSS_SITE", title: "OSS SITE" },
+      ],
     };
   },
   mounted() {
@@ -97,7 +94,7 @@ export default {
   methods: {
     async getPerx() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes")
+        .get("http://127.0.0.1:8000/api/classes")
         .then((response) => {
           this.perx = response.data.perx;
           console.log(response.data.perx);
@@ -106,7 +103,6 @@ export default {
           console.log(error);
         });
     },
-
   },
 };
 </script>

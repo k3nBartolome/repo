@@ -10,8 +10,8 @@
           ADD Request
         </button>
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
@@ -58,7 +58,10 @@
                     {{ site.name }}
                   </option>
                 </select>
-                <p v-if="errors.sites_selected" class="text-red-500 text-xs mt-1">
+                <p
+                  v-if="errors.sites_selected"
+                  class="text-red-500 text-xs mt-1"
+                >
                   {{ errors.sites_selected }}
                 </p>
               </label>
@@ -84,12 +87,12 @@
                 <div
                   class="mb-[0.125rem] mr-4 inline-block min-h-[1.5rem] pl-[1.5rem]"
                 >
-                <input
-                class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
-                type="radio"
-                v-model="category"
-                value="Premium"
-              />
+                  <input
+                    class="relative float-left -ml-[1.5rem] mr-1 mt-0.5 h-5 w-5 appearance-none rounded-full border-2 border-solid border-neutral-300"
+                    type="radio"
+                    v-model="category"
+                    value="Premium"
+                  />
                   <label
                     class="mt-px inline-block pl-[0.15rem] hover:cursor-pointer"
                     >Premium Item</label
@@ -114,7 +117,10 @@
                     {{ item.item_name }}
                   </option>
                 </select>
-                <p v-if="errors.items_selected" class="text-red-500 text-xs mt-1">
+                <p
+                  v-if="errors.items_selected"
+                  class="text-red-500 text-xs mt-1"
+                >
                   {{ errors.items_selected }}
                 </p>
               </label>
@@ -148,7 +154,10 @@
                   v-model="quantity_approved"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.quantity_approved" class="text-red-500 text-xs mt-1">
+                <p
+                  v-if="errors.quantity_approved"
+                  class="text-red-500 text-xs mt-1"
+                >
                   {{ errors.quantity_approved }}
                 </p>
               </label>
@@ -317,7 +326,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/itemseparate?category=${this.category}`,
+          `http://127.0.0.1:8000/api/itemseparate?category=${this.category}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -340,7 +349,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventory",
+          "http://127.0.0.1:8000/api/inventory",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -361,7 +370,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -386,10 +395,11 @@ export default {
         this.errors.items_selected = "Item Name is required.";
       }
       if (!this.quantity_approved) {
-      this.errors.quantity_approved = "Quantity Request is required.";
-    } else if (parseInt(this.quantity_approved) > parseInt(this.quantity)) {
-      this.errors.quantity_approved = "Quantity Request cannot exceed available quantity.";
-    }
+        this.errors.quantity_approved = "Quantity Request is required.";
+      } else if (parseInt(this.quantity_approved) > parseInt(this.quantity)) {
+        this.errors.quantity_approved =
+          "Quantity Request cannot exceed available quantity.";
+      }
       if (Object.keys(this.errors).length > 0) {
         return;
       }
@@ -401,7 +411,7 @@ export default {
         requested_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/inventory", formData, {
+        .post("http://127.0.0.1:8000/api/inventory", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -415,8 +425,8 @@ export default {
           this.getInventory();
           this.showModal = false;
           this.$router.push("/site_request_manager/request", () => {
-          location.reload();
-        });
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);

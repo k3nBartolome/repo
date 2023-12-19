@@ -5,11 +5,11 @@
         <div class="w-full px-1 py-3 sm:w-1/4 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-green-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-
               <div class="flex-1 text-left">
                 <h5 class="text-white">No. of Released</h5>
                 <h3 class="text-3xl text-white">
-                  {{ filteredTotalReleased }}<span class="text-green-400"></span>
+                  {{ filteredTotalReleased
+                  }}<span class="text-green-400"></span>
                 </h3>
               </div>
             </div>
@@ -18,7 +18,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-blue-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-
               <div class="flex-1 text-left">
                 <h5 class="text-white">Released Quantity</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalQuantity }}</h3>
@@ -29,7 +28,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/4 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-orange-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-
               <div class="flex-1 text-left">
                 <h5 class="text-white">Premium</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalPremium }}</h3>
@@ -40,7 +38,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-purple-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-
               <div class="flex-1 text-left">
                 <h5 class="text-white">Normal</h5>
                 <h3 class="text-3xl text-white">{{ filteredTotalNormal }}</h3>
@@ -52,7 +49,6 @@
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-red-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
-
               <div class="flex-1 text-left">
                 <h5 class="text-white">Partial</h5>
                 <h3 class="text-3xl text-white">
@@ -62,7 +58,7 @@
             </div>
           </div>
         </div>
- <!--
+        <!--
         <div class="w-full px-1 py-3 sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/7">
           <div class="p-2 bg-yellow-600 border rounded shadow card-stats">
             <div class="flex flex-row items-center">
@@ -222,7 +218,7 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
-   filteredItems() {
+    filteredItems() {
       let filteredData = [...this.award];
 
       if (this.sites_selected) {
@@ -269,7 +265,6 @@ export default {
           item.items.category,
           item.items.type,
           item.released_by ? item.released_by.name : "N/A",
-
         ]),
       ];
 
@@ -296,7 +291,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -315,29 +310,26 @@ export default {
     async getAward() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/awarded/both", {
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/awarded/both",
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-          if (response.status === 200) {
+        if (response.status === 200) {
           this.award = response.data.awarded;
 
-
           this.total = this.award.length;
-
-
 
           const filteredData = this.filteredItems;
           this.filteredTotalReleased = filteredData.length;
 
           this.filteredTotalQuantity = filteredData.reduce((sum, item) => {
-
-        return sum + item.awarded_quantity;
-
-        }, 0);
-        this.filteredTotalNormal = filteredData.reduce((sum, item) => {
+            return sum + item.awarded_quantity;
+          }, 0);
+          this.filteredTotalNormal = filteredData.reduce((sum, item) => {
             if (item.items.category === "Normal") {
               return sum + item.awarded_quantity;
             }
@@ -349,8 +341,7 @@ export default {
             }
             return sum;
           }, 0);
-
-        }  else {
+        } else {
           console.log("Error fetching awarded");
         }
       } catch (error) {

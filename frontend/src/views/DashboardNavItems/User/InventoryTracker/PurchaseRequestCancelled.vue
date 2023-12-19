@@ -127,16 +127,16 @@ export default {
       deniedRequestId: null,
       columns: [
         { data: "id", title: "ID" },
-            { data: "site.name", title: "Site" },
-            { data: "item_name", title: "Item" },
-            { data: "quantity", title: "Quantity" },
-            { data: "estimated_cost", title: "Estimated Cost Per Item" },
-            { data: "total_estimated_cost", title: "Total Estimated Cost" },
-            { data: "requested_by.name", title: "Requested By" },
+        { data: "site.name", title: "Site" },
+        { data: "item_name", title: "Item" },
+        { data: "quantity", title: "Quantity" },
+        { data: "estimated_cost", title: "Estimated Cost Per Item" },
+        { data: "total_estimated_cost", title: "Total Estimated Cost" },
+        { data: "requested_by.name", title: "Requested By" },
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -162,11 +162,14 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/purchase2", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/purchase2",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.purchase = response.data.purchase;

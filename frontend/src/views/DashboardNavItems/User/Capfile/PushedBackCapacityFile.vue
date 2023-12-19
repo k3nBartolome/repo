@@ -1,14 +1,14 @@
 <template>
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
-      <h2 class="text-xl font-bold text-center">
-        PUSHBACK CLASS
-      </h2>
-        </div>
-      </header>
+      <h2 class="text-xl font-bold text-center">PUSHBACK CLASS</h2>
+    </div>
+  </header>
   <div class="px-12 py-8">
     <form @submit.prevent="pushClass">
-      <div class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2">
+      <div
+        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
+      >
         <div class="py-8 font-bold">
           <label class="block">
             Targets
@@ -64,7 +64,11 @@
               @change="getPrograms"
             >
               <option disabled value="" selected>Please select one</option>
-              <option v-for="program in programs" :key="program.id" :value="program.id">
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
                 {{ program.name }}
               </option>
             </select>
@@ -220,9 +224,13 @@
             />
           </label>
 
-          <label class="block">Approved by
-            <select required v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100">
+          <label class="block"
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
               <option value="VP-Training">VP-Training</option>
@@ -244,12 +252,30 @@
               v-model="requested_by"
               value="Talent Acquisition"
             />Talent Acquisition
-            <input type="checkbox" v-model="requested_by" value="Workforce" />Workforce
-            <input type="checkbox" v-model="requested_by" value="Training" />Training
-            <input type="checkbox" v-model="requested_by" value="Client" />Client
-            <input type="checkbox" v-model="requested_by" value="Operation" />Operation
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Workforce"
+            />Workforce
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Training"
+            />Training
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Client"
+            />Client
+            <input
+              type="checkbox"
+              v-model="requested_by"
+              value="Operation"
+            />Operation
 
-            <label class="block py-6" v-if="requested_by.includes('Talent Acquisition')"
+            <label
+              class="block py-6"
+              v-if="requested_by.includes('Talent Acquisition')"
               >Talent Acquisition
               <input
                 type="text"
@@ -314,8 +340,12 @@
         </div>
         <div class="flex justify-between">
           <router-link to="/capfile">
-          <button class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600">
-            <i class="fa fa-chevron-circle-left "></i> Back</button></router-link>
+            <button
+              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-chevron-circle-left"></i> Back
+            </button></router-link
+          >
         </div>
       </div>
     </form>
@@ -458,10 +488,10 @@ export default {
     syncNoticeWeeks: function () {
       this.notice_weeks = this.notice_weeks_computed;
     },
-     async getSites() {
+    async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -478,190 +508,200 @@ export default {
       }
     },
     async getPrograms() {
-  console.log(this.programs_selected);
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
-    const response = await axios.get("http://10.109.2.112:8081/api/programs", { headers });
-
-    if (response.status === 200) {
-      this.programs = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
-async getDateRange() {
-  console.log(this.agreed_start_date);
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
-
-    const response = await axios.get("http://10.109.2.112:8081/api/daterange", { headers });
-
-    if (response.status === 200) {
-      this.daterange = response.data.data;
-      console.log(response.data.data);
-
-      for (let i = 0; i < this.daterange.length; i++) {
-        const range = this.daterange[i];
-        if (
-          this.agreed_start_date >= range.week_start &&
-          this.agreed_start_date <= range.week_end
-        ) {
-          this.date_selected = range.id;
-          break;
-        }
-      }
-    } else {
-      console.log("Error fetching date range");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-}
-,
-async getClasses() {
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = response.data;
-    const classObj = data.class;
-    this.sites_selected = classObj.site.id;
-    this.programs_selected = classObj.program.id;
-    this.type_of_hiring = classObj.type_of_hiring;
-    this.external_target = classObj.external_target;
-    this.internal_target = classObj.internal_target;
-    this.total_target = classObj.total_target;
-    this.original_start_date = classObj.original_start_date;
-    this.notice_days = classObj.notice_days;
-    this.notice_weeks = classObj.notice_weeks;
-    this.date_selected = classObj.date_range.id;
-    this.with_erf = classObj.with_erf;
-    this.category = classObj.category;
-    this.within_sla = classObj.within_sla;
-    this.agreed_start_date = classObj.agreed_start_date;
-    this.erf_number = classObj.erf_number;
-    this.approved_by = classObj.approved_by;
-
-    console.log(classObj);
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-async getTransaction() {
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    this.classes = response.data.classes;
-    console.log(response.data.classes);
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-pushClass() {
-  const formData = {
-    site_id: this.sites_selected,
-    program_id: this.programs_selected,
-    type_of_hiring: this.type_of_hiring,
-    external_target: this.external_target,
-    internal_target: this.internal_target,
-    total_target: this.total_target,
-    notice_days: this.notice_days,
-    notice_weeks: this.notice_weeks,
-    with_erf: this.with_erf,
-    category: this.category,
-    original_start_date: this.original_start_date,
-    wfm_date_requested: this.wfm_date_requested,
-    within_sla: this.within_sla,
-    remarks: this.remarks,
-    requested_by: this.requested_by,
-    erf_number: this.erf_number,
-    date_range_id: this.date_selected,
-    approved_status: "pending",
-    status: "Active",
-    updated_by: this.$store.state.user_id,
-    agreed_start_date: this.agreed_start_date,
-    changes: this.changes,
-    approved_by: this.approved_by,
-    ta: this.ta,
-    wf: this.wf,
-    tr: this.tr,
-    cl: this.cl,
-    op: this.op,
-  };
-
-  const token = this.$store.state.token;
-
-  axios
-    .put(
-      "http://10.109.2.112:8081/api/classes/pushedback/" + this.$route.params.id,
-      formData,
-      {
-        headers: {
+      console.log(this.programs_selected);
+      try {
+        const token = this.$store.state.token;
+        const headers = {
           Authorization: `Bearer ${token}`,
-        },
+        };
+
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers,
+        });
+
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
       }
-    )
-    .then((response) => {
-      console.log(response.data);
-      this.site_id = "";
-      this.program_id = "";
-      this.type_of_hiring = "";
-      this.external_target = "";
-      this.internal_target = "";
-      this.total_target = "";
-      this.notice_days = "";
-      this.notice_weeks = "";
-      this.with_erf = "";
-      this.erf_number = "";
-      this.category = "";
-      this.original_start_date = "";
-      this.wfm_date_requested = "";
-      this.within_sla = "";
-      this.remarks = "";
-      this.requested_by = "";
-      this.date_range_id = "";
-      this.approved_status = "";
-      this.updated_by = "";
-      this.agreed_start_date = "";
-      this.approved_by = "";
-      this.changes = "";
-      this.ta = "";
-      this.wf = "";
-      this.tr = "";
-      this.cl = "";
-      this.op = "";
+    },
+    async getDateRange() {
+      console.log(this.agreed_start_date);
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-      this.$router.push("/capfile", () => {
-        location.reload();
-      });
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-    });
-},
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/daterange",
+          { headers }
+        );
 
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+
+          for (let i = 0; i < this.daterange.length; i++) {
+            const range = this.daterange[i];
+            if (
+              this.agreed_start_date >= range.week_start &&
+              this.agreed_start_date <= range.week_end
+            ) {
+              this.date_selected = range.id;
+              break;
+            }
+          }
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getClasses() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/classes/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        const data = response.data;
+        const classObj = data.class;
+        this.sites_selected = classObj.site.id;
+        this.programs_selected = classObj.program.id;
+        this.type_of_hiring = classObj.type_of_hiring;
+        this.external_target = classObj.external_target;
+        this.internal_target = classObj.internal_target;
+        this.total_target = classObj.total_target;
+        this.original_start_date = classObj.original_start_date;
+        this.notice_days = classObj.notice_days;
+        this.notice_weeks = classObj.notice_weeks;
+        this.date_selected = classObj.date_range.id;
+        this.with_erf = classObj.with_erf;
+        this.category = classObj.category;
+        this.within_sla = classObj.within_sla;
+        this.agreed_start_date = classObj.agreed_start_date;
+        this.erf_number = classObj.erf_number;
+        this.approved_by = classObj.approved_by;
+
+        console.log(classObj);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    async getTransaction() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.classes = response.data.classes;
+        console.log(response.data.classes);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    pushClass() {
+      const formData = {
+        site_id: this.sites_selected,
+        program_id: this.programs_selected,
+        type_of_hiring: this.type_of_hiring,
+        external_target: this.external_target,
+        internal_target: this.internal_target,
+        total_target: this.total_target,
+        notice_days: this.notice_days,
+        notice_weeks: this.notice_weeks,
+        with_erf: this.with_erf,
+        category: this.category,
+        original_start_date: this.original_start_date,
+        wfm_date_requested: this.wfm_date_requested,
+        within_sla: this.within_sla,
+        remarks: this.remarks,
+        requested_by: this.requested_by,
+        erf_number: this.erf_number,
+        date_range_id: this.date_selected,
+        approved_status: "pending",
+        status: "Active",
+        updated_by: this.$store.state.user_id,
+        agreed_start_date: this.agreed_start_date,
+        changes: this.changes,
+        approved_by: this.approved_by,
+        ta: this.ta,
+        wf: this.wf,
+        tr: this.tr,
+        cl: this.cl,
+        op: this.op,
+      };
+
+      const token = this.$store.state.token;
+
+      axios
+        .put(
+          "http://127.0.0.1:8000/api/classes/pushedback/" +
+            this.$route.params.id,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.site_id = "";
+          this.program_id = "";
+          this.type_of_hiring = "";
+          this.external_target = "";
+          this.internal_target = "";
+          this.total_target = "";
+          this.notice_days = "";
+          this.notice_weeks = "";
+          this.with_erf = "";
+          this.erf_number = "";
+          this.category = "";
+          this.original_start_date = "";
+          this.wfm_date_requested = "";
+          this.within_sla = "";
+          this.remarks = "";
+          this.requested_by = "";
+          this.date_range_id = "";
+          this.approved_status = "";
+          this.updated_by = "";
+          this.agreed_start_date = "";
+          this.approved_by = "";
+          this.changes = "";
+          this.ta = "";
+          this.wf = "";
+          this.tr = "";
+          this.cl = "";
+          this.op = "";
+
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        });
+    },
   },
 };
 </script>

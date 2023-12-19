@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Program Manager
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -166,7 +166,7 @@ export default {
     this.getSites();
     window.vm = this;
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -243,7 +243,7 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -262,11 +262,14 @@ export default {
 
     async getPrograms2() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs2", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/programs2",
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.programs2 = response.data.data;
@@ -282,7 +285,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -308,7 +311,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData, {
+        .post("http://127.0.0.1:8000/api/programs", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

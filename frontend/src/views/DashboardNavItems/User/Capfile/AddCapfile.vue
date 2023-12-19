@@ -3,8 +3,8 @@
   <header class="w-full bg-white shadow">
     <div class="items-center w-full py-2">
       <h2 class="text-xl font-bold text-center">ADD CLASS</h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
       <div
@@ -327,7 +327,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -344,46 +344,51 @@ export default {
       }
     },
     async getPrograms() {
-  console.log(this.programs_selected);
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+      console.log(this.programs_selected);
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/programs", { headers });
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers,
+        });
 
-    if (response.status === 200) {
-      this.programs = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching programs");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
-async getDateRange() {
-  console.log(this.date_selected);
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+    async getDateRange() {
+      console.log(this.date_selected);
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-    const response = await axios.get("http://10.109.2.112:8081/api/daterange", { headers });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/daterange",
+          { headers }
+        );
 
-    if (response.status === 200) {
-      this.daterange = response.data.data;
-      console.log(response.data.data);
-    } else {
-      console.log("Error fetching date range");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
 
     addClass() {
       const formData = {
@@ -413,7 +418,7 @@ async getDateRange() {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

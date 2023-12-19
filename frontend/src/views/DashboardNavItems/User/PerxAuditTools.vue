@@ -250,7 +250,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://127.0.0.1:8000/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -278,22 +278,19 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/export",
-          {
-            params: {
-              filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
-              filter_site: this.filterSite,
-              filter_date: this.filterDate,
-              filter_contact: this.filterContact,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob",
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/export", {
+          params: {
+            filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_site: this.filterSite,
+            filter_date: this.filterDate,
+            filter_contact: this.filterContact,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        });
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

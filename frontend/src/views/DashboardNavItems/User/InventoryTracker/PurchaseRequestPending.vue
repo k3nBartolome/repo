@@ -128,38 +128,45 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-        data: "id",
-        title: "Actions",
-        orderable: false,
-        searchable: false,
-        render: function (data) {
-          const isUser = this.isUser;
-          const isRemx = this.isRemx;
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const isUser = this.isUser;
+            const isRemx = this.isRemx;
 
-          return `
-            ${isUser || isRemx ? `
+            return `
+            ${
+              isUser || isRemx
+                ? `
               <button class="w-20 text-xs btn btn-primary" data-id="${data}" @click="approvedPurchase(${data})">Approve</button>
               <button
                 class="w-20 text-xs btn btn-danger"
                 data-id="${data}"
-                ${!window.vm.showModal ? `@click="openModalForDenial(${data})"` : ''}
+                ${
+                  !window.vm.showModal
+                    ? `@click="openModalForDenial(${data})"`
+                    : ""
+                }
               >
                 Deny
-              </button>` : ''}
+              </button>`
+                : ""
+            }
           `;
-        }.bind(this), // Bind the render function to the component's context
-      },
+          }.bind(this), // Bind the render function to the component's context
+        },
         { data: "site.name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "estimated_cost", title: "Estimated Cost Per Item" },
         { data: "total_estimated_cost", title: "Total Estimated Cost" },
         { data: "requested_by.name", title: "Requested By" },
-
       ],
     };
   },
-   computed: {
+  computed: {
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -199,7 +206,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/purchase/approved/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/purchase/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -221,7 +228,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/purchase/denied/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/purchase/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -234,7 +241,7 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/purchase", {
+        const response = await axios.get("http://127.0.0.1:8000/api/purchase", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -253,7 +260,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -53,7 +53,10 @@
                   v-model="received_quantity"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
-                <p v-if="errors.received_quantity" class="text-red-500 text-xs mt-1">
+                <p
+                  v-if="errors.received_quantity"
+                  class="text-red-500 text-xs mt-1"
+                >
                   {{ errors.received_quantity }}
                 </p>
               </label>
@@ -101,11 +104,11 @@
                 },
               },
               columnDefs: [
-      {
-        targets: [8], // Index of the column to hide (zero-based index)
-        visible: false, // Set to true to show, false to hide
-      },
-    ],
+                {
+                  targets: [8], // Index of the column to hide (zero-based index)
+                  visible: false, // Set to true to show, false to hide
+                },
+              ],
             }"
           >
             <thead class="truncate">
@@ -151,36 +154,35 @@ export default {
       errors: {},
       siteRequestId: null,
       columns: [
-  { data: "id", title: "ID" },
-  {
-    data: null,
-    title: "Actions",
-    orderable: false,
-    searchable: false,
-    render: function (data) {
-      const requestedById = data.requested_by ? data.requested_by.id : null;
+        { data: "id", title: "ID" },
+        {
+          data: null,
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const requestedById = data.requested_by
+              ? data.requested_by.id
+              : null;
 
-
-
-      return `
+            return `
         ${
-          requestedById ===  this.$store.state.user_id
+          requestedById === this.$store.state.user_id
             ? `<button class="w-20 text-xs btn btn-primary" data-id="${data.id}" onclick="window.vm.openModalForReceived(${data.id})">Received</button>`
             : ""
         }
       `;
-    }.bind(this),
-  },
-  { data: "site.name", title: "Site" },
-  { data: "item.item_name", title: "Item Name" },
-  { data: "item.budget_code", title: "Budget Code" },
-  { data: "quantity_approved", title: "Quantity Requested" },
-  { data: "status", title: "Approval Status" },
-  { data: "requested_by.name", title: "Requested By" },
-  { data: "requested_by.id", title: "" },
-  { data: "approved_by.name", title: "Approved By" },
-],
-
+          }.bind(this),
+        },
+        { data: "site.name", title: "Site" },
+        { data: "item.item_name", title: "Item Name" },
+        { data: "item.budget_code", title: "Budget Code" },
+        { data: "quantity_approved", title: "Quantity Requested" },
+        { data: "status", title: "Approval Status" },
+        { data: "requested_by.name", title: "Requested By" },
+        { data: "requested_by.id", title: "" },
+        { data: "approved_by.name", title: "Approved By" },
+      ],
     };
   },
   computed: {
@@ -203,12 +205,14 @@ export default {
   },
   watch: {
     received_quantity(newValue) {
-      const quantityApproved = this.inventory.find(item => item.id === this.receivedId)?.quantity_approved.toString();
+      const quantityApproved = this.inventory
+        .find((item) => item.id === this.receivedId)
+        ?.quantity_approved.toString();
 
       if (newValue === quantityApproved) {
-        this.received_status = 'complete';
-      } else if (this.received_status === 'complete') {
-        this.received_status = '';
+        this.received_status = "complete";
+      } else if (this.received_status === "complete") {
+        this.received_status = "";
       }
     },
   },
@@ -228,7 +232,9 @@ export default {
       } else if (
         this.received_status === "partial" &&
         parseInt(this.received_quantity) >
-          parseInt(this.inventory.find((item) => item.id === id).quantity_approved)
+          parseInt(
+            this.inventory.find((item) => item.id === id).quantity_approved
+          )
       ) {
         this.errors.received_quantity =
           "Quantity Received cannot exceed Quantity Requested.";
@@ -250,14 +256,14 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/inventory/received/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
-         this.showModal= false;
-         this.$router.push("/site_request_manager/received", () => {
-          location.reload();
-        });
+          this.showModal = false;
+          this.$router.push("/site_request_manager/received", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -267,7 +273,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventory/approved/pending",
+          "http://127.0.0.1:8000/api/inventory/approved/pending",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -4,8 +4,8 @@
       <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
         Program Manager
       </h2>
-        </div>
-      </header>
+    </div>
+  </header>
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
@@ -76,14 +76,25 @@
       </div>
       <table class="w-full text-white table-auto">
         <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
+          <tr
+            class="text-left bg-orange-500 border-2 border-orange-600 border-solid"
+          >
             <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Created by
+            </th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Created date
+            </th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Active Status
+            </th>
+            <th
+              class="px-1 py-1 truncate whitespace-no-wrap border"
+              colspan="3"
+            >
               Action
             </th>
           </tr>
@@ -102,16 +113,17 @@
             </td>
             <td class="px-2 py-2">
               <router-link :to="`/program_management/edit/${program3.id}`">
-              <button
-                @click="getPrograms(program3.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Edit
-              </button>
-            </router-link>
+                <button
+                  @click="getPrograms(program3.id)"
+                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                >
+                  Edit
+                </button>
+              </router-link>
             </td>
             <td class="px-2 py-2">
-              <button @click="deactivateProgram(program3.id)"
+              <button
+                @click="deactivateProgram(program3.id)"
                 class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 Deactivate
@@ -134,14 +146,25 @@
       </div>
       <table class="w-full text-white table-auto">
         <thead>
-          <tr class="text-left bg-orange-500 border-2 border-orange-600 border-solid">
+          <tr
+            class="text-left bg-orange-500 border-2 border-orange-600 border-solid"
+          >
             <th class="px-1 py-1 truncate whitespace-no-wrap border">ID</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Name</th>
             <th class="px-1 py-1 truncate whitespace-no-wrap border">Site</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created by</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Created date</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border">Active Status</th>
-            <th class="px-1 py-1 truncate whitespace-no-wrap border" colspan="3">
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Created by
+            </th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Created date
+            </th>
+            <th class="px-1 py-1 truncate whitespace-no-wrap border">
+              Active Status
+            </th>
+            <th
+              class="px-1 py-1 truncate whitespace-no-wrap border"
+              colspan="3"
+            >
               Action
             </th>
           </tr>
@@ -160,16 +183,17 @@
             </td>
             <td class="px-2 py-2">
               <router-link :to="`/program_management/edit/${program4.id}`">
-              <button
-                @click="getPrograms(program4.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
-              >
-                Edit
-              </button>
-            </router-link>
+                <button
+                  @click="getPrograms(program4.id)"
+                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                >
+                  Edit
+                </button>
+              </router-link>
             </td>
             <td class="px-2 py-2">
-              <button @click="activateProgram(program4.id)"
+              <button
+                @click="activateProgram(program4.id)"
                 class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 Activate
@@ -225,43 +249,44 @@ export default {
   methods: {
     activateProgram(id) {
       const form = {
-        is_active:1,
+        is_active: 1,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("http://10.109.2.112:8081/api/programs_activate/"+ id, form)
-        .then(response => {
+      axios
+        .put("http://127.0.0.1:8000/api/programs_activate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getPrograms3();
           this.getPrograms4();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
-      deactivateProgram(id) {
+    deactivateProgram(id) {
       const form = {
-        is_active:0,
+        is_active: 0,
         updated_by: this.$store.state.user_id,
       };
-      axios.put("7.0.0.1:8000/api/programs_deactivate/"+ id, form)
-        .then(response => {
+      axios
+        .put("7.0.0.1:8000/api/programs_deactivate/" + id, form)
+        .then((response) => {
           console.log(response.data);
           this.is_active = "";
           this.getPrograms3();
           this.getPrograms4();
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error.response.data);
         });
     },
     async getPrograms3() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs5")
+        .get("http://127.0.0.1:8000/api/programs5")
         .then((response) => {
           this.programs5 = response.data.data;
           console.log(response.data.data);
-
         })
         .catch((error) => {
           console.log(error);
@@ -269,11 +294,10 @@ export default {
     },
     async getPrograms4() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs6")
+        .get("http://127.0.0.1:8000/api/programs6")
         .then((response) => {
           this.programs6 = response.data.data;
           console.log(response.data.data);
-
         })
         .catch((error) => {
           console.log(error);
@@ -282,7 +306,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites5")
+        .get("http://127.0.0.1:8000/api/sites5")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -301,7 +325,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData)
+        .post("http://127.0.0.1:8000/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";
