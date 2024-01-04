@@ -11,6 +11,7 @@ classesallgua
 classesallindia
 classesalljam
 classesdashboard
+classesstaffing
 classestransaction
 countstatus
 cstat
@@ -38,6 +39,7 @@ monthdata
 monthrange
 mpsmonth
 mpssite
+mpsweek
 Nums
 nunomaduro
 perx

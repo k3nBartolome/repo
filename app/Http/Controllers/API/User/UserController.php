@@ -21,37 +21,37 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|string|min:6',
-        'role' => 'sometimes|string|exists:roles,name'
-    ]);
+    {
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'role' => 'sometimes|string|exists:roles,name'
+        ]);
 
-    $user = User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'password' => bcrypt($validatedData['password'])
-    ]);
+        $user = User::create([
+            'name' => $validatedData['name'],
+            'email' => $validatedData['email'],
+            'password' => bcrypt($validatedData['password'])
+        ]);
 
-    $user_role = $validatedData['role'];
-    if ($user_role) {
-        $role = Role::where('name', $user_role)->first();
-        if (!$role) {
-            // Role not found, halt the process
-            return response()->json(['error' => 'Role not found'], 400);
+        $user_role = $validatedData['role'];
+        if ($user_role) {
+            $role = Role::where('name', $user_role)->first();
+            if (!$role) {
+                // Role not found, halt the process
+                return response()->json(['error' => 'Role not found'], 400);
+            }
+
+            $user->assignRole($role);
+
+            // Give the user the permissions associated with the role
+            $permissions = $role->permissions;
+            $user->syncPermissions($permissions);
         }
 
-        $user->assignRole($role);
-
-        // Give the user the permissions associated with the role
-        $permissions = $role->permissions;
-        $user->syncPermissions($permissions);
+        return new UserResource($user);
     }
-
-    return new UserResource($user);
-}
 
 
     /**
@@ -61,10 +61,11 @@ class UserController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        $user = User::FindOrFail($id);
-        return new UserResource($user);
-    }
+{
+    $user = User::FindOrFail($id);
+    return new UserResource($user);
+}
+
 
     /**
      * Update the specified resource in storage.
@@ -96,6 +97,40 @@ class UserController extends Controller
         }
         return new UserResource($user);
     }
+    public function update_profile(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $rules = [
+            'name' => 'nullable|string',
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|min:8',
+        ];
+
+        if ($request->filled('password')) {
+            $rules['password_confirmation'] = 'required|same:password';
+        }
+
+        $this->validate($request, $rules);
+
+        if ($request->filled('name')) {
+            $user->name = $request->input('name');
+        }
+        if ($request->filled('email')) {
+            $user->email = $request->input('email');
+        }
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->input('password'));
+        }
+
+        $user->save();
+
+        return response()->json(['user' => $user, 'message' => 'Profile updated successfully']);
+    }
+
+
+
+
 
     /**
      * Remove the specified resource from storage.

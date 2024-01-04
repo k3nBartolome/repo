@@ -82,11 +82,13 @@ export default {
       "setRole",
       "setUserId",
       "setPermissions",
+      "setUserName",
     ]),
     async login(e) {
       e.preventDefault();
       let user;
-      let role; // Ensure you're declaring the role variable here
+      let name;
+      let role;
       let token;
       let user_id;
       let permissions;
@@ -100,21 +102,28 @@ export default {
         .then(function (response) {
           isLogin = true;
           user = response.data.user;
+          name = response.data.name;
           token = response.data.token;
-          role = response.data.role; // Set the role value from the response
+          role = response.data.role;
           user_id = response.data.user_id;
           permissions = response.data.permissions;
           console.log(response.data);
         })
         .catch(function (error) {
-          console.log(error);
+          console.error("API Error:", error);
           isLogin = false;
         });
 
       if (isLogin) {
         this.setUser(user);
+        this.setUserName(name);
+        console.log(
+          "User name set in Vuex store:",
+          this.$store.getters.returnUserName
+        );
+
         this.setToken(token);
-        this.setRole(role); // Set the user's role
+        this.setRole(role);
         this.setUserId(user_id);
         this.setPermissions(permissions);
 

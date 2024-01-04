@@ -37,6 +37,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::delete('/delete_user/{id}', [UserController::class, 'destroy']);
     Route::get('/show_user/{id}', [UserController::class, 'show']);
     Route::get('/list_user', [UserController::class, 'index']);
+    Route::put('/update_user/profile/{id}/',[UserController::class, 'update_profile']);
+
 
     // Role Routes
     Route::get('/list_role', [RoleController::class, 'index']);
