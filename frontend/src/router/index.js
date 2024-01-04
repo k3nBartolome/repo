@@ -9,6 +9,7 @@ import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
 import AppPerxDashboard from "@/views/Dashboard/AppPerxDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
+import userProfile from "@/views/DashboardNavItems/Admin/UserProfile.vue";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
 import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
 import SiteManagement from "@/views//Dashboard/AppSiteDashboard.vue";
@@ -65,6 +66,11 @@ const routes = [
         path: "/capfile",
         name: "capacityFile",
         component: capacityFile,
+      },
+      {
+        path: "/profile",
+        name: "userProfile",
+        component: userProfile,
       },
       {
         path: "/staffing",

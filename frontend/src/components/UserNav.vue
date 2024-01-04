@@ -128,9 +128,9 @@
               v-show="isDropdown3Open"
               class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
             >
-              <router-link to="/staffing_report" class="link-button">
+              <router-link to="/staffing_report/month" class="link-button">
                 <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/staffing_report') }"
+              :class="{ 'selected-tab': isActiveTab('/staffing_report/month') }"
                                   >
                   Staffing Tracker
                 </li>
@@ -191,27 +191,21 @@
             <option value="/capfileguatemala" class="flex items-center">GUA</option>
           </select> -->
           <div class="relative inline-block" >
-            <button
-              @click="toggleDropdown2"
-              class="px-4 py-2 font-bold text-black rounded cursor-pointer"
-            >
-              <i class="material-icons" style="font-size: 48px; color: red;">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  class="w-6 h-6"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </i>
-            </button>
+            <router-link to="/profile" class="link-button">
+              <li class="tab-button" :class="{ 'selected-tab': isActiveTab('/profile') }">
+                <div class="flex items-center">
+                 
+                  <button @click="toggleDropdown2" class="profile-button px-4 py-2 font-bold text-black rounded cursor-pointer">
+                    <i class="material-icons" style="font-size: 24px; color: red;">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                    </i>
+                  </button>
+                  <span class="user-name">{{ userName }}</span>
+                </div>
+              </li>
+            </router-link>
             <div
               v-show="isDropdown2Open"
               class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14"
@@ -251,6 +245,10 @@ export default {
     };
   },
   computed: {
+    userName() {
+    const userName = this.$store.state.name;
+    return userName;
+    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -308,6 +306,17 @@ export default {
   font-size: 100%;
   vertical-align: baseline;
   background: transparent;
+}
+.tab-button .flex {
+  align-items: center;
+}
+
+.user-name {
+  margin-right: 10px;
+}
+
+.profile-button {
+  margin-left: 10px;
 }
 main {
   display: flex;

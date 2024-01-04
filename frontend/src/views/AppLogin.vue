@@ -87,7 +87,6 @@ export default {
     async login(e) {
       e.preventDefault();
       let user;
-      let name;
       let role;
       let token;
       let user_id;
@@ -102,7 +101,6 @@ export default {
         .then(function (response) {
           isLogin = true;
           user = response.data.user;
-          name = response.data.name;
           token = response.data.token;
           role = response.data.role;
           user_id = response.data.user_id;
@@ -116,12 +114,6 @@ export default {
 
       if (isLogin) {
         this.setUser(user);
-        this.setUserName(name);
-        console.log(
-          "User name set in Vuex store:",
-          this.$store.getters.returnUserName
-        );
-
         this.setToken(token);
         this.setRole(role);
         this.setUserId(user_id);

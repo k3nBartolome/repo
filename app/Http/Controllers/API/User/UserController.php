@@ -13,8 +13,10 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(100);
+
         return UserResource::collection($users);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -26,13 +28,13 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
-            'role' => 'sometimes|string|exists:roles,name'
+            'role' => 'sometimes|string|exists:roles,name',
         ]);
 
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password'])
+            'password' => bcrypt($validatedData['password']),
         ]);
 
         $user_role = $validatedData['role'];
@@ -53,32 +55,32 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-{
-    $user = User::FindOrFail($id);
-    return new UserResource($user);
-}
+    {
+        $user = User::FindOrFail($id);
 
+        return new UserResource($user);
+    }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $id,
+            'email' => 'sometimes|email|unique:users,email,'.$id,
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|string|exists:roles,name',
         ]);
@@ -95,15 +97,17 @@ class UserController extends Controller
             $user->syncRoles($user_role);
             $user->syncPermissions($role_permission);
         }
+
         return new UserResource($user);
     }
+
     public function update_profile(Request $request, $id)
     {
         $user = User::findOrFail($id);
 
         $rules = [
             'name' => 'nullable|string',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'password' => 'nullable|min:8',
         ];
 
@@ -120,7 +124,7 @@ class UserController extends Controller
             $user->email = $request->input('email');
         }
         if ($request->filled('password')) {
-            $user->password = Hash::make($request->input('password'));
+            $user->password = bcrypt($request->input('password'));
         }
 
         $user->save();
@@ -128,14 +132,11 @@ class UserController extends Controller
         return response()->json(['user' => $user, 'message' => 'Profile updated successfully']);
     }
 
-
-
-
-
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

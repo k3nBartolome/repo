@@ -56,13 +56,9 @@ export default createStore({
     returnUserId(state) {
       return state.user_id;
     },
-    returnUserName(state) {
-      return state.name;
+    returnUser(state) {
+      return state.user;
     },
-    hasPermission(state) {
-      return (permission) => {
-        return state.permissions.includes(permission);
-      };
-    },
+
   },
 });
