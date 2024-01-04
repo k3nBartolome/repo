@@ -210,11 +210,14 @@
               v-show="isDropdown2Open"
               class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14"
             >
-              <router-link to="/login" class="link-button">
-                <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
-                  <i class="bg-red-600 fa fa-sign-out"></i> Logout
-                </li>
-              </router-link>
+            <router-link to="/login" class="link-button" @click="logout">
+            <button>
+              <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
+                <i class="bg-red-600 fa fa-sign-out"></i> Logout
+              </li>
+            </button>
+          </router-link>
+            
             </div>
           </div>
         </div>
@@ -226,6 +229,7 @@
 <script>
 import { ref } from "vue";
 import logo from "./storage/vxilogo.jpg";
+
 
 export default {
   setup() {
@@ -288,7 +292,15 @@ export default {
     navigateToPage() {
       this.$router.push(this.selectedOption);
     },
+    logout() {
+      try {
+        this.$store.dispatch('logout');  // Dispatch the logout action
+      } catch (error) {
+        console.error('Error during logout:', error);
+      }
+    
   },
+}
 };
 </script>
 <style>

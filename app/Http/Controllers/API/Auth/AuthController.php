@@ -4,12 +4,9 @@ namespace App\Http\Controllers\API\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use App\Http\Resources\UserResource;
-
 
 class AuthController extends Controller
 {
@@ -17,7 +14,7 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'password' => 'required|min:8'
+            'password' => 'required|min:8',
         ]);
 
         $credentials = $request->only(['email', 'password']);
@@ -35,13 +32,28 @@ class AuthController extends Controller
                 'token' => $token,
                 'role' => $role,
                 'permissions' => $permissions,
-                'user_id' => $user_id
+                'user_id' => $user_id,
             ], 200);
         }
 
         return response()->json([
             'status' => 'error',
-            'message' => 'Invalid Credentials'
+            'message' => 'Invalid Credentials',
         ], 401);
+    }
+
+    public function logout($id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->token()->revoke();
+
+            return response()->json('Logged out', 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json('No user is currently authenticated', 401);
+        } catch (\Exception $e) {
+            // Log or handle other exceptions
+            return response()->json('Internal Server Error', 500);
+        }
     }
 }
