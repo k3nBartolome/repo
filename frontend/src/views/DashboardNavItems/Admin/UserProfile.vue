@@ -84,7 +84,7 @@ export default {
         const id = this.$store.state.user_id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/show_user/${id}`,
+          `http://127.0.0.1:8000/api/show_user/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ export default {
         }
 
         const response = await axios.put(
-          `http://10.109.2.112:8081/api/update_user/profile/${id}`,
+          `http://127.0.0.1:8000/api/update_user/profile/${id}`,
           payload,
           {
             headers: {
