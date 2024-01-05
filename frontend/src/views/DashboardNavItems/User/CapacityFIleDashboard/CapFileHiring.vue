@@ -1,14 +1,41 @@
 <template>
-  <div class="py-8">
-    <div class="px-4 sm:px-6 lg:px-8">
-      <button
-        @click="exportToExcel"
-        class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out"
-      >
-        Export to Excel
-      </button>
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2">
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+  <div v-if="isLoading" class="loader">
+    <div aria-label="Loading..." role="status" class="loader">
+      <svg class="icon" viewBox="0 0 256 256">
+        <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+      </svg>
+      <span class="loading-text">Loading...</span>
+    </div>
+  </div>
+  <div class="py-0">
+    <div class="px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+      <div class="flex items-center">
+        <button
+          @click="exportToExcel"
+          class="bg-green-600 text-white px-3 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out mr-2"
+        >
+          Export
+        </button>
+        <button
+          @click="toggleAll"
+          class="px-3 py-2 rounded-md transition duration-300 ease-in-out"
+          :class="{
+            'bg-red-600 text-white': showJanColumn,
+            'bg-blue-500 text-white': !showJanColumn,
+          }"
+        >
+          {{ showJanColumn ? "Swith to Monthly View" : "Switch to Weekly View" }}
+        </button>
+      </div>
+      <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2 ml-4 items-center">
+        <div>
           <label class="block mb-2">Sites</label>
           <MultiSelect
             v-model="sites_selected"
@@ -16,14 +43,21 @@
             filter
             optionLabel="name"
             placeholder="Select Sites"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="w-full p-2 border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
             :selected-items-class="'bg-orange-500 text-white'"
-            :panel-style="{ backgroundColor: 'white' }"
-            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+            :panel-style="{
+              backgroundColor: 'white',
+              borderRadius: '5px',
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+            }"
+            :panel-class="'border border-gray-300 rounded-md shadow-md text-black'"
+            :filter-placeholder="'Search...'"
+            :filter-input-class="'p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out'"
+            :item-template="'<span class=\'custom-item\'>{{item.name}}</span>'"
             @change="getPrograms"
           />
         </div>
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
+        <div>
           <label class="block mb-2">Programs</label>
           <MultiSelect
             v-model="programs_selected"
@@ -31,15 +65,23 @@
             filter
             optionLabel="name"
             placeholder="Select Programs"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="w-full p-2 border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
             :selected-items-class="'bg-orange-500 text-white'"
-            :panel-style="{ backgroundColor: 'white' }"
-            :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
+            :panel-style="{
+              backgroundColor: 'white',
+              borderRadius: '5px',
+              boxShadow: '0 2px 5px rgba(0, 0, 0, 0.15)',
+            }"
+            :panel-class="'border border-gray-300 rounded-md shadow-md text-black'"
+            :filter-placeholder="'Search...'"
+            :filter-input-class="'p-2 border border-gray-300 rounded-md focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out'"
+            :item-template="'<span class=\'custom-item\'>{{item.name}}</span>'"
           />
         </div>
       </div>
     </div>
   </div>
+
   <div class="px-2 overflow-x-auto overflow-y-auto">
     <div class="p-4">
       <div
@@ -64,6 +106,7 @@
               </th>
               <th
                 :colspan="showJanColumn ? 5 : 1"
+                :rowspan="showJanColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showJanColumn,
                   'bg-blue-500': showJanColumn,
@@ -77,6 +120,7 @@
               </th>
               <th
                 :colspan="showFebColumn ? 5 : 1"
+                :rowspan="showFebColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showFebColumn,
                   'bg-blue-500': showFebColumn,
@@ -90,6 +134,7 @@
               </th>
               <th
                 :colspan="showMarColumn ? 5 : 1"
+                :rowspan="showMarColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showMarColumn,
                   'bg-blue-500': showMarColumn,
@@ -103,6 +148,7 @@
               </th>
               <th
                 :colspan="showAprColumn ? 6 : 1"
+                :rowspan="showAprColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showAprColumn,
                   'bg-blue-500': showAprColumn,
@@ -116,6 +162,7 @@
               </th>
               <th
                 :colspan="showMayColumn ? 5 : 1"
+                :rowspan="showMayColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showMayColumn,
                   'bg-blue-500': showMayColumn,
@@ -129,6 +176,7 @@
               </th>
               <th
                 :colspan="showJunColumn ? 5 : 1"
+                :rowspan="showJunColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showJunColumn,
                   'bg-blue-500': showJunColumn,
@@ -142,6 +190,7 @@
               </th>
               <th
                 :colspan="showJulColumn ? 6 : 1"
+                :rowspan="showJulColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showJulColumn,
                   'bg-blue-500': showJulColumn,
@@ -155,6 +204,7 @@
               </th>
               <th
                 :colspan="showAugColumn ? 5 : 1"
+                :rowspan="showAugColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showAugColumn,
                   'bg-blue-500': showAugColumn,
@@ -168,6 +218,7 @@
               </th>
               <th
                 :colspan="showSepColumn ? 6 : 1"
+                :rowspan="showSepColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showSepColumn,
                   'bg-blue-500': showSepColumn,
@@ -181,6 +232,7 @@
               </th>
               <th
                 :colspan="showOctColumn ? 5 : 1"
+                :rowspan="showOctColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showOctColumn,
                   'bg-blue-500': showOctColumn,
@@ -194,6 +246,7 @@
               </th>
               <th
                 :colspan="showNovColumn ? 5 : 1"
+                :rowspan="showNovColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showNovColumn,
                   'bg-blue-500': showNovColumn,
@@ -207,6 +260,7 @@
               </th>
               <th
                 :colspan="showDecColumn ? 6 : 1"
+                :rowspan="showDecColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showDecColumn,
                   'bg-blue-500': showDecColumn,
@@ -243,6 +297,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showJanColumn"
               >
                 Jan
               </th>
@@ -262,6 +317,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showFebColumn"
               >
                 Feb
               </th>
@@ -281,6 +337,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showMarColumn"
               >
                 Mar
               </th>
@@ -303,6 +360,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showAprColumn"
               >
                 Apr
               </th>
@@ -322,6 +380,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showMayColumn"
               >
                 May
               </th>
@@ -341,6 +400,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showJunColumn"
               >
                 Jun
               </th>
@@ -363,6 +423,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showJulColumn"
               >
                 Jul
               </th>
@@ -382,6 +443,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showAugColumn"
               >
                 Aug
               </th>
@@ -404,6 +466,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showSepColumn"
               >
                 Sep
               </th>
@@ -423,6 +486,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showOctColumn"
               >
                 Oct
               </th>
@@ -442,6 +506,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showNovColumn"
               >
                 Nov
               </th>
@@ -464,6 +529,7 @@
                 class="border-2 border-gray-300 px-1"
                 style="vertical-align: middle"
                 rowspan="2"
+                v-if="showDecColumn"
               >
                 Dec
               </th>
@@ -1033,6 +1099,8 @@ export default {
       showOctColumn: true,
       showNovColumn: true,
       showDecColumn: true,
+      showAll: true,
+      isLoading: false,
     };
   },
   computed: {},
@@ -1076,8 +1144,25 @@ export default {
       else if (month === "Nov") this.showNovColumn = !this.showNovColumn;
       else if (month === "Dec") this.showDecColumn = !this.showDecColumn;
     },
+    toggleAll() {
+      const newState = !this.showJanColumn;
+      this.showJanColumn = newState;
+      this.showFebColumn = newState;
+      this.showMarColumn = newState;
+      this.showAprColumn = newState;
+      this.showMayColumn = newState;
+      this.showJunColumn = newState;
+      this.showJulColumn = newState;
+      this.showAugColumn = newState;
+      this.showSepColumn = newState;
+      this.showOctColumn = newState;
+      this.showNovColumn = newState;
+      this.showDecColumn = newState;
+    },
+
     async getClassesAll() {
       try {
+        this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
           "http://127.0.0.1:8000/api/classesdashboard",
@@ -1113,6 +1198,9 @@ export default {
       } catch (error) {
         console.error("An error occurred:", error);
       }
+      finally {
+    this.isLoading = false; // Set loading state back to false, regardless of success or failure
+  }
     },
     async getMonth() {
       try {
@@ -1136,6 +1224,7 @@ export default {
     async exportToExcel() {
       // Set export loading to true before making the request
       try {
+        this.isLoading = true;
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
@@ -1161,11 +1250,14 @@ export default {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = "your_filename.xlsx";
+        a.download = "hiring_summary.xlsx";
         a.click();
       } catch (error) {
         console.error("Error exporting data to Excel", error);
       }
+      finally {
+    this.isLoading = false; // Set loading state back to false, regardless of success or failure
+  }
     },
     async getSites() {
       try {
@@ -1285,5 +1377,48 @@ p {
 .p-multiselect .p-checkbox .p-checkbox-icon {
   font-size: var(--checkbox-size);
   border-color: var(--checkbox-border);
+}
+</style>
+<style scoped>
+/* Your loader styles here */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the loader is on top of other elements */
+}
+
+.loader-content {
+  /* Style your loader content (SVG, text, etc.) */
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  /* Style your SVG icon */
+  height: 3rem; /* Adjust the size as needed */
+  width: 3rem;  /* Adjust the size as needed */
+  animation: spin 1s linear infinite;
+  stroke: rgba(107, 114, 128, 1);
+}
+
+.loading-text {
+  /* Style your loading text */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  line-height: 2rem; /* Adjust the size as needed */
+  font-weight: 500;
+  color: rgba(107, 114, 128, 1);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
