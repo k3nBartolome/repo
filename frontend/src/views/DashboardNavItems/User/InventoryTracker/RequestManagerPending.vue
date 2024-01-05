@@ -135,6 +135,7 @@
                   last: 'Last',
                 },
               },
+              
             }"
           >
             <thead class="truncate">
@@ -183,7 +184,7 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-          data: "id",
+          data: null,
           title: "Actions",
           orderable: false,
           searchable: false,
@@ -194,19 +195,21 @@ export default {
             const requestedById = data.requested_by
               ? data.requested_by.id
               : null;
-            console.log("Requested By ID:", requestedById);
+              
+
+
 
             return `
       ${
         isRemx || isUser || isSourcing
-          ? `<button class="w-20 text-xs btn btn-primary" onclick="window.vm.approvedRequest(${data})">Approve</button>
-           <button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForDenial(${data})">Deny</button>`
+          ? `<button class="w-20 text-xs btn btn-primary" data-id="${data.id} "onclick="window.vm.approvedRequest(${data.id})">Approve</button>
+           <button class="w-20 text-xs btn btn-danger"   data-id="${data.id}" onclick="window.vm.openModalForDenial(${data.id})">Deny</button>`
           : ""
       }
 
       ${
         requestedById === this.$store.state.user_id
-          ? `<button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForCancellation(${data})">Cancel</button>`
+          ? `<button class="w-20 text-xs btn btn-danger"  data-id="${data.id}" onclick="window.vm.openModalForCancellation(${data.id})">Cancel</button>`
           : ""
       }
   `;
@@ -217,7 +220,7 @@ export default {
         { data: "item.budget_code", title: "Budget Code" },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
-        { data: "requested_by.name", title: "Requested By" },
+         { data: "requested_by.name", title: "Requested By" },
       ],
     };
   },
