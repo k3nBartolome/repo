@@ -479,7 +479,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/items_selected2/${this.sites_selected}`,
+          `http://10.109.2.112:8081/api/items_selected2/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -501,7 +501,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -521,7 +521,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/awarded/premium",
+          "http://10.109.2.112:8081/api/awarded/premium",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -580,7 +580,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/award",
+          "http://10.109.2.112:8081/api/award",
           formData,
           {
             headers: {

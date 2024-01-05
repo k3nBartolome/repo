@@ -103,7 +103,12 @@
                   last: 'Last',
                 },
               },
-              
+              columnDefs: [
+                {
+                  targets: [8], // Index of the column to hide (zero-based index)
+                  visible: false, // Set to true to show, false to hide
+                },
+              ],
             }"
           >
             <thead class="truncate">
@@ -159,7 +164,6 @@ export default {
             const requestedById = data.requested_by
               ? data.requested_by.id
               : null;
-              
 
             return `
         ${
@@ -176,6 +180,7 @@ export default {
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
+        { data: "requested_by.id", title: "" },
         { data: "approved_by.name", title: "Approved By" },
       ],
     };
@@ -251,7 +256,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/inventory/received/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -268,7 +273,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/approved/pending",
+          "http://10.109.2.112:8081/api/inventory/approved/pending",
           {
             headers: {
               Authorization: `Bearer ${token}`,
