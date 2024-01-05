@@ -190,7 +190,7 @@ export default {
           render: function (data) {
             const isUser = this.isUser;
             const isRemx = this.isRemx;
-            //const isSourcing = this.isSourcing;
+            const isSourcing = this.isSourcing;
             const requestedById = data.requested_by
               ? data.requested_by.id
               : null;
@@ -198,7 +198,7 @@ export default {
 
             return `
       ${
-        isRemx || isUser
+        isRemx || isUser || isSourcing
           ? `<button class="w-20 text-xs btn btn-primary" onclick="window.vm.approvedRequest(${data})">Approve</button>
            <button class="w-20 text-xs btn btn-danger" onclick="window.vm.openModalForDenial(${data})">Deny</button>`
           : ""
@@ -218,7 +218,6 @@ export default {
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "status", title: "Approval Status" },
         { data: "requested_by.name", title: "Requested By" },
-        { data: "requested_by.id", title: "Requested By" },
       ],
     };
   },
