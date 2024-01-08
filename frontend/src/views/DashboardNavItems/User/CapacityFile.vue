@@ -1,12 +1,5 @@
 <template>
-  <header class="w-full bg-green-300">
-    <div class="flex items-center w-full max-w-screen-xl py-2 sm:px-2 lg:px-2">
-      <h2 class="pl-8 text-3xl font-bold tracking-tight text-gray-900">
-        Capacity File Manager
-      </h2>
-    </div>
-  </header>
-  <div class="py-8">
+  <div class="py-0">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
@@ -97,25 +90,32 @@
             </select>
           </label>
         </div>
-        <router-link
-          :to="{
-            path: `/addcapfile/}`,
-            query: {
-              program: programs_selected,
-              site: sites_selected,
-              daterange: week_selected,
-            },
-          }"
-        >
-          <button
-            v-if="!classExists"
-            type="submit"
-            :disabled="classExists"
-            class="px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
-            <i class="fa fa-building"></i> Add
-          </button>
-        </router-link>
+       
+        <div class="col-span-6 md:col-span-1">
+           <router-link
+        :to="{
+          path: `/addcapfile/}`,
+          query: {
+            program: programs_selected,
+            site: sites_selected,
+            daterange: week_selected,
+          },
+        }"
+      >
+     
+      <button
+      v-if="!classExists"
+      type="submit"
+      :disabled="isButtonDisabled"
+      class="w-full h-12 mt-2 font-semibold text-white bg-orange-500 rounded hover:bg-gray-600"
+    >
+      <i class="fa fa-building"></i> Add
+    </button>
+  </router-link>
+  <span v-if="buttonPressed && isButtonDisabled" class="text-red-500 text-sm ml-2">Fill in the selections first</span>
+
+</div>
+
       </form>
     </div>
   </div>
@@ -223,6 +223,9 @@ export default {
     };
   },
   computed: {
+    isButtonDisabled() {
+      return this.classExists || !this.sites_selected || !this.programs_selected || !this.week_selected;
+    },
     classExists() {
       return this.classes.some((c) => {
         return (

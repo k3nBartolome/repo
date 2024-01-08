@@ -65,7 +65,7 @@ return [
             'url' => env('DB_SECONDARY_URL'),
             'host' => env('DB_SECONDARY_HOST', '127.0.0.1'),
             'port' => env('DB_SECONDARY_PORT', '3306'),
-            'database' => env('DB_SECONDARY_DATABASE', 'testdb'),
+            'database' => env('DB_SECONDARY_DATABASE', 'cfms'),
             'username' => env('DB_SECONDARY_USERNAME', 'root'),
             'password' => env('DB_SECONDARY_PASSWORD', ''),
             'unix_socket' => env('DB_SECONDARY_SOCKET', ''),
@@ -147,7 +147,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
         ],
 
         'default' => [

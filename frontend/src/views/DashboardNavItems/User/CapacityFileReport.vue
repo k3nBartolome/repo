@@ -2,7 +2,19 @@
   <div class="px-0 pt-1 border-b border-gray-200 dark:border-gray-700">
     <div class="container">
       <div class="row">
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-2 col-sm-6">
+          <router-link to="/capfile" class="link-button">
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/capfile'),
+              }"
+            >
+              Manage
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
           <router-link to="/capfile/summary" class="link-button">
             <button
               class="tab-button"
@@ -14,7 +26,7 @@
             </button>
           </router-link>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-2 col-sm-6">
           <router-link to="/capfile/history" class="link-button">
             <button
               class="tab-button"
@@ -26,7 +38,7 @@
             </button>
           </router-link>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-2 col-sm-6">
           <router-link to="/capfile/cancelled" class="link-button">
             <button
               class="tab-button"
@@ -38,7 +50,7 @@
             </button>
           </router-link>
         </div>
-        <div class="col-md-3 col-sm-6">
+        <div class="col-md-2 col-sm-6">
           <router-link to="/capfile/moved" class="link-button">
             <button
               class="tab-button"

@@ -111,6 +111,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
     Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
     Route::get('perxfilter', [ClassesController::class, 'perxFilter']);
+    Route::get('sr_compliance', [ClassesController::class, 'srCompliance']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
     Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);

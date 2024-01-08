@@ -62,11 +62,7 @@ const routes = [
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
     children: [
-      {
-        path: "/capfile",
-        name: "capacityFile",
-        component: capacityFile,
-      },
+      
       {
         path: "/profile",
         name: "userProfile",
@@ -248,6 +244,11 @@ const routes = [
             path: "moved",
             name: "CapFilePushedback",
             component: CapFilePushedback,
+          },
+          {
+            path: "/capfile",
+            name: "capacityFile",
+            component: capacityFile,
           },
         ],
       },

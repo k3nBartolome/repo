@@ -16,6 +16,18 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ClassesController extends Controller
 {
+    public function srCompliance(Request $request)
+    {
+        $query = DB::connection('secondary')
+        ->table('classes');
+
+        $filteredData = $query->get();
+
+        return response()->json([
+            'sr' => $filteredData,
+        ]);
+    }
+
     public function perxFilter(Request $request)
     {
         $query = DB::connection('secondary_sqlsrv')

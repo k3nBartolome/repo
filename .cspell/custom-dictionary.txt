@@ -6,6 +6,8 @@ autoload
 Autoload
 autoloader
 beyondcode
+capfilems
+cfms
 classesall
 classesallgua
 classesallindia
@@ -45,12 +47,14 @@ nunomaduro
 perx
 PERX
 perxfilter
+phpredis
 phpunit
 pushedback
 Pushedback
 remx
 siteinventory
 siteinventoryall
+sslmode
 sumtotaltarget
 updateclassesstaffing
 websockets
