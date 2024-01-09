@@ -90,7 +90,7 @@
             </select>
           </label>
         </div>
-       
+
         <div class="col-span-6 md:col-span-1">
            <router-link
         :to="{
@@ -102,7 +102,7 @@
           },
         }"
       >
-     
+
       <button
       v-if="!classExists"
       type="submit"
@@ -112,7 +112,7 @@
       <i class="fa fa-building"></i> Add
     </button>
   </router-link>
-  <span v-if="buttonPressed && isButtonDisabled" class="text-red-500 text-sm ml-2">Fill in the selections first</span>
+  <span v-if="EmptySelection" class="text-red-500 text-sm ml-2">Fill all the selections first</span>
 
 </div>
 
@@ -225,6 +225,9 @@ export default {
   computed: {
     isButtonDisabled() {
       return this.classExists || !this.sites_selected || !this.programs_selected || !this.week_selected;
+    },
+    EmptySelection() {
+      return !this.sites_selected || !this.programs_selected || !this.week_selected;
     },
     classExists() {
       return this.classes.some((c) => {

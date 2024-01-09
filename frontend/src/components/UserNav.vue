@@ -59,6 +59,14 @@
                   PERX Tool
                 </li>
               </router-link>
+              <router-link to="/web" class="link-button">
+                <li class="tab-button"
+                    :class="{ 'selected-tab': isActiveTab('/web') }"
+                  v-if="isUser"
+                            >
+                  Test WebDataRocks
+                </li>
+              </router-link>
               </div>
             </div>
           </div>
@@ -115,8 +123,8 @@
             </div>
           </div>
         </li>
-        <li class="tab-button">
-        <div v-if="isUser">
+        <!-- <li class="tab-button">
+         <div v-if="isUser">
           <div class="relative inline-block">
             <button
               @click="toggleDropdown3"
@@ -145,7 +153,7 @@
             </div>
           </div>
         </div>
-      </li>
+      </li> -->
       <li class="tab-button">
         <div v-if="isUser">
           <div class="relative inline-block">
@@ -194,7 +202,7 @@
             <router-link to="/profile" class="link-button">
               <li class="tab-button" :class="{ 'selected-tab': isActiveTab('/profile') }">
                 <div class="flex items-center">
-                 
+
                   <button @click="toggleDropdown2" class="profile-button px-4 py-2 font-bold text-black rounded cursor-pointer">
                     <i class="material-icons" style="font-size: 24px; color: red;">
                       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
@@ -217,7 +225,7 @@
               </li>
             </button>
           </router-link>
-            
+
             </div>
           </div>
         </div>
@@ -298,7 +306,7 @@ export default {
       } catch (error) {
         console.error('Error during logout:', error);
       }
-    
+
   },
 }
 };

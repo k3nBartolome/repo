@@ -13,6 +13,7 @@ import userProfile from "@/views/DashboardNavItems/Admin/UserProfile.vue";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
 import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
 import SiteManagement from "@/views//Dashboard/AppSiteDashboard.vue";
+import WebRockData from "@/views//Dashboard/WebRockData.vue";
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
 import capacityFileReport from "@/views/DashboardNavItems/User/CapacityFileReport.vue";
 import CapFileHiring from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileHiring.vue";
@@ -62,21 +63,21 @@ const routes = [
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
     children: [
-      
+
       {
         path: "/profile",
         name: "userProfile",
         component: userProfile,
       },
       {
-        path: "/staffing",
-        name: "StaffingTracker",
-        component: StaffingTracker,
-      },
-      {
         path: "/perx",
         name: "perxAuditTools",
         component: perxAuditTools,
+      },
+      {
+        path: "/web",
+        name: "WebRockData",
+        component: WebRockData,
       },
       {
         path: "/inventory",
@@ -217,6 +218,11 @@ const routes = [
             path: "month",
             name: "staffingTrackerMonthDashboard",
             component: staffingTrackerMonthDashboard,
+          },
+          {
+            path: "/staffing",
+            name: "StaffingTracker",
+            component: StaffingTracker,
           },
         ],
       },

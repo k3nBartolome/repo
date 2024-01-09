@@ -1368,7 +1368,7 @@ class ClassesController extends Controller
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
-                if ($grandTotal != 0) {
+               /*  if ($grandTotal != 0) { */
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
@@ -1440,7 +1440,7 @@ class ClassesController extends Controller
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
-            }
+            /* } */
         }
 
         $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
