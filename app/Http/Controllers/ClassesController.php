@@ -13,21 +13,36 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Models\SmartRecruitData;
+use Carbon\Carbon;
+
 
 class ClassesController extends Controller
 {
     public function srCompliance(Request $request)
-    {
-        $query = DB::connection('secondary')
-        ->table('classes');
+{
+    $fourMonthsBeforeNow = Carbon::now()->subMonths(1)->startOfMonth();
 
-        $filteredData = $query->get();
+    $filteredData = SmartRecruitData::on('secondary_sqlsrv')
+        ->select([
+           'ApplicantId', /* 'ApplicationInfoId', 'DateOfApplication', 'LastName',
+        'FirstName', 'MiddleName', 'MobileNo', 'Site', 'GenSource', 'SpecSource',
+        'Status', 'QueueDate', 'Interviewer', 'LOB', 'RescheduleDate', 'Step',
+        'AppStep', 'ApplicationStepStatusId', 'WordQuiz', 'SVA', 'Address',
+        'Municipality', 'Province', 'last_update_date' */
+        ])
+       
+        ->where('DateOfApplication', '>=', $fourMonthsBeforeNow)
+        //->take(1000)
+        ->get();
 
-        return response()->json([
-            'sr' => $filteredData,
-        ]);
-    }
+    return response()->json([
+        'sr' => $filteredData,
+    ]);
+}
 
+
+    
     public function perxFilter(Request $request)
     {
         $query = DB::connection('secondary_sqlsrv')

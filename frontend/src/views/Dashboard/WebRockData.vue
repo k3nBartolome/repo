@@ -14,11 +14,11 @@ export default {
   name: "App",
   data() {
     return {
-      classes: [],
+      sr: [],
     };
   },
   methods: {
-    async getClassesAll() {
+    async getSr() {
       try {
         const token = this.$store.state.token;
         const config = {
@@ -27,11 +27,11 @@ export default {
           },
         };
 
-        const response = await axios.get("http://127.0.0.1:8000/api/classesall", config);
+        const response = await axios.get("http://10.109.2.112:8081/api/sr_compliance", config);
         console.log("Response received:", response.data);
 
-        this.classes = response.data.classes;
-        console.log("Classes data:", this.classes);
+        this.sr = response.data.sr;
+        console.log("sr data:", this.sr);
 
         this.initializeWebDataRocks();
       } catch (error) {
@@ -44,7 +44,7 @@ export default {
         toolbar: true,
         report: {
           dataSource: {
-            data: this.classes,
+            data: this.sr,
           },
           options: {
            grid: {
@@ -117,7 +117,7 @@ export default {
     // ... (define other event handlers)
   },
   mounted() {
-    this.getClassesAll();
+    this.getSr();
   },
 };
 </script>
