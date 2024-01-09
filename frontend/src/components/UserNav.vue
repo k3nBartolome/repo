@@ -40,7 +40,7 @@
 
         <li class="tab-button">
           <div v-if="isUser|| isBudget || isSourcing">
-            <div class="relative inline-block py-0">
+            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown5">
               <button
                 @click="toggleDropdown5"
                 class="px-4 py-2 text-black rounded cursor-pointer"
@@ -73,7 +73,7 @@
         </li>
         <li class="tab-button">
           <div>
-            <div class="relative inline-block py-0">
+            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown4">
               <button
                 @click="toggleDropdown4"
                 class="px-4 py-2 text-black rounded cursor-pointer"
@@ -156,7 +156,7 @@
       </li> -->
       <li class="tab-button">
         <div v-if="isUser">
-          <div class="relative inline-block">
+          <div class="relative inline-block" v-on:mouseleave="toggleDropdown">
             <button
               @click="toggleDropdown"
               class="px-4 py-2 text-black rounded cursor-pointer"
@@ -198,7 +198,7 @@
             <option value="/capfilejamaica" class="flex items-center">JAM</option>
             <option value="/capfileguatemala" class="flex items-center">GUA</option>
           </select> -->
-          <div class="relative inline-block" >
+          <div class="relative inline-block" v-on:mouseleave="toggleDropdown2">
             <router-link to="/profile" class="link-button">
               <li class="tab-button" :class="{ 'selected-tab': isActiveTab('/profile') }">
                 <div class="flex items-center">
@@ -295,8 +295,9 @@ export default {
       this.isDropdown4Open = !this.isDropdown4Open;
     },
     toggleDropdown5() {
-      this.isDropdown5Open = !this.isDropdown5Open;
-    },
+  this.isDropdown5Open = !this.isDropdown5Open;
+},
+
     navigateToPage() {
       this.$router.push(this.selectedOption);
     },
