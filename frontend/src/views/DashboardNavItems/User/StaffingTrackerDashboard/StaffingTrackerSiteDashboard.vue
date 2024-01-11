@@ -137,7 +137,7 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "http://10.109.2.112:8081/api/mpssite";
+        let apiUrl = "http://127.0.0.1:8000/api/mpssite";
         const params = {};
         if (this.month_selected) {
           params.month_num = this.month_selected;
@@ -162,7 +162,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(`http://10.109.2.112:8081/api/programs`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/programs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

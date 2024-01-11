@@ -1,14 +1,17 @@
 <template>
   <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
-    <ul class="flex -mb-px text-sm font-medium text-center">
+    <ul class="flex -mb-px text-sm font-medium text-center tabs">
       <router-link to="/site_request_manager/request">
         <li
-          class="mr-2"
+          class="tab mr-2"
           role="presentation"
           v-if="isUser || isRemx || isBudget || isSourcing"
         >
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/request'),
+            }"
             type="button"
             role="tab"
           >
@@ -18,12 +21,15 @@
       </router-link>
       <router-link to="/site_request_manager/pending">
         <li
-          class="mr-2"
+          class="tab mr-2"
           role="presentation"
           v-if="isUser || isRemx || isBudget || isSourcing"
         >
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/pending'),
+            }"
             type="button"
             role="tab"
           >
@@ -36,12 +42,15 @@
       </router-link>
       <router-link to="/site_request_manager/approved">
         <li
-          class="mr-2"
+          class="tab mr-2"
           role="presentation"
           v-if="isUser || isRemx || isBudget || isSourcing"
         >
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/approved'),
+            }"
             type="button"
             role="tab"
           >
@@ -53,9 +62,12 @@
         to="/site_request_manager/denied"
         v-if="isUser || isRemx || isBudget || isSourcing"
       >
-        <li role="presentation">
+        <li class="tab" role="presentation">
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/denied'),
+            }"
             type="button"
             role="tab"
           >
@@ -67,9 +79,12 @@
         to="/site_request_manager/received"
         v-if="isUser || isRemx || isBudget || isSourcing"
       >
-        <li role="presentation">
+        <li class="tab" role="presentation">
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/received'),
+            }"
             type="button"
             role="tab"
           >
@@ -81,9 +96,12 @@
         </li>
       </router-link>
       <router-link to="/site_request_manager/cancelled">
-        <li role="presentation">
+        <li class="tab" role="presentation">
           <button
-            class="inline-block p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 focus:outline-none"
+            class="tab-button"
+            :class="{
+              'selected-tab': isActiveTab('/site_request_manager/cancelled'),
+            }"
             type="button"
             role="tab"
           >
@@ -101,6 +119,7 @@
     </div>
   </main>
 </template>
+
 <script>
 import axios from "axios";
 export default {
@@ -141,7 +160,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventoryall",
+          "http://127.0.0.1:8000/api/inventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -170,9 +189,13 @@ export default {
         console.log(error);
       }
     },
+    isActiveTab(route) {
+      return this.$route.path === route;
+    },
   },
 };
 </script>
+
 <style>
 .tabs {
   display: flex;
@@ -190,6 +213,7 @@ export default {
 .tab:last-child {
   margin-right: 0;
 }
+
 main {
   display: flex;
   flex-direction: column;
@@ -199,6 +223,7 @@ main {
 .flex {
   flex: 1;
 }
+
 .count-notification {
   background-color: red;
   color: white;

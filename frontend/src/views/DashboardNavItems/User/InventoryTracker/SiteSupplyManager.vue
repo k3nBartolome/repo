@@ -6,7 +6,9 @@
           <router-link to="/site_supply_manager/stocks" class="link-button">
             <button
               class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/request') }"
+              :class="{
+                'selected-tab': isActiveTab('/site_supply_manager/stocks'),
+              }"
             >
               Site Supply
             </button>
@@ -16,7 +18,9 @@
           <router-link to="/site_supply_manager/transfer" class="link-button">
             <button
               class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/dashboard_manager/supply') }"
+              :class="{
+                'selected-tab': isActiveTab('/site_supply_manager/transfer'),
+              }"
             >
               Site Transfer
             </button>
@@ -26,8 +30,8 @@
     </div>
   </div>
   <main class="flex flex-col h-screen">
-    <div class="flex flex-1 px-4 py-2 md:px-1 ">
-      <div class="w-full py-6 ">
+    <div class="flex flex-1 px-4 py-2 md:px-1">
+      <div class="w-full py-6">
         <router-view />
       </div>
     </div>
@@ -115,4 +119,5 @@ main {
 .link-button {
   text-decoration: none;
 }
-</style>s
+</style>
+s

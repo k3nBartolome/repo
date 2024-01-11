@@ -54,7 +54,7 @@ export default createStore({
       state.name = null;
       state.permissions = [];
       axios.defaults.headers.common["Authorization"] = "";
-    
+
       // Clear local storage directly
       Object.keys(localStorage).forEach((key) => {
         if (key.startsWith("vuex")) {
@@ -62,16 +62,16 @@ export default createStore({
         }
       });
     },
-    
+
   },
   actions: {
     async logout({ commit, state }) {
       console.log("User State Before Logout:", state);
       try {
         if (state.token) {
-          const id = state.user_id; 
+          const id = state.user_id;
           console.log("Authentication Token:", state.token);
-await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
+await axios.post(`http://127.0.0.1:8000/api/logout/${id}`);
           commit("logout");
         } else {
           console.warn("User is not authenticated.");
@@ -86,7 +86,7 @@ await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
     },
     // ... other actions
   },
-  
+
   getters: {
     isLoggedIn(state) {
       return !!state.token;

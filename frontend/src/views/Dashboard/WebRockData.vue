@@ -27,7 +27,7 @@ export default {
           },
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_compliance", config);
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_compliance", config);
         console.log("Response received:", response.data);
 
         this.sr = response.data.sr;

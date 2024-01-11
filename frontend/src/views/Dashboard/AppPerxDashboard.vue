@@ -41,24 +41,22 @@
 </template>
 
 <script>
-import axios from "axios";
+// Import only the necessary modules
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
-// eslint-disable-next-line no-unused-vars
-import Buttons from "datatables.net-buttons-bs5";
-import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
-// eslint-disable-next-line no-unused-vars
-import print from "datatables.net-buttons/js/buttons.print";
-//import pdfmake from "pdfmake";
-// eslint-disable-next-line no-unused-vars
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
-// eslint-disable-next-line no-unused-vars
+import "datatables.net-buttons-bs5";
+import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
+import "datatables.net-buttons/js/buttons.print";
+
+// Import other necessary libraries
+import axios from "axios";
+// import pdfmake if needed
+import "bootstrap/dist/css/bootstrap.css";
 
 import "bootstrap/dist/css/bootstrap.css";
 
 DataTable.use(DataTableLib);
-//DataTable.use(pdfmake);
 DataTable.use(ButtonsHtml5);
 
 export default {
@@ -94,7 +92,7 @@ export default {
   methods: {
     async getPerx() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes")
+        .get("http://127.0.0.1:8000/api/classes")
         .then((response) => {
           this.perx = response.data.perx;
           console.log(response.data.perx);
