@@ -1,115 +1,95 @@
 <template>
-  <div class="px-2 pt-1 border-b border-gray-200 dark:border-gray-700">
-    <ul class="flex -mb-px text-sm font-medium text-center tabs">
-      <router-link to="/site_request_manager/request">
-        <li
-          class="tab mr-2"
-          role="presentation"
-          v-if="isUser || isRemx || isBudget || isSourcing"
-        >
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/request'),
-            }"
-            type="button"
-            role="tab"
+  <div class="px-0 pt-1 border-b border-gray-200 dark:border-gray-700">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-2 col-sm-6">
+          <router-link to="/site_request_manager/request" class="link-button">
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/request'),
+              }"
+            >
+              Request
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link to="/site_request_manager/pending" class="link-button">
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/pending'),
+              }"
+            >
+              Pending Request
+              <span v-if="totalPending > 0" class="count-notification">{{
+                totalPending
+              }}</span>
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link to="/site_request_manager/approved" class="link-button">
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/approved'),
+              }"
+            >
+              Approved Request
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link
+            to="/site_request_manager/denied"
+            v-if="isUser || isRemx || isBudget || isSourcing"
+            class="link-button"
           >
-            Request
-          </button>
-        </li>
-      </router-link>
-      <router-link to="/site_request_manager/pending">
-        <li
-          class="tab mr-2"
-          role="presentation"
-          v-if="isUser || isRemx || isBudget || isSourcing"
-        >
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/pending'),
-            }"
-            type="button"
-            role="tab"
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/denied'),
+              }"
+            >
+              Denied Request
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link
+            to="/site_request_manager/received"
+            v-if="isUser || isRemx || isBudget || isSourcing"
+            class="link-button"
           >
-            Pending Request
-            <span v-if="totalPending > 0" class="count-notification">{{
-              totalPending
-            }}</span>
-          </button>
-        </li>
-      </router-link>
-      <router-link to="/site_request_manager/approved">
-        <li
-          class="tab mr-2"
-          role="presentation"
-          v-if="isUser || isRemx || isBudget || isSourcing"
-        >
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/approved'),
-            }"
-            type="button"
-            role="tab"
-          >
-            Approved Request
-          </button>
-        </li>
-      </router-link>
-      <router-link
-        to="/site_request_manager/denied"
-        v-if="isUser || isRemx || isBudget || isSourcing"
-      >
-        <li class="tab" role="presentation">
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/denied'),
-            }"
-            type="button"
-            role="tab"
-          >
-            Denied Request
-          </button>
-        </li>
-      </router-link>
-      <router-link
-        to="/site_request_manager/received"
-        v-if="isUser || isRemx || isBudget || isSourcing"
-      >
-        <li class="tab" role="presentation">
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/received'),
-            }"
-            type="button"
-            role="tab"
-          >
-            Receive
-            <span v-if="totalReceived > 0" class="count-notification">{{
-              totalReceived
-            }}</span>
-          </button>
-        </li>
-      </router-link>
-      <router-link to="/site_request_manager/cancelled">
-        <li class="tab" role="presentation">
-          <button
-            class="tab-button"
-            :class="{
-              'selected-tab': isActiveTab('/site_request_manager/cancelled'),
-            }"
-            type="button"
-            role="tab"
-          >
-            Cancelled Request
-          </button>
-        </li>
-      </router-link>
-    </ul>
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/received'),
+              }"
+            >
+              Receive
+              <span v-if="totalReceived > 0" class="count-notification">{{
+                totalReceived
+              }}</span>
+            </button>
+          </router-link>
+        </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link to="/site_request_manager/cancelled" class="link-button">
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/site_request_manager/cancelled'),
+              }"
+            >
+              Cancelled Request
+            </button>
+          </router-link>
+        </div>
+      </div>
+    </div>
   </div>
   <main class="flex flex-col h-screen">
     <div class="flex flex-1 px-4 py-2 md:px-1">
@@ -197,38 +177,53 @@ export default {
 </script>
 
 <style>
-.tabs {
-  display: flex;
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;
 }
-
-.tab {
-  padding: 8px 16px;
-  cursor: pointer;
-  border: 1px solid #ccc;
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
-  margin-right: 4px;
-}
-
-.tab:last-child {
-  margin-right: 0;
-}
-
 main {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
-
-.flex {
-  flex: 1;
+.selected-tab {
+  border-color: #6366f1;
+  color: #6366f1;
+  font-weight: bold;
+}
+.tab-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: transparent;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.3s, color 0.3s;
+  text-align: center;
+  color: black;
+  text-decoration: none !important;
 }
 
-.count-notification {
-  background-color: red;
-  color: white;
-  border-radius: 50%;
-  padding: 2px 6px;
-  margin-left: 5px;
+.tab-button:hover {
+  color: #6366f1;
+}
+
+@media (min-width: 576px) {
+  .tab-button {
+    padding: 1rem 0.75rem;
+  }
+}
+@media (min-width: 768px) {
+  .tab-button {
+    padding: 1rem 0.5rem;
+  }
+}
+.link-button {
+  text-decoration: none;
 }
 </style>
