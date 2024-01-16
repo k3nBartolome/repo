@@ -59,14 +59,7 @@
                   PERX Tool
                 </li>
               </router-link>
-              <router-link to="/web" class="link-button">
-                <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/web') }"
-                  v-if="isUser"
-                            >
-                  Test WebDataRocks
-                </li>
-              </router-link>
+
               </div>
             </div>
           </div>
@@ -123,6 +116,14 @@
             </div>
           </div>
         </li>
+        <router-link to="/web" class="link-button">
+          <li class="tab-button"
+              :class="{ 'selected-tab': isActiveTab('/web') }"
+            v-if="isUser"
+                      >
+            SR Pending Movements
+          </li>
+        </router-link>
         <!-- <li class="tab-button">
          <div v-if="isUser">
           <div class="relative inline-block">

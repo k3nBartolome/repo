@@ -6,7 +6,7 @@
       </h2>
     </div>
   </header>
-  <div class="py-2 overflow-x-auto">
+  <div class="py-0 overflow-x-auto">
     <table class="w-full border-collapse">
       <thead>
         <tr class="border-black border-2">

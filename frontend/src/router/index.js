@@ -80,6 +80,11 @@ const routes = [
         component: WebRockData,
       },
       {
+        path: "/user_management",
+        name: "usermanagement",
+        component: UserManagement,
+      },
+      {
         path: "/inventory",
         name: "inventoryTracker",
         component: inventoryTracker,
@@ -313,11 +318,7 @@ const routes = [
         name: "adminDashboard",
         component: AppAdminDashboard,
       },
-      {
-        path: "/user_management",
-        name: "usermanagement",
-        component: UserManagement,
-      },
+
     ],
   },
   {

@@ -1,21 +1,51 @@
 <template>
-  <div>
-    <div id="wdr-component"></div>
+  <div class="py-8">
+    <div class="pl-8 pr-8 overflow-x-auto overflow-y-auto">
+      <table class="w-full  table-auto">
+        <thead>
+          <tr
+            class="text-left  border-2 border-orange-600 border-solid"
+          >
+      <th class="px-1 py-2">Step</th>
+      <th class="px-1 py-2">Bridgetowne</th>
+      <th class="px-1 py-2">Clark</th>
+      <th class="px-1 py-2">Davao</th>
+      <th class="px-1 py-2">Makati</th>
+      <th class="px-1 py-2">MOA</th>
+      <th class="px-1 py-2">QC North Edsa</th>
+        </tr>
+    </thead>
+    <tbody v-for="(item, index) in sr" :key="index">
+      <tr
+      class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
+    >
+<td class="px-1 py-2">{{item.CombinedStepAppStep}}</td>
+<td class="px-1 py-2">{{item.Bridgetowne}}</td>
+<td class="px-1 py-2">{{item.Clark}}</td>
+<td class="px-1 py-2">{{item.Davao}}</td>
+<td class="px-1 py-2">{{item.Makati}}</td>
+<td class="px-1 py-2">{{item.MOA}}</td>
+<td class="px-1 py-2">{{item['QC North EDSA']}}</td>
+
+    </tr>
+  </tbody>
+    </table>
   </div>
+</div>
 </template>
 
 <script>
 import axios from "axios";
-import WebDataRocks from "@webdatarocks/webdatarocks";
-import "@webdatarocks/webdatarocks/webdatarocks.css";
 
 
 export default {
-  name: "App",
   data() {
     return {
       sr: [],
     };
+  },
+  mounted() {
+    this.getSr();
   },
   methods: {
     async getSr() {
@@ -38,90 +68,10 @@ export default {
         console.log("Error:", error);
       }
     },
-    initializeWebDataRocks() {
-      new WebDataRocks({
-        container: this.$el.querySelector("#wdr-component"),
-        toolbar: true,
-        report: {
-          dataSource: {
-            data: this.sr,
-          },
-          options: {
-           grid: {
-            showHeaders:false,
-          type: "flat"
-           }
-          }
-        },
-        afterchartdraw: this.afterchartdraw,
-        aftergriddraw: this.aftergriddraw,
-        beforegriddraw: this.beforegriddraw,
-        beforetoolbarcreated: this.beforetoolbarcreated,
-        cellclick: this.cellclick,
-        celldoubleclick: this.celldoubleclick,
-        componentFolder: this.componentFolder,
-        customizeCell: this.customizeCell,
-        customizeContextMenu: this.customizeContextMenu,
-        datachanged: this.datachanged,
-        dataerror: this.dataerror,
-        datafilecancelled: this.datafilecancelled,
-        dataloaded: this.dataloaded,
-        fieldslistclose: this.fieldslistclose,
-        fieldslistopen: this.fieldslistopen,
-        filterclose: this.filterclose,
-        filteropen: this.filteropen,
-        fullscreen: this.fullscreen,
-        global: this.global,
-        height: this.height,
-        loadingdata: this.loadingdata,
-        loadinglocalization: this.loadinglocalization,
-        loadingolapstructure: this.loadingolapstructure,
-        loadingreportfile: this.loadingreportfile,
-        localizationerror: this.localizationerror,
-        localizationloaded: this.localizationloaded,
-        olapstructureerror: this.olapstructureerror,
-        olapstructureloaded: this.olapstructureloaded,
-        openingreportfile: this.openingreportfile,
-        querycomplete: this.querycomplete,
-        queryerror: this.queryerror,
-        ready: this.ready,
-        reportchange: this.reportchange,
-        reportcomplete: this.reportcomplete,
-        reportfilecancelled: this.reportfilecancelled,
-        reportfileerror: this.reportfileerror,
-        reportfileloaded: this.reportfileloaded,
-        runningquery: this.runningquery,
-        update: this.update,
-        width: this.width,
-      });
-    },
-    // Define your event handlers here
-    afterchartdraw() {
-      // Handle afterchartdraw event
-    },
-    aftergriddraw() {
-      // Handle aftergriddraw event
-    },
-    beforegriddraw() {
-      // Handle beforegriddraw event
-    },
-    beforetoolbarcreated() {
-      // Handle beforetoolbarcreated event
-    },
-    cellclick() {
-      // Handle cellclick event
-    },
-    celldoubleclick() {
-      // Handle celldoubleclick event
-    },
-    // ... (define other event handlers)
-  },
-  mounted() {
-    this.getSr();
   },
 };
 </script>
 
 <style scoped>
-@import "~@webdatarocks/webdatarocks/webdatarocks.min.css";
+
 </style>

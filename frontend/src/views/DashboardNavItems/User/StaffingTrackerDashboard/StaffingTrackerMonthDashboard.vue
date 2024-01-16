@@ -1,9 +1,9 @@
 <template>
-  <div class="py-8">
+  <div class="py-0">
     <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+      class="px-4 py-0 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-1 gap-6">
         <div>
           <label class="block">
             Site

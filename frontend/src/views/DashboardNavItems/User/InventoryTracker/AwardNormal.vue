@@ -207,6 +207,10 @@
       </div>
     </div>
   </div>
+  <div class="image-modal">
+    <button class="close-button" @click="closeImageModal">Close</button>
+    <img class="enlarged-image" @click.stop="" alt="Enlarged Image" />
+  </div>
   <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -303,7 +307,9 @@ export default {
           title: "Image",
           render: (data, type) => {
             if (type === "display" && data) {
-              return `<img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>`;
+              return `<button onclick="window.vm.openImageModal('${data}')">
+                <img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>
+              </button>`;
             }
             return "";
           },
@@ -359,6 +365,18 @@ export default {
     this.getAward();
   },
   methods: {
+    openImageModal(imageUrl) {
+      const modal = document.querySelector(".image-modal");
+      const enlargedImage = document.querySelector(".enlarged-image");
+
+      enlargedImage.src = imageUrl;
+      modal.style.display = "flex";
+    },
+    closeImageModal() {
+      const modal = document.querySelector(".image-modal");
+
+      modal.style.display = "none";
+    },
     async handleFileChange(event) {
       const selectedFile = event.target.files[0];
 
