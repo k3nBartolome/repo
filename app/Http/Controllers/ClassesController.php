@@ -19,18 +19,22 @@ class ClassesController extends Controller
 {
     public function srCompliance(Request $request)
     {
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 30, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 76, 78, 79, 80, 81, 87, 88];
+
         $result = SmartRecruitData::on('secondary_sqlsrv')
-        ->select('Step', 'Site', \DB::raw('COUNT(*) as Count'))
+        ->select('Step', 'AppStep', 'Site', \DB::raw('COUNT(*) as Count'))
         ->groupBy('Step', 'AppStep', 'Site')
         ->orderBy('Step')
         ->orderBy('AppStep')
+        ->whereIn('ApplicationStepStatusId', $appstepIDs)
         ->orderBy('Site')
+
         ->get();
 
         $groupedData = [];
 
         foreach ($result as $item) {
-            $combinedStepAppStep = $item->Step;
+            $combinedStepAppStep = $item->AppStep;
 
             if (!isset($groupedData[$combinedStepAppStep])) {
                 $groupedData[$combinedStepAppStep] = [
