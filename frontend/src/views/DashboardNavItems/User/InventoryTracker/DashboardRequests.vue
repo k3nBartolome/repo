@@ -235,7 +235,9 @@ export default {
             }
           },
         },
-        { data: "quantity_approved", title: "Quantity Requested" },
+        { data: "original_request", title: "Quantity Requested" },
+        { data: "received_quantity", title: "Quantity Received" },
+        { data: "quantity_approved", title: "Remaining Quantity" },
         { data: "status", title: "Approval Status" },
         {
           data: "requested_by.name",
