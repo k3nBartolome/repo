@@ -136,7 +136,7 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "http://127.0.0.1:8000/api/mpsmonth";
+        let apiUrl = "http://10.109.2.112:8081/api/mpsmonth";
         const params = {};
         if (this.sites_selected) {
           params.site_id = this.sites_selected;
@@ -161,7 +161,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -180,7 +180,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(`http://127.0.0.1:8000/api/programs`, {
+        const response = await axios.get(`http://10.109.2.112:8081/api/programs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

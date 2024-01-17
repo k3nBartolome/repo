@@ -19,12 +19,16 @@ class ClassesController extends Controller
 {
     public function srCompliance(Request $request)
     {
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 30, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 76, 78, 79, 80, 81, 87, 88];
+
         $result = SmartRecruitData::on('secondary_sqlsrv')
-        ->select('Step', 'Site', \DB::raw('COUNT(*) as Count'))
+        ->select('Step', 'AppStep', 'Site', \DB::raw('COUNT(*) as Count'))
         ->groupBy('Step', 'AppStep', 'Site')
         ->orderBy('Step')
         ->orderBy('AppStep')
+        ->whereIn('ApplicationStepStatusId', $appstepIDs)
         ->orderBy('Site')
+
         ->get();
 
         $groupedData = [];
@@ -54,6 +58,12 @@ class ClassesController extends Controller
 
         return response()->json(['sr' => $formattedResult]);
     }
+
+
+
+
+    
+
 
     /*  public function srCompliance(Request $request)
     {
@@ -87,29 +97,29 @@ class ClassesController extends Controller
     'sr' =>  $counts,
     ]);
     } */
-    /*
-    public function srCompliance(Request $request)
-    {
-    $fourMonthsBeforeNow = Carbon::now()->subDay(1);
+/*
+public function srCompliance(Request $request)
+{
+$fourMonthsBeforeNow = Carbon::now()->subDay(1);
 
-    $filteredData = SmartRecruitData::on('secondary_sqlsrv')
-    ->select([
-    'ApplicantId', 'DateOfApplication', 'Address',
-    'Municipality', 'Province', /* 'ApplicationInfoId', 'DateOfApplication', 'LastName',
-    'FirstName', 'MiddleName', 'MobileNo', 'Site', 'GenSource', 'SpecSource',
-    'Status', 'QueueDate', 'Interviewer', 'LOB', 'RescheduleDate', 'Step',sss
-    'AppStep', 'ApplicationStepStatusId', 'WordQuiz', 'SVA', 'Address',
-    'Municipality', 'Province', 'last_update_date'
-    ])
+$filteredData = SmartRecruitData::on('secondary_sqlsrv')
+->select([
+'ApplicantId', 'DateOfApplication', 'Address',
+'Municipality', 'Province', /* 'ApplicationInfoId', 'DateOfApplication', 'LastName',
+'FirstName', 'MiddleName', 'MobileNo', 'Site', 'GenSource', 'SpecSource',
+'Status', 'QueueDate', 'Interviewer', 'LOB', 'RescheduleDate', 'Step',sss
+'AppStep', 'ApplicationStepStatusId', 'WordQuiz', 'SVA', 'Address',
+'Municipality', 'Province', 'last_update_date'
+])
 
-    ->where('DateOfApplication', '>=', $fourMonthsBeforeNow)
-    ->get();
+->where('DateOfApplication', '>=', $fourMonthsBeforeNow)
+->get();
 
-    return response()->json([
-    'sr' => $filteredData,
-    ]);
-    }
-     */
+return response()->json([
+'sr' => $filteredData,
+]);
+}
+ */
 
     public function perxFilter(Request $request)
     {
@@ -120,7 +130,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -128,7 +138,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -136,7 +146,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -147,7 +157,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -158,7 +168,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 
@@ -178,7 +188,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
             }
         }
 
@@ -186,7 +196,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
             }
         }
 
@@ -194,7 +204,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -205,7 +215,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -216,7 +226,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
+                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
             }
         }
 
