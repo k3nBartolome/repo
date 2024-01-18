@@ -7,6 +7,7 @@ use App\Models\SiteInventory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class ItemsController extends Controller
 {
@@ -165,7 +166,7 @@ class ItemsController extends Controller
         $items->fill($request->all());
         $items->date_added = Carbon::now()->format('Y-m-d H:i');
         $items->save();
-        $items->item_less_id = $items->id;
+        $items->item_less_id = Str::uuid();
         $items->save();
 
         return response()->json([
@@ -198,7 +199,7 @@ class ItemsController extends Controller
         $items->fill($request->all());
         $items->date_added = Carbon::now()->format('Y-m-d H:i');
         $items->save();
-        $items->item_less_id = $items->id;
+        $items->item_less_id = Str::uuid();
         $items->save();
 
         return response()->json([

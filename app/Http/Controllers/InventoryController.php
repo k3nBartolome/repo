@@ -239,7 +239,7 @@ class InventoryController extends Controller
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
-            $siteInventory->item_less_id = $inventory->item->id;
+            $siteInventory->item_less_id = $inventory->item->item_less_id;
             $siteInventory->item_name = $inventory->item->item_name;
             $siteInventory->quantity = $inventory->received_quantity;
             $siteInventory->original_quantity = $inventory->received_quantity;
@@ -315,7 +315,7 @@ class InventoryController extends Controller
         } else {
             $siteInventory = new SiteInventory();
             $siteInventory->site_id = $inventory->transferred_to;
-            $siteInventory->item_less_id = $inventory->siteInventory->id;
+            $siteInventory->item_less_id = $inventory->siteInventory->item_less_id;
             $siteInventory->item_name = $inventory->siteInventory->item_name;
             $siteInventory->quantity = $inventory->received_quantity;
             $siteInventory->original_quantity = $inventory->received_quantity;
