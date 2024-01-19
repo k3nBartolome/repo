@@ -18,46 +18,62 @@ use Maatwebsite\Excel\Facades\Excel;
 class ClassesController extends Controller
 {
     public function srCompliance(Request $request)
-    {
-        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 30, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 76, 78, 79, 80, 81, 87, 88];
+{
+    $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 30, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 79, 80, 81, 87, 88];
 
-        $result = SmartRecruitData::on('secondary_sqlsrv')
-        ->select('Step', 'AppStep', 'Site', \DB::raw('COUNT(*) as Count'))
-        ->groupBy('Step', 'AppStep', 'Site')
-        ->orderBy('Step')
-        ->orderBy('AppStep')
-        ->whereIn('ApplicationStepStatusId', $appstepIDs)
-        ->orderBy('Site')
+    $query = SmartRecruitData::on('secondary_sqlsrv')
+    ->select('Step', 'AppStep', 'Site', \DB::raw('COUNT(*) as Count'))
+    ->groupBy('Step', 'AppStep', 'Site')
+    ->orderBy('Step')
+    ->orderBy('AppStep')
+    ->whereIn('ApplicationStepStatusId', $appstepIDs)
+    ->orderBy('Site');
 
-        ->get();
+    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+        $filterDateStart = $request->input('filter_date_start');
+        $filterDateEnd = $request->input('filter_date_end');
 
-        $groupedData = [];
+        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+            $startDate = date('Y-m-d', strtotime($filterDateStart));
+            $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-        foreach ($result as $item) {
-            $combinedStepAppStep = $item->AppStep;
+            $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
 
-            if (!isset($groupedData[$combinedStepAppStep])) {
-                $groupedData[$combinedStepAppStep] = [
-                'Bridgetowne' => 0,
-                'Clark' => 0,
-                'Davao' => 0,
-                'Makati' => 0,
-                'MOA' => 0,
-                'QC North EDSA' => 0,
-            ];
-            }
-
-            $groupedData[$combinedStepAppStep][$item->Site] += $item->Count;
+            $query->where('QueueDate', '>=', $startDate)
+                ->where('QueueDate', '<', $endDate);
         }
-
-        $formattedResult = [];
-
-        foreach ($groupedData as $combinedStepAppStep => $siteCounts) {
-            $formattedResult[] = array_merge(['CombinedStepAppStep' => $combinedStepAppStep], $siteCounts);
-        }
-
-        return response()->json(['sr' => $formattedResult]);
     }
+
+    $result = $query->get();
+
+    $groupedData = [];
+
+    foreach ($result as $item) {
+        $combinedStepAppStep = $item->Step;
+
+        if (!isset($groupedData[$combinedStepAppStep])) {
+            $groupedData[$combinedStepAppStep] = [
+            'Bridgetowne' => 0,
+            'Clark' => 0,
+            'Davao' => 0,
+            'Makati' => 0,
+            'MOA' => 0,
+            'QC North EDSA' => 0,
+        ];
+        }
+
+        $groupedData[$combinedStepAppStep][$item->Site] += $item->Count;
+    }
+
+    $formattedResult = [];
+
+    foreach ($groupedData as $combinedStepAppStep => $siteCounts) {
+        $formattedResult[] = array_merge(['CombinedStepAppStep' => $combinedStepAppStep], $siteCounts);
+    }
+
+    return response()->json(['sr' => $formattedResult]);
+}
+
 
 
 

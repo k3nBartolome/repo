@@ -48,6 +48,8 @@ editcapfile
 editcapfileguatemala
 editcapfileindia
 editcapfilejamaica
+Edsa
+EDSA
 emps
 Emps
 fieldslistclose

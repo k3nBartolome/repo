@@ -284,7 +284,7 @@ export default {
             filter_firstname: this.filterFirstName,
             filter_site: this.filterSite,
             filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,            filter_contact: this.filterContact,
+            filter_date_end: this.filterEndDate,            filter_contact: this.filterContact,
           },
           headers: {
             Authorization: `Bearer ${token}`,

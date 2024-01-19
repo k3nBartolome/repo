@@ -2,10 +2,12 @@
 allrequest
 allstatus
 alltransfer
+appstep
 autoload
 Autoload
 autoloader
 beyondcode
+Bridgetowne
 capfilems
 cfms
 classesall
@@ -20,6 +22,7 @@ cstat
 daterange
 dbal
 dont
+EDSA
 emps
 fakerphp
 firstname
@@ -36,6 +39,7 @@ Laravel
 lastname
 leftjoin
 Maatwebsite
+Makati
 middlename
 monthdata
 monthrange
