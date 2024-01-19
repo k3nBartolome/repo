@@ -1,4 +1,9 @@
 <template>
+  <header class="bg-white p-4 py-0">
+    <div class="max-w-screen-xl mx-auto">
+      <h2 class="text-3xl font-bold text-gray-900">SR Pending Movement</h2>
+    </div>
+  </header>
     <div class="bg-gray-100 px-4">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
         
@@ -31,7 +36,7 @@
         </div>
       </div>
     </div>
-    <div class="p-4">
+    <div class="px-4">
       <div
         class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto"
       >
@@ -50,9 +55,9 @@
     </thead>
     <tbody v-for="(item, index) in sr" :key="index">
       <tr
-      class="font-semibold text-black bg-white border-2 border-gray-400 border-solid"
+      class="font-semibold text-black bg-white border-2 border-gray-400 border-solid px-2"
     >
-<td class="border-2 border-gray-300 text-center font-semibold">{{item.CombinedStepAppStep}}</td>
+<td class="border-2 border-gray-300 text-left font-semibold">{{item.CombinedStepAppStep}}</td>
 <td class="border-2 border-gray-300 text-center font-semibold">{{item.Bridgetowne}}</td>
 <td class="border-2 border-gray-300 text-center font-semibold">{{item.Clark}}</td>
 <td class="border-2 border-gray-300 text-center font-semibold">{{item.Davao}}</td>

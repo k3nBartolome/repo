@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <header class="bg-white p-4">
+  <div class="py-0">
+    <header class="bg-white p-4 py-0">
       <div class="max-w-screen-xl mx-auto">
         <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool</h2>
       </div>
