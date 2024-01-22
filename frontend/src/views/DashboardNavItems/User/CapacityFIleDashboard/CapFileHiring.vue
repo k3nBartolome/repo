@@ -84,12 +84,10 @@
 
   <div class="px-2 overflow-x-auto overflow-y-auto">
     <div class="p-4">
-      <div
-        class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto"
-      >
-        <table class="min-w-full border-collapse border-2 border-gray-300">
+      <div class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto">
+      <table class="min-w-full border-collapse border-2 border-gray-300">
           <thead class="">
-            <tr class="border-4 border-gray-300 px-1 text-center">
+            <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
               <th
                 class="border-2 border-gray-300 px-1"
                 rowspan="3"
@@ -695,7 +693,9 @@
           </thead>
           <tbody>
             <template v-for="(item, index) in classes" :key="index">
-              <tr>
+               <tr
+            class="text-black bg-white border-b-2 border-gray-400 border-solid"
+          >
                 <td
                   class="border-4 border-gray-300 truncate px-2 font-semibold"
                 >

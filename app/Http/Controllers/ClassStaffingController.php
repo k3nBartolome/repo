@@ -170,18 +170,21 @@ class ClassStaffingController extends Controller
         }
         $uniqueMonths = $uniqueMonths->distinct()->get();
 
-        $uniqueSiteIds = DB::table('sites')
-        ->select([
-            DB::raw('COALESCE(site_id, 0) as site_id'),
-            DB::raw('COALESCE(name, null) as site_name'),
-        ]);
+        $uniqueSiteIdsQuery = DB::table('sites')
+    ->select([
+        DB::raw('COALESCE(site_id, 0) as site_id'),
+        DB::raw('COALESCE(name, null) as site_name'),
+    ]);
 
-        if (!empty($siteNum)) {
-            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
-            $uniqueSiteIds->whereIn('site_id', $siteNum);
-        }
+if (!empty($siteNum)) {
+    $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
+    $uniqueSiteIdsQuery->whereIn('site_id', $siteNum);
+}
 
-        $uniqueSiteIds = $uniqueSiteIds->distinct()->get();
+$uniqueSiteIds = $uniqueSiteIdsQuery->distinct()
+    ->where('is_active', 1)
+    ->get();
+
 
         // Initialize the computed sums array
         $computedSums = [];
@@ -382,18 +385,20 @@ class ClassStaffingController extends Controller
         }
 
         $uniqueMonths = $uniqueMonths->distinct()->get();
-        $uniqueSiteIds = DB::table('sites')
-        ->select([
-            DB::raw('COALESCE(site_id, 0) as site_id'),
-            DB::raw('COALESCE(name, null) as site_name'),
-        ]);
+        $uniqueSiteIdsQuery = DB::table('sites')
+    ->select([
+        DB::raw('COALESCE(site_id, 0) as site_id'),
+        DB::raw('COALESCE(name, null) as site_name'),
+    ]);
 
-        if (!empty($siteNum)) {
-            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
-            $uniqueSiteIds->whereIn('site_id', $siteNum);
-        }
+if (!empty($siteNum)) {
+    $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
+    $uniqueSiteIdsQuery->whereIn('site_id', $siteNum);
+}
 
-        $uniqueSiteIds = $uniqueSiteIds->distinct()->get();
+$uniqueSiteIds = $uniqueSiteIdsQuery->distinct()
+    ->where('is_active', 1)
+    ->get();
 
         $computedSums = [];
         $grandTotals = [
@@ -591,7 +596,7 @@ class ClassStaffingController extends Controller
         $distinctMonths = DB::table('date_ranges')
         ->select([
             'month_num',
-            DB::raw('COALESCE(date_ranges.month, 0) as month_name'),
+            DB::raw('COALESCE(date_ranges.month, null) as month_name'),
         ])
         ->distinct()
         ->get();
@@ -685,8 +690,9 @@ class ClassStaffingController extends Controller
         $distinctSites = DB::table('sites')
         ->select([
             'site_id',
-            DB::raw('COALESCE(sites.name, 0) as site_name'),
+            DB::raw('COALESCE(sites.name, null) as site_name'),
         ])
+        ->where('sites.is_active', 1)
         ->distinct()
         ->get();
         $computedSums = [];
@@ -732,6 +738,7 @@ class ClassStaffingController extends Controller
             )
             ->where('class_staffing.active_status', 1)
             ->where('sites.site_id', $siteId)
+            
             ->when($monthNum, function ($query) use ($monthNum) {
                 return $query->where('date_ranges.month_num', 'LIKE', '%'.$monthNum.'%');
             })

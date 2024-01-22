@@ -59,6 +59,7 @@ remx
 siteinventory
 siteinventoryall
 sslmode
+subquery
 sumtotaltarget
 updateclassesstaffing
 websockets
