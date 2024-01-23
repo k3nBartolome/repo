@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\DashboardClassesExport;
 use App\Exports\MyExport;
+use App\Exports\SrExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
@@ -17,6 +18,82 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ClassesController extends Controller
 {
+    public function srSite()
+    {
+        $query = SmartRecruitData::on('secondary_sqlsrv')->select('Site')->distinct()->get();
+        return response()->json([
+            'sites' => $query
+        ]);
+    }
+   
+    public function srFilter(Request $request)
+    {
+        $query = SmartRecruitData::on('secondary_sqlsrv')
+        ->select('ApplicationInfoId','QueueDate','LastName','FirstName','MiddleName', 
+        'Site','GenSource','SpecSource','Step','AppStep');
+
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+
+            if (!empty($filterSite)) {
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+            }
+        }
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd));
+
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+
+                $query->where('QueueDate', '>=', $startDate)
+                    ->where('QueueDate', '<', $endDate);
+            }
+        }
+
+        $filteredData = $query->get();
+
+        return response()->json([
+            'sr' => $filteredData,
+        ]);
+    }
+    public function srExport(Request $request)
+    {
+        $query = SmartRecruitData::on('secondary_sqlsrv')
+        ->select('ApplicationInfoId','QueueDate','LastName','FirstName','MiddleName', 
+        'Site','GenSource','SpecSource','Step','AppStep');
+
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+
+            if (!empty($filterSite)) {
+                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+            }
+        }
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd));
+
+                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+
+                $query->where('QueueDate', '>=', $startDate)
+                    ->where('QueueDate', '<', $endDate);
+            }
+        }
+
+        $filteredData = $query->get();
+
+        $filteredDataArray = $filteredData->toArray();
+
+        return Excel::download(new SrExport($filteredDataArray), 'filtered_sr_data.xlsx');
+    }
     public function srCompliance(Request $request)
     {
         $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 30, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 79, 80, 81, 87, 88];
@@ -104,62 +181,14 @@ class ClassesController extends Controller
 
         return response()->json(['sr' => $formattedResult]);
     }
-
-    /*  public function srCompliance(Request $request)
-    {
-    $fourMonthsBeforeNow = Carbon::now()->subMonth(12)->startOfMonth();
-
-    $filteredData = SmartRecruitData::on('secondary_sqlsrv')
-    ->select([
-    'ApplicantId','ApplicationInfoId', 'DateOfApplication', 'LastName',
-    'FirstName', 'MiddleName', 'MobileNo', 'Site', 'GenSource', 'SpecSource',
-    'Status', 'QueueDate', 'Interviewer', 'LOB', 'RescheduleDate', 'Step',
-    'AppStep', 'ApplicationStepStatusId', 'WordQuiz', 'SVA', 'Address',
-    'Municipality', 'Province', 'last_update_date'
-    ])
-    ->where('DateOfApplication', '>=', $fourMonthsBeforeNow)
-    ->get();
-
-    $counts = [];
-    foreach ($filteredData as $data) {
-    foreach ($data->toArray() as $key => $value) {
-    if (!isset($counts[$key])) {
-    $counts[$key] = [];
-    }
-    if (!isset($counts[$key][$value])) {
-    $counts[$key][$value] = 0;
-    }
-    $counts[$key][$value]++;
-    }
-    }
-
-    return response()->json([
-    'sr' =>  $counts,
-    ]);
-    } */
-/*
-public function srCompliance(Request $request)
+    public function perxSite()
 {
-$fourMonthsBeforeNow = Carbon::now()->subDay(1);
-
-$filteredData = SmartRecruitData::on('secondary_sqlsrv')
-->select([
-'ApplicantId', 'DateOfApplication', 'Address',
-'Municipality', 'Province', /* 'ApplicationInfoId', 'DateOfApplication', 'LastName',
-'FirstName', 'MiddleName', 'MobileNo', 'Site', 'GenSource', 'SpecSource',
-'Status', 'QueueDate', 'Interviewer', 'LOB', 'RescheduleDate', 'Step',sss
-'AppStep', 'ApplicationStepStatusId', 'WordQuiz', 'SVA', 'Address',
-'Municipality', 'Province', 'last_update_date'
-])
-
-->where('DateOfApplication', '>=', $fourMonthsBeforeNow)
-->get();
-
-return response()->json([
-'sr' => $filteredData,
-]);
+    $query = DB::connection('secondary_sqlsrv')
+    ->table('PERX_DATA')->select('Site')->whereNotNull('Site')->distinct()->get();
+    return response()->json([
+        'sites' => $query
+    ]);
 }
- */
 
     public function perxFilter(Request $request)
     {

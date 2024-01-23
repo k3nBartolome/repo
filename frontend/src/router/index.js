@@ -53,6 +53,7 @@ import staffingTrackerMonthDashboard from "@/views/DashboardNavItems/User/Staffi
 import staffingTrackerSiteDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerSiteDashboard.vue";
 import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerWeekDashboard.vue";
 import perxAuditTools from "@/views/DashboardNavItems/User/PerxAuditTools.vue";
+import SrFilterTool from "@/views/DashboardNavItems/User/SrFilterTool.vue";
 
 const routes = [
   {
@@ -73,6 +74,11 @@ const routes = [
         path: "/perx",
         name: "perxAuditTools",
         component: perxAuditTools,
+      },
+      {
+        path: "/sr_filter",
+        name: "SrFilterTool",
+        component: SrFilterTool,
       },
       {
         path: "/web",

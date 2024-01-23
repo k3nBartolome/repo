@@ -112,10 +112,24 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
     Route::get('perxfilter', [ClassesController::class, 'perxFilter']);
     Route::get('sr_compliance', [ClassesController::class, 'srCompliance']);
+    Route::get('sr_filter', [ClassesController::class, 'srFilter']);
+    Route::get('sr_export', [ClassesController::class, 'srExport']);
+    Route::get('sr_site', [ClassesController::class, 'srSite']);
+    Route::get('perx_site', [ClassesController::class, 'perxSite']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
     Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);
     Route::get('export4', [ClassesController::class, 'dashboardClassesExport4']);
+    Route::get('mps', [ClassStaffingController::class, 'mps']);
+Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
+Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
+Route::get('programs_selected', [ProgramController::class, 'perSite']);
+Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
+Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
+Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
+
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);
@@ -182,12 +196,3 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
-Route::get('mps', [ClassStaffingController::class, 'mps']);
-Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
-Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
-Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
-Route::get('programs_selected', [ProgramController::class, 'perSite']);
-Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
-Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
-Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);

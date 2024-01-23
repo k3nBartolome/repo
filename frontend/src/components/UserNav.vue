@@ -116,14 +116,41 @@
             </div>
           </div>
         </li>
-        <router-link to="/web" class="link-button">
-          <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/web') }"
-            v-if="isUser"
-                      >
-            SR Pending Movements
-          </li>
-        </router-link>
+        <li class="tab-button">
+          <div >
+            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown6">
+              <button
+                @click="toggleDropdown6"
+                class="px-4 py-2 text-black rounded cursor-pointer"
+              >
+              SR Summary
+              </button>
+              <div
+                v-show="isDropdown6Open"
+                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
+              >
+              <router-link to="/web" class="link-button">
+                <li class="tab-button"
+                    :class="{ 'selected-tab': isActiveTab('/perx') }"
+                 
+                            >
+                            SR Pending Movements
+                </li>
+              </router-link>
+              <router-link to="/sr_filter" class="link-button">
+                <li class="tab-button"
+                    :class="{ 'selected-tab': isActiveTab('/perx') }"
+                  
+                            >
+                            SR List
+                </li>
+              </router-link>
+
+              </div>
+            </div>
+          </div>
+        </li>
+       
         <!-- <li class="tab-button">
          <div v-if="isUser">
           <div class="relative inline-block">
@@ -255,6 +282,7 @@ export default {
       isDropdown3Open: false,
       isDropdown4Open: false,
       isDropdown5Open: false,
+      isDropdown6Open: false,
     };
   },
   computed: {
@@ -297,6 +325,9 @@ export default {
     },
     toggleDropdown5() {
   this.isDropdown5Open = !this.isDropdown5Open;
+},
+toggleDropdown6() {
+  this.isDropdown6Open = !this.isDropdown6Open;
 },
 
     navigateToPage() {
