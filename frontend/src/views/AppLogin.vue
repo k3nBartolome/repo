@@ -45,7 +45,7 @@
 
         <div class="flex items-center justify-between">
           <div class="text-sm">
-            <a href="#" class="font-medium text-orange-600 hover:text-gray-700"
+            <a  class="font-medium text-orange-600 hover:text-gray-700"
               >Forgot your password?</a
             >
           </div>
