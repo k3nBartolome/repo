@@ -214,7 +214,7 @@ export default {
     };
   },
   mounted() {
-    
+    this.getDates();
     this.getSites();
   },
   computed: {
@@ -226,6 +226,27 @@ export default {
   },
 
   methods: {
+    async getDates() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://10.109.2.112:8081/api/perx_date", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.filterStartDate = response.data.minDate;
+          this.filterEndDate= response.data.maxDate;
+          console.log(response.data.minDate);
+          console.log(response.data.maxDate);
+        } else {
+          console.log("Error fetching Date");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     updateFilterStartDate(event) {
       this.filterStartDate = event.target.value;
     },

@@ -81,7 +81,7 @@ const routes = [
         component: SrFilterTool,
       },
       {
-        path: "/web",
+        path: "/sr_compliance",
         name: "WebRockData",
         component: WebRockData,
       },

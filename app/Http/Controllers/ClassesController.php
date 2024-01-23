@@ -25,6 +25,22 @@ class ClassesController extends Controller
             'sites' => $query
         ]);
     }
+    public function srDate()
+    {
+        $minDate = SmartRecruitData::on('secondary_sqlsrv')->min('QueueDate');
+        $maxDate = SmartRecruitData::on('secondary_sqlsrv')->max('QueueDate');
+    
+        $minDate = \Carbon\Carbon::parse($minDate)->format('Y-m-d');
+        $maxDate = \Carbon\Carbon::parse($maxDate)->format('Y-m-d');
+    
+        return response()->json([
+            'minDate' => $minDate,
+            'maxDate' => $maxDate
+        ]);
+    }
+   
+    
+
    
     public function srFilter(Request $request)
     {
@@ -187,6 +203,21 @@ class ClassesController extends Controller
     ->table('PERX_DATA')->select('Site')->whereNotNull('Site')->distinct()->get();
     return response()->json([
         'sites' => $query
+    ]);
+}
+public function perxDate()
+{
+    $minDate = DB::connection('secondary_sqlsrv')
+    ->table('PERX_DATA')->min('DateOfApplication');
+    $maxDate = DB::connection('secondary_sqlsrv')
+    ->table('PERX_DATA')->max('DateOfApplication');
+
+    $minDate = \Carbon\Carbon::parse($minDate)->format('Y-m-d');
+    $maxDate = \Carbon\Carbon::parse($maxDate)->format('Y-m-d');
+
+    return response()->json([
+        'minDate' => $minDate,
+        'maxDate' => $maxDate
     ]);
 }
 

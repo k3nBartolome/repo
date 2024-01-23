@@ -166,6 +166,7 @@ export default {
   mounted() {
     
     this.getSites();
+    this.getDates();
   },
   computed: {
     formattedFilterDate() {
@@ -190,6 +191,27 @@ export default {
           console.log(response.data.data);
         } else {
           console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+  async getDates() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.filterStartDate = response.data.minDate;
+          this.filterEndDate= response.data.maxDate;
+          console.log(response.data.minDate);
+          console.log(response.data.maxDate);
+        } else {
+          console.log("Error fetching Date");
         }
       } catch (error) {
         console.log(error);

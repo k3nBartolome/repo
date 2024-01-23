@@ -1,9 +1,9 @@
 <template>
   <div class="main-container">
-    <div class="nav-container sticky-nav">
+    <div class="nav-container sticky-nav pb-0">
       <NavBar />
     </div>
-    <div class="w-full">
+    <div class="w-full pt-0">
       <div>
         <router-view></router-view>
       </div>

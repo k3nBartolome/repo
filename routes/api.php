@@ -114,6 +114,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('sr_compliance', [ClassesController::class, 'srCompliance']);
     Route::get('sr_filter', [ClassesController::class, 'srFilter']);
     Route::get('sr_export', [ClassesController::class, 'srExport']);
+    Route::get('sr_date', [ClassesController::class, 'srDate']);
+    Route::get('perx_date', [ClassesController::class, 'perxDate']);
     Route::get('sr_site', [ClassesController::class, 'srSite']);
     Route::get('perx_site', [ClassesController::class, 'perxSite']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);

@@ -1,6 +1,6 @@
 <template>
-  <div class="nav-container sticky top-0 z-50 bg-white">
-    <nav class="container px-6 py-0 mx-auto md:flex md:justify-between md:items-center">
+  <div class="nav-container sticky top-0 z-50 bg-red-500">
+    <nav class="container px-0 py-0 mx-auto md:flex md:justify-between md:items-center">
       <div class="flex items-center justify-between">
         <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
         <div @click="toggleNav" class="flex md:hidden">
@@ -129,9 +129,9 @@
                 v-show="isDropdown6Open"
                 class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
               >
-              <router-link to="/web" class="link-button">
+              <router-link to="/sr_compliance" class="link-button">
                 <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/perx') }"
+                    :class="{ 'selected-tab': isActiveTab('/sr_compliance') }"
                  
                             >
                             SR Pending Movements
@@ -139,7 +139,7 @@
               </router-link>
               <router-link to="/sr_filter" class="link-button">
                 <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/perx') }"
+                    :class="{ 'selected-tab': isActiveTab('/sr_filter') }"
                   
                             >
                             SR List
@@ -150,38 +150,6 @@
             </div>
           </div>
         </li>
-       
-        <!-- <li class="tab-button">
-         <div v-if="isUser">
-          <div class="relative inline-block">
-            <button
-              @click="toggleDropdown3"
-              class="px-4 py-2 text-black rounded cursor-pointer"
-            >
-              Reports
-            </button>
-            <div
-              v-show="isDropdown3Open"
-              class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
-            >
-              <router-link to="/staffing_report/month" class="link-button">
-                <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/staffing_report/month') }"
-                                  >
-                  Staffing Tracker
-                </li>
-              </router-link>
-              <router-link to="/capfile/summary" class="link-button">
-                <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/capfile/summary') }"
-                                  >
-                  Capacity File
-                </li>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </li> -->
       <li class="tab-button">
         <div v-if="isUser">
           <div class="relative inline-block" v-on:mouseleave="toggleDropdown">
@@ -216,16 +184,6 @@
       </ul>
       <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
         <div class="py-4">
-          <!-- <select
-            v-model="selectedOption"
-            @change="navigateToPage"
-            class="border-gray-300 rounded focus:ring focus:ring-indigo-200 focus:border-indigo-500"
-          >
-            <option value="/capfileindia" class="flex items-center">IND</option>
-            <option value="/capfile" class="flex items-center">PH</option>
-            <option value="/capfilejamaica" class="flex items-center">JAM</option>
-            <option value="/capfileguatemala" class="flex items-center">GUA</option>
-          </select> -->
           <div class="relative inline-block" v-on:mouseleave="toggleDropdown2">
             <router-link to="/profile" class="link-button">
               <li class="tab-button" :class="{ 'selected-tab': isActiveTab('/profile') }">

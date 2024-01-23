@@ -108,6 +108,8 @@ export default {
       filterStartDate: "",
       filterEndDate: "",
       showAppStep: true, 
+      minDate:[],
+      maxDate:[],
     };
   },
   computed: {
@@ -119,8 +121,30 @@ export default {
   },
   mounted() {
     this.getSr();
+    this.getDates();
   },
   methods: {
+    async getDates() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.filterStartDate = response.data.minDate;
+          this.filterEndDate= response.data.maxDate;
+          console.log(response.data.minDate);
+          console.log(response.data.maxDate);
+        } else {
+          console.log("Error fetching Date");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toggleAppStep(item) {
       if (this.showAppStep) {
         console.log("Showing item.Step:", item.Step);
