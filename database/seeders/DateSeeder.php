@@ -40,14 +40,7 @@ class DateSeeder extends Seeder
             $start_date->addDays(1);
         }
 
-        $existingData = DB::table('date_ranges')->get();
-
-        if ($existingData->count() === 0) {
-          
-            DB::table('date_ranges')->insert($weeks);
-        } else {
-           
-            echo 'Table already seeded with data';
-        }
+        // Remove the conditional check for existing data
+        DB::table('date_ranges')->insert($weeks);
     }
 }

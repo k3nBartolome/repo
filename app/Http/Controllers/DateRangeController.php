@@ -14,25 +14,31 @@ class DateRangeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(): AnonymousResourceCollection
+    public function index()
     {
-        $dateRanges = DateRange::paginate(10);
-    
-        return DateRangeResource::collection($dateRanges);
+        $year = 2024;
+        $dateRanges = DateRange::where('year', $year)
+        ->get();
+
+        return response()->json(['data' => $dateRanges]);
     }
-    
-    public function indexByMonth($monthId): AnonymousResourceCollection
+
+    public function indexByMonth($monthId)
     {
-        $dateRanges = DateRange::where('month_num', $monthId)->paginate(10);
-    
-        return DateRangeResource::collection($dateRanges);
+        $year = 2024;
+
+        $dateRanges = DateRange::where('month_num', $monthId)
+            ->where('year', $year)
+            ->get();
+
+        return response()->json(['data' => $dateRanges]);
     }
 
     public function perMonth(Request $request)
     {
         $dateNum = $request->input('month_num');
 
-        $query = DateRange::where('year', 2023);
+        $query = DateRange::where('year', 2024);
 
         if (!empty($dateNum)) {
             $dateNum = is_array($dateNum) ? $dateNum : [$dateNum];
@@ -47,11 +53,12 @@ class DateRangeController extends Controller
     public function byMonth(Request $request, $monthId)
     {
         $monthIdArray = explode(',', $monthId);
-
+        $year = 2024;
         $allDaterange = [];
 
         foreach ($monthIdArray as $monthId) {
             $daterange = DateRange::where('month_num', $monthId)
+            ->where('year', $year)
             ->get();
 
             $allDaterange = array_merge($allDaterange, $daterange->toArray());

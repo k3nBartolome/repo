@@ -127,7 +127,7 @@ export default {
     async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -178,7 +178,7 @@ export default {
         }
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/sr_compliance",
+          "http://127.0.0.1:8000/api/sr_compliance",
           {
             params,
             headers: {
