@@ -116,19 +116,7 @@
             </div>
           </div>
         </li>
-        <li class="tab-button">
-          <div >
-            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown6">
-              <button
-                @click="toggleDropdown6"
-                class="px-4 py-2 text-black rounded cursor-pointer"
-              >
-              SR Summary
-              </button>
-              <div
-                v-show="isDropdown6Open"
-                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
-              >
+        
               <router-link to="/sr_compliance" class="link-button">
                 <li class="tab-button"
                     :class="{ 'selected-tab': isActiveTab('/sr_compliance') }"
@@ -137,19 +125,7 @@
                             SR Pending Movements
                 </li>
               </router-link>
-              <router-link to="/sr_filter" class="link-button">
-                <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/sr_filter') }"
-                  
-                            >
-                            SR List
-                </li>
-              </router-link>
 
-              </div>
-            </div>
-          </div>
-        </li>
       <li class="tab-button">
         <div v-if="isUser">
           <div class="relative inline-block" v-on:mouseleave="toggleDropdown">
@@ -205,12 +181,13 @@
               class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14"
             >
             <router-link to="/login" class="link-button" @click="logout">
-            <button>
-              <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
-                <i class="bg-red-600 fa fa-sign-out"></i> Logout
-              </li>
-            </button>
-          </router-link>
+              <button>
+                <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
+                  <i class="bg-red-600 fa fa-sign-out"></i> Logout
+                </li>
+              </button>
+            </router-link>
+            
 
             </div>
           </div>

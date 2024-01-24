@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
     public function login(Request $request)
@@ -46,14 +46,15 @@ class AuthController extends Controller
     {
         try {
             $user = User::findOrFail($id);
-            $user->token()->revoke();
-
+            $user->tokens()->where('id', $id)->delete();
+    
             return response()->json('Logged out', 200);
         } catch (ModelNotFoundException $e) {
             return response()->json('No user is currently authenticated', 401);
         } catch (\Exception $e) {
-            // Log or handle other exceptions
+            // Log the error message
+            Log::error('Error during logout:', $e->getMessage());
             return response()->json('Internal Server Error', 500);
         }
-    }
+}
 }

@@ -29,6 +29,7 @@ class SrExport implements FromCollection, WithHeadings
             'First Name',
             'Middle Name', 
             'Site', 
+            'Mobile No.',
             'GenSource', 
             'SpecSource',
             'Step',

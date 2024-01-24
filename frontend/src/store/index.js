@@ -16,6 +16,7 @@ export default createStore({
     user_id: null,
     name: null,
     permissions: [],
+    persistedStateKey: persistedStateOptions.key,
   },
   mutations: {
     setUser(state, { user, name, role, token, permissions }) {
@@ -46,33 +47,44 @@ export default createStore({
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     },
     logout(state) {
-      console.log("Logout mutation called");
-      state.user = null;
-      state.role = null;
-      state.token = null;
-      state.user_id = null;
-      state.name = null;
-      state.permissions = [];
-      axios.defaults.headers.common["Authorization"] = "";
-
-      // Clear local storage directly
-      Object.keys(localStorage).forEach((key) => {
-        if (key.startsWith("vuex")) {
-          localStorage.removeItem(key);
-        }
+      // Reset all properties to their initial values
+      Object.assign(state, {
+        user: null,
+        role: null,
+        token: null,
+        user_id: null,
+        name: null,
+        permissions: [],
       });
-    },
+    
+      // Clear axios authorization header
+      axios.defaults.headers.common["Authorization"] = "";
+    
+      // Clear local storage
+      localStorage.clear();
+      localStorage.removeItem(persistedStateOptions.key);
+      localStorage.removeItem(state.persistedStateKey);
+    }
+    
+    
+    
 
   },
   actions: {
     async logout({ commit, state }) {
-      console.log("User State Before Logout:", state);
       try {
         if (state.token) {
+          // Make a copy of the user ID
           const id = state.user_id;
+    
+          // Clear Vuex state and local storage
+          commit('logout');
+    
           console.log("Authentication Token:", state.token);
-await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
-          commit("logout");
+          await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
+    
+          // Remove specific item from local storage
+          localStorage.removeItem(state.persistedStateKey);
         } else {
           console.warn("User is not authenticated.");
         }
@@ -82,11 +94,11 @@ await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
         } else {
             console.error("Error during logout:", error);
         }
+      }
     }
-    },
-    // ... other actions
-  },
+    
 
+  },
   getters: {
     isLoggedIn(state) {
       return !!state.token;

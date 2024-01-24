@@ -54,6 +54,7 @@ import staffingTrackerSiteDashboard from "@/views/DashboardNavItems/User/Staffin
 import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerWeekDashboard.vue";
 import perxAuditTools from "@/views/DashboardNavItems/User/PerxAuditTools.vue";
 import SrFilterTool from "@/views/DashboardNavItems/User/SrFilterTool.vue";
+import SrManager from "@/views/DashboardNavItems/User/SrManager.vue";
 
 const routes = [
   {
@@ -75,20 +76,28 @@ const routes = [
         name: "perxAuditTools",
         component: perxAuditTools,
       },
-      {
-        path: "/sr_filter",
-        name: "SrFilterTool",
-        component: SrFilterTool,
-      },
-      {
-        path: "/sr_compliance",
-        name: "WebRockData",
-        component: WebRockData,
-      },
+      
       {
         path: "/user_management",
         name: "usermanagement",
         component: UserManagement,
+      },
+      {
+        path: "/",
+        name: "SrManager",
+        component: SrManager,
+        children: [
+          {
+            path: "/sr_filter",
+            name: "SrFilterTool",
+            component: SrFilterTool,
+          },
+          {
+            path: "/sr_compliance",
+            name: "WebRockData",
+            component: WebRockData,
+          },
+        ],
       },
       {
         path: "/inventory",
