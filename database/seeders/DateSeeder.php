@@ -42,5 +42,8 @@ class DateSeeder extends Seeder
 
         // Remove the conditional check for existing data
         DB::table('date_ranges')->insert($weeks);
+        DB::table('date_ranges')->update([
+            'date_id' => DB::raw('id'),
+        ]);
     }
 }

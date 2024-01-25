@@ -2,14 +2,78 @@
   <div v-if="isLoading" class="loader">
     <div aria-label="Loading..." role="status" class="loader">
       <svg class="icon" viewBox="0 0 256 256">
-        <line x1="128" y1="32" x2="128" y2="64" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="195.9" y1="60.1" x2="173.3" y2="82.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="224" y1="128" x2="192" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="195.9" y1="195.9" x2="173.3" y2="173.3" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="128" y1="224" x2="128" y2="192" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="60.1" y1="195.9" x2="82.7" y2="173.3" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="32" y1="128" x2="64" y2="128" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
-        <line x1="60.1" y1="60.1" x2="82.7" y2="82.7" stroke-linecap="round" stroke-linejoin="round" stroke-width="24"></line>
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
       </svg>
       <span class="loading-text">Loading...</span>
     </div>
@@ -31,7 +95,9 @@
             'bg-blue-500 text-white': !showJanColumn,
           }"
         >
-          {{ showJanColumn ? "Swith to Monthly View" : "Switch to Weekly View" }}
+          {{
+            showJanColumn ? "Swith to Monthly View" : "Switch to Weekly View"
+          }}
         </button>
       </div>
       <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2 ml-4 items-center">
@@ -89,7 +155,7 @@
       >
         <table class="min-w-full border-collapse border-2 border-gray-300">
           <thead class="">
-            <tr class="border-4 border-gray-300 px-1 text-center">
+            <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
               <th
                 class="border-2 border-gray-300 px-1"
                 rowspan="3"
@@ -133,7 +199,7 @@
                 Feb
               </th>
               <th
-                :colspan="showMarColumn ? 5 : 1"
+                :colspan="showMarColumn ? 6 : 1"
                 :rowspan="showMarColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showMarColumn,
@@ -147,7 +213,7 @@
                 Mar
               </th>
               <th
-                :colspan="showAprColumn ? 6 : 1"
+                :colspan="showAprColumn ? 5 : 1"
                 :rowspan="showAprColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showAprColumn,
@@ -175,7 +241,7 @@
                 May
               </th>
               <th
-                :colspan="showJunColumn ? 5 : 1"
+                :colspan="showJunColumn ? 6 : 1"
                 :rowspan="showJunColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showJunColumn,
@@ -189,7 +255,7 @@
                 Jun
               </th>
               <th
-                :colspan="showJulColumn ? 6 : 1"
+                :colspan="showJulColumn ? 5 : 1"
                 :rowspan="showJulColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showJulColumn,
@@ -203,7 +269,7 @@
                 Jul
               </th>
               <th
-                :colspan="showAugColumn ? 5 : 1"
+                :colspan="showAugColumn ? 6 : 1"
                 :rowspan="showAugColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showAugColumn,
@@ -217,7 +283,7 @@
                 Aug
               </th>
               <th
-                :colspan="showSepColumn ? 6 : 1"
+                :colspan="showSepColumn ? 5 : 1"
                 :rowspan="showSepColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showSepColumn,
@@ -245,7 +311,7 @@
                 Oct
               </th>
               <th
-                :colspan="showNovColumn ? 5 : 1"
+                :colspan="showNovColumn ? 6 : 1"
                 :rowspan="showNovColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showNovColumn,
@@ -259,7 +325,7 @@
                 Nov
               </th>
               <th
-                :colspan="showDecColumn ? 6 : 1"
+                :colspan="showDecColumn ? 5 : 1"
                 :rowspan="showDecColumn ? 1 : 3"
                 :class="{
                   'bg-red-500': !showDecColumn,
@@ -282,16 +348,16 @@
             </tr>
             <tr class="border-4 border-gray-300 px-1 text-center">
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 1
+                Dec 31
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 8
+                Jan 7
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 15
+                Jan 14
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 22
+                Jan 21
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -302,16 +368,16 @@
                 Jan
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Jan 29
+                Jan 28
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 5
+                Feb 4
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 12
+                Feb 11
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 19
+                Feb 18
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -322,16 +388,19 @@
                 Feb
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Feb 26
+                Feb 25
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 5
+                Mar 2
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 12
+                Mar 9
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 19
+                Mar 17
+              </th>
+              <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
+                Mar 24
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -342,19 +411,16 @@
                 Mar
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Mar 26
+                Mar 31
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 2
+                Apr 7
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 9
+                Apr 14
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 16
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 23
+                Apr 21
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -365,16 +431,16 @@
                 Apr
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                Apr 30
+                Apr 28
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 7
+                May 5
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 14
+                May 12
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 21
+                May 19
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -385,16 +451,19 @@
                 May
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                May 28
+                May 26
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 4
+                Jun 3
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 11
+                Jun 9
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 18
+                Jun 16
+              </th>
+              <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
+                Jun 23
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -405,19 +474,16 @@
                 Jun
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jun 25
+                Jun 30
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 2
+                Jul 7
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 9
+                Jul 14
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 16
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 23
+                Jul 21
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -428,16 +494,19 @@
                 Jul
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Jul 30
+                Jul 28
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 6
+                Aug 4
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 13
+                Aug 11
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 20
+                Aug 18
+              </th>
+              <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
+                Aug 25
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -448,19 +517,16 @@
                 Aug
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Aug 27
+                Sep 1
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 3
+                Sep 8
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 10
+                Sep 15
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 17
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 24
+                Sep 22
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -471,16 +537,16 @@
                 Sep
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 1
+                Sep 29
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 8
+                Oct 6
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 15
+                Oct 13
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 22
+                Oct 20
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -491,16 +557,19 @@
                 Oct
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Oct 29
+                Oct 27
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 5
+                Nov 3
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 12
+                Nov 10
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 19
+                Nov 17
+              </th>
+              <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
+                Nov 24
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -511,19 +580,16 @@
                 Nov
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Nov 26
+                Dec 1
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 3
+                Dec 8
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 10
+                Dec 15
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 17
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 24
+                Dec 22
               </th>
               <th
                 class="border-2 border-gray-300 px-1"
@@ -536,166 +602,178 @@
             </tr>
             <tr class="border-4 border-gray-300 px-1 text-center">
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 7
+                Jan 6
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 14
+                Jan 13
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 21
+                Jan 20
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJanColumn">
-                Jan 28
+                Jan 27
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 4
+                Feb 3
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 11
+                Feb 10
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 18
+                Feb 17
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showFebColumn">
-                Feb 25
+                Feb 24
+              </th>
+
+              <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
+                Mar 1
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 4
+                Mar 8
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 11
+                Mar 16
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 18
+                Mar 23
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMarColumn">
-                Mar 25
+                Mar 30
+              </th>
+
+              <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
+                Mar 6
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 1
+                Apr 13
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 8
+                Apr 20
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 15
+                Apr 27
               </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 22
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showAprColumn">
-                Apr 29
+
+              <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
+                May 4
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 6
+                May 11
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 13
+                May 18
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 20
+                May 25
               </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showMayColumn">
-                May 27
+
+              <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
+                Jun 2
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 3
+                Jun 8
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 10
+                Jun 15
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 17
+                Jun 22
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJunColumn">
-                Jun 24
+                Jun 29
+              </th>
+
+              <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
+                Jul 6
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 1
+                Jul 13
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 8
+                Jul 20
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 15
+                Jul 27
               </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 22
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showJulColumn">
-                Jul 29
+
+              <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
+                Aug 3
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 5
+                Aug 10
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 12
+                Aug 17
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 19
+                Aug 24
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showAugColumn">
-                Aug 26
+                Aug 31
+              </th>
+
+              <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
+                Sep 7
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 2
+                Sep 14
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 9
+                Sep 21
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 16
+                Sep 28
               </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 23
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showSepColumn">
-                Sep 30
+
+              <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
+                Oct 5
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 7
+                Oct 12
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 14
+                Oct 19
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 21
+                Oct 26
               </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showOctColumn">
-                Oct 28
+
+              <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
+                Nov 2
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 4
+                Nov 9
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 11
+                Nov 16
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 18
+                Nov 23
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showNovColumn">
-                Nov 25
+                Nov 30
+              </th>
+
+              <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
+                Dec 7
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 2
+                Dec 14
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 9
+                Dec 21
               </th>
               <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 16
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 23
-              </th>
-              <th class="border-2 border-gray-300 px-1" v-if="showDecColumn">
-                Dec 30
+                Dec 28
               </th>
             </tr>
           </thead>
           <tbody>
             <template v-for="(item, index) in classes" :key="index">
-              <tr>
+              <tr
+                class="text-black bg-white border-b-2 border-gray-400 border-solid"
+              >
                 <td
                   class="border-4 border-gray-300 truncate px-2 font-semibold"
                 >
@@ -784,14 +862,14 @@
                 >
                   {{ item.Week12 }}
                 </td>
-                <td class="border-2 border-gray-300 text-center font-semibold">
-                  {{ item.Mar }}
-                </td>
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
-                  v-if="showAprColumn"
+                  v-if="showMarColumn"
                 >
                   {{ item.Week13 }}
+                </td>
+                <td class="border-2 border-gray-300 text-center font-semibold">
+                  {{ item.Mar }}
                 </td>
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
@@ -871,15 +949,16 @@
                 >
                   {{ item.Week25 }}
                 </td>
-                <td class="border-2 border-gray-300 text-center font-semibold">
-                  {{ item.Jun }}
-                </td>
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
-                  v-if="showJulColumn"
+                  v-if="showJunColumn"
                 >
                   {{ item.Week26 }}
                 </td>
+                <td class="border-2 border-gray-300 text-center font-semibold">
+                  {{ item.Jun }}
+                </td>
+
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
                   v-if="showJulColumn"
@@ -936,7 +1015,7 @@
                 </td>
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
-                  v-if="showSepColumn"
+                  v-if="showAugColumn"
                 >
                   {{ item.Week35 }}
                 </td>
@@ -1016,17 +1095,18 @@
                   class="border-2 border-gray-300 text-center font-semibold"
                   v-if="showNovColumn"
                 >
+                  {{ item.Week48 }}
+                </td>
+                <td
+                  class="border-2 border-gray-300 text-center font-semibold"
+                  v-if="showNovColumn"
+                >
                   {{ item.Week47 }}
                 </td>
                 <td class="border-2 border-gray-300 text-center font-semibold">
                   {{ item.Nov }}
                 </td>
-                <td
-                  class="border-2 border-gray-300 text-center font-semibold"
-                  v-if="showDecColumn"
-                >
-                  {{ item.Week48 }}
-                </td>
+
                 <td
                   class="border-2 border-gray-300 text-center font-semibold"
                   v-if="showDecColumn"
@@ -1196,9 +1276,9 @@ export default {
         }
       } catch (error) {
         console.error("An error occurred:", error);
-      }finally {
-    this.isLoading = false; // Set loading state back to false, regardless of success or failure
-  }
+      } finally {
+        this.isLoading = false; // Set loading state back to false, regardless of success or failure
+      }
     },
     async getMonth() {
       try {
@@ -1252,9 +1332,9 @@ export default {
         a.click();
       } catch (error) {
         console.error("Error exporting data to Excel", error);
-      }finally {
-    this.isLoading = false; // Set loading state back to false, regardless of success or failure
-  }
+      } finally {
+        this.isLoading = false; // Set loading state back to false, regardless of success or failure
+      }
     },
     async getSites() {
       try {
@@ -1359,7 +1439,7 @@ export default {
 .icon {
   /* Style your SVG icon */
   height: 3rem; /* Adjust the size as needed */
-  width: 3rem;  /* Adjust the size as needed */
+  width: 3rem; /* Adjust the size as needed */
   animation: spin 1s linear infinite;
   stroke: rgba(107, 114, 128, 1);
 }
