@@ -58,13 +58,14 @@ class ClassesController extends Controller
                 'Step',
                 'AppStep'
             )
+            ->whereNotNull('Site')
             ->whereIn('ApplicationStepStatusId', $appstepIDs);
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -75,7 +76,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('QueueDate', '>=', $startDate)
                     ->where('QueueDate', '<', $endDate);
@@ -91,6 +92,7 @@ class ClassesController extends Controller
 
     public function srExport(Request $request)
     {
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 79, 80, 81, 87, 88];
         $query = SmartRecruitData::on('secondary_sqlsrv')
             ->select(
                 'ApplicationInfoId',
@@ -104,13 +106,15 @@ class ClassesController extends Controller
                 'SpecSource',
                 'Step',
                 'AppStep'
-            );
+            )
+            ->whereNotNull('Site')
+            ->whereIn('ApplicationStepStatusId', $appstepIDs);
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -121,7 +125,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('QueueDate', '>=', $startDate)
                     ->where('QueueDate', '<', $endDate);
@@ -155,7 +159,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('QueueDate', '>=', $startDate)
                     ->where('QueueDate', '<', $endDate);
@@ -254,7 +258,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -262,7 +266,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -270,7 +274,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -281,7 +285,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -292,7 +296,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -312,7 +316,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -320,7 +324,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -328,7 +332,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -339,7 +343,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -350,7 +354,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -582,7 +586,6 @@ class ClassesController extends Controller
         ]);
     }
 
-
     public function cStat()
     {
         $classes = Classes::whereHas('site', function ($query) {
@@ -732,7 +735,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -753,7 +755,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -796,10 +798,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -829,7 +831,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -872,10 +874,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
@@ -1028,7 +1030,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -1049,7 +1050,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -1092,10 +1093,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -1125,7 +1126,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -1168,10 +1169,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
@@ -1324,7 +1325,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -1345,7 +1345,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -1388,10 +1388,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -1421,7 +1421,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -1464,10 +1464,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
@@ -1620,7 +1620,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -1641,7 +1640,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -1684,10 +1683,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -1717,7 +1716,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -1760,10 +1759,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
@@ -1933,7 +1932,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -1954,7 +1952,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -1997,10 +1995,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -2030,7 +2028,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -2073,10 +2071,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
@@ -2229,7 +2227,6 @@ class ClassesController extends Controller
                     '102' => 0,
                     '103' => 0,
                     '104' => 0,
-
                 ];
 
                 foreach ($programData as $week => $weekData) {
@@ -2250,7 +2247,7 @@ class ClassesController extends Controller
                     'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
                     'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
                     'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum(),
-                    'Week9' =>  $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
                     'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
                     'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
                     'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
@@ -2293,10 +2290,10 @@ class ClassesController extends Controller
                     'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
                     'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
                     'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum(),
-                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96']  : '',
-                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97']  : '',
-                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98']  : '',
-                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99']  : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
                     'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
                     'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum(),
                     'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
@@ -2326,7 +2323,7 @@ class ClassesController extends Controller
             'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
             'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
             'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum(),
-            'Week9' =>  $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
+            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
             'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
             'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
             'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
@@ -2369,10 +2366,10 @@ class ClassesController extends Controller
             'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
             'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
             'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum(),
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96']  : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97']  : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98']  : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99']  : '',
+            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
+            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
+            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
+            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
             'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
             'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum(),
             'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
