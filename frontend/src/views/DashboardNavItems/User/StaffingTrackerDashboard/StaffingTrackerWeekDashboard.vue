@@ -1,72 +1,72 @@
 <template>
   <div class="py-0">
-    <div class="container mx-auto mt-4 px-4 py-0">
-      <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+    <div class="container px-4 py-0 mx-auto mt-4">
+      <div class="py-0 mb-4 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <MultiSelect
             v-model="sites_selected"
             :options="sites"
             filter
             optionLabel="name"
             placeholder="Select Sites"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
             @change="getPrograms"
           />
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <MultiSelect
             v-model="programs_selected"
             :options="programs"
             filter
             optionLabel="name"
             placeholder="Select Programs"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
           />
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <MultiSelect
             v-model="month_selected"
             :options="months"
             filter
             optionLabel="month"
             placeholder="Select Month"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
             @change="getDateRange"
           />
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <MultiSelect
             v-model="week_selected"
             :options="daterange"
             filter
             optionLabel="date_range"
             placeholder="Select Date"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
           />
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
         @click="exportToExcel"
-        class="px-4 py-2 bg-orange-500 text-white rounded-lg w-full"
+        class="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
       >
         Export to Excel
       </button>
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
-          class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
+          class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
             @click="resetFilters"
           >
             Reset Filters
@@ -76,26 +76,26 @@
     </div>
 
     <div class="px-4">
-      <div class="bg-white shadow-md rounded-lg overflow-y-auto">
-        <table class="min-w-full border-collapse border-2 border-gray-300">
+      <div class="overflow-y-auto bg-white rounded-lg shadow-md">
+        <table class="min-w-full border-2 border-collapse border-gray-300">
           <thead>
-            <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
-            <th class="border-2 border-gray-300 px-1 py-1 truncate">Month</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Week</th>
-            <th class="border-2 border-gray-300 px-1 py-1 truncate">Site</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Program</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Target</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Internal</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">External</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Overall Starts</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day1</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day2</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day3</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day4</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day5</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Total Classes</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Filled</th>
-            <th class="border-2 border-gray-300 px-2 py-1 truncate">Open</th>
+            <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
+            <th class="px-1 py-1 truncate border-2 border-gray-300">Month</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Week</th>
+            <th class="px-1 py-1 truncate border-2 border-gray-300">Site</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Program</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Target</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Internal</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">External</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Overall Starts</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Day1</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Day2</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Day3</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Day4</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Day5</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Total Classes</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Filled</th>
+            <th class="px-2 py-1 truncate border-2 border-gray-300">Open</th>
           </tr>
         </thead>
         <tbody v-for="(mps1, index) in mps" :key="index">
@@ -106,52 +106,52 @@
                 v-for="(mps4, index4) in mps3"
                 :key="index4"
               >
-                <td class="border-2 border-gray-300 px-1 py-1 text-center font-semibold truncate">
+                <td class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.month }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.week_name }}
                 </td>
-                <td class="border-2 border-gray-300 px-1 py-1 text-center font-semibold truncate">
+                <td class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.site_name }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.program_name }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.total_target }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.internal }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.external }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.total }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.day_1 }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.day_2 }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.day_3 }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.day_4 }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.day_5 }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.classes }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.filled }}
                 </td>
-                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
                   {{ mps4.open }}
                 </td>
               </tr>

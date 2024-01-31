@@ -15,6 +15,7 @@
           Sign in
         </h2>
       </div>
+
       <form class="mt-8 space-y-6" @submit.prevent="login">
         <div class="-space-y-px rounded-md shadow-sm">
           <div class="flex items center">
@@ -42,14 +43,8 @@
             />
           </div>
         </div>
+        <span v-if="successMessage" class="text-red-500">{{ successMessage }}</span>
 
-        <div class="flex items-center justify-between">
-          <div class="text-sm">
-            <a  class="font-medium text-orange-600 hover:text-gray-700"
-              >Forgot your password?</a
-            >
-          </div>
-        </div>
         <div class="flex items center">
           <button
             type="submit"
@@ -70,9 +65,7 @@ export default {
     return {
       email: "",
       password: "",
-      form: {
-        message: " ",
-      },
+      successMessage:"",
     };
   },
   methods: {
@@ -139,7 +132,7 @@ export default {
           this.$router.push({ path: "/perx_manager" });
         }
       } else {
-        this.form.message = "Invalid Credentials";
+        this.successMessage = "Invalid Credentials!";
       }
     },
   },

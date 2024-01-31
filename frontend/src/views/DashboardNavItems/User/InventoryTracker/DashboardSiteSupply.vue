@@ -102,7 +102,7 @@
             </div>
             <button
               @click="exportToExcel"
-              class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-blue-500 rounded hover:bg-blue-600"
+              class="h-8 px-3 mt-4 font-semibold text-white transition-colors duration-300 bg-green-600 rounded hover:bg-green-600"
             >
               Export
             </button>

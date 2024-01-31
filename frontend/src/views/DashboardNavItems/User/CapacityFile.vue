@@ -1,124 +1,110 @@
 <template>
   <div class="py-0">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
+    <div class="container px-4 py-0 mx-auto mt-4">
+      <span v-if="EmptySelection" class="ml-2 text-lg text-red-500 align-center"
+      >Fill all the selections first</span
     >
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6"
-      >
-        <div class="col-span-6 md:col-span-1">
+      <div class="py-0 mb-4 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <router-link
+            :to="{
+              path: `/addcapfile/}`,
+              query: {
+                program: programs_selected,
+                site: sites_selected,
+                daterange: week_selected,
+              },
+            }"
+          >
+            <button
+              v-if="!classExists"
+              type="submit"
+              :disabled="isButtonDisabled"
+              class="w-full px-4 py-2 text-white bg-orange-500 rounded-lg"
+            >
+              <i class="fa fa-building"></i> Add
+            </button>
+          </router-link>
+         
+        </div>
+        
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="sites_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            @change="getPrograms"
+          >
+            <option disabled value="" selected>Please select Site</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="programs_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Program</option>
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
+              {{ program.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="month_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            @change="onMonthSelected"
+          >
+            <option disabled value="" selected>Please select Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="week_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Week</option>
+            <option
+              v-for="daterange in daterange"
+              :key="daterange.id"
+              :value="daterange.id"
+            >
+              {{ daterange.date_range }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
             type="button"
-            class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
             @click="resetFilter"
           >
             Reset Filters
           </button>
         </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Site
-            <select
-              v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="getPrograms"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Programs
-            <select
-              v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
-                {{ program.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Month
-            <select
-              v-model="month_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              @change="onMonthSelected"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-          </label>
-        </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Week Range
-            <select
-              v-model="week_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
-              >
-                {{ daterange.date_range }}
-              </option>
-            </select>
-          </label>
-        </div>
-
-        <div class="col-span-6 md:col-span-1">
-           <router-link
-        :to="{
-          path: `/addcapfile/}`,
-          query: {
-            program: programs_selected,
-            site: sites_selected,
-            daterange: week_selected,
-          },
-        }"
-      >
-
-      <button
-      v-if="!classExists"
-      type="submit"
-      :disabled="isButtonDisabled"
-      class="w-full h-12 mt-2 font-semibold text-white bg-orange-500 rounded hover:bg-gray-600"
-    >
-      <i class="fa fa-building"></i> Add
-    </button>
-  </router-link>
-  <span v-if="EmptySelection" class="text-red-500 text-sm ml-2">Fill all the selections first</span>
-
-</div>
-
-      </form>
+       
+      </div>
     </div>
   </div>
+  
   <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -224,10 +210,17 @@ export default {
   },
   computed: {
     isButtonDisabled() {
-      return this.classExists || !this.sites_selected || !this.programs_selected || !this.week_selected;
+      return (
+        this.classExists ||
+        !this.sites_selected ||
+        !this.programs_selected ||
+        !this.week_selected
+      );
     },
     EmptySelection() {
-      return !this.sites_selected || !this.programs_selected || !this.week_selected;
+      return (
+        !this.sites_selected || !this.programs_selected || !this.week_selected
+      );
     },
     classExists() {
       return this.classes.some((c) => {

@@ -1,44 +1,34 @@
 <template>
-
   <div class="py-0">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
-      <form
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-6"
-      >
-        <div class="col-span-6 md:col-span-1">
+    <div class="container px-4 py-0 mx-auto mt-4">
+      <div class="py-0 mb-4 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
             type="button"
-            class="w-full h-12 mt-2 font-semibold text-white bg-gray-500 rounded hover:bg-gray-600"
+            class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
             @click="resetFilter"
           >
             Reset Filters
           </button>
         </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Site
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
             <select
               v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               @change="getPrograms"
             >
-              <option disabled value="" selected>Please select one</option>
+              <option disabled value="" selected>Please select  Site</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
                 {{ site.name }}
               </option>
             </select>
-          </label>
         </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Programs
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
             <select
               v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
-              <option disabled value="" selected>Please select one</option>
+              <option disabled value="" selected>Please select Program</option>
               <option
                 v-for="program in programs"
                 :key="program.id"
@@ -47,17 +37,15 @@
                 {{ program.name }}
               </option>
             </select>
-          </label>
+          
         </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Month
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
             <select
               v-model="month_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               @change="getDateRange"
             >
-              <option disabled value="" selected>Please select one</option>
+              <option disabled value="" selected>Please select Month</option>
               <option value="1">January</option>
               <option value="2">February</option>
               <option value="3">March</option>
@@ -71,16 +59,15 @@
               <option value="11">November</option>
               <option value="12">December</option>
             </select>
-          </label>
+          
         </div>
-        <div class="col-span-6 md:col-span-1">
-          <label class="block">
-            Week Range
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+           
             <select
               v-model="week_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
-              <option disabled value="" selected>Please select one</option>
+              <option disabled value="" selected>Please select Week</option>
               <option
                 v-for="daterange in daterange"
                 :key="daterange.id"
@@ -89,8 +76,9 @@
                 {{ daterange.date_range }}
               </option>
             </select>
-          </label>
+         
         </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
         <router-link
           :to="{
             path: `/addcapfile/}`,
@@ -105,13 +93,15 @@
             v-if="!classExists"
             type="submit"
             :disabled="classExists"
-            class="px-10 py-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            class="w-full px-4 py-2 text-white bg-orange-500 rounded-lg"
           >
             <i class="fa fa-building"></i> Add
           </button>
         </router-link>
-      </form>
+      </div>
+    
     </div>
+  </div>
   </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
