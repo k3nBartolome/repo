@@ -2,7 +2,7 @@
   <div class="px-0 pt-1 border-b border-gray-200 dark:border-gray-700">
     <div class="container">
       <div class="row">
-        <div class="col-md-2 col-sm-2 font-semibold">
+        <div class="col-md-2 col-sm-2">
           <router-link to="/site_supply_manager/stocks" class="link-button">
             <button
               class="tab-button"
@@ -14,7 +14,7 @@
             </button>
           </router-link>
         </div>
-        <div class="col-md-2 col-sm-2 font-semibold">
+        <div class="col-md-2 col-sm-2">
           <router-link to="/site_supply_manager/transfer" class="link-button">
             <button
               class="tab-button"
@@ -23,6 +23,9 @@
               }"
             >
               Site Transfer
+              <span v-if="totalReceived > 0" class="count-notification">{{
+                totalReceived
+              }}</span>
             </button>
           </router-link>
         </div>
@@ -38,8 +41,17 @@
   </main>
 </template>
 <script>
+import axios from "axios";
 export default {
+  data() {
+    return {
+      inventory: [],
+      totalReceived: "",
+      Total: "",
+    };
+  },
   mounted() {
+    this.getInventory();
     this.$router.afterEach(() => {
       window.location.reload();
     });
@@ -65,6 +77,36 @@ export default {
   methods: {
     isActiveTab(route) {
       return this.$route.path === route;
+    },
+    async getInventory() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/inventory/alltransfer",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.inventory = response.data.inventory;
+
+          const receivedItems = this.inventory.filter(
+            (item) =>
+              item.transaction_type === "Transfer Request" && item.received_status === null
+          );
+
+          
+          this.totalReceived = receivedItems.length;
+          this.Total = this.totalReceived;
+        } else {
+          console.log("Error fetching inventory");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

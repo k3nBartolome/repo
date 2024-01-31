@@ -42,6 +42,7 @@
               ></path>
             </svg>
           </button>
+          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
           <div class="modal-scrollable-content">
             <form
               @submit.prevent="addItems"
@@ -320,6 +321,7 @@ export default {
       category: "Normal",
       date_expiry: "",
       showModal: false,
+      successMessage:"",
       errors: {},
       columns: [
         { data: "id", title: "ID" },
@@ -491,6 +493,7 @@ export default {
           this.budget_code = "";
           this.date_expiry = "";
           this.getItems();
+          this.successMessage = "Item Added successfully!";
         })
         .catch((error) => {
           console.log(error.response.data);

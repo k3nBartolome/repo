@@ -42,11 +42,13 @@
               ></path>
             </svg>
           </button>
+          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
           <div class="modal-scrollable-content">
             <form
               @submit.prevent="transferItems"
               class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
             >
+            
               <div class="col-span-1">
                 <label class="block">
                   Site
@@ -206,11 +208,13 @@
                 ></path>
               </svg>
             </button>
+            <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
             <div class="modal-scrollable-content">
               <form
                 @submit.prevent="addItems"
                 class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
               >
+             
                 <div class="col-span-1">
                   <label class="block">
                     Site
@@ -493,6 +497,7 @@ export default {
       showModal: false,
       showModalSupply: false,
       errors: {},
+      successMessage:"",
       columns: [
         { data: "id", title: "ID" },
         {
@@ -707,7 +712,9 @@ export default {
         .then((response) => {
           if (response && response.data && response.data.Request) {
             console.log(response.data.Request);
-            // ... rest of your code
+            this.successMessage = "Transferred successfully!";
+            this.showModal = false;
+            window.location.reload()
           } else {
             console.error("Response or Request property is undefined.");
           }
@@ -785,6 +792,7 @@ export default {
           this.budget_code = "";
           this.date_expiry = "";
           this.getItems();
+          this.successMessage = "Item Successfully Added!";
         })
         .catch((error) => {
           console.log(error.response.data);

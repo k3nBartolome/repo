@@ -1,94 +1,101 @@
 <template>
-  <div class="py-8">
-    <div class="px-4 sm:px-6 lg:px-8">
-      <button
-        @click="exportToExcel"
-        class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out"
-      >
-        Export to Excel
-      </button>
-      <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
-          <label class="block mb-2">Sites</label>
+  <div class="py-0">
+    <div class="container mx-auto mt-4 px-4 py-0">
+      <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <MultiSelect
             v-model="sites_selected"
             :options="sites"
             filter
             optionLabel="name"
             placeholder="Select Sites"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
             @change="getPrograms"
           />
         </div>
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
-          <label class="block mb-2">Programs</label>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <MultiSelect
             v-model="programs_selected"
             :options="programs"
             filter
             optionLabel="name"
             placeholder="Select Programs"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
           />
         </div>
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
-          <label class="block mb-2">Month</label>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <MultiSelect
             v-model="month_selected"
             :options="months"
             filter
             optionLabel="month"
             placeholder="Select Month"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
             @change="getDateRange"
           />
         </div>
-        <div class="bg-surface-ground text-text-color p-4 rounded-md shadow-md">
-          <label class="block mb-2">Week</label>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <MultiSelect
             v-model="week_selected"
             :options="daterange"
             filter
             optionLabel="date_range"
             placeholder="Select Date"
-            class="w-full p-2 border border-gray-300 rounded-lg md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{ backgroundColor: 'white' }"
             :panel-class="'border border-gray-300 rounded-lg shadow-lg text-black'"
           />
         </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <button
+        @click="exportToExcel"
+        class="px-4 py-2 bg-orange-500 text-white rounded-lg w-full"
+      >
+        Export to Excel
+      </button>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <button
+          class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
+            @click="resetFilters"
+          >
+            Reset Filters
+          </button>
+        </div>
       </div>
     </div>
 
-    <div class="py-6 overflow-x-auto">
-      <table class="w-full table-auto">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="px-4 py-2 text-left">Month</th>
-            <th class="px-4 py-2 text-left">Week</th>
-            <th class="px-4 py-2 text-left">Site</th>
-            <th class="px-4 py-2 text-left">Program</th>
-            <th class="px-4 py-2 text-left">Target</th>
-            <th class="px-4 py-2 text-left">Internal</th>
-            <th class="px-4 py-2 text-left">External</th>
-            <th class="px-4 py-2 text-left">Overall Starts</th>
-            <th class="px-4 py-2 text-left">Day1</th>
-            <th class="px-4 py-2 text-left">Day2</th>
-            <th class="px-4 py-2 text-left">Day3</th>
-            <th class="px-4 py-2 text-left">Day4</th>
-            <th class="px-4 py-2 text-left">Day5</th>
-            <th class="px-4 py-2 text-left">Total Classes</th>
-            <th class="px-4 py-2 text-left">Filled</th>
-            <th class="px-4 py-2 text-left">Open</th>
+    <div class="px-4">
+      <div class="bg-white shadow-md rounded-lg overflow-y-auto">
+        <table class="min-w-full border-collapse border-2 border-gray-300">
+          <thead>
+            <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
+            <th class="border-2 border-gray-300 px-1 py-1 truncate">Month</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Week</th>
+            <th class="border-2 border-gray-300 px-1 py-1 truncate">Site</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Program</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Target</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Internal</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">External</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Overall Starts</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day1</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day2</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day3</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day4</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Day5</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Total Classes</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Filled</th>
+            <th class="border-2 border-gray-300 px-2 py-1 truncate">Open</th>
           </tr>
         </thead>
         <tbody v-for="(mps1, index) in mps" :key="index">
@@ -99,52 +106,52 @@
                 v-for="(mps4, index4) in mps3"
                 :key="index4"
               >
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-1 py-1 text-center font-semibold truncate">
                   {{ mps4.month }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.week_name }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-1 py-1 text-center font-semibold truncate">
                   {{ mps4.site_name }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.program_name }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.total_target }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.internal }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.external }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.total }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.day_1 }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.day_2 }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.day_3 }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.day_4 }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.day_5 }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.classes }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.filled }}
                 </td>
-                <td class="px-4 py-2 text-left truncate border">
+                <td class="border-2 border-gray-300 px-2 py-1 text-center font-semibold truncate">
                   {{ mps4.open }}
                 </td>
               </tr>
@@ -154,6 +161,7 @@
       </table>
     </div>
   </div>
+</div>
 </template>
 <script>
 import axios from "axios";
@@ -173,6 +181,12 @@ export default {
       sites_selected: [],
       month_selected: [],
       months: [],
+      initialFilters: {
+        week_selected: "",
+      programs_selected: "",
+      sites_selected: "",
+      month_selected: "",
+      },
     };
   },
   computed: {},
@@ -202,6 +216,12 @@ export default {
     this.getMonth();
   },
   methods: {
+    resetFilters() {
+      this.month_selected = this.initialFilters.month_selected;
+      this.programs_selected = this.initialFilters.programs_selected;
+      this.sites_selected = this.initialFilters.sites_selected;
+      this.week_selected = this.initialFilters.week_selected;
+    },
     async getStaffing() {
       try {
         const token = this.$store.state.token;
@@ -379,9 +399,32 @@ export default {
   width: 100%;
 }
 
-.table {
-  white-space: nowrap;
+.col-span-6 {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
+
+/* Responsive styles for the table */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .table th,
+  .table td {
+    padding: 0.25rem;
+  }
+}
+
+/* Styles for the reset button */
+
 
 .table thead th {
   padding: 8px;
