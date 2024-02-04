@@ -11,7 +11,7 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Philippines');
             })
@@ -23,7 +23,7 @@ class ProgramController extends Controller
 
     public function index2()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Philippines');
             })
@@ -35,7 +35,7 @@ class ProgramController extends Controller
 
     public function index3()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'India');
             })
@@ -47,19 +47,19 @@ class ProgramController extends Controller
 
     public function index4()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
-        ->whereHas('site', function ($query) {
-            $query->where('country', 'India');
-        })
-        ->where('is_active', 0)
-        ->get();
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'India');
+            })
+            ->where('is_active', 0)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
 
     public function index5()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Jamaica');
             })
@@ -71,7 +71,7 @@ class ProgramController extends Controller
 
     public function index6()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Jamaica');
             })
@@ -83,7 +83,7 @@ class ProgramController extends Controller
 
     public function index7()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Guatemala');
             })
@@ -95,12 +95,12 @@ class ProgramController extends Controller
 
     public function index8()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'classes'])
-        ->whereHas('site', function ($query) {
-            $query->where('country', 'Guatemala');
-        })
-        ->where('is_active', 0)
-        ->get();
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+            ->whereHas('site', function ($query) {
+                $query->where('country', 'Guatemala');
+            })
+            ->where('is_active', 0)
+            ->get();
 
         return response()->json(['data' => $programs]);
     }
@@ -134,7 +134,7 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,'.$id.',id,site_id,'.$request->input('site_id'),
+            'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'site_id' => 'sometimes',
@@ -185,9 +185,9 @@ class ProgramController extends Controller
 
         foreach ($siteIdsArray as $siteId) {
             $programs = Program::where('site_id', $siteId)
-            ->where('is_active', 1)
-            ->get()
-            ->sortByDesc('name');
+                ->where('is_active', 1)
+                ->get()
+                ->sortByDesc('name');
 
             $allPrograms = array_merge($allPrograms, $programs->toArray());
         }
