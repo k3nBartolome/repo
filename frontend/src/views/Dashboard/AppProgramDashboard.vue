@@ -38,7 +38,7 @@
             type="text"
             v-model="program_group"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
+            
           />
         </label>
         <label class="block">
@@ -73,7 +73,7 @@
           class="table min-w-full divide-y divide-gray-200 table-striped"
           :options="{
             responsive: true,
-            autoWidth: true,
+            autoWidth: false,
             dom: 'Bfrtip',
             language: {
               search: 'Search',
@@ -231,7 +231,7 @@ export default {
       };
 
       axios
-        .put(`/programs_deactivate/${id}`, form, config)
+        .put(`http://10.109.2.112:8081/api/programs_deactivate/${id}`, form, config)
         .then((response) => {
           // Handle the response
           console.log(response.data);

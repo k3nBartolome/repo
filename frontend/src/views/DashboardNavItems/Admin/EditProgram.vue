@@ -38,7 +38,7 @@
             type="text"
             v-model="program_group"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
+            
           />
         </label>
         <label class="block">
@@ -87,9 +87,18 @@ export default {
   },
   methods: {
     async getPrograms() {
-      await axios
-        .get("http://10.109.2.112:8081/api/programs/" + this.$route.params.id)
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
           this.programs = response.data.data;
           const programObj = this.programs;
           this.name = programObj.name;
@@ -98,11 +107,14 @@ export default {
           this.sites_selected = programObj.site_id;
 
           console.log(programObj);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     async getSites() {
       try {
         const token = this.$store.state.token;
@@ -123,6 +135,7 @@ export default {
       }
     },
     editProgram() {
+      const token = this.$store.state.token;
       const formData = {
         name: this.name,
         description: this.description,
@@ -131,7 +144,15 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("/programs/" + this.$route.params.id, formData)
+        .put(
+          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           this.name = "";

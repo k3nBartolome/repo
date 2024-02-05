@@ -117,7 +117,7 @@ class ProgramController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'description' => 'required',
-            'program_group' => 'required',
+            'program_group' => 'sometimes',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
         ]);
