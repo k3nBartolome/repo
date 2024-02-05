@@ -198,3 +198,11 @@ Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4'])
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
+Route::post('/email', function () {
+    \Mail::raw('This is a test email.', function ($message) {
+        $message->to('padillakryss@gmail.com');
+        $message->subject('Test Email');
+    });
+
+    return response()->json(['message' => 'Test email sent.']);
+});
