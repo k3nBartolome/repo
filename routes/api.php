@@ -123,14 +123,14 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);
     Route::get('export4', [ClassesController::class, 'dashboardClassesExport4']);
     Route::get('mps', [ClassStaffingController::class, 'mps']);
-Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
-Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
-Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
-Route::get('programs_selected', [ProgramController::class, 'perSite']);
-Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
-Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
-Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
+    Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
+    Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+    Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
+    Route::get('programs_selected', [ProgramController::class, 'perSite']);
+    Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+    Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
+    Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
+    Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
 
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);

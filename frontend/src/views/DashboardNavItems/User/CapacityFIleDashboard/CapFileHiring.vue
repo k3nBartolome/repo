@@ -78,6 +78,7 @@
       <span class="loading-text">Loading...</span>
     </div>
   </div>
+  
   <div class="py-0">
     <div class="px-4 sm:px-6 lg:px-8 flex items-center justify-between">
       <div class="flex items-center">
@@ -96,7 +97,7 @@
           }"
         >
           {{
-            showJanColumn ? "Swith to Monthly View" : "Switch to Weekly View"
+            showJanColumn ? "Switch to Monthly View" : "Switch to Weekly View"
           }}
         </button>
       </div>
@@ -148,11 +149,13 @@
     </div>
   </div>
 
-  <div class="px-2 overflow-x-auto overflow-y-auto">
+  <div class="px-2 overflow-x-auto overflow-y-auto"  ref="componentToConvert">
     <div class="p-4">
       <div
         class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto"
       >
+      <button @click="convertComponentToImage">Convert to Image</button>
+    <img v-if="imageData" :src="imageData" alt="Converted Image" style="max-width: 100%; height: auto; margin-top: 10px;">
         <table class="min-w-full border-collapse border-2 border-gray-300">
           <thead class="">
             <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
@@ -1149,6 +1152,8 @@
 <script>
 import axios from "axios";
 import MultiSelect from "primevue/multiselect";
+import html2canvas from 'html2canvas';
+
 
 export default {
   components: {
@@ -1181,6 +1186,7 @@ export default {
       showDecColumn: false,
       showAll: true,
       isLoading: false,
+      imageData:"",
     };
   },
   computed: {},
@@ -1210,6 +1216,17 @@ export default {
     },
   },
   methods: {
+    async convertComponentToImage() {
+      const element = this.$refs.componentToConvert;
+      const canvas = await html2canvas(element);
+      const imageData = canvas.toDataURL();
+      this.imageData = imageData; // Store the image data for display
+      this.sendImageToServer(imageData);
+    },
+    sendImageToServer(imageData) {
+      // Your code to send the image data to the server goes here
+      console.log("Sending image data to server:", imageData);
+    },
     toggleColumnVisibility(month) {
       if (month === "Jan") this.showJanColumn = !this.showJanColumn;
       else if (month === "Feb") this.showFebColumn = !this.showFebColumn;

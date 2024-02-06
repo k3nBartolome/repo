@@ -21,6 +21,7 @@ countstatus
 cstat
 daterange
 dbal
+Dispatchable
 dont
 EDSA
 emps
