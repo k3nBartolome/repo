@@ -13,6 +13,9 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
+use App\Mail\CapEmail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -128,6 +131,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
     Route::get('programs_selected', [ProgramController::class, 'perSite']);
     Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+    Route::get('siteclasses', [ClassesController::class, 'dashboardSiteClasses']);
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
@@ -198,11 +202,19 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
-Route::post('/email', function () {
+/* Route::post('/email', function () {
     \Mail::raw('This is a test email.', function ($message) {
         $message->to('padillakryss@gmail.com');
         $message->subject('Test Email');
     });
 
     return response()->json(['message' => 'Test email sent.']);
+}); */
+Route::post('/render', function (Request $request) {
+    $html = $request->input('html');
+
+    // Send the email with the received HTML content
+    Mail::to('padillakryss@gmail.com')->send(new CapEmail($html));
+
+    return response()->json(['message' => 'Email sent with received HTML content']);
 });

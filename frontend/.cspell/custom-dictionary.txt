@@ -28,6 +28,7 @@ Cheryll
 Christito
 Classe
 classesall
+classessite
 colorpicker
 columngroup
 confirmationservice

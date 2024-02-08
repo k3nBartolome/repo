@@ -43,6 +43,7 @@
     "event-pubsub": "^5.0.3",
     "flag-icon-css": "^4.1.7",
     "font-awesome": "^4.7.0",
+    "heic2any": "^0.0.4",
     "html-webpack-plugin": "^5.5.4",
     "html2canvas": "^1.4.1",
     "image-compressor": "^2.0.3",
