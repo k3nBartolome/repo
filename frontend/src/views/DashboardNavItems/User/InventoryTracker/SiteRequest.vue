@@ -326,7 +326,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/itemseparate?category=${this.category}`,
+          `http://127.0.0.1:8000/api/itemseparate?category=${this.category}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -349,7 +349,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventory",
+          "http://127.0.0.1:8000/api/inventory",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -370,7 +370,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -411,7 +411,7 @@ export default {
         requested_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/inventory", formData, {
+        .post("http://127.0.0.1:8000/api/inventory", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

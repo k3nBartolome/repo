@@ -154,8 +154,47 @@
       <div
         class="overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-md"
       >
-        <!-- <button @click="convertComponentToImage">Convert to Image</button>
-    <img v-if="imageData" :src="imageData" alt="Converted Image" style="max-width: 100%; height: auto; margin-top: 10px;"> -->
+      <table class="min-w-full border-2 border-collapse border-gray-300">
+        <thead class="">
+          <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
+          <th class="px-1 border-2 border-gray-300">Site</th>
+          <th class="px-1 border-2 border-gray-300">Jan</th>
+          <th class="px-1 border-2 border-gray-300">Feb</th>
+          <th class="px-1 border-2 border-gray-300">Mar</th>
+          <th class="px-1 border-2 border-gray-300">Apr</th>
+          <th class="px-1 border-2 border-gray-300">May</th>
+          <th class="px-1 border-2 border-gray-300">Jun</th>
+          <th class="px-1 border-2 border-gray-300">Jul</th>
+          <th class="px-1 border-2 border-gray-300">Aug</th>
+          <th class="px-1 border-2 border-gray-300">Sep</th>
+          <th class="px-1 border-2 border-gray-300">Oct</th>
+          <th class="px-1 border-2 border-gray-300">Nov</th>
+          <th class="px-1 border-2 border-gray-300">Dec</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-for="(item, index) in siteclasses" :key="index">
+            <tr
+            class="text-black bg-white border-b-2 border-gray-400 border-solid"
+          >
+            <td
+              class="px-2 font-semibold truncate border-4 border-gray-300"
+            >{{item.Site}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.January}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.February}}</td>
+          <td >{{item.March}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.April}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.May}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.June}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.July}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.September}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.October}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.November}}</td>
+          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.December}}</td>
+          </tr>
+          </template>
+        </tbody>
+      </table>
         <table class="min-w-full border-2 border-collapse border-gray-300">
           <thead class="">
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -1144,45 +1183,6 @@
             </template>
           </tbody>
         </table>
-        <table>
-          <thead>
-            <th>Site</th>
-            <th>Jan</th>
-            <th>Feb</th>
-            <th>Mar</th>
-            <th>Apr</th>
-            <th>May</th>
-            <th>Jun</th>
-            <th>Jul</th>
-            <th>Aug</th>
-            <th>Sep</th>
-            <th>Oct</th>
-            <th>Nov</th>
-            <th>Dec</th>
-          </thead>
-          <tbody>
-            <template v-for="(item, index) in siteclasses" :key="index">
-              <tr
-              class="text-black bg-white border-b-2 border-gray-400 border-solid"
-            >
-              <td
-                class="px-2 font-semibold truncate border-4 border-gray-300"
-              >{{item.Site}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.January}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.February}}</td>
-            <td >{{item.March}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.April}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.May}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.June}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.July}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.September}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.October}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.November}}</td>
-            <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.December}}</td>
-            </tr>
-            </template>
-          </tbody>
-        </table>
       </div>
     </div>
     <button @click="endEmailContent">Send Email</button>
@@ -1261,7 +1261,7 @@ export default {
         let divContent = this.$refs.componentToConvert.innerHTML; // Changed from emailContent to componentToConvert
 
         axios
-          .post("http://10.109.2.112:8081/api/render", {
+          .post("http://127.0.0.1:8000/api/render", {
             html: divContent,
           })
           .then(function (response) {
@@ -1306,7 +1306,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteclasses",
+          "http://127.0.0.1:8000/api/siteclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1330,7 +1330,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboard",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1371,7 +1371,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1404,7 +1404,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1429,7 +1429,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 
