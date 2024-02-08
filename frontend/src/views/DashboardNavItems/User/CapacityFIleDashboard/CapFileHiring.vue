@@ -154,7 +154,7 @@
       <div
         class="overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-md"
       >
-      <table class="min-w-full border-2 border-collapse border-gray-300">
+      <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
         <thead class="">
           <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
           <th class="px-1 border-2 border-gray-300">Site</th>
