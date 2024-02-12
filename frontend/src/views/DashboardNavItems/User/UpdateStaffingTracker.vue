@@ -1182,7 +1182,7 @@ export default {
     async getClasses() {
       try {
         const token = this.$store.state.token;
-        const classSelected = this.$route.query.class_selected;
+        const classSelected = this.$route.params.id;
 
         if (classSelected) {
           const response = await axios.get(
