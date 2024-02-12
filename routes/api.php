@@ -213,8 +213,12 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 Route::post('/render', function (Request $request) {
     $html = $request->input('html');
 
-    // Send the email with the received HTML content
-    Mail::to('padillakryss@gmail.com')->send(new CapEmail($html));
+    // Define the list of recipients
+    $recipients = ['padillakryss@gmail.com','kryss.bartolome@vxi.com'];
+
+    // Send the email with the received HTML content to all recipients
+    Mail::to($recipients)->send(new CapEmail($html));
 
     return response()->json(['message' => 'Email sent with received HTML content']);
 });
+

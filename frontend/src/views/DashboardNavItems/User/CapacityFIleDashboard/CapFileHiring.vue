@@ -154,48 +154,99 @@
       <div
         class="overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-md"
       >
-      <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
-        <thead class="">
-          <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-          <th class="px-1 border-2 border-gray-300">Site</th>
-          <th class="px-1 border-2 border-gray-300">Jan</th>
-          <th class="px-1 border-2 border-gray-300">Feb</th>
-          <th class="px-1 border-2 border-gray-300">Mar</th>
-          <th class="px-1 border-2 border-gray-300">Apr</th>
-          <th class="px-1 border-2 border-gray-300">May</th>
-          <th class="px-1 border-2 border-gray-300">Jun</th>
-          <th class="px-1 border-2 border-gray-300">Jul</th>
-          <th class="px-1 border-2 border-gray-300">Aug</th>
-          <th class="px-1 border-2 border-gray-300">Sep</th>
-          <th class="px-1 border-2 border-gray-300">Oct</th>
-          <th class="px-1 border-2 border-gray-300">Nov</th>
-          <th class="px-1 border-2 border-gray-300">Dec</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-for="(item, index) in siteclasses" :key="index">
-            <tr
-            class="text-black bg-white border-b-2 border-gray-400 border-solid"
-          >
-            <td
-              class="px-2 font-semibold truncate border-4 border-gray-300"
-            >{{item.Site}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.January}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.February}}</td>
-          <td >{{item.March}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.April}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.May}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.June}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.July}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.September}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.October}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.November}}</td>
-          <td class="px-2 font-semibold truncate border-4 border-gray-300">{{item.December}}</td>
-          </tr>
-          </template>
-        </tbody>
-      </table>
-        <table class="min-w-full border-2 border-collapse border-gray-300">
+        <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
+          <thead class="">
+            <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
+              <th class="px-1 border-2 border-gray-300">Site Name</th>
+              <th class="px-1 border-2 border-gray-300">Jan</th>
+              <th class="px-1 border-2 border-gray-300">Feb</th>
+              <th class="px-1 border-2 border-gray-300">Mar</th>
+              <th class="px-1 border-2 border-gray-300">Apr</th>
+              <th class="px-1 border-2 border-gray-300">May</th>
+              <th class="px-1 border-2 border-gray-300">Jun</th>
+              <th class="px-1 border-2 border-gray-300">Jul</th>
+              <th class="px-1 border-2 border-gray-300">Aug</th>
+              <th class="px-1 border-2 border-gray-300">Sep</th>
+              <th class="px-1 border-2 border-gray-300">Oct</th>
+              <th class="px-1 border-2 border-gray-300">Nov</th>
+              <th class="px-1 border-2 border-gray-300">Dec</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-for="(item, index) in siteclasses" :key="index">
+              <tr
+                class="text-black bg-white border-b-2 border-gray-400 border-solid"
+              >
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.Site }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.January }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.February }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.March }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.April }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.May }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.June }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.July }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.August }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.September }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.October }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.November }}
+                </td>
+                <td
+                  class="px-2 font-semibold truncate border-4 border-gray-300"
+                >
+                  {{ item.December }}
+                </td>
+              </tr>
+            </template>
+          </tbody>
+        </table>
+        <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
           <thead class="">
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
               <th
@@ -1258,11 +1309,49 @@ export default {
     },
     endEmailContent() {
       this.$nextTick(() => {
-        let divContent = this.$refs.componentToConvert.innerHTML; // Changed from emailContent to componentToConvert
+        let divContent = this.$refs.componentToConvert.innerHTML;
+
+        // Create a DOM parser
+        let parser = new DOMParser();
+
+        // Parse the HTML string
+        let doc = parser.parseFromString(divContent, "text/html");
+
+        // Get all table elements
+        let tables = doc.querySelectorAll("table");
+
+        // Loop over each table
+        tables.forEach((table) => {
+          // Apply striped background to th elements
+          let thElements = table.querySelectorAll("th");
+          thElements.forEach((th) => {
+            th.style.background = "#e69138";
+            th.style.color = "white";
+            th.style.padding = "5px";
+            th.style.border = "1px solid black"; // Add border to th elements
+          });
+
+          // Apply alternate colors to rows
+          let trElements = table.querySelectorAll("tr");
+          trElements.forEach((tr, index) => {
+            tr.style.background = index % 2 === 0 ? "#bcbcbc" : "#ffffff";
+            tr.style.color = "black";
+            tr.style.padding = "5px";
+
+            // Add border to td elements in each row
+            let tdElements = tr.querySelectorAll("td");
+            tdElements.forEach((td) => {
+              td.style.border = "1px solid black";
+            });
+          });
+        });
+
+        // Serialize the modified HTML
+        let modifiedHTML = doc.documentElement.outerHTML;
 
         axios
           .post("http://127.0.0.1:8000/api/render", {
-            html: divContent,
+            html: modifiedHTML,
           })
           .then(function (response) {
             console.log(response);
