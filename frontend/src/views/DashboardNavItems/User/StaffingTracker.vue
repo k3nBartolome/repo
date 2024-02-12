@@ -37,7 +37,7 @@
                 {{ program.name }}
               </option>
             </select>
-          
+
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
             <select
@@ -59,10 +59,10 @@
               <option value="11">November</option>
               <option value="12">December</option>
             </select>
-          
+
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
-           
+
             <select
               v-model="week_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -76,7 +76,7 @@
                 {{ daterange.date_range }}
               </option>
             </select>
-         
+
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
         <router-link
@@ -99,7 +99,7 @@
           </button>
         </router-link>
       </div>
-    
+
     </div>
   </div>
   </div>
@@ -187,8 +187,7 @@ export default {
           searchable: false,
           render: function (data) {
             return `<button class="w-40 text-xs btn btn-primary" data-id="${data}"  onclick="window.vm.navigateToEdit(${data})">Edit</button>
-                    <button class="w-40 text-xs btn btn-secondary" data-id="${data}" onclick="window.vm.navigateToPushback(${data})">Pushback/Update</button>
-                    <button class="w-40 btn btn-danger" data-id="${data}" onclick="window.vm.navigateToCancel(${data})">Cancel</button>
+
   `;
           },
         },
@@ -256,14 +255,9 @@ export default {
       this.status = "";
     },
     navigateToEdit(id) {
-      this.$router.push(`/editcapfile/${id}`);
+      this.$router.push(`/updatestaffing/${id}`);
     },
-    navigateToCancel(id) {
-      this.$router.push(`/cancelcapfile/${id}`);
-    },
-    navigateToPushback(id) {
-      this.$router.push(`/pushbackcapfile/${id}`);
-    },
+
     async getClassesAll() {
       try {
         const token = this.$store.state.token;

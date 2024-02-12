@@ -1103,15 +1103,16 @@
                 >
                   {{ item.Week34 }}
                 </td>
+                <td
+                class="font-semibold text-center border-2 border-gray-300"
+                v-if="showAugColumn"
+              >
+                {{ item.Week35 }}
+              </td>
                 <td class="font-semibold text-center border-2 border-gray-300">
                   {{ item.Aug }}
                 </td>
-                <td
-                  class="font-semibold text-center border-2 border-gray-300"
-                  v-if="showAugColumn"
-                >
-                  {{ item.Week35 }}
-                </td>
+
                 <td
                   class="font-semibold text-center border-2 border-gray-300"
                   v-if="showSepColumn"
