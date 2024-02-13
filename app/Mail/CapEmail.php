@@ -6,33 +6,25 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class CapEmail extends Mailable
-{
+class CapEmail extends Mailable {
     use Queueable;
     use SerializesModels;
 
     public $html;
+    public $message;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
-    public function __construct($html)
-    {
+    public function __construct( $html, $message ) {
         $this->html = $html;
+        $this->message = $message;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
-    public function build()
-    {
-        return $this->view('email')
-                    ->with([
-                        'html' => $this->html,
-                    ]);
+    public function build() {
+        $subject = 'PH TA Capacity File - as of ' . date( 'Y-m-d' );
+        return $this->view( 'email' )
+        ->with( [
+            'html' => $this->html,
+            'message' => $this->message,
+        ] )
+        ->subject( $subject );
     }
 }

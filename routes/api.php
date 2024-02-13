@@ -135,6 +135,16 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
+    Route::post('/render', function (Request $request) {
+        $html = $request->input('html');
+        $message = $request->input('message');
+        $recipients = ['padillakryss@gmail.com','carlo.reyes@vxi.com','krbartolome@vxi.com.ph'];
+        Mail::to($recipients)->send(new CapEmail($html, $message));
+        return response()->json(['message' => 'Email sent with received HTML content']);
+    });
+
+
+
 
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
@@ -210,15 +220,15 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 
     return response()->json(['message' => 'Test email sent.']);
 }); */
-Route::post('/render', function (Request $request) {
+/* Route::post('/render', function (Request $request) {
     $html = $request->input('html');
 
     // Define the list of recipients
-    $recipients = ['padillakryss@gmail.com','kryss.bartolome@vxi.com'];
+    $recipients = ['padillakryss@gmail.com','arielito.pascua@vxi.com','krbartolome@vxi.com'];
 
     // Send the email with the received HTML content to all recipients
     Mail::to($recipients)->send(new CapEmail($html));
 
     return response()->json(['message' => 'Email sent with received HTML content']);
-});
+}); */
 

@@ -1507,15 +1507,16 @@ class ClassesController extends Controller
                 $programId = $program->id;
                 $month = $dateRange->month_num;
                 $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                    ->whereHas('dateRange', function ($subquery) use ($month) {
-                        $subquery->where('month_num', $month)->distinct('month_num');
-                    })
-                    ->whereHas('dateRange', function ($subquery) use ($year) {
-                        $subquery->where('year', $year);
-                    })
-                    ->where('site_id', $programId)
-                    ->where('status', 'Active')
-                    ->get();
+                ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                    $subquery->where('month_num', $month)->where('year', $year);
+                })
+                ->whereHas('program', function ($subquery) {
+                    $subquery->where('is_active', 1);
+                })
+                ->where('site_id', $programId)
+                ->where('status', 'Active')
+                ->get();
+
                 $totalTarget = $classes->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$month])) {
@@ -1887,67 +1888,72 @@ class ClassesController extends Controller
     public function dashboardClasses2()
     {
         $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines');
+            $query->where('country', '=', 'Philippines')
+                  ->where('is_active', '=', 1);
         })
-            ->whereHas('dateRange', function ($query) {
-                $query->where('year', '=', '2024');
-            })
-            ->with([
-                'site',
-                'program',
-                'dateRange',
-                'createdByUser',
-                'updatedByUser',
-            ])
-            ->select([
-                'id',
-                'pushedback_id',
-                'within_sla',
-                'condition',
-                'requested_by',
-                'original_start_date',
-                'changes',
-                'agreed_start_date',
-                'approved_date',
-                'cancelled_date',
-                'wfm_date_requested',
-                'notice_weeks',
-                'external_target',
-                'internal_target',
-                'notice_days',
-                'pipeline_utilized',
-                'total_target',
-                'remarks',
-                'status',
-                'category',
-                'type_of_hiring',
-                'update_status',
-                'approved_status',
-                'with_erf',
-                'erf_number',
-                'approved_by',
-                'cancelled_by',
-                'ta',
-                'wave_no',
-                'wf',
-                'tr',
-                'cl',
-                'op',
-                'created_by',
-                'site_id',
-                'program_id',
-                'updated_by',
-                'date_range_id',
-                'created_at',
-                'updated_at'
-            ])
-            ->where('status', 'Active')
-            ->get();
+        ->whereHas('program', function ($query) {
+            $query->where('is_active', '=', 1);
+        })
+        ->whereHas('dateRange', function ($query) {
+            $query->where('year', '=', '2024');
+        })
+        ->with([
+            'site',
+            'program',
+            'dateRange',
+            'createdByUser',
+            'updatedByUser',
+        ])
+        ->select([
+            'id',
+            'pushedback_id',
+            'within_sla',
+            'condition',
+            'requested_by',
+            'original_start_date',
+            'changes',
+            'agreed_start_date',
+            'approved_date',
+            'cancelled_date',
+            'wfm_date_requested',
+            'notice_weeks',
+            'external_target',
+            'internal_target',
+            'notice_days',
+            'pipeline_utilized',
+            'total_target',
+            'remarks',
+            'status',
+            'category',
+            'type_of_hiring',
+            'update_status',
+            'approved_status',
+            'with_erf',
+            'erf_number',
+            'approved_by',
+            'cancelled_by',
+            'ta',
+            'wave_no',
+            'wf',
+            'tr',
+            'cl',
+            'op',
+            'created_by',
+            'site_id',
+            'program_id',
+            'updated_by',
+            'date_range_id',
+            'created_at',
+            'updated_at'
+        ])
+
+        ->get();
 
         return response()->json([
             'classes' => $classes,
         ]);
     }
+
 
 
     public function dashboardClasses3(Request $request)
