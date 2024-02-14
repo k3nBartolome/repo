@@ -13,9 +13,8 @@ use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
-use App\Mail\CapEmail;
+use  App\Http\Controllers\CapEmailController;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -135,17 +134,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
-    Route::post('/render', function (Request $request) {
-        $html = $request->input('html');
-        $message = $request->input('message');
-        $recipients = ['padillakryss@gmail.com','carlo.reyes@vxi.com','krbartolome@vxi.com.ph'];
-        Mail::to($recipients)->send(new CapEmail($html, $message));
-        return response()->json(['message' => 'Email sent with received HTML content']);
-    });
-
-
-
-
+    Route::post('render', [CapEmailController::class, 'sendEmail']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);
@@ -212,23 +201,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
-/* Route::post('/email', function () {
-    \Mail::raw('This is a test email.', function ($message) {
-        $message->to('padillakryss@gmail.com');
-        $message->subject('Test Email');
-    });
-
-    return response()->json(['message' => 'Test email sent.']);
-}); */
-/* Route::post('/render', function (Request $request) {
-    $html = $request->input('html');
-
-    // Define the list of recipients
-    $recipients = ['padillakryss@gmail.com','arielito.pascua@vxi.com','krbartolome@vxi.com'];
-
-    // Send the email with the received HTML content to all recipients
-    Mail::to($recipients)->send(new CapEmail($html));
-
-    return response()->json(['message' => 'Email sent with received HTML content']);
-}); */
 
