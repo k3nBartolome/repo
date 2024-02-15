@@ -1277,7 +1277,9 @@ export default {
       imageData: "",
     };
   },
-  computed: {},
+  created() {
+    this.getEmailContent();
+  },
   mounted() {
     this.getClassesSite();
     this.getClassesAll();
@@ -1380,6 +1382,27 @@ export default {
       this.showNovColumn = newState;
       this.showDecColumn = newState;
     },
+    async getEmailContent() {
+    try {
+        let htmlContent = this.$refs.componentToConvert.innerHTML;
+        const token = this.$store.state.token;
+
+        const response = await axios.post(
+            "http://127.0.0.1:8000/api/generate-html",
+            { html: htmlContent }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            }
+        );
+
+        console.log(response.data);
+    } catch (error) {
+        console.error(error);
+    }
+},
+
 
     async getClassesSite() {
       try {
