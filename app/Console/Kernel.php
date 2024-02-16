@@ -16,15 +16,14 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-    {
-        $schedule->call(function () {
-            $controller = new CapEmailController();
-            $request = new Request();
-            $modifiedHtmlContent = $controller->generateHtmlContent($request);
-            $request->merge(['html' => $modifiedHtmlContent]);
-            $controller->sendEmail($request);
-        })->dailyAt('19:59')->timezone('Asia/Manila');
-    }
+{
+    $schedule->call(function () {
+        $controller = new CapEmailController();
+        $controller->sendEmail(new Request());
+    })->dailyAt('16:11')->timezone('Asia/Manila');
+}
+
+
 
     /**
      * Register the commands for the application.

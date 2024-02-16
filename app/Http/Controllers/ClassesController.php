@@ -2693,4 +2693,18 @@ class ClassesController extends Controller
         // @ts-ignore
         return new ClassesResource($class);
     }
+    //For Web Routes
+    public function WebDashboardSiteClasses(Request $request, CapEmailController $emailController)
+    {
+        $mappedGroupedClasses = $emailController->retrieveDataForEmail();
+
+        return view('email.view', compact('mappedGroupedClasses'));
+    }
+
+    public function WebDashboardClasses(Request $request, CapEmailController $emailController)
+    {
+        $mappedClasses = $emailController->retrieveDataForClassesEmail();
+
+        return view('email.view', compact('mappedClasses'));
+    }
 }

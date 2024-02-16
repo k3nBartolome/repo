@@ -64,4 +64,6 @@ sslmode
 subquery
 sumtotaltarget
 updateclassesstaffing
+webclassesdashboard
+websiteclasses
 websockets
