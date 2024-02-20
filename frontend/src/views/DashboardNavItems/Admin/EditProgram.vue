@@ -12,38 +12,32 @@
     >
       <form
         @submit.prevent="editProgram"
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        class="flex flex-wrap items-center justify-between gap-4 font-semibold"
       >
-        <label class="block">
-          Name
-          <input
+        <label class="block"
+          >Name<input
             type="text"
             v-model="name"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Description
-          <input
+            required /></label
+        ><label class="block"
+          >Description<input
             type="text"
             v-model="description"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Program Group
-          <input
+            required /></label
+        ><label class="block"
+          >Program Group<input
             type="text"
             v-model="program_group"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            
-          />
-        </label>
-        <label class="block">
-          Site
-          <select
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
+        ><label class="block"
+          >B2<input
+            type="checkbox"
+            v-model="b2"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
+        ><label class="block"
+          >Site<select
             v-model="sites_selected"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
@@ -53,9 +47,8 @@
             <option v-for="site in sites" :key="site.id" :value="site.id">
               {{ site.name }}
             </option>
-          </select>
-        </label>
-        <button
+          </select></label
+        ><button
           type="submit"
           class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
@@ -76,6 +69,7 @@ export default {
       description: "",
       program_group: "",
       sites_selected: "",
+      b2: false,
       sites: [],
     };
   },
@@ -140,6 +134,7 @@ export default {
         name: this.name,
         description: this.description,
         program_group: this.program_group,
+        b2: this.b2,
         site_id: this.sites_selected,
         updated_by: this.$store.state.user_id,
       };
@@ -158,6 +153,7 @@ export default {
           this.name = "";
           this.description = "";
           this.program_group = "";
+          this.b2 = formData.b2; 
           this.sites_selected = "";
           this.$router.push("/program_management", () => {
             location.reload();

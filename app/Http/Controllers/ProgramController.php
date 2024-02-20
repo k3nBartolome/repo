@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ProgramResource;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -109,7 +108,7 @@ class ProgramController extends Controller
     {
         $program = Program::FindOrFail($id);
 
-        return new ProgramResource($program);
+        return response()->json(['data' => $program]);
     }
 
     public function store(Request $request)
@@ -118,6 +117,7 @@ class ProgramController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'program_group' => 'sometimes',
+            'b2' => 'required|boolean',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
         ]);
@@ -127,8 +127,9 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
-
-        return new ProgramResource($program);
+        $program->program_id = $program->id;
+        $program->save();
+        return response()->json(['data' => $program]);
     }
 
     public function update(Request $request, $id)
@@ -137,6 +138,7 @@ class ProgramController extends Controller
             'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
             'description' => 'sometimes',
             'program_group' => 'sometimes',
+            'b2' => 'sometimes|boolean',
             'site_id' => 'sometimes',
         ]);
 
@@ -152,7 +154,7 @@ class ProgramController extends Controller
         $program->fill($request->all());
         $program->save();
 
-        return new ProgramResource($program);
+        return response()->json(['data' => $program]);
     }
 
     public function destroy($id)
@@ -213,7 +215,7 @@ class ProgramController extends Controller
         $program->fill($request->all());
         $program->save();
 
-        return new ProgramResource($program);
+        return response()->json(['data' => $program]);
     }
 
     public function activate(Request $request, $id)
@@ -234,6 +236,6 @@ class ProgramController extends Controller
         $program->fill($request->all());
         $program->save();
 
-        return new ProgramResource($program);
+        return response()->json(['data' => $program]);
     }
 }

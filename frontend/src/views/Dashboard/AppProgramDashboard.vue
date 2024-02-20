@@ -12,38 +12,32 @@
     >
       <form
         @submit.prevent="addProgram"
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+        class="flex flex-wrap items-center justify-between gap-4 font-semibold"
       >
-        <label class="block">
-          Name
-          <input
+        <label class="block"
+          >Name<input
             type="text"
             v-model="name"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Description
-          <input
+            required /></label
+        ><label class="block"
+          >Description<input
             type="text"
             v-model="description"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Program Group
-          <input
+            required /></label
+        ><label class="block"
+          >Program Group<input
             type="text"
             v-model="program_group"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            
-          />
-        </label>
-        <label class="block">
-          Site
-          <select
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
+        ><label class="block"
+          >B2<input
+            type="checkbox"
+            v-model="b2"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
+        ><label class="block"
+          >Site<select
             v-model="sites_selected"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
@@ -53,9 +47,8 @@
             <option v-for="site in sites" :key="site.id" :value="site.id">
               {{ site.name }}
             </option>
-          </select>
-        </label>
-        <button
+          </select></label
+        ><button
           type="submit"
           class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
@@ -64,6 +57,7 @@
       </form>
     </div>
   </div>
+
   <div class="py-0">
     <div class="px-8">
       <div class="overflow-x-auto">
@@ -129,17 +123,22 @@ export default {
       program_group: "",
       sites_selected: "",
       sites: [],
+      b2: false,
       columns: [
         { data: "id", title: "ID" },
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
+        { data: "b2", title: "B2" },
         { data: "created_by_user.name", title: "Created By" },
         { data: "created_at", title: "Created Date" },
-        { data: "updated_by_user.name", title: "Updated By" ,
-        render: (data, type, row) => {
+        {
+          data: "updated_by_user.name",
+          title: "Updated By",
+          render: (data, type, row) => {
             return row.updated_by_user ? row.updated_by_user.name : "N/A";
-          },},
+          },
+        },
         { data: "updated_at", title: "Updated Date" },
         {
           data: "is_active",
@@ -231,7 +230,11 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/programs_deactivate/${id}`, form, config)
+        .put(
+          `http://10.109.2.112:8081/api/programs_deactivate/${id}`,
+          form,
+          config
+        )
         .then((response) => {
           // Handle the response
           console.log(response.data);
@@ -246,11 +249,14 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/programs",
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -311,6 +317,7 @@ export default {
         program_group: this.program_group,
         site_id: this.sites_selected,
         is_active: 1,
+        b2: this.b2,
         created_by: this.$store.state.user_id,
       };
       axios
@@ -325,6 +332,7 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
+          this.b2 = "";
           this.getPrograms();
         })
         .catch((error) => {

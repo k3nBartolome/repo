@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SiteResource;
 use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -118,9 +117,10 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill($request->all());
         $site->country = 'Philippines';
+        $site->site_id = $site->id;
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     public function store2(Request $request)
@@ -143,7 +143,7 @@ class SiteController extends Controller
         $site->country = 'India';
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     public function store3(Request $request)
@@ -166,7 +166,7 @@ class SiteController extends Controller
         $site->country = 'Jamaica';
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     public function store4(Request $request)
@@ -189,7 +189,7 @@ class SiteController extends Controller
         $site->country = 'Guatemala';
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     /**
@@ -201,7 +201,7 @@ class SiteController extends Controller
     {
         $site = Site::FindOrFail($id);
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     /**
@@ -212,7 +212,7 @@ class SiteController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:sites,name,'.$id,
+            'name' => 'sometimes|unique:sites,name,' . $id,
             'description' => 'sometimes',
             'site_director' => 'sometimes',
             'region' => 'sometimes',
@@ -231,7 +231,7 @@ class SiteController extends Controller
         $site->fill($request->all());
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     /**
@@ -270,7 +270,7 @@ class SiteController extends Controller
         $site->fill($request->all());
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 
     public function activate(Request $request, $id)
@@ -291,6 +291,6 @@ class SiteController extends Controller
         $site->fill($request->all());
         $site->save();
 
-        return new SiteResource($site);
+        return response()->json(['data' => $site]);
     }
 }
