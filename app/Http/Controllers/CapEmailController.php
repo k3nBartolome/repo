@@ -19,7 +19,7 @@ class CapEmailController extends Controller
     $mappedGroupedClasses = $this->retrieveDataForEmail();
     $mappedClasses = $this->retrieveDataForClassesEmail();
 
-    $recipients = ['padillakryss@gmail.com', 'krbartolome@vxi.com.ph'];
+    $recipients = ['padillakryss@gmail.com', 'kryss.bartolome@vxi.com','arielito.pascua@vxi.com'];
     $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
     Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses,'mappedClasses' => $mappedClasses], function ($message) use ($recipients, $subject) {

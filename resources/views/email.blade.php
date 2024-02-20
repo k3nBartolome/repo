@@ -2,133 +2,194 @@
 <html>
 
 <head>
-    <title>Mail from App</title>
+    <title>TA Reports</title>
     <style>
-        /* Custom CSS */
-        body {
-            background-color: #f3f4f6; /* Light gray background */
-            font-family: Arial, sans-serif; /* Specify preferred font */
-            color: #333; /* Text color */
-            padding: 20px; /* Add some padding */
-        }
-        .email-heading {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
         th, td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-        white-space: nowrap; /* Add this line */
-    }
-        th, .last-row {
-            background-color: blue; /* Blue background */
-            color: white; /* White text */
-        }
-        tr:not(.last-row):nth-child(even) {
-            background-color: gray; /* Gray background */
-            color: black; /* Black text */
-        }
-        p {
-            margin: 10px 0;
+            height: 5px;
         }
     </style>
+    
 </head>
 
-<body>
+<body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333;">
     <div>
-        <strong><p >Test Email</p></strong>
-        <p >Hi Team,</p>
-        <p >Please see below for the most updated cap file.</p>
-        <table>
+        <strong>
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test Email</p>
+        </strong>
+        <p style="margin: 10px 0;">TA Reports</p>
+        <p style="margin: 10px 0;">Please see below for the most updated cap file.</p>
+        <div style="margin: 10px 0">
+        <p style="margin: 10px 0;">PER SITE:</p>
+        <table style="width: 70%; border-collapse: collapse;">
             <thead>
-                <tr >
-                    <th>Site</th>
-                    <th>Jan</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Apr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Aug</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dec</th>
+                <tr>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Site</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jan</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Feb</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Mar</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Apr</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        May</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jun</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jul</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Aug</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Sep</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Oct</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Nov</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Dec</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($mappedGroupedClasses as $index => $data)
-                    <tr @if($loop->last) class="last-row" @endif>
-                        <td>{{ $data['Site'] }}</td>
-                        <td>{{ $data['January'] }}</td>
-                        <td>{{ $data['February'] }}</td>
-                        <td>{{ $data['March'] }}</td>
-                        <td>{{ $data['April'] }}</td>
-                        <td>{{ $data['May'] }}</td>
-                        <td>{{ $data['June'] }}</td>
-                        <td>{{ $data['July'] }}</td>
-                        <td>{{ $data['August'] }}</td>
-                        <td>{{ $data['September'] }}</td>
-                        <td>{{ $data['October'] }}</td>
-                        <td>{{ $data['November'] }}</td>
-                        <td>{{ $data['December'] }}</td>
-                    </tr>
+                <tr @if($loop->last) class="last-row" @endif>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Site'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['January'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['February'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['March'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['April'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['May'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['June'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['July'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['August'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['September'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['October'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['November'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['December'] }}</td>
+                </tr>
                 @endforeach
             </tbody>
         </table>
-        <table>
+    </div>
+    <div style="margin: 10px 0">
+        <p style="margin: 10px 0;">PER PROGRAM:</p>
+        <table style="width: 100%; border-collapse: collapse;">
             <thead>
-                <tr >
-                    <th>Site</th>
-                    <th>Program</th>
-                    <th>Jan</th>
-                    <th>Feb</th>
-                    <th>Mar</th>
-                    <th>Apr</th>
-                    <th>May</th>
-                    <th>Jun</th>
-                    <th>Jul</th>
-                    <th>Aug</th>
-                    <th>Sep</th>
-                    <th>Oct</th>
-                    <th>Nov</th>
-                    <th>Dec</th>
-                    <th>Total</th>
+                <tr>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Site</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Program</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jan</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Feb</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Mar</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Apr</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        May</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jun</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Jul</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Aug</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Sep</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Oct</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Nov</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Dec</th>
+                    <th
+                       style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                        Total</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($mappedClasses as $index => $data)
-                    <tr @if($loop->last) class="last-row" @endif>
-                        <td>{{ $data['Site'] }}</td>
-                        <td>{{ $data['Program'] }}</td>
-                        <td>{{ $data['Jan'] }}</td>
-                        <td>{{ $data['Feb'] }}</td>
-                        <td>{{ $data['Mar'] }}</td>
-                        <td>{{ $data['Apr'] }}</td>
-                        <td>{{ $data['May'] }}</td>
-                        <td>{{ $data['Jun'] }}</td>
-                        <td>{{ $data['Jul'] }}</td>
-                        <td>{{ $data['Aug'] }}</td>
-                        <td>{{ $data['Sep'] }}</td>
-                        <td>{{ $data['Oct'] }}</td>
-                        <td>{{ $data['Nov'] }}</td>
-                        <td>{{ $data['Dec'] }}</td>
-                        <td>{{ $data['GrandTotalByProgram'] }}</td>
-                    </tr>
+                <tr @if($loop->last) class="last-row" @endif>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Site'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Program'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Jan'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Feb'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Mar'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Apr'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['May'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Jun'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Jul'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Aug'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Sep'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Oct'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Nov'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['Dec'] }}</td>
+                    <td style="border: 1px solid #ccc; padding: 5px; text-align: left; truncate">{{
+                        $data['GrandTotalByProgram'] }}</td>
+                </tr>
                 @endforeach
             </tbody>
         </table>
-        <p>Thanks,</p>
-        <p>TA Reports Team</p>
+    </div>
+        <p style="margin: 10px 0;font-weight: bold;">Thanks,</p>
+        <p style="margin: 10px 0;font-weight: bold;">TA Reports Team</p>
     </div>
 </body>
 

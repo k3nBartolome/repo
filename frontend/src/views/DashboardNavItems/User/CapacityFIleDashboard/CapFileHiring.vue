@@ -149,10 +149,10 @@
     </div>
   </div>
 
-  <div class="px-2 overflow-x-auto overflow-y-auto" ref="componentToConvert">
+  <div class="px-2 overflow-x-auto">
     <div class="p-4">
       <div
-        class="overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-md"
+        class="overflow-x-auto  rounded-lg shadow-md"
       >
         <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
           <thead class="">
@@ -1238,7 +1238,6 @@
       </div>
     </div>
   </div>
-  <button @click="endEmailContent">Send Email</button>
 </template>
 
 <script>
@@ -1277,9 +1276,6 @@ export default {
       imageData: "",
     };
   },
-  created() {
-    this.getEmailContent();
-  },
   mounted() {
     this.getClassesSite();
     this.getClassesAll();
@@ -1305,53 +1301,6 @@ export default {
     },
   },
   methods: {
-    endEmailContent() {
-      this.$nextTick(() => {
-        let divContent = this.$refs.componentToConvert.innerHTML;
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(divContent, "text/html");
-        let tables = doc.querySelectorAll("table");
-        tables.forEach((table) => {
-          let thElements = table.querySelectorAll("th");
-          thElements.forEach((th) => {
-            th.style.background = "#e69138";
-            th.style.color = "white";
-            th.style.padding = "5px";
-            th.style.border = "1px solid black";
-          });
-          let trElements = table.querySelectorAll("tr");
-          trElements.forEach((tr, index) => {
-            tr.style.background = index % 2 === 0 ? "#bcbcbc" : "#ffffff";
-            tr.style.color = "black";
-            tr.style.padding = "5px";
-            let tdElements = tr.querySelectorAll("td");
-            tdElements.forEach((td) => {
-              td.style.border = "1px solid black";
-            });
-          });
-        });
-        let modifiedHTML = doc.documentElement.outerHTML;
-        const token = this.$store.state.token;
-        axios
-          .post(
-            "http://127.0.0.1:8000/api/render",
-            {
-              html: modifiedHTML,
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          )
-          .then(function (response) {
-            console.log(response);
-          })
-          .catch(function (error) {
-            console.log(error);
-          });
-      });
-    },
 
     toggleColumnVisibility(month) {
       if (month === "Jan") this.showJanColumn = !this.showJanColumn;
@@ -1382,33 +1331,11 @@ export default {
       this.showNovColumn = newState;
       this.showDecColumn = newState;
     },
-    async getEmailContent() {
-    try {
-        let htmlContent = this.$refs.componentToConvert.innerHTML;
-        const token = this.$store.state.token;
-
-        const response = await axios.post(
-            "http://127.0.0.1:8000/api/generate-html",
-            { html: htmlContent }, 
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
-
-        console.log(response.data);
-    } catch (error) {
-        console.error(error);
-    }
-},
-
-
     async getClassesSite() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/siteclasses",
+          "http://10.109.2.112:8081/api/siteclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1432,7 +1359,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesdashboard",
+          "http://10.109.2.112:8081/api/classesdashboard",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1473,7 +1400,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
+        const response = await axios.get("http://10.109.2.112:8081/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1506,7 +1433,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1531,7 +1458,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
+        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
           ","
         )}`;
 

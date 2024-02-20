@@ -229,7 +229,7 @@ export default {
     async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/perx_date", {
+        const response = await axios.get("http://10.109.2.112:8081/api/perx_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -277,7 +277,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/perx_site", {
+        const response = await axios.get("http://10.109.2.112:8081/api/perx_site", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -298,7 +298,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilter",
+          "http://10.109.2.112:8081/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -326,7 +326,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/export", {
+        const response = await axios.get("http://10.109.2.112:8081/api/export", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
