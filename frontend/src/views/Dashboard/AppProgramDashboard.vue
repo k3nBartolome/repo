@@ -129,7 +129,14 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
-        { data: "b2", title: "B2" },
+        {
+          data: "b2",
+          title: "B2 Status",
+          render: function (data) {
+            return data === null || data === 0 ? "Not B2" : "B2";
+          },
+        },
+
         { data: "created_by_user.name", title: "Created By" },
         { data: "created_at", title: "Created Date" },
         {
