@@ -2,36 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use DOMDocument;
-use App\Models\Site;
-use App\Models\Program;
 use App\Models\Classes;
 use App\Models\DateRange;
+use App\Models\Program;
+use App\Models\Site;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class CapEmailController extends Controller
 {
     public function sendEmail(Request $request)
-{
-    // Retrieve data needed for email content
-    $mappedGroupedClasses = $this->retrieveDataForEmail();
-    $mappedClasses = $this->retrieveDataForClassesEmail();
+    {
+        $mappedGroupedClasses = $this->retrieveDataForEmail();
+        $mappedClasses = $this->retrieveDataForClassesEmail();
 
-    $recipients = ['padillakryss@gmail.com', 'kryss.bartolome@vxi.com','arielito.pascua@vxi.com'];
-    $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
+        $recipients = ['padillakryss@gmail.com', 'kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
+        $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
-    Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses,'mappedClasses' => $mappedClasses], function ($message) use ($recipients, $subject) {
-        $message->from('TA.Insights@vxi.com', 'TA Report');
-        $message->to($recipients);
-        $message->subject($subject);
-    });
+        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses], function ($message) use ($recipients, $subject) {
+            $message->from('TA.Insights@vxi.com', 'TA Reports');
+            $message->to($recipients);
+            $message->subject($subject);
+        });
 
-    return response()->json(['message' => 'Email sent successfully']);
-}
+        return response()->json(['message' => 'Email sent successfully']);
+    }
 
-public function retrieveDataForEmail()
+    public function retrieveDataForEmail()
     {
         $programs = Site::where('is_active', 1)->get();
 
@@ -51,15 +48,15 @@ public function retrieveDataForEmail()
                 $programId = $program->id;
                 $month = $dateRange->month_num;
                 $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                ->whereHas('dateRange', function ($subquery) use ($month, $year) {
-                    $subquery->where('month_num', $month)->where('year', $year);
-                })
-                ->whereHas('program', function ($subquery) {
-                    $subquery->where('is_active', 1);
-                })
-                ->where('site_id', $programId)
-                ->where('status', 'Active')
-                ->get();
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+                    ->where('site_id', $programId)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
 
@@ -130,11 +127,11 @@ public function retrieveDataForEmail()
     }
     public function retrieveDataForClassesEmail()
     {
-        $programs = Program::with('site')            ->when(true, function ($query) {
-                $query->whereHas('site', function ($subquery) {
-                    $subquery->where('is_active', 1);
-                });
-            })
+        $programs = Program::with('site')->when(true, function ($query) {
+            $query->whereHas('site', function ($subquery) {
+                $subquery->where('is_active', 1);
+            });
+        })
             ->where('is_active', 1) // You can keep or remove this line based on your requirements
             ->get();
 

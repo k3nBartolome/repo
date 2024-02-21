@@ -16,14 +16,12 @@ class Kernel extends ConsoleKernel
      * @return void
      */
     protected function schedule(Schedule $schedule)
-{
-    $schedule->call(function () {
-        $controller = new CapEmailController();
-        $controller->sendEmail(new Request());
-    })->dailyAt('19:00')->timezone('Asia/Manila');
-}
-
-
+    {
+        $schedule->call(function () {
+            $controller = new CapEmailController();
+            $controller->sendEmail(new Request());
+        })->dailyAt('21:00')->timezone('Asia/Manila');
+    }
 
     /**
      * Register the commands for the application.
@@ -32,7 +30,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
