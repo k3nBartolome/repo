@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>TA Reports</title>
+    <title>TA Insights</title>
     <style>
         th, td {
             height: 5px;
@@ -14,9 +14,9 @@
 <body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333;">
     <div>
         <strong>
-            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test Email</p>
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test email only. This will go live by Feb 28 9PM. Please update data.</p>
         </strong>
-        <p style="margin: 10px 0;">TA Reports</p>
+        <p style="margin: 10px 0;">TA Insights</p>
         <p style="margin: 10px 0;">Please see below for the most updated cap file.</p>
         <div style="margin: 10px 0">
         <p style="margin: 10px 0;">PER SITE:</p>
