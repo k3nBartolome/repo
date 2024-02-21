@@ -181,7 +181,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_site", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_site", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -200,7 +200,7 @@ export default {
   async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -236,7 +236,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/sr_filter",
+          "http://127.0.0.1:8000/api/sr_filter",
           {
             params: {
               
@@ -262,7 +262,7 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_export", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_export", {
           params: {
            
             filter_site: this.filterSite,

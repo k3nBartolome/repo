@@ -203,3 +203,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
 });
 
+Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
