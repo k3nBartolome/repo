@@ -2708,7 +2708,7 @@ class ClassesController extends Controller
     }
     public function WebDashboardB2Classes(Request $request, CapEmailController $emailController)
     {
-        $mappedClasses = $emailController->retrieveB2DataForEmail();
+        $mappedB2Classes = $emailController->retrieveB2DataForEmail();
 
         return view('email.view', compact('mappedB2Classes'));
     }

@@ -126,7 +126,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($mappedGroupedClasses as $index => $data)
+                    @foreach ($mappedB2Classes as $index => $data)
                     <tr @if($loop->last) class="last-row" @endif>
                         <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">{{
                         $data['Site'] }}</td>
@@ -152,8 +152,6 @@
                         $data['October'] }}</td>
                         <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">{{
                         $data['November'] }}</td>
-                        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">{{
-                        $data['December'] }}</td>
                         <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">{{
                         $data['December'] }}</td>
                         <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">{{

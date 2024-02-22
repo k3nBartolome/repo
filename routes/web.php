@@ -15,4 +15,5 @@ use  App\Http\Controllers\CapEmailController;
 */
 Route::get( '/webclassesdashboard', [ ClassesController::class, 'WebDashboardClasses' ] );
 Route::get( '/websiteclasses', [ ClassesController::class, 'WebDashboardSiteClasses' ] );
+Route::get( '/websiteb2classes', [ ClassesController::class, 'retrieveB2DataForEmail' ] );
 Route::post( 'render', [ CapEmailController::class, 'sendEmail' ] );
