@@ -3,20 +3,17 @@
     <div class="container mx-auto mt-4 px-4 py-0">
       <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
-         
-            <select
-              v-model="sites_selected"
-              class="px-4 py-2 border rounded-lg w-full bg-gray-100"
-            >
-              <option disabled value="" selected>Please select Site</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          
+          <select
+            v-model="sites_selected"
+            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
+          >
+            <option disabled value="" selected>Please select Site</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
         </div>
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          
           <select
             v-model="programs_selected"
             class="px-4 py-2 border rounded-lg w-full bg-gray-100"
@@ -33,7 +30,7 @@
         </div>
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <button
-          class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
+            class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
             @click="resetFilters"
           >
             Reset Filters
@@ -47,53 +44,103 @@
       <table class="min-w-full border-collapse border-2 border-gray-300">
         <thead>
           <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Month</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Target</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Internal</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">External</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Overall Starts</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Day1</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Day2</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Day3</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Day4</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Day5</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Total Classes</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Filled</th>
-          <th class="border-2 border-gray-300 px-4 py-2 truncate">Open</th>
-        </tr>
-      </thead>
-      <tbody v-for="(mps1, index) in mps" :key="index">
-        <tr
-        class="text-black bg-white border-b-2 border-gray-400 border-solid"
-      >
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate">
-            {{ mps1.month }}
-          </td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">
-            {{ mps1.total_target }}
-          </td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">
-            {{ mps1.internal }}
-          </td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">
-            {{ mps1.external }}
-          </td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.total }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.day_1 }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.day_2 }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.day_3 }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.day_4 }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.day_5 }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">
-            {{ mps1.classes }}
-          </td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.filled }}</td>
-          <td class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate">{{ mps1.open }}</td>
-        </tr>
-      </tbody>
-    </table>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Month</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Target</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">
+              Internal
+            </th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">
+              External
+            </th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">
+              Overall Starts
+            </th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day1</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day2</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day3</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day4</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day5</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">
+              Total Classes
+            </th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Filled</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Open</th>
+          </tr>
+        </thead>
+        <tbody v-for="(mps1, index) in mps" :key="index">
+          <tr
+            class="text-black bg-white border-b-2 border-gray-400 border-solid"
+          >
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+            >
+              {{ mps1.month }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.total_target }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.internal }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.external }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.total }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.day_1 }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.day_2 }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.day_3 }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.day_4 }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.day_5 }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.classes }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.filled }}
+            </td>
+            <td
+              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
+            >
+              {{ mps1.open }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
 </template>
 <script>
 import axios from "axios";
@@ -135,7 +182,7 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "http://10.109.2.112:8081/api/mpsmonth";
+        let apiUrl = "http://127.0.0.1:8000/api/mpsmonth";
         const params = {};
         if (this.sites_selected) {
           params.site_id = this.sites_selected;
@@ -160,7 +207,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -179,7 +226,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(`http://10.109.2.112:8081/api/programs`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/programs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -49,41 +49,42 @@
         </thead>
         <tbody v-for="(item, index) in sr" :key="index">
           <tr
-          class=""
-          :class="{'border-4 border-gray-300 px-4 py-2 text-left font-bold bg-blue-300 text-lg': item.Step, 'border-4 border-gray-300 px-4 py-2 text-left font-semibold text-sm': item.AppStep}">
-          <td  class=""
-          :class="{'border-4 border-gray-300 px-4 py-2 text-left font-bold bg-blue-300': item.Step, 'border-4 border-gray-300 px-4 py-2 text-left font-semibold': item.AppStep}">
-          {{ item.Step || item.AppStep }}
-      </td>
-          
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
+            class=""
+            :class="{
+              'border-4 border-gray-300 px-4 py-2 text-left font-bold bg-blue-300 text-lg':
+                item.Step,
+              'border-4 border-gray-300 px-4 py-2 text-left font-semibold text-sm':
+                item.AppStep,
+            }"
+          >
+            <td
+              class=""
+              :class="{
+                'border-4 border-gray-300 px-4 py-2 text-left font-bold bg-blue-300':
+                  item.Step,
+                'border-4 border-gray-300 px-4 py-2 text-left font-semibold':
+                  item.AppStep,
+              }"
             >
+              {{ item.Step || item.AppStep }}
+            </td>
+
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item.Bridgetowne }}
             </td>
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
-            >
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item.Clark }}
             </td>
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
-            >
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item.Davao }}
             </td>
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
-            >
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item.Makati }}
             </td>
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
-            >
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item.MOA }}
             </td>
-            <td class="border-gray-300 border-2  px-4 py-2 text-center"
-              
-            >
+            <td class="border-gray-300 border-2 px-4 py-2 text-center">
               {{ item["QC North EDSA"] }}
             </td>
             <td
@@ -107,9 +108,9 @@ export default {
       sr: [],
       filterStartDate: "",
       filterEndDate: "",
-      showAppStep: true, 
-      minDate:[],
-      maxDate:[],
+      showAppStep: true,
+      minDate: [],
+      maxDate: [],
     };
   },
   computed: {
@@ -127,7 +128,7 @@ export default {
     async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -135,7 +136,7 @@ export default {
 
         if (response.status === 200) {
           this.filterStartDate = response.data.minDate;
-          this.filterEndDate= response.data.maxDate;
+          this.filterEndDate = response.data.maxDate;
           console.log(response.data.minDate);
           console.log(response.data.maxDate);
         } else {
@@ -178,7 +179,7 @@ export default {
         }
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/sr_compliance",
+          "http://127.0.0.1:8000/api/sr_compliance",
           {
             params,
             headers: {

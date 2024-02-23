@@ -84,7 +84,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -112,7 +112,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -140,7 +140,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
           formData,
           {
             headers: {
@@ -153,7 +153,7 @@ export default {
           this.name = "";
           this.description = "";
           this.program_group = "";
-          this.b2 = formData.b2; 
+          this.b2 = formData.b2;
           this.sites_selected = "";
           this.$router.push("/program_management", () => {
             location.reload();

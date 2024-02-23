@@ -1,10 +1,88 @@
 <template>
   <div class="py-0">
+    <div
+      class="container px-4 py-0 mx-auto mt-4 flex flex-wrap space-x-2 items-center"
+    >
+      <div class="flex-grow">
+        <select
+          v-model="sites_selected"
+          class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          @change="getPrograms"
+        >
+          <option disabled value="" selected>Please select Site</option>
+          <option v-for="site in sites" :key="site.id" :value="site.id">
+            {{ site.name }}
+          </option>
+        </select>
+      </div>
+      <div class="flex-grow">
+        <select
+          v-model="programs_selected"
+          class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+        >
+          <option disabled value="" selected>Please select Program</option>
+          <option
+            v-for="program in programs"
+            :key="program.id"
+            :value="program.id"
+          >
+            {{ program.name }}
+          </option>
+        </select>
+      </div>
+      <div class="flex-grow">
+        <select
+          v-model="month_selected"
+          class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          @change="onMonthSelected"
+        >
+          <option disabled value="" selected>Please select Month</option>
+          <option value="1">January</option>
+          <option value="2">February</option>
+          <option value="3">March</option>
+          <option value="4">April</option>
+          <option value="5">May</option>
+          <option value="6">June</option>
+          <option value="7">July</option>
+          <option value="8">August</option>
+          <option value="9">September</option>
+          <option value="10">October</option>
+          <option value="11">November</option>
+          <option value="12">December</option>
+        </select>
+      </div>
+      <div class="flex-grow">
+        <select
+          v-model="week_selected"
+          class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+        >
+          <option disabled value="" selected>Please select Week</option>
+          <option
+            v-for="daterange in daterange"
+            :key="daterange.id"
+            :value="daterange.id"
+          >
+            {{ daterange.date_range }}
+          </option>
+        </select>
+      </div>
+      <div>
+        <button
+          type="button"
+          class="px-4 py-2 text-white bg-red-500 rounded-lg"
+          @click="resetFilter"
+        >
+          Reset Filters
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="py-1">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="classes"
+            :data="filteredData"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -69,6 +147,13 @@ export default {
       classes: [],
       grandTotal: [],
       grandTotal2: [],
+      sites: [],
+      programs: [],
+      daterange: [],
+      sites_selected: "",
+      programs_selected: "",
+      month_selected: "",
+      week_selected: "",
       columns: [
         { data: "id", title: "ID" },
         { data: "site.country", title: "Country" },
@@ -112,16 +197,73 @@ export default {
       ],
     };
   },
-  computed: {},
+  computed: {
+    filteredData() {
+      let filteredData = [...this.classes];
+      if (this.sites_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.site.id === this.sites_selected;
+        });
+      }
+
+      if (this.programs_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.program.id === this.programs_selected;
+        });
+      }
+      if (this.month_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.date_range.month_num === parseInt(this.month_selected);
+        });
+      }
+      if (this.week_selected) {
+        filteredData = filteredData.filter((classes) => {
+          const weekId = classes.date_range.id;
+          return weekId === this.week_selected;
+        });
+      }
+
+      return filteredData;
+    },
+    EmptySelection() {
+      return (
+        !this.sites_selected || !this.programs_selected || !this.week_selected
+      );
+    },
+    classExists() {
+      return this.classes.some((c) => {
+        return (
+          c.site.id === this.sites_selected &&
+          c.program.id === this.programs_selected &&
+          c.date_range.id === this.week_selected
+        );
+      });
+    },
+  },
   mounted() {
     this.getClassesAll();
+    this.getSites();
+    this.getPrograms();
+    this.getDateRange();
   },
   methods: {
+    onMonthSelected() {
+      if (this.month_selected) {
+        this.getDateRange();
+      }
+    },
+    resetFilter() {
+      this.sites_selected = "";
+      this.programs_selected = "";
+      this.month_selected = "";
+      this.week_selected = "";
+      this.status = "";
+    },
     async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard2",
+          "http://127.0.0.1:8000/api/classesdashboard2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -139,6 +281,78 @@ export default {
         }
       } catch (error) {
         console.error("An error occurred:", error);
+      }
+    },
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getPrograms() {
+      if (!this.sites_selected) {
+        return;
+      }
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.programs = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getDateRange() {
+      if (!this.month_selected) {
+        return;
+      }
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.daterange = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
       }
     },
   },

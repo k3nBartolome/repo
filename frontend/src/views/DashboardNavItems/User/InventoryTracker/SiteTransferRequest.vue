@@ -29,7 +29,9 @@
               ></path>
             </svg>
           </button>
-          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
+          <span v-if="successMessage" class="text-green-500">{{
+            successMessage
+          }}</span>
           <form
             @submit.prevent="receivedRequest(receivedId)"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
@@ -147,7 +149,7 @@ export default {
       received_quantity: "",
       showModal: false,
       errors: {},
-      successMessage:"",
+      successMessage: "",
       siteRequestId: null,
       columns: [
         { data: "id", title: "ID" },
@@ -273,13 +275,13 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/inventory/transfer/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.successMessage = "Received successfully!";
-            this.showModal = false;
-            window.location.reload()
+          this.showModal = false;
+          window.location.reload();
         })
         .catch((error) => {
           console.log(error.response.data.data);
@@ -289,7 +291,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/inventory/alltransfer",
+          "http://127.0.0.1:8000/api/inventory/alltransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

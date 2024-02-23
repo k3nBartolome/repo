@@ -2,8 +2,8 @@
   <div class="py-0">
     <div class="container px-4 py-0 mx-auto mt-4">
       <span v-if="EmptySelection" class="ml-2 text-lg text-red-500 align-center"
-      >Fill all the selections first</span
-    >
+        >Fill all the selections first</span
+      >
       <div class="py-0 mb-4 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <router-link
@@ -25,9 +25,8 @@
               <i class="fa fa-building"></i> Add
             </button>
           </router-link>
-         
         </div>
-        
+
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <select
             v-model="sites_selected"
@@ -100,11 +99,10 @@
             Reset Filters
           </button>
         </div>
-       
       </div>
     </div>
   </div>
-  
+
   <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -244,6 +242,11 @@ export default {
           return classes.program.id === this.programs_selected;
         });
       }
+      if (this.month_selected) {
+        filteredData = filteredData.filter((classes) => {
+          return classes.date_range.month_num === parseInt(this.month_selected);
+        });
+      }
 
       if (this.week_selected) {
         filteredData = filteredData.filter((classes) => {
@@ -289,7 +292,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -310,7 +313,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -334,7 +337,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -361,7 +364,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

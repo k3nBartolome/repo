@@ -42,7 +42,9 @@
               ></path>
             </svg>
           </button>
-          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
+          <span v-if="successMessage" class="text-green-500">{{
+            successMessage
+          }}</span>
           <div class="modal-scrollable-content">
             <form
               @submit.prevent="addItems"
@@ -321,7 +323,7 @@ export default {
       category: "Normal",
       date_expiry: "",
       showModal: false,
-      successMessage:"",
+      successMessage: "",
       errors: {},
       columns: [
         { data: "id", title: "ID" },
@@ -393,7 +395,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/itemsboth3",
+          "http://127.0.0.1:8000/api/itemsboth3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -414,7 +416,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -476,7 +478,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items", formData, {
+        .post("http://127.0.0.1:8000/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

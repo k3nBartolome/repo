@@ -58,15 +58,15 @@
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
-        @click="exportToExcel"
-        class="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
-      >
-        Export to Excel
-      </button>
+            @click="exportToExcel"
+            class="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
+          >
+            Export to Excel
+          </button>
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <button
-          class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
+            class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
             @click="resetFilters"
           >
             Reset Filters
@@ -80,88 +80,134 @@
         <table class="min-w-full border-2 border-collapse border-gray-300">
           <thead>
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-            <th class="px-1 py-1 truncate border-2 border-gray-300">Month</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Week</th>
-            <th class="px-1 py-1 truncate border-2 border-gray-300">Site</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Program</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Target</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Internal</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">External</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Overall Starts</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Day1</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Day2</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Day3</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Day4</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Day5</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Total Classes</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Filled</th>
-            <th class="px-2 py-1 truncate border-2 border-gray-300">Open</th>
-          </tr>
-        </thead>
-        <tbody v-for="(mps1, index) in mps" :key="index">
-          <template v-for="(mps2, index2) in mps1" :key="index2">
-            <template v-for="(mps3, index3) in mps2" :key="index3">
-              <tr
-                class="border-2 border-black"
-                v-for="(mps4, index4) in mps3"
-                :key="index4"
-              >
-                <td class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.month }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.week_name }}
-                </td>
-                <td class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.site_name }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.program_name }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.total_target }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.internal }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.external }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.total }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.day_1 }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.day_2 }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.day_3 }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.day_4 }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.day_5 }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.classes }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.filled }}
-                </td>
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps4.open }}
-                </td>
-              </tr>
+              <th class="px-1 py-1 truncate border-2 border-gray-300">Month</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Week</th>
+              <th class="px-1 py-1 truncate border-2 border-gray-300">Site</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Program
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Target
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Internal
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                External
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Overall Starts
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Day1</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Day2</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Day3</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Day4</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Day5</th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Total Classes
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">
+                Filled
+              </th>
+              <th class="px-2 py-1 truncate border-2 border-gray-300">Open</th>
+            </tr>
+          </thead>
+          <tbody v-for="(mps1, index) in mps" :key="index">
+            <template v-for="(mps2, index2) in mps1" :key="index2">
+              <template v-for="(mps3, index3) in mps2" :key="index3">
+                <tr
+                  class="border-2 border-black"
+                  v-for="(mps4, index4) in mps3"
+                  :key="index4"
+                >
+                  <td
+                    class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.month }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.week_name }}
+                  </td>
+                  <td
+                    class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.site_name }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.program_name }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.total_target }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.internal }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.external }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.total }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.day_1 }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.day_2 }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.day_3 }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.day_4 }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.day_5 }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.classes }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.filled }}
+                  </td>
+                  <td
+                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+                  >
+                    {{ mps4.open }}
+                  </td>
+                </tr>
+              </template>
             </template>
-          </template>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
-</div>
 </template>
 <script>
 import axios from "axios";
@@ -183,9 +229,9 @@ export default {
       months: [],
       initialFilters: {
         week_selected: "",
-      programs_selected: "",
-      sites_selected: "",
-      month_selected: "",
+        programs_selected: "",
+        sites_selected: "",
+        month_selected: "",
       },
     };
   },
@@ -226,7 +272,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/mpsweek", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -253,7 +299,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/months", {
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -276,7 +322,7 @@ export default {
 
         // Make an API request to trigger the Excel export
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/export-to-excel",
+          "http://127.0.0.1:8000/api/export-to-excel",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -314,7 +360,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -338,7 +384,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `http://10.109.2.112:8081/api/daterange_select/${monthId.join(
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -367,7 +413,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 
@@ -424,7 +470,6 @@ export default {
 }
 
 /* Styles for the reset button */
-
 
 .table thead th {
   padding: 8px;

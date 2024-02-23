@@ -1060,7 +1060,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classestransaction/${id}`,
+          `http://127.0.0.1:8000/api/classestransaction/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1116,7 +1116,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1136,7 +1136,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classesstaffing/${id}`,
+          `http://127.0.0.1:8000/api/classesstaffing/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1186,7 +1186,7 @@ export default {
 
         if (classSelected) {
           const response = await axios.get(
-            `http://10.109.2.112:8081/api/classes/${classSelected}`,
+            `http://127.0.0.1:8000/api/classes/${classSelected}`,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -1220,7 +1220,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1237,7 +1237,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1256,7 +1256,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1333,7 +1333,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/updateclassesstaffing/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/updateclassesstaffing/${this.$route.params.id}`,
           formData,
           config
         )

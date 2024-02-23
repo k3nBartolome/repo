@@ -12,96 +12,91 @@
           </button>
         </div>
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
-            <select
-              v-model="sites_selected"
-              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-              @change="getPrograms"
-            >
-              <option disabled value="" selected>Please select  Site</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-        </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0">
-            <select
-              v-model="programs_selected"
-              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-            >
-              <option disabled value="" selected>Please select Program</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
-              >
-                {{ program.name }}
-              </option>
-            </select>
-
-        </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0">
-            <select
-              v-model="month_selected"
-              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-              @change="getDateRange"
-            >
-              <option disabled value="" selected>Please select Month</option>
-              <option value="1">January</option>
-              <option value="2">February</option>
-              <option value="3">March</option>
-              <option value="4">April</option>
-              <option value="5">May</option>
-              <option value="6">June</option>
-              <option value="7">July</option>
-              <option value="8">August</option>
-              <option value="9">September</option>
-              <option value="10">October</option>
-              <option value="11">November</option>
-              <option value="12">December</option>
-            </select>
-
-        </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0">
-
-            <select
-              v-model="week_selected"
-              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-            >
-              <option disabled value="" selected>Please select Week</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
-              >
-                {{ daterange.date_range }}
-              </option>
-            </select>
-
-        </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0">
-        <router-link
-          :to="{
-            path: `/addcapfile/}`,
-            query: {
-              program: programs_selected,
-              site: sites_selected,
-              daterange: week_selected,
-            },
-          }"
-        >
-          <button
-            v-if="!classExists"
-            type="submit"
-            :disabled="classExists"
-            class="w-full px-4 py-2 text-white bg-orange-500 rounded-lg"
+          <select
+            v-model="sites_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            @change="getPrograms"
           >
-            <i class="fa fa-building"></i> Add
-          </button>
-        </router-link>
+            <option disabled value="" selected>Please select Site</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="programs_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Program</option>
+            <option
+              v-for="program in programs"
+              :key="program.id"
+              :value="program.id"
+            >
+              {{ program.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="month_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            @change="getDateRange"
+          >
+            <option disabled value="" selected>Please select Month</option>
+            <option value="1">January</option>
+            <option value="2">February</option>
+            <option value="3">March</option>
+            <option value="4">April</option>
+            <option value="5">May</option>
+            <option value="6">June</option>
+            <option value="7">July</option>
+            <option value="8">August</option>
+            <option value="9">September</option>
+            <option value="10">October</option>
+            <option value="11">November</option>
+            <option value="12">December</option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <select
+            v-model="week_selected"
+            class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Week</option>
+            <option
+              v-for="daterange in daterange"
+              :key="daterange.id"
+              :value="daterange.id"
+            >
+              {{ daterange.date_range }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <router-link
+            :to="{
+              path: `/addcapfile/}`,
+              query: {
+                program: programs_selected,
+                site: sites_selected,
+                daterange: week_selected,
+              },
+            }"
+          >
+            <button
+              v-if="!classExists"
+              type="submit"
+              :disabled="classExists"
+              class="w-full px-4 py-2 text-white bg-orange-500 rounded-lg"
+            >
+              <i class="fa fa-building"></i> Add
+            </button>
+          </router-link>
+        </div>
       </div>
-
     </div>
-  </div>
   </div>
   <div class="py-2">
     <div class="pl-8 pr-8">
@@ -262,7 +257,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -283,7 +278,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -307,7 +302,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -334,7 +329,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

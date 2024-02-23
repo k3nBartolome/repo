@@ -2,7 +2,9 @@
   <div class="container mx-auto mt-8 flex flex-col items-center">
     <h1 class="text-2xl font-semibold mb-4">Update Profile</h1>
     <form @submit.prevent="updateProfile" class="w-full max-w-md">
-      <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
+      <span v-if="successMessage" class="text-green-500">{{
+        successMessage
+      }}</span>
       <div class="mb-4">
         <label for="name" class="block text-sm font-medium text-gray-600"
           >Name:</label
@@ -73,7 +75,7 @@ export default {
       password: "",
       showPassword: false,
       confirmPassword: "",
-      successMessage:"",
+      successMessage: "",
     };
   },
   mounted() {
@@ -86,7 +88,7 @@ export default {
         const id = this.$store.state.user_id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/show_user/${id}`,
+          `http://127.0.0.1:8000/api/show_user/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -105,42 +107,42 @@ export default {
     },
 
     async updateProfile() {
-  try {
-    const token = this.$store.state.token;
-    const id = this.$store.state.user_id;
+      try {
+        const token = this.$store.state.token;
+        const id = this.$store.state.user_id;
 
-    const payload = {
-      name: this.name,
-      email: this.email,
-    };
+        const payload = {
+          name: this.name,
+          email: this.email,
+        };
 
-    if (this.password) {
-      payload.password = this.password;
-      payload.password_confirmation = this.confirmPassword;
-    }
+        if (this.password) {
+          payload.password = this.password;
+          payload.password_confirmation = this.confirmPassword;
+        }
 
-    const response = await axios.put(
-      `http://10.109.2.112:8081/api/update_user/profile/${id}`,
-      payload,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        const response = await axios.put(
+          `http://127.0.0.1:8000/api/update_user/profile/${id}`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.name = response.data.user.name;
+        this.email = response.data.user.email;
+
+        // Add this line to set the success message
+        this.successMessage = "Profile updated successfully!";
+
+        console.log(response.data.message);
+      } catch (error) {
+        console.log(error);
       }
-    );
-
-    this.name = response.data.user.name;
-    this.email = response.data.user.email;
-
-    // Add this line to set the success message
-    this.successMessage = "Profile updated successfully!";
-
-    console.log(response.data.message);
-  } catch (error) {
-    console.log(error);
-
-  }}
-},
+    },
+  },
 };
 </script>
 

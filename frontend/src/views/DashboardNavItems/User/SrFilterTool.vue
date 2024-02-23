@@ -1,19 +1,18 @@
 <template>
   <div class="py-0">
-
     <div class="bg-gray-100 p-4">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        
         <div class="w-full md:w-1/4">
           <select
             v-model="filterSite"
             placeholder="Filter by Site"
             class="p-2 border rounded-lg w-full"
-          ><option disabled value="" selected>Please select one</option>
-          <option v-for="site in sites" :key="site.Site" :value="site.Site">
-            {{ site.Site }}
-          </option>
-        </select>
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.Site" :value="site.Site">
+              {{ site.Site }}
+            </option>
+          </select>
         </div>
         <div class="w-full md:w-1/4">
           <input
@@ -62,11 +61,11 @@
         class="table divide-y divide-gray-200 table-auto table-striped"
         :options="{
           responsive: false,
-              autoWidth: false,
-              pageLength: 10,
-              lengthChange: true,
-              ordering: true,
-              scrollX: true,
+          autoWidth: false,
+          pageLength: 10,
+          lengthChange: true,
+          ordering: true,
+          scrollX: true,
           dom: 'rtlip',
           language: {
             search: 'Search',
@@ -136,36 +135,29 @@ export default {
   components: { DataTable },
   data() {
     return {
-     
       filterSite: "",
       filterStartDate: "",
       filterEndDate: "",
-      sites:[],
+      sites: [],
       sr: [],
       columns: [
-        
-    
-    { data: "ApplicationInfoId", title: "SR ID" },
-    { data: "QueueDate", title: "Date" },
-    { data: "LastName", title: "Last Name" },
-    { data: "FirstName", title: "First Name" },
-    { data: "MiddleName", title: "Middle Name" }, 
-    { data: "Site", title: "Site" },
-    { data: "MobileNo", title: "Mobile#" },
-    { data: "GenSource", title: "Gen Source" },
-    { data: "SpecSource", title: "Spec Source" },
-    { data: "Step", title: "Step" },
-    { data: "AppStep", title: "AppStep" }
-
-
-
+        { data: "ApplicationInfoId", title: "SR ID" },
+        { data: "QueueDate", title: "Date" },
+        { data: "LastName", title: "Last Name" },
+        { data: "FirstName", title: "First Name" },
+        { data: "MiddleName", title: "Middle Name" },
+        { data: "Site", title: "Site" },
+        { data: "MobileNo", title: "Mobile#" },
+        { data: "GenSource", title: "Gen Source" },
+        { data: "SpecSource", title: "Spec Source" },
+        { data: "Step", title: "Step" },
+        { data: "AppStep", title: "AppStep" },
       ],
       filterLoading: false,
       exportLoading: false,
     };
   },
   mounted() {
-    
     this.getSites();
     this.getDates();
   },
@@ -181,7 +173,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_site", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_site", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -197,10 +189,10 @@ export default {
         console.log(error);
       }
     },
-  async getDates() {
+    async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_date", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sr_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -208,7 +200,7 @@ export default {
 
         if (response.status === 200) {
           this.filterStartDate = response.data.minDate;
-          this.filterEndDate= response.data.maxDate;
+          this.filterEndDate = response.data.maxDate;
           console.log(response.data.minDate);
           console.log(response.data.maxDate);
         } else {
@@ -236,10 +228,9 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/sr_filter",
+          "http://127.0.0.1:8000/api/sr_filter",
           {
             params: {
-              
               filter_site: this.filterSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
@@ -262,18 +253,20 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sr_export", {
-          params: {
-           
-            filter_site: this.filterSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,         
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/sr_export",
+          {
+            params: {
+              filter_site: this.filterSite,
+              filter_date_start: this.filterStartDate,
+              filter_date_end: this.filterEndDate,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -287,7 +280,7 @@ export default {
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
       } finally {
-        this.exportLoading = false; 
+        this.exportLoading = false;
       }
     },
   },

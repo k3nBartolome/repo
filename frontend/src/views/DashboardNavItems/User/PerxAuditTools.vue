@@ -33,11 +33,12 @@
             v-model="filterSite"
             placeholder="Filter by Site"
             class="p-2 border rounded-lg w-full"
-          ><option disabled value="" selected>Please select one</option>
-          <option v-for="site in sites" :key="site.Site" :value="site.Site">
-            {{ site.Site }}
-          </option>
-        </select>
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.Site" :value="site.Site">
+              {{ site.Site }}
+            </option>
+          </select>
         </div>
         <div class="w-full md:w-1/4">
           <input
@@ -183,7 +184,7 @@ export default {
       filterLastNameError: "",
       filterContactError: "",
       perx: [],
-      sites:[],
+      sites: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
         { data: "ApplicationInfoId", title: "SR ID" },
@@ -229,15 +230,18 @@ export default {
     async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/perx_date", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/perx_date",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.filterStartDate = response.data.minDate;
-          this.filterEndDate= response.data.maxDate;
+          this.filterEndDate = response.data.maxDate;
           console.log(response.data.minDate);
           console.log(response.data.maxDate);
         } else {
@@ -277,11 +281,14 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/perx_site", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/perx_site",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.sites = response.data.sites;
@@ -298,7 +305,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://127.0.0.1:8000/api/perxfilter",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -326,13 +333,14 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/export", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
             filter_site: this.filterSite,
             filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,            filter_contact: this.filterContact,
+            filter_date_end: this.filterEndDate,
+            filter_contact: this.filterContact,
           },
           headers: {
             Authorization: `Bearer ${token}`,

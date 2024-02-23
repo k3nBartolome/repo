@@ -43,7 +43,9 @@
             />
           </div>
         </div>
-        <span v-if="successMessage" class="text-red-500">{{ successMessage }}</span>
+        <span v-if="successMessage" class="text-red-500">{{
+          successMessage
+        }}</span>
 
         <div class="flex items center">
           <button
@@ -65,7 +67,7 @@ export default {
     return {
       email: "",
       password: "",
-      successMessage:"",
+      successMessage: "",
     };
   },
   methods: {
@@ -87,7 +89,7 @@ export default {
       let isLogin;
 
       await axios
-        .post("http://10.109.2.112:8081/api/login", {
+        .post("http://127.0.0.1:8000/api/login", {
           email: this.email,
           password: this.password,
         })

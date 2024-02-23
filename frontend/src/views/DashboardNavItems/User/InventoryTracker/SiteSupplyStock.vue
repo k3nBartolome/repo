@@ -42,13 +42,14 @@
               ></path>
             </svg>
           </button>
-          <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
+          <span v-if="successMessage" class="text-green-500">{{
+            successMessage
+          }}</span>
           <div class="modal-scrollable-content">
             <form
               @submit.prevent="transferItems"
               class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
             >
-            
               <div class="col-span-1">
                 <label class="block">
                   Site
@@ -208,13 +209,14 @@
                 ></path>
               </svg>
             </button>
-            <span v-if="successMessage" class="text-green-500">{{ successMessage }}</span>
+            <span v-if="successMessage" class="text-green-500">{{
+              successMessage
+            }}</span>
             <div class="modal-scrollable-content">
               <form
                 @submit.prevent="addItems"
                 class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
               >
-             
                 <div class="col-span-1">
                   <label class="block">
                     Site
@@ -497,7 +499,7 @@ export default {
       showModal: false,
       showModalSupply: false,
       errors: {},
-      successMessage:"",
+      successMessage: "",
       columns: [
         { data: "id", title: "ID" },
         {
@@ -642,7 +644,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteinventoryall",
+          "http://127.0.0.1:8000/api/siteinventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -663,7 +665,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -704,7 +706,7 @@ export default {
         transferred_from: this.sites1_selected,
       };
       axios
-        .post("http://10.109.2.112:8081/api/transfer", formData, {
+        .post("http://127.0.0.1:8000/api/transfer", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -714,7 +716,7 @@ export default {
             console.log(response.data.Request);
             this.successMessage = "Transferred successfully!";
             this.showModal = false;
-            window.location.reload()
+            window.location.reload();
           } else {
             console.error("Response or Request property is undefined.");
           }
@@ -775,7 +777,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items_site_supply", formData, {
+        .post("http://127.0.0.1:8000/api/items_site_supply", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
