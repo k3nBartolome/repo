@@ -83,6 +83,10 @@ class Classes extends Model
     {
         return $this->belongsTo(User::class, 'updated_by');
     }
+    public function CancelledByUser()
+    {
+        return $this->belongsTo(User::class, 'cancelled_by');
+    }
 
     // @ts-ignore
     public function classes()

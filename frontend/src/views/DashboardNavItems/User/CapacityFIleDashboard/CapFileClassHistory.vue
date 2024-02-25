@@ -1,9 +1,7 @@
 <template>
   <div class="py-0">
-    <div
-      class="container px-4 py-0 mx-auto mt-4 flex flex-wrap space-x-2 items-center"
-    >
-      <div class="flex-grow">
+    <div class="mb-4 md:flex md:space-x-2 md:items-center">
+      <div class="w-full md:w-1/4 relative">
         <select
           v-model="sites_selected"
           class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -15,7 +13,7 @@
           </option>
         </select>
       </div>
-      <div class="flex-grow">
+      <div class="w-full md:w-1/4">
         <select
           v-model="programs_selected"
           class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -30,7 +28,7 @@
           </option>
         </select>
       </div>
-      <div class="flex-grow">
+      <div class="w-full md:w-1/4">
         <select
           v-model="month_selected"
           class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -51,7 +49,7 @@
           <option value="12">December</option>
         </select>
       </div>
-      <div class="flex-grow">
+      <div class="w-full md:w-1/4">
         <select
           v-model="week_selected"
           class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -66,10 +64,28 @@
           </option>
         </select>
       </div>
-      <div>
+      <div class="w-full md:w-1/4">
         <button
           type="button"
-          class="px-4 py-2 text-white bg-red-500 rounded-lg"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+          @click="getClassesAll"
+        >
+          Filter
+        </button>
+      </div>
+      <div class="w-full md:w-1/4">
+        <button
+          type="button"
+          class="px-4 py-2 bg-green-600 text-white rounded-lg w-full"
+          @click="exportToExcel"
+        >
+          Export
+        </button>
+      </div>
+      <div class="w-full md:w-1/4">
+        <button
+          type="button"
+          class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
           @click="resetFilter"
         >
           Reset Filters
@@ -77,12 +93,13 @@
       </div>
     </div>
   </div>
+
   <div class="py-1">
     <div class="pl-8 pr-8">
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="filteredData"
+            :data="classes"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -156,11 +173,11 @@ export default {
       week_selected: "",
       columns: [
         { data: "id", title: "ID" },
-        { data: "site.country", title: "Country" },
-        { data: "site.region", title: "Region" },
-        { data: "site.name", title: "Site" },
-        { data: "program.name", title: "Program" },
-        { data: "date_range.date_range", title: "Hiring Week" },
+        { data: "country", title: "Country" },
+        { data: "region", title: "Region" },
+        { data: "site_name", title: "Site" },
+        { data: "program_name", title: "Program" },
+        { data: "date_range", title: "Hiring Week" },
         { data: "external_target", title: "External Target" },
         { data: "internal_target", title: "Internal Target" },
         { data: "total_target", title: "Total Target" },
@@ -197,34 +214,14 @@ export default {
       ],
     };
   },
+  watch: {
+    sites_selected: "getClassesAll",
+    programs_selected: "getClassesAll",
+    month_selected: "getClassesAll",
+    week_selected: "getClassesAll",
+  },
+
   computed: {
-    filteredData() {
-      let filteredData = [...this.classes];
-      if (this.sites_selected) {
-        filteredData = filteredData.filter((classes) => {
-          return classes.site.id === this.sites_selected;
-        });
-      }
-
-      if (this.programs_selected) {
-        filteredData = filteredData.filter((classes) => {
-          return classes.program.id === this.programs_selected;
-        });
-      }
-      if (this.month_selected) {
-        filteredData = filteredData.filter((classes) => {
-          return classes.date_range.month_num === parseInt(this.month_selected);
-        });
-      }
-      if (this.week_selected) {
-        filteredData = filteredData.filter((classes) => {
-          const weekId = classes.date_range.id;
-          return weekId === this.week_selected;
-        });
-      }
-
-      return filteredData;
-    },
     EmptySelection() {
       return (
         !this.sites_selected || !this.programs_selected || !this.week_selected
@@ -257,7 +254,6 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
-      this.status = "";
     },
     async getClassesAll() {
       try {
@@ -265,6 +261,12 @@ export default {
         const response = await axios.get(
           "http://127.0.0.1:8000/api/classesdashboard2",
           {
+            params: {
+              sites_selected: this.sites_selected,
+              programs_selected: this.programs_selected,
+              month_selected: this.month_selected,
+              week_selected: this.week_selected,
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -283,6 +285,52 @@ export default {
         console.error("An error occurred:", error);
       }
     },
+
+    async exportToExcel() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/history_export",
+          {
+            params: {
+              sites_selected: this.sites_selected,
+              programs_selected: this.programs_selected,
+              month_selected: this.month_selected,
+              week_selected: this.week_selected,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
+
+        // Check if the response contains data
+        if (response && response.data) {
+          // Create a Blob from the response data
+          const blob = new Blob([response.data], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+
+          // Create a link element and trigger a download
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "filtered_class_history_data.xlsx";
+          document.body.appendChild(link); // Append the link to the body
+          link.click(); // Simulate a click on the link
+          document.body.removeChild(link); // Remove the link from the body after download
+          window.URL.revokeObjectURL(url); // Revoke the URL to free up memory
+        } else {
+          console.error("Empty response received when exporting data to Excel");
+        }
+      } catch (error) {
+        console.error("Error exporting filtered data to Excel", error);
+      }
+    },
+
     async getSites() {
       try {
         const token = this.$store.state.token;

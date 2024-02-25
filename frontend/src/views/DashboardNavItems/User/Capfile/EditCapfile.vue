@@ -170,18 +170,21 @@
               class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
-              <option value="Within Sla">Within Sla</option>
-              <option value="Outside Sla-Change in Demand">
-                Outside Sla-Change in Demand
+              <option value="Within SLA">Within SLA</option>
+              <option value="Outside SLA-Cancellation">
+                Outside SLA-Cancellation
               </option>
-              <option value="Outside Sla-Change in Start Date">
-                Outside Sla-Change in Start Date
+              <option value="Outside SLA-Change in Demand">
+                Outside SLA-Change in Demand
               </option>
-              <option value="Outside Sla-Change in Profile">
-                Outside Sla-Change in Profile
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
               </option>
-              <option value="Outside Sla-Change in Process/Assessments">
-                Outside Sla-Change in Process/Assessments
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
               </option>
               <option value="OV Support">OV Support</option>
             </select>

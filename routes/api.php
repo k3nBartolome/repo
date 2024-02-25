@@ -122,6 +122,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('perx_site', [ClassesController::class, 'perxSite']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
     Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
+    Route::get('history_export', [ClassesController::class, 'dashboardClassesExport2']);
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);
     Route::get('export4', [ClassesController::class, 'dashboardClassesExport4']);
     Route::get('mps', [ClassStaffingController::class, 'mps']);

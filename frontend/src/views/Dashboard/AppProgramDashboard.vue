@@ -133,7 +133,7 @@ export default {
           data: "b2",
           title: "B2 Status",
           render: function (data) {
-            return data === null || data === 0 ? "Not B2" : "B2";
+            return data === null || data === 0 ? "Non-B2" : "B2";
           },
         },
 
@@ -256,14 +256,11 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/programs",
-          {
-            headers: {
-              Authorization: `Bearer ${this.$store.state.token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        });
 
         if (response.status === 200) {
           this.programs = response.data.data;

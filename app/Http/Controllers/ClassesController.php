@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\DashboardClassesExport;
 use App\Exports\MyExport;
 use App\Exports\SrExport;
+use App\Exports\ClassHistoryExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
@@ -894,6 +895,149 @@ class ClassesController extends Controller
         ];
 
         return Excel::download(new DashboardClassesExport($response), 'filtered_data.xlsx');
+    }
+    public function dashboardClassesExport2(Request $request)
+    {
+        $query = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])
+            ->whereHas('site', function ($query) use ($request) {
+                $query->where('country', '=', 'Philippines')
+                    ->where('is_active', '=', 1);
+            })
+            ->whereHas('program', function ($query) use ($request) {
+                $query->where('is_active', '=', 1);
+            })
+            ->whereHas('dateRange', function ($query) use ($request) {
+                $query->where('year', '=', '2024');
+            });
+
+        if ($request->has('sites_selected')) {
+            $sitesSelected = $request->input('sites_selected');
+
+            if (!empty($sitesSelected)) {
+                $query->where('site_id', $sitesSelected);
+            }
+        }
+
+        if ($request->has('programs_selected')) {
+            $programsSelected = $request->input('programs_selected');
+
+            if (!empty($programsSelected)) {
+                $query->where('program_id', $programsSelected);
+            }
+        }
+
+        if ($request->has('month_selected')) {
+            $monthSelected = $request->input('month_selected');
+
+            if (!empty($monthSelected)) {
+                $query->whereHas('dateRange', function ($query) use ($monthSelected) {
+                    $query->where('month_num', $monthSelected);
+                });
+            }
+        }
+
+        if ($request->has('week_selected')) {
+            $weekSelected = $request->input('week_selected');
+
+            if (!empty($weekSelected)) {
+                $query->whereHas('dateRange', function ($query) use ($weekSelected) {
+                    $query->where('date_Range_id', $weekSelected);
+                });
+            }
+        }
+
+
+
+        $classes = $query->select([
+            'id',
+            'pushedback_id',
+            'within_sla',
+            'condition',
+            'requested_by',
+            'original_start_date',
+            'changes',
+            'agreed_start_date',
+            'approved_date',
+            'cancelled_date',
+            'wfm_date_requested',
+            'notice_weeks',
+            'external_target',
+            'internal_target',
+            'notice_days',
+            'pipeline_utilized',
+            'total_target',
+            'remarks',
+            'status',
+            'category',
+            'type_of_hiring',
+            'update_status',
+            'approved_status',
+            'with_erf',
+            'erf_number',
+            'approved_by',
+            'cancelled_by',
+            'ta',
+            'wave_no',
+            'wf',
+            'tr',
+            'cl',
+            'op',
+            'created_by',
+            'site_id',
+            'program_id',
+            'updated_by',
+            'date_range_id',
+            'created_at',
+            'updated_at',
+        ])
+            ->get();
+
+        $formattedClasses = $classes->map(function ($class) {
+            return [
+                'id' => $class->id,
+                'country' => $class->site->country,
+                'region' => $class->site->region,
+                'site_name' => $class->site->name,
+                'program_name' => $class->program->name,
+                'date_range' => $class->dateRange->date_range,
+                'external_target' => $class->external_target,
+                'internal_target' => $class->internal_target,
+                'total_target' => $class->total_target,
+                'within_sla' => $class->within_sla,
+                'condition' => $class->condition,
+                'original_start_date' => $class->original_start_date,
+                'changes' => $class->changes,
+                'agreed_start_date' => $class->agreed_start_date,
+                'wfm_date_requested' => $class->wfm_date_requested,
+                'notice_weeks' => $class->notice_weeks,
+                'notice_days' => $class->notice_days,
+                'pipeline_utilized' => $class->pipeline_utilized,
+                'remarks' => $class->remarks,
+                'status' => $class->status,
+                'category' => $class->category,
+                'type_of_hiring' => $class->type_of_hiring,
+                'with_erf' => $class->with_erf,
+                'erf_number' => $class->erf_number,
+                'wave_no' => $class->wave_no,
+                'ta' => $class->ta,
+                'wf' => $class->wf,
+                'tr' => $class->tr,
+                'cl' => $class->cl,
+                'op' => $class->op,
+                'approved_by' => $class->approved_by,
+                'cancelled_by' => $class->cancelledByUser ? $class->cancelledByUser->name : null,
+                'requested_by' => $class->requested_by,
+                'created_by' => $class->createdByUser->name,
+                'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
+                'approved_date' => $class->approved_date,
+                'cancelled_date' => $class->cancelled_date,
+                'created_at' => $class->created_at->format('m-d-Y H:i'),
+                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+            ];
+        })->toArray();
+
+
+        return Excel::download(new ClassHistoryExport($formattedClasses), 'Class_history_data.xlsx');
     }
 
     public function dashboardClassesExport3(Request $request)
@@ -1903,80 +2047,133 @@ class ClassesController extends Controller
 
     public function dashboardClasses2(Request $request)
     {
-        $siteId = $request->input('site_id');
-        $programId = $request->input('program_id');
-        $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines')
-                ->where('is_active', '=', 1);
-        })
-            ->whereHas('program', function ($query) {
+
+        $query = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])
+            ->whereHas('site', function ($query) use ($request) {
+                $query->where('country', '=', 'Philippines')
+                    ->where('is_active', '=', 1);
+            })
+            ->whereHas('program', function ($query) use ($request) {
                 $query->where('is_active', '=', 1);
             })
-            ->whereHas('dateRange', function ($query) {
+            ->whereHas('dateRange', function ($query) use ($request) {
                 $query->where('year', '=', '2024');
-            })
-            ->when(!empty($siteId), function ($query) use ($siteId) {
-                $query->whereIn('site_id', $siteId);
-            })
-            ->when(!empty($programId), function ($query) use ($programId) {
-                $query->whereIn('program_id', $programId);
-            })
-            ->with([
-                'site',
-                'program',
-                'dateRange',
-                'createdByUser',
-                'updatedByUser',
-            ])
-            ->select([
-                'id',
-                'pushedback_id',
-                'within_sla',
-                'condition',
-                'requested_by',
-                'original_start_date',
-                'changes',
-                'agreed_start_date',
-                'approved_date',
-                'cancelled_date',
-                'wfm_date_requested',
-                'notice_weeks',
-                'external_target',
-                'internal_target',
-                'notice_days',
-                'pipeline_utilized',
-                'total_target',
-                'remarks',
-                'status',
-                'category',
-                'type_of_hiring',
-                'update_status',
-                'approved_status',
-                'with_erf',
-                'erf_number',
-                'approved_by',
-                'cancelled_by',
-                'ta',
-                'wave_no',
-                'wf',
-                'tr',
-                'cl',
-                'op',
-                'created_by',
-                'site_id',
-                'program_id',
-                'updated_by',
-                'date_range_id',
-                'created_at',
-                'updated_at',
-            ])
+            });
 
+        if ($request->has('sites_selected') && $request->sites_selected !== null) {
+            $query->where('site_id', $request->sites_selected);
+        }
+
+        if ($request->has('programs_selected') && $request->programs_selected !== null) {
+            $query->where('program_id', $request->programs_selected);
+        }
+
+        if ($request->has('month_selected') && $request->month_selected !== null) {
+            $query->whereHas('dateRange', function ($query) use ($request) {
+                $query->where('month_num', $request->month_selected);
+            });
+        }
+
+        if ($request->has('week_selected') && $request->week_selected !== null) {
+            $query->whereHas('dateRange', function ($query) use ($request) {
+                $query->where('date_Range_id', $request->week_selected);
+            });
+        }
+
+
+        $classes = $query->select([
+            'id',
+            'pushedback_id',
+            'within_sla',
+            'condition',
+            'requested_by',
+            'original_start_date',
+            'changes',
+            'agreed_start_date',
+            'approved_date',
+            'cancelled_date',
+            'wfm_date_requested',
+            'notice_weeks',
+            'external_target',
+            'internal_target',
+            'notice_days',
+            'pipeline_utilized',
+            'total_target',
+            'remarks',
+            'status',
+            'category',
+            'type_of_hiring',
+            'update_status',
+            'approved_status',
+            'with_erf',
+            'erf_number',
+            'approved_by',
+            'cancelled_by',
+            'ta',
+            'wave_no',
+            'wf',
+            'tr',
+            'cl',
+            'op',
+            'created_by',
+            'site_id',
+            'program_id',
+            'updated_by',
+            'date_range_id',
+            'created_at',
+            'updated_at',
+        ])
             ->get();
+        $formattedClasses = $classes->map(function ($class) {
+            return [
+                'id' => $class->id,
+                'country' => $class->site->country,
+                'region' => $class->site->region,
+                'site_name' => $class->site->name,
+                'program_name' => $class->program->name,
+                'date_range' => $class->dateRange->date_range,
+                'external_target' => $class->external_target,
+                'internal_target' => $class->internal_target,
+                'total_target' => $class->total_target,
+                'within_sla' => $class->within_sla,
+                'condition' => $class->condition,
+                'original_start_date' => $class->original_start_date,
+                'changes' => $class->changes,
+                'agreed_start_date' => $class->agreed_start_date,
+                'wfm_date_requested' => $class->wfm_date_requested,
+                'notice_weeks' => $class->notice_weeks,
+                'notice_days' => $class->notice_days,
+                'pipeline_utilized' => $class->pipeline_utilized,
+                'remarks' => $class->remarks,
+                'status' => $class->status,
+                'category' => $class->category,
+                'type_of_hiring' => $class->type_of_hiring,
+                'with_erf' => $class->with_erf,
+                'erf_number' => $class->erf_number,
+                'wave_no' => $class->wave_no,
+                'ta' => $class->ta,
+                'wf' => $class->wf,
+                'tr' => $class->tr,
+                'cl' => $class->cl,
+                'op' => $class->op,
+                'approved_by' => $class->approved_by,
+                'cancelled_by' => $class->cancelledByUser ? $class->cancelledByUser->name : null,
+                'requested_by' => $class->requested_by,
+                'created_by' => $class->createdByUser->name,
+                'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
+                'approved_date' => $class->approved_date,
+                'cancelled_date' => $class->cancelled_date,
+                'created_at' => $class->created_at->format('m-d-Y H:i'),
+                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+            ];
+        });
+
 
         return response()->json([
-            'classes' => $classes,
+            'classes' => $formattedClasses,
         ]);
     }
+
 
     public function dashboardClasses3(Request $request)
     {
