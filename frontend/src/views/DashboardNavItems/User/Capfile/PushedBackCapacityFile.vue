@@ -538,7 +538,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "http://127.0.0.1:8000/api/daterangeall",
           { headers }
         );
 

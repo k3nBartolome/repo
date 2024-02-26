@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+
 
 class ClassesController extends Controller
 {
@@ -536,6 +538,8 @@ class ClassesController extends Controller
             return response()->json(['error' => 'Class not found'], 404);
         }
 
+
+
         return response()->json([
             'class' => $class,
         ]);
@@ -548,6 +552,8 @@ class ClassesController extends Controller
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
+
+
 
         return response()->json([
             'class' => $class,
@@ -566,27 +572,51 @@ class ClassesController extends Controller
             ->where('pushedback_id', $class->pushedback_id)
             ->get();
 
+          // Format decimal values to two decimal places
+
+
         return response()->json([
-            'classes' => $classes,
+            'class' => $classes,
         ]);
     }
 
     public function classesall()
-    {
-        $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Philippines');
+{
+    $classes = Classes::whereHas('site', function ($query) {
+        $query->where('country', '=', 'Philippines');
+    })
+        ->whereHas('dateRange', function ($query) {
+            $query->where('year', '=', '2024');
         })
-            ->whereHas('dateRange', function ($query) {
-                $query->where('year', '=', '2024');
-            })
-            ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('status', 'Active')
-            ->get();
+        ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->where('status', 'Active')
+        ->get();
 
-        return response()->json([
-            'classes' => $classes,
-        ]);
+    // Format decimal values to two decimal places
+    foreach ($classes as $class) {
+        foreach ($class->getAttributes() as $key => $value) {
+            if (is_float($value)) {
+                $class->$key = number_format($value, 2, '.', '');
+            }
+        }
+
+        // Format the date
+        if ($class->created_at) {
+            $class->created_at = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i:s.u\Z', $class->created_at)->setTimezone('Asia/Manila')->format('m-d-Y H:i');
+        }
+        if ($class->updated_at) {
+            $class->updated_at = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i:s.u\Z', $class->updated_at)->setTimezone('Asia/Manila')->format('m-d-Y H:i');
+        }
     }
+
+    return response()->json([
+        'classes' => $classes,
+    ]);
+}
+
+
+
+
 
     public function cStat()
     {
@@ -596,9 +626,18 @@ class ClassesController extends Controller
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
             ->get();
 
-        return response()->json([
-            'classes' => $classes,
-        ]);
+      // Format decimal values to two decimal places
+      foreach ($classes as $class) {
+        foreach ($class->getAttributes() as $key => $value) {
+            if (is_float($value)) {
+                $class->$key = number_format($value, 2, '.', '');
+            }
+        }
+    }
+
+    return response()->json([
+        'classes' => $classes,
+    ]);
     }
 
     //hiring summary
@@ -2913,161 +2952,139 @@ class ClassesController extends Controller
         return new ClassesResource($class);
     }
     public function retrieveB2DataForEmail(Request $request)
-
     {
         $siteId = $request->input('site_id');
         $programFilter = $request->input('program_id');
+
+        // Fetch active sites
         $programs = Site::where('is_active', 1)->get();
-        $year = 2024;
-        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        // Fetch date ranges for the year 2024
+        $dateRanges = DateRange::where('year', 2024)->groupBy('month_num')->pluck('month_num');
+
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByWeek2 = [];
         $grandTotalByProgram = [];
-        $grandTotalByProgram2 = []; // Declare $b2percentage array
+        $grandTotalByProgram2 = [];
 
+        // Iterate over each site
         foreach ($programs as $program) {
             $siteName = $program->name;
-            if (!isset($grandTotalByProgram[$siteName])) {
-                $grandTotalByProgram[$siteName] = 0;
-            }
-            if (!isset($grandTotalByProgram2[$siteName])) {
-                $grandTotalByProgram2[$siteName] = 0;
-            }
-            foreach ($dateRanges as $dateRange) {
-                $programId = $program->id;
-                $month = $dateRange->month_num;
+
+            $grandTotalByProgram[$siteName] = 0;
+            $grandTotalByProgram2[$siteName] = 0;
+
+            // Iterate over each month
+            foreach ($dateRanges as $month) {
+                // Fetch classes with b2 program and without b2 program for the current site and month
                 $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
-                        $subquery->where('month_num', $month)->where('year', $year);
+                    ->whereHas('dateRange', function ($query) use ($month) {
+                        $query->where('month_num', $month);
                     })
-                    ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1)->where('b2', 1);
-                    })
+                    ->where('site_id', $program->id)
+                    ->where('status', 'Active');
 
-                    ->when(!empty($siteId), function ($query) use ($siteId) {
-                        $query->whereIn('site_id', $siteId);
-                    })
-                    ->when(!empty($programFilter), function ($query) use ($programFilter) {
-                        $query->whereIn('program_id', $programFilter);
-                    })
-                    ->where('site_id', $programId)
-                    ->where('status', 'Active')
-                    ->get();
-                $classes2 = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
-                        $subquery->where('month_num', $month)->where('year', $year);
-                    })
-                    ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1);
-                    })
-
-
-                    ->when(!empty($siteId), function ($query) use ($siteId) {
-                        $query->whereIn('site_id', $siteId);
-                    })
-                    ->when(!empty($programFilter), function ($query) use ($programFilter) {
-                        $query->whereIn('program_id', $programFilter);
-                    })
-                    ->where('site_id', $programId)
-                    ->where('status', 'Active')
-                    ->get();
-                $totalTarget = $classes->sum('total_target');
-                $totalTarget2 = $classes2->sum('total_target');
-
-                if (!isset($grandTotalByWeek[$month])) {
-                    $grandTotalByWeek[$month] = 0;
-                }
-                if (!isset($grandTotalByWeek2[$month])) {
-                    $grandTotalByWeek2[$month] = 0;
+                if (!empty($siteId)) {
+                    $classes->whereIn('site_id', $siteId);
                 }
 
-                $grandTotalByWeek[$month] += $totalTarget;
-                $grandTotalByWeek2[$month] += $totalTarget2;
+                $classesWithB2Program = clone $classes;
+                $classesWithB2Program->whereHas('program', function ($query) {
+                    $query->where('is_active', 1)->where('b2', 1);
+                });
+
+                $classesWithoutB2Program = clone $classes;
+                $classesWithoutB2Program->whereDoesntHave('program', function ($query) {
+                    $query->where('is_active', 1)->where('b2', 1);
+                });
+
+                // Calculate total targets
+                $totalTarget = $classesWithB2Program->sum('total_target');
+                $totalTarget2 = $classesWithoutB2Program->sum('total_target');
+
+                // Update grand totals
+                $grandTotalByWeek[$month] = ($grandTotalByWeek[$month] ?? 0) + $totalTarget;
+                $grandTotalByWeek2[$month] = ($grandTotalByWeek2[$month] ?? 0) + $totalTarget2;
                 $grandTotalByProgram[$siteName] += $totalTarget;
-
                 $grandTotalByProgram2[$siteName] += $totalTarget2;
 
-                if (!isset($groupedClasses[$siteName][$month])) {
-                    $groupedClasses[$siteName][$month] = ['total_target' => 0];
-                }
-                $groupedClasses[$siteName][$month]['total_target'] += $totalTarget;
-            }
-        }
-        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
-        $grandTotalForAllPrograms2 = array_sum($grandTotalByProgram2);
-
-        $mappedB2Classes = [];
-        $mappedB2Classes[] = [
-            'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
-
-        ];
-        foreach ($groupedClasses as $siteName => $siteData) {
-            $weeklyData = [
-                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
-                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
-            ];
-            foreach ($siteData as $month => $weekData) {
-                $weeklyData[$month] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
-            }
-            $grandTotal = $grandTotalByProgram[$siteName];
-            if ($grandTotal != 0) {
-                $mappedB2Classes[] = [
-                    'Site' => $siteName,
-                    'January' => $weeklyData['1'] ?: '',
-                    'February' => $weeklyData['2'] ?: '',
-                    'March' => $weeklyData['3'] ?: '',
-                    'April' => $weeklyData['4'] ?: '',
-                    'May' => $weeklyData['5'] ?: '',
-                    'June' => $weeklyData['6'] ?: '',
-                    'July' => $weeklyData['7'] ?: '',
-                    'August' => $weeklyData['8'] ?: '',
-                    'September' => $weeklyData['9'] ?: '',
-                    'October' => $weeklyData['10'] ?: '',
-                    'November' => $weeklyData['11'] ?: '',
-                    'December' => $weeklyData['12'] ?: '',
-                    'GrandTotalByProgram' => $grandTotal,
+                // Update grouped classes
+                $groupedClasses[$siteName][$month] = [
+                    'total_target' => ($groupedClasses[$siteName][$month]['total_target'] ?? 0) + $totalTarget
                 ];
             }
         }
 
+        // Calculate grand totals
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+        $grandTotalForAllPrograms2 = array_sum($grandTotalByProgram2);
 
+        $mappedB2Classes = [
+            [
+                'Site' => 'B2 Percentage',
+                'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
+                'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
+                'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
+                'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
+                'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
+                'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
+                'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
+                'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
+                'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
+                'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
+                'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
+                'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
+                'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            ]
+        ];
 
+        // Iterate over grouped classes to prepare data for response
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = array_fill(1, 12, 0); // Initialize weekly data array
+
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = $weekData['total_target'] ?? 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            // Add site data to mappedB2Classes array
+            $mappedB2Classes[] = [
+                'Site' => $siteName,
+                        'January' => $weeklyData['1'] ?: '',
+                        'February' => $weeklyData['2'] ?: '',
+                        'March' => $weeklyData['3'] ?: '',
+                        'April' => $weeklyData['4'] ?: '',
+                        'May' => $weeklyData['5'] ?: '',
+                        'June' => $weeklyData['6'] ?: '',
+                        'July' => $weeklyData['7'] ?: '',
+                        'August' => $weeklyData['8'] ?: '',
+                        'September' => $weeklyData['9'] ?: '',
+                        'October' => $weeklyData['10'] ?: '',
+                        'November' => $weeklyData['11'] ?: '',
+                        'December' => $weeklyData['12'] ?: '',
+                        'GrandTotalByProgram' => $grandTotal,
+            ];
+        }
+
+        // Add grand total data to mappedB2Classes array
         $mappedB2Classes[] = [
             'Site' => 'Grand Total',
-            'January' => $grandTotalByWeek['1'] ?: '',
-            'February' => $grandTotalByWeek['2'] ?: '',
-            'March' => $grandTotalByWeek['3'] ?: '',
-            'April' => $grandTotalByWeek['4'] ?: '',
-            'May' => $grandTotalByWeek['5'] ?: '',
-            'June' => $grandTotalByWeek['6'] ?: '',
-            'July' => $grandTotalByWeek['7'] ?: '',
-            'August' => $grandTotalByWeek['8'] ?: '',
-            'September' => $grandTotalByWeek['9'] ?: '',
-            'October' => $grandTotalByWeek['10'] ?: '',
-            'November' => $grandTotalByWeek['11'] ?: '',
-            'December' => $grandTotalByWeek['12'] ?: '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+                'January' => $grandTotalByWeek['1'] ?: '',
+                'February' => $grandTotalByWeek['2'] ?: '',
+                'March' => $grandTotalByWeek['3'] ?: '',
+                'April' => $grandTotalByWeek['4'] ?: '',
+                'May' => $grandTotalByWeek['5'] ?: '',
+                'June' => $grandTotalByWeek['6'] ?: '',
+                'July' => $grandTotalByWeek['7'] ?: '',
+                'August' => $grandTotalByWeek['8'] ?: '',
+                'September' => $grandTotalByWeek['9'] ?: '',
+                'October' => $grandTotalByWeek['10'] ?: '',
+                'November' => $grandTotalByWeek['11'] ?: '',
+                'December' => $grandTotalByWeek['12'] ?: '',
+                'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
 
-
-
-        $response = [
-            'data' => $mappedB2Classes,
-        ];
+        $response = ['data' => $mappedB2Classes];
 
         return response()->json($response);
     }

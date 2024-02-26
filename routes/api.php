@@ -152,6 +152,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 
     // DateRange
     Route::get('daterange', [DateRangeController::class, 'index']);
+    Route::get('daterangeall', [DateRangeController::class, 'indexAll']);
     Route::get('daterange_selected/{monthId}', [DateRangeController::class, 'indexByMonth']);
     Route::get('daterange_select/{monthId}', [DateRangeController::class, 'byMonth']);
     Route::get('daterange_selected', [DateRangeController::class, 'perMonth']);

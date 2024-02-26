@@ -17,7 +17,7 @@ class CapEmailController extends Controller
         $mappedClasses = $this->retrieveDataForClassesEmail();
         $mappedB2Classes = $this->retrieveB2DataForEmail();
 
-        $recipients = ['padillakryss@gmail.com', 'kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
         Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses,'mappedB2Classes' => $mappedB2Classes], function ($message) use ($recipients, $subject) {
