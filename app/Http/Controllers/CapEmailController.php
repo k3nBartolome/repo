@@ -132,7 +132,7 @@ class CapEmailController extends Controller
                 $subquery->where('is_active', 1);
             });
         })
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1) // You ckeep or remove this line based on your requirements
             ->get();
 
         $year = 2024;

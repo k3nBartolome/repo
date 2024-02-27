@@ -117,7 +117,7 @@ class ProgramController extends Controller
             'name' => 'required|max:255',
             'description' => 'required',
             'program_group' => 'sometimes',
-            'b2' => 'required|boolean',
+            'b2' => 'sometimes|boolean',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
         ]);

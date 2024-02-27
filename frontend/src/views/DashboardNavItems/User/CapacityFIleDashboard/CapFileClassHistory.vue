@@ -230,9 +230,9 @@ export default {
     classExists() {
       return this.classes.some((c) => {
         return (
-          c.site.id === this.sites_selected &&
-          c.program.id === this.programs_selected &&
-          c.date_range.id === this.week_selected
+          c.site_id === this.sites_selected &&
+          c.program_id === this.programs_selected &&
+          c.date_range_id === this.week_selected
         );
       });
     },

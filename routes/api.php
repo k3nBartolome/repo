@@ -137,9 +137,10 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
     Route::post('render', [CapEmailController::class, 'sendEmail']);
     Route::get('b2percentage', [CapEmailController::class, 'retrieveB2DataForEmail']);
+    Route::get('b2percentage', [CapEmailController::class, 'retrieveB2DataForEmail']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
-    Route::get('sumtotaltarget', [ClassesController::class, 'sumTotalTarget']);
+    Route::get('class_exists', [ClassesController::class, 'classExists']);
 
     // Class Staffing
     Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
