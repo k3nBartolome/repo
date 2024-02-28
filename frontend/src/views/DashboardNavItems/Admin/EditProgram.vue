@@ -52,7 +52,7 @@
           type="submit"
           class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
-          <i class="fa fa-building"></i> Edit
+          <i class="fa fa-building"></i> Save
         </button>
       </form>
     </div>

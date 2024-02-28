@@ -570,38 +570,35 @@ class ClassesController extends Controller
             ->where('pushedback_id', $class->pushedback_id)
             ->get();
 
-          // Format decimal values to two decimal places
-
-
         return response()->json([
             'class' => $classes,
         ]);
     }
     public function classExists(Request $request)
-{
-    $query = Classes::query()
-        ->where('status', 'Active')
-        ->when($request->has('sites_selected'), function ($query) use ($request) {
-            $query->where('site_id', $request->sites_selected);
-        })
-        ->when($request->has('programs_selected'), function ($query) use ($request) {
-            $query->where('program_id', $request->programs_selected);
-        })
-        ->when($request->has('month_selected'), function ($query) use ($request) {
-            $query->whereHas('dateRange', function ($dateRangeQuery) use ($request) {
-                $dateRangeQuery->where('month_num', $request->month_selected);
+    {
+        $query = Classes::query()
+            ->where('status', 'Active')
+            ->when($request->has('sites_selected'), function ($query) use ($request) {
+                $query->where('site_id', $request->sites_selected);
+            })
+            ->when($request->has('programs_selected'), function ($query) use ($request) {
+                $query->where('program_id', $request->programs_selected);
+            })
+            ->when($request->has('month_selected'), function ($query) use ($request) {
+                $query->whereHas('dateRange', function ($dateRangeQuery) use ($request) {
+                    $dateRangeQuery->where('month_num', $request->month_selected);
+                });
+            })
+            ->when($request->has('week_selected'), function ($query) use ($request) {
+                $query->whereHas('dateRange', function ($dateRangeQuery) use ($request) {
+                    $dateRangeQuery->where('date_Range_id', $request->week_selected);
+                });
             });
-        })
-        ->when($request->has('week_selected'), function ($query) use ($request) {
-            $query->whereHas('dateRange', function ($dateRangeQuery) use ($request) {
-                $dateRangeQuery->where('date_Range_id', $request->week_selected);
-            });
-        });
 
-    $classExists = $query->exists();
+        $classExists = $query->exists();
 
-    return response()->json(['classExists' => $classExists]);
-}
+        return response()->json(['classExists' => $classExists]);
+    }
 
     public function classesall(Request $request)
     {
@@ -633,49 +630,49 @@ class ClassesController extends Controller
 
         $formattedClasses = $classes->map(function ($class) {
             return [
-                    'id' => $class->id,
-                    'country' => $class->site->country,
-                    'region' => $class->site->region,
-                    'site_name' => $class->site->name,
-                    'site_id' => $class->site->id,
-                    'program_name' => $class->program->name,
-                    'program_id' => $class->program->id,
-                    'date_range' => $class->dateRange->date_range,
-                    'date_range_id' => $class->dateRange->id,
-                    'month' => $class->dateRange->month,
-                    'external_target' => $class->external_target,
-                    'internal_target' => $class->internal_target,
-                    'total_target' => $class->total_target,
-                    'within_sla' => $class->within_sla,
-                    'condition' => $class->condition,
-                    'original_start_date' => $class->original_start_date,
-                    'changes' => $class->changes,
-                    'agreed_start_date' => $class->agreed_start_date,
-                    'wfm_date_requested' => $class->wfm_date_requested,
-                    'notice_weeks' => number_format($class->notice_weeks, 2),
-                    'notice_days' => $class->notice_days,
-                    'pipeline_utilized' => $class->pipeline_utilized,
-                    'remarks' => $class->remarks,
-                    'status' => $class->status,
-                    'category' => $class->category,
-                    'type_of_hiring' => $class->type_of_hiring,
-                    'with_erf' => $class->with_erf,
-                    'erf_number' => $class->erf_number,
-                    'wave_no' => $class->wave_no,
-                    'ta' => $class->ta,
-                    'wf' => $class->wf,
-                    'tr' => $class->tr,
-                    'cl' => $class->cl,
-                    'op' => $class->op,
-                    'approved_by' => $class->approved_by,
-                    'cancelled_by' => $class->cancelledByUser ? $class->cancelledByUser->name : null,
-                    'requested_by' => $class->requested_by,
-                    'created_by' => $class->createdByUser->name,
-                    'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
-                    'approved_date' => $class->approved_date,
-                    'cancelled_date' => $class->cancelled_date,
-                    'created_at' => $class->created_at->format('m-d-Y H:i'),
-                    'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+                'id' => $class->id,
+                'country' => $class->site->country,
+                'region' => $class->site->region,
+                'site_name' => $class->site->name,
+                'site_id' => $class->site->id,
+                'program_name' => $class->program->name,
+                'program_id' => $class->program->id,
+                'date_range' => $class->dateRange->date_range,
+                'date_range_id' => $class->dateRange->id,
+                'month' => $class->dateRange->month,
+                'external_target' => $class->external_target,
+                'internal_target' => $class->internal_target,
+                'total_target' => $class->total_target,
+                'within_sla' => $class->within_sla,
+                'condition' => $class->condition,
+                'original_start_date' => $class->original_start_date,
+                'changes' => $class->changes,
+                'agreed_start_date' => $class->agreed_start_date,
+                'wfm_date_requested' => $class->wfm_date_requested,
+                'notice_weeks' => number_format($class->notice_weeks, 2),
+                'notice_days' => $class->notice_days,
+                'pipeline_utilized' => $class->pipeline_utilized,
+                'remarks' => $class->remarks,
+                'status' => $class->status,
+                'category' => $class->category,
+                'type_of_hiring' => $class->type_of_hiring,
+                'with_erf' => $class->with_erf,
+                'erf_number' => $class->erf_number,
+                'wave_no' => $class->wave_no,
+                'ta' => $class->ta,
+                'wf' => $class->wf,
+                'tr' => $class->tr,
+                'cl' => $class->cl,
+                'op' => $class->op,
+                'approved_by' => $class->approved_by,
+                'cancelled_by' => $class->cancelledByUser ? $class->cancelledByUser->name : null,
+                'requested_by' => $class->requested_by,
+                'created_by' => $class->createdByUser->name,
+                'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
+                'approved_date' => $class->approved_date,
+                'cancelled_date' => $class->cancelled_date,
+                'created_at' => $class->created_at->format('m-d-Y H:i'),
+                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
             ];
         });
 
@@ -697,9 +694,9 @@ class ClassesController extends Controller
 
 
 
-    return response()->json([
-        'classes' => $classes,
-    ]);
+        return response()->json([
+            'classes' => $classes,
+        ]);
     }
 
     //hiring summary
@@ -3112,38 +3109,38 @@ class ClassesController extends Controller
             // Add site data to mappedB2Classes array
             $mappedB2Classes[] = [
                 'Site' => $siteName,
-                        'January' => $weeklyData['1'] ?: '',
-                        'February' => $weeklyData['2'] ?: '',
-                        'March' => $weeklyData['3'] ?: '',
-                        'April' => $weeklyData['4'] ?: '',
-                        'May' => $weeklyData['5'] ?: '',
-                        'June' => $weeklyData['6'] ?: '',
-                        'July' => $weeklyData['7'] ?: '',
-                        'August' => $weeklyData['8'] ?: '',
-                        'September' => $weeklyData['9'] ?: '',
-                        'October' => $weeklyData['10'] ?: '',
-                        'November' => $weeklyData['11'] ?: '',
-                        'December' => $weeklyData['12'] ?: '',
-                        'GrandTotalByProgram' => $grandTotal,
+                'January' => $weeklyData['1'] ?: '',
+                'February' => $weeklyData['2'] ?: '',
+                'March' => $weeklyData['3'] ?: '',
+                'April' => $weeklyData['4'] ?: '',
+                'May' => $weeklyData['5'] ?: '',
+                'June' => $weeklyData['6'] ?: '',
+                'July' => $weeklyData['7'] ?: '',
+                'August' => $weeklyData['8'] ?: '',
+                'September' => $weeklyData['9'] ?: '',
+                'October' => $weeklyData['10'] ?: '',
+                'November' => $weeklyData['11'] ?: '',
+                'December' => $weeklyData['12'] ?: '',
+                'GrandTotalByProgram' => $grandTotal,
             ];
         }
 
         // Add grand total data to mappedB2Classes array
         $mappedB2Classes[] = [
             'Site' => 'Grand Total',
-                'January' => $grandTotalByWeek['1'] ?: '',
-                'February' => $grandTotalByWeek['2'] ?: '',
-                'March' => $grandTotalByWeek['3'] ?: '',
-                'April' => $grandTotalByWeek['4'] ?: '',
-                'May' => $grandTotalByWeek['5'] ?: '',
-                'June' => $grandTotalByWeek['6'] ?: '',
-                'July' => $grandTotalByWeek['7'] ?: '',
-                'August' => $grandTotalByWeek['8'] ?: '',
-                'September' => $grandTotalByWeek['9'] ?: '',
-                'October' => $grandTotalByWeek['10'] ?: '',
-                'November' => $grandTotalByWeek['11'] ?: '',
-                'December' => $grandTotalByWeek['12'] ?: '',
-                'GrandTotalByProgram' => $grandTotalForAllPrograms,
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
 
         $response = ['data' => $mappedB2Classes];

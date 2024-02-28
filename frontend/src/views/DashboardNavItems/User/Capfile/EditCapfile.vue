@@ -221,86 +221,100 @@
             </select>
           </label>
         </div>
-        <div class="py-6">
-          <label class="block py-6"
-            >Requested by:
+        <div class="py-6 flex space-x-4">
+          <label class="block">
             <input
               type="checkbox"
               v-model="requested_by"
               :checked="databaseValue.includes('Talent Acquisition')"
               value="Talent Acquisition"
-            />Talent Acquisition
+            />
+            Talent Acquisition
+          </label>
+          <label class="block">
             <input
               type="checkbox"
               v-model="requested_by"
               :checked="databaseValue.includes('Workforce')"
               value="Workforce"
-            />Workforce
+            />
+            Workforce
+          </label>
+          <label class="block">
             <input
               type="checkbox"
               v-model="requested_by"
               :checked="databaseValue.includes('Training')"
               value="Training"
-            />Training
+            />
+            Training
+          </label>
+          <label class="block">
             <input
               type="checkbox"
               v-model="requested_by"
               :checked="databaseValue.includes('Client')"
               value="Client"
-            />Client
+            />
+            Client
+          </label>
+          <label class="block">
             <input
               type="checkbox"
               v-model="requested_by"
               :checked="databaseValue.includes('Operation')"
               value="Operation"
-            />Operation
+            />
+            Operation
+          </label>
+          <label
+            class="block"
+            v-if="requested_by.includes('Talent Acquisition')"
+          >
+            Talent Acquisition
+            <input
+              type="text"
+              v-model="ta"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
+        </div>
 
-            <label
-              class="block py-6"
-              v-if="requested_by.includes('Talent Acquisition')"
-              >Talent Acquisition
-              <input
-                type="text"
-                v-model="ta"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
+        <div class="py-6 flex space-x-4">
+          <label class="block py-6" v-if="requested_by.includes('Workforce')"
+            >Workforce
+            <input
+              type="text"
+              v-model="wf"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
 
-            <label class="block py-6" v-if="requested_by.includes('Workforce')"
-              >Workforce
-              <input
-                type="text"
-                v-model="wf"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
+          <label class="block py-6" v-if="requested_by.includes('Training')"
+            >Training
+            <input
+              type="text"
+              v-model="tr"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
 
-            <label class="block py-6" v-if="requested_by.includes('Training')"
-              >Training
-              <input
-                type="text"
-                v-model="tr"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
+          <label class="block py-6" v-if="requested_by.includes('Client')"
+            >Client
+            <input
+              type="text"
+              v-model="cl"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
+          </label>
 
-            <label class="block py-6" v-if="requested_by.includes('Client')"
-              >Client
-              <input
-                type="text"
-                v-model="cl"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
-
-            <label class="block py-6" v-if="requested_by.includes('Operation')"
-              >Operation
-              <input
-                type="text"
-                v-model="op"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
+          <label class="block py-6" v-if="requested_by.includes('Operation')"
+            >Operation
+            <input
+              type="text"
+              v-model="op"
+              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+            />
           </label>
 
           <label class="block py-6"
@@ -485,7 +499,6 @@ export default {
     this.getDateRange();
     this.getClasses();
     this.getTransaction();
-    this.getClassesAll();
     this.databaseValue = this.databaseValue.split(", ");
   },
   watch: {
@@ -504,26 +517,6 @@ export default {
     },
     syncNoticeWeeks: function () {
       this.notice_weeks = this.notice_weeks_computed;
-    },
-    async getClassesAll() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesall",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const allClasses = response.data.classes;
-        const currentId = this.$route.params.id;
-        this.classes1 = allClasses.filter((c) => c.id !== parseInt(currentId));
-
-        console.log(response.data.data);
-      } catch (error) {
-        console.log(error);
-      }
     },
 
     async getSites() {
