@@ -9,11 +9,14 @@
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
+    ><span v-if="successMessage" class="text-green-500">{{
+      successMessage
+    }}</span>
       <form
         @submit.prevent="addProgram"
         class="flex flex-wrap items-center justify-between gap-4 font-semibold"
       >
+      
         <label class="block"
           >Name<input
             type="text"
@@ -124,6 +127,7 @@ export default {
       sites_selected: "",
       sites: [],
       b2: false,
+      successMessage: "",
       columns: [
         { data: "id", title: "ID" },
         { data: "name", title: "Name" },
@@ -332,6 +336,7 @@ export default {
         })
         .then((response) => {
           console.log(response.data);
+          this.successMessage = "Program Added Successfully!";
           this.name = "";
           this.description = "";
           this.program_group = "";
