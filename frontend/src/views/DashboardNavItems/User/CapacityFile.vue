@@ -1,10 +1,11 @@
 <template>
   <div class="py-0">
-    <span v-if="EmptySelection" class="ml-2 text-lg text-red-500 align-center"
-    >Fill all the selections first</span
-  >
     <div class="container px-4 py-0 mx-auto mt-4">
-     
+      <div class="flex justify-center">
+        <span v-if="EmptySelection" class="ml-2 text-lg text-red-500" style="align-self: center;">
+          Fill all the selections first
+        </span>
+      </div>
       <div class="py-0 mb-4 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-4 md:w-1/3 md:mt-0">
           <select
@@ -69,31 +70,31 @@
             </option>
           </select>
         </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0 flex items-center justify-end px-2">
           <button
             type="button"
-            class=" p-2 text-white bg-red-500 rounded-lg"
+            class=" p-2 text-white bg-red-500 rounded-lg mr-2"
             @click="resetFilter"
           >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="w-4 h-4"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
           </button>
-        </div>
-        <div class="w-full mt-4 md:w-1/3 md:mt-0" v-if="isButtonVisible">
+      
           <router-link
             :to="{ path: `/addcapfile/}`, query: { program: programs_selected, site: sites_selected, daterange: week_selected }}"
           >
             <button
               type="submit"
               :disabled="isButtonDisabled"
-              class="p-2 text-white bg-orange-500 rounded-lg"
+              v-if="isButtonVisible"
+              class="p-2 text-white bg-orange-500 rounded-lg ml-2"
             >
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="h-4 w-4"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
             </button>
           </router-link>
         </div>
       </div>
+      </div>
     </div>
-  </div>
 
   <div class="py-0">
     <div class="pl-8 pr-8">

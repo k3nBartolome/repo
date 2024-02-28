@@ -571,7 +571,7 @@ class ClassesController extends Controller
             ->get();
 
         return response()->json([
-            'class' => $classes,
+            'classes' => $classes,
         ]);
     }
     public function classExists(Request $request)
@@ -2984,6 +2984,8 @@ class ClassesController extends Controller
             'program_id' => 'required',
             'date_range_id' => 'required',
             'cancelled_by' => 'required',
+            'pipeline_utilized' => 'required',
+            'pipeline_offered' => 'required',
             'wf' => 'nullable',
             'tr' => 'nullable',
             'op' => 'nullable',

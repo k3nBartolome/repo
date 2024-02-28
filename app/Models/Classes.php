@@ -8,7 +8,7 @@ use Illuminate\Foundation\Auth\User;
 use Illuminate\Notifications\Notifiable;
 
 class Classes extends Model
-{
+ {
     use Notifiable;
     use HasFactory;
     protected $casts = [
@@ -35,6 +35,7 @@ class Classes extends Model
         'notice_days',
         'pipeline_utilized',
         'total_target',
+        'pipeline_offered',
         'reason_for_counter_proposal',
         'remarks',
         'status',
@@ -60,37 +61,39 @@ class Classes extends Model
     ];
 
     public function site()
-    {
-        return $this->belongsTo(Site::class, 'site_id');
+ {
+        return $this->belongsTo( Site::class, 'site_id' );
     }
 
     public function dateRange()
-    {
-        return $this->belongsTo(DateRange::class, 'date_range_id');
+ {
+        return $this->belongsTo( DateRange::class, 'date_range_id' );
     }
 
     public function program()
-    {
-        return $this->belongsTo(Program::class, 'program_id');
+ {
+        return $this->belongsTo( Program::class, 'program_id' );
     }
 
     public function createdByUser()
-    {
-        return $this->belongsTo(User::class, 'created_by');
+ {
+        return $this->belongsTo( User::class, 'created_by' );
     }
 
     public function updatedByUser()
-    {
-        return $this->belongsTo(User::class, 'updated_by');
+ {
+        return $this->belongsTo( User::class, 'updated_by' );
     }
+
     public function CancelledByUser()
-    {
-        return $this->belongsTo(User::class, 'cancelled_by');
+ {
+        return $this->belongsTo( User::class, 'cancelled_by' );
     }
 
     // @ts-ignore
+
     public function classes()
-    {
-        return $this->hasMany(ClassStaffing::class, 'classes_id');
+ {
+        return $this->hasMany( ClassStaffing::class, 'classes_id' );
     }
 }

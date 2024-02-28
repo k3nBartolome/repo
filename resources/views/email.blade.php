@@ -15,7 +15,7 @@
 <body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333;">
     <div>
         <strong>
-            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test email only. This will go live by Feb 28 9PM. Please update data.</p>
+            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test email only.  Please update data.</p>
         </strong>
         <p style="margin: 10px 0;">Hi Team,</p>
         <p style="margin: 10px 0;">Please see below for the most updated cap file.</p>
