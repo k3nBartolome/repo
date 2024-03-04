@@ -1,22 +1,20 @@
 <!-- eslint-disable vue/require-v-for-key -->
 <template>
-  <header class="w-full bg-white shadow">
-    <div class="items-center w-full py-2">
+  <header class="w-full bg-white">
+    <div class="items-center w-full">
       <h2 class="text-xl font-bold text-center">ADD CLASS</h2>
     </div>
   </header>
-  <div class="px-12 py-8">
+  <div class="px-12 py-8 font-serifs">
     <form @submit.prevent="addClass">
-      <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
-      >
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Site
             <select
               disabled
               v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               required
               @change="getSites"
             >
@@ -26,12 +24,14 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Line of Business
             <select
               disabled
               v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               required
               @change="getPrograms"
             >
@@ -45,12 +45,14 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Type of Hiring
             <select
               required
               v-model="type_of_hiring"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -58,81 +60,104 @@
               <option value="attrition and growth">Attrition and Growth</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             External Target
             <input
               required
               type="number"
               v-model="external_target"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncTotalTarget"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Internal Target
             <input
               required
               type="number"
               v-model="internal_target"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncTotalTarget"
             />
           </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Total Target
             <input
               type="number"
               v-model="total_target"
               readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Original Start Date
             <input
               required
               type="date"
               v-model="original_start_date"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncNoticeDays"
             />
           </label>
-
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >WFM Date Requested
             <input
               required
               type="date"
               v-model="wfm_date_requested"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncNoticeDays"
             />
           </label>
-          <label class="block">
-            Notice Days
-            <input
-              type="number"
-              v-model="notice_days"
-              readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeWeeks"
-            />
-          </label>
+        </div>
+        <!--
+        <div class="w-full mt-1 md:w-1/5 md:mt-0 relative border rounded-lg">
+          <input
+            type="number"
+            v-model="notice_days"
+            readonly
+            class="w-full px-4 py-2 bg-white border-2 pt-6"
+            @change="syncNoticeWeeks"
+          />
+          <label
+            class="absolute left-3 top-0 bg-white px-1"
+            style="transform: translateY(-50%)"
+            >Notice Days</label
+          >
+        </div> -->
+
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Notice Weeks
             <input
               type="text"
               v-model="notice_weeks"
               readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             />
           </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Weeks Start
             <select
               disabled
               v-model="date_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               required
               @change="getDateRange"
             >
@@ -146,44 +171,52 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >With ERF?
             <select
               required
               v-model="with_erf"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="yes">Yes</option>
               <option value="no">No</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block" v-if="with_erf === 'yes'">
             ERF Number
             <input
               type="text"
               v-model="erf_number"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Category
             <select
               required
               v-model="category"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
               <option value="confirmed">Confirmed</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Within SLA?
             <select
               required
               v-model="within_sla"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="Within SLA">Within SLA</option>
@@ -208,12 +241,16 @@
               <option value="OV Support">OV Support</option>
             </select>
           </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Approved by
             <select
               required
               v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
@@ -228,33 +265,26 @@
             </select>
           </label>
         </div>
-        <div class="py-4">
-          <label class="block py-6"
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-5/5 md:mt-0">
+          <label class="block"
             >Remarks<textarea
               required
               type="text"
               v-model="remarks"
-              class="block w-full h-20 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full h-15 bg-white border rounded-lg"
             />
           </label>
         </div>
-        <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
-            <i class="fa fa-save"></i> Save
-          </button>
-        </div>
-        <div class="flex justify-between">
-          <router-link to="/capfile">
-            <button
-              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-chevron-circle-left"></i> Back
-            </button></router-link
-          >
-        </div>
+      </div>
+      <div class="flex justify-center py-4">
+        <button
+          type="submit"
+          class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        >
+          <i class="fa fa-save"></i> Save
+        </button>
       </div>
     </form>
   </div>

@@ -17,17 +17,17 @@
     </div>
   </header>
   <div class="py-0 px-4">
-    <div class="px-4 py-0 bg-white ">
-      <div class="fixed inset-0 z-50 flex items-center justify-center modal mx-4" v-if="showModal">
+    <div class="px-4 py-0 bg-white">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal mx-4"
+        v-if="showModal"
+      >
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
-        <div class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4">
-
-
-
+        <div
+          class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4"
+        >
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">
-              Class History
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-800">Class History</h2>
           </header>
           <button
             @click="showModal = false"
@@ -52,66 +52,118 @@
             <table class="min-w-full border-collapse border-2 border-gray-300">
               <thead>
                 <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">ID</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Site</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Line of Business</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Type of Hiring</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Total Target</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Original Start Date</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Movement Date</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Weeks Range</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Within SLA?</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Agreed Start Date</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Requested by</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Approved by</th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">Transaction Type</th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    ID
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Site
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Line of Business
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Type of Hiring
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Total Target
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Original Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Movement Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Weeks Range
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Within SLA?
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Agreed Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Requested by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Approved by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Transaction Type
+                  </th>
                 </tr>
               </thead>
-              <tbody >
+              <tbody>
                 <tr
                   v-for="classes in classes"
                   :key="classes.id"
-                   class="border-2 border-black"
-          >
-          <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.pushedback_id }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.site.name }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.program.name }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.type_of_hiring }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.total_target }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.original_start_date }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.wfm_date_requested }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.date_range.date_range }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.within_sla }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.agreed_start_date }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.requested_by }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.approved_by }}</td>
-                   <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >{{ classes.changes }}</td>
+                  class="border-2 border-black"
+                >
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.pushedback_id }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.site.name }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.program.name }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.type_of_hiring }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.total_target }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.original_start_date }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.wfm_date_requested }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.date_range.date_range }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.within_sla }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.agreed_start_date }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.requested_by }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.approved_by }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.changes }}
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -129,7 +181,7 @@
             <select
               v-model="sites_selected"
               disabled
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getSites"
             >
@@ -146,7 +198,7 @@
             <select
               disabled
               v-model="programs_selected"
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getPrograms"
             >
@@ -167,7 +219,7 @@
             <select
               disabled
               v-model="type_of_hiring"
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -210,7 +262,7 @@
               type="number"
               v-model="total_target"
               disabled
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
         </div>
@@ -221,18 +273,17 @@
               disabled
               type="date"
               v-model="original_start_date"
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
         </div>
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          
           <label class="block">
             Weeks Start
             <select
               disabled
               v-model="date_selected"
-             class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getDateRange"
             >
@@ -367,7 +418,6 @@
               type="number"
               v-model="pipeline_offered"
               class="w-full px-4 py-2 bg-white border rounded-lg"
-              
             />
           </label>
         </div>
@@ -378,14 +428,12 @@
               type="number"
               v-model="pipeline_utilized"
               class="w-full px-4 py-2 bg-white border rounded-lg"
-              
             />
           </label>
         </div>
         <div class="w-full mt-1 md:w-3/5 md:mt-0">
-         
           <div class="py-6 flex space-x-4">
-            <label class="block font-bold">Requested By:</label> 
+            <label class="block font-bold">Requested By:</label>
             <label class="block">
               <input
                 type="checkbox"
@@ -436,7 +484,6 @@
       </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
-         
           <label
             class="block"
             v-if="cancelled_by.includes('Talent Acquisition')"
@@ -492,27 +539,26 @@
       </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-1 md:w-5/5 md:mt-0">
-      <label class="block"
+          <label class="block"
             >Reason for Cancellation<textarea
               required
               type="text"
               v-model="remarks"
-              class="block w-full h-15 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-        />
-      </label>
-    </div>
-  </div>
-        <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
-            <i class="fa fa-save"></i> Cancel
-          </button>
+              class="block w-full h-15 bg-white border rounded-lg"
+            />
+          </label>
         </div>
-      </form>
-    </div>
-  
+      </div>
+      <div class="flex justify-center py-4">
+        <button
+          type="submit"
+          class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        >
+          <i class="fa fa-save"></i> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
 </template>
 <script>
 import axios from "axios";
@@ -528,7 +574,7 @@ export default {
       total_target: 0,
       original_start_date: "",
       cancelled_date: "",
-      agreed_start_date:"",
+      agreed_start_date: "",
       remarks: "",
       pipeline_offered: 0,
       pipeline_utilized: 0,

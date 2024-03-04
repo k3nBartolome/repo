@@ -16,514 +16,565 @@
       </h2>
     </div>
   </header>
-        <div class="py-0 px-4">
-          <div class="px-4 py-0 bg-white ">
-            <div class="fixed inset-0 z-50 flex items-center justify-center modal mx-4" v-if="showModal">
-              <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
-              <div class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4">
-                <header class="px-4 py-2 border-b-2 border-gray-200">
-                  <h2 class="text-lg font-semibold text-gray-800">
-                    Class History
-                  </h2>
-                </header>
-                <button
-                  @click="showModal = false"
-                  class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+  <div class="py-0 px-4">
+    <div class="px-4 py-0 bg-white">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal mx-4"
+        v-if="showModal"
+      >
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div
+          class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4"
+        >
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Class History</h2>
+          </header>
+          <button
+            @click="showModal = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <div class="modal-scrollable-content">
+            <table class="min-w-full border-collapse border-2 border-gray-300">
+              <thead>
+                <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    ID
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Site
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Line of Business
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Type of Hiring
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Total Target
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Original Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Movement Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Weeks Range
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Within SLA?
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Agreed Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Requested by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Approved by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Transaction Type
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="classes in classes"
+                  :key="classes.id"
+                  class="border-2 border-black"
                 >
-                  <svg
-                    class="w-6 h-6"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
                   >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12"
-                    ></path>
-                  </svg>
-                </button>
-                <div class="modal-scrollable-content">
-                  <table class="min-w-full border-collapse border-2 border-gray-300">
-                    <thead>
-                      <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">ID</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Site</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Line of Business</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Type of Hiring</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Total Target</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Original Start Date</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Movement Date</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Weeks Range</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Within SLA?</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Agreed Start Date</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Requested by</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Approved by</th>
-                        <th class="border-2 border-gray-300 px-2 py-2 truncate">Transaction Type</th>
-                      </tr>
-                    </thead>
-                    <tbody >
-                      <tr
-                        v-for="classes in classes"
-                        :key="classes.id"
-                         class="border-2 border-black"
-                >
-                <td
+                    {{ classes.pushedback_id }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.pushedback_id }}</td>
-                         <td
+                  >
+                    {{ classes.site.name }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.site.name }}</td>
-                         <td
+                  >
+                    {{ classes.program.name }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.program.name }}</td>
-                         <td
+                  >
+                    {{ classes.type_of_hiring }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.type_of_hiring }}</td>
-                         <td
+                  >
+                    {{ classes.total_target }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.total_target }}</td>
-                         <td
+                  >
+                    {{ classes.original_start_date }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.original_start_date }}</td>
-                         <td
+                  >
+                    {{ classes.wfm_date_requested }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.wfm_date_requested }}</td>
-                         <td
+                  >
+                    {{ classes.date_range.date_range }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.date_range.date_range }}</td>
-                         <td
+                  >
+                    {{ classes.within_sla }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.within_sla }}</td>
-                         <td
+                  >
+                    {{ classes.agreed_start_date }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.agreed_start_date }}</td>
-                         <td
+                  >
+                    {{ classes.requested_by }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.requested_by }}</td>
-                         <td
+                  >
+                    {{ classes.approved_by }}
+                  </td>
+                  <td
                     class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.approved_by }}</td>
-                         <td
-                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-                  >{{ classes.changes }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
+                  >
+                    {{ classes.changes }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-        <div class="px-12 py-8 font-serifs">
-          <form @submit.prevent="pushClass">
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="py-6 flex space-x-4">
-                <label class="block">
-                Targets
-                <input
-                  type="radio"
-                  v-model="changes"
-                  value="Change Targets"
-                  required
-                  class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </label>
-                <label class="block">
-                Dates
-                <input
-                  type="radio"
-                  v-model="changes"
-                  value="Change Dates"
-                  required
-                  class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </label>
-                <label class="block">
-                Both
-                <input
-                  type="radio"
-                  v-model="changes"
-                  required
-                  checked
-                  value="Change Targets and Dates"
-                  class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
-                />
-              </label>
-            </div>
-          </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Site
-                  <select
-                    v-model="sites_selected"
-                    class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-                    required
-                    @change="getSites"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option v-for="site in sites" :key="site.id" :value="site.id">
-                      {{ site.name }}
-                    </option>
-                  </select>
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Line of Business
-                  <select
-                    v-model="programs_selected"
-                    class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-                    required
-                    @change="getPrograms"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option
-                      v-for="program in programs"
-                      :key="program.id"
-                      :value="program.id"
-                    >
-                      {{ program.name }}
-                    </option>
-                  </select>
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Type of Hiring
-                  <select
-                    v-model="type_of_hiring"
-                    class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option value="attrition">Attrition</option>
-                    <option value="growth">Growth</option>
-                    <option value="attrition and growth">Attrition and Growth</option>
-                  </select>
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  External Target
-                  <input
-                    required
-                    type="number"
-                    :disabled="isTargetDisabled"
-                    v-model="external_target"
-                    name="external_target"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    @change="syncTotalTarget"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Internal Target
-                  <input
-                    required
-                    type="number"
-                    :disabled="isTargetDisabled"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    v-model="internal_target"
-                    @change="syncTotalTarget"
-                  />
-                </label>
-              </div>
-            </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Total Target
-                  <input
-                    type="number"
-                    v-model="total_target"
-                    disabled
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Original Start Date
-                  <input
-                    type="date"
-                    v-model="original_start_date"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    @change="syncNoticeDays"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Date of Request
-                  <input
-                    required
-                    type="date"
-                    v-model="wfm_date_requested"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    @change="syncNoticeDays"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Notice Days
-                  <input
-                    type="number"
-                    v-model="notice_days"
-                    disabled
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    @change="syncNoticeWeeks"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Notice Weeks
-                  <input
-                    type="text"
-                    v-model="notice_weeks"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-            </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block">
-                  Weeks Start
-                  <select
-                    v-model="date_selected"
-                    class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
-                    required
-                    @change="getDateRange"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option
-                      v-for="daterange in daterange"
-                      :key="daterange.id"
-                      :value="daterange.id"
-                    >
-                      {{ daterange.date_range }}
-                    </option>
-                  </select>
-                </label>
-              </div>
-             
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Category
-                  <select
-                    required
-                    v-model="category"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option value="placeholder">Placeholder</option>
-                    <option value="confirmed">Confirmed</option>
-                  </select>
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Within SLA?
-                  <select
-                    required
-                    v-model="within_sla"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option value="Within SLA">Within SLA</option>
-                    <option value="Outside SLA-Cancellation">
-                      Outside SLA-Cancellation
-                    </option>
-                    <option value="Outside SLA-Change in Demand">
-                      Outside SLA-Change in Demand
-                    </option>
-                    <option value="Outside SLA-Change in Start Date">
-                      Outside SLA-Change in Start Date
-                    </option>
-                    <option value="Outside SLA-Change in Profile">
-                      Outside SLA-Change in Profile
-                    </option>
-                    <option value="Outside SLA-Change in Process/Assessments">
-                      Outside SLA-Change in Process/Assessments
-                    </option>
-                    <option value="OV Support">OV Support</option>
-                  </select>
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Agreed Start Date
-                  <input
-                    type="date"
-                    required
-                    v-model="agreed_start_date"
-                    :disabled="isDateDisabled"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                    @change="syncNoticeDays"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block"
-                  >Approved by
-                  <select
-                    required
-                    v-model="approved_by"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  >
-                    <option disabled value="" selected>Please select one</option>
-                    <option value="VP-Ops">VP-Ops</option>
-                    <option value="VP-Training">VP-Training</option>
-                    <option value="VP-WF">VP-WF</option>
-                    <option value="VP-TA">VP-TA</option>
-                    <option value="CS">CS</option>
-                    <option value="WF">WF</option>
-                    <option value="Ops">Ops</option>
-                    <option value="Training">Training</option>
-                    <option value="TA">TA</option>
-                  </select>
-                </label>
-              </div>
-            </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              
-              <div class="w-full mt-1 md:w-4/5 md:mt-0">
-            
-                <div class="py-6 flex space-x-4">
-                  <label class="block font-bold">Requested By:</label> 
-                  <label class="block">
-                    <input
-                      type="checkbox"
-                      v-model="requested_by"
-                      :checked="databaseValue.includes('Talent Acquisition')"
-                      value="Talent Acquisition"
-                    />
-                    Talent Acquisition
-                  </label>
-                  <label class="block">
-                    <input
-                      type="checkbox"
-                      v-model="requested_by"
-                      :checked="databaseValue.includes('Workforce')"
-                      value="Workforce"
-                    />
-                    Workforce
-                  </label>
-                  <label class="block">
-                    <input
-                      type="checkbox"
-                      v-model="requested_by"
-                      :checked="databaseValue.includes('Training')"
-                      value="Training"
-                    />
-                    Training
-                  </label>
-                  <label class="block">
-                    <input
-                      type="checkbox"
-                      v-model="requested_by"
-                      :checked="databaseValue.includes('Client')"
-                      value="Client"
-                    />
-                    Client
-                  </label>
-                  <label class="block">
-                    <input
-                      type="checkbox"
-                      v-model="requested_by"
-                      :checked="databaseValue.includes('Operation')"
-                      value="Operation"
-                    />
-                    Operation
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label
-                  class="block"
-                  v-if="requested_by.includes('Talent Acquisition')"
-                >
-                  Talent Acquisition
-                  <input
-                    type="text"
-                    v-model="ta"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block" v-if="requested_by.includes('Workforce')"
-                  >Workforce
-                  <input
-                    type="text"
-                    v-model="wf"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block" v-if="requested_by.includes('Training')"
-                  >Training
-                  <input
-                    type="text"
-                    v-model="tr"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block" v-if="requested_by.includes('Client')"
-                  >Client
-                  <input
-                    type="text"
-                    v-model="cl"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-              <div class="w-full mt-1 md:w-1/5 md:mt-0">
-                <label class="block" v-if="requested_by.includes('Operation')"
-                  >Operation
-                  <input
-                    type="text"
-                    v-model="op"
-                    class="w-full px-4 py-2 bg-white border rounded-lg"
-                  />
-                </label>
-              </div>
-            </div>
-            <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-              <div class="w-full mt-1 md:w-5/5 md:mt-0">
-            <label class="block"
-              >Remarks<textarea
-                required
-                type="text"
-                v-model="remarks"
-                class="block w-full h-15 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+      </div>
+    </div>
+  </div>
+  <div class="px-12 py-8 font-serifs">
+    <form @submit.prevent="pushClass">
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="py-6 flex space-x-4">
+          <label class="block">
+            Targets
+            <input
+              type="radio"
+              v-model="changes"
+              value="Change Targets"
+              required
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+          <label class="block">
+            Dates
+            <input
+              type="radio"
+              v-model="changes"
+              value="Change Dates"
+              required
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+          <label class="block">
+            Both
+            <input
+              type="radio"
+              v-model="changes"
+              required
+              checked
+              value="Change Targets and Dates"
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Site
+            <select
+              v-model="sites_selected"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              required
+              @change="getSites"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Line of Business
+            <select
+              v-model="programs_selected"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              required
+              @change="getPrograms"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option
+                v-for="program in programs"
+                :key="program.id"
+                :value="program.id"
+              >
+                {{ program.name }}
+              </option>
+            </select>
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Type of Hiring
+            <select
+              v-model="type_of_hiring"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="attrition">Attrition</option>
+              <option value="growth">Growth</option>
+              <option value="attrition and growth">Attrition and Growth</option>
+            </select>
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            External Target
+            <input
+              required
+              type="number"
+              :disabled="isTargetDisabled"
+              v-model="external_target"
+              name="external_target"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncTotalTarget"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Internal Target
+            <input
+              required
+              type="number"
+              :disabled="isTargetDisabled"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              v-model="internal_target"
+              @change="syncTotalTarget"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Total Target
+            <input
+              type="number"
+              v-model="total_target"
+              disabled
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Original Start Date
+            <input
+              type="date"
+              v-model="original_start_date"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncNoticeDays"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Date of Request
+            <input
+              required
+              type="date"
+              v-model="wfm_date_requested"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncNoticeDays"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Notice Days
+            <input
+              type="number"
+              v-model="notice_days"
+              disabled
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncNoticeWeeks"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Notice Weeks
+            <input
+              type="text"
+              v-model="notice_weeks"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Weeks Start
+            <select
+              v-model="date_selected"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              required
+              @change="getDateRange"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option
+                v-for="daterange in daterange"
+                :key="daterange.id"
+                :value="daterange.id"
+              >
+                {{ daterange.date_range }}
+              </option>
+            </select>
+          </label>
+        </div>
+
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Category
+            <select
+              required
+              v-model="category"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="placeholder">Placeholder</option>
+              <option value="confirmed">Confirmed</option>
+            </select>
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Within SLA?
+            <select
+              required
+              v-model="within_sla"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Within SLA">Within SLA</option>
+              <option value="Outside SLA-Cancellation">
+                Outside SLA-Cancellation
+              </option>
+              <option value="Outside SLA-Change in Demand">
+                Outside SLA-Change in Demand
+              </option>
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
+              </option>
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
+              </option>
+              <option value="OV Support">OV Support</option>
+            </select>
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Agreed Start Date
+            <input
+              type="date"
+              required
+              v-model="agreed_start_date"
+              :disabled="isDateDisabled"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncNoticeDays"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Approved by
+            <select
+              required
+              v-model="approved_by"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="VP-Ops">VP-Ops</option>
+              <option value="VP-Training">VP-Training</option>
+              <option value="VP-WF">VP-WF</option>
+              <option value="VP-TA">VP-TA</option>
+              <option value="CS">CS</option>
+              <option value="WF">WF</option>
+              <option value="Ops">Ops</option>
+              <option value="Training">Training</option>
+              <option value="TA">TA</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-4/5 md:mt-0">
+          <div class="py-6 flex space-x-4">
+            <label class="block font-bold">Requested By:</label>
+            <label class="block">
+              <input
+                type="checkbox"
+                v-model="requested_by"
+                :checked="databaseValue.includes('Talent Acquisition')"
+                value="Talent Acquisition"
               />
+              Talent Acquisition
+            </label>
+            <label class="block">
+              <input
+                type="checkbox"
+                v-model="requested_by"
+                :checked="databaseValue.includes('Workforce')"
+                value="Workforce"
+              />
+              Workforce
+            </label>
+            <label class="block">
+              <input
+                type="checkbox"
+                v-model="requested_by"
+                :checked="databaseValue.includes('Training')"
+                value="Training"
+              />
+              Training
+            </label>
+            <label class="block">
+              <input
+                type="checkbox"
+                v-model="requested_by"
+                :checked="databaseValue.includes('Client')"
+                value="Client"
+              />
+              Client
+            </label>
+            <label class="block">
+              <input
+                type="checkbox"
+                v-model="requested_by"
+                :checked="databaseValue.includes('Operation')"
+                value="Operation"
+              />
+              Operation
             </label>
           </div>
         </div>
-        <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label
+            class="block"
+            v-if="requested_by.includes('Talent Acquisition')"
           >
-            <i class="fa fa-save"></i> Pushback
-          </button>
+            Talent Acquisition
+            <input
+              type="text"
+              v-model="ta"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
         </div>
-       
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block" v-if="requested_by.includes('Workforce')"
+            >Workforce
+            <input
+              type="text"
+              v-model="wf"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block" v-if="requested_by.includes('Training')"
+            >Training
+            <input
+              type="text"
+              v-model="tr"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block" v-if="requested_by.includes('Client')"
+            >Client
+            <input
+              type="text"
+              v-model="cl"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block" v-if="requested_by.includes('Operation')"
+            >Operation
+            <input
+              type="text"
+              v-model="op"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-5/5 md:mt-0">
+          <label class="block"
+            >Remarks<textarea
+              required
+              type="text"
+              v-model="remarks"
+              class="block w-full h-15 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="flex justify-center py-4">
+        <button
+          type="submit"
+          class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        >
+          <i class="fa fa-save"></i> Pushback
+        </button>
+      </div>
     </form>
   </div>
- 
 </template>
 <script>
 import axios from "axios";
