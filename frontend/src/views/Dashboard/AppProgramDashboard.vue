@@ -12,11 +12,12 @@
     ><span v-if="successMessage" class="text-green-500">{{
       successMessage
     }}</span>
+    <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
       <form
         @submit.prevent="addProgram"
         class="flex flex-wrap items-center justify-between gap-4 font-semibold"
       >
-      
+
         <label class="block"
           >Name<input
             type="text"
@@ -125,6 +126,7 @@ export default {
       description: "",
       program_group: "",
       sites_selected: "",
+      errorMessage: "",
       sites: [],
       b2: false,
       successMessage: "",
@@ -346,6 +348,11 @@ export default {
         })
         .catch((error) => {
           console.log(error.response.data);
+          if (error.response.status === 400) {
+            this.errorMessage = error.response.data.error.name[0];
+          } else {
+            this.errorMessage = "An error occurred while adding the program.";
+          }
         });
     },
   },

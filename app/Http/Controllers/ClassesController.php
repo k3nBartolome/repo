@@ -2918,11 +2918,11 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-        $class->status = 'Moved';
         $class->save();
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
+        $newClass->status = 'Moved';
         $newClass->requested_by = json_encode($requested_by);
         $newClass->fill($request->all());
         $newClass->save();

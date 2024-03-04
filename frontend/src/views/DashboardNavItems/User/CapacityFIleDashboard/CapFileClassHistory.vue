@@ -1,7 +1,7 @@
 <template>
   <div class="py-0">
     <div class="mb-4 md:flex md:space-x-2 md:items-center">
-      <div class="w-full md:w-1/4 relative">
+      <div class="relative w-full md:w-1/4">
         <select
           v-model="sites_selected"
           class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -67,7 +67,7 @@
       <div class="w-full md:w-1/4">
         <button
           type="button"
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+          class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           @click="getClassesAll"
         >
           Filter
@@ -76,7 +76,7 @@
       <div class="w-full md:w-1/4">
         <button
           type="button"
-          class="px-4 py-2 bg-green-600 text-white rounded-lg w-full"
+          class="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
           @click="exportToExcel"
         >
           Export
@@ -85,7 +85,7 @@
       <div class="w-full md:w-1/4">
         <button
           type="button"
-          class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
+          class="w-full px-4 py-2 text-white bg-red-500 rounded-lg"
           @click="resetFilter"
         >
           Reset Filters
@@ -256,6 +256,10 @@ export default {
       this.week_selected = "";
     },
     async getClassesAll() {
+      console.log("Sites Selected:", this.sites_selected);
+    console.log("Programs Selected:", this.programs_selected);
+    console.log("Month Selected:", this.month_selected);
+    console.log("Week Selected:", this.week_selected);
       try {
         const token = this.$store.state.token;
         const response = await axios.get(

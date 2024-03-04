@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Validation\Rule;
 class ProgramController extends Controller
 {
     public function index()
@@ -114,7 +114,12 @@ class ProgramController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
+            'name' => [
+                'required',
+                Rule::unique('programs')->where(function ($query) use ($request) {
+                    return $query->where('site_id', $request->input('site_id'));
+                }),
+            ],
             'description' => 'required',
             'program_group' => 'sometimes',
             'b2' => 'sometimes|boolean',
@@ -127,9 +132,8 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
-        $program->program_id = $program->id;
-        $program->save();
-        return response()->json(['data' => $program]);
+
+        return response()->json(['data' => $program], 201);
     }
 
     public function update(Request $request, $id)
