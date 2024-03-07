@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ClassHistoryExport;
 use App\Exports\DashboardClassesExport;
 use App\Exports\MyExport;
 use App\Exports\SrExport;
-use App\Exports\ClassHistoryExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
@@ -143,7 +143,7 @@ class ClassesController extends Controller
 
     public function srCompliance(Request $request)
     {
-        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78,  80, 81, 87, 88];
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
 
         $query = SmartRecruitData::on('secondary_sqlsrv')
             ->select('Step', 'AppStep', 'Site', DB::raw('COUNT(*) as Count'))
@@ -536,8 +536,6 @@ class ClassesController extends Controller
             return response()->json(['error' => 'Class not found'], 404);
         }
 
-
-
         return response()->json([
             'class' => $class,
         ]);
@@ -550,8 +548,6 @@ class ClassesController extends Controller
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
-
-
 
         return response()->json([
             'class' => $class,
@@ -681,9 +677,6 @@ class ClassesController extends Controller
         ]);
     }
 
-
-
-
     public function cStat()
     {
         $classes = Classes::whereHas('site', function ($query) {
@@ -691,8 +684,6 @@ class ClassesController extends Controller
         })
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
             ->get();
-
-
 
         return response()->json([
             'classes' => $classes,
@@ -1044,8 +1035,6 @@ class ClassesController extends Controller
             }
         }
 
-
-
         $classes = $query->select([
             'id',
             'pushedback_id',
@@ -1133,7 +1122,6 @@ class ClassesController extends Controller
                 'updated_at' => $class->updated_at->format('m-d-Y H:i'),
             ];
         })->toArray();
-
 
         return Excel::download(new ClassHistoryExport($formattedClasses), 'Class_history_data.xlsx');
     }
@@ -1845,7 +1833,6 @@ class ClassesController extends Controller
         return response()->json($response);
     }
 
-
     public function dashboardClasses(Request $request)
     {
         $siteId = $request->input('site_id');
@@ -2178,7 +2165,6 @@ class ClassesController extends Controller
             });
         }
 
-
         $classes = $query->select([
             'id',
             'pushedback_id',
@@ -2266,12 +2252,10 @@ class ClassesController extends Controller
             ];
         });
 
-
         return response()->json([
             'classes' => $formattedClasses,
         ]);
     }
-
 
     public function dashboardClasses3(Request $request)
     {
@@ -2881,54 +2865,54 @@ class ClassesController extends Controller
     }
 
     public function pushedback(Request $request, $id)
-{
-    $validator = Validator::make($request->all(), [
-        'notice_weeks' => 'required',
-        'notice_days' => 'required',
-        'external_target' => 'required',
-        'internal_target' => 'required',
-        'total_target' => 'required',
-        'type_of_hiring' => 'required',
-        'within_sla' => 'required',
-        'with_erf' => 'required',
-        'erf_number' => 'nullable',
-        'remarks' => 'required',
-        'status' => 'required',
-        'approved_status' => 'required',
-        'original_start_date' => 'required',
-        'wfm_date_requested' => 'nullable',
-        'program_id' => 'required',
-        'site_id' => 'required',
-        'date_range_id' => 'required',
-        'category' => 'required',
-        'requested_by' => 'required',
-        'agreed_start_date' => 'required',
-        'approved_by' => 'required',
-        'updated_by' => 'required',
-        'changes' => 'required',
-        'wf' => 'nullable',
-        'tr' => 'nullable',
-        'op' => 'nullable',
-        'ta' => 'nullable',
-        'cl' => 'nullable',
-    ]);
-    $requested_by = [$request->requested_by];
-    if ($validator->fails()) {
-        return response()->json(['error' => $validator->errors()], 400);
+    {
+        $validator = Validator::make($request->all(), [
+            'notice_weeks' => 'required',
+            'notice_days' => 'required',
+            'external_target' => 'required',
+            'internal_target' => 'required',
+            'total_target' => 'required',
+            'type_of_hiring' => 'required',
+            'within_sla' => 'required',
+            'with_erf' => 'required',
+            'erf_number' => 'nullable',
+            'remarks' => 'required',
+            'status' => 'required',
+            'approved_status' => 'required',
+            'original_start_date' => 'required',
+            'wfm_date_requested' => 'nullable',
+            'program_id' => 'required',
+            'site_id' => 'required',
+            'date_range_id' => 'required',
+            'category' => 'required',
+            'requested_by' => 'required',
+            'agreed_start_date' => 'required',
+            'approved_by' => 'required',
+            'updated_by' => 'required',
+            'changes' => 'required',
+            'wf' => 'nullable',
+            'tr' => 'nullable',
+            'op' => 'nullable',
+            'ta' => 'nullable',
+            'cl' => 'nullable',
+        ]);
+        $requested_by = [$request->requested_by];
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $class = Classes::find($id);
+        $class->status = 'Moved';
+        $class->save();
+        $newClass = $class->replicate();
+        $newClass->update_status = $class->update_status + 1;
+        $newClass->changes = 'Pushedback';
+        $newClass->requested_by = json_encode($requested_by);
+        $newClass->fill($request->all());
+        $newClass->save();
+
+        return new ClassesResource($newClass);
     }
-
-    $class = Classes::find($id);
-    $class->status = 'Moved';
-    $class->save();
-    $newClass = $class->replicate();
-    $newClass->update_status = $class->update_status + 1;
-    $newClass->changes = 'Pushedback';
-    $newClass->requested_by = json_encode($requested_by);
-    $newClass->fill($request->all());
-    $newClass->save();
-
-    return new ClassesResource($newClass);
-}
 
     public function edit(Request $request, $id)
     {
@@ -3072,7 +3056,7 @@ class ClassesController extends Controller
 
                 // Update grouped classes
                 $groupedClasses[$siteName][$month] = [
-                    'total_target' => ($groupedClasses[$siteName][$month]['total_target'] ?? 0) + $totalTarget
+                    'total_target' => ($groupedClasses[$siteName][$month]['total_target'] ?? 0) + $totalTarget,
                 ];
             }
         }
@@ -3097,7 +3081,7 @@ class ClassesController extends Controller
                 'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
                 'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
                 'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
-            ]
+            ],
         ];
 
         // Iterate over grouped classes to prepare data for response
@@ -3176,58 +3160,55 @@ class ClassesController extends Controller
 
         return view('sr_pending_email.view', compact('mappedResult'));
     }
-    public function AutomatedSrExport(Request $request, CapEmailController $emailController)
+    public function AutomatedSrExportData(Request $request, CapEmailController $emailController)
     {
-        $formattedResult = $emailController->srComplianceExportData();
+
+        $formattedResult = $emailController->AutomatedSrExport();
 
         return view('sr_pending_email.view', compact('formattedResult'));
     }
-    
-    
-    
-    
 
 }
- /*  $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
-    
-        $query = SmartRecruitData::on('secondary_sqlsrv')
-            ->select('Step', DB::raw('COUNT(*) as Count'))
-            ->groupBy('Step')
-            ->whereIn('ApplicationStepStatusId', $appstepIDs)
-            ->orderBy('Step');
-    
-        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-            $filterDateStart = $request->input('filter_date_start');
-            $filterDateEnd = $request->input('filter_date_end');
-    
-            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd));
-    
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
-    
-                $query->where('QueueDate', '>=', $startDate)
-                    ->where('QueueDate', '<', $endDate);
-            }
-        }
-    
-        $result = $query->get();
-    
-        $stepCounts = [];
-    
-        foreach ($result as $item) {
-            $step = $item->Step;
-            $stepCounts[$step] = number_format($item->Count);
-        }
-    
-        // Assigning values from $stepCounts to keys
-        $output = [
-            '2. ONLINE ASSESSMENT' => $stepCounts['2. ONLINE ASSESSMENT'],
-            '3. INITIAL INTERVIEW' => $stepCounts['3. INITIAL INTERVIEW'],
-            '4. BEHAVIORAL INTERVIEW' => $stepCounts['4. BEHAVIORAL INTERVIEW'],
-            '5. OPERATIONS VALIDATION' => $stepCounts['5. OPERATIONS VALIDATION'],
-            '6. LANGUAGE ASSESSMENT' => $stepCounts['6. LANGUAGE ASSESSMENT']
-        ];
-    
-        return response()->json(['sr' => $output]);
-    } */
+/*  $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
+
+$query = SmartRecruitData::on('secondary_sqlsrv')
+->select('Step', DB::raw('COUNT(*) as Count'))
+->groupBy('Step')
+->whereIn('ApplicationStepStatusId', $appstepIDs)
+->orderBy('Step');
+
+if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+$filterDateStart = $request->input('filter_date_start');
+$filterDateEnd = $request->input('filter_date_end');
+
+if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+$startDate = date('Y-m-d', strtotime($filterDateStart));
+$endDate = date('Y-m-d', strtotime($filterDateEnd));
+
+$endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+
+$query->where('QueueDate', '>=', $startDate)
+->where('QueueDate', '<', $endDate);
+}
+}
+
+$result = $query->get();
+
+$stepCounts = [];
+
+foreach ($result as $item) {
+$step = $item->Step;
+$stepCounts[$step] = number_format($item->Count);
+}
+
+// Assigning values from $stepCounts to keys
+$output = [
+'2. ONLINE ASSESSMENT' => $stepCounts['2. ONLINE ASSESSMENT'],
+'3. INITIAL INTERVIEW' => $stepCounts['3. INITIAL INTERVIEW'],
+'4. BEHAVIORAL INTERVIEW' => $stepCounts['4. BEHAVIORAL INTERVIEW'],
+'5. OPERATIONS VALIDATION' => $stepCounts['5. OPERATIONS VALIDATION'],
+'6. LANGUAGE ASSESSMENT' => $stepCounts['6. LANGUAGE ASSESSMENT']
+];
+
+return response()->json(['sr' => $output]);
+} */

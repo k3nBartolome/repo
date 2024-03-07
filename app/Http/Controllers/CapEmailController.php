@@ -6,8 +6,8 @@ use App\Models\Classes;
 use App\Models\DateRange;
 use App\Models\Program;
 use App\Models\Site;
-use Illuminate\Http\Request;
 use App\Models\SmartRecruitData;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -35,9 +35,8 @@ class CapEmailController extends Controller
     {
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
-    
 
-        $recipients = ['kryss.bartolome@vxi.com','padillakryss@gmail.com' ];
+        $recipients = ['kryss.bartolome@vxi.com', 'padillakryss@gmail.com','arielito.pascua@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
@@ -161,7 +160,7 @@ class CapEmailController extends Controller
             ->whereBetween('QueueDate', ['20240101', $latestDate])
 
             ->orderBy('Site');
-        
+
         $result = $query->get();
         $groupedData = [];
         $totalStepCounts = [];
@@ -282,7 +281,7 @@ class CapEmailController extends Controller
     }
     public function AutomatedSrExport()
     {
-        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78,  80, 81, 87, 88];
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
         $latestDate = SmartRecruitData::on('secondary_sqlsrv')->max('last_update_date');
         $query = SmartRecruitData::on('secondary_sqlsrv')
             ->select('Step', 'AppStep', 'Site', DB::raw('COUNT(*) as Count'))
@@ -292,8 +291,6 @@ class CapEmailController extends Controller
             ->whereIn('ApplicationStepStatusId', $appstepIDs)
             ->whereBetween('QueueDate', ['20240101', $latestDate])
             ->orderBy('Site');
-
-
 
         $result = $query->get();
 
@@ -343,7 +340,7 @@ class CapEmailController extends Controller
                 }
 
                 $formattedResult[] = array_merge(
-                    [ 'AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
+                    ['AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
                     $formattedSiteCounts
                 );
             }

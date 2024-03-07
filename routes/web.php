@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CapEmailController;
 use App\Http\Controllers\ClassesController;
-use  App\Http\Controllers\CapEmailController;
+use Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,11 +13,11 @@ use  App\Http\Controllers\CapEmailController;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the 'web' middleware group. Now create something great!
 |
-*/
-Route::get( '/webclassesdashboard', [ ClassesController::class, 'WebDashboardClasses' ] );
-Route::get( '/websiteclasses', [ ClassesController::class, 'WebDashboardSiteClasses' ] );
-Route::get( '/websiteb2classes', [ ClassesController::class, 'retrieveB2DataForEmail' ] );
-Route::get( '/automated_sr', [ ClassesController::class, 'AutomatedSr' ] );
-Route::get( '/automated_sr_export', [ ClassesController::class, 'AutomatedSrExport' ] );
-Route::post( 'render', [ CapEmailController::class, 'sendEmail' ] );
-Route::post( 'sr_render', [ CapEmailController::class, 'sendSR' ] );
+ */
+Route::get('/webclassesdashboard', [ClassesController::class, 'WebDashboardClasses']);
+Route::get('/websiteclasses', [ClassesController::class, 'WebDashboardSiteClasses']);
+Route::get('/websiteb2classes', [ClassesController::class, 'retrieveB2DataForEmail']);
+Route::get('/automated_sr', [ClassesController::class, 'AutomatedSr']);
+Route::get('/automated_sr_export', [ClassesController::class, 'AutomatedSrExportData']);
+Route::post('render', [CapEmailController::class, 'sendEmail']);
+Route::post('sr_render', [CapEmailController::class, 'sendSR']);
