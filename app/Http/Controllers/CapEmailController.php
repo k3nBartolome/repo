@@ -7,6 +7,8 @@ use App\Models\DateRange;
 use App\Models\Program;
 use App\Models\Site;
 use Illuminate\Http\Request;
+use App\Models\SmartRecruitData;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class CapEmailController extends Controller
@@ -20,7 +22,25 @@ class CapEmailController extends Controller
         $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
-        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses,'mappedB2Classes' => $mappedB2Classes], function ($message) use ($recipients, $subject) {
+        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes], function ($message) use ($recipients, $subject) {
+            $message->from('TA.Insights@vxi.com', 'TA Reports');
+            $message->to($recipients);
+            $message->subject($subject);
+        });
+
+        return response()->json(['message' => 'Email sent successfully']);
+    }
+
+    public function sendSR(Request $request)
+    {
+        $mappedResult = $this->srComplianceExport();
+        $formattedResult = $this->AutomatedSrExport();
+    
+
+        $recipients = ['kryss.bartolome@vxi.com','padillakryss@gmail.com' ];
+        $subject = 'SR Pending Movement - as of ' . date('F j, Y');
+
+        Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
             $message->subject($subject);
@@ -125,6 +145,213 @@ class CapEmailController extends Controller
         ];
         return $mappedGroupedClasses;
     }
+    //sr
+    public function srComplianceExport()
+    {
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
+
+        $latestDate = SmartRecruitData::on('secondary_sqlsrv')->max('last_update_date');
+
+        $query = SmartRecruitData::on('secondary_sqlsrv')
+            ->select('Step', 'AppStep', 'Site', DB::raw('COUNT(*) as Count'))
+            ->groupBy('Step', 'AppStep', 'Site')
+            ->orderBy('Step')
+            ->orderBy('AppStep')
+            ->whereIn('ApplicationStepStatusId', $appstepIDs)
+            ->whereBetween('QueueDate', ['20240101', $latestDate])
+
+            ->orderBy('Site');
+        
+        $result = $query->get();
+        $groupedData = [];
+        $totalStepCounts = [];
+        $totalAppStepCounts = [];
+        $totalSiteCounts = [];
+
+        foreach ($result as $item) {
+            $step = $item->Step;
+            $appStep = $item->AppStep;
+            $site = $item->Site;
+
+            if (!isset($groupedData[$step][$appStep])) {
+                $groupedData[$step][$appStep] = [
+                    'Bridgetowne' => 0,
+                    'Clark' => 0,
+                    'Davao' => 0,
+                    'Makati' => 0,
+                    'MOA' => 0,
+                    'QC North EDSA' => 0,
+                ];
+            }
+
+            $groupedData[$step][$appStep][$site] += $item->Count;
+            $totalStepCounts[$step] = isset($totalStepCounts[$step]) ? $totalStepCounts[$step] + $item->Count : $item->Count;
+            $totalAppStepCounts[$step][$appStep] = isset($totalAppStepCounts[$step][$appStep]) ? $totalAppStepCounts[$step][$appStep] + $item->Count : $item->Count;
+            $totalSiteCounts[$step][$site] = (isset($item->Count) && $item->Count > 0) ? (isset($totalSiteCounts[$step][$site]) ? $totalSiteCounts[$step][$site] + $item->Count : $item->Count) : 0;
+        }
+
+        $formattedResult = [];
+        $maxAppSteps = [];
+        $mappedResult = [];
+
+        foreach ($groupedData as $step => $appSteps) {
+            $maxAppStep = null;
+            $maxAppStepCount = 0;
+
+            foreach ($appSteps as $appStep => $siteCounts) {
+                $totalCount = $totalAppStepCounts[$step][$appStep];
+
+                if ($totalCount > $maxAppStepCount) {
+                    $maxAppStepCount = $totalCount;
+                    $maxAppStep = $appStep;
+                }
+            }
+
+            $maxAppSteps[$step] = $maxAppStep;
+
+            $formattedSiteCounts = [];
+            if ($maxAppStep !== null) {
+                foreach ($appSteps[$maxAppStep] as $site => $count) {
+                    $formattedSiteCounts[$site] = number_format($count);
+                }
+
+                $formattedResult[] = array_merge(
+                    ['Step' => $step, 'MaxAppStep' => $maxAppStep, 'MaxAppStepCount' => number_format($totalAppStepCounts[$step][$maxAppStep]), 'StepName' => $step],
+                    $formattedSiteCounts
+                );
+                $mappedResult['2. ONLINE ASSESSMENT'] = [
+                    'MaxAppStep' => isset($formattedResult[0]) ? $formattedResult[0]['MaxAppStep'] : null,
+                    'MaxAppStepCount' => isset($formattedResult[0]) ? $formattedResult[0]['MaxAppStepCount'] : null,
+                    'Bridgetowne' => isset($formattedResult[0]) ? $formattedResult[0]['Bridgetowne'] : null,
+                    'Clark' => isset($formattedResult[0]) ? $formattedResult[0]['Clark'] : null,
+                    'Davao' => isset($formattedResult[0]) ? $formattedResult[0]['Davao'] : null,
+                    'Makati' => isset($formattedResult[0]) ? $formattedResult[0]['Makati'] : null,
+                    'MOA' => isset($formattedResult[0]) ? $formattedResult[0]['MOA'] : null,
+                    'QC North EDSA' => isset($formattedResult[0]) ? $formattedResult[0]['QC North EDSA'] : null,
+                    'TotalCount' => isset($totalStepCounts['2. ONLINE ASSESSMENT']) ? number_format($totalStepCounts['2. ONLINE ASSESSMENT']) : null,
+                ];
+                $mappedResult['3. INITIAL INTERVIEW'] = [
+                    'MaxAppStep' => isset($formattedResult[1]) ? $formattedResult[1]['MaxAppStep'] : null,
+                    'MaxAppStepCount' => isset($formattedResult[1]) ? $formattedResult[1]['MaxAppStepCount'] : null,
+                    'Bridgetowne' => isset($formattedResult[1]) ? $formattedResult[1]['Bridgetowne'] : null,
+                    'Clark' => isset($formattedResult[1]) ? $formattedResult[1]['Clark'] : null,
+                    'Davao' => isset($formattedResult[1]) ? $formattedResult[1]['Davao'] : null,
+                    'Makati' => isset($formattedResult[1]) ? $formattedResult[1]['Makati'] : null,
+                    'MOA' => isset($formattedResult[1]) ? $formattedResult[1]['MOA'] : null,
+                    'QC North EDSA' => isset($formattedResult[1]) ? $formattedResult[1]['QC North EDSA'] : null,
+                    'TotalCount' => isset($totalStepCounts['3. INITIAL INTERVIEW']) ? number_format($totalStepCounts['3. INITIAL INTERVIEW']) : null,
+                ];
+                $mappedResult['4. BEHAVIORAL INTERVIEW'] = [
+                    'MaxAppStep' => isset($formattedResult[2]) ? $formattedResult[2]['MaxAppStep'] : null,
+                    'MaxAppStepCount' => isset($formattedResult[2]) ? $formattedResult[2]['MaxAppStepCount'] : null,
+                    'Bridgetowne' => isset($formattedResult[2]) ? $formattedResult[2]['Bridgetowne'] : null,
+                    'Clark' => isset($formattedResult[2]) ? $formattedResult[2]['Clark'] : null,
+                    'Davao' => isset($formattedResult[2]) ? $formattedResult[2]['Davao'] : null,
+                    'Makati' => isset($formattedResult[2]) ? $formattedResult[2]['Makati'] : null,
+                    'MOA' => isset($formattedResult[2]) ? $formattedResult[2]['MOA'] : null,
+                    'QC North EDSA' => isset($formattedResult[2]) ? $formattedResult[2]['QC North EDSA'] : null,
+                    'TotalCount' => isset($totalStepCounts['4. BEHAVIORAL INTERVIEW']) ? number_format($totalStepCounts['4. BEHAVIORAL INTERVIEW']) : null,
+                ];
+                $mappedResult['5. OPERATIONS VALIDATION'] = [
+                    'MaxAppStep' => isset($formattedResult[3]) ? $formattedResult[3]['MaxAppStep'] : null,
+                    'MaxAppStepCount' => isset($formattedResult[3]) ? $formattedResult[3]['MaxAppStepCount'] : null,
+                    'Bridgetowne' => isset($formattedResult[3]) ? $formattedResult[3]['Bridgetowne'] : null,
+                    'Clark' => isset($formattedResult[3]) ? $formattedResult[3]['Clark'] : null,
+                    'Davao' => isset($formattedResult[3]) ? $formattedResult[3]['Davao'] : null,
+                    'Makati' => isset($formattedResult[3]) ? $formattedResult[3]['Makati'] : null,
+                    'MOA' => isset($formattedResult[3]) ? $formattedResult[3]['MOA'] : null,
+                    'QC North EDSA' => isset($formattedResult[3]) ? $formattedResult[3]['QC North EDSA'] : null,
+                    'TotalCount' => isset($totalStepCounts['5. OPERATIONS VALIDATION']) ? number_format($totalStepCounts['5. OPERATIONS VALIDATION']) : null,
+                ];
+                $mappedResult['6. LANGUAGE ASSESSMENT'] = [
+                    'MaxAppStep' => isset($formattedResult[4]) ? $formattedResult[4]['MaxAppStep'] : null,
+                    'MaxAppStepCount' => isset($formattedResult[4]) ? $formattedResult[4]['MaxAppStepCount'] : null,
+                    'Bridgetowne' => isset($formattedResult[4]) ? $formattedResult[4]['Bridgetowne'] : null,
+                    'Clark' => isset($formattedResult[4]) ? $formattedResult[4]['Clark'] : null,
+                    'Davao' => isset($formattedResult[4]) ? $formattedResult[4]['Davao'] : null,
+                    'Makati' => isset($formattedResult[4]) ? $formattedResult[4]['Makati'] : null,
+                    'MOA' => isset($formattedResult[4]) ? $formattedResult[4]['MOA'] : null,
+                    'QC North EDSA' => isset($formattedResult[4]) ? $formattedResult[4]['QC North EDSA'] : null,
+                    'TotalCount' => isset($totalStepCounts['6. LANGUAGE ASSESSMENT']) ? number_format($totalStepCounts['6. LANGUAGE ASSESSMENT']) : null,
+                ];
+
+            }
+        }
+
+        return $mappedResult;
+    }
+    public function AutomatedSrExport()
+    {
+        $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78,  80, 81, 87, 88];
+        $latestDate = SmartRecruitData::on('secondary_sqlsrv')->max('last_update_date');
+        $query = SmartRecruitData::on('secondary_sqlsrv')
+            ->select('Step', 'AppStep', 'Site', DB::raw('COUNT(*) as Count'))
+            ->groupBy('Step', 'AppStep', 'Site')
+            ->orderBy('Step')
+            ->orderBy('AppStep')
+            ->whereIn('ApplicationStepStatusId', $appstepIDs)
+            ->whereBetween('QueueDate', ['20240101', $latestDate])
+            ->orderBy('Site');
+
+
+
+        $result = $query->get();
+
+        $groupedData = [];
+        $totalStepCounts = [];
+        $totalAppStepCounts = [];
+
+        $totalSiteCounts = [];
+
+        foreach ($result as $item) {
+            $step = $item->Step;
+            $appStep = $item->AppStep;
+            $site = $item->Site;
+
+            if (!isset($groupedData[$step][$appStep])) {
+                $groupedData[$step][$appStep] = [
+                    'Bridgetowne' => 0,
+                    'Clark' => 0,
+                    'Davao' => 0,
+                    'Makati' => 0,
+                    'MOA' => 0,
+                    'QC North EDSA' => 0,
+                ];
+            }
+
+            $groupedData[$step][$appStep][$site] += $item->Count;
+            $totalStepCounts[$step] = isset($totalStepCounts[$step]) ? $totalStepCounts[$step] + $item->Count : $item->Count;
+            $totalAppStepCounts[$step][$appStep] = isset($totalAppStepCounts[$step][$appStep]) ? $totalAppStepCounts[$step][$appStep] + $item->Count : $item->Count;
+            $totalSiteCounts[$step][$site] = (isset($item->Count) && $item->Count > 0) ? (isset($totalSiteCounts[$step][$site]) ? $totalSiteCounts[$step][$site] + $item->Count : $item->Count) : 0;
+        }
+
+        foreach ($groupedData as $step => $appSteps) {
+            $formattedTotalSiteCounts = [];
+            foreach ($totalSiteCounts[$step] as $site => $count) {
+                $formattedTotalSiteCounts[$site] = number_format($count);
+            }
+
+            $formattedResult[] = array_merge(
+                ['Step' => $step, 'TotalCount' => number_format($totalStepCounts[$step])],
+                $formattedTotalSiteCounts
+            );
+
+            foreach ($appSteps as $appStep => $siteCounts) {
+                $formattedSiteCounts = [];
+                foreach ($siteCounts as $site => $count) {
+                    $formattedSiteCounts[$site] = number_format($count);
+                }
+
+                $formattedResult[] = array_merge(
+                    [ 'AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
+                    $formattedSiteCounts
+                );
+            }
+        }
+
+        return $formattedResult;
+    }
+    //capfile
     public function retrieveDataForClassesEmail()
     {
         $programs = Program::with('site')->when(true, function ($query) {
@@ -521,8 +748,6 @@ class CapEmailController extends Controller
             }
         }
 
-
-
         $mappedB2Classes[] = [
             'Site' => 'Grand Total',
             'January' => $grandTotalByWeek['1'] ?: '',
@@ -539,8 +764,6 @@ class CapEmailController extends Controller
             'December' => $grandTotalByWeek['12'] ?: '',
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
-
-
 
         return $mappedB2Classes;
     }

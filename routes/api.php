@@ -207,3 +207,4 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 });
 
 Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
+Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);

@@ -10,7 +10,7 @@ class ProgramController extends Controller
 {
     public function index()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Philippines');
             })
@@ -22,7 +22,7 @@ class ProgramController extends Controller
 
     public function index2()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Philippines');
             })
@@ -34,7 +34,7 @@ class ProgramController extends Controller
 
     public function index3()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'India');
             })
@@ -46,7 +46,7 @@ class ProgramController extends Controller
 
     public function index4()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'India');
             })
@@ -58,7 +58,7 @@ class ProgramController extends Controller
 
     public function index5()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Jamaica');
             })
@@ -70,7 +70,7 @@ class ProgramController extends Controller
 
     public function index6()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Jamaica');
             })
@@ -82,7 +82,7 @@ class ProgramController extends Controller
 
     public function index7()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Guatemala');
             })
@@ -94,7 +94,7 @@ class ProgramController extends Controller
 
     public function index8()
     {
-        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser', 'classes'])
+        $programs = Program::with(['site', 'user', 'createdByUser', 'updatedByUser'])
             ->whereHas('site', function ($query) {
                 $query->where('country', 'Guatemala');
             })

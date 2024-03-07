@@ -84,7 +84,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -99,6 +99,9 @@ export default {
           this.description = programObj.description;
           this.program_group = programObj.program_group;
           this.sites_selected = programObj.site_id;
+          this.b2 = !!programObj.b2; // Double negation to convert to boolean
+
+          
 
           console.log(programObj);
         } else {
@@ -112,7 +115,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -140,7 +143,7 @@ export default {
       };
       axios
         .put(
-          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
           formData,
           {
             headers: {

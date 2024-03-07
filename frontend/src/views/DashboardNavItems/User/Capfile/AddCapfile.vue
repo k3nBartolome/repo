@@ -122,6 +122,18 @@
             />
           </label>
         </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Notice Days
+            <input
+              type="text"
+              v-model="notice_days"
+              readonly
+              @change="syncNoticeWeeks"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
         <!--
         <div class="w-full mt-1 md:w-1/5 md:mt-0 relative border rounded-lg">
           <input
@@ -360,7 +372,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -384,7 +396,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
           headers,
         });
 
@@ -408,7 +420,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "http://10.109.2.112:8081/api/daterange",
           { headers }
         );
 
@@ -451,7 +463,7 @@ export default {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
+        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
