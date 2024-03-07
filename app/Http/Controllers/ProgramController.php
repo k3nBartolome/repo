@@ -6,6 +6,7 @@ use App\Models\Program;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+
 class ProgramController extends Controller
 {
     public function index()
@@ -204,19 +205,24 @@ class ProgramController extends Controller
     public function deactivate(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'is_active' => 'sometimes',
+            'is_active' => 'sometimes|boolean', // Ensure is_active is a boolean field
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
+        // Find the program by ID
         $program = Program::find($id);
+
         if (!$program) {
             return response()->json(['error' => 'Program not found'], 404);
         }
 
-        $program->fill($request->all());
+        // Update program status to deactivate
+        $program->is_active = false; // Assuming is_active is a boolean field
+
+        // Save the updated program
         $program->save();
 
         return response()->json(['data' => $program]);

@@ -6,18 +6,118 @@
       </h2>
     </div>
   </header>
+
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center modal"
+    v-if="ShowDeactivateModal"
+  >
+    <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+    <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+      <header
+        class="flex items-center justify-between px-4 py-2 border-b-2 border-gray-200"
+      >
+        <h2 class="text-lg font-semibold text-gray-800">
+          Do you want to deactivate this Program?
+        </h2>
+        <button
+          @click="ShowDeactivateModal = false"
+          class="text-gray-600 hover:text-gray-800"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="flex justify-between mt-4">
+        <button
+          @click="deactivateProgram(deactivateRequestId)"
+          class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Ok
+        </button>
+        <button
+          @click="ShowDeactivateModal = false"
+          class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center modal"
+    v-if="ShowActivateModal"
+  >
+    <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+    <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+      <header
+        class="flex items-center justify-between px-4 py-2 border-b-2 border-gray-200"
+      >
+        <h2 class="text-lg font-semibold text-gray-800">
+          Do you want to Activate this Program?
+        </h2>
+        <button
+          @click="ShowActivateModal = false"
+          class="text-gray-600 hover:text-gray-800"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </header>
+
+      <div class="flex justify-between mt-4">
+        <button
+          @click="activateProgram(activateRequestId)"
+          class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          Ok
+        </button>
+        <button
+          @click="ShowActivateModal = false"
+          class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="py-8">
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    ><span v-if="successMessage" class="text-green-500">{{
-      successMessage
-    }}</span>
-    <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
+    >
+      <span v-if="successMessage" class="text-green-500">{{
+        successMessage
+      }}</span>
+      <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
       <form
         @submit.prevent="addProgram"
         class="flex flex-wrap items-center justify-between gap-4 font-semibold"
       >
-
         <label class="block"
           >Name<input
             type="text"
@@ -61,13 +161,49 @@
       </form>
     </div>
   </div>
-
+  <h3>Active Program</h3>
   <div class="py-0">
     <div class="px-8">
       <div class="overflow-x-auto">
         <DataTable
           :data="programs"
           :columns="columns"
+          class="table min-w-full divide-y divide-gray-200 table-striped"
+          :options="{
+            responsive: true,
+            autoWidth: false,
+            dom: 'Bfrtip',
+            language: {
+              search: 'Search',
+              zeroRecords: 'No data available',
+              info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+              infoFiltered: '(Filtered from MAX records.)',
+              paginate: {
+                first: 'First',
+                previous: 'Prev',
+                next: 'Next',
+                last: 'Last',
+              },
+            },
+            lengthMenu: [10, 25, 50, 100],
+          }"
+        >
+          <thead class="truncate">
+            <tr>
+              <!-- ...existing code... -->
+            </tr>
+          </thead>
+        </DataTable>
+      </div>
+    </div>
+  </div>
+  <h3 class="py-4">Inactive Program</h3>
+  <div class="py-0">
+    <div class="px-8">
+      <div class="overflow-x-auto">
+        <DataTable
+          :data="programs2"
+          :columns="columns2"
           class="table min-w-full divide-y divide-gray-200 table-striped"
           :options="{
             responsive: true,
@@ -129,6 +265,11 @@ export default {
       errorMessage: "",
       sites: [],
       b2: false,
+      ShowDeactivateModal: false,
+      deactivateRequestId: null,
+      ShowActivateModal: false,
+      activateRequestId: null,
+
       successMessage: "",
       columns: [
         { data: "id", title: "ID" },
@@ -136,14 +277,12 @@ export default {
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
         {
-    data: "b2",
-    title: "B2 Status",
-    render: function(data) {
-        return Number(data) ? "B2" : "NON-B2";
-    },
-},
-
-
+          data: "b2",
+          title: "B2 Status",
+          render: function (data) {
+            return Number(data) ? "B2" : "NON-B2";
+          },
+        },
 
         { data: "created_by_user.name", title: "Created By" },
         { data: "created_at", title: "Created Date" },
@@ -168,7 +307,49 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="btn btn-danger w-36" data-id="${data}"  onclick="window.vm.deactivateProgram(${data})">Deactivate</button>
+            return `<button class="btn btn-danger w-36" data-id="${data}" onclick="window.vm.openModalForDeactivation(${data})">Deactivate</button>
+                    <button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+  `;
+          },
+        },
+      ],
+      columns2: [
+        { data: "id", title: "ID" },
+        { data: "name", title: "Name" },
+        { data: "site.name", title: "Site" },
+        { data: "description", title: "Description" },
+        {
+          data: "b2",
+          title: "B2 Status",
+          render: function (data) {
+            return Number(data) ? "B2" : "NON-B2";
+          },
+        },
+
+        { data: "created_by_user.name", title: "Created By" },
+        { data: "created_at", title: "Created Date" },
+        {
+          data: "updated_by_user.name",
+          title: "Updated By",
+          render: (data, type, row) => {
+            return row.updated_by_user ? row.updated_by_user.name : "N/A";
+          },
+        },
+        { data: "updated_at", title: "Updated Date" },
+        {
+          data: "is_active",
+          title: "Active Status",
+          render: function (data) {
+            return data === 1 ? "Inactive" : "Active";
+          },
+        },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-danger w-36" data-id="${data}" onclick="window.vm.openModalForActivation(${data})">Activate</button>
                     <button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
   `;
           },
@@ -202,6 +383,15 @@ export default {
     },
   },
   methods: {
+    openModalForDeactivation(id) {
+      this.deactivateRequestId = id;
+      this.ShowDeactivateModal = true;
+    },
+    openModalForActivation(id) {
+      this.activateRequestId = id;
+      this.ShowActivateModal = true;
+    },
+
     navigateToEdit(id) {
       this.$router.push(`/program_management/edit/${id}`);
     },
@@ -218,17 +408,17 @@ export default {
       };
 
       axios
-        .put(`/programs_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
         .then((response) => {
-          // Handle the response
           console.log(response.data);
-          this.is_active = "";
+          this.successMessage = "Program activated successfully!";
           this.getPrograms();
           this.getPrograms2();
+          this.ShowActivateModal = false;
         })
         .catch((error) => {
-          // Handle the error
           console.log(error.response.data);
+          this.errorMessage = "An error occurred while activating the program.";
         });
     },
 
@@ -246,25 +436,27 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/programs_deactivate/${id}`,
+          `http://127.0.0.1:8000/api/programs_deactivate/${id}`,
           form,
           config
         )
+
         .then((response) => {
-          // Handle the response
           console.log(response.data);
-          this.is_active = "";
+          this.successMessage = "Program deactivated successfully!";
           this.getPrograms();
           this.getPrograms2();
+          this.ShowDeactivateModal = false;
         })
         .catch((error) => {
-          // Handle the error
           console.log(error.response.data);
+          this.errorMessage =
+            "An error occurred while deactivating the program.";
         });
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -284,7 +476,7 @@ export default {
     async getPrograms2() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs2",
+          "http://127.0.0.1:8000/api/programs2",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -306,7 +498,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -333,7 +525,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData, {
+        .post("http://127.0.0.1:8000/api/programs", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -360,3 +552,23 @@ export default {
   },
 };
 </script>
+<style>
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+}
+</style>

@@ -56,18 +56,18 @@ export default createStore({
         name: null,
         permissions: [],
       });
-    
+
       // Clear axios authorization header
       axios.defaults.headers.common["Authorization"] = "";
-    
+
       // Clear local storage
       localStorage.clear();
       localStorage.removeItem(persistedStateOptions.key);
       localStorage.removeItem(state.persistedStateKey);
     }
-    
-    
-    
+
+
+
 
   },
   actions: {
@@ -76,13 +76,13 @@ export default createStore({
         if (state.token) {
           // Make a copy of the user ID
           const id = state.user_id;
-    
+
           // Clear Vuex state and local storage
           commit('logout');
-    
+
           console.log("Authentication Token:", state.token);
-          await axios.post(`http://10.109.2.112:8081/api/logout/${id}`);
-    
+          await axios.post(`http://127.0.0.1:8000/api/logout/${id}`);
+
           // Remove specific item from local storage
           localStorage.removeItem(state.persistedStateKey);
         } else {
@@ -96,7 +96,7 @@ export default createStore({
         }
       }
     }
-    
+
 
   },
   getters: {
