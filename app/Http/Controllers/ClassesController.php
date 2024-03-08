@@ -127,10 +127,10 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate));
 
                 $query->where('QueueDate', '>=', $startDate)
-                    ->where('QueueDate', '<', $endDate);
+                    ->where('QueueDate', '<=', $endDate);
             }
         }
 

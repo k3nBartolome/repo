@@ -36,7 +36,7 @@ class CapEmailController extends Controller
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
 
-        $recipients = ['kryss.bartolome@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
