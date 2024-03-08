@@ -20,20 +20,31 @@
             coverage January 1 - {{ date('F j') }} )</p>
 
 
-        @if(isset($mappedResult['2. ONLINE ASSESSMENT']))
-        <p style="margin: 10px 0;">The Sourcing Team has a total pending of <strong>{{ $mappedResult['2. ONLINE
-                ASSESSMENT']['TotalCount'] }}</strong>
-            pending online assessments, <strong>{{ $mappedResult['2. ONLINE ASSESSMENT']['MaxAppStepCount'] }}</strong>
-            of which are
-            still <strong>{{ strtolower($mappedResult['2. ONLINE ASSESSMENT']['MaxAppStep']) }}</strong>
-            .</p>
+        @if (isset($mappedResult['2. ONLINE ASSESSMENT']))
+            <p style="margin: 10px 0;">The Sourcing Team has a total pending of
+                <strong>{{ $mappedResult[
+                    '2. ONLINE
+                                                                ASSESSMENT'
+                ]['TotalCount'] }}</strong>
+                pending online assessments,
+                <strong>{{ $mappedResult['2. ONLINE ASSESSMENT']['MaxAppStepCount'] }}</strong>
+                of which are
+                still <strong>{{ strtolower($mappedResult['2. ONLINE ASSESSMENT']['MaxAppStep']) }}</strong>
+                .
+            </p>
         @else
-        <p style="margin: 10px 0;">No data available for Online Assessment.</p>
+            <p style="margin: 10px 0;">No data available for Online Assessment.</p>
         @endif
 
         @php
-        $totalPendingHS = ($mappedResult['3. INITIAL INTERVIEW']['TotalCount'] ?? 0) + ($mappedResult['4. BEHAVIORAL
-        INTERVIEW']['TotalCount'] ?? 0) + ($mappedResult['5. OPERATIONS VALIDATION']['TotalCount'] ?? 0);
+            $totalPendingHS =
+                ($mappedResult['3. INITIAL INTERVIEW']['TotalCount'] ?? 0) +
+                ($mappedResult[
+                    '4. BEHAVIORAL
+        INTERVIEW'
+                ]['TotalCount'] ??
+                    0) +
+                ($mappedResult['5. OPERATIONS VALIDATION']['TotalCount'] ?? 0);
         @endphp
 
         <p style="margin: 10px 0;">The H&S Team has a total pending movement of <strong>{{ $totalPendingHS }}</strong> -
@@ -67,30 +78,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($formattedResult as $item)
-                        @if(isset($item['Step']))
-                        <tr style="border: 1px solid #ccc; padding: 5px; font-weight: bold; background-color: #60a5fa;">
-                            @else
-                        <tr style="border: 1px solid #ccc;">
+                        @foreach ($formattedResult as $item)
+                            @if (isset($item['Step']))
+                                <tr
+                                    style="border: 1px solid #ccc; padding: 5px; font-weight: bold; background-color: #60a5fa;">
+                                @else
+                                <tr style="border: 1px solid #ccc;">
                             @endif
                             <td style="text-align: left;">
                                 {{ $item['Step'] ?? $item['AppStep'] }}
                             </td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{
-                                $item['Bridgetowne'] ?? '' }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{ $item['Clark'] ??
-                                '' }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{ $item['Davao'] ??
-                                '' }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{ $item['Makati'] ??
-                                '' }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{ $item['MOA'] ?? ''
-                                }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">{{ $item['QC North
-                                EDSA'] ?? '' }}</td>
-                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center; font-weight: bold;">{{
-                                $item['TotalCount'] ?? '' }}</td>
-                        </tr>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item['Bridgetowne'] ?? '' }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item['Clark'] ?? '' }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item['Davao'] ?? '' }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item['Makati'] ?? '' }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item['MOA'] ?? '' }}</td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
+                                {{ $item[
+                                    'QC North
+                                                                                                                                EDSA'
+                                ] ?? '' }}
+                            </td>
+                            <td style="border: 1px solid #ccc; padding: 5px; text-align: center; font-weight: bold;">
+                                {{ $item['TotalCount'] ?? '' }}</td>
+                            </tr>
                         @endforeach
                     </tbody>
                 </table>

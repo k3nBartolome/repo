@@ -298,7 +298,7 @@ export default {
           data: "is_active",
           title: "Active Status",
           render: function (data) {
-            return data === 1 ? "Inactive" : "Active";
+            return Number(data) ? "Active" : "Inactive";
           },
         },
         {
@@ -340,7 +340,7 @@ export default {
           data: "is_active",
           title: "Active Status",
           render: function (data) {
-            return data === 1 ? "Inactive" : "Active";
+            return Number(data) ? "Active" : "Inactive";
           },
         },
         {
