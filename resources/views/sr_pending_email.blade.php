@@ -15,11 +15,8 @@
 <body style="background-color: #f3f4f6; font-family: Arial, sans-serif; color: #333;">
     
     <div>
-        <strong>
-            <p style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">Test email only. Please update data.</p>
-        </strong>
         <p style="margin: 10px 0;">Hi Team,</p>
-        <p style="margin: 10px 0;">Please find below our SR Pending Movement Report as of {{ date('F j, Y') }}</p>
+        <p style="margin: 10px 0;">Please find below our SR Pending Movement Report as of {{ date('F j, Y') }}(Date coverage January 01 - {{ date('F j') }} )</p>
 
         
         @if(isset($mappedResult['2. ONLINE ASSESSMENT']))
@@ -42,7 +39,7 @@
     </div>
 
 
-  
+    <div style="margin: 10px 0">
     <div style="padding: 1rem 2rem 2rem 0;">
         <div style="background-color: white; box-shadow: 0 4px 6px 0 hsla(0, 0%, 0%, 0.07), 0 2px 4px 0 hsla(0, 0%, 0%, 0.06); border-radius: 0.5rem; overflow-x: auto; overflow-y: auto;">
             <table style="min-width: 100%; border-collapse: collapse; border: 2px solid #d1d5db;">
@@ -81,6 +78,7 @@
             </table>
         </div>
     </div>
+</div>
     
     
 

@@ -36,7 +36,7 @@ class CapEmailController extends Controller
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
 
-        $recipients = ['kryss.bartolome@vxi.com', 'padillakryss@gmail.com','arielito.pascua@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
@@ -157,9 +157,12 @@ class CapEmailController extends Controller
             ->orderBy('Step')
             ->orderBy('AppStep')
             ->whereIn('ApplicationStepStatusId', $appstepIDs)
-            ->whereBetween('QueueDate', ['20240101', $latestDate])
-
+            ->where(function($query) use ($latestDate) {
+                $query->where('QueueDate', '>=', '20240101')
+                      ->where('QueueDate', '<=', $latestDate);
+            })
             ->orderBy('Site');
+        
 
         $result = $query->get();
         $groupedData = [];
