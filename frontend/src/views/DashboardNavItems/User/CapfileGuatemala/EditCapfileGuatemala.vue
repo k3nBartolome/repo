@@ -505,7 +505,7 @@ export default {
     async getClassesAll() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesallgua"
+          "http://127.0.0.1:8000/api/classesallgua"
         );
         const allClasses = response.data.classes;
         const currentId = this.$route.params.id;
@@ -520,7 +520,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites7")
+        .get("http://127.0.0.1:8000/api/sites7")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -531,7 +531,7 @@ export default {
     },
     async deleteClasses() {
       await axios
-        .delete("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .delete("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.data;
           console.log(response.data.data);
@@ -546,7 +546,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs7")
+        .get("http://127.0.0.1:8000/api/programs7")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -558,7 +558,7 @@ export default {
     async getDateRange() {
       console.log(this.agreed_start_date);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -580,7 +580,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -612,7 +612,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -655,7 +655,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/edit/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/edit/" + this.$route.params.id,
           formData
         )
         .then((response) => {

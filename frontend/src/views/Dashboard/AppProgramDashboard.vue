@@ -107,40 +107,78 @@
   </div>
 
   <div class="py-8">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
+    <div class="container mx-auto mt-4 p-4 pt-0 pb-2">
+    <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
+     
       <span v-if="successMessage" class="text-green-500">{{
         successMessage
       }}</span>
       <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
       <form
         @submit.prevent="addProgram"
-        class="flex flex-wrap items-center justify-between gap-4 font-semibold"
+       
       >
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
         <label class="block"
           >Name<input
             type="text"
             v-model="name"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required /></label
-        ><label class="block"
+        >
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <label class="block"
           >Description<input
             type="text"
             v-model="description"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required /></label
-        ><label class="block"
+        >
+      </div>
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <label class="block"
           >Program Group<input
             type="text"
             v-model="program_group"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
-        ><label class="block"
-          >B2<input
-            type="checkbox"
-            v-model="b2"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
-        ><label class="block"
+        >
+      </div>
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
+        <label class="block"
+        >Program Type<select
+          v-model="program_type"
+          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          required
+        >
+          <option disabled value="" selected>Please select one</option>
+
+        </select></label
+      >  </div>
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
+      <label class="block"
+        >ID Creation<select
+          v-model="id_creation"
+          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          required
+        >
+          <option disabled value="" selected>Please select one</option>
+
+        </select></label
+      >  </div>
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
+      <label class="block"
+        >Pre Emps<select
+          v-model="pre_emps"
+          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          required
+        >
+          <option disabled value="" selected>Please select one</option>
+
+        </select></label
+      >  </div>
+      <div class="w-full md:w-1/3 mt-4 md:mt-0">
+      <label class="block"
           >Site<select
             v-model="sites_selected"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
@@ -152,7 +190,8 @@
               {{ site.name }}
             </option>
           </select></label
-        ><button
+        >
+        </div><button
           type="submit"
           class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
@@ -160,6 +199,7 @@
         </button>
       </form>
     </div>
+  </div>
   </div>
   <h3>Active Program</h3>
   <div class="py-0">
@@ -264,7 +304,9 @@ export default {
       sites_selected: "",
       errorMessage: "",
       sites: [],
-      b2: false,
+      program_type: "",
+      pre_emps: "",
+      id_creation: "",
       ShowDeactivateModal: false,
       deactivateRequestId: null,
       ShowActivateModal: false,
@@ -277,11 +319,8 @@ export default {
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
         {
-          data: "b2",
-          title: "B2 Status",
-          render: function (data) {
-            return Number(data) ? "B2" : "NON-B2";
-          },
+          data: "program_type",
+          title: "Program Type",
         },
 
         { data: "created_by_user.name", title: "Created By" },
@@ -319,7 +358,7 @@ export default {
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
         {
-          data: "b2",
+          data: "program_type",
           title: "B2 Status",
           render: function (data) {
             return Number(data) ? "B2" : "NON-B2";
@@ -408,7 +447,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/programs_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.successMessage = "Program activated successfully!";
@@ -436,7 +475,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/programs_deactivate/${id}`,
+          `http://127.0.0.1:8000/api/programs_deactivate/${id}`,
           form,
           config
         )
@@ -456,7 +495,7 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -476,7 +515,7 @@ export default {
     async getPrograms2() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs2",
+          "http://127.0.0.1:8000/api/programs2",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -498,7 +537,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -521,11 +560,13 @@ export default {
         program_group: this.program_group,
         site_id: this.sites_selected,
         is_active: 1,
-        b2: this.b2,
+        program_type: this.program_type,
+        pre_emps: this.pre_emps,
+        id_creation: this.id_creation,
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData, {
+        .post("http://127.0.0.1:8000/api/programs", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -537,7 +578,9 @@ export default {
           this.description = "";
           this.program_group = "";
           this.sites_selected = "";
-          this.b2 = "";
+          this.program_type = "";
+          this.id_creation="";
+          this.pre_emps="";
           this.getPrograms();
         })
         .catch((error) => {

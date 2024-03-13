@@ -91,7 +91,6 @@ class Classes extends Model
     }
 
     // @ts-ignore
-
     public function classes()
  {
         return $this->hasMany( ClassStaffing::class, 'classes_id' );
