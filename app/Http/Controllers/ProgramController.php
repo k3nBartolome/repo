@@ -123,9 +123,11 @@ class ProgramController extends Controller
             ],
             'description' => 'required',
             'program_group' => 'sometimes',
-            'b2' => 'sometimes|boolean',
+            'program_type' => 'sometimes',
             'site_id' => 'required|exists:sites,id',
             'is_active' => 'required|boolean',
+            'id_creation' => 'sometimes',
+            'pre_emps' => 'sometimes',
         ]);
 
         if ($validator->fails()) {
@@ -143,8 +145,10 @@ class ProgramController extends Controller
             'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
             'description' => 'sometimes',
             'program_group' => 'sometimes',
-            'b2' => 'sometimes|boolean',
-            'site_id' => 'sometimes',
+            'program_type' => 'sometimes',
+            'id_creation' => 'sometimes',
+            'pre_emps' => 'sometimes',
+
         ]);
 
         if ($validator->fails()) {

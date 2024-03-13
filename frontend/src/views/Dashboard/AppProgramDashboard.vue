@@ -106,100 +106,108 @@
     </div>
   </div>
 
-  <div class="py-8">
-    <div class="container mx-auto mt-4 p-4 pt-0 pb-2">
-    <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
-     
-      <span v-if="successMessage" class="text-green-500">{{
-        successMessage
-      }}</span>
-      <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
-      <form
-        @submit.prevent="addProgram"
-       
-      >
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-        <label class="block"
-          >Name<input
-            type="text"
-            v-model="name"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required /></label
-        >
+  <div class="px-12 py-8 font-serifs">
+    <span v-if="successMessage" class="text-green-500">{{
+      successMessage
+    }}</span>
+    <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
+    <form @submit.prevent="addProgram">
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <label class="block font-semibold"
+            >Name<input
+              type="text"
+              v-model="name"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+          /></label>
         </div>
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
-        <label class="block"
-          >Description<input
-            type="text"
-            v-model="description"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required /></label
-        >
-      </div>
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-        <label class="block"
-          >Program Group<input
-            type="text"
-            v-model="program_group"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100" /></label
-        >
-      </div>
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-        <label class="block"
-        >Program Type<select
-          v-model="program_type"
-          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          required
-        >
-          <option disabled value="" selected>Please select one</option>
-
-        </select></label
-      >  </div>
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-      <label class="block"
-        >ID Creation<select
-          v-model="id_creation"
-          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          required
-        >
-          <option disabled value="" selected>Please select one</option>
-
-        </select></label
-      >  </div>
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-      <label class="block"
-        >Pre Emps<select
-          v-model="pre_emps"
-          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-          required
-        >
-          <option disabled value="" selected>Please select one</option>
-
-        </select></label
-      >  </div>
-      <div class="w-full md:w-1/3 mt-4 md:mt-0">
-      <label class="block"
-          >Site<select
-            v-model="sites_selected"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-            @change="getSites"
+          <label class="block font-semibold"
+            >Description<input
+              type="text"
+              v-model="description"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+          /></label>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Program Group<input
+              type="text"
+              v-model="program_group"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+          /></label>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Program Type<select
+              v-model="program_type"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="BAU" selected>BAU</option>
+              <option value="B2" selected>B2</option>
+              <option value="Comcast" selected>Comcast</option>
+              <option value="DULY" selected>DULY</option>
+              <option value="TEMU" selected>TEMU</option>
+            </select></label
           >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.id" :value="site.id">
-              {{ site.name }}
-            </option>
-          </select></label
-        >
-        </div><button
-          type="submit"
-          class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-        >
-          <i class="fa fa-building"></i> Add
-        </button>
-      </form>
-    </div>
-  </div>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >ID Creation<select
+              v-model="id_creation"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Yes" selected>Yes</option>
+              <option value="No" selected>No</option>
+            </select></label
+          >
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Pre Emps<select
+              v-model="pre_emps"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Yes" selected>Yes</option>
+              <option value="No" selected>No</option>
+            </select></label
+          >
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Site<select
+              v-model="sites_selected"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+              @change="getSites"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+            </select></label
+          >
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <label class="block font-semibold">
+            <button
+              type="submit"
+              class="w-full px-4 py-2 mt-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-building"></i> Add
+            </button>
+          </label>
+        </div>
+      </div>
+    </form>
   </div>
   <h3>Active Program</h3>
   <div class="py-0">
@@ -579,8 +587,8 @@ export default {
           this.program_group = "";
           this.sites_selected = "";
           this.program_type = "";
-          this.id_creation="";
-          this.pre_emps="";
+          this.id_creation = "";
+          this.pre_emps = "";
           this.getPrograms();
         })
         .catch((error) => {
