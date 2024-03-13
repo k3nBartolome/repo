@@ -330,7 +330,14 @@ export default {
           data: "program_type",
           title: "Program Type",
         },
-
+        {
+          data: "id_creation",
+          title: "ID Creation?",
+        },
+        {
+          data: "pre_emps",
+          title: "Pre Emps?",
+        },
         { data: "created_by_user.name", title: "Created By" },
         { data: "created_at", title: "Created Date" },
         {
@@ -367,10 +374,15 @@ export default {
         { data: "description", title: "Description" },
         {
           data: "program_type",
-          title: "B2 Status",
-          render: function (data) {
-            return Number(data) ? "B2" : "NON-B2";
-          },
+          title: "Program Type",
+        },
+        {
+          data: "id_creation",
+          title: "ID Creation?",
+        },
+        {
+          data: "pre_emps",
+          title: "Pre Emps?",
         },
 
         { data: "created_by_user.name", title: "Created By" },
