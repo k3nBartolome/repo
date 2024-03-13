@@ -18,9 +18,7 @@ class AddProgramsColumns extends Migration
             $table->string('id_creation')->nullable();
             $table->string('pre_emps')->nullable();
 
-
-            DB::statement('ALTER TABLE programs MODIFY b2 VARCHAR(255)');
-
+            DB::statement('ALTER TABLE programs ALTER COLUMN b2 VARCHAR(255)');
 
             $table->renameColumn('b2', 'program_type');
         });
@@ -38,8 +36,8 @@ class AddProgramsColumns extends Migration
             $table->dropColumn('id_creation');
             $table->dropColumn('pre_emps');
 
+            DB::statement('ALTER TABLE programs ALTER COLUMN program_type bit');
 
-            $table->boolean('program_type')->change();
             $table->renameColumn('program_type', 'b2');
         });
     }
