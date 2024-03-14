@@ -205,7 +205,7 @@ class ClassesController extends Controller
             }
 
             $formattedResult[] = array_merge(
-                [ 'Step' => $step, 'TotalCount' => number_format($totalStepCounts[$step])],
+                ['Step' => $step, 'TotalCount' => number_format($totalStepCounts[$step])],
                 $formattedTotalSiteCounts
             );
 
@@ -216,7 +216,7 @@ class ClassesController extends Controller
                 }
 
                 $formattedResult[] = array_merge(
-                    [ 'AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
+                    ['AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
                     $formattedSiteCounts
                 );
             }
@@ -2896,7 +2896,7 @@ class ClassesController extends Controller
             'ta' => 'nullable',
             'cl' => 'nullable',
         ]);
-        $requested_by = [$request->requested_by];
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
@@ -2904,10 +2904,12 @@ class ClassesController extends Controller
         $class = Classes::find($id);
         $class->status = 'Moved';
         $class->save();
+
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
-        $newClass->requested_by = json_encode($requested_by);
+        $newClass->requested_by = $request->requested_by; // Directly assign the value without further processing
+
         $newClass->fill($request->all());
         $newClass->save();
 
@@ -3167,7 +3169,6 @@ class ClassesController extends Controller
 
         return view('sr_pending_email.view', compact('formattedResult'));
     }
-
 }
 /*  $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
 

@@ -434,61 +434,35 @@
         <div class="w-full mt-1 md:w-3/5 md:mt-0">
           <div class="py-6 flex space-x-4">
             <label class="block font-bold">Requested By:</label>
-            <label class="block">
+            <label
+              class="block"
+              v-for="requester in [
+                'Talent Acquisition',
+                'Workforce',
+                'Training',
+                'Client',
+                'Operation',
+              ]"
+              :key="requester"
+            >
               <input
                 type="checkbox"
                 v-model="cancelled_by"
-                :checked="databaseValue.includes('Talent Acquisition')"
-                value="Talent Acquisition"
+                :value="requester"
+                v-bind:checked="cancelled_by.includes(requester)"
               />
-              Talent Acquisition
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="cancelled_by"
-                :checked="databaseValue.includes('Workforce')"
-                value="Workforce"
-              />
-              Workforce
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="cancelled_by"
-                :checked="databaseValue.includes('Training')"
-                value="Training"
-              />
-              Training
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="cancelled_by"
-                :checked="databaseValue.includes('Client')"
-                value="Client"
-              />
-              Client
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="cancelled_by"
-                :checked="databaseValue.includes('Operation')"
-                value="Operation"
-              />
-              Operation
+              {{ requester }}
             </label>
           </div>
         </div>
       </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label
-            class="block"
-            v-if="cancelled_by.includes('Talent Acquisition')"
-          >
-            Talent Acquisition
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Talent Acquisition')"
+        >
+          <label class="block"
+            >Talent Acquisition
             <input
               type="text"
               v-model="ta"
@@ -496,8 +470,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="cancelled_by.includes('Workforce')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Workforce')"
+        >
+          <label class="block"
             >Workforce
             <input
               type="text"
@@ -506,8 +483,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="cancelled_by.includes('Training')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Training')"
+        >
+          <label class="block"
             >Training
             <input
               type="text"
@@ -516,8 +496,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="cancelled_by.includes('Client')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Client')"
+        >
+          <label class="block"
             >Client
             <input
               type="text"
@@ -526,8 +509,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="cancelled_by.includes('Operation')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Operation')"
+        >
+          <label class="block"
             >Operation
             <input
               type="text"
@@ -634,7 +620,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -658,7 +644,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -677,7 +663,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -700,7 +686,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -715,38 +701,61 @@ export default {
       }
     },
     async getClasses() {
-      const token = this.$store.state.token;
-
       try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classes/" + this.$route.params.id,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          { headers }
         );
 
-        const data = response.data;
-        const classObj = data.class;
-        this.sites_selected = classObj.site.id;
-        this.programs_selected = classObj.program.id;
-        this.type_of_hiring = classObj.type_of_hiring;
-        this.external_target = classObj.external_target;
-        this.internal_target = classObj.internal_target;
-        this.total_target = classObj.total_target;
-        this.original_start_date = classObj.original_start_date;
-        this.cancelled_date = classObj.cancelled_date;
-        this.notice_days = classObj.notice_days;
-        this.notice_weeks = classObj.notice_weeks;
-        this.date_selected = classObj.date_range.id;
-        this.category = classObj.category;
-        this.within_sla = classObj.within_sla;
-        this.agreed_start_date = classObj.agreed_start_date;
-        this.changes = classObj.changes;
-        this.approved_by = classObj.approved_by;
+        if (response.status === 200) {
+          const data = response.data;
+          const classObj = data.class;
+          const nestedCancelledByArray = JSON.parse(classObj.requested_by);
 
-        console.log(classObj);
+          // Ensure cancelledByArray is always an array
+          let cancelledByArray = Array.isArray(nestedCancelledByArray)
+            ? nestedCancelledByArray.flat()
+            : [nestedCancelledByArray];
+
+          console.log("Parsed requested_by array:", cancelledByArray);
+
+          // Assign the concatenated string to requested_by property
+          this.sites_selected = classObj.site.id;
+          this.programs_selected = classObj.program.id;
+          this.type_of_hiring = classObj.type_of_hiring;
+          this.external_target = classObj.external_target;
+          this.internal_target = classObj.internal_target;
+          this.total_target = classObj.total_target;
+          this.original_start_date = classObj.original_start_date;
+          this.notice_days = classObj.notice_days;
+          this.notice_weeks = classObj.notice_weeks;
+          this.date_selected = classObj.date_range.id;
+          this.with_erf = classObj.with_erf;
+          this.category = classObj.category;
+          this.within_sla = classObj.within_sla;
+          this.agreed_start_date = classObj.agreed_start_date;
+          this.erf_number = classObj.erf_number;
+          this.approved_by = classObj.approved_by;
+          this.wfm_date_requested = classObj.wfm_date_requested;
+          this.remarks = classObj.remarks;
+          this.ta = classObj.ta;
+          this.wf = classObj.wf;
+          this.tr = classObj.tr;
+          this.cl = classObj.cl;
+          this.op = classObj.op;
+          this.cancelled_by = cancelledByArray;
+
+          this.wave_no = classObj.wave_no;
+
+          console.log(classObj);
+        } else {
+          console.log("Error fetching classes");
+        }
       } catch (error) {
         console.log(error);
       }
@@ -776,7 +785,7 @@ export default {
 
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {
@@ -792,7 +801,7 @@ export default {
           this.approved_status = "";
           this.approved_by = "";
           this.remarks = "";
-          this.cancelled_by = [];
+          this.cancelled_by = "";
           this.cancelled_date = "";
           this.pipeline_utilized = "";
           this.pipeline_offered = "";

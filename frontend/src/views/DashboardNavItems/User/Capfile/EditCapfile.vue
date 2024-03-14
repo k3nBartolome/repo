@@ -424,61 +424,35 @@
         <div class="w-full mt-1 md:w-4/5 md:mt-0">
           <div class="py-6 flex space-x-4">
             <label class="block font-bold">Requested By:</label>
-            <label class="block">
+            <label
+              class="block"
+              v-for="requester in [
+                'Talent Acquisition',
+                'Workforce',
+                'Training',
+                'Client',
+                'Operation',
+              ]"
+              :key="requester"
+            >
               <input
                 type="checkbox"
                 v-model="requested_by"
-                :checked="databaseValue.includes('Talent Acquisition')"
-                value="Talent Acquisition"
+                :value="requester"
+                v-bind:checked="requested_by.includes(requester)"
               />
-              Talent Acquisition
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="requested_by"
-                :checked="databaseValue.includes('Workforce')"
-                value="Workforce"
-              />
-              Workforce
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="requested_by"
-                :checked="databaseValue.includes('Training')"
-                value="Training"
-              />
-              Training
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="requested_by"
-                :checked="databaseValue.includes('Client')"
-                value="Client"
-              />
-              Client
-            </label>
-            <label class="block">
-              <input
-                type="checkbox"
-                v-model="requested_by"
-                :checked="databaseValue.includes('Operation')"
-                value="Operation"
-              />
-              Operation
+              {{ requester }}
             </label>
           </div>
         </div>
       </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label
-            class="block"
-            v-if="requested_by.includes('Talent Acquisition')"
-          >
-            Talent Acquisition
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="requested_by.includes('Talent Acquisition')"
+        >
+          <label class="block"
+            >Talent Acquisition
             <input
               type="text"
               v-model="ta"
@@ -486,8 +460,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="requested_by.includes('Workforce')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="requested_by.includes('Workforce')"
+        >
+          <label class="block"
             >Workforce
             <input
               type="text"
@@ -496,8 +473,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="requested_by.includes('Training')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="requested_by.includes('Training')"
+        >
+          <label class="block"
             >Training
             <input
               type="text"
@@ -506,8 +486,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="requested_by.includes('Client')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="requested_by.includes('Client')"
+        >
+          <label class="block"
             >Client
             <input
               type="text"
@@ -516,8 +499,11 @@
             />
           </label>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="requested_by.includes('Operation')"
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="requested_by.includes('Operation')"
+        >
+          <label class="block"
             >Operation
             <input
               type="text"
@@ -527,6 +513,7 @@
           </label>
         </div>
       </div>
+
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-1 md:w-5/5 md:mt-0">
           <label class="block"
@@ -583,10 +570,9 @@ export default {
       cl: "",
       op: "",
       disableForm: true,
-      requested_by: [],
+      requested_by: "",
       classes: [],
       classes1: [],
-      databaseValue: "",
       showModal: false,
     };
   },
@@ -652,7 +638,6 @@ export default {
     this.getDateRange();
     this.getClasses();
     this.getTransaction();
-    this.databaseValue = this.databaseValue.split(", ");
   },
   watch: {
     agreed_start_date: {
@@ -660,6 +645,7 @@ export default {
       immediate: true,
     },
   },
+
   methods: {
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
@@ -675,7 +661,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -698,7 +684,7 @@ export default {
       };
 
       await axios
-        .delete(`http://10.109.2.112:8081/api/classes/${this.$route.params.id}`, {
+        .delete(`http://127.0.0.1:8000/api/classes/${this.$route.params.id}`, {
           headers,
         })
         .then((response) => {
@@ -720,7 +706,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -743,7 +729,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterangeall",
+          "http://127.0.0.1:8000/api/daterangeall",
           { headers }
         );
 
@@ -768,7 +754,6 @@ export default {
         console.log(error);
       }
     },
-
     async getClasses() {
       try {
         const token = this.$store.state.token;
@@ -777,13 +762,23 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
         if (response.status === 200) {
           const data = response.data;
           const classObj = data.class;
+          const nestedRequestedByArray = JSON.parse(classObj.requested_by);
+
+          // Ensure requestedByArray is always an array
+          let requestedByArray = Array.isArray(nestedRequestedByArray)
+            ? nestedRequestedByArray.flat()
+            : [nestedRequestedByArray];
+
+          console.log("Parsed requested_by array:", requestedByArray);
+
+          // Assign the concatenated string to requested_by property
           this.sites_selected = classObj.site.id;
           this.programs_selected = classObj.program.id;
           this.type_of_hiring = classObj.type_of_hiring;
@@ -802,6 +797,13 @@ export default {
           this.approved_by = classObj.approved_by;
           this.wfm_date_requested = classObj.wfm_date_requested;
           this.remarks = classObj.remarks;
+          this.ta = classObj.ta;
+          this.wf = classObj.wf;
+          this.tr = classObj.tr;
+          this.cl = classObj.cl;
+          this.op = classObj.op;
+          this.requested_by = requestedByArray;
+
           this.wave_no = classObj.wave_no;
 
           console.log(classObj);
@@ -821,7 +823,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/transaction/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/transaction/${this.$route.params.id}`,
           { headers }
         );
 
@@ -875,7 +877,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/classes/edit/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/edit/${this.$route.params.id}`,
           formData,
           { headers }
         )
