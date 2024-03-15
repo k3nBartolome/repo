@@ -36,7 +36,7 @@ class CapEmailController extends Controller
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
 
-        $recipients = ['kryss.bartolome@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
@@ -157,12 +157,12 @@ class CapEmailController extends Controller
             ->orderBy('Step')
             ->orderBy('AppStep')
             ->whereIn('ApplicationStepStatusId', $appstepIDs)
-            ->where(function($query) use ($latestDate) {
+            ->where(function ($query) use ($latestDate) {
                 $query->where('QueueDate', '>=', '20240101')
-                      ->where('QueueDate', '<=', $latestDate);
+                    ->where('QueueDate', '<=', $latestDate);
             })
             ->orderBy('Site');
-        
+
 
         $result = $query->get();
         $groupedData = [];
@@ -276,7 +276,6 @@ class CapEmailController extends Controller
                     'QC North EDSA' => isset($formattedResult[4]) ? $formattedResult[4]['QC North EDSA'] : null,
                     'TotalCount' => isset($totalStepCounts['6. LANGUAGE ASSESSMENT']) ? number_format($totalStepCounts['6. LANGUAGE ASSESSMENT']) : null,
                 ];
-
             }
         }
 
@@ -661,7 +660,7 @@ class CapEmailController extends Controller
                         $subquery->where('month_num', $month)->where('year', $year);
                     })
                     ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1)->where('b2', 1);
+                        $subquery->where('is_active', 1)->where('program_type', 'B2');
                     })
                     ->where('site_id', $program->id)
                     ->where('status', 'Active')

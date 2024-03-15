@@ -3024,7 +3024,7 @@ class ClassesController extends Controller
 
             // Iterate over each month
             foreach ($dateRanges as $month) {
-                // Fetch classes with b2 program and without b2 program for the current site and month
+                // Fetch classes with program_type program and without program_type program for the current site and month
                 $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
                     ->whereHas('dateRange', function ($query) use ($month) {
                         $query->where('month_num', $month);
@@ -3038,12 +3038,12 @@ class ClassesController extends Controller
 
                 $classesWithB2Program = clone $classes;
                 $classesWithB2Program->whereHas('program', function ($query) {
-                    $query->where('is_active', 1)->where('b2', 1);
+                    $query->where('is_active', 1)->where('program_type', 'B2');
                 });
 
                 $classesWithoutB2Program = clone $classes;
                 $classesWithoutB2Program->whereDoesntHave('program', function ($query) {
-                    $query->where('is_active', 1)->where('b2', 1);
+                    $query->where('is_active', 1)->where('program_type', 'B2');
                 });
 
                 // Calculate total targets

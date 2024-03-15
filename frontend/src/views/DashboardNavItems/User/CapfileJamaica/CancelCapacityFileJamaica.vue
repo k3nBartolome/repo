@@ -1,21 +1,187 @@
 <template>
-  <header class="w-full bg-white shadow">
-    <div class="items-center w-full py-2">
+  <header class="w-full bg-white">
+    <div class="items-center w-full">
       <h2 class="text-xl font-bold text-center">CANCEL CLASS</h2>
     </div>
   </header>
-  <div class="px-12 py-8">
-    <form @submit.prevent="cancelClass">
+  <header class="w-full">
+    <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
+      <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
+        <button
+          @click="showModal = true"
+          class="px-4 py-2 mr-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+        >
+          View History
+        </button>
+      </h2>
+    </div>
+  </header>
+  <div class="py-0 px-4">
+    <div class="px-4 py-0 bg-white">
       <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
+        class="fixed inset-0 z-50 flex items-center justify-center modal mx-4"
+        v-if="showModal"
       >
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div
+          class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4"
+        >
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Class History</h2>
+          </header>
+          <button
+            @click="showModal = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <div class="modal-scrollable-content">
+            <table class="min-w-full border-collapse border-2 border-gray-300">
+              <thead>
+                <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    ID
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Site
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Line of Business
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Type of Hiring
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Total Target
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Original Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Movement Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Weeks Range
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Within SLA?
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Agreed Start Date
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Requested by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Approved by
+                  </th>
+                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    Transaction Type
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  v-for="classes in classes"
+                  :key="classes.id"
+                  class="border-2 border-black"
+                >
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.pushedback_id }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.site.name }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.program.name }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.type_of_hiring }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.total_target }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.original_start_date }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.wfm_date_requested }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.date_range.date_range }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.within_sla }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.agreed_start_date }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.requested_by }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.approved_by }}
+                  </td>
+                  <td
+                    class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
+                  >
+                    {{ classes.changes }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="px-12 py-8 font-serifs">
+    <form @submit.prevent="cancelClass">
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Site
             <select
               v-model="sites_selected"
               disabled
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getSites"
             >
@@ -25,12 +191,14 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Line of Business
             <select
               disabled
               v-model="programs_selected"
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getPrograms"
             >
@@ -44,12 +212,14 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Type of Hiring
             <select
               disabled
               v-model="type_of_hiring"
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -57,6 +227,8 @@
               <option value="attrition and growth">Attrition and Growth</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             External Target
             <input
@@ -64,73 +236,54 @@
               type="number"
               v-model="external_target"
               name="external_target"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               @change="syncTotalTarget"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Internal Target
             <input
               disabled
               type="number"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               v-model="internal_target"
               @change="syncTotalTarget"
             />
           </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Total Target
             <input
               type="number"
               v-model="total_target"
               disabled
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Original Start Date
             <input
               disabled
               type="date"
               v-model="original_start_date"
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
-
-          <label class="block"
-            >Cancelled Date
-            <input
-              type="date"
-              v-model="cancelled_date"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeDays"
-            />
-          </label>
-          <label class="block">
-            Notice Days
-            <input
-              type="number"
-              v-model="notice_days"
-              disabled
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              @change="syncNoticeWeeks"
-            />
-          </label>
-          <label class="block">
-            Notice Weeks
-            <input
-              type="text"
-              v-model="notice_weeks"
-              disabled
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-            />
-          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Weeks Start
             <select
               disabled
               v-model="date_selected"
-              class="block w-full mt-1 bg-gray-300 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
               @change="getDateRange"
             >
@@ -144,57 +297,104 @@
               </option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Notice Days
+            <input
+              type="number"
+              v-model="notice_days"
+              disabled
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              @change="syncNoticeWeeks"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block">
+            Notice Weeks
+            <input
+              type="text"
+              v-model="notice_weeks"
+              disabled
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Cancelled Date
+            <input
+              type="date"
+              v-model="cancelled_date"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              @change="syncNoticeDays"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Category
             <select
               required
               v-model="category"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
               <option value="confirmed">Confirmed</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Within SLA?
             <select
               required
               v-model="within_sla"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
-              <option value="Within Sla">Within Sla</option>
-              <option value="Outside Sla-Change in Demand">
-                Outside Sla-Change in Demand
+              <option value="Within SLA">Within SLA</option>
+              <option value="Outside SLA-Cancellation">
+                Outside SLA-Cancellation
               </option>
-              <option value="Outside Sla-Change in Start Date">
-                Outside Sla-Change in Start Date
+              <option value="Outside SLA-Change in Demand">
+                Outside SLA-Change in Demand
               </option>
-              <option value="Outside Sla-Change in Profile">
-                Outside Sla-Change in Profile
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
               </option>
-              <option value="Outside Sla-Change in Process/Assessments">
-                Outside Sla-Change in Process/Assessments
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
               </option>
               <option value="OV Support">OV Support</option>
             </select>
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Agreed Start Date
             <input
               type="date"
               v-model="agreed_start_date"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncNoticeDays"
             />
           </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Approved by
             <select
               required
               v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
@@ -209,154 +409,141 @@
             </select>
           </label>
         </div>
-        <div class="py-6">
-          <label class="block py-6"
-            >Requested by:
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Pipeline Offered
             <input
-              type="checkbox"
-              v-model="cancelled_by"
-              value="Talent Acquisition"
-            />Talent Acquisition
-            <input
-              type="checkbox"
-              v-model="cancelled_by"
-              value="Workforce"
-            />Workforce
-            <input
-              type="checkbox"
-              v-model="cancelled_by"
-              value="Training"
-            />Training
-            <input
-              type="checkbox"
-              v-model="cancelled_by"
-              value="Client"
-            />Client
-            <input
-              type="checkbox"
-              v-model="cancelled_by"
-              value="Operation"
-            />Operation
-
-            <label
-              class="block py-6"
-              v-if="cancelled_by.includes('Talent Acquisition')"
-              >Talent Acquisition
-              <input
-                type="text"
-                v-model="ta"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
-
-            <label class="block py-6" v-if="cancelled_by.includes('Workforce')"
-              >Workforce
-              <input
-                type="text"
-                v-model="wf"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
-
-            <label class="block py-6" v-if="cancelled_by.includes('Training')"
-              >Training
-              <input
-                type="text"
-                v-model="tr"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
-
-            <label class="block py-6" v-if="cancelled_by.includes('Client')"
-              >Client
-              <input
-                type="text"
-                v-model="cl"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
-
-            <label class="block py-6" v-if="cancelled_by.includes('Operation')"
-              >Operation
-              <input
-                type="text"
-                v-model="op"
-                class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
-              />
-            </label>
+              type="number"
+              v-model="pipeline_offered"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
           </label>
-
-          <label class="block py-6"
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Pipeline Utilized
+            <input
+              type="number"
+              v-model="pipeline_utilized"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-3/5 md:mt-0">
+          <div class="py-6 flex space-x-4">
+            <label class="block font-bold">Requested By:</label>
+            <label
+              class="block"
+              v-for="requester in [
+                'Talent Acquisition',
+                'Workforce',
+                'Training',
+                'Client',
+                'Operation',
+              ]"
+              :key="requester"
+            >
+              <input
+                type="checkbox"
+                v-model="cancelled_by"
+                :value="requester"
+                v-bind:checked="cancelled_by.includes(requester)"
+              />
+              {{ requester }}
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Talent Acquisition')"
+        >
+          <label class="block"
+            >Talent Acquisition
+            <input
+              type="text"
+              v-model="ta"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Workforce')"
+        >
+          <label class="block"
+            >Workforce
+            <input
+              type="text"
+              v-model="wf"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Training')"
+        >
+          <label class="block"
+            >Training
+            <input
+              type="text"
+              v-model="tr"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Client')"
+        >
+          <label class="block"
+            >Client
+            <input
+              type="text"
+              v-model="cl"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div
+          class="w-full mt-1 md:w-1/5 md:mt-0"
+          v-if="cancelled_by.includes('Operation')"
+        >
+          <label class="block"
+            >Operation
+            <input
+              type="text"
+              v-model="op"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-5/5 md:mt-0">
+          <label class="block"
             >Reason for Cancellation<textarea
               required
               type="text"
               v-model="remarks"
-              class="block w-full h-20 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full h-15 bg-white border rounded-lg"
             />
           </label>
         </div>
-        <div class="flex justify-center py-4">
-          <button
-            type="submit"
-            class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-          >
-            <i class="fa fa-save"></i> Cancel
-          </button>
-        </div>
-        <div class="flex justify-between">
-          <router-link to="/capfile">
-            <button
-              class="px-4 py-1 ml-auto text-white bg-blue-500 rounded hover:bg-gray-600"
-            >
-              <i class="fa fa-chevron-circle-left"></i> Back
-            </button></router-link
-          >
-        </div>
+      </div>
+      <div class="flex justify-center py-4">
+        <button
+          type="submit"
+          class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+        >
+          <i class="fa fa-save"></i> Cancel
+        </button>
       </div>
     </form>
-  </div>
-  <div class="px-12 py-6">
-    <h2 class="font-bold">History</h2>
-    <table class="w-full border table-auto">
-      <thead class="font-bold text-left border border-black">
-        <tr>
-          <th class="px-4 py-2">ID</th>
-          <th class="px-4 py-2">Site</th>
-          <th class="px-4 py-2">Line of Business</th>
-          <th class="px-4 py-2">Type of Hiring</th>
-          <th class="px-4 py-2">Total Target</th>
-          <th class="px-4 py-2">Original Start Date</th>
-          <th class="px-4 py-2">Movement Date</th>
-          <th class="px-4 py-2">Weeks Range</th>
-          <th class="px-4 py-2">Within SLA?</th>
-          <th class="px-4 py-2">Agreed Start Date</th>
-          <th class="px-4 py-2">Requested by</th>
-          <th class="px-4 py-2">Approved by</th>
-          <th class="px-4 py-2">Transaction Type</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-700">
-        <tr
-          v-for="classes in classes"
-          :key="classes.id"
-          class="border-b border-gray-200 hover:bg-gray-100"
-        >
-          <td class="px-4 py-3">{{ classes.pushedback_id }}</td>
-          <td class="px-4 py-3">{{ classes.site.name }}</td>
-          <td class="px-4 py-3">{{ classes.program.name }}</td>
-          <td class="px-4 py-3">{{ classes.type_of_hiring }}</td>
-          <td class="px-4 py-3">{{ classes.total_target }}</td>
-          <td class="px-4 py-3">{{ classes.original_start_date }}</td>
-          <td class="px-4 py-3">{{ classes.wfm_date_requested }}</td>
-          <td class="px-4 py-3">{{ classes.date_range.date_range }}</td>
-          <td class="px-4 py-3">{{ classes.within_sla }}</td>
-          <td class="px-4 py-3">{{ classes.agreed_start_date }}</td>
-          <td class="px-4 py-3">{{ classes.requested_by }}</td>
-          <td class="px-4 py-3">{{ classes.approved_by }}</td>
-          <td class="px-4 py-3">{{ classes.changes }}</td>
-        </tr>
-      </tbody>
-    </table>
   </div>
 </template>
 <script>
@@ -372,9 +559,11 @@ export default {
       internal_target: "",
       total_target: 0,
       original_start_date: "",
-      agreed_start_date: "",
       cancelled_date: "",
+      agreed_start_date: "",
       remarks: "",
+      pipeline_offered: 0,
+      pipeline_utilized: 0,
       reason: [],
       category: "",
       notice_days: 0,
@@ -390,6 +579,8 @@ export default {
       tr: "",
       cl: "",
       op: "",
+      showModal: false,
+      databaseValue: "",
     };
   },
   computed: {
@@ -427,58 +618,113 @@ export default {
       this.notice_weeks = this.notice_weeks_computed;
     },
     async getSites() {
-      console.log(this.sites_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/sites5")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
           this.sites = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getPrograms() {
       console.log(this.programs_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/programs5")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+          headers,
+        });
+
+        if (response.status === 200) {
           this.programs = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     async getTransaction() {
-      await axios
-        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
-        .then((response) => {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        this.classes = response.data.classes;
+        console.log(response.data.classes);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getDateRange() {
       console.log(this.date_selected);
-      await axios
-        .get("http://127.0.0.1:8000/api/daterange")
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/daterange",
+          { headers }
+        );
+
+        if (response.status === 200) {
           this.daterange = response.data.data;
           console.log(response.data.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching date range");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async getClasses() {
-      await axios
-        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          { headers }
+        );
+
+        if (response.status === 200) {
           const data = response.data;
           const classObj = data.class;
+          const nestedCancelledByArray = JSON.parse(classObj.requested_by);
+
+          // Ensure cancelledByArray is always an array
+          let cancelledByArray = Array.isArray(nestedCancelledByArray)
+            ? nestedCancelledByArray.flat()
+            : [nestedCancelledByArray];
+
+          console.log("Parsed requested_by array:", cancelledByArray);
+
+          // Assign the concatenated string to requested_by property
           this.sites_selected = classObj.site.id;
           this.programs_selected = classObj.program.id;
           this.type_of_hiring = classObj.type_of_hiring;
@@ -486,22 +732,35 @@ export default {
           this.internal_target = classObj.internal_target;
           this.total_target = classObj.total_target;
           this.original_start_date = classObj.original_start_date;
-          this.cancelled_date = classObj.cancelled_date;
           this.notice_days = classObj.notice_days;
           this.notice_weeks = classObj.notice_weeks;
           this.date_selected = classObj.date_range.id;
+          this.with_erf = classObj.with_erf;
           this.category = classObj.category;
           this.within_sla = classObj.within_sla;
           this.agreed_start_date = classObj.agreed_start_date;
-          this.changes = classObj.changes;
+          this.erf_number = classObj.erf_number;
           this.approved_by = classObj.approved_by;
+          this.wfm_date_requested = classObj.wfm_date_requested;
+          this.remarks = classObj.remarks;
+          this.ta = classObj.ta;
+          this.wf = classObj.wf;
+          this.tr = classObj.tr;
+          this.cl = classObj.cl;
+          this.op = classObj.op;
+          this.cancelled_by = cancelledByArray;
+
+          this.wave_no = classObj.wave_no;
 
           console.log(classObj);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        } else {
+          console.log("Error fetching classes");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     cancelClass() {
       const formData = {
         site_id: this.sites_selected,
@@ -513,16 +772,26 @@ export default {
         remarks: this.remarks,
         approved_status: "pending",
         status: "cancelled",
+        pipeline_utilized: this.pipeline_utilized,
+        pipeline_offered: this.pipeline_offered,
         ta: this.ta,
         wf: this.wf,
         tr: this.tr,
         cl: this.cl,
         op: this.op,
       };
+
+      const token = this.$store.state.token;
+
       axios
         .put(
           "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         )
         .then((response) => {
           console.log(response.data);
@@ -532,14 +801,16 @@ export default {
           this.approved_status = "";
           this.approved_by = "";
           this.remarks = "";
-          this.cancelled_by = [];
+          this.cancelled_by = "";
           this.cancelled_date = "";
+          this.pipeline_utilized = "";
+          this.pipeline_offered = "";
           this.ta = "";
           this.wf = "";
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("/capfilejamaica", () => {
+          this.$router.push("/capfile", () => {
             location.reload();
           });
         })
