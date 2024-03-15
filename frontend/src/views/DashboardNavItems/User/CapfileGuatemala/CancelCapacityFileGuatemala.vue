@@ -178,7 +178,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Site
-            <select
+            <select 
               v-model="sites_selected"
               disabled
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
@@ -620,7 +620,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -644,7 +644,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs7", {
           headers,
         });
 
@@ -810,7 +810,7 @@ export default {
           this.tr = "";
           this.cl = "";
           this.op = "";
-          this.$router.push("/capfile", () => {
+          this.$router.push("/capfileguatemala", () => {
             location.reload();
           });
         })

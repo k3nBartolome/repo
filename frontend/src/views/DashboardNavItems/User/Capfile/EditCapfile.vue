@@ -178,7 +178,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Site
-            <select
+            <select disabled
               v-model="sites_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
@@ -194,7 +194,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Line of Business
-            <select
+            <select disabled
               v-model="programs_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
@@ -214,7 +214,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Type of Hiring
-            <select
+            <select disabled
               v-model="type_of_hiring"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
@@ -315,7 +315,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block">
             Weeks Start
-            <select
+            <select disabled
               v-model="date_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required

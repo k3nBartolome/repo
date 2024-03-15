@@ -6,63 +6,108 @@
       </h2>
     </div>
   </header>
-  <div class="py-8">
-    <div
-      class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
-    >
-      <form
-        @submit.prevent="editProgram"
-        class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-      >
-        <label class="block">
-          Name
-          <input
-            type="text"
-            v-model="name"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Description
-          <input
-            type="text"
-            v-model="description"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Program Group
-          <input
-            type="text"
-            v-model="program_group"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-          />
-        </label>
-        <label class="block">
-          Site
-          <select
-            v-model="sites_selected"
-            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
-            @change="getSites"
+  <div class="px-12 py-8 font-serifs">
+    <span v-if="successMessage" class="text-green-500">{{
+      successMessage
+    }}</span>
+    <span v-if="errorMessage" class="text-red-500">{{ errorMessage }}</span>
+    <form @submit.prevent="editProgram">
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <label class="block font-semibold"
+            >Name<input
+              type="text"
+              v-model="name"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+          /></label>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Description<input
+              type="text"
+              v-model="description"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+          /></label>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Program Group<input
+              type="text"
+              v-model="program_group"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+          /></label>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Program Type<select
+              v-model="program_type"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="BAU" selected>BAU</option>
+              <option value="B2" selected>B2</option>
+              <option value="COMCAST" selected>COMCAST</option>
+              <option value="DULY" selected>DULY</option>
+              <option value="TEMU" selected>TEMU</option>
+            </select></label
           >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.id" :value="site.id">
-              {{ site.name }}
-            </option>
-          </select>
-        </label>
-        <button
-          type="submit"
-          class="px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
-        >
-          <i class="fa fa-building"></i> Edit
-        </button>
-      </form>
-    </div>
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >ID Creation<select
+              v-model="id_creation"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Yes" selected>Yes</option>
+              <option value="No" selected>No</option>
+            </select></label
+          >
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Pre Emps<select
+              v-model="pre_emps"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Yes" selected>Yes</option>
+              <option value="No" selected>No</option>
+            </select></label
+          >
+        </div>
+        <div class="w-full md:w-1/3 mt-4 md:mt-0">
+          <label class="block font-semibold"
+            >Site<select
+              v-model="sites_selected"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+              required
+              @change="getSites"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option v-for="site in sites" :key="site.id" :value="site.id">
+                {{ site.name }}
+              </option>
+            </select></label
+          >
+        </div>
+        <div class="w-full mt-4 md:w-1/3 md:mt-0">
+          <label class="block font-semibold">
+            <button
+              type="submit"
+              class="w-full px-4 py-2 mt-4 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
+            >
+              <i class="fa fa-building"></i> Save
+            </button>
+          </label>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 <script>
@@ -76,6 +121,9 @@ export default {
       description: "",
       program_group: "",
       sites_selected: "",
+      program_type: "",
+      pre_emps: "",
+      id_creation: "",
       sites: [],
     };
   },
@@ -87,26 +135,40 @@ export default {
   },
   methods: {
     async getPrograms() {
-      await axios
-        .get("http://127.0.0.1:8000/api/programs/" + this.$route.params.id)
-        .then((response) => {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
           this.programs = response.data.data;
           const programObj = this.programs;
           this.name = programObj.name;
           this.description = programObj.description;
           this.program_group = programObj.program_group;
           this.sites_selected = programObj.site_id;
-
-          console.log(programObj);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+          this.program_type = programObj.program_type;
+          (this.pre_emps = programObj.pre_emps),
+            (this.id_creation = programObj.id_creation),
+            console.log(programObj);
+        } else {
+          console.log("Error fetching programs");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
+
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -123,22 +185,37 @@ export default {
       }
     },
     editProgram() {
+      const token = this.$store.state.token;
       const formData = {
         name: this.name,
         description: this.description,
         program_group: this.program_group,
+        program_type: this.program_type,
+        pre_emps: this.pre_emps,
+        id_creation: this.id_creation,
         site_id: this.sites_selected,
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("/programs/" + this.$route.params.id, formData)
+        .put(
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        )
         .then((response) => {
           console.log(response.data);
           this.name = "";
           this.description = "";
           this.program_group = "";
+          this.program_type = "";
+          this.id_creation = "";
+          this.pre_emps = "";
           this.sites_selected = "";
-          this.$router.push("/program_managementguatamela", () => {
+          this.$router.push("/program_managementguatemala", () => {
             location.reload();
           });
         })

@@ -2,12 +2,10 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
 import ContactUs from "@/views/ContactUs";
-import AppPerxLayout from "@/components/AppPerxLayout";
 import AppUserLayout from "@/components/AppUserLayout";
 import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
-import AppPerxDashboard from "@/views/Dashboard/AppPerxDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
 import userProfile from "@/views/DashboardNavItems/Admin/UserProfile.vue";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
@@ -55,6 +53,26 @@ import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/Staffin
 import perxAuditTools from "@/views/DashboardNavItems/User/PerxAuditTools.vue";
 import SrFilterTool from "@/views/DashboardNavItems/User/SrFilterTool.vue";
 import SrManager from "@/views/DashboardNavItems/User/SrManager.vue";
+import pushbackCapacityFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/PushedBackCapacityFileJamaica.vue";
+import cancelCapacityFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/CancelCapacityFileJamaica.vue";
+import editCapFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/EditCapfileJamaica.vue";
+import pushbackCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/PushedBackCapacityFileGuatemala.vue";
+import cancelCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/CancelCapacityFileGuatemala.vue";
+import editCapFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/EditCapfileGuatemala.vue";
+import capacityFileJamaica from "@/views/DashboardNavItems/User/CapacityFileJamaica.vue";
+import capacityFileGuatemala from "@/views/DashboardNavItems/User/CapacityFileGuatemala.vue";
+import addCapacityFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/AddCapfileJamaica.vue";
+import addCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/AddCapfileGuatemala.vue";
+import SiteManagementJamaica from "@/views//Dashboard/AppSiteDashboardJamaica.vue";
+import SiteManagementGuatemala from "@/views//Dashboard/AppSiteDashboardGuatemala.vue";
+import AppUserLayoutJamaica from "@/components/AppUserLayoutJamaica";
+import AppUserLayoutGuatemala from "@/components/AppUserLayoutGuatemala";
+import programManagementEditJamaica from "@/views/DashboardNavItems/Admin/EditProgramJamaica";
+import siteManagementEditJamaica from "@/views/DashboardNavItems/Admin/EditSiteJamaica";
+import programManagementEditGuatemala from "@/views/DashboardNavItems/Admin/EditProgramGuatemala";
+import siteManagementEditGuatemala from "@/views/DashboardNavItems/Admin/EditSiteGuatemala";
+import ProgramManagementJamaica from "@/views/Dashboard/AppProgramDashboardJamaica.vue";
+import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGuatemala.vue";
 
 const routes = [
   {
@@ -76,7 +94,7 @@ const routes = [
         name: "perxAuditTools",
         component: perxAuditTools,
       },
-      
+
       {
         path: "/user_management",
         name: "usermanagement",
@@ -322,10 +340,118 @@ const routes = [
   },
   {
     path: "/",
+    component: AppUserLayoutGuatemala,
+    meta: {
+      requiresAuth: true,
+      requiresRoles: ["user", "remx", "sourcing", "budget"],
+    },
+    children: [{
+        path: "/capfileguatemala",
+        name: "capacityFileGuatemala",
+        component: capacityFileGuatemala,
+      },
+      {
+        path: "/pushbackcapfileguatemala/:id",
+        name: "pushbackCapacityFileGuatemala",
+        component: pushbackCapacityFileGuatemala,
+      },
+      {
+        path: "/cancelcapfileguatemala/:id",
+        name: "cancelCapacityFileGuatemala",
+        component: cancelCapacityFileGuatemala,
+      },
+      {
+        path: "/editcapfileguatemala/:id",
+        name: "editCapFileGuatemala",
+        component: editCapFileGuatemala,
+      },
+      {
+        path: "/addcapfileguatemala/:id",
+        name: "addCapacityFileGuatemala",
+        component: addCapacityFileGuatemala,
+      },
+      {
+        path: "/site_managementguatemala",
+        name: "sitemanagementGuatemala",
+        component: SiteManagementGuatemala,
+      },
+      {
+        path: "/site_managementguatemala/edit/:id",
+        name: "sitemanagementeditGuatemala",
+        component: siteManagementEditGuatemala,
+      },
+      {
+        path: "/program_managementguatemala",
+        name: "programmanagementGuatemala",
+        component: ProgramManagementGuatemala,
+      },
+      {
+        path: "/program_managementguatemala/edit/:id",
+        name: "programmanagementeditGuatemala",
+        component: programManagementEditGuatemala,
+      },
+    ],
+  },
+  {
+    path: "/",
+    component: AppUserLayoutJamaica,
+    meta: {
+      requiresAuth: true,
+      requiresRoles: ["user", "remx", "sourcing", "budget"],
+    },
+    children: [{
+        path: "/capfilejamaica",
+        name: "capacityFileJamaica",
+        component: capacityFileJamaica,
+      },
+      {
+        path: "/pushbackcapfilejamaica/:id",
+        name: "pushbackCapacityFileJamaica",
+        component: pushbackCapacityFileJamaica,
+      },
+      {
+        path: "/cancelcapfilejamaica/:id",
+        name: "cancelCapacityFileJamaica",
+        component: cancelCapacityFileJamaica,
+      },
+      {
+        path: "/editcapfilejamaica/:id",
+        name: "editCapFileJamaica",
+        component: editCapFileJamaica,
+      },
+      {
+        path: "/addcapfilejamaica/:id",
+        name: "addCapacityFileJamaica",
+        component: addCapacityFileJamaica,
+      },
+      {
+        path: "/site_managementjamaica",
+        name: "sitemanagementJamaica",
+        component: SiteManagementJamaica,
+      },
+      {
+        path: "/site_managementjamaica/edit/:id",
+        name: "sitemanagementeditJamaica",
+        component: siteManagementEditJamaica,
+      },
+      {
+        path: "/program_managementjamaica",
+        name: "programmanagementJamaica",
+        component: ProgramManagementJamaica,
+      },
+      {
+        path: "/program_managementjamaica/edit/:id",
+        name: "programmanagementeditJamaica",
+        component: programManagementEditJamaica,
+      },
+    ],
+  },
+  {
+    path: "/",
     component: AppAdminLayout,
     meta: {
       requiresAuth: true,
-      requiresRole: "admin",
+      requiresRoles: ["admin"],
     },
     children: [
       {
@@ -336,21 +462,7 @@ const routes = [
 
     ],
   },
-  {
-    path: "/",
-    component: AppPerxLayout,
-    meta: {
-      requiresAuth: true,
-      requiresRole: "perx",
-    },
-    children: [
-      {
-        path: "/perx_manager",
-        name: "Perx",
-        component: AppPerxDashboard,
-      },
-    ],
-  },
+
   {
     path: "/auth",
     name: "Auth",

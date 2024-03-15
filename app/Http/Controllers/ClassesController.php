@@ -2850,17 +2850,84 @@ class ClassesController extends Controller
         return response()->json($response);
     }
 
-    public function classesallGua()
+    public function classesallGua(Request $request)
     {
         $classes = Classes::whereHas('site', function ($query) {
             $query->where('country', '=', 'Guatemala');
         })
+            ->whereHas('dateRange', function ($query) {
+                $query->where('year', '=', '2024');
+            })
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
             ->where('status', 'Active')
+            ->when($request->has('sites_selected') && $request->sites_selected !== null, function ($query) use ($request) {
+                $query->where('site_id', $request->sites_selected);
+            })
+            ->when($request->has('programs_selected') && $request->programs_selected !== null, function ($query) use ($request) {
+                $query->where('program_id', $request->programs_selected);
+            })
+            ->when($request->has('month_selected') && $request->month_selected !== null, function ($query) use ($request) {
+                $query->whereHas('dateRange', function ($query) use ($request) {
+                    $query->where('month_num', $request->month_selected);
+                });
+            })
+            ->when($request->has('week_selected') && $request->week_selected !== null, function ($query) use ($request) {
+                $query->whereHas('dateRange', function ($query) use ($request) {
+                    $query->where('date_Range_id', $request->week_selected);
+                });
+            })
             ->get();
 
+        $formattedClasses = $classes->map(function ($class) {
+            return [
+                'id' => $class->id,
+                'country' => $class->site->country,
+                'region' => $class->site->region,
+                'site_name' => $class->site->name,
+                'site_id' => $class->site->id,
+                'program_name' => $class->program->name,
+                'program_id' => $class->program->id,
+                'date_range' => $class->dateRange->date_range,
+                'date_range_id' => $class->dateRange->id,
+                'month' => $class->dateRange->month,
+                'external_target' => $class->external_target,
+                'internal_target' => $class->internal_target,
+                'total_target' => $class->total_target,
+                'within_sla' => $class->within_sla,
+                'condition' => $class->condition,
+                'original_start_date' => $class->original_start_date,
+                'changes' => $class->changes,
+                'agreed_start_date' => $class->agreed_start_date,
+                'wfm_date_requested' => $class->wfm_date_requested,
+                'notice_weeks' => number_format($class->notice_weeks, 2),
+                'notice_days' => $class->notice_days,
+                'pipeline_utilized' => $class->pipeline_utilized,
+                'remarks' => $class->remarks,
+                'status' => $class->status,
+                'category' => $class->category,
+                'type_of_hiring' => $class->type_of_hiring,
+                'with_erf' => $class->with_erf,
+                'erf_number' => $class->erf_number,
+                'wave_no' => $class->wave_no,
+                'ta' => $class->ta,
+                'wf' => $class->wf,
+                'tr' => $class->tr,
+                'cl' => $class->cl,
+                'op' => $class->op,
+                'approved_by' => $class->approved_by,
+                'cancelled_by' => $class->cancelledByUser ? $class->cancelledByUser->name : null,
+                'requested_by' => $class->requested_by,
+                'created_by' => $class->createdByUser->name,
+                'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
+                'approved_date' => $class->approved_date,
+                'cancelled_date' => $class->cancelled_date,
+                'created_at' => $class->created_at->format('m-d-Y H:i'),
+                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+            ];
+        });
+
         return response()->json([
-            'classes' => $classes,
+            'classes' => $formattedClasses,
         ]);
     }
 

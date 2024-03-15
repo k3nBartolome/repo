@@ -38,7 +38,6 @@
             v-model="siteDirector"
             type="text"
             class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-            required
           />
         </label>
         <label class="block">
@@ -79,7 +78,11 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("http://127.0.0.1:8000/api/sites/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/sites/" + this.$route.params.id, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
         .then((response) => {
           this.sites = response.data.data;
           const siteObj = this.sites;
@@ -94,6 +97,7 @@ export default {
           console.log(error);
         });
     },
+
     editSite() {
       const formData = {
         name: this.name,
@@ -105,7 +109,12 @@ export default {
       axios
         .put(
           "http://127.0.0.1:8000/api/sites/" + this.$route.params.id,
-          formData
+          formData,
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          }
         )
         .then((response) => {
           console.log(response.data);
@@ -114,7 +123,7 @@ export default {
           this.siteDirector = "";
           this.region = "";
           this.updated_by = "";
-          this.$router.push("/site_managementguatamela", () => {
+          this.$router.push("/site_managementguatemala", () => {
             location.reload();
           });
         })
