@@ -319,7 +319,6 @@ export default {
       deactivateRequestId: null,
       ShowActivateModal: false,
       activateRequestId: null,
-
       successMessage: "",
       columns: [
         { data: "id", title: "ID" },
@@ -503,8 +502,8 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.successMessage = "Program deactivated successfully!";
-          this.getPrograms7();
-          this.getPrograms8();
+          this.getPrograms();
+          this.getPrograms2();
           this.ShowDeactivateModal = false;
         })
         .catch((error) => {
@@ -515,11 +514,14 @@ export default {
     },
     async getPrograms() {
       try {
-        const response = await axios.get("http://127.0.0.1:8000/api/programs7", {
-          headers: {
-            Authorization: `Bearer ${this.$store.state.token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/programs7",
+          {
+            headers: {
+              Authorization: `Bearer ${this.$store.state.token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -585,6 +587,7 @@ export default {
         id_creation: this.id_creation,
         created_by: this.$store.state.user_id,
       };
+
       axios
         .post("http://127.0.0.1:8000/api/programs", formData, {
           headers: {
@@ -594,23 +597,32 @@ export default {
         .then((response) => {
           console.log(response.data);
           this.successMessage = "Program Added Successfully!";
-          this.name = "";
-          this.description = "";
-          this.program_group = "";
-          this.sites_selected = "";
-          this.program_type = "";
-          this.id_creation = "";
-          this.pre_emps = "";
-          this.getPrograms7();
+          // Reset form fields after successful addition
+          this.resetForm();
+          this.getPrograms();
         })
         .catch((error) => {
           console.log(error.response.data);
+          // Handle different types of errors
           if (error.response.status === 400) {
+            // Handle validation errors
             this.errorMessage = error.response.data.error.name[0];
           } else {
+            // Handle other errors
             this.errorMessage = "An error occurred while adding the program.";
           }
         });
+    },
+
+    resetForm() {
+      // Reset form fields
+      this.name = "";
+      this.description = "";
+      this.program_group = "";
+      this.sites_selected = "";
+      this.program_type = "";
+      this.id_creation = "";
+      this.pre_emps = "";
     },
   },
 };

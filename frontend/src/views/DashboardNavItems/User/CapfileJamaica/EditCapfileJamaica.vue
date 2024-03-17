@@ -179,6 +179,7 @@
           <label class="block">
             Site
             <select
+              disabled
               v-model="sites_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
@@ -195,6 +196,7 @@
           <label class="block">
             Line of Business
             <select
+              disabled
               v-model="programs_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
@@ -215,6 +217,7 @@
           <label class="block">
             Type of Hiring
             <select
+              disabled
               v-model="type_of_hiring"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
@@ -316,6 +319,7 @@
           <label class="block">
             Weeks Start
             <select
+              disabled
               v-model="date_selected"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               required
@@ -661,7 +665,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -706,9 +710,12 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers,
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/programs5",
+          {
+            headers,
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -911,7 +918,7 @@ export default {
           this.cl = "";
           this.op = "";
           this.wave_no = "";
-          this.$router.push("/capfile", () => {
+          this.$router.push("/capfilejamaica", () => {
             location.reload();
           });
         })

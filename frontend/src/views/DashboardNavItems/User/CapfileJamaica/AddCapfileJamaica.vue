@@ -372,7 +372,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -396,9 +396,12 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers,
-        });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/programs5",
+          {
+            headers,
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -486,7 +489,7 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
-          this.$router.push("/capfile", () => {
+          this.$router.push("/capfilejamaica", () => {
             location.reload();
           });
         })

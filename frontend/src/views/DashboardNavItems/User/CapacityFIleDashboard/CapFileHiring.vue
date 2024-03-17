@@ -1535,8 +1535,8 @@ export default {
         );
 
         if (response.status === 200) {
-          this.b2classes = response.data;
-          console.log(response.data);
+          this.b2classes = response.data.data;
+          console.log(response.data.data);
         } else {
           console.log("Error fetching data");
         }

@@ -50,7 +50,7 @@ class CapEmailController extends Controller
 
     public function retrieveDataForEmail()
     {
-        $programs = Site::where('is_active', 1)->get();
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
 
         $year = 2024;
         $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
@@ -355,9 +355,12 @@ class CapEmailController extends Controller
     {
         $programs = Program::with('site')->when(true, function ($query) {
             $query->whereHas('site', function ($subquery) {
-                $subquery->where('is_active', 1);
+                $subquery->where('is_active', 1)->whereHas('country', function ($subsubquery) {
+                    $subsubquery->where('name', 'Philippines');
+                });
             });
         })
+
             ->where('is_active', 1) // You ckeep or remove this line based on your requirements
             ->get();
 
@@ -636,7 +639,7 @@ class CapEmailController extends Controller
 
     public function retrieveB2DataForEmail()
     {
-        $programs = Site::where('is_active', 1)->get();
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
         $year = 2024;
         $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
         $groupedClasses = [];

@@ -61,6 +61,8 @@ filteropen
 Filtrados
 Firstname
 focustrap
+fontawesome
+Fonticons
 frtlip
 gtotal
 hoverable
