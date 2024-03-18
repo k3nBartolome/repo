@@ -246,6 +246,9 @@ export default {
             return row.requested_by ? row.requested_by.name : "N/A";
           },
         },
+        { data: "date_requested", title: "Requested Date" },
+        { data: "date_received", title: "Received Date"
+       },
         {
           data: "approved_by.name",
           title: "approved By",
@@ -253,6 +256,7 @@ export default {
             return row.approved_by ? row.approved_by.name : "N/A";
           },
         },
+        { data: "date_approved", title: "Approved Date" },
         {
           data: "denied_by.name",
           title: "Denied By",
@@ -260,6 +264,7 @@ export default {
             return row.denied_by ? row.denied_by.name : "N/A";
           },
         },
+        { data: "date_denied", title: "Denied Date" },
         { data: "denial_reason", title: "Denial Reason" },
       ],
     };
