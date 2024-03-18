@@ -156,6 +156,7 @@ export default {
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
         { data: "items.item_name", title: "Item Name" },
+        { data: "items.budget_code", title: "Budget Code" },
         { data: "awarded_quantity", title: "Released Quantity" },
         { data: "awardee_hrid", title: "Awardee ID" },
         { data: "awardee_name", title: "Awardee Name" },
@@ -163,7 +164,7 @@ export default {
         {
           data: "date_released",
           title: "Date Released",
-          render: (data) => (data ? data.slice(0, -3) : ""),
+          
         },
         { data: "remarks", title: "Remarks" },
         {
