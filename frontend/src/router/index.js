@@ -60,7 +60,17 @@ import pushbackCapacityFileGuatemala from "@/views/DashboardNavItems/User/Capfil
 import cancelCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/CancelCapacityFileGuatemala.vue";
 import editCapFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/EditCapfileGuatemala.vue";
 import capacityFileJamaica from "@/views/DashboardNavItems/User/CapacityFileJamaica.vue";
+import capacityFileReportJamaica from "@/views/DashboardNavItems/User/CapacityFileReportJamaica.vue";
+import CapFileHiringJamaica from "@/views/DashboardNavItems/User/CapacityFileDashboardJamaica/CapFileHiring.vue";
+import CapFileClassHistoryJamaica from "@/views/DashboardNavItems/User/CapacityFileDashboardJamaica/CapFileClassHistory";
+import CapFilePushedbackJamaica from "@/views/DashboardNavItems/User/CapacityFileDashboardJamaica/CapFilePushedback";
+import CapFileCancelledJamaica from "@/views/DashboardNavItems/User/CapacityFileDashboardJamaica/CapFileCancelled";
 import capacityFileGuatemala from "@/views/DashboardNavItems/User/CapacityFileGuatemala.vue";
+import capacityFileReportGuatemala from "@/views/DashboardNavItems/User/CapacityFileReportGuatemala.vue";
+import CapFileHiringGuatemala from "@/views/DashboardNavItems/User/CapacityFileDashboardGuatemala/CapFileHiring.vue";
+import CapFileClassHistoryGuatemala from "@/views/DashboardNavItems/User/CapacityFileDashboardGuatemala/CapFileClassHistory";
+import CapFilePushedbackGuatemala from "@/views/DashboardNavItems/User/CapacityFileDashboardGuatemala/CapFilePushedback";
+import CapFileCancelledGuatemala from "@/views/DashboardNavItems/User/CapacityFileDashboardGuatemala/CapFileCancelled";
 import addCapacityFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/AddCapfileJamaica.vue";
 import addCapacityFileGuatemala from "@/views/DashboardNavItems/User/CapfileGuatemala/AddCapfileGuatemala.vue";
 import SiteManagementJamaica from "@/views//Dashboard/AppSiteDashboardJamaica.vue";
@@ -346,10 +356,37 @@ const routes = [
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
     children: [{
-        path: "/capfileguatemala",
-        name: "capacityFileGuatemala",
-        component: capacityFileGuatemala,
-      },
+      path: "/capfile/guatemala",
+      name: "capacityFileReportGuatemala",
+      component: capacityFileReportGuatemala,
+      children: [
+        {
+          path: "history",
+          name: "CapFileClassHistoryGuatemala",
+          component: CapFileClassHistoryGuatemala,
+        },
+        {
+          path: "summary",
+          name: "CapFileHiringGuatemala",
+          component: CapFileHiringGuatemala,
+        },
+        {
+          path: "cancelled",
+          name: "CapFileCancelledGuatemala",
+          component: CapFileCancelledGuatemala,
+        },
+        {
+          path: "moved",
+          name: "CapFilePushedbackGuatemala",
+          component: CapFilePushedbackGuatemala,
+        },
+        {
+          path: "/capfileguatemala",
+          name: "capacityFileGuatemala",
+          component: capacityFileGuatemala,
+        },
+      ],
+    },
       {
         path: "/pushbackcapfileguatemala/:id",
         name: "pushbackCapacityFileGuatemala",
@@ -399,11 +436,38 @@ const routes = [
       requiresAuth: true,
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
-    children: [{
-        path: "/capfilejamaica",
-        name: "capacityFileJamaica",
-        component: capacityFileJamaica,
-      },
+    children: [ {
+      path: "/capfile/jamaica",
+      name: "capacityFileReportJamaica",
+      component: capacityFileReportJamaica,
+      children: [
+        {
+          path: "history",
+          name: "CapFileClassHistoryJamaica",
+          component: CapFileClassHistoryJamaica,
+        },
+        {
+          path: "summary",
+          name: "CapFileHiringJamaica",
+          component: CapFileHiringJamaica,
+        },
+        {
+          path: "cancelled",
+          name: "CapFileCancelledJamaica",
+          component: CapFileCancelledJamaica,
+        },
+        {
+          path: "moved",
+          name: "CapFilePushedbackJamaica",
+          component: CapFilePushedbackJamaica,
+        },
+        {
+          path: "/capfilejamaica",
+          name: "capacityFileJamaica",
+          component: capacityFileJamaica,
+        },
+      ],
+    },
       {
         path: "/pushbackcapfilejamaica/:id",
         name: "pushbackCapacityFileJamaica",

@@ -21,6 +21,7 @@ classestransaction
 countstatus
 cstat
 daterange
+daterangeall
 dbal
 Dispatchable
 Doesnt
@@ -51,6 +52,8 @@ mpssite
 mpsweek
 Nums
 nunomaduro
+percentageguatemala
+percentagejamaica
 perx
 PERX
 perxfilter

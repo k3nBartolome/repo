@@ -69,10 +69,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::post('sites2', [SiteController::class, 'store2']);
     Route::post('sites3', [SiteController::class, 'store3']);
     Route::post('sites4', [SiteController::class, 'store4']);
-    Route::post('sites5', [SiteController::class, 'store5']);
-    Route::post('sites6', [SiteController::class, 'store6']);
-    Route::post('sites7', [SiteController::class, 'store7']);
-    Route::post('sites8', [SiteController::class, 'store8']);
     Route::put('sites/{id}', [SiteController::class, 'update']);
     Route::put('sites_activate/{id}', [SiteController::class, 'activate']);
     Route::put('sites_deactivate/{id}', [SiteController::class, 'deactivate']);
@@ -135,6 +131,16 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
+    Route::get('classesdashboardJamaica', [ClassesController::class, 'dashboardClassesJamaica']);
+    Route::get('siteclassesJamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
+    Route::get('classesdashboardJamaica2', [ClassesController::class, 'dashboardClassesJamaica2']);
+    Route::get('classesdashboardJamaica3', [ClassesController::class, 'dashboardClassesJamaica3']);
+    Route::get('classesdashboardJamaica4', [ClassesController::class, 'dashboardClassesJamaica4']);
+    Route::get('classesdashboardGuatemala', [ClassesController::class, 'dashboardClassesGuatemala']);
+    Route::get('siteclassesGuatemala', [ClassesController::class, 'dashboardSiteClassesGuatemala']);
+    Route::get('classesdashboardGuatemala2', [ClassesController::class, 'dashboardClassesGuatemala2']);
+    Route::get('classesdashboardGuatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
+    Route::get('classesdashboardGuatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);
 
     Route::post('render', [CapEmailController::class, 'sendEmail']);
     Route::get('b2percentage', [ClassesController::class, 'retrieveB2DataForEmail']);
