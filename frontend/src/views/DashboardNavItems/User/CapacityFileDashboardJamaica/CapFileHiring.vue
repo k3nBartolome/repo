@@ -1491,7 +1491,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/siteclasses",
+          "http://127.0.0.1:8000/api/siteclassesjamaica",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1520,7 +1520,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/b2percentage",
+          "http://127.0.0.1:8000/api/b2percentagejamaica",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1550,7 +1550,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboardjamaica",
           {
             headers: {
               Authorization: `Bearer ${token}`,

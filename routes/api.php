@@ -131,21 +131,21 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
-    Route::get('classesdashboardJamaica', [ClassesController::class, 'dashboardClassesJamaica']);
-    Route::get('siteclassesJamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
-    Route::get('classesdashboardJamaica2', [ClassesController::class, 'dashboardClassesJamaica2']);
-    Route::get('classesdashboardJamaica3', [ClassesController::class, 'dashboardClassesJamaica3']);
-    Route::get('classesdashboardJamaica4', [ClassesController::class, 'dashboardClassesJamaica4']);
-    Route::get('classesdashboardGuatemala', [ClassesController::class, 'dashboardClassesGuatemala']);
-    Route::get('siteclassesGuatemala', [ClassesController::class, 'dashboardSiteClassesGuatemala']);
-    Route::get('classesdashboardGuatemala2', [ClassesController::class, 'dashboardClassesGuatemala2']);
-    Route::get('classesdashboardGuatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
-    Route::get('classesdashboardGuatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);
+    Route::get('classesdashboardjamaica', [ClassesController::class, 'dashboardClassesJamaica']);
+    Route::get('siteclassesjamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
+    Route::get('classesdashboardjamaica2', [ClassesController::class, 'dashboardClassesJamaica2']);
+    Route::get('classesdashboardjamaica3', [ClassesController::class, 'dashboardClassesJamaica3']);
+    Route::get('classesdashboardjamaica4', [ClassesController::class, 'dashboardClassesJamaica4']);
+    Route::get('classesdashboardguatemala', [ClassesController::class, 'dashboardClassesGuatemala']);
+    Route::get('siteclassesguatemala', [ClassesController::class, 'dashboardSiteClassesGuatemala']);
+    Route::get('classesdashboardguatemala2', [ClassesController::class, 'dashboardClassesGuatemala2']);
+    Route::get('classesdashboardguatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
+    Route::get('classesdashboardguatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);
 
     Route::post('render', [CapEmailController::class, 'sendEmail']);
     Route::get('b2percentage', [ClassesController::class, 'retrieveB2DataForEmail']);
     Route::get('b2percentagejamaica', [ClassesController::class, 'retrieveB2DataForEmailJamaica']);
-    Route::get('b2percentageguatema la', [ClassesController::class, 'retrieveB2DataForEmailGuatemala']);
+    Route::get('b2percentageguatemala', [ClassesController::class, 'retrieveB2DataForEmailGuatemala']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('class_exists', [ClassesController::class, 'classExists']);
