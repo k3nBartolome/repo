@@ -3,11 +3,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile" class="link-button">
+          <router-link to="/capfilejamaica" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/capfile'),
+                'selected-tab': isActiveTab('/capfilejamaica'),
               }"
             >
               Manage
@@ -15,11 +15,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/summary" class="link-button">
+          <router-link to="/capfile/jamaica/summary" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/capfile/summary'),
+                'selected-tab': isActiveTab('/capfile/jamaica/summary'),
               }"
             >
               Hiring Summary
@@ -27,11 +27,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/history" class="link-button">
+          <router-link to="/capfile/jamaica/history" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/capfile/history'),
+                'selected-tab': isActiveTab('/capfile/jamaica/history'),
               }"
             >
               Class History
@@ -39,11 +39,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/cancelled" class="link-button">
+          <router-link to="/capfile/jamaica/cancelled" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/capfile/cancelled'),
+                'selected-tab': isActiveTab('/capfile/jamaica/cancelled'),
               }"
             >
               Cancelled Class
@@ -51,11 +51,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/moved" class="link-button">
+          <router-link to="/capfile/jamaica/moved" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/capfile/moved'),
+                'selected-tab': isActiveTab('/capfile/jamaica/moved'),
               }"
             >
               Moved Class

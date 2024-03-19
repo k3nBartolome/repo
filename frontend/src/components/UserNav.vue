@@ -1,231 +1,92 @@
 <template>
-  <div class="nav-container sticky top-0 z-50 bg-red-500">
-    <nav class="container px-0 py-0 mx-auto md:flex md:justify-between md:items-center">
-      <div class="flex items-center justify-between">
-        <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
-        <div @click="toggleNav" class="flex md:hidden">
-          <button
-            type="button"
-            class="text-orange-600 hover:text-gray-400 focus:outline-none focus:text-orange-600"
-          >
-            <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
-              <path
-                fill-rule="evenodd"
-                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-              ></path>
-            </svg>
-          </button>
+  <div>
+    <nav class="bg-white">
+      <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <img class="h-8 w-8" src="logo.png" alt="Logo">
+            </div>
+            <div class="hidden md:block ml-10 flex-grow">
+              <div class="flex items-baseline space-x-4 justify-center">
+                <router-link to="/capfile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Capacity File</router-link>
+                <router-link to="/staffing" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Staffing Tracker</router-link>
+                <router-link to="/sr_compliance" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">SR Pending Movemnet</router-link>
+                <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+                  <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Inventory Tracker</button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link to="/dashboard_manager/request" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Dashboard</router-link>
+                    <router-link to="/inventory/supply_manager" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Supply Manager</router-link>
+                    <router-link to="/site_supply_manager/stocks" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Site Supply Manager</router-link>
+                    <router-link to="/site_request_manager/request" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Request Manager</router-link>
+                    <router-link to="/award_manager/normal" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Release Item</router-link>                  </div>
+                </div>
+                <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+                  <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" v-if="isUser|| isBudget || isSourcing">Budget</button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link to="/perx" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">PERX Tool</router-link>
+                    
+                  </div>
+                </div>
+                <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+                  <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link to="/site_management" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Sites</router-link>
+                    <router-link to="/program_management" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Programs</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="-mr-2 flex md:hidden">
+              <button @click="toggleMobileMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <span class="sr-only">Open main menu</span>
+                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-end">
+            
+            <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+              <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Country</button>
+              <div v-show="dropdownOpen" class="dropdown-content">
+                <router-link to="/capfile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Philippines</router-link>
+            <router-link to="/capfileguatemala" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Guatemala</router-link>
+            <router-link to="/capfilejamaica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Jamaica</router-link>
+              </div>
+            </div>
+            <router-link to="/profile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Profile</router-link>
+            <router-link to="/logout" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Logout</router-link>
+          </div>
         </div>
       </div>
-      <ul
-        :class="showMenu ? 'flex' : 'hidden'"
-        class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
-      >
-        <router-link to="/capfile" class="link-button">
-          <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/capfile') }"
-            v-if="isUser"
-                      >
-            Capacity File
-          </li>
-        </router-link>
-        <router-link to="/staffing" class="link-button">
-          <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/staffing') }"
-            v-if="isUser"
-                      >
-            Staffing Tracker
-          </li>
-        </router-link>
-
-        <li class="tab-button">
-          <div v-if="isUser|| isBudget || isSourcing">
-            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown5">
-              <button
-                @click="toggleDropdown5"
-                class="px-4 py-2 text-black rounded cursor-pointer"
-              >
-              Budget
-              </button>
-              <div
-                v-show="isDropdown5Open"
-                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
-              >
-              <router-link to="/perx" class="link-button">
-                <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/perx') }"
-                  v-if="isUser|| isBudget || isSourcing"
-                            >
-                  PERX Tool
-                </li>
-              </router-link>
-
+      <div :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <router-link to="/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</router-link>
+          <div class="relative" @click="toggleDropdown">
+            <button class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium focus:outline-none">Dropdown</button>
+            <div v-show="dropdownOpen" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <router-link to="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">About</router-link>
+                <router-link to="/services" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Services</router-link>
+                <router-link to="/contact" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Contact</router-link>
               </div>
             </div>
           </div>
-        </li>
-        <li class="tab-button">
-          <div>
-            <div class="relative inline-block py-0" v-on:mouseleave="toggleDropdown4">
-              <button
-                @click="toggleDropdown4"
-                class="px-4 py-2 text-black rounded cursor-pointer"
-              >
-              Inventory Tracker
-              </button>
-              <div
-                v-show="isDropdown4Open"
-                class="absolute z-10 py-2 truncate bg-white rounded shadow-md"
-              >
-              <router-link to="/dashboard_manager/request" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
-                :class="{ 'selected-tab': isActiveTab('//dashboard_manager/request') }"
-                                    >
-                    Dashboard
-                  </li>
-                </router-link>
-                <router-link to="/inventory/supply_manager" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
-                :class="{ 'selected-tab': isActiveTab('/inventory/supply_manager') }"
-                                    >
-                    Supply Manager
-                  </li>
-                </router-link>
-                <router-link to="/site_supply_manager/stocks" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
-                :class="{ 'selected-tab': isActiveTab('/inventory/site_supply_manager') }"
-                                    >
-                    Site Supply Manager
-                  </li>
-                </router-link>
-                <router-link to="/site_request_manager/request" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
-                :class="{ 'selected-tab': isActiveTab('/site_request_manager/request') }"
-                                    >
-                    Site Request
-                  </li>
-                </router-link>
-                <router-link to="/award_manager/normal" class="link-button">
-                  <li class="tab-button"  v-if="isUser || isRemx || isBudget || isSourcing"
-                :class="{ 'selected-tab': isActiveTab('/award_manager/normal') }"
-                                    >
-                    Release Item
-                  </li>
-                </router-link>
-              </div>
-            </div>
-          </div>
-        </li>
-        
-              <router-link to="/sr_compliance" class="link-button">
-                <li class="tab-button"
-                    :class="{ 'selected-tab': isActiveTab('/sr_compliance') }"
-                 
-                            >
-                            SR Pending Movements
-                </li>
-              </router-link>
-
-      <li class="tab-button">
-        <div v-if="isUser">
-          <div class="relative inline-block" v-on:mouseleave="toggleDropdown">
-            <button
-              @click="toggleDropdown"
-              class="px-4 py-2 text-black rounded cursor-pointer"
-            >
-              Admin
-            </button>
-            <div
-              v-show="isDropdownOpen"
-              class="absolute z-10 py-2 bg-white rounded shadow-md"
-            >
-              <router-link to="/site_management" class="link-button">
-                <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/site_management') }"
-                                  >
-                  Sites
-                </li>
-              </router-link>
-              <router-link to="/program_management" class="link-button">
-                <li class="tab-button"
-              :class="{ 'selected-tab': isActiveTab('/program_management') }"
-                                  >
-                  Programs
-                </li>
-              </router-link>
-            </div>
-          </div>
         </div>
-      </li>
-      </ul>
-      <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
-        <div class="py-4">
-          <div class="relative inline-block" v-on:mouseleave="toggleDropdown2">
-            <router-link to="/profile" class="link-button">
-              <li class="tab-button" :class="{ 'selected-tab': isActiveTab('/profile') }">
-                <div class="flex items-center">
-
-                  <button @click="toggleDropdown2" class="profile-button px-4 py-2 font-bold text-black rounded cursor-pointer">
-                    <i class="material-icons" style="font-size: 24px; color: red;">
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                    </i>
-                  </button>
-                  <span class="user-name">{{ userName }}</span>
-                </div>
-              </li>
-            </router-link>
-            <div
-              v-show="isDropdown2Open"
-              class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14"
-            >
-            <router-link to="/login" class="link-button" @click="logout">
-              <button>
-                <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
-                  <i class="bg-red-600 fa fa-sign-out"></i> Logout
-                </li>
-              </button>
-            </router-link>
-
- <div class="py-4">
-          <select v-model="selectedOption" @change="navigateToPage" class="rounded border-gray-300 focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-            <option value="/capfilejamaica" class="flex items-center">JAM</option>
-            <option value="/capfileguatemala" class="flex items-center">GUA</option>
-            <option value="/capfileindia" class="flex items-center">IND</option>
-            <option value="/capfile" class="flex items-center">PH</option>
-          </select>
-        </div>
-            </div>
-          </div>
-        </div>
-      </ul>
+      </div>
     </nav>
   </div>
 </template>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <script>
-import { ref } from "vue";
-import logo from "./storage/vxilogo.jpg";
-
-
 export default {
-  setup() {
-    let showMenu = ref(false);
-    const toggleNav = () => (showMenu.value = !showMenu.value);
-    return { showMenu, toggleNav };
-  },
   data() {
     return {
-      logo,
-      selectedOption: "/capfile",
-      isDropdownOpen: false,
-      isDropdown2Open: false,
-      isDropdown3Open: false,
-      isDropdown4Open: false,
-      isDropdown5Open: false,
-      isDropdown6Open: false,
-    };
+      dropdownOpen: false,
+      mobileMenuOpen: false
+    }
   },
   computed: {
     userName() {
@@ -250,112 +111,55 @@ export default {
     },
   },
   methods: {
-    isActiveTab(route) {
-      return this.$route.path === route;
+    openDropdown() {
+      if (window.innerWidth > 768) {
+        this.dropdownOpen = true;
+      }
+    },
+    closeDropdown() {
+      if (window.innerWidth > 768) {
+        this.dropdownOpen = false;
+      }
     },
     toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
-    toggleDropdown2() {
-      this.isDropdown2Open = !this.isDropdown2Open;
-    },
-    toggleDropdown3() {
-      this.isDropdown3Open = !this.isDropdown3Open;
-    },
-    toggleDropdown4() {
-      this.isDropdown4Open = !this.isDropdown4Open;
-    },
-    toggleDropdown5() {
-  this.isDropdown5Open = !this.isDropdown5Open;
-},
-toggleDropdown6() {
-  this.isDropdown6Open = !this.isDropdown6Open;
-},
-
-    navigateToPage() {
-      this.$router.push(this.selectedOption);
-    },
-    logout() {
-      try {
-        this.$store.dispatch('logout');  // Dispatch the logout action
-      } catch (error) {
-        console.error('Error during logout:', error);
+      if (window.innerWidth <= 768) {
+        this.dropdownOpen = !this.dropdownOpen;
       }
-
-  },
+    },
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen;
+    }
+  }
 }
-};
 </script>
+
 <style>
-.sticky {
-  position: sticky;
-  top: 0;
-  background-color: white;
-  z-index: 50; /* Adjust the z-index as needed */
-}
-* {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: 0;
-  font-size: 100%;
-  vertical-align: baseline;
-  background: transparent;
-}
-.tab-button .flex {
-  align-items: center;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.user-name {
-  margin-right: 10px;
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
-.profile-button {
-  margin-left: 10px;
-}
-main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.selected-tab {
-  border-color: #6366f1;
-  color: #6366f1;
-  font-weight: bold;
-}
-.tab-button {
-  display: block;
-  width: 100%;
-  padding: 0;
-  border: none;
-  background-color: transparent;
-  border-bottom: 2px solid transparent;
-  transition: border-color 0.3s, color 0.3s;
-  text-align: center;
+.dropdown-content a {
   color: black;
-  text-decoration: none !important;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
 }
-.tab-button li {
-  margin-top: 0px; /* Adjust as needed */
-  margin-bottom: 0px; /* Adjust as needed */
-}
-.tab-button:hover {
-  color: #6366f1;
-}
-li.tab-button > div > div > ul > li {
-  margin-top: 0px; /* Adjust as needed */
-  margin-bottom: 0px; /* Adjust as needed */
-}
-@media (min-width: 576px) {
-  .tab-button {
-    padding: 0;
-  }
-}
-@media (min-width: 768px) {
-  .tab-button {
-    padding: 0;
-  }
-}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
 .link-button {
   text-decoration: none;
 }

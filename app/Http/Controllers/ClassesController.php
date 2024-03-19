@@ -7253,7 +7253,7 @@ class ClassesController extends Controller
     public function classesallJam(Request $request)
     {
         $classes = Classes::whereHas('site', function ($query) {
-            $query->where('country', '=', 'Jas');
+            $query->where('country', '=', 'Jamaica');
         })
             ->whereHas('dateRange', function ($query) {
                 $query->where('year', '=', '2024');

@@ -1,143 +1,148 @@
 <template>
-  <div class="bg-white">
-    <nav class="container px-6 py-2 mx-auto md:flex md:justify-between md:items-center">
-      <div class="flex items-center justify-between">
-        <img :src="logo" alt="VXI Logo" class="w-20 h-10" />
-        <!-- Mobile menu button -->
-        <div @click="toggleNav" class="flex md:hidden">
-          <button
-            type="button"
-            class="text-orange-600 hover:text-gray-400 focus:outline-none focus:text-orange-600"
-          >
-            <svg viewBox="0 0 24 24" class="w-6 h-6 fill-current">
-              <path
-                fill-rule="evenodd"
-                d="M4 5h16a1 1 0 0 1 0 2H4a1 1 0 1 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2zm0 6h16a1 1 0 0 1 0 2H4a1 1 0 0 1 0-2z"
-              ></path>
-            </svg>
-          </button>
+  <div>
+    <nav class="bg-white">
+      <div class="max-w-full mx-auto sm:px-2 lg:px-4">
+        <div class="flex items-center justify-between h-16">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <img class="h-8 w-8" src="logo.png" alt="Logo">
+            </div>
+            <div class="hidden md:block ml-10 flex-grow">
+              <div class="flex items-baseline space-x-4 justify-center">
+                <router-link to="/capfileguatemala" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Capacity File</router-link>
+                <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+                  <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Admin</button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link to="/site_managementguatemala" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Sites</router-link>
+                    <router-link to="/program_managementguatemala" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Programs</router-link>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="-mr-2 flex md:hidden">
+              <button @click="toggleMobileMenu" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                <span class="sr-only">Open main menu</span>
+                <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="flex items-center justify-end">
+            
+            <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
+              <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Country</button>
+              <div v-show="dropdownOpen" class="dropdown-content">
+                <router-link to="/capfile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Philippines</router-link>
+            <router-link to="/capfileguatemala" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Guatemala</router-link>
+            <router-link to="/capfilejamaica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Jamaica</router-link>
+              </div>
+            </div>
+            <router-link to="/profile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Profile</router-link>
+            <router-link to="/logout" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Logout</router-link>
+          </div>
         </div>
       </div>
-      <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
-      <ul
-        :class="showMenu ? 'flex' : 'hidden'"
-        class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0"
-      >
-              <router-link to="/capfileguatemala"
-                ><li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
-                  Capacity File Guatemala
-                </li></router-link
-              >
-        <router-link to="/staffing">
-          <li
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-          >
-            Staffing Tracker
-          </li></router-link
-        >
-        <router-link to="/staffing_report"
-          ><li
-            class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-          >
-            Power BI Report
-          </li></router-link
-        >
-        <div class="py-4">
-          <div class="relative inline-block">
-            <button
-              @click="toggleDropdown"
-              class="px-4 py-2 text-black rounded cursor-pointer"
-            >
-              Admin
-            </button>
-            <div
-              v-show="isDropdownOpen"
-              class="absolute z-10 py-2 bg-white rounded shadow-md"
-            >
-              <router-link to="/site_managementguatemala"
-                ><li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
-                  Sites
-                </li></router-link
-              >
-              <router-link to="/program_managementguatemala"
-                ><li
-                  class="text-black hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600"
-                >
-                  Programs
-                </li></router-link
-              >
+      <div :class="{'block': mobileMenuOpen, 'hidden': !mobileMenuOpen}" class="md:hidden">
+        <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <router-link to="/" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</router-link>
+          <div class="relative" @click="toggleDropdown">
+            <button class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium focus:outline-none">Dropdown</button>
+            <div v-show="dropdownOpen" class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+              <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                <router-link to="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">About</router-link>
+                <router-link to="/services" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Services</router-link>
+                <router-link to="/contact" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Contact</router-link>
+              </div>
             </div>
           </div>
         </div>
-      </ul>
-      <ul class="flex-col mt-8 space-y-4 font-bold md:flex md:space-y-0 md:flex-row md:items-center md:space-x-10 md:mt-0">
-        <div class="py-4">
-          <select v-model="selectedOption" @change="navigateToPage" class="rounded border-gray-300 focus:ring focus:ring-indigo-200 focus:border-indigo-500">
-            <option value="/capfilejamaica" class="flex items-center">JAM</option>
-            <option value="/capfileguatemala" class="flex items-center">GUA</option>
-            <option value="/capfileindia" class="flex items-center">IND</option>
-            <option value="/capfile" class="flex items-center">PH</option>
-          </select>
-          <div class="relative inline-block">
-            <button @click="toggleDropdown2" class="px-4 py-2 font-bold text-black rounded cursor-pointer">
-              <i class="material-icons" style="font-size: 48px; color: red;"> <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
-                stroke="currentColor" class="w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round"
-                    d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg></i>
-            </button>
-            <div v-show="isDropdown2Open" class="absolute z-10 py-6 bg-orange-500 border border-2 border-orange-500 rounded shadow-md px-14">
-              <router-link to="/login">
-                <li class="font-bold text-white truncate hover:text-orange-600 focus:outline-none focus:shadow-outline-orange-600">
-                  <i class="bg-red-600 fa fa-sign-out"></i> Logout
-                </li>
-              </router-link>
-            </div>
-          </div>
-        </div>
-      </ul>
+      </div>
     </nav>
   </div>
 </template>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <script>
-import { ref } from "vue";
-import logo from "./storage/vxilogo.jpg";
 export default {
-  setup() {
-    let showMenu = ref(false);
-    const toggleNav = () => (showMenu.value = !showMenu.value);
-    return { showMenu, toggleNav };
-  },
   data() {
     return {
-      logo,
-      selectedOption: '/capfileguatemala',
-      isDropdownOpen: false,
-      isDropdown2Open: false,
-
-    };
-  },
-  methods: {
-    toggleDropdown() {
-      this.isDropdownOpen = !this.isDropdownOpen;
-    },
-    toggleDropdown2() {
-      this.isDropdown2Open = !this.isDropdown2Open;
-    },
-    navigateToPage() {
-      this.$router.push(this.selectedOption);
+      dropdownOpen: false,
+      mobileMenuOpen: false
     }
   },
-};
+  computed: {
+    userName() {
+    const userName = this.$store.state.name;
+    return userName;
+    },
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
+  },
+  methods: {
+    openDropdown() {
+      if (window.innerWidth > 768) {
+        this.dropdownOpen = true;
+      }
+    },
+    closeDropdown() {
+      if (window.innerWidth > 768) {
+        this.dropdownOpen = false;
+      }
+    },
+    toggleDropdown() {
+      if (window.innerWidth <= 768) {
+        this.dropdownOpen = !this.dropdownOpen;
+      }
+    },
+    toggleMobileMenu() {
+      this.mobileMenuOpen = !this.mobileMenuOpen;
+    }
+  }
+}
 </script>
+
 <style>
-button:focus {
-  outline: none;
+.dropdown {
+  position: relative;
+  display: inline-block;
 }
 
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
+.link-button {
+  text-decoration: none;
+}
 </style>

@@ -100,7 +100,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('cstat', [ClassesController::class, 'cstat']);
 
     Route::get('classesallindia', [ClassesController::class, 'classesAllInd']);
-    Route::get('classesalljam', [ClassesController::class, 'classesAllJam']);
+    Route::get('classesalljam', [ClassesController::class, 'classesallJam']);
     Route::get('classesallgua', [ClassesController::class, 'classesAllGua']);
     Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
     Route::put('classes/edit/{id}', [ClassesController::class, 'edit']);

@@ -283,7 +283,7 @@ export default {
       };
 
       axios
-        .post("http://127.0.0.1:8000/api/sites", formData, config)
+        .post("http://127.0.0.1:8000/api/sites4", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";
