@@ -38,8 +38,8 @@
             <router-link to="/capfilejamaica" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">Jamaica</router-link>
               </div>
             </div>
-            <router-link to="/profile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Profile</router-link>
-            <router-link to="/logout" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Logout</router-link>
+            <router-link to="/profile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">{{ userName }}</router-link>
+            <router-link to="/login" @click="logout" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">Logout</router-link>
           </div>
         </div>
       </div>
@@ -93,6 +93,14 @@ export default {
     },
   },
   methods: {
+    logout() {
+      try {
+        this.$store.dispatch('logout');  // Dispatch the logout action
+      } catch (error) {
+        console.error('Error during logout:', error);
+      }
+
+  },
     openDropdown() {
       if (window.innerWidth > 768) {
         this.dropdownOpen = true;
