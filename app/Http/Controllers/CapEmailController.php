@@ -10,9 +10,54 @@ use App\Models\SmartRecruitData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+
 
 class CapEmailController extends Controller
 {
+
+    /*    public function sendEmail(Request $request)
+{
+    // Retrieve data for email
+    $mappedGroupedClasses = $this->retrieveDataForEmail();
+    $mappedClasses = $this->retrieveDataForClassesEmail();
+    $mappedB2Classes = $this->retrieveB2DataForEmail();
+
+    // Generate Excel file for B2 data
+    $excelData = $mappedB2Classes['data'];
+    $excelFileName = 'b2_data_' . date('YmdHis') . '.xlsx';
+
+    // Create a temporary file path
+    $tempFilePath = tempnam(sys_get_temp_dir(), 'excel');
+
+    // Write Excel data to the temporary file
+    \Excel::store($excelData, $tempFilePath);
+
+    // Recipients and subject
+    $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
+    $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
+
+    // Email content
+    $emailContent = "<p>Email content goes here...</p>"; // You can compose your email content here
+
+    // Send email with attachment
+    Mail::send([], [], function ($message) use ($recipients, $subject, $emailContent, $excelFileName, $tempFilePath) {
+        $message->from('TA.Insights@vxi.com', 'TA Reports');
+        $message->to($recipients)->subject($subject);
+        $message->setBody($emailContent, 'text/html');
+
+        // Attach Excel file from temporary file path
+        $message->attach($tempFilePath, [
+            'as' => $excelFileName,
+            'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    });
+
+    // Delete the temporary file after sending the email
+    unlink($tempFilePath);
+
+    return response()->json(['message' => 'Email sent successfully']);
+} */
     public function sendEmail(Request $request)
     {
         $mappedGroupedClasses = $this->retrieveDataForEmail();

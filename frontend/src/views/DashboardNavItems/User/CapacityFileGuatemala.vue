@@ -2,7 +2,11 @@
   <div class="py-0">
     <div class="container px-4 py-0 mx-auto mt-4">
       <div class="flex justify-center">
-        <span v-if="EmptySelection" class="ml-2 text-lg text-red-500" style="align-self: center;">
+        <span
+          v-if="EmptySelection"
+          class="ml-2 text-lg text-red-500"
+          style="align-self: center"
+        >
           Fill all the selections first
         </span>
       </div>
@@ -70,17 +74,36 @@
             </option>
           </select>
         </div>
-        <div class="flex items-center justify-end w-full px-2 mt-4 md:w-1/3 md:mt-0">
+        <div
+          class="flex items-center justify-end w-full px-2 mt-4 md:w-1/3 md:mt-0"
+        >
           <button
             type="button"
-            class="p-2 mr-2 text-white bg-red-500 rounded-lg "
+            class="p-2 mr-2 text-white bg-red-500 rounded-lg"
             @click="resetFilter"
           >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="w-4 h-4"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"/></svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 384 512"
+              class="w-4 h-4"
+            >
+              <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+              <path
+                fill="#ffffff"
+                d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z"
+              />
+            </svg>
           </button>
 
           <router-link
-            :to="{ path: `/addcapfileguatemala/}`, query: { program: programs_selected, site: sites_selected, daterange: week_selected }}"
+            :to="{
+              path: `/addcapfileguatemala/}`,
+              query: {
+                program: programs_selected,
+                site: sites_selected,
+                daterange: week_selected,
+              },
+            }"
           >
             <button
               type="submit"
@@ -88,13 +111,23 @@
               v-if="isButtonVisible"
               class="p-2 ml-2 text-white bg-orange-500 rounded-lg"
             >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="w-4 h-4"><!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.--><path fill="#ffffff" d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"/></svg>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                class="w-4 h-4"
+              >
+                <!--!Font Awesome Free 6.5.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                <path
+                  fill="#ffffff"
+                  d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z"
+                />
+              </svg>
             </button>
           </router-link>
         </div>
       </div>
-      </div>
     </div>
+  </div>
 
   <div class="py-0">
     <div class="pl-8 pr-8">
@@ -206,30 +239,28 @@ export default {
     };
   },
   watch: {
-  sites_selected() {
-    this.checkClassExists();
-    this.getClassesAll();
+    sites_selected() {
+      this.checkClassExists();
+      this.getClassesAll();
+    },
+    programs_selected() {
+      this.checkClassExists();
+      this.getClassesAll();
+    },
+    month_selected() {
+      this.checkClassExists();
+      this.getClassesAll();
+    },
+    week_selected() {
+      this.checkClassExists();
+      this.getClassesAll();
+    },
   },
-  programs_selected() {
-    this.checkClassExists();
-    this.getClassesAll();
-  },
-  month_selected() {
-    this.checkClassExists();
-    this.getClassesAll();
-  },
-  week_selected() {
-    this.checkClassExists();
-    this.getClassesAll();
-  }
-},
 
   computed: {
     isButtonDisabled() {
       return (
-        !this.sites_selected ||
-        !this.programs_selected ||
-        !this.week_selected
+        !this.sites_selected || !this.programs_selected || !this.week_selected
       );
     },
     EmptySelection() {
@@ -237,7 +268,6 @@ export default {
         !this.sites_selected || !this.programs_selected || !this.week_selected
       );
     },
-
   },
   mounted() {
     window.vm = this;
@@ -250,29 +280,32 @@ export default {
 
   methods: {
     async checkClassExists() {
-  try {
-    const token = this.$store.state.token; // Assuming you store the token in Vuex state
-    const response = await axios.get("http://10.109.2.112:8081/api/class_exists", {
-      params: {
-        sites_selected: this.sites_selected,
-        programs_selected: this.programs_selected,
-        month_selected: this.month_selected,
-        week_selected: this.week_selected
-      },
-      headers: {
-        Authorization: `Bearer ${token}` // Include the token in the Authorization header
-      }
-    });
+      try {
+        const token = this.$store.state.token; // Assuming you store the token in Vuex state
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/class_exists",
+          {
+            params: {
+              sites_selected: this.sites_selected,
+              programs_selected: this.programs_selected,
+              month_selected: this.month_selected,
+              week_selected: this.week_selected,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
+          }
+        );
 
-    if (response.status === 200) {
-      this.isButtonVisible = !response.data.classExists;
-    } else {
-      console.log("Error checking class existence");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-},
+        if (response.status === 200) {
+          this.isButtonVisible = !response.data.classExists;
+        } else {
+          console.log("Error checking class existence");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
 
     onMonthSelected() {
       if (this.month_selected) {
@@ -299,7 +332,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesallgua",
+          "http://127.0.0.1:8000/api/classesallgua",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -326,7 +359,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites7", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -350,7 +383,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -377,7 +410,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
