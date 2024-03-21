@@ -45,7 +45,7 @@ class CapEmailController extends Controller
             $worksheetNames, 
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com'];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
         // Get the full path of the stored Excel file
@@ -556,7 +556,7 @@ class CapEmailController extends Controller
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
 
-        $recipients = ['kryss.bartolome@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {

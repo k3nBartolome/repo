@@ -23,9 +23,7 @@
         @if (isset($mappedResult['2. ONLINE ASSESSMENT']))
             <p style="margin: 10px 0;">The Sourcing Team has a total pending of
                 <strong>{{ $mappedResult[
-                    '2. ONLINE
-                                                                ASSESSMENT'
-                ]['TotalCount'] }}</strong>
+                    '2. ONLINE ASSESSMENT']['TotalCount'] }}</strong>
                 pending online assessments,
                 <strong>{{ $mappedResult['2. ONLINE ASSESSMENT']['MaxAppStepCount'] }}</strong>
                 of which are
@@ -40,9 +38,7 @@
             $totalPendingHS =
                 ($mappedResult['3. INITIAL INTERVIEW']['TotalCount'] ?? 0) +
                 ($mappedResult[
-                    '4. BEHAVIORAL
-        INTERVIEW'
-                ]['TotalCount'] ??
+                    '4. BEHAVIORAL INTERVIEW']['TotalCount'] ??
                     0) +
                 ($mappedResult['5. OPERATIONS VALIDATION']['TotalCount'] ?? 0);
         @endphp
@@ -100,9 +96,7 @@
                                 {{ $item['MOA'] ?? '' }}</td>
                             <td style="border: 1px solid #ccc; padding: 5px; text-align: center;">
                                 {{ $item[
-                                    'QC North
-                                                                                                                                EDSA'
-                                ] ?? '' }}
+                                    'QC North EDSA'] ?? '' }}
                             </td>
                             <td style="border: 1px solid #ccc; padding: 5px; text-align: center; font-weight: bold;">
                                 {{ $item['TotalCount'] ?? '' }}</td>
