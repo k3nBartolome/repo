@@ -7,16 +7,18 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 class DashboardClassesExportWeek implements WithMultipleSheets
 {
     protected $mappedGroupedClassesWeek;
-    protected $mappedB2Classes;
+    protected $mappedGroupedClasses;
     protected $mappedClassesMoved;
     protected $mappedClassesCancelled;
+    protected $mappedClassesSla;
 
-    public function __construct($mappedGroupedClassesWeek, $mappedB2Classes, $mappedClassesMoved, $mappedClassesCancelled)
+    public function __construct($mappedGroupedClassesWeek, $mappedGroupedClasses, $mappedClassesMoved, $mappedClassesCancelled, $mappedClassesSla)
     {
         $this->mappedGroupedClassesWeek = collect($mappedGroupedClassesWeek);
-        $this->mappedB2Classes = collect($mappedB2Classes);
+        $this->mappedGroupedClasses = collect($mappedGroupedClasses);
         $this->mappedClassesMoved = collect($mappedClassesMoved);
         $this->mappedClassesCancelled = collect($mappedClassesCancelled);
+        $this->mappedClassesSla = collect($mappedClassesSla);
     }
 
     public function sheets(): array
@@ -24,9 +26,10 @@ class DashboardClassesExportWeek implements WithMultipleSheets
         $sheets = [];
 
         $sheets[] = new MappedGroupedClassesWeekSheet($this->mappedGroupedClassesWeek);
-        $sheets[] = new MappedB2ClassesSheet($this->mappedB2Classes);
+        $sheets[] = new MappedGroupedClassesSheet($this->mappedGroupedClasses);
         $sheets[] = new MappedClassesMoved($this->mappedClassesMoved);
         $sheets[] = new MappedClassesCancelled($this->mappedClassesCancelled);
+        $sheets[] = new MappedClassesSla($this->mappedClassesSla);
 
         return $sheets;
     }
@@ -35,10 +38,10 @@ class DashboardClassesExportWeek implements WithMultipleSheets
     {
         return [
             'Mapped Grouped Classes Week' => $this->mappedGroupedClassesWeek,
-            'Mapped B2 Classes' => $this->mappedB2Classes,
+            'Mapped Site Classes' => $this->mappedGroupedClasses,
             'Mapped Classes Moved' => $this->mappedClassesMoved,
             'Mapped Classes Cancelled' => $this->mappedClassesCancelled,
+            'Mapped Classes Sla' => $this->mappedClassesSla,
         ];
     }
 }
-

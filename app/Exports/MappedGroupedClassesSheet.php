@@ -6,7 +6,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Illuminate\Support\Collection;
 
-class MappedB2ClassesSheet implements FromCollection, WithHeadings
+class MappedGroupedClassesSheet implements FromCollection, WithHeadings
 {
     protected $data;
 
@@ -21,7 +21,7 @@ class MappedB2ClassesSheet implements FromCollection, WithHeadings
     }
     public function title(): string
     {
-        return 'B2 Summary'; // Specify the title of the worksheet
+        return 'Site Summary'; // Specify the title of the worksheet
     }
     public function headings(): array
     {
@@ -41,7 +41,7 @@ class MappedB2ClassesSheet implements FromCollection, WithHeadings
             'Nov',
             'Dec',
             'Total'
-          
+
         ];
     }
 }
