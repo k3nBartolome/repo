@@ -142,7 +142,7 @@ class ProgramController extends Controller
     public function update(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'sometimes|unique:programs,name,' . $id . ',id,site_id,' . $request->input('site_id'),
+            'name' => 'sometimes',
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'program_type' => 'sometimes',

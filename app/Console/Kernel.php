@@ -20,11 +20,11 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $controller = new CapEmailController();
             $controller->sendEmail(new Request());
-        })->dailyAt('21:00')->timezone('Asia/Manila');
+        })->dailyAt('19:56')->timezone('Asia/Manila');
         $schedule->call(function () {
             $controller = new CapEmailController();
             $controller->sendSR(new Request());
-        })->dailyAt('13:00')->timezone('Asia/Manila');
+        })->dailyAt('17:40')->timezone('Asia/Manila');
     }
 
     /**

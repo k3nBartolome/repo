@@ -8,8 +8,10 @@ Autoload
 autoloader
 beyondcode
 Bridgetowne
+capfile
 capfilems
 cfms
+ckeep
 classesall
 classesallgua
 classesallindia
@@ -52,6 +54,8 @@ mpssite
 mpsweek
 Nums
 nunomaduro
+officedocument
+openxmlformats
 percentageguatemala
 percentagejamaica
 perx
@@ -64,8 +68,10 @@ Pushedback
 remx
 siteinventory
 siteinventoryall
+spreadsheetml
 sslmode
 subquery
+subsubquery
 sumtotaltarget
 updateclassesstaffing
 webclassesdashboard

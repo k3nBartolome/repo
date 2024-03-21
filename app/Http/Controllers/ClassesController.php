@@ -7571,7 +7571,7 @@ class ClassesController extends Controller
                         $subquery->where('month_num', $month)->where('year', $year);
                     })
                     ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1)->where('program_type', 'B2');
+                        $subquery->where('is_active', 1)->where('program_type', 'B2')->orWhere('program_type', 'COMCAST');
                     })
                     ->where('site_id', $program->id)
                     ->where('status', 'Active')
@@ -7705,7 +7705,7 @@ class ClassesController extends Controller
                         $subquery->where('month_num', $month)->where('year', $year);
                     })
                     ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1)->where('program_type', 'B2');
+                        $subquery->where('is_active', 1)->where('program_type', 'B2')->orWhere('program_type', 'COMCAST');
                     })
                     ->where('site_id', $program->id)
                     ->where('status', 'Active')
@@ -7839,7 +7839,7 @@ class ClassesController extends Controller
                         $subquery->where('month_num', $month)->where('year', $year);
                     })
                     ->whereHas('program', function ($subquery) {
-                        $subquery->where('is_active', 1)->where('program_type', 'B2');
+                        $subquery->where('is_active', 1)->where('program_type', 'B2')->orWhere('program_type', 'COMCAST');
                     })
                     ->where('site_id', $program->id)
                     ->where('status', 'Active')
