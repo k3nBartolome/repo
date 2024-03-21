@@ -4,15 +4,18 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
 
-class MappedClassesMoved implements FromCollection, WithHeadings
+class MappedClassesMoved implements FromCollection, WithHeadings, WithTitle
 {
     protected $data;
+    protected $title;
 
-    public function __construct($data)
+    public function __construct($data,$title)
     {
         $this->data = collect($data);
+        $this->title = $title;
     }
 
     public function collection()
@@ -21,7 +24,7 @@ class MappedClassesMoved implements FromCollection, WithHeadings
     }
     public function title(): string
     {
-        return 'Pushback'; 
+        return 'Movements'; 
     }
     public function headings(): array
     {

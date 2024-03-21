@@ -4,15 +4,18 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
 
-class MappedClassesCancelled implements FromCollection, WithHeadings
+class MappedClassesCancelled implements FromCollection, WithHeadings, WithTitle
 {
     protected $data;
+    protected $title;
 
-    public function __construct($data)
+    public function __construct($data,$title)
     {
         $this->data = collect($data);
+        $this->title = $title;
     }
 
     public function collection()

@@ -42,9 +42,10 @@ class CapEmailController extends Controller
             $mappedClassesMoved,
             $mappedClassesCancelled,
             $mappedClassesSla,
+            $worksheetNames, 
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com'];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
         // Get the full path of the stored Excel file
@@ -133,7 +134,7 @@ class CapEmailController extends Controller
                 $query->where('year', '=', '2024');
             })
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('within_sla', 'LIKE', '%Outside SLA%')
+            ->where('within_sla', 'Outside SLA-New class added')
             ->get();
 
         $formattedClasses = $classes->map(function ($class) {
