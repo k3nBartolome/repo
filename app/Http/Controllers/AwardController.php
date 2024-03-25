@@ -22,7 +22,7 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/'.$award->path);
+            $award->image_path = asset('storage/' . $award->path);
         }
 
         return response()->json(['awarded' => $awarded]);
@@ -39,7 +39,7 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/'.$award->path);
+            $award->image_path = asset('storage/' . $award->path);
         }
 
         return response()->json(['awarded' => $awarded]);
@@ -55,7 +55,7 @@ class AwardController extends Controller
             ->get();
 
         foreach ($awarded as $award) {
-            $award->image_path = asset('storage/'.$award->path);
+            $award->image_path = asset('storage/' . $award->path);
         }
 
         return response()->json(['awarded' => $awarded]);
@@ -88,7 +88,17 @@ class AwardController extends Controller
      */
     public function show($id)
     {
+        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])->find($id);
+
+        if (!$awarded) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        return response()->json([
+            'item' => $awarded,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

@@ -212,6 +212,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/normal', [AwardController::class, 'awardedNormal']);
     Route::get('awarded/premium', [AwardController::class, 'awardedPremium']);
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
+    Route::get('awarded/{id}', [AwardController::class, 'show']);
+    Route::put('awarded/{id}', [AwardController::class, 'update']);
 });
 
 Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);

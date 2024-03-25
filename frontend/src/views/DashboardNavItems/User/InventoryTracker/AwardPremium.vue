@@ -20,6 +20,85 @@
       >
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+          <div v-if="loading" class="loader">
+            <div aria-label="Loading..." role="status" class="loader">
+              <svg class="icon" viewBox="0 0 256 256">
+                <line
+                  x1="128"
+                  y1="32"
+                  x2="128"
+                  y2="64"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="195.9"
+                  y1="60.1"
+                  x2="173.3"
+                  y2="82.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="224"
+                  y1="128"
+                  x2="192"
+                  y2="128"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="195.9"
+                  y1="195.9"
+                  x2="173.3"
+                  y2="173.3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="128"
+                  y1="224"
+                  x2="128"
+                  y2="192"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="60.1"
+                  y1="195.9"
+                  x2="82.7"
+                  y2="173.3"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="32"
+                  y1="128"
+                  x2="64"
+                  y2="128"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+                <line
+                  x1="60.1"
+                  y1="60.1"
+                  x2="82.7"
+                  y2="82.7"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="24"
+                ></line>
+              </svg>
+              <span class="loading-text">Loading...</span>
+            </div>
+          </div>
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">
               Released Premium Item
@@ -292,6 +371,7 @@ export default {
       awarded_quantity: "",
       budget_code: "",
       showModal: false,
+      loading: false,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
@@ -497,7 +577,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/items_selected2/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/items_selected2/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -519,7 +599,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -539,7 +619,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/awarded/premium",
+          "http://127.0.0.1:8000/api/awarded/premium",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -559,7 +639,7 @@ export default {
     },
     async AwardPremiumItem() {
       this.errors = {};
-
+      this.loading = true;
       if (!this.sites_selected) {
         this.errors.sites_selected = "Site is required.";
       }
@@ -598,7 +678,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://10.109.2.112:8081/api/award",
+          "http://127.0.0.1:8000/api/award",
           formData,
           {
             headers: {
@@ -615,6 +695,8 @@ export default {
         this.getAward();
       } catch (error) {
         console.error("Error awarding:", error.response.data);
+      } finally {
+        this.loading = false;
       }
     },
     clearForm() {
@@ -721,5 +803,48 @@ input[type="radio"] {
 input[type="radio"]:checked::before {
   width: 10px;
   height: 10px;
+}
+</style>
+<style scoped>
+/* Your loader styles here */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the loader is on top of other elements */
+}
+
+.loader-content {
+  /* Style your loader content (SVG, text, etc.) */
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  /* Style your SVG icon */
+  height: 3rem; /* Adjust the size as needed */
+  width: 3rem; /* Adjust the size as needed */
+  animation: spin 1s linear infinite;
+  stroke: rgba(107, 114, 128, 1);
+}
+
+.loading-text {
+  /* Style your loading text */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  line-height: 2rem; /* Adjust the size as needed */
+  font-weight: 500;
+  color: rgba(107, 114, 128, 1);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
