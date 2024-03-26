@@ -20,85 +20,6 @@
       >
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
-          <div v-if="loading" class="loader">
-            <div aria-label="Loading..." role="status" class="loader">
-              <svg class="icon" viewBox="0 0 256 256">
-                <line
-                  x1="128"
-                  y1="32"
-                  x2="128"
-                  y2="64"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="60.1"
-                  x2="173.3"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="224"
-                  y1="128"
-                  x2="192"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="195.9"
-                  x2="173.3"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="128"
-                  y1="224"
-                  x2="128"
-                  y2="192"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="195.9"
-                  x2="82.7"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="32"
-                  y1="128"
-                  x2="64"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="60.1"
-                  x2="82.7"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-              </svg>
-              <span class="loading-text">Loading...</span>
-            </div>
-          </div>
           <header class="px-4 py-2 border-b-2 border-gray-200">
             <h2 class="text-lg font-semibold text-gray-800">
               Released Normal Item
@@ -286,278 +207,6 @@
       </div>
     </div>
   </div>
-  <div class="py-0">
-    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
-      <div
-        class="fixed inset-0 z-50 flex items-center justify-center modal"
-        v-if="ShowEditModal"
-      >
-        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
-        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
-          <div v-if="loading" class="loader">
-            <div aria-label="Loading..." role="status" class="loader">
-              <svg class="icon" viewBox="0 0 256 256">
-                <line
-                  x1="128"
-                  y1="32"
-                  x2="128"
-                  y2="64"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="60.1"
-                  x2="173.3"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="224"
-                  y1="128"
-                  x2="192"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="195.9"
-                  y1="195.9"
-                  x2="173.3"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="128"
-                  y1="224"
-                  x2="128"
-                  y2="192"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="195.9"
-                  x2="82.7"
-                  y2="173.3"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="32"
-                  y1="128"
-                  x2="64"
-                  y2="128"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-                <line
-                  x1="60.1"
-                  y1="60.1"
-                  x2="82.7"
-                  y2="82.7"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="24"
-                ></line>
-              </svg>
-              <span class="loading-text">Loading...</span>
-            </div>
-          </div>
-          <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Edit Item</h2>
-          </header>
-          <button
-            @click="showModal = false"
-            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
-          >
-            <svg
-              class="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M6 18L18 6M6 6l12 12"
-              ></path>
-            </svg>
-          </button>
-          <div class="modal-scrollable-content">
-            <form
-              @submit.prevent="EditNormalItem"
-              class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
-            >
-              <div class="col-span-1">
-                <label class="block">
-                  Site
-                  <select
-                    @change="getItems"
-                    v-model="sites_selected"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  >
-                    <option disabled value="" selected>
-                      Please select one
-                    </option>
-                    <option
-                      v-for="site in sites"
-                      :key="site.id"
-                      :value="site.id"
-                    >
-                      {{ site.name }}
-                    </option>
-                  </select>
-                  <p
-                    v-if="errors.sites_selected"
-                    class="mt-1 text-xs text-red-500"
-                  >
-                    {{ errors.sites_selected }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Item Name
-                  <select
-                    @change="onItemSelected"
-                    v-model="items_selected"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  >
-                    <option disabled value="" selected>
-                      Please select one
-                    </option>
-                    <option
-                      v-for="site_items in site_items"
-                      :key="site_items"
-                      :value="site_items.id"
-                    >
-                      {{ site_items.item_name }}
-                    </option>
-                  </select>
-                  <p
-                    v-if="errors.items_selected"
-                    class="mt-1 text-xs text-red-500"
-                  >
-                    {{ errors.items_selected }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Budget Code
-                  <input
-                    type="text"
-                    v-model="budget_code"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Quantity Available
-                  <input
-                    type="number"
-                    readonly
-                    v-model="quantity"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Awardee Name
-                  <input
-                    type="text"
-                    v-model="awardee_name"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                  <p
-                    v-if="errors.awardee_name"
-                    class="mt-1 text-xs text-red-500"
-                  >
-                    {{ errors.awardee_name }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Awardee HRID
-                  <input
-                    type="text"
-                    v-model="awardee_hrid"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                  <p
-                    v-if="errors.awardee_hrid"
-                    class="mt-1 text-xs text-red-500"
-                  >
-                    {{ errors.awardee_hrid }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  Awarded Quantity
-                  <input
-                    type="number"
-                    v-model="awarded_quantity"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                  <p
-                    v-if="errors.awarded_quantity"
-                    class="mt-1 text-xs text-red-500"
-                  >
-                    {{ errors.awarded_quantity }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block"
-                  >Remarks
-                  <textarea
-                    v-model="remarks"
-                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                  />
-                  <p v-if="errors.remarks" class="mt-1 text-xs text-red-500">
-                    {{ errors.remarks }}
-                  </p>
-                </label>
-              </div>
-              <div class="col-span-1">
-                <label class="block">
-                  <input type="file" @change="handleFileChange" />
-                  <img :src="previewImage" v-if="previewImage" alt="Preview" />
-                  <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
-                    {{ errors.file_name }}
-                  </p>
-                </label>
-              </div>
-              <div class="flex justify-end mt-4">
-                <button
-                  type="submit"
-                  class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   <div class="image-modal">
     <button class="close-button" @click="closeImageModal">Close</button>
     <img class="enlarged-image" @click.stop="" alt="Enlarged Image" />
@@ -643,9 +292,6 @@ export default {
       awarded_quantity: "",
       budget_code: "",
       showModal: false,
-      ShowEditModal: false,
-      loading: false,
-      editRequestId: null,
       columns: [
         { data: "id", title: "ID" },
         { data: "site.name", title: "Site" },
@@ -729,10 +375,6 @@ export default {
     this.getAward();
   },
   methods: {
-    openModalForEdit(id) {
-      this.editRequestId = id;
-      this.ShowEditModal = true;
-    },
     openImageModal(imageUrl) {
       const modal = document.querySelector(".image-modal");
       const enlargedImage = document.querySelector(".enlarged-image");
@@ -806,6 +448,7 @@ export default {
         console.log("Preview Image URL:", this.previewImage);
       }
     },
+
     async compressBlob(blob, maxSize) {
       const image = new Image();
       const reader = new FileReader();
@@ -861,7 +504,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/items_selected/${this.sites_selected}`,
+          `http://10.109.2.112:8081/api/items_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -883,7 +526,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -903,7 +546,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/awarded/normal",
+          "http://10.109.2.112:8081/api/awarded/normal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -924,7 +567,7 @@ export default {
 
     async AwardNormalItem() {
       this.errors = {};
-      this.loading = true;
+
       if (!this.sites_selected) {
         this.errors.sites_selected = "Site is required.";
       }
@@ -963,7 +606,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/award",
+          "http://10.109.2.112:8081/api/award",
           formData,
           {
             headers: {
@@ -980,8 +623,6 @@ export default {
         this.getAward();
       } catch (error) {
         console.error("Error awarding:", error.response.data);
-      } finally {
-        this.loading = false;
       }
     },
     clearForm() {
@@ -1084,48 +725,5 @@ input[type="radio"] {
 input[type="radio"]:checked::before {
   width: 10px;
   height: 10px;
-}
-</style>
-<style scoped>
-/* Your loader styles here */
-.loader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Ensure the loader is on top of other elements */
-}
-
-.loader-content {
-  /* Style your loader content (SVG, text, etc.) */
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  /* Style your SVG icon */
-  height: 3rem; /* Adjust the size as needed */
-  width: 3rem; /* Adjust the size as needed */
-  animation: spin 1s linear infinite;
-  stroke: rgba(107, 114, 128, 1);
-}
-
-.loading-text {
-  /* Style your loading text */
-  font-size: 1.5rem; /* Adjust the size as needed */
-  line-height: 2rem; /* Adjust the size as needed */
-  font-weight: 500;
-  color: rgba(107, 114, 128, 1);
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
 }
 </style>
