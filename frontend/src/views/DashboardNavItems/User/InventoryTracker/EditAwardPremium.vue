@@ -206,7 +206,7 @@ export default {
 
         console.log("Awarded:", response.data.Award);
 
-        this.$router.push("/award_manager/normal", () => {
+        this.$router.push("/award_manager/premium", () => {
           location.reload();
         });
       } catch (error) {

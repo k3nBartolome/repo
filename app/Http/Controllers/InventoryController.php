@@ -298,9 +298,9 @@ class InventoryController extends Controller
         $totalCost = $inventory->siteInventory->cost * $inventory->received_quantity;
 
         $siteInventory = SiteInventory::where('item_name', $inventory->siteInventory->item_name)
-        ->where('budget_code', $inventory->siteInventory->budget_code)
-        ->where('site_id', $inventory->transferred_to)
-        ->first();
+            ->where('budget_code', $inventory->siteInventory->budget_code)
+            ->where('site_id', $inventory->transferred_to)
+            ->first();
 
         if ($siteInventory) {
             $siteInventory->site_id = $inventory->transferred_to;
@@ -597,7 +597,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            ])->where('transaction_type', 'Transfer Request')
+        ])->where('transaction_type', 'Transfer Request')
 
             ->get();
 
@@ -619,7 +619,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
         ])->where('transaction_type', 'Transfer Request')
-        ->where('status', null)
+            ->where('status', null)
             ->get();
 
         return response()->json(['inventory' => $inventory]);
@@ -650,40 +650,4 @@ class InventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show(c $c)
-    {
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param \App\Models\c $c
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(c $c)
-    {
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \App\Models\c $c
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, c $c)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param \App\Models\c $c
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(c $c)
-    {
-    }
 }

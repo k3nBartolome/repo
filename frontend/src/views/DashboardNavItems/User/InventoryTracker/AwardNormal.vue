@@ -320,7 +320,7 @@ export default {
           orderable: false,
           searchable: false,
           render: function (data) {
-            return `<button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.openModalForEdit(${data})">Edit</button>
+            return `<button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
   `;
           },
         },
@@ -375,6 +375,9 @@ export default {
     this.getAward();
   },
   methods: {
+    navigateToEdit(id) {
+      this.$router.push(`/award_manager/normal/${id}`);
+    },
     openImageModal(imageUrl) {
       const modal = document.querySelector(".image-modal");
       const enlargedImage = document.querySelector(".enlarged-image");
@@ -393,6 +396,9 @@ export default {
       if (!selectedFile) {
         return;
       }
+
+      // Assign the selected file to this.selectedFile
+      this.selectedFile = selectedFile;
 
       const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB threshold
 
@@ -425,7 +431,7 @@ export default {
 
               canvas.toBlob(
                 async (blob) => {
-                  this.selectedFile = blob;
+                  this.selectedFile = blob; // Update this.selectedFile with the resized blob
                   this.previewImage = URL.createObjectURL(blob);
 
                   console.log("Preview Image URL:", this.previewImage);
@@ -442,7 +448,6 @@ export default {
         }
       } else {
         // No need to resize for smaller images
-        this.selectedFile = selectedFile;
         this.previewImage = URL.createObjectURL(selectedFile);
 
         console.log("Preview Image URL:", this.previewImage);
@@ -485,86 +490,6 @@ export default {
 
       return compressedBlob;
     },
-
-    onItemSelected() {
-      const selectedItem = this.site_items.find(
-        (site_items) => site_items.id === this.items_selected
-      );
-
-      if (selectedItem) {
-        this.budget_code = selectedItem.budget_code;
-        this.quantity = selectedItem.quantity;
-      }
-    },
-    async getItems() {
-      if (!this.sites_selected) {
-        return;
-      }
-
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          `http://10.109.2.112:8081/api/items_selected/${this.sites_selected}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          this.site_items = response.data.items;
-          console.log(response.data.items);
-        } else {
-          console.log("Error fetching items");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
-
-    async getSites() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.sites = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching sites");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async getAward() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/awarded/normal",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          this.award = response.data.awarded;
-          console.log(response.data.awarded);
-        } else {
-          console.log("Error fetching awarded");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-
     async AwardNormalItem() {
       this.errors = {};
 
@@ -606,7 +531,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "http://10.109.2.112:8081/api/award",
+          "http://127.0.0.1:8000/api/award",
           formData,
           {
             headers: {
@@ -633,6 +558,85 @@ export default {
       this.awardee_hrid = "";
       this.remarks = "";
       this.selectedFile = null;
+    },
+
+    onItemSelected() {
+      const selectedItem = this.site_items.find(
+        (site_items) => site_items.id === this.items_selected
+      );
+
+      if (selectedItem) {
+        this.budget_code = selectedItem.budget_code;
+        this.quantity = selectedItem.quantity;
+      }
+    },
+    async getItems() {
+      if (!this.sites_selected) {
+        return;
+      }
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/items_selected/${this.sites_selected}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.site_items = response.data.items;
+          console.log(response.data.items);
+        } else {
+          console.log("Error fetching items");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getAward() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/awarded/normal",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.award = response.data.awarded;
+          console.log(response.data.awarded);
+        } else {
+          console.log("Error fetching awarded");
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
 };

@@ -42,6 +42,8 @@ import siteRequestReceived from "@/views/DashboardNavItems/User/InventoryTracker
 import siteRequest from "@/views/DashboardNavItems/User/InventoryTracker/SiteRequest.vue";
 import awardManager from "@/views/DashboardNavItems/User/InventoryTracker/AwardManager.vue";
 import awardNormal from "@/views/DashboardNavItems/User/InventoryTracker/AwardNormal.vue";
+import EditAwardNormal from "@/views/DashboardNavItems/User/InventoryTracker/EditAwardNormal.vue";
+import EditAwardPremium from "@/views/DashboardNavItems/User/InventoryTracker/EditAwardPremium.vue";
 import awardPremium from "@/views/DashboardNavItems/User/InventoryTracker/AwardPremium.vue";
 import requestManagerPending from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerPending.vue";
 import requestManagerApproved from "@/views/DashboardNavItems/User/InventoryTracker/RequestManagerApproved.vue";
@@ -233,6 +235,17 @@ const routes = [
                 name: "awardPremium",
                 component: awardPremium,
               },
+              {
+                path: "normal/:id",
+                name: "EditAwardNormal",
+                component: EditAwardNormal,
+              },
+              {
+                path: "premium/:id",
+                name: "EditAwardPremium",
+                component: EditAwardPremium,
+              },
+
             ],
           },
         ],

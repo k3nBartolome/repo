@@ -394,6 +394,16 @@ export default {
             return "";
           },
         },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            return `<button class="btn btn-primary w-36" data-id="${data}" onclick="window.vm.navigateToEdit(${data})">Edit</button>
+  `;
+          },
+        },
       ],
     };
   },
@@ -444,7 +454,11 @@ export default {
     this.getItems();
     this.getAward();
   },
+
   methods: {
+    navigateToEdit(id) {
+      this.$router.push(`/award_manager/premium/${id}`);
+    },
     openImageModal(imageUrl) {
       const modal = document.querySelector(".image-modal");
       const enlargedImage = document.querySelector(".enlarged-image");

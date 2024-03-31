@@ -16,52 +16,57 @@ class AwardController extends Controller
      */
     public function awardedNormal()
     {
-        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
-            ->where('award_status', 'Awarded')
-            ->whereHas('items', function ($query) {
-                $query->whereIn('category', ['Normal']);
-            })
-            ->get();
-
-        foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
-        }
-
-        return response()->json(['awarded' => $awarded]);
+        return $this->getAwardedItemsByCategory('Normal');
     }
 
     public function awardedPremium()
     {
+        return $this->getAwardedItemsByCategory('Premium');
+    }
+
+    private function getAwardedItemsByCategory($category)
+    {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
             ->where('award_status', 'Awarded')
-            ->whereHas('items', function ($query) {
-                $query->whereIn('category', ['Premium']);
+            ->whereHas('items', function ($query) use ($category) {
+                $query->whereIn('category', [$category]);
             })
-
             ->get();
 
-        foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
-        }
+        $awarded->each(function ($award) {
+            $award->image_path = $this->getImagePath($award);
+        });
 
         return response()->json(['awarded' => $awarded]);
     }
 
+
     public function awardedBoth()
     {
-        $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
+        $awarded = $this->getAwardedItems();
+
+        $awarded->each(function ($award) {
+            $award->image_path = $this->getImagePath($award);
+        });
+
+        return response()->json(['awarded' => $awarded]);
+    }
+
+    private function getAwardedItems()
+    {
+        return Award::with(['site', 'items', 'processedBy', 'releasedBy'])
             ->where('award_status', 'Awarded')
             ->whereHas('items', function ($query) {
                 $query->whereIn('category', ['Normal', 'Premium']);
             })
             ->get();
-
-        foreach ($awarded as $award) {
-            $award->image_path = asset('storage/' . $award->path);
-        }
-
-        return response()->json(['awarded' => $awarded]);
     }
+
+    private function getImagePath($award)
+    {
+        return asset('storage/' . $award->path);
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -79,68 +84,61 @@ class AwardController extends Controller
     public function show($id)
     {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])->find($id);
-    
+
         if (!$awarded) {
             return response()->json(['error' => 'Item not found'], 404);
         }
-    
+
         $awarded->image_path = asset('storage/' . $awarded->path);
-    
+
         return response()->json([
             'item' => $awarded,
         ]);
     }
     public function update(Request $request, $id)
     {
-        // Validate the incoming request data
-        $validator = Validator::make($request->all(), [
-            'awardee_name' => 'required',
-            'awardee_hrid' => 'required',
-            'remarks' => 'required',
-            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif,jfif',
-        ]);
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'awardee_name' => 'sometimes',
+                'awardee_hrid' => 'sometimes',
+                'remarks' => 'sometimes',
+                'file_name' => $request->hasFile('file_name') ? 'image|mimes:jpeg,png,jpg,gif' : '',
+            ]
+        );
 
-        // Check if validation fails
+
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 400);
+            return $validator->errors();
         }
 
         try {
-            // Begin a database transaction
             DB::beginTransaction();
 
-            // Find the award by ID
             $award = Award::find($id);
+            $award->fill($request->all());
 
-            // Check if the award with the provided ID exists
-            if (!$award) {
-                return response()->json(['error' => 'Item not found'], 404);
+            if ($request->hasFile('file_name')) {
+                $imagePath = $request->file('file_name')->store('storage', 'public');
+                $award->path = $imagePath;
             }
 
-            // Store the uploaded image
-            $imagePath = $request->file('file_name')->store('storage', 'public');
-
-            // Update the award attributes
-            $award->fill($request->all());
-            $award->path = $imagePath; // Update the image path
             $award->save();
 
-            // Commit the transaction
             DB::commit();
 
-            // Return a success response
             return response()->json([
                 'message' => 'Item updated successfully.',
                 'award' => $award,
             ]);
         } catch (\Exception $e) {
-            // If an error occurs, rollback the transaction
             DB::rollback();
 
-            // Return an error response
             return response()->json(['error' => 'An error occurred while updating the item.'], 500);
         }
     }
+
+
 
 
 
