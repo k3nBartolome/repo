@@ -510,10 +510,10 @@ export default {
           render: function (data) {
             const isUser = this.isUser;
             const isRemx = this.isRemx;
-
+            const isSourcing = this.Sourcing;
             return `
             ${
-              isUser || isRemx
+              isUser || isRemx || isSourcing
                 ? `
                     <button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForTransfer(${data})">Transfer</button>`
                 : ""
