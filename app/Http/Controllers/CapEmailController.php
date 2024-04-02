@@ -35,7 +35,7 @@ class CapEmailController extends Controller
             'Site Summary',
             'Classes Moved',
             'Classes Cancelled',
-            'Out Of SLA'
+            'Out Of SLA',
         ];
 
         Excel::store(new DashboardClassesExportWeek(
@@ -44,17 +44,17 @@ class CapEmailController extends Controller
             $mappedClassesMoved,
             $mappedClassesCancelled,
             $mappedClassesSla,
-            $worksheetNames, 
+            $worksheetNames,
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
 
         // Get the full path of the stored Excel file
         $excelFilePath = public_path('storage/' . $excelFileName);
 
         // Send email with attachment
-        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes,'mappedExternalClasses' => $mappedExternalClasses,'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
+        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
             $message->subject($subject);
@@ -125,7 +125,7 @@ class CapEmailController extends Controller
             ];
         });
 
-        return  $formattedClasses;
+        return $formattedClasses;
     }
     public function classesSla()
     {
@@ -184,7 +184,7 @@ class CapEmailController extends Controller
             ];
         });
 
-        return  $formattedClasses;
+        return $formattedClasses;
     }
     public function classesCancelled()
     {
@@ -243,7 +243,7 @@ class CapEmailController extends Controller
             ];
         });
 
-        return  $formattedClasses;
+        return $formattedClasses;
     }
     public function retrieveDataForEmailWeek()
     {
@@ -558,7 +558,7 @@ class CapEmailController extends Controller
         $mappedResult = $this->srComplianceExport();
         $formattedResult = $this->AutomatedSrExport();
 
-        $recipients = ['kryss.bartolome@vxi.com','PH_Talent_Acquisition_Leaders@vxi.com','PH_Talent_Acquisition_Management_Team@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
         $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
