@@ -17,6 +17,10 @@ classesallgua
 classesallindia
 classesalljam
 classesdashboard
+classesdashboardexternal
+classesdashboardguatemala
+classesdashboardinternal
+classesdashboardjamaica
 classessitedashboard
 classesstaffing
 classestransaction
@@ -67,6 +71,8 @@ Pushback
 pushedback
 Pushedback
 remx
+siteclassesguatemala
+siteclassesjamaica
 siteinventory
 siteinventoryall
 spreadsheetml
@@ -76,5 +82,8 @@ subsubquery
 sumtotaltarget
 updateclassesstaffing
 webclassesdashboard
+websiteb
 websiteclasses
+websiteexternal
+websiteinternal
 websockets

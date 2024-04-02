@@ -3926,6 +3926,236 @@ class ClassesController extends Controller
 
         return response()->json($response);
     }
+    public function dashboardExternalClasses(Request $request)
+    {
+        $siteId = $request->input('site_id');
+        $programFilter = $request->input('program_id');
+
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+
+                    ->when(true, function ($query) {
+                        $query->whereHas('site', function ($subquery) {
+                            $subquery->where('is_active', 1);
+                        });
+                    })
+                    ->when(!empty($siteId), function ($query) use ($siteId) {
+                        $query->whereIn('site_id', $siteId);
+                    })
+                    ->when(!empty($programFilter), function ($query) use ($programFilter) {
+                        $query->whereIn('program_id', $programFilter);
+                    })
+                    ->where('site_id', $programId)
+                    ->where('status', 'Active')
+                    ->get();
+
+                $totalTarget = $classes->sum('external_target');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['external_target' => 0];
+                }
+                $groupedClasses[$siteName][$month]['external_target'] += $totalTarget;
+            }
+        }
+
+        $mappedGroupedClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['external_target']) ? $weekData['external_target'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedGroupedClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedGroupedClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        $response = [
+            'data' => $mappedGroupedClasses,
+        ];
+
+        return response()->json($response);
+    }
+    public function dashboardInternalClasses(Request $request)
+    {
+        $siteId = $request->input('site_id');
+        $programFilter = $request->input('program_id');
+
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+
+                    ->when(true, function ($query) {
+                        $query->whereHas('site', function ($subquery) {
+                            $subquery->where('is_active', 1);
+                        });
+                    })
+                    ->when(!empty($siteId), function ($query) use ($siteId) {
+                        $query->whereIn('site_id', $siteId);
+                    })
+                    ->when(!empty($programFilter), function ($query) use ($programFilter) {
+                        $query->whereIn('program_id', $programFilter);
+                    })
+                    ->where('site_id', $programId)
+                    ->where('status', 'Active')
+                    ->get();
+
+                $totalTarget = $classes->sum('internal_target');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['internal_target' => 0];
+                }
+                $groupedClasses[$siteName][$month]['internal_target'] += $totalTarget;
+            }
+        }
+
+        $mappedGroupedClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['internal_target']) ? $weekData['internal_target'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedGroupedClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedGroupedClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        $response = [
+            'data' => $mappedGroupedClasses,
+        ];
+
+        return response()->json($response);
+    }
     public function dashboardSiteClassesJamaica(Request $request)
     {
         $siteId = $request->input('site_id');
@@ -7953,6 +8183,18 @@ class ClassesController extends Controller
         $mappedGroupedClasses = $emailController->retrieveDataForEmail();
 
         return view('email.view', compact('mappedGroupedClasses'));
+    }
+    public function WebDashboardExternalClasses(Request $request, CapEmailController $emailController)
+    {
+        $mappedGroupedClasses = $emailController->retrieveExternalForEmail();
+
+        return view('email.view', compact('mappedExternalClasses'));
+    }
+    public function WebDashboardInternalClasses(Request $request, CapEmailController $emailController)
+    {
+        $mappedGroupedClasses = $emailController->retrieveInternalForEmail();
+
+        return view('email.view', compact('mappedInternalClasses'));
     }
 
     public function WebDashboardClasses(Request $request, CapEmailController $emailController)

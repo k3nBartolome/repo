@@ -18,6 +18,8 @@ class CapEmailController extends Controller
     public function sendEmail(Request $request)
     {
         $mappedGroupedClasses = $this->retrieveDataForEmail();
+        $mappedExternalClasses = $this->retrieveExternalForEmail();
+        $mappedInternalClasses = $this->retrieveInternalForEmail();
         $mappedClassesMoved = $this->classesMoved();
         $mappedClassesCancelled = $this->classesCancelled();
         $mappedClassesSla = $this->classesSla();
@@ -52,7 +54,7 @@ class CapEmailController extends Controller
         $excelFilePath = public_path('storage/' . $excelFileName);
 
         // Send email with attachment
-        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes], function ($message) use ($recipients, $subject, $excelFilePath) {
+        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes,'mappedExternalClasses' => $mappedExternalClasses,'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
             $message->subject($subject);
@@ -663,6 +665,198 @@ class CapEmailController extends Controller
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
         return $mappedGroupedClasses;
+    }
+    public function retrieveInternalForEmail()
+    {
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+                    ->where('site_id', $programId)
+                    ->where('status', 'Active')
+                    ->get();
+
+                $totalTarget = $classes->sum('internal_target');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['internal_target' => 0];
+                }
+                $groupedClasses[$siteName][$month]['internal_target'] += $totalTarget;
+            }
+        }
+
+        $mappedExternalClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['internal_target']) ? $weekData['internal_target'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedExternalClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedExternalClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        return $mappedExternalClasses;
+    }
+    public function retrieveExternalForEmail()
+    {
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+                    ->where('site_id', $programId)
+                    ->where('status', 'Active')
+                    ->get();
+
+                $totalTarget = $classes->sum('external_target');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['external_target' => 0];
+                }
+                $groupedClasses[$siteName][$month]['external_target'] += $totalTarget;
+            }
+        }
+
+        $mappedExternalClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['external_target']) ? $weekData['external_target'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedExternalClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedExternalClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        return $mappedExternalClasses;
     }
     //sr
     public function srComplianceExport()

@@ -131,8 +131,9 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
     Route::get('classesdashboard4', [ClassesController::class, 'dashboardClasses4']);
-    Route::get('classesdashboardjamaica', [ClassesController::class, 'dashboardClassesJamaica']);
-    Route::get('siteclassesjamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
+    Route::get('classesdashboardexternal', [ClassesController::class, 'dashboardExternalClasses']);
+    Route::get('classesdashboardinternal', [ClassesController::class, 'dashboardInternalClasses']);
+    Route::get('classesdashboardjamaica', [ClassesController::class, 'dashboardClassesJamaica']);Route::get('siteclassesjamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
     Route::get('classesdashboardjamaica2', [ClassesController::class, 'dashboardClassesJamaica2']);
     Route::get('classesdashboardjamaica3', [ClassesController::class, 'dashboardClassesJamaica3']);
     Route::get('classesdashboardjamaica4', [ClassesController::class, 'dashboardClassesJamaica4']);
