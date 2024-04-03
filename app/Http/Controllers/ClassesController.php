@@ -8224,46 +8224,4 @@ class ClassesController extends Controller
         return view('sr_pending_email.view', compact('formattedResult'));
     }
 }
-/*  $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
 
-$query = SmartRecruitData::on('secondary_sqlsrv')
-->select('Step', DB::raw('COUNT(*) as Count'))
-->groupBy('Step')
-->whereIn('ApplicationStepStatusId', $appstepIDs)
-->orderBy('Step');
-
-if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-$filterDateStart = $request->input('filter_date_start');
-$filterDateEnd = $request->input('filter_date_end');
-
-if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-$startDate = date('Y-m-d', strtotime($filterDateStart));
-$endDate = date('Y-m-d', strtotime($filterDateEnd));
-
-$endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
-
-$query->where('QueueDate', '>=', $startDate)
-->where('QueueDate', '<', $endDate);
-}
-}
-
-$result = $query->get();
-
-$stepCounts = [];
-
-foreach ($result as $item) {
-$step = $item->Step;
-$stepCounts[$step] = number_format($item->Count);
-}
-
-// Assigning values from $stepCounts to keys
-$output = [
-'2. ONLINE ASSESSMENT' => $stepCounts['2. ONLINE ASSESSMENT'],
-'3. INITIAL INTERVIEW' => $stepCounts['3. INITIAL INTERVIEW'],
-'4. BEHAVIORAL INTERVIEW' => $stepCounts['4. BEHAVIORAL INTERVIEW'],
-'5. OPERATIONS VALIDATION' => $stepCounts['5. OPERATIONS VALIDATION'],
-'6. LANGUAGE ASSESSMENT' => $stepCounts['6. LANGUAGE ASSESSMENT']
-];
-
-return response()->json(['sr' => $output]);
-} */

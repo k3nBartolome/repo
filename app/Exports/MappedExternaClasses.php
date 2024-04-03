@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
 
-class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTitle {
+class MappedExternalClasses implements FromCollection, WithHeadings, WithTitle {
     protected $data;
     protected $title;
 
@@ -21,7 +21,7 @@ class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTit
     }
 
     public function title(): string {
-        return 'Internals Summary';
+        return 'Site Summary';
         // Specify the title of the worksheet
     }
 

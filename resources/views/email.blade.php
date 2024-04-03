@@ -88,7 +88,7 @@
             </table>
         </div>
         <div style="margin: 10px 0">
-            <p style="margin: 10px 0;">PER SITE INTERNAL:</p>
+            <p style="margin: 10px 0;">PER SITE INTERNALS:</p>
             <table style="width: 70%; border-collapse: collapse;">
                 <thead>
                     <tr>
@@ -159,7 +159,7 @@
             </table>
         </div>
         <div style="margin: 10px 0">
-            <p style="margin: 10px 0;">PER SITE EXTERNAL:</p>
+            <p style="margin: 10px 0;">PER SITE EXTERNALS:</p>
             <table style="width: 70%; border-collapse: collapse;">
                 <thead>
                     <tr>
