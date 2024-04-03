@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
 
-class MappedInternalClasses implements FromCollection, WithHeadings, WithTitle {
+class MappedExternalClasses implements FromCollection, WithHeadings, WithTitle {
     protected $data;
     protected $title;
 
@@ -21,7 +21,7 @@ class MappedInternalClasses implements FromCollection, WithHeadings, WithTitle {
     }
 
     public function title(): string {
-        return 'Site Summary';
+        return 'Externals Summary';
         // Specify the title of the worksheet
     }
 

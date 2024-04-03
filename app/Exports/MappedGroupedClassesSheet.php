@@ -21,7 +21,7 @@ class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTit
     }
 
     public function title(): string {
-        return 'Internals Summary';
+        return 'Site Summary';
         // Specify the title of the worksheet
     }
 

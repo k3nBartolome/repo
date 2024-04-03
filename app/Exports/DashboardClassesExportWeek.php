@@ -47,6 +47,8 @@ class DashboardClassesExportWeek implements WithMultipleSheets
         return [
             'Mapped Grouped Classes Week' => $this->mappedGroupedClassesWeek,
             'Mapped Site Classes' => $this->mappedGroupedClasses,
+            'Mapped External Classes' => $this->mappedExternalClasses,
+            'Mapped Internal Classes' => $this->mappedInternalClasses,
             'Mapped Classes Moved' => $this->mappedClassesMoved,
             'Mapped Classes Cancelled' => $this->mappedClassesCancelled,
             'Mapped Classes Sla' => $this->mappedClassesSla,

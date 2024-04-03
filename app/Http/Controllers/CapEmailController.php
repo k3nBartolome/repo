@@ -33,6 +33,8 @@ class CapEmailController extends Controller
         $worksheetNames = [
             'Hiring Summary',
             'Site Summary',
+            'External Summary',
+            'Internal Summary',
             'Classes Moved',
             'Classes Cancelled',
             'Out Of SLA',
@@ -41,6 +43,8 @@ class CapEmailController extends Controller
         Excel::store(new DashboardClassesExportWeek(
             $mappedGroupedClassesWeek,
             $mappedGroupedClasses,
+            $mappedExternalClasses,
+            $mappedInternalClasses,
             $mappedClassesMoved,
             $mappedClassesCancelled,
             $mappedClassesSla,
