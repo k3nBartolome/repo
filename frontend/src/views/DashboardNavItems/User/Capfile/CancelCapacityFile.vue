@@ -4,6 +4,85 @@
       <h2 class="text-xl font-bold text-center">CANCEL CLASS</h2>
     </div>
   </header>
+  <div v-if="loading" class="loader">
+    <div aria-label="Loading..." role="status" class="loader">
+      <svg class="icon" viewBox="0 0 256 256">
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+      </svg>
+      <span class="loading-text">Loading...</span>
+    </div>
+  </div>
   <header class="w-full">
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
@@ -569,6 +648,7 @@ export default {
       pipeline_utilized: 0,
       reason: [],
       category: "",
+      loading: false,
       notice_days: 0,
       sites: [],
       daterange: [],
@@ -623,7 +703,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -647,7 +727,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -666,7 +746,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -689,7 +769,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -711,7 +791,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -765,6 +845,7 @@ export default {
     },
 
     cancelClass() {
+      this.loading = true;
       const formData = {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
@@ -788,7 +869,7 @@ export default {
 
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {
@@ -818,9 +899,55 @@ export default {
           });
         })
         .catch((error) => {
-          console.log(error.response.data);
-        });
+      console.log(error.response.data);
+    })
+    .finally(() => {
+      this.loading = false;
+    });
     },
   },
 };
 </script>
+<style scoped>
+/* Your loader styles here */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the loader is on top of other elements */
+}
+
+.loader-content {
+  /* Style your loader content (SVG, text, etc.) */
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  /* Style your SVG icon */
+  height: 3rem; /* Adjust the size as needed */
+  width: 3rem; /* Adjust the size as needed */
+  animation: spin 1s linear infinite;
+  stroke: rgba(107, 114, 128, 1);
+}
+
+.loading-text {
+  /* Style your loading text */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  line-height: 2rem; /* Adjust the size as needed */
+  font-weight: 500;
+  color: rgba(107, 114, 128, 1);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

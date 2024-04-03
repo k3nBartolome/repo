@@ -5,6 +5,85 @@
       <h2 class="text-xl font-bold text-center">ADD CLASS</h2>
     </div>
   </header>
+  <div v-if="loading" class="loader">
+    <div aria-label="Loading..." role="status" class="loader">
+      <svg class="icon" viewBox="0 0 256 256">
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+      </svg>
+      <span class="loading-text">Loading...</span>
+    </div>
+  </div>
   <div class="px-12 py-8 font-serifs">
     <form @submit.prevent="addClass">
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
@@ -322,6 +401,7 @@ export default {
       erf_number: "",
       within_sla: "",
       approved_by: "",
+      loading: false,
       sites: [],
       daterange: [],
       programs: [],
@@ -372,7 +452,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -396,7 +476,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -420,7 +500,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -436,64 +516,69 @@ export default {
     },
 
     addClass() {
-      const formData = {
-        site_id: this.sites_selected,
-        program_id: this.programs_selected,
-        type_of_hiring: this.type_of_hiring,
-        external_target: this.external_target,
-        internal_target: this.internal_target,
-        total_target: this.total_target,
-        notice_days: this.notice_days,
-        notice_weeks: this.notice_weeks,
-        with_erf: this.with_erf,
-        erf_number: this.erf_number,
-        category: this.category,
-        original_start_date: this.original_start_date,
-        wfm_date_requested: this.wfm_date_requested,
-        within_sla: this.within_sla,
-        remarks: this.remarks,
-        date_range_id: this.date_selected,
-        approved_status: "pending",
-        approved_by: this.approved_by,
-        status: "Active",
-        created_by: this.$store.state.user_id,
-      };
-      const token = this.$store.state.token;
-      const headers = {
-        Authorization: `Bearer ${token}`,
-      };
-      axios
-        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
-        .then((response) => {
-          console.log(response.data);
-          this.site_id = "";
-          this.program_id = "";
-          this.type_of_hiring = "";
-          this.external_target = "";
-          this.internal_target = "";
-          this.total_target = "";
-          this.notice_days = "";
-          this.notice_weeks = "";
-          this.with_erf = "";
-          this.erf_number = "";
-          this.category = "";
-          this.original_start_date = "";
-          this.wfm_date_requested = "";
-          this.within_sla = "";
-          this.remarks = "";
-          this.date_range_id = "";
-          this.approved_status = "";
-          this.created_by = "";
-          this.approved_by = "";
-          this.two_dimensional_id = "";
-          this.$router.push("/capfile", () => {
-            location.reload();
-          });
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-        });
-    },
+  this.loading = true;
+  const formData = {
+    site_id: this.sites_selected,
+    program_id: this.programs_selected,
+    type_of_hiring: this.type_of_hiring,
+    external_target: this.external_target,
+    internal_target: this.internal_target,
+    total_target: this.total_target,
+    notice_days: this.notice_days,
+    notice_weeks: this.notice_weeks,
+    with_erf: this.with_erf,
+    erf_number: this.erf_number,
+    category: this.category,
+    original_start_date: this.original_start_date,
+    wfm_date_requested: this.wfm_date_requested,
+    within_sla: this.within_sla,
+    remarks: this.remarks,
+    date_range_id: this.date_selected,
+    approved_status: "pending",
+    approved_by: this.approved_by,
+    status: "Active",
+    created_by: this.$store.state.user_id,
+  };
+  const token = this.$store.state.token;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  };
+  axios
+    .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
+    .then((response) => {
+      console.log(response.data);
+      this.site_id = "";
+      this.program_id = "";
+      this.type_of_hiring = "";
+      this.external_target = "";
+      this.internal_target = "";
+      this.total_target = "";
+      this.notice_days = "";
+      this.notice_weeks = "";
+      this.with_erf = "";
+      this.erf_number = "";
+      this.category = "";
+      this.original_start_date = "";
+      this.wfm_date_requested = "";
+      this.within_sla = "";
+      this.remarks = "";
+      this.date_range_id = "";
+      this.approved_status = "";
+      this.created_by = "";
+      this.approved_by = "";
+      this.two_dimensional_id = "";
+      this.$router.push("/capfile", () => {
+        location.reload();
+      });
+    })
+    .catch((error) => {
+      console.log(error.response.data);
+    })
+    .finally(() => {
+      this.loading = false;
+    });
+},
+
   },
 };
 </script>
@@ -524,5 +609,48 @@ export default {
   border-width: 5px;
   border-style: solid;
   border-color: transparent transparent black transparent;
+}
+</style>
+<style scoped>
+/* Your loader styles here */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the loader is on top of other elements */
+}
+
+.loader-content {
+  /* Style your loader content (SVG, text, etc.) */
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  /* Style your SVG icon */
+  height: 3rem; /* Adjust the size as needed */
+  width: 3rem; /* Adjust the size as needed */
+  animation: spin 1s linear infinite;
+  stroke: rgba(107, 114, 128, 1);
+}
+
+.loading-text {
+  /* Style your loading text */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  line-height: 2rem; /* Adjust the size as needed */
+  font-weight: 500;
+  color: rgba(107, 114, 128, 1);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>

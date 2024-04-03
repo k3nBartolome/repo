@@ -1,4 +1,83 @@
 <template>
+  <div v-if="isLoading" class="loader">
+    <div aria-label="Loading..." role="status" class="loader">
+      <svg class="icon" viewBox="0 0 256 256">
+        <line
+          x1="128"
+          y1="32"
+          x2="128"
+          y2="64"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="60.1"
+          x2="173.3"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="224"
+          y1="128"
+          x2="192"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="195.9"
+          y1="195.9"
+          x2="173.3"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="128"
+          y1="224"
+          x2="128"
+          y2="192"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="195.9"
+          x2="82.7"
+          y2="173.3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="32"
+          y1="128"
+          x2="64"
+          y2="128"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+        <line
+          x1="60.1"
+          y1="60.1"
+          x2="82.7"
+          y2="82.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="24"
+        ></line>
+      </svg>
+      <span class="loading-text">Loading...</span>
+    </div>
+  </div>
   <div class="py-0">
     <div class="container px-4 py-0 mx-auto mt-4">
       <div class="flex justify-center">
@@ -204,6 +283,7 @@ export default {
       programs_selected: "",
       month_selected: "",
       week_selected: "",
+      isLoading: false,
       isButtonVisible: true,
       columns: [
         { data: "id", title: "ID" },
@@ -283,7 +363,7 @@ export default {
       try {
         const token = this.$store.state.token; // Assuming you store the token in Vuex state
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/class_exists",
+          "http://127.0.0.1:8000/api/class_exists",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -330,9 +410,10 @@ export default {
     },
     async getClassesAll() {
       try {
+        this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -354,12 +435,14 @@ export default {
         }
       } catch (error) {
         console.log(error);
+      }finally {
+        this.isLoading = false;
       }
     },
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -383,7 +466,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -410,7 +493,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -450,5 +533,48 @@ export default {
 
 .table tbody td {
   padding: 8px;
+}
+</style>
+<style scoped>
+/* Your loader styles here */
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure the loader is on top of other elements */
+}
+
+.loader-content {
+  /* Style your loader content (SVG, text, etc.) */
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  /* Style your SVG icon */
+  height: 3rem; /* Adjust the size as needed */
+  width: 3rem; /* Adjust the size as needed */
+  animation: spin 1s linear infinite;
+  stroke: rgba(107, 114, 128, 1);
+}
+
+.loading-text {
+  /* Style your loading text */
+  font-size: 1.5rem; /* Adjust the size as needed */
+  line-height: 2rem; /* Adjust the size as needed */
+  font-weight: 500;
+  color: rgba(107, 114, 128, 1);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
