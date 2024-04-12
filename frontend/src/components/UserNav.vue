@@ -12,6 +12,7 @@
                 <router-link to="/capfile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Capacity File</router-link>
                 <router-link to="/staffing" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Staffing Tracker</router-link>
                 <router-link to="/sr_compliance" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">SR Pending Movements</router-link>
+                <router-link to="/h&s" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">H&S Tool</router-link>
                 <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
                   <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Inventory Tracker</button>
                   <div v-show="dropdownOpen" class="dropdown-content">
@@ -25,7 +26,7 @@
                   <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium" v-if="isUser|| isBudget || isSourcing">Budget</button>
                   <div v-show="dropdownOpen" class="dropdown-content">
                     <router-link to="/perx" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900" role="menuitem">PERX Tool</router-link>
-                    
+
                   </div>
                 </div>
                 <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
@@ -47,7 +48,7 @@
             </div>
           </div>
           <div class="flex items-center justify-end">
-            
+
             <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
               <button class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">Country</button>
               <div v-show="dropdownOpen" class="dropdown-content">

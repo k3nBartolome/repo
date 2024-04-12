@@ -13,6 +13,12 @@ import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
 import SiteManagement from "@/views//Dashboard/AppSiteDashboard.vue";
 import WebRockData from "@/views//Dashboard/WebRockData.vue";
 import capacityFile from "@/views/DashboardNavItems/User/CapacityFile.vue";
+import HnS from "@/views/DashboardNavItems/User/HnS.vue";
+import Screening from "@/views/DashboardNavItems/User/H&S/HsScreening.vue";
+import Interview from "@/views/DashboardNavItems/User/H&S/HsInterview.vue";
+import Ov from "@/views/DashboardNavItems/User/H&S/HsOv.vue";
+import ProgSpecs from "@/views/DashboardNavItems/User/H&S/HsProgSpecs.vue";
+import JobOffer from "@/views/DashboardNavItems/User/H&S/HsJobOffer.vue";
 import capacityFileReport from "@/views/DashboardNavItems/User/CapacityFileReport.vue";
 import CapFileHiring from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileHiring.vue";
 import CapFileClassHistory from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileClassHistory";
@@ -358,6 +364,38 @@ const routes = [
         path: "/program_management/edit/:id",
         name: "programmanagementedit",
         component: programManagementEdit,
+      },
+      {
+        path: "/h&s",
+        name: "HnS",
+        component: HnS,
+        children: [
+          {
+            path: "screening",
+            name: "Screening",
+            component: Screening,
+          },
+          {
+            path: "interview",
+            name: "Interview",
+            component: Interview,
+          },
+          {
+            path: "ov",
+            name: "Ov",
+            component: Ov,
+          },
+          {
+            path: "prog_specs",
+            name: "ProgSpecs",
+            component: ProgSpecs,
+          },
+          {
+            path: "job_offer",
+            name: "JobOffer",
+            component: JobOffer,
+          },
+        ],
       },
     ],
   },
