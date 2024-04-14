@@ -215,7 +215,7 @@ class ClassesController extends Controller
                 }
 
                 $formattedResult[] = array_merge(
-                    [ 'AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
+                    ['AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
                     $formattedSiteCounts
                 );
             }
@@ -298,7 +298,7 @@ class ClassesController extends Controller
                 }
 
                 $formattedResult[] = array_merge(
-                    [ 'AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
+                    ['AppStep' => $appStep, 'TotalCount' => number_format($totalAppStepCounts[$step][$appStep]), 'StepName' => $step],
                     $formattedSiteCounts
                 );
             }

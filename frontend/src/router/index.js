@@ -22,6 +22,7 @@ import JobOffer from "@/views/DashboardNavItems/User/H&S/HsJobOffer.vue";
 import capacityFileReport from "@/views/DashboardNavItems/User/CapacityFileReport.vue";
 import CapFileHiring from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileHiring.vue";
 import CapFileClassHistory from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileClassHistory";
+import CapFileCancelledClass from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileCancelledClasses.vue";
 import CapFilePushedback from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFilePushedback";
 import CapFileCancelled from "@/views/DashboardNavItems/User/CapacityFileDashboard/CapFileCancelled";
 import addCapacityFile from "@/views/DashboardNavItems/User/Capfile/AddCapfile.vue";
@@ -322,6 +323,11 @@ const routes = [
             path: "/capfile",
             name: "capacityFile",
             component: capacityFile,
+          },
+          {
+            path: "/cancelled_list",
+            name: "CapFileCancelledClass",
+            component: CapFileCancelledClass,
           },
         ],
       },

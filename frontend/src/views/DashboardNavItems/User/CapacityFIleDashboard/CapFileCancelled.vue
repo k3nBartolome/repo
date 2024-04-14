@@ -96,10 +96,18 @@
           }"
         >
           {{
-            showJanColumn ? "Swith to Monthly View" : "Switch to Weekly View"
+            showJanColumn ? "Switch to Monthly View" : "Switch to Weekly View"
           }}
         </button>
+        <router-link to="/cancelled_list">
+          <button
+            class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out ml-2"
+          >
+            View List
+          </button>
+        </router-link>
       </div>
+
       <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2 ml-4 items-center">
         <div>
           <label class="block mb-2">Sites</label>

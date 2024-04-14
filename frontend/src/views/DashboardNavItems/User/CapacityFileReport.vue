@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile" class="link-button">
+          <router-link to="/capfile" class="link-button" v-if="isUser">
             <button
               class="tab-button"
               :class="{
@@ -15,7 +15,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/summary" class="link-button">
+          <router-link
+            to="/capfile/summary"
+            class="link-button"
+            v-if="isUser || isSourcing"
+          >
             <button
               class="tab-button"
               :class="{
@@ -27,7 +31,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/history" class="link-button">
+          <router-link
+            to="/capfile/history"
+            class="link-button"
+            v-if="isUser || isSourcing"
+          >
             <button
               class="tab-button"
               :class="{
@@ -39,7 +47,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/cancelled" class="link-button">
+          <router-link
+            to="/capfile/cancelled"
+            class="link-button"
+            v-if="isUser || isSourcing"
+          >
             <button
               class="tab-button"
               :class="{
@@ -51,7 +63,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile/moved" class="link-button">
+          <router-link
+            to="/capfile/moved"
+            class="link-button"
+            v-if="isUser || isSourcing"
+          >
             <button
               class="tab-button"
               :class="{
