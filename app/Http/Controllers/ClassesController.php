@@ -667,8 +667,8 @@ class ClassesController extends Controller
                 'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
                 'approved_date' => $class->approved_date,
                 'cancelled_date' => $class->cancelled_date,
-                'created_at' => $class->created_at->format('m-d-Y H:i'),
-                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+                'created_at' => $class->created_at ? $class->created_at->format('m-d-Y H:i') : null,
+                'updated_at' => $class->updated_at ? $class->updated_at->format('m-d-Y H:i') : null,
             ];
         });
 
@@ -7679,8 +7679,8 @@ class ClassesController extends Controller
                 'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
                 'approved_date' => $class->approved_date,
                 'cancelled_date' => $class->cancelled_date,
-                'created_at' => $class->created_at->format('m-d-Y H:i'),
-                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+                'created_at' => $class->created_at ? $class->created_at->format('m-d-Y H:i') : null,
+                'updated_at' => $class->updated_at ? $class->updated_at->format('m-d-Y H:i') : null,
             ];
         });
 
@@ -7759,8 +7759,8 @@ class ClassesController extends Controller
                 'updated_by' => $class->updatedByUser ? $class->updatedByUser->name : null,
                 'approved_date' => $class->approved_date,
                 'cancelled_date' => $class->cancelled_date,
-                'created_at' => $class->created_at->format('m-d-Y H:i'),
-                'updated_at' => $class->updated_at->format('m-d-Y H:i'),
+                'created_at' => $class->created_at ? $class->created_at->format('m-d-Y H:i') : null,
+                'updated_at' => $class->updated_at ? $class->updated_at->format('m-d-Y H:i') : null,
             ];
         });
 
