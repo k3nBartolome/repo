@@ -3,7 +3,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-2 col-sm-6">
-          <router-link to="/capfile" class="link-button" v-if="isUser">
+          <router-link to="/capfile" class="link-button" v-if="isUser || isSourcing">
             <button
               class="tab-button"
               :class="{
