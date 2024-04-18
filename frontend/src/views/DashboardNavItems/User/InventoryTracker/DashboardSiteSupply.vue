@@ -333,12 +333,12 @@ export default {
           this.items = response.data.items;
           this.totalItems = this.items.length;
 
-          const filteredData = this.filteredItems;
-          this.filteredTotalSupply = filteredData.length;
-          this.filteredTotalOriginalQuantity = this.calculateSum(
-            filteredData,
-            "original_quantity"
-          );
+          const filteredData = this.items.filter(item => item.quantity > 0);
+      this.filteredTotalSupply = filteredData.length;
+      this.filteredTotalOriginalQuantity = this.calculateSum(
+        filteredData,
+        "original_quantity"
+      );
           this.filteredTotalRemaining = this.calculateSum(
             filteredData,
             "quantity"
