@@ -219,5 +219,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::post('award/{id}', [AwardController::class, 'update']);
 });
 
+Route::get('out', [ClassesController::class, 'OutOfSla']);
+Route::get('cancel', [ClassesController::class, 'Cancelled']);
 Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
 Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);
