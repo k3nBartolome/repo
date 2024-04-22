@@ -25,7 +25,7 @@ class CancelledHeadCount implements FromCollection, WithHeadings, WithTitle
 
     public function title(): string
     {
-        return '';
+        return 'Cancel';
     }
 
     public function headings(): array

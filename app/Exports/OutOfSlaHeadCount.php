@@ -25,7 +25,7 @@ class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle
 
     public function title(): string
     {
-        return '';
+        return 'Out';
     }
 
     public function headings(): array

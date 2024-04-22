@@ -40,6 +40,8 @@ class CapEmailController extends Controller
             'Classes Moved',
             'Classes Cancelled',
             'Out Of SLA',
+            'Out',
+            'Cancel',
         ];
 
         Excel::store(new DashboardClassesExportWeek(
@@ -50,6 +52,8 @@ class CapEmailController extends Controller
             $mappedClassesMoved,
             $mappedClassesCancelled,
             $mappedClassesSla,
+            $outOfSlaHeadCount,
+            $cancelledHeadCount,
             $worksheetNames,
         ), 'public/' . $excelFileName);
 
@@ -125,7 +129,7 @@ class CapEmailController extends Controller
             $notice_weeks_avg = $grandTotalByWeeks[$siteName]; // Use the accumulated notice weeks
             $totalHC += $grandTotalByProgram[$siteName]; // Accumulate total HC
 
-            $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
+            $maxPrograms = isset($maxProgramBySite[$siteId]) ? implode(', ', array_unique($maxProgramBySite[$siteId]['program_names'])) : '';
 
             $outOfSlaHeadCount[] = [
                 'Site' => $siteName,
@@ -160,7 +164,7 @@ class CapEmailController extends Controller
         $grandTotalByWeeks = []; // Initialize array to accumulate notice weeks
         $grandTotalByPipeline = []; // Initialize array to accumulate pipeline offered
         $maxProgramBySite = [];
-
+    
         foreach ($sites as $site) {
             $siteName = $site->name;
             $siteId = $site->id;
@@ -195,13 +199,13 @@ class CapEmailController extends Controller
             });
             $maxProgramIds = $classesWithMaxTarget->pluck('program_id')->toArray();
             $maxProgramNames = Program::whereIn('id', $maxProgramIds)->pluck('program_group')->toArray();
-
+    
             $maxProgramBySite[$siteId] = [
                 'program_ids' => $maxProgramIds,
                 'program_names' => $maxProgramNames,
             ];
         }
-
+    
         // Calculate total HC and total pipeline offered
         $totalHC = 0;
         $totalPipelineOffered = 0;
@@ -210,39 +214,39 @@ class CapEmailController extends Controller
             $totalHC += $grandTotalByProgram[$site->name];
             $totalPipelineOffered += $grandTotalByPipeline[$site->name];
         }
-
+    
         // Calculate total average notice weeks
         $totalNoticeWeeks = 0;
         foreach ($grandTotalByWeeks as $notice_weeks) {
             $totalNoticeWeeks += $notice_weeks;
         }
         $totalNoticeWeeks /= count($sites); // Calculate average notice weeks
-
+    
         $cancelledHeadCount = [];
         foreach ($sites as $site) {
             $siteId = $site->id;
-            $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
-
+            $maxPrograms = isset($maxProgramBySite[$siteId]) ? implode(', ', array_unique($maxProgramBySite[$siteId]['program_names'])) : '';
             $cancelledHeadCount[] = [
                 'Site' => $site->name,
                 'HC' => $grandTotalByProgram[$site->name],
+                'Pipeline Offered' => $grandTotalByPipeline[$site->name], // Include pipeline offered value
                 'Notice Weeks' => number_format($grandTotalByWeeks[$site->name], 2),
-                'Pipeline Offered' => $grandTotalByPipeline[$site->name],
                 'Drivers' => $maxPrograms,
             ];
         }
-
+    
         // Add totals to the result
         $cancelledHeadCount[] = [
             'Site' => 'Total',
             'HC' => $totalHC,
+            'Pipeline Offered' => $totalPipelineOffered, // Include total pipeline offered value
             'Notice Weeks' => number_format($totalNoticeWeeks, 2),
-            'Pipeline Offered' => $totalPipelineOffered,
             'Drivers' => [],
         ];
-
+    
         return  $cancelledHeadCount;
     }
+    
 
     public function classesMoved()
     {
