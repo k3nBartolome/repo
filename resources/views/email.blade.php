@@ -300,7 +300,7 @@
                 </tbody>
             </table>
         </div>
-        <div style="margin: 10px 0">
+       {{--  <div style="margin: 10px 0">
             <p style="margin: 10px 0;">PER PROGRAM:</p>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead>
@@ -374,7 +374,7 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
+        </div> --}}
         <p style="margin: 10px 0;font-weight: bold;">Thanks,</p>
         <p style="margin: 10px 0;font-weight: bold;">TA Reports Team</p>
     </div>

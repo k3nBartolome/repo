@@ -1,4 +1,69 @@
 <template>
+  <div class="py-0">
+    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
+        v-if="showModalEdit"
+      >
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Edit Classes</h2>
+          </header>
+          <button
+            @click="showModalEdit = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <form
+            @submit.prevent="editClasses(editId)"
+            class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+          ><div class="col-span-1">
+            <label class="block"
+              >Pipeline Offered
+              <input type="number"
+                v-model="pipeline_utilized"
+                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+              />
+            </label>
+          </div>
+            <div class="col-span-1">
+              <label class="block"
+                >Pipeline Utilized
+                <textarea
+                  v-model="pipeline_utilized"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="flex justify-end mt-4">
+              <button
+                type="submit"
+                class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+      
   <div class="px-4 py-0">
     <div class="px-4 py-0 bg-white">
       <div
@@ -321,6 +386,9 @@ export default {
       month_selected: "",
       week_selected: "",
       showModal: false,
+      showModalEdit: false,
+      pipeline_offered: "",
+      pipeline_utilized: "",
       columns: [
         { data: "id", title: "ID" },
         {
@@ -328,13 +396,13 @@ export default {
           title: "Actions",
           render: (data) => {
             const isUser = this.isUser;
-            const isRemx = this.isRemx;
             const isSourcing = this.isSourcing;
 
             return `
       ${
-        isUser || isRemx || isSourcing
-          ? `<button class="w-30 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForHistory(${data})">View History</button>`
+        isUser || isSourcing
+          ? `<button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForHistory(${data})">View History</button>
+             <button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForEdit(${data})">Edit</button>`
           : ""
       }
     `;
@@ -411,15 +479,6 @@ export default {
         !this.sites_selected || !this.programs_selected || !this.week_selected
       );
     },
-    classExists() {
-      return this.classes.some((c) => {
-        return (
-          c.site_id === this.sites_selected &&
-          c.program_id === this.programs_selected &&
-          c.date_range_id === this.week_selected
-        );
-      });
-    },
   },
 
   mounted() {
@@ -436,6 +495,10 @@ export default {
       this.showModal = true;
       this.getTransaction(id);
     },
+    openModalForEdit(id) {
+      this.editId = id;
+      this.showModalEdit = true;
+    },
 
     onMonthSelected() {
       if (this.month_selected) {
@@ -448,11 +511,68 @@ export default {
       this.month_selected = "";
       this.week_selected = "";
     },
+    async getClasses() {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          { headers }
+        );
+
+        if (response.status === 200) {
+          const data = response.data;
+          const classObj = data.class;
+          this.pipeline_offered = classObj.pipeline_offered;
+          this.pipeline_utilized = classObj.pipeline_utilized;
+         
+          console.log(classObj);
+        } else {
+          console.log("Error fetching classes");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+   
+    editClass() {
+      const token = this.$store.state.token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      this.loading = true;
+      const formData = {
+      pipeline_utilized: this.pipeline_utilized,
+      pipeline_offered: this.pipeline_offered ,
+      };
+
+      axios
+        .put(
+          `http://127.0.0.1:8000/api/classes/edit/${this.$route.params.id}`,
+          formData,
+          { headers }
+        )
+        .then((response) => {
+          console.log(response.data);
+          this.pipeline_utilized = "";
+          this.pipeline_offered = "";
+        })
+        .catch((error) => {
+      console.log(error.response.data);
+    })
+    .finally(() => {
+      this.loading = false;
+    });
+    },
+  
     async getTransaction(id) {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/transaction/${id}`,
+          `http://127.0.0.1:8000/api/transaction/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -466,7 +586,6 @@ export default {
         console.log(error);
       }
     },
-
     async getClassesAll() {
       console.log("Sites Selected:", this.sites_selected);
       console.log("Programs Selected:", this.programs_selected);
@@ -475,7 +594,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classescancelled",
+          "http://127.0.0.1:8000/api/classescancelled",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -504,7 +623,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -528,7 +647,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -555,7 +674,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -576,3 +695,86 @@ export default {
   },
 };
 </script>
+<style>
+.table-responsive {
+  overflow: auto;
+}
+
+.datatable-container {
+  width: 100%;
+}
+
+.table {
+  white-space: nowrap;
+}
+
+.table thead th {
+  padding: 8px;
+}
+
+.table tbody td {
+  padding: 8px;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 400px;
+}
+/* Updated Radio Button Styles */
+input[type="radio"] {
+  /* Hide the default radio button */
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  margin-right: 8px;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"]:checked {
+  /* Add custom styling for the checked state */
+  border-color: #3b71ca; /* Blue color for checked state */
+}
+
+input[type="radio"]:checked::before {
+  /* Add the blue dot inside the checked radio button */
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #3b71ca; /* Blue color for the dot */
+}
+
+/* Optional: Increase the size of the radio button and the blue dot */
+input[type="radio"] {
+  width: 20px;
+  height: 20px;
+}
+
+input[type="radio"]:checked::before {
+  width: 10px;
+  height: 10px;
+}
+</style>

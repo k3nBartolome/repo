@@ -104,6 +104,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesallgua', [ClassesController::class, 'classesAllGua']);
     Route::put('classes/pushedback/{id}', [ClassesController::class, 'pushedback']);
     Route::put('classes/edit/{id}', [ClassesController::class, 'edit']);
+    Route::put('classes/cancelled/edit/{id}', [ClassesController::class, 'editCancelled']);
     Route::put('classes/cancel/{id}', [ClassesController::class, 'cancel']);
     Route::post('classes', [ClassesController::class, 'store']);
     Route::get('check', [ClassesController::class, 'checkCombinationExistence']);

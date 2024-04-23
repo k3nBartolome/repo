@@ -7820,7 +7820,24 @@ class ClassesController extends Controller
 
         return new ClassesResource($newClass);
     }
+    public function editCancelled(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'pipeline_offered' => 'required',
+            'pipeline_utilized' => 'required',
 
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $class = Classes::find($id);
+        $class->fill($request->all());
+        $class->save();
+
+        // @ts-ignore
+        return new ClassesResource($class);
+    }
     public function edit(Request $request, $id)
     {
         $validator = Validator::make($request->all(), [
