@@ -40,8 +40,8 @@ class CapEmailController extends Controller
             'Classes Moved',
             'Classes Cancelled',
             'Out Of SLA',
-            'Out',
-            'Cancel',
+            'Per Site Out of SLA',
+            'Per Site Cancellation',
         ];
 
         Excel::store(new DashboardClassesExportWeek(
@@ -164,7 +164,7 @@ class CapEmailController extends Controller
         $grandTotalByWeeks = []; // Initialize array to accumulate notice weeks
         $grandTotalByPipeline = []; // Initialize array to accumulate pipeline offered
         $maxProgramBySite = [];
-    
+
         foreach ($sites as $site) {
             $siteName = $site->name;
             $siteId = $site->id;
@@ -199,13 +199,13 @@ class CapEmailController extends Controller
             });
             $maxProgramIds = $classesWithMaxTarget->pluck('program_id')->toArray();
             $maxProgramNames = Program::whereIn('id', $maxProgramIds)->pluck('program_group')->toArray();
-    
+
             $maxProgramBySite[$siteId] = [
                 'program_ids' => $maxProgramIds,
                 'program_names' => $maxProgramNames,
             ];
         }
-    
+
         // Calculate total HC and total pipeline offered
         $totalHC = 0;
         $totalPipelineOffered = 0;
@@ -214,14 +214,14 @@ class CapEmailController extends Controller
             $totalHC += $grandTotalByProgram[$site->name];
             $totalPipelineOffered += $grandTotalByPipeline[$site->name];
         }
-    
+
         // Calculate total average notice weeks
         $totalNoticeWeeks = 0;
         foreach ($grandTotalByWeeks as $notice_weeks) {
             $totalNoticeWeeks += $notice_weeks;
         }
         $totalNoticeWeeks /= count($sites); // Calculate average notice weeks
-    
+
         $cancelledHeadCount = [];
         foreach ($sites as $site) {
             $siteId = $site->id;
@@ -234,7 +234,7 @@ class CapEmailController extends Controller
                 'Drivers' => $maxPrograms,
             ];
         }
-    
+
         // Add totals to the result
         $cancelledHeadCount[] = [
             'Site' => 'Total',
@@ -243,10 +243,10 @@ class CapEmailController extends Controller
             'Notice Weeks' => number_format($totalNoticeWeeks, 2),
             'Drivers' => [],
         ];
-    
+
         return  $cancelledHeadCount;
     }
-    
+
 
     public function classesMoved()
     {

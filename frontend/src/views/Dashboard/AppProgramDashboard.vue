@@ -132,12 +132,25 @@
           /></label>
         </div>
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <label class="block font-semibold"
-            >Program Group<input
-              type="text"
-              v-model="program_group"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-          /></label>
+          <input
+            type="text"
+            v-model="searchQuery"
+            @input="filterOptions"
+            placeholder="Search program group"
+          />
+          <select
+            v-model="program_group"
+            class="w-full px-4 py-2 bg-white border rounded-lg"
+          >
+            <option disabled value="">Select program group</option>
+            <option
+              v-for="option in filteredProgramGroups"
+              :key="option.id"
+              :value="option.name"
+            >
+              {{ option.name }}
+            </option>
+          </select>
         </div>
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <label class="block font-semibold"
@@ -319,13 +332,63 @@ export default {
       deactivateRequestId: null,
       ShowActivateModal: false,
       activateRequestId: null,
-
+      searchQuery: "",
+      programGroups: [
+        { id: 2, name: "ALIEXPRESS" },
+        { id: 5, name: "AT&T" },
+        { id: 6, name: "ATT/DTV" },
+        { id: 7, name: "BBBY" },
+        { id: 8, name: "BRIGHTSPEED" },
+        { id: 9, name: "BUYER (CS)" },
+        { id: 10, name: "COMCAST" },
+        { id: 11, name: "CRIS" },
+        { id: 12, name: "D&B" },
+        { id: 13, name: "DOOR DASH" },
+        { id: 14, name: "DTV" },
+        { id: 15, name: "DULY HEALTH" },
+        { id: 16, name: "EBAY" },
+        { id: 17, name: "ENS" },
+        { id: 18, name: "FIS" },
+        { id: 19, name: "FOX" },
+        { id: 20, name: "HARVEST RIGHT" },
+        { id: 21, name: "HERTZ" },
+        { id: 22, name: "HYOSUNG" },
+        { id: 23, name: "LAZADA" },
+        { id: 24, name: "LEGAL ZOOM" },
+        { id: 25, name: "LG" },
+        { id: 26, name: "MCI" },
+        { id: 27, name: "META" },
+        { id: 28, name: "MICROSOFT" },
+        { id: 29, name: "MODIVCARE" },
+        { id: 30, name: "MSI" },
+        { id: 31, name: "NOTION" },
+        { id: 32, name: "Others" },
+        { id: 33, name: "PAPA JOHNS" },
+        { id: 34, name: "PAYPAL" },
+        { id: 35, name: "PFS" },
+        { id: 36, name: "ROKU" },
+        { id: 37, name: "SELLER (PSC)" },
+        { id: 38, name: "SHOPHQ" },
+        { id: 39, name: "STREETLANE" },
+        { id: 40, name: "SXM" },
+        { id: 41, name: "TEMU" },
+        { id: 42, name: "ULTRA MINT" },
+        { id: 43, name: "Voice" },
+        { id: 44, name: "WESTWOOD" },
+        { id: 45, name: "XOOM" },
+        { id: 46, name: "ZINUS" },
+        { id: 47, name: "ZYNEX" },
+      ],
       successMessage: "",
       columns: [
         { data: "id", title: "ID" },
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
+        {
+          data: "program_group",
+          title: "Program Group",
+        },
         {
           data: "program_type",
           title: "Program Type",
@@ -372,6 +435,10 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
+        {
+          data: "program_group",
+          title: "Program Group",
+        },
         {
           data: "program_type",
           title: "Program Type",
@@ -440,8 +507,16 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
+    filteredProgramGroups() {
+      return this.programGroups.filter((option) =>
+        option.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
   },
   methods: {
+    filterOptions() {
+      // No need to do anything here as the computed property handles filtering
+    },
     openModalForDeactivation(id) {
       this.deactivateRequestId = id;
       this.ShowDeactivateModal = true;
