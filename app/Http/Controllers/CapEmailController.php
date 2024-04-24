@@ -139,7 +139,7 @@ class CapEmailController extends Controller
             $notice_weeks_avg = $grandTotalByWeeks[$siteName]; // Use the accumulated notice weeks
             $totalHC += $grandTotalByProgram[$siteName]; // Accumulate total HC
 
-            $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
+            $maxPrograms = isset($maxProgramBySite[$siteId]) ? implode(', ', array_unique($maxProgramBySite[$siteId]['program_names'])) : '';
 
             $outOfSlaHeadCountMonth[] = [
                 'Site' => $siteName,
@@ -321,20 +321,20 @@ class CapEmailController extends Controller
     $cancelledHeadCountMonth = [];
     foreach ($sites as $site) {
         $siteId = $site->id;
-        $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
+        $maxPrograms = isset($maxProgramBySite[$siteId]) ? implode(', ', array_unique($maxProgramBySite[$siteId]['program_names'])) : '';
         $cancelledHeadCountMonth[] = [
             'Site' => $site->name,
             'HC' => $grandTotalByProgram[$site->name],
-            'Notice Weeks' => number_format($grandTotalByWeeks[$site->name], 2),
             'Pipeline Offered' => $grandTotalByPipeline[$site->name],
+            'Notice Weeks' => number_format($grandTotalByWeeks[$site->name], 2),
             'Drivers' => $maxPrograms,
         ];
     }
     $cancelledHeadCountMonth[] = [
         'Site' => 'Total',
         'HC' => $totalHC,
-        'Notice Weeks' => number_format($totalNoticeWeeks, 2),
         'Pipeline Offered' => $totalPipelineOffered,
+        'Notice Weeks' => number_format($totalNoticeWeeks, 2),
         'Drivers' => [],
     ];
     return $cancelledHeadCountMonth;
@@ -414,7 +414,7 @@ class CapEmailController extends Controller
             $cancelledHeadCount[] = [
                 'Site' => $site->name,
                 'HC' => $grandTotalByProgram[$site->name],
-                'Pipeline Offered' => $grandTotalByPipeline[$site->name], // Include pipeline offered value
+                'Pipeline Offered' => $grandTotalByPipeline[$site->name],
                 'Notice Weeks' => number_format($grandTotalByWeeks[$site->name], 2),
                 'Drivers' => $maxPrograms,
             ];
@@ -424,7 +424,7 @@ class CapEmailController extends Controller
         $cancelledHeadCount[] = [
             'Site' => 'Total',
             'HC' => $totalHC,
-            'Pipeline Offered' => $totalPipelineOffered, // Include total pipeline offered value
+            'Pipeline Offered' => $totalPipelineOffered,
             'Notice Weeks' => number_format($totalNoticeWeeks, 2),
             'Drivers' => [],
         ];
