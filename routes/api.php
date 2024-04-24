@@ -222,5 +222,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);
 Route::get('cancel', [ClassesController::class, 'Cancelled']);
+Route::get('out/month', [ClassesController::class, 'OutOfSlaMonth']);
+Route::get('cancel/month', [ClassesController::class, 'CancelledMonth']);
 Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
 Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);

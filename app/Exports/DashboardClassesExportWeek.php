@@ -5,7 +5,7 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
 class DashboardClassesExportWeek implements WithMultipleSheets
-{
+ {
     protected $mappedGroupedClassesWeek;
     protected $mappedGroupedClasses;
     protected $mappedExternalClasses;
@@ -17,39 +17,39 @@ class DashboardClassesExportWeek implements WithMultipleSheets
     protected $cancelledHeadCount;
     protected $worksheetNames;
 
-    public function __construct($mappedGroupedClassesWeek, $mappedGroupedClasses, $mappedExternalClasses, $mappedInternalClasses, $mappedClassesMoved, $mappedClassesCancelled, $mappedClassesSla, $outOfSlaHeadCount, $cancelledHeadCount, $worksheetNames)
-    {
-        $this->mappedGroupedClassesWeek = collect($mappedGroupedClassesWeek);
-        $this->mappedGroupedClasses = collect($mappedGroupedClasses);
-        $this->mappedExternalClasses = collect($mappedExternalClasses);
-        $this->mappedInternalClasses = collect($mappedInternalClasses);
-        $this->mappedClassesMoved = collect($mappedClassesMoved);
-        $this->mappedClassesCancelled = collect($mappedClassesCancelled);
-        $this->mappedClassesSla = collect($mappedClassesSla);
-        $this->outOfSlaHeadCount = collect($outOfSlaHeadCount);
-        $this->cancelledHeadCount = collect($cancelledHeadCount);
+    public function __construct( $mappedGroupedClassesWeek, $mappedGroupedClasses, $mappedExternalClasses, $mappedInternalClasses, $mappedClassesMoved, $mappedClassesCancelled, $mappedClassesSla, $outOfSlaHeadCount, $cancelledHeadCount, $worksheetNames )
+ {
+        $this->mappedGroupedClassesWeek = collect( $mappedGroupedClassesWeek );
+        $this->mappedGroupedClasses = collect( $mappedGroupedClasses );
+        $this->mappedExternalClasses = collect( $mappedExternalClasses );
+        $this->mappedInternalClasses = collect( $mappedInternalClasses );
+        $this->mappedClassesMoved = collect( $mappedClassesMoved );
+        $this->mappedClassesCancelled = collect( $mappedClassesCancelled );
+        $this->mappedClassesSla = collect( $mappedClassesSla );
+        $this->outOfSlaHeadCount = collect( $outOfSlaHeadCount );
+        $this->cancelledHeadCount = collect( $cancelledHeadCount );
         $this->worksheetNames = $worksheetNames;
     }
 
     public function sheets(): array
-    {
+ {
         $sheets = [];
 
-        $sheets[] = new MappedGroupedClassesWeekSheet($this->mappedGroupedClassesWeek, $this->worksheetNames[0]);
-        $sheets[] = new MappedGroupedClassesSheet($this->mappedGroupedClasses, $this->worksheetNames[1]);
-        $sheets[] = new MappedExternalClasses($this->mappedExternalClasses, $this->worksheetNames[2]);
-        $sheets[] = new MappedInternalClasses($this->mappedInternalClasses, $this->worksheetNames[3]);
-        $sheets[] = new MappedClassesMoved($this->mappedClassesMoved, $this->worksheetNames[4]);
-        $sheets[] = new MappedClassesCancelled($this->mappedClassesCancelled, $this->worksheetNames[5]);
-        $sheets[] = new MappedClassesSla($this->mappedClassesSla, $this->worksheetNames[6]);
-        $sheets[] = new OutOfSlaHeadCount($this->outOfSlaHeadCount, $this->worksheetNames[7]);
-        $sheets[] = new CancelledHeadCount($this->cancelledHeadCount, $this->worksheetNames[8]);
+        $sheets[] = new MappedGroupedClassesWeekSheet( $this->mappedGroupedClassesWeek, $this->worksheetNames[ 0 ] );
+        $sheets[] = new MappedGroupedClassesSheet( $this->mappedGroupedClasses, $this->worksheetNames[ 1 ] );
+        $sheets[] = new MappedExternalClasses( $this->mappedExternalClasses, $this->worksheetNames[ 2 ] );
+        $sheets[] = new MappedInternalClasses( $this->mappedInternalClasses, $this->worksheetNames[ 3 ] );
+        $sheets[] = new MappedClassesMoved( $this->mappedClassesMoved, $this->worksheetNames[ 4 ] );
+        $sheets[] = new MappedClassesCancelled( $this->mappedClassesCancelled, $this->worksheetNames[ 5 ] );
+        $sheets[] = new MappedClassesSla( $this->mappedClassesSla, $this->worksheetNames[ 6 ] );
+        $sheets[] = new OutOfSlaHeadCount( $this->outOfSlaHeadCount, $this->worksheetNames[ 7 ] );
+        $sheets[] = new CancelledHeadCount( $this->cancelledHeadCount, $this->worksheetNames[ 8 ] );
 
         return $sheets;
     }
 
-    public function map($mappedGroupedClassesWeek): array
-    {
+    public function map( $mappedGroupedClassesWeek ): array
+ {
         return [
             'Mapped Grouped Classes Week' => $this->mappedGroupedClassesWeek,
             'Mapped Site Classes' => $this->mappedGroupedClasses,

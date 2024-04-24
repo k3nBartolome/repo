@@ -17,6 +17,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Carbon\Carbon;
+
 
 class ClassesController extends Controller
 {
@@ -8449,17 +8451,111 @@ class ClassesController extends Controller
             'grouped_classes' => $mappedGroupedClasses,
         ];
     }
+    public function OutOfSlaMonth()
+    {
+        $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+        $year = 2024;
+        $date = Carbon::now()->format('Y-m-d');
+        $month = null;
+
+        $dateRange = DB::table('date_ranges')
+    ->select('month', 'month_num')
+    ->where('week_start', '<=', $date)
+    ->where('week_end', '>=', $date)
+    ->first();
+
+        if ($dateRange) {
+            $month = $dateRange->month_num;
+        }
+        $grandTotalByProgram = [];
+        $grandTotalByWeeks = []; // Initialize array to accumulate notice weeks
+        $maxProgramBySite = [];
+
+        foreach ($sites as $site) {
+            $siteName = $site->name;
+            $siteId = $site->id;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            if (!isset($grandTotalByWeeks[$siteName])) {
+                $grandTotalByWeeks[$siteName] = 0; // Initialize notice weeks accumulator
+            }
+            $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+            ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                $subquery->where('month_num', $month)->where('year', $year);
+            })
+                ->whereHas('program', function ($subquery) {
+                    $subquery->where('is_active', 1);
+                })
+                ->where('site_id', $siteId)
+                ->where('status', 'Active')
+                ->where('within_sla', 'Outside SLA-New class added')
+                ->get();
+            $totalTarget = $classes->sum('total_target');
+            $notice_weeks = $classes->avg('notice_weeks');
+            $grandTotalByProgram[$siteName] += $totalTarget;
+            $grandTotalByWeeks[$siteName] += $notice_weeks; // Accumulate notice weeks
+            $maxTotalTarget = $classes->max('total_target');
+            $classesWithMaxTarget = $classes->filter(function ($class) use ($maxTotalTarget) {
+                return $class->total_target == $maxTotalTarget;
+            });
+            $maxProgramIds = $classesWithMaxTarget->pluck('program_id')->toArray();
+            $maxProgramNames = Program::whereIn('id', $maxProgramIds)->pluck('program_group')->toArray();
+
+            $maxProgramBySite[$siteId] = [
+                'program_ids' => $maxProgramIds,
+                'program_names' => $maxProgramNames,
+            ];
+        }
+        $mappedGroupedClasses = [];
+        $totalHC = 0;
+        $totalNoticeWeeks = 0; // Initialize total notice weeks
+        foreach ($sites as $site) {
+            $siteName = $site->name;
+            $siteId = $site->id;
+            $notice_weeks_avg = $grandTotalByWeeks[$siteName]; // Use the accumulated notice weeks
+            $totalHC += $grandTotalByProgram[$siteName]; // Accumulate total HC
+
+            $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
+
+            $mappedGroupedClasses[] = [
+                'Site' => $siteName,
+                'HC' => $grandTotalByProgram[$siteName],
+                'Notice Weeks' => number_format($notice_weeks_avg, 2), // Format to two decimal places
+                'Drivers' => $maxPrograms,
+            ];
+
+            // Accumulate total notice weeks
+            $totalNoticeWeeks += $notice_weeks_avg;
+        }
+
+        // Calculate total average notice weeks
+        $totalAverageNoticeWeeks = $totalNoticeWeeks / count($sites);
+
+        // Add totals to the result
+        $mappedGroupedClasses[] = [
+            'Site' => 'Total',
+            'HC' => $totalHC,
+            'Notice Weeks' => number_format($totalAverageNoticeWeeks, 2), // Format to two decimal places
+            'Drivers' => [], // No need to include Drivers for the total row
+        ];
+
+        return [
+            'grouped_classes' => $mappedGroupedClasses,
+        ];
+    }
 
 
-public function Cancelled()
-{
-    $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
-    $year = 2024;
+    public function Cancelled()
+    {
+        $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+        $year = 2024;
+
+
     $grandTotalByProgram = [];
-    $grandTotalByWeeks = []; // Initialize array to accumulate notice weeks
-    $grandTotalByPipeline = []; // Initialize array to accumulate pipeline offered
+    $grandTotalByWeeks = [];
+    $grandTotalByPipeline = [];
     $maxProgramBySite = [];
-
     foreach ($sites as $site) {
         $siteName = $site->name;
         $siteId = $site->id;
@@ -8467,15 +8563,15 @@ public function Cancelled()
             $grandTotalByProgram[$siteName] = 0;
         }
         if (!isset($grandTotalByWeeks[$siteName])) {
-            $grandTotalByWeeks[$siteName] = 0; // Initialize notice weeks accumulator
+            $grandTotalByWeeks[$siteName] = 0;
         }
         if (!isset($grandTotalByPipeline[$siteName])) {
-            $grandTotalByPipeline[$siteName] = 0; // Initialize pipeline offered accumulator
+            $grandTotalByPipeline[$siteName] = 0;
         }
         $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->whereHas('dateRange', function ($subquery) use ($year) {
-                $subquery->where('year', $year);
-            })
+        ->whereHas('dateRange', function ($subquery) use ($year) {
+            $subquery->where('year', $year);
+        })
             ->whereHas('program', function ($subquery) {
                 $subquery->where('is_active', 1);
             })
@@ -8483,11 +8579,11 @@ public function Cancelled()
             ->where('status', 'Cancelled')
             ->get();
         $totalTarget = $classes->sum('total_target');
-        $pipelineOffered = $classes->sum('pipeline_offered'); // Compute pipeline offered
+        $pipelineOffered = $classes->sum('pipeline_offered');
         $notice_weeks = $classes->avg('notice_weeks');
         $grandTotalByProgram[$siteName] += $totalTarget;
-        $grandTotalByWeeks[$siteName] += $notice_weeks; // Accumulate notice weeks
-        $grandTotalByPipeline[$siteName] += $pipelineOffered; // Accumulate pipeline offered
+        $grandTotalByWeeks[$siteName] += $notice_weeks;
+        $grandTotalByPipeline[$siteName] += $pipelineOffered;
         $maxTotalTarget = $classes->max('total_target');
         $classesWithMaxTarget = $classes->filter(function ($class) use ($maxTotalTarget) {
             return $class->total_target == $maxTotalTarget;
@@ -8500,8 +8596,6 @@ public function Cancelled()
             'program_names' => $maxProgramNames,
         ];
     }
-
-    // Calculate total HC and total pipeline offered
     $totalHC = 0;
     $totalPipelineOffered = 0;
     foreach ($sites as $site) {
@@ -8509,19 +8603,15 @@ public function Cancelled()
         $totalHC += $grandTotalByProgram[$site->name];
         $totalPipelineOffered += $grandTotalByPipeline[$site->name];
     }
-
-    // Calculate total average notice weeks
     $totalNoticeWeeks = 0;
     foreach ($grandTotalByWeeks as $notice_weeks) {
         $totalNoticeWeeks += $notice_weeks;
     }
-    $totalNoticeWeeks /= count($sites); // Calculate average notice weeks
-
+    $totalNoticeWeeks /= count($sites);
     $mappedGroupedClasses = [];
     foreach ($sites as $site) {
         $siteId = $site->id;
         $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
-
         $mappedGroupedClasses[] = [
             'Site' => $site->name,
             'HC' => $grandTotalByProgram[$site->name],
@@ -8530,8 +8620,6 @@ public function Cancelled()
             'Drivers' => $maxPrograms,
         ];
     }
-
-    // Add totals to the result
     $mappedGroupedClasses[] = [
         'Site' => 'Total',
         'HC' => $totalHC,
@@ -8539,12 +8627,106 @@ public function Cancelled()
         'Pipeline Offered' => $totalPipelineOffered,
         'Drivers' => [],
     ];
-
     return [
         'grouped_classes' => $mappedGroupedClasses,
     ];
 }
 
+public function CancelledMonth()
+    {
+        $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+        $year = 2024;
+        $date = Carbon::now()->format('Y-m-d');
+        $month = null;
 
+        $dateRange = DB::table('date_ranges')
+    ->select('month', 'month_num')
+    ->where('week_start', '<=', $date)
+    ->where('week_end', '>=', $date)
+    ->first();
+
+        if ($dateRange) {
+            $month = $dateRange->month_num;
+        }
+
+    $grandTotalByProgram = [];
+    $grandTotalByWeeks = [];
+    $grandTotalByPipeline = [];
+    $maxProgramBySite = [];
+    foreach ($sites as $site) {
+        $siteName = $site->name;
+        $siteId = $site->id;
+        if (!isset($grandTotalByProgram[$siteName])) {
+            $grandTotalByProgram[$siteName] = 0;
+        }
+        if (!isset($grandTotalByWeeks[$siteName])) {
+            $grandTotalByWeeks[$siteName] = 0;
+        }
+        if (!isset($grandTotalByPipeline[$siteName])) {
+            $grandTotalByPipeline[$siteName] = 0;
+        }
+        $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+        ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+            $subquery->where('month_num', $month)->where('year', $year);
+        })
+            ->whereHas('program', function ($subquery) {
+                $subquery->where('is_active', 1);
+            })
+            ->where('site_id', $siteId)
+            ->where('status', 'Cancelled')
+            ->get();
+        $totalTarget = $classes->sum('total_target');
+        $pipelineOffered = $classes->sum('pipeline_offered');
+        $notice_weeks = $classes->avg('notice_weeks');
+        $grandTotalByProgram[$siteName] += $totalTarget;
+        $grandTotalByWeeks[$siteName] += $notice_weeks;
+        $grandTotalByPipeline[$siteName] += $pipelineOffered;
+        $maxTotalTarget = $classes->max('total_target');
+        $classesWithMaxTarget = $classes->filter(function ($class) use ($maxTotalTarget) {
+            return $class->total_target == $maxTotalTarget;
+        });
+        $maxProgramIds = $classesWithMaxTarget->pluck('program_id')->toArray();
+        $maxProgramNames = Program::whereIn('id', $maxProgramIds)->pluck('program_group')->toArray();
+
+        $maxProgramBySite[$siteId] = [
+            'program_ids' => $maxProgramIds,
+            'program_names' => $maxProgramNames,
+        ];
+    }
+    $totalHC = 0;
+    $totalPipelineOffered = 0;
+    foreach ($sites as $site) {
+        $siteId = $site->id;
+        $totalHC += $grandTotalByProgram[$site->name];
+        $totalPipelineOffered += $grandTotalByPipeline[$site->name];
+    }
+    $totalNoticeWeeks = 0;
+    foreach ($grandTotalByWeeks as $notice_weeks) {
+        $totalNoticeWeeks += $notice_weeks;
+    }
+    $totalNoticeWeeks /= count($sites);
+    $mappedGroupedClasses = [];
+    foreach ($sites as $site) {
+        $siteId = $site->id;
+        $maxPrograms = isset($maxProgramBySite[$siteId]) ? $maxProgramBySite[$siteId]['program_names'] : [];
+        $mappedGroupedClasses[] = [
+            'Site' => $site->name,
+            'HC' => $grandTotalByProgram[$site->name],
+            'Notice Weeks' => number_format($grandTotalByWeeks[$site->name], 2),
+            'Pipeline Offered' => $grandTotalByPipeline[$site->name],
+            'Drivers' => $maxPrograms,
+        ];
+    }
+    $mappedGroupedClasses[] = [
+        'Site' => 'Total',
+        'HC' => $totalHC,
+        'Notice Weeks' => number_format($totalNoticeWeeks, 2),
+        'Pipeline Offered' => $totalPipelineOffered,
+        'Drivers' => [],
+    ];
+    return [
+        'grouped_classes' => $mappedGroupedClasses,
+    ];
+}
 
 }
