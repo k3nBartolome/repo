@@ -27,6 +27,8 @@ class CapEmailController extends Controller
         $mappedClassesSla = $this->classesSla();
         $outOfSlaHeadCount = $this->OutOfSla();
         $cancelledHeadCount = $this->Cancelled();
+        $outOfSlaHeadCountMonth = $this->OutOfSlaMonth();
+        $cancelledHeadCountMonth = $this->CancelledMonth();
         $mappedGroupedClassesWeek = $this->retrieveDataForEmailWeek();
         $mappedClasses = $this->retrieveDataForClassesEmail();
         $mappedB2Classes = $this->retrieveB2DataForEmail();
@@ -39,8 +41,10 @@ class CapEmailController extends Controller
             'Moved Classes',
             'Cancelled Classes',
             'Out Of SLA',
-            'Per Site Out of SLA',
-            'Per Site Cancellation',
+            'YTD Per Site Out of SLA',
+            'YTD Per Site Cancellation',
+            'MTD Per Site Out of SLA',
+            'MTD Per Site Cancellation',
         ];
         Excel::store(new DashboardClassesExportWeek(
             $mappedGroupedClassesWeek,
@@ -52,6 +56,8 @@ class CapEmailController extends Controller
             $mappedClassesSla,
             $outOfSlaHeadCount,
             $cancelledHeadCount,
+            $outOfSlaHeadCountMonth,
+            $cancelledHeadCountMonth,
             $worksheetNames,
         ), 'public/' . $excelFileName);
         $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];

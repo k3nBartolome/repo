@@ -4,8 +4,7 @@ namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 
-class DashboardClassesExportWeek implements WithMultipleSheets
- {
+class DashboardClassesExportWeek implements WithMultipleSheets {
     protected $mappedGroupedClassesWeek;
     protected $mappedGroupedClasses;
     protected $mappedExternalClasses;
@@ -15,10 +14,11 @@ class DashboardClassesExportWeek implements WithMultipleSheets
     protected $mappedClassesSla;
     protected $outOfSlaHeadCount;
     protected $cancelledHeadCount;
+    protected $outOfSlaHeadCountMonth;
+    protected $cancelledHeadCountMonth;
     protected $worksheetNames;
 
-    public function __construct( $mappedGroupedClassesWeek, $mappedGroupedClasses, $mappedExternalClasses, $mappedInternalClasses, $mappedClassesMoved, $mappedClassesCancelled, $mappedClassesSla, $outOfSlaHeadCount, $cancelledHeadCount, $worksheetNames )
- {
+    public function __construct( $mappedGroupedClassesWeek, $mappedGroupedClasses, $mappedExternalClasses, $mappedInternalClasses, $mappedClassesMoved, $mappedClassesCancelled, $mappedClassesSla, $outOfSlaHeadCount, $cancelledHeadCount, $outOfSlaHeadCountMonth, $cancelledHeadCountMonth, $worksheetNames ) {
         $this->mappedGroupedClassesWeek = collect( $mappedGroupedClassesWeek );
         $this->mappedGroupedClasses = collect( $mappedGroupedClasses );
         $this->mappedExternalClasses = collect( $mappedExternalClasses );
@@ -28,11 +28,12 @@ class DashboardClassesExportWeek implements WithMultipleSheets
         $this->mappedClassesSla = collect( $mappedClassesSla );
         $this->outOfSlaHeadCount = collect( $outOfSlaHeadCount );
         $this->cancelledHeadCount = collect( $cancelledHeadCount );
+        $this->outOfSlaHeadCountMonth = collect( $outOfSlaHeadCountMonth );
+        $this->cancelledHeadCountMonth = collect( $cancelledHeadCountMonth );
         $this->worksheetNames = $worksheetNames;
     }
 
-    public function sheets(): array
- {
+    public function sheets(): array {
         $sheets = [];
 
         $sheets[] = new MappedGroupedClassesWeekSheet( $this->mappedGroupedClassesWeek, $this->worksheetNames[ 0 ] );
@@ -44,12 +45,13 @@ class DashboardClassesExportWeek implements WithMultipleSheets
         $sheets[] = new MappedClassesSla( $this->mappedClassesSla, $this->worksheetNames[ 6 ] );
         $sheets[] = new OutOfSlaHeadCount( $this->outOfSlaHeadCount, $this->worksheetNames[ 7 ] );
         $sheets[] = new CancelledHeadCount( $this->cancelledHeadCount, $this->worksheetNames[ 8 ] );
+        $sheets[] = new OutOfSlaHeadCountMonth( $this->outOfSlaHeadCountMonth, $this->worksheetNames[ 9 ] );
+        $sheets[] = new CancelledHeadCountMonth( $this->cancelledHeadCountMonth, $this->worksheetNames[ 10 ] );
 
         return $sheets;
     }
 
-    public function map( $mappedGroupedClassesWeek ): array
- {
+    public function map( $mappedGroupedClassesWeek ): array {
         return [
             'Mapped Grouped Classes Week' => $this->mappedGroupedClassesWeek,
             'Mapped Site Classes' => $this->mappedGroupedClasses,
@@ -60,6 +62,8 @@ class DashboardClassesExportWeek implements WithMultipleSheets
             'Mapped Classes Sla' => $this->mappedClassesSla,
             'Mapped Out OF Sla' => $this->outOfSlaHeadCount,
             'Mapped Cancelled' => $this->cancelledHeadCount,
+            'Mapped Out OF Sla Month' => $this->outOfSlaHeadCountMonth,
+            'Mapped Cancelled Month' => $this->cancelledHeadCountMonth,
         ];
     }
 }

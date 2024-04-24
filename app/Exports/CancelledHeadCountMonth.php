@@ -7,7 +7,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
 
-class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle
+class CancelledHeadCountMonth implements FromCollection, WithHeadings, WithTitle
  {
     protected $data;
     protected $title;
@@ -25,7 +25,7 @@ class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle
 
     public function title(): string
  {
-        return 'YTD Per Site Out of SLA';
+        return 'MTD Per Site Cancelled';
     }
 
     public function headings(): array
@@ -34,6 +34,7 @@ class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle
         return [
             'Site Name',
             'HC',
+            'Pipeline Offered',
             'Average Notice Weeks',
             'Program Group'
 
