@@ -18,12 +18,12 @@ class CreateScreeningTable extends Migration
             $table->string('sc_scheduled_by')->nullable();
             $table->string('sc_processed_by')->nullable();
             $table->string('sc_recruiter_notes')->nullable();
-            $table->time('sc_scheduled_timeslot')->nullable();
-            $table->time('sc_time_assigned')->nullable();
+            $table->datetime('sc_scheduled_timeslot')->nullable();
+            $table->datetime('sc_time_assigned')->nullable();
             $table->string('sc_status')->nullable();
             $table->datetime('sc_start')->nullable();
             $table->datetime('sc_end')->nullable();
-            $table->decimal('sc_aht', 5, 2)->nullable()->nullable();
+            $table->time('sc_aht')->nullable();
             $table->unsignedBigInteger('sc_updated_by')->nullable();
             $table->unsignedBigInteger('apn_id')->nullable();
             $table->string('sc_remarks')->nullable()->nullable();

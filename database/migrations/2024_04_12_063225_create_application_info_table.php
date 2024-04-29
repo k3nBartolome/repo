@@ -27,9 +27,9 @@ class CreateApplicationInfoTable extends Migration
             $table->string('apn_name_of_event');
             $table->string('apn_segment');
             $table->string('apn_shifter_type');
-            $table->string('apn_ko');
-            $table->string('apn_word_quiz');
-            $table->string('apn_sva');
+            $table->integer('apn_ko');
+            $table->integer('apn_word_quiz');
+            $table->integer('apn_sva');
             $table->string('apn_typing_test');
             $table->string('apn_typing_test_accuracy');
             $table->string('apn_typing_test_speed');

@@ -25,9 +25,7 @@ class CreateOvTable extends Migration
             $table->string('ov_added_by')->nullable();
             $table->dateTime('ov_last_update')->nullable();
             $table->dateTime('ov_added_date');
-            $table->foreign('apn_id')->references('id')->on('application_info')->onDelete('cascade'); // replace 'another_table' with the actual table name where 'apn_id' references
-            // add more foreign key constraints if necessary
-            // e.g., $table->foreign('foreign_key_column')->references('referenced_column')->on('referenced_table')->onDelete('cascade');
+            $table->foreign('apn_id')->references('id')->on('application_info')->onDelete('cascade');
         });
     }
 
