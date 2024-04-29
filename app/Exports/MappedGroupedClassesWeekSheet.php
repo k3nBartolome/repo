@@ -6,12 +6,13 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Illuminate\Support\Collection;
+
 class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, WithTitle
 {
     protected $data;
     protected $title;
 
-    public function __construct($data,$title)
+    public function __construct($data, $title)
     {
         $this->data = collect($data);
         $this->title = $title;
@@ -54,7 +55,7 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, Wit
             'April',
             'Apr 28 - May 4',
             'May 5 - May 11',
-            'May 12 - May 28',
+            'May 12 - May 18',
             'May 19 - May 25',
             'May',
             'May 26 - Jun 2',
@@ -94,7 +95,7 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, Wit
             'Dec 8 - Dec 14',
             'Dec 15 - Dec 21',
             'Dec 22 - Dec 28',
-           
+
             'December',
             'Total',
         ];
