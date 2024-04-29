@@ -33,7 +33,7 @@ class CreateInitialInterviewTable extends Migration
             $table->string('ii_interviewer')->nullable();
             $table->dateTime('ii_time_started')->nullable();
             $table->dateTime('ii_time_ended')->nullable();
-            $table->string('ii_aht')->nullable();
+            $table->time('ii_aht')->nullable();
             $table->integer('ii_cs_score')->nullable();
             $table->integer('ii_srp_score')->nullable();
             $table->string('ii_status')->nullable();

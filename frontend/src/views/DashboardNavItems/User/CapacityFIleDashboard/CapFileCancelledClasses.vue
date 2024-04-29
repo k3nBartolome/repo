@@ -475,22 +475,27 @@ export default {
       columns: [
         { data: "id", title: "ID" },
         {
-          data: "id",
-          title: "Actions",
-          render: (data) => {
-            const isUser = this.isUser;
-            const isSourcing = this.isSourcing;
+  data: "id",
+  title: "Actions",
+  render: (data) => {
+    const isUser = this.isUser;
+    const isSourcing = this.isSourcing;
 
-            return `
+    return `
       ${
         isUser || isSourcing
-          ? `<button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForHistory(${data})">View History</button>
-             <button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForEdit(${data})">Edit</button>`
+          ? `<button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForHistory(${data})">View History</button>`
+          : ""
+      }
+      ${
+        isUser
+          ? `<button class="text-xs w-30 btn btn-primary" data-id="${data}" onclick="window.vm.openModalForEdit(${data})">Edit</button>`
           : ""
       }
     `;
-          },
-        },
+  },
+},
+
 
         { data: "country", title: "Country" },
         { data: "region", title: "Region" },

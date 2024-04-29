@@ -31,7 +31,7 @@
           </button>
           <form
             @submit.prevent="addLeads"
-            class="px-4 py-2 grid grid-cols  gap-2"
+            class="grid gap-2 px-4 py-2 grid-cols"
           >
           <div class="col-span-1">
             <label class="block">
@@ -173,10 +173,6 @@
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
           <div>
-            <select v-model="selected">
-              <option disabled value="">Please select one</option>
-              <option v-for="option in options" :key="option">{{ option }}</option>
-            </select>
             <input type="file" @change="handleFileUpload" accept=".xlsx,.xls,.csv" />
           </div>
             <div class="flex justify-end mt-4">
@@ -196,7 +192,7 @@
     <div class="flex items-baseline space-x-2 " >
       <div class="">
         <router-link to="/h&s/screening" class="link-button">
-          <button class="text-black font-sans font-semibold text-2xs svg-button">
+          <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
               <g id="SVGRepo_iconCarrier">
@@ -226,7 +222,7 @@
 
       <div class="">
         <router-link to="/h&s/interview" class="link-button">
-        <button class="text-black font-sans font-semibold text-2xs svg-button">
+        <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
               <g id="SVGRepo_iconCarrier">
@@ -253,7 +249,7 @@
       </div>
       <div class="">
         <router-link to="/h&s/ov" class="link-button">
-        <button class="text-black font-sans font-semibold text-2xs svg-button">
+        <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
               <g id="SVGRepo_iconCarrier">
@@ -280,7 +276,7 @@
       </div>
       <div class="">
         <router-link to="/h&s/prog_specs" class="link-button">
-          <button class="text-black font-sans font-semibold text-2xs svg-button">
+          <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
               <g id="SVGRepo_iconCarrier">
@@ -307,7 +303,7 @@
       </div>
       <div class="">
         <router-link to="/h&s/job_offer" class="link-button">
-          <button class="text-black font-sans font-semibold text-2xs svg-button">
+          <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
               <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
               <g id="SVGRepo_iconCarrier">
@@ -335,8 +331,8 @@
     </div>
   </div>
   <main class="flex flex-col h-screen border border-1">
-    <div class="px-4 py-2 grid grid-cols-10 grid-rows-1 gap-2">
-      <button class="bg-orange-500 text-white rounded-full text-2xs svg-button2" @click="showModalAdd = true">
+    <div class="grid grid-cols-10 grid-rows-1 gap-2 px-4 py-2">
+      <button class="text-white bg-orange-500 rounded-full text-2xs svg-button2" @click="showModalAdd = true">
         <svg width="143px" height="143px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff" stroke="#ffffff">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -355,7 +351,7 @@
         </svg>
         Add Leads
       </button>
-      <button class="bg-orange-500 text-white rounded-full text-2xs svg-button2" @click="showModalImport = true">
+      <button class="text-white bg-orange-500 rounded-full text-2xs svg-button2" @click="showModalImport = true">
         <svg width="143px" height="143px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff" stroke="#ffffff">
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
           <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>

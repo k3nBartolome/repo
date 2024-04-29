@@ -1,5 +1,8 @@
 <template>
   <header class="w-full">
+    <h2 class="pl-8 pb-8 font-bold tracking-tight text-gray-900">
+     Site Supply Manager
+     </h2>
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
       <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
