@@ -620,7 +620,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -645,7 +645,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/programs7",
+          "http://10.109.2.112:8081/api/programs7",
           {
             headers,
           }
@@ -666,7 +666,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -689,7 +689,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "http://10.109.2.112:8081/api/daterange",
           { headers }
         );
 
@@ -711,7 +711,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -788,7 +788,7 @@ export default {
 
       axios
         .put(
-          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {
