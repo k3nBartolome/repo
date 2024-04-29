@@ -34,7 +34,7 @@ class DashboardClassesExport implements FromCollection, WithHeadings
             'Feb 11 - Feb 17',
             'Feb 18 - Feb 24',
             'February',
-            'Feb 25 - Mar 1',
+            'Feb 25 - Mar 2',
             'Mar 3 - Mar 9',
             'Mar 10 - Mar 16',
             'Mar 17 - Mar 23',
