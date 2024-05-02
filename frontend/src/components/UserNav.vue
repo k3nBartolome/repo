@@ -10,7 +10,7 @@
             <div class="hidden md:block ml-10 flex-grow">
               <div class="flex items-baseline space-x-4 justify-center">
                 <router-link to="/capfile" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser || isSourcing">Capacity File</router-link>
-                <router-link to="/staffing" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">Staffing Tracker</router-link>
+                <router-link to="/staffing" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  >Staffing Tracker</router-link>
                 <router-link to="/sr_compliance" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button">SR Pending Movements</router-link>
                 <router-link to="/h&s" class=" hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"  v-if="isUser">H&S Tool</router-link>
                 <div class="dropdown" @mouseover="openDropdown" @mouseleave="closeDropdown" @click="toggleDropdown">
