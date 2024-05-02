@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class JobOffer extends Model
 {
-    use HasFactory;
-
-    protected $table = 'job_offer'; // Specify the table name
+    protected $table = 'job_offer';
 
     protected $fillable = [
         'jo_poc',
@@ -28,4 +25,6 @@ class JobOffer extends Model
         'jo_last_update',
         'jo_added_date',
     ];
+
+    // Optionally, you can define relationships or additional methods here
 }

@@ -1,22 +1,20 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class LanguageInterview extends Model
 {
-    use HasFactory;
-
     protected $table = 'language_interview';
+
     protected $fillable = [
-        'li_start',
+        'li_started',
         'li_end',
         'li_aht',
         'li_date',
         'li_month',
-        'li_meek',
+        'li_week',
         'li_pron_accent',
         'li_grammar',
         'li_fluency',

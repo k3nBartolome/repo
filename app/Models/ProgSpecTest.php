@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ProgSpecTest extends Model
 {
-    use HasFactory;
-
-    protected $table = 'prog_spec_test'; // Specify the table name
+    protected $table = 'prog_spec_test';
 
     protected $fillable = [
         'pst_date',

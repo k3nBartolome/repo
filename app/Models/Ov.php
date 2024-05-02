@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Ov extends Model
 {
-    use HasFactory;
-
-    protected $table = 'ov'; // Specify the table name
+    protected $table = 'ov';
 
     protected $fillable = [
         'ov_mode',
@@ -23,4 +20,6 @@ class Ov extends Model
         'ov_last_update',
         'ov_added_date',
     ];
+
+    // Optionally, you can define relationships or additional methods here
 }

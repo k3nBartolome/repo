@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class InitialInterview extends Model
 {
-    use HasFactory;
-
     protected $table = 'initial_interview';
 
     protected $fillable = [
@@ -41,5 +38,10 @@ class InitialInterview extends Model
         'ii_last_update',
         'ii_added_date',
         'ii_expected_salary',
+        'ii_is_legal_age',
+        'ii_previous_company_name',
+        'ii_last_working_date',
+        'ii_previous_company_type',
+        'ii_work_handled',
     ];
 }

@@ -1,15 +1,12 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Screening extends Model
 {
-    use HasFactory;
-
-    protected $table = 'screening'; // Specify the table name
+    protected $table = 'screening';
 
     protected $fillable = [
         'sc_scheduled_by',
@@ -18,7 +15,7 @@ class Screening extends Model
         'sc_scheduled_timeslot',
         'sc_time_assigned',
         'sc_status',
-        'sc_start',
+        'sc_started',
         'sc_end',
         'sc_aht',
         'sc_updated_by',

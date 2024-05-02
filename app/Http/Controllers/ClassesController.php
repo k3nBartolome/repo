@@ -4442,8 +4442,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -4540,7 +4545,6 @@ class ClassesController extends Controller
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -4604,10 +4608,80 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
+            }
+            if ($grandTotal != 0) {
+                $mappedGroupedClasses[] = [
+                    'Site' => $siteName,
+                    'Program' => $programName,
+                    'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
+                    'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
+                    'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
+                    'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
+                    'Jan' => collect($weeklyData)->only([53, 54, 55, 56])->sum() != 0 ? collect($weeklyData)->only([53, 54, 55, 56])->sum() : '',
+                    'Week5' => $weeklyData['57'] != 0 ? $weeklyData['57'] : '',
+                    'Week6' => $weeklyData['58'] != 0 ? $weeklyData['58'] : '',
+                    'Week7' => $weeklyData['59'] != 0 ? $weeklyData['59'] : '',
+                    'Week8' => $weeklyData['60'] != 0 ? $weeklyData['60'] : '',
+                    'Feb' => collect($weeklyData)->only([57, 58, 59, 60])->sum() != 0 ? collect($weeklyData)->only([57, 58, 59, 60])->sum() : '',
+                    'Week9' => $weeklyData['61'] != 0 ? $weeklyData['61'] : '',
+                    'Week10' => $weeklyData['62'] != 0 ? $weeklyData['62'] : '',
+                    'Week11' => $weeklyData['63'] != 0 ? $weeklyData['63'] : '',
+                    'Week12' => $weeklyData['64'] != 0 ? $weeklyData['64'] : '',
+                    'Week13' => $weeklyData['65'] != 0 ? $weeklyData['65'] : '',
+                    'Mar' => collect($weeklyData)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($weeklyData)->only([61, 62, 63, 64, 65])->sum() : '',
+                    'Week14' => $weeklyData['66'] != 0 ? $weeklyData['66'] : '',
+                    'Week15' => $weeklyData['67'] != 0 ? $weeklyData['67'] : '',
+                    'Week16' => $weeklyData['68'] != 0 ? $weeklyData['68'] : '',
+                    'Week17' => $weeklyData['69'] != 0 ? $weeklyData['69'] : '',
+                    'Apr' => collect($weeklyData)->only([66, 67, 68, 69])->sum() != 0 ? collect($weeklyData)->only([66, 67, 68, 69])->sum() : '',
+                    'Week18' => $weeklyData['70'] != 0 ? $weeklyData['70'] : '',
+                    'Week19' => $weeklyData['71'] != 0 ? $weeklyData['71'] : '',
+                    'Week20' => $weeklyData['72'] != 0 ? $weeklyData['72'] : '',
+                    'Week21' => $weeklyData['73'] != 0 ? $weeklyData['73'] : '',
+                    'May' => collect($weeklyData)->only([70, 71, 72, 73])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73])->sum() : '',
+                    'Week22' => $weeklyData['74'] != 0 ? $weeklyData['74'] : '',
+                    'Week23' => $weeklyData['75'] != 0 ? $weeklyData['75'] : '',
+                    'Week24' => $weeklyData['76'] != 0 ? $weeklyData['76'] : '',
+                    'Week25' => $weeklyData['77'] != 0 ? $weeklyData['77'] : '',
+                    'Week26' => $weeklyData['78'] != 0 ? $weeklyData['78'] : '',
+                    'Jun' => collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() : '',
+                    'Week27' => $weeklyData['79'] != 0 ? $weeklyData['79'] : '',
+                    'Week28' => $weeklyData['80'] != 0 ? $weeklyData['80'] : '',
+                    'Week29' => $weeklyData['81'] != 0 ? $weeklyData['81'] : '',
+                    'Week30' => $weeklyData['82'] != 0 ? $weeklyData['82'] : '',
+                    'Jul' => collect($weeklyData)->only([79, 80, 81, 82])->sum() != 0 ? collect($weeklyData)->only([79, 80, 81, 82])->sum() : '',
+                    'Week31' => $weeklyData['83'] != 0 ? $weeklyData['83'] : '',
+                    'Week32' => $weeklyData['84'] != 0 ? $weeklyData['84'] : '',
+                    'Week33' => $weeklyData['85'] != 0 ? $weeklyData['85'] : '',
+                    'Week34' => $weeklyData['86'] != 0 ? $weeklyData['86'] : '',
+                    'Week35' => $weeklyData['87'] != 0 ? $weeklyData['87'] : '',
+                    'Aug' => collect($weeklyData)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($weeklyData)->only([83, 84, 85, 86, 87])->sum() : '',
+                    'Week36' => $weeklyData['88'] != 0 ? $weeklyData['88'] : '',
+                    'Week37' => $weeklyData['89'] != 0 ? $weeklyData['89'] : '',
+                    'Week38' => $weeklyData['90'] != 0 ? $weeklyData['90'] : '',
+                    'Week39' => $weeklyData['91'] != 0 ? $weeklyData['91'] : '',
+                    'Sep' => collect($weeklyData)->only([88, 89, 90, 91])->sum() != 0 ? collect($weeklyData)->only([88, 89, 90, 91])->sum() : '',
+                    'Week40' => $weeklyData['92'] != 0 ? $weeklyData['92'] : '',
+                    'Week41' => $weeklyData['93'] != 0 ? $weeklyData['93'] : '',
+                    'Week42' => $weeklyData['94'] != 0 ? $weeklyData['94'] : '',
+                    'Week43' => $weeklyData['95'] != 0 ? $weeklyData['95'] : '',
+                    'Oct' => collect($weeklyData)->only([92, 93, 94, 95])->sum() != 0 ? collect($weeklyData)->only([92, 93, 94, 95])->sum() : '',
+                    'Week44' => $weeklyData['96'] != 0 ? $weeklyData['96'] : '',
+                    'Week45' => $weeklyData['97'] != 0 ? $weeklyData['97'] : '',
+                    'Week46' => $weeklyData['98'] != 0 ? $weeklyData['98'] : '',
+                    'Week47' => $weeklyData['99'] != 0 ? $weeklyData['99'] : '',
+                    'Week48' => $weeklyData['100'] != 0 ? $weeklyData['100'] : '',
+                    'Nov' => collect($weeklyData)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($weeklyData)->only([96, 97, 98, 99, 100])->sum() : '',
+                    'Week49' => $weeklyData['101'] != 0 ? $weeklyData['101'] : '',
+                    'Week50' => $weeklyData['102'] != 0 ? $weeklyData['102'] : '',
+                    'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
+                    'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
+                    'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
             }
         }
 
@@ -7803,20 +7877,18 @@ class ClassesController extends Controller
             'ta' => 'nullable',
             'cl' => 'nullable',
         ]);
-
+        $requested_by = [$request->requested_by];
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
         $class = Classes::find($id);
-        $class->status = 'Moved';
         $class->save();
-
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
-        $newClass->requested_by = $request->requested_by; // Directly assign the value without further processing
-
+        $newClass->status = 'Moved';
+        $newClass->requested_by = json_encode($requested_by);
         $newClass->fill($request->all());
         $newClass->save();
 

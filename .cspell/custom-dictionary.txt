@@ -75,6 +75,7 @@ siteclassesguatemala
 siteclassesjamaica
 siteinventory
 siteinventoryall
+sitely
 spreadsheetml
 sslmode
 subquery

@@ -4,7 +4,7 @@
       Supply Manager
      </h2>
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
-      
+
       <h2 class="pl-8 text-sm font-bold tracking-tight text-gray-900">
         <button
         v-if="isUser || isRemx"
@@ -14,7 +14,7 @@
         ADD Supply
       </button>
       </h2>
- 
+
     </div>
   </header>
   <div class="py-0">
@@ -400,7 +400,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/itemsboth3",
+          "http://127.0.0.1:8000/api/itemsboth3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -421,7 +421,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -483,7 +483,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items", formData, {
+        .post("http://127.0.0.1:8000/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

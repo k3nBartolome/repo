@@ -1,20 +1,14 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Bci extends Model
 {
-    use HasFactory;
-
-    protected $table = 'bci'; // Specify the table name
+    protected $table = 'bci';
 
     protected $fillable = [
-        'bci_recruiter_name',
-        'bci_time_started',
-        'bci_time_ended',
         'bci_aht',
         'bci_integrity',
         'bci_orientation',

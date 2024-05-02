@@ -947,14 +947,15 @@ class ClassStaffingController extends Controller
         $classes->save();
 
         $class = ClassStaffing::find($id);
-        $class->active_status = '0';
+        $class->active_status = '1';
+        $class->transaction = 'Update';
+        $class->updated_by = $request->input('updated_by');
         $class->save();
 
         $newClass = $class->replicate();
-        $newClass->transaction = 'Update';
-        $newClass->updated_by = $request->input('updated_by');
+
         $newClass->fill($request->all());
-        $newClass->active_status = '1';
+        $newClass->active_status = '0';
         $newClass->save();
 
         return response()->json([

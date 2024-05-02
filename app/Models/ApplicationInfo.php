@@ -1,14 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ApplicationInfo extends Model
 {
-    use HasFactory;
-
     protected $table = 'application_info';
 
     protected $fillable = [
@@ -25,7 +22,6 @@ class ApplicationInfo extends Model
         'apn_typing_test_accuracy',
         'apn_typing_test_speed',
         'apn_oot_non_oot',
-        'apn_location',
         'apn_gen_source',
         'apn_specific_source',
         'apn_name_of_event',
@@ -34,11 +30,14 @@ class ApplicationInfo extends Model
         'apn_referrer_hrid',
         'apn_referrer_account',
         'apn_applicant_referrer_name',
-        'apn_referred_by',
         'apn_updated_by',
         'ai_id',
         'apn_added_by',
         'apn_added_date',
         'apn_last_update',
+        'apn_application_date',
+        'apn_application_week_ending',
+        'apn_application_month',
+        'apn_leads_added_date',
     ];
 }
