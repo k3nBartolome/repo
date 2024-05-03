@@ -753,6 +753,7 @@ export default {
       show_ups_external: "",
       show_ups_total: "",
       deficit: "",
+      classes_id: "",
       percentage: "",
       status: "",
       open: "",
@@ -778,9 +779,6 @@ export default {
     };
   },
   computed: {
-    class_selected() {
-      return this.$route.query.class_selected;
-    },
     filteredClasses() {
       let filtered = this.classesall;
       if (this.sites_selected) {
@@ -1050,7 +1048,7 @@ export default {
     this.getDateRange();
     this.getClassesStaffing();
     this.getClassesAll();
-    this.getClasses();
+
     this.getTransaction();
   },
   methods: {
@@ -1060,7 +1058,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classestransaction/${id}`,
+          `http://127.0.0.1:8000/api/classestransaction/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1116,7 +1114,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1136,7 +1134,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classesstaffing/${id}`,
+          `http://127.0.0.1:8000/api/classesstaffing/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1172,55 +1170,35 @@ export default {
         this.internals_hires_all = classStaffingObj.internals_hires_all;
         this.externals_hires_all = classStaffingObj.externals_hires_all;
         this.pipeline_target = classStaffingObj.pipeline_target;
+        this.class_selected = classStaffingObj.classes_id;
         this.pipeline = classStaffingObj.pipeline;
         this.over_hires = classStaffingObj.over_hires;
         this.additional_remarks = classStaffingObj.additional_remarks;
+        this.type_of_hiring = classStaffingObj.classes.type_of_hiring;
+        this.external_target = classStaffingObj.classes.external_target;
+        this.internal_target = classStaffingObj.classes.internal_target;
+        this.total_target = classStaffingObj.classes.total_target;
+        this.region = classStaffingObj.classes.site.region;
+        this.country = classStaffingObj.classes.site.country;
+        this.program_selected = classStaffingObj.classes.program.id;
+        this.site_selected = classStaffingObj.classes.site.id;
+        this.hiring_week = classStaffingObj.classes.date_range.id;
+        this.year = classStaffingObj.classes.date_range.year;
+        this.month = classStaffingObj.classes.date_range.month;
+        this.training_start = classStaffingObj.classes.agreed_start_date;
+        this.erf_number = classStaffingObj.classes.erf_number;
+        this.wave_no = classStaffingObj.classes.wave_no;
+        console.log("id moto" + this.class_selected);
       } catch (error) {
         console.log(error);
       }
     },
-    async getClasses() {
-      try {
-        const token = this.$store.state.token;
-        const classSelected = this.$route.params.id;
 
-        if (classSelected) {
-          const response = await axios.get(
-            `http://10.109.2.112:8081/api/classes/${classSelected}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          const classObj = response.data.class;
-          console.log(classObj);
-          this.type_of_hiring = classObj.type_of_hiring;
-          this.external_target = classObj.external_target;
-          this.internal_target = classObj.internal_target;
-          this.total_target = classObj.total_target;
-          this.region = classObj.site.region;
-          this.country = classObj.site.country;
-          this.program_selected = classObj.program_id;
-          this.site_selected = classObj.site_id;
-          this.hiring_week = classObj.date_range.id;
-          this.year = classObj.date_range.year;
-          this.month = classObj.date_range.month;
-          this.training_start = classObj.agreed_start_date;
-          this.erf_number = classObj.erf_number;
-          this.wave_no = classObj.wave_no;
-        } else {
-          console.log("No class selected");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async getSites() {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1237,7 +1215,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1256,7 +1234,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1333,7 +1311,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/updateclassesstaffing/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/updateclassesstaffing/${this.$route.params.id}`,
           formData,
           config
         )
@@ -1363,6 +1341,7 @@ export default {
           this.pending_ov = "";
           this.pending_pre_emps = "";
           this.classes_number = "";
+          this.classes_id = "";
           this.pipeline_total = "";
           this.cap_starts = "";
           this.internals_hires_all = "";

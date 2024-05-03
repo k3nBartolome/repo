@@ -123,8 +123,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);
     Route::get('export4', [ClassesController::class, 'dashboardClassesExport4']);
     Route::get('mps', [ClassStaffingController::class, 'mps']);
-    Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
-    Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+
     Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
     Route::get('programs_selected', [ProgramController::class, 'perSite']);
     Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
@@ -226,3 +225,5 @@ Route::get('out/month', [ClassesController::class, 'OutOfSlaMonth']);
 Route::get('cancel/month', [ClassesController::class, 'CancelledMonth']);
 Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
 Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);
+Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);

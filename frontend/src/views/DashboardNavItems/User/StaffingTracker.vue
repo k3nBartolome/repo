@@ -92,7 +92,7 @@
       <div class="scroll">
         <div class="w-2/3 mx-auto datatable-container">
           <DataTable
-            :data="classes"
+            :data="class_staffing"
             :columns="columns"
             class="table divide-y divide-gray-200 table-auto table-striped"
             :options="{
@@ -154,7 +154,7 @@ export default {
   components: { DataTable },
   data() {
     return {
-      classes: [],
+      class_staffing: [],
       sites: [],
       programs: [],
       daterange: [],
@@ -179,17 +179,20 @@ export default {
   `;
           },
         },
-        { data: "country", title: "Country" },
-        { data: "region", title: "Region" },
-        { data: "site_name", title: "Site" },
-        { data: "program_name", title: "Program" },
-        { data: "month", title: "Month" },
-        { data: "date_range", title: "Hiring Week" },
-        { data: "total_target", title: "Total Target" },
-        { data: "original_start_date", title: "Original Start Date" },
-        { data: "type_of_hiring", title: "Type of Hiring" },
-        { data: "created_at", title: "Created date" },
-        { data: "created_by", title: "Created by" },
+        { data: "classes.site.country", title: "Country" },
+        { data: "classes.site.region", title: "Region" },
+        { data: "classes.site.name", title: "Site" },
+        { data: "classes.program.name", title: "Program" },
+        { data: "classes.date_range.month", title: "Month" },
+        { data: "classes.date_range.date_range", title: "Hiring Week" },
+        { data: "classes.total_target", title: "Total Target" },
+        {
+          data: "classes.original_start_date",
+          title: "Original Start Date",
+        },
+        { data: "classes.type_of_hiring", title: "Type of Hiring" },
+        { data: "classes.created_at", title: "Created date" },
+        { data: "classes.created_by_user.name", title: "Created by" },
       ],
     };
   },
@@ -210,21 +213,18 @@ export default {
       this.status = "";
     },
     navigateToEdit(id) {
-      this.$router.push(`/updatestaffing/${id}`);
+      this.$router.push({
+        path: `/updatestaffing/${id}`,
+        query: {},
+      });
     },
 
     async getClassesAll() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesstaffing",
           {
-            params: {
-              sites_selected: this.sites_selected,
-              programs_selected: this.programs_selected,
-              month_selected: this.month_selected,
-              week_selected: this.week_selected,
-            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -232,8 +232,8 @@ export default {
         );
 
         if (response.status === 200) {
-          this.classes = response.data.classes;
-          console.log(response.data.classes);
+          this.class_staffing = response.data.class_staffing;
+          console.log(response.data.class_staffing);
         } else {
           console.log("Error fetching classes");
         }
@@ -244,7 +244,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -268,7 +268,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -295,7 +295,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
