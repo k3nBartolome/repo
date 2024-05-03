@@ -5,14 +5,11 @@ namespace App\Http\Controllers;
 use App\Exports\ClassStaffingExports;
 use App\Models\Classes;
 use App\Models\ClassStaffing;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-use Carbon\Carbon;
-use App\Models\DateRange;
-
-
 
 class ClassStaffingController extends Controller
 {
@@ -191,7 +188,7 @@ class ClassStaffingController extends Controller
         $uniqueMonths = DB::table('date_ranges')
             ->join('classes', 'date_ranges.id', '=', 'classes.date_range_id') // Joining 'classes' table
             ->where('classes.status', 'Active')
-            // Adding condition on 'classes' table
+        // Adding condition on 'classes' table
             ->select([
                 DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
                 DB::raw('COALESCE(date_ranges.month, null) as month'),
@@ -202,7 +199,6 @@ class ClassStaffingController extends Controller
         }
 
         $uniqueMonths = $uniqueMonths->distinct()->get();
-
 
         $uniqueSiteIdsQuery = DB::table('sites')
             ->join('classes', 'sites.site_id', '=', 'classes.site_id') // Joining 'classes' table
@@ -221,7 +217,6 @@ class ClassStaffingController extends Controller
             ->where('classes.status', 'Active')
             ->where('sites.country', 'Philippines')
             ->get();
-
 
         // Initialize the computed sums array
         $computedSums = [];
@@ -259,8 +254,6 @@ class ClassStaffingController extends Controller
                 ->where('classes.total_target', '>', 0)
                 ->get();
 
-
-
             $distinctDateRanges = DB::table('date_ranges')
                 ->join('classes', 'date_ranges.id', '=', 'classes.date_range_id')
                 ->where('date_ranges.year', 2024)
@@ -269,6 +262,7 @@ class ClassStaffingController extends Controller
                 ->select([
                     DB::raw('COALESCE(date_ranges.date_id, 0) as date_id'),
                     DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                    'date_ranges.date_id', // Include date_id in the select list
                 ])
                 ->orderBy('date_ranges.date_id', 'asc');
 
@@ -278,7 +272,6 @@ class ClassStaffingController extends Controller
             }
 
             $distinctDateRanges = $distinctDateRanges->distinct()->get();
-
 
             foreach ($distinctDateRanges as $dateRangeData) {
 
@@ -296,7 +289,7 @@ class ClassStaffingController extends Controller
                         ->where('classes.status', 'Active')
                         ->select([
                             DB::raw('COALESCE(programs.id, 0) as program_id'),
-                            DB::raw('COALESCE(programs.name, 0) as program_name'),
+                            DB::raw('COALESCE(programs.name, null) as program_name'),
                         ]);
 
                     if (!empty($programNum)) {
@@ -305,7 +298,6 @@ class ClassStaffingController extends Controller
                     }
 
                     $uniqueProgramIds = $uniqueProgramIds->distinct()->get();
-
 
                     foreach ($uniqueProgramIds as $programData) {
                         $programId = $programData->program_id;
@@ -732,13 +724,11 @@ class ClassStaffingController extends Controller
                 'total' => $staffing->sum('show_ups_total'),
                 'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
 
-
                 'internal' => $staffing->sum('show_ups_internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'day_1' => $staffing->sum('day_1'),
                 'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
             ];
-
 
             foreach ($grandTotals as $key => $value) {
                 if ($key !== 'fillrate') {
@@ -755,96 +745,96 @@ class ClassStaffingController extends Controller
 
     /*     public function mpsMonth(Request $request)
     {
-        $siteId = $request->input('site_id');
-        $distinctMonths = DB::table('date_ranges')
-            ->select([
-                'month_num',
-                DB::raw('COALESCE(date_ranges.month, null) as month_name'),
-            ])
-            ->distinct()
-            ->get();
-        $computedSums = [];
-        $grandTotals = [
-            'total_target' => 0,
-            'internal' => 0,
-            'external' => 0,
-            'total' => 0,
-            'fillrate' => 0,
-            'day_1' => 0,
-            'day_1sup' => 0,
-            'pipeline_total' => 0,
-            'hires_goal' => 0,
-        ];
-        $totalShowUpsTotalAllMonths = 0;
-        $totalTargetsAllMonths = 0;
-        $totalDay1AllMonths = 0;
-        $totalPipelineTotalAllMonths = 0;
-        foreach ($distinctMonths as $monthData) {
-            $monthNum = $monthData->month_num;
-            $monthName = $monthData->month_name;
-            $year = 2024;
-            $staffing = DB::table('class_staffing')
-                ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
-                ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
-                ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
-                ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
-                ->select(
-                    'class_staffing.*',
-                    'classes.*',
-                    'sites.*',
-                    'programs.*',
-                    'date_ranges.*',
-                    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
-                    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
-                    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
-                    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-                    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
-                    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
-                    DB::raw('COALESCE(sites.name, null) as site_name'),
-                    DB::raw('COALESCE(programs.name, null) as program_name')
-                )
-                ->where('class_staffing.active_status', 1)
-                ->where('date_ranges.month_num', $monthNum)
-                ->where('date_ranges.year', $year)
-                ->when($siteId, function ($query) use ($siteId) {
-                    return $query->where('sites.id', $siteId);
-                })
-                ->get();
-            $totalShowUpsTotalAllMonths += $staffing->sum('show_ups_total');
-            $totalTargetsAllMonths += $staffing->sum('total_target');
-            $totalDay1AllMonths += $staffing->sum('day_1');
-            $totalPipelineTotalAllMonths += $staffing->sum('pipeline_total');
-            $computedSums[$monthName] = [
-                'month' => $monthName,
-                'total_target' => $staffing->sum('total_target'),
-                'internal' => $staffing->sum('show_ups_internal'),
-                'external' => $staffing->sum('show_ups_external'),
-                'total' => $staffing->sum('show_ups_total'),
-                'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
-                'day_1' => $staffing->sum('day_1'),
-                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
-                'pipeline_total' => $staffing->sum('pipeline_total'),
-                'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
-            ];
-            foreach ($grandTotals as $key => $value) {
-                if ($key !== 'fillrate') {
-                    $grandTotals[$key] += $computedSums[$monthName][$key];
-                }
-            }
-        }
-        $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $grandTotals['fillrate'] = $fillRateGrandTotal;
-        $grandTotals['day_1sup'] = $day1SupGrandTotal;
-        $grandTotals['hires_goal'] = $hiresGoalGrandTotal;
-        $computedSums['Grand Total'] = $grandTotals;
-        return response()->json([
-            'mps' => $computedSums,
-        ]);
+    $siteId = $request->input('site_id');
+    $distinctMonths = DB::table('date_ranges')
+    ->select([
+    'month_num',
+    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+    ])
+    ->distinct()
+    ->get();
+    $computedSums = [];
+    $grandTotals = [
+    'total_target' => 0,
+    'internal' => 0,
+    'external' => 0,
+    'total' => 0,
+    'fillrate' => 0,
+    'day_1' => 0,
+    'day_1sup' => 0,
+    'pipeline_total' => 0,
+    'hires_goal' => 0,
+    ];
+    $totalShowUpsTotalAllMonths = 0;
+    $totalTargetsAllMonths = 0;
+    $totalDay1AllMonths = 0;
+    $totalPipelineTotalAllMonths = 0;
+    foreach ($distinctMonths as $monthData) {
+    $monthNum = $monthData->month_num;
+    $monthName = $monthData->month_name;
+    $year = 2024;
+    $staffing = DB::table('class_staffing')
+    ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+    ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+    ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+    ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+    ->select(
+    'class_staffing.*',
+    'classes.*',
+    'sites.*',
+    'programs.*',
+    'date_ranges.*',
+    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+    DB::raw('COALESCE(sites.name, null) as site_name'),
+    DB::raw('COALESCE(programs.name, null) as program_name')
+    )
+    ->where('class_staffing.active_status', 1)
+    ->where('date_ranges.month_num', $monthNum)
+    ->where('date_ranges.year', $year)
+    ->when($siteId, function ($query) use ($siteId) {
+    return $query->where('sites.id', $siteId);
+    })
+    ->get();
+    $totalShowUpsTotalAllMonths += $staffing->sum('show_ups_total');
+    $totalTargetsAllMonths += $staffing->sum('total_target');
+    $totalDay1AllMonths += $staffing->sum('day_1');
+    $totalPipelineTotalAllMonths += $staffing->sum('pipeline_total');
+    $computedSums[$monthName] = [
+    'month' => $monthName,
+    'total_target' => $staffing->sum('total_target'),
+    'internal' => $staffing->sum('show_ups_internal'),
+    'external' => $staffing->sum('show_ups_external'),
+    'total' => $staffing->sum('show_ups_total'),
+    'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+    'day_1' => $staffing->sum('day_1'),
+    'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
+    'pipeline_total' => $staffing->sum('pipeline_total'),
+    'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+    ];
+    foreach ($grandTotals as $key => $value) {
+    if ($key !== 'fillrate') {
+    $grandTotals[$key] += $computedSums[$monthName][$key];
+    }
+    }
+    }
+    $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
+    number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+    $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
+    number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+    $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
+    number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+    $grandTotals['fillrate'] = $fillRateGrandTotal;
+    $grandTotals['day_1sup'] = $day1SupGrandTotal;
+    $grandTotals['hires_goal'] = $hiresGoalGrandTotal;
+    $computedSums['Grand Total'] = $grandTotals;
+    return response()->json([
+    'mps' => $computedSums,
+    ]);
     } */
     public function mpsSite(Request $request)
     {
@@ -1112,8 +1102,8 @@ class ClassStaffingController extends Controller
     }
 
     /*
-     * Remove the specified resource from storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
+ * Remove the specified resource from storage.
+ *
+ * @return \Illuminate\Http\Response
+ */
 }
