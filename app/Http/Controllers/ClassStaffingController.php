@@ -173,16 +173,6 @@ class ClassStaffingController extends Controller
         $programNum = $request->input('program_id');
         $dateNum = $request->input('date_id');
 
-
-        $uniqueMonths = DB::table('date_ranges')
-            ->select([
-                DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
-                DB::raw('COALESCE(date_ranges.month, null) as month'),
-            ]);
-        if (!empty($monthNum)) {
-            $uniqueMonths->whereIn('date_ranges.month_num', $monthNum);
-        }
-        $uniqueMonths = $uniqueMonths->distinct()->get();
         $uniqueSiteIdsQuery = DB::table('sites')
             ->join('classes', 'sites.site_id', '=', 'classes.site_id')
             ->select([
@@ -195,12 +185,52 @@ class ClassStaffingController extends Controller
         }
         $uniqueSiteIds = $uniqueSiteIdsQuery->distinct()
             ->where('sites.is_active', 1)
+            ->where('classes.status', 'Active')
             ->where('sites.country', 'Philippines')
             ->get();
         $computedSums = [];
-        foreach ($uniqueMonths as $monthdata) {
-            $month = $monthdata->month_num;
-            $monthName = $monthdata->month;
+
+        $current_end = null;
+        $previousWeek_end = null;
+        $current_start = null;
+        $previousWeek_start = null;
+        $nextWeek_start = null;
+        $NextWeek_end = null;
+        $date = Carbon::now()->format('Y-m-d');
+        $dateRange = DB::table('date_ranges')
+            ->select('week_start', 'week_end')
+            ->where('week_start', '<=', $date)
+            ->where('week_end', '>=', $date)
+            ->first();
+        if ($dateRange) {
+            $current_start = Carbon::parse($dateRange->week_start);
+            $current_end = Carbon::parse($dateRange->week_end);
+            $previousWeek_end = $current_end->copy()->subWeek();
+            $previousWeek_start = $current_start->copy()->subWeek();
+            $nextWeek_start = $current_end->copy()->addDay();
+            $NextWeek_end = $current_end->copy()->addWeek();
+        }
+        $distinctDateRanges = DB::table('date_ranges')
+->where('date_ranges.year', 2024)
+->whereIn('week_end', [$previousWeek_end, $current_end, $NextWeek_end])
+->select([
+DB::raw('COALESCE(date_ranges.date_id, 0) as date_id'),
+DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+'date_ranges.date_id',
+'week_end',
+])
+->orderBy('date_ranges.date_id', 'asc');
+
+        if (!empty($dateNum)) {
+            $dateNum = is_array($dateNum) ? $dateNum : [$dateNum];
+            $distinctDateRanges->whereIn('date_ranges.date_id', $dateNum);
+
+        }
+        $distinctDateRanges = $distinctDateRanges->distinct()->get();
+
+    foreach ($distinctDateRanges as $dateRangeData) {
+
+
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
@@ -226,62 +256,37 @@ class ClassStaffingController extends Controller
                     DB::raw('COALESCE(programs.name, null) as program_name')
                 )
                 ->where('class_staffing.active_status', 1)
-                ->where('date_ranges.month_num', $month)
                 ->where('classes.total_target', '>', 0)
                 ->get();
 
-            $distinctDateRanges = DB::table('date_ranges')
-
-                ->where('date_ranges.year', 2024)
-                ->where('date_ranges.month_num', $month)
-                ->select([
-                    DB::raw('COALESCE(date_ranges.date_id, 0) as date_id'),
-                    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-                    'date_ranges.date_id', // Include date_id in the select list
-                ])
-                ->orderBy('date_ranges.date_id', 'asc');
-
-            if (!empty($dateNum)) {
-                $siteNum = is_array($dateNum) ? $dateNum : [$dateNum];
-                $distinctDateRanges->whereIn('date_ranges.date_id', $dateNum);
-            }
-
-            $distinctDateRanges = $distinctDateRanges->distinct()->get();
-
-            foreach ($distinctDateRanges as $dateRangeData) {
-
                 $dateRangeId = $dateRangeData->date_id;
                 $weekName = $dateRangeData->week_name;
-                $computedSums[$month][$dateRangeId] = [];
-
+                $computedSums[$dateRangeId] = [];
                 foreach ($uniqueSiteIds as $siteData) {
                     $siteId = $siteData->site_id;
                     $siteName = $siteData->site_name;
-                    $computedSums[$month][$dateRangeId][$siteId] = [];
+                    $computedSums[$dateRangeId][$siteId] = [];
                     $uniqueProgramIds = DB::table('programs')
+                        ->join('classes', 'programs.id', '=', 'classes.program_id')
                         ->where('programs.site_id', $siteId)
+                        ->where('classes.status', 'Active')
                         ->select([
                             DB::raw('COALESCE(programs.id, 0) as program_id'),
                             DB::raw('COALESCE(programs.name, null) as program_name'),
                         ]);
-
                     if (!empty($programNum)) {
                         $programNum = is_array($programNum) ? $programNum : [$programNum];
                         $uniqueProgramIds->whereIn('programs.id', $programNum);
                     }
                     $uniqueProgramIds = $uniqueProgramIds->distinct()->get();
-
                     foreach ($uniqueProgramIds as $programData) {
                         $programId = $programData->program_id;
                         $programName = $programData->program_name;
-                        $computedSums[$month][$dateRangeId][$siteId][$programId] = [];
-
+                        $computedSums[$dateRangeId][$siteId][$programId] = [];
                         $WeekMonthSiteProgram = $staffing
-                            ->where('month_num', $month)
                             ->where('date_range_id', $dateRangeId)
                             ->where('site_id', $siteId)
                             ->where('program_id', $programId);
-
                         $sums = [
                             'total_target' => $WeekMonthSiteProgram->sum('total_target'),
                             'internal' => $WeekMonthSiteProgram->sum('show_ups_internal'),
@@ -297,55 +302,54 @@ class ClassStaffingController extends Controller
                             'open' => $WeekMonthSiteProgram->sum('filled'),
                             'classes' => $WeekMonthSiteProgram->sum('classes_number'),
                         ];
+                        if ( $sums['total_target'] != 0) {
 
+                            if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
+                                $computedSums[$dateRangeId][$siteId][$programId] = [
 
-                        if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
-                            $computedSums[$month][$dateRangeId][$siteId][$programId] = [
-                                'month' => $WeekMonthSiteProgram->first()->month,
-                                'week_name' => $WeekMonthSiteProgram->first()->week_name,
-                                'site_name' => $WeekMonthSiteProgram->first()->site_name,
-                                'program_name' => $WeekMonthSiteProgram->first()->program_name,
-                                'total_target' => $sums['total_target'],
-                                'internal' => $sums['internal'],
-                                'external' => $sums['external'],
-                                'total' => $sums['total'],
-                                'cap_starts' => $sums['cap_starts'],
-                                'day_1' => $sums['day_1'],
-                                'day_2' => $sums['day_2'],
-                                'day_3' => $sums['day_3'],
-                                'day_4' => $sums['day_4'],
-                                'day_5' => $sums['day_5'],
-                                'filled' => $sums['filled'],
-                                'open' => $sums['open'],
-                                'classes' => $sums['classes'],
-                            ];
-                        } else {
-                            $computedSums[$month][$dateRangeId][$siteId][$programId] = [
-                                'month' => $monthName,
-                                'week_name' => $weekName,
-                                'site_name' => $siteName,
-                                'program_name' => $programName,
-                                'total_target' => 0,
-                                'internal' => 0,
-                                'external' => 0,
-                                'total' => 0,
-                                'cap_starts' => 0,
-                                'day_1' => 0,
-                                'day_2' => 0,
-                                'day_3' => 0,
-                                'day_4' => 0,
-                                'day_5' => 0,
-                                'filled' => 0,
-                                'open' => 0,
-                                'classes' => 0,
-                            ];
+                                    'week_name' => $WeekMonthSiteProgram->first()->week_name,
+                                    'site_name' => $WeekMonthSiteProgram->first()->site_name,
+                                    'program_name' => $WeekMonthSiteProgram->first()->program_name,
+                                    'total_target' => $sums['total_target'],
+                                    'internal' => $sums['internal'],
+                                    'external' => $sums['external'],
+                                    'total' => $sums['total'],
+                                    'cap_starts' => $sums['cap_starts'],
+                                    'day_1' => $sums['day_1'],
+                                    'day_2' => $sums['day_2'],
+                                    'day_3' => $sums['day_3'],
+                                    'day_4' => $sums['day_4'],
+                                    'day_5' => $sums['day_5'],
+                                    'filled' => $sums['filled'],
+                                    'open' => $sums['open'],
+                                    'classes' => $sums['classes'],
+                                ];
+                            } else {
+                                $computedSums[$dateRangeId][$siteId][$programId] = [
+
+                                    'week_name' => $weekName,
+                                    'site_name' => $siteName,
+                                    'program_name' => $programName,
+                                    'total_target' => 0,
+                                    'internal' => 0,
+                                    'external' => 0,
+                                    'total' => 0,
+                                    'cap_starts' => 0,
+                                    'day_1' => 0,
+                                    'day_2' => 0,
+                                    'day_3' => 0,
+                                    'day_4' => 0,
+                                    'day_5' => 0,
+                                    'filled' => 0,
+                                    'open' => 0,
+                                    'classes' => 0,
+                                ];
+                            }
                         }
                     }
                 }
             }
-        }
 
-        // Calculate the grand totals
         $grandTotals = [
             'total_target' => 0,
             'internal' => 0,
@@ -361,10 +365,7 @@ class ClassStaffingController extends Controller
             'open' => 0,
             'classes' => 0,
         ];
-
-        // Include the grand total in your response
         $computedSums['Grand Total'] = $grandTotals;
-
         $response = [
             'mps' => $computedSums,
         ];
