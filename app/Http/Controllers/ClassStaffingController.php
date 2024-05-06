@@ -168,69 +168,31 @@ class ClassStaffingController extends Controller
 
     public function mpsWeek(Request $request)
     {
-        $monthNum = $request->input('month_num');
         $siteNum = $request->input('site_id');
         $programNum = $request->input('program_id');
         $dateNum = $request->input('date_id');
 
-        $uniqueSiteIdsQuery = DB::table('sites')
-            ->join('classes', 'sites.site_id', '=', 'classes.site_id')
-            ->select([
-                DB::raw('COALESCE(sites.site_id, 0) as site_id'),
-                DB::raw('COALESCE(sites.name, null) as site_name'),
-            ]);
-        if (!empty($siteNum)) {
-            $siteNum = is_array($siteNum) ? $siteNum : [$siteNum];
-            $uniqueSiteIdsQuery->whereIn('sites.site_id', $siteNum);
-        }
-        $uniqueSiteIds = $uniqueSiteIdsQuery->distinct()
-            ->where('sites.is_active', 1)
-            ->where('classes.status', 'Active')
-            ->where('sites.country', 'Philippines')
-            ->get();
         $computedSums = [];
 
-        $current_end = null;
-        $previousWeek_end = null;
-        $current_start = null;
-        $previousWeek_start = null;
-        $nextWeek_start = null;
-        $NextWeek_end = null;
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
             ->first();
-        if ($dateRange) {
-            $current_start = Carbon::parse($dateRange->week_start);
-            $current_end = Carbon::parse($dateRange->week_end);
-            $previousWeek_end = $current_end->copy()->subWeek();
-            $previousWeek_start = $current_start->copy()->subWeek();
-            $nextWeek_start = $current_end->copy()->addDay();
-            $NextWeek_end = $current_end->copy()->addWeek();
+        if (!$dateRange) {
+            return response()->json(['error' => 'No date range found for the current date.']);
         }
+
         $distinctDateRanges = DB::table('date_ranges')
-->where('date_ranges.year', 2024)
-->whereIn('week_end', [$previousWeek_end, $current_end, $NextWeek_end])
-->select([
-DB::raw('COALESCE(date_ranges.date_id, 0) as date_id'),
-DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-'date_ranges.date_id',
-'week_end',
-])
-->orderBy('date_ranges.date_id', 'asc');
+            ->whereIn('week_end', [
+                Carbon::parse($dateRange->week_end)->subWeek(),
+                $dateRange->week_end,
+                Carbon::parse($dateRange->week_end)->addWeek(),
+            ])
+            ->pluck('date_id');
 
-        if (!empty($dateNum)) {
-            $dateNum = is_array($dateNum) ? $dateNum : [$dateNum];
-            $distinctDateRanges->whereIn('date_ranges.date_id', $dateNum);
-
-        }
-        $distinctDateRanges = $distinctDateRanges->distinct()->get();
-
-    foreach ($distinctDateRanges as $dateRangeData) {
-
-
+        foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
@@ -247,8 +209,6 @@ DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
                     'date_ranges.*',
                     DB::raw('COALESCE(classes.total_target, 0) as total'),
                     DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
-                    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
-                    DB::raw('COALESCE(date_ranges.month, null) as month'),
                     DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
                     DB::raw('COALESCE(sites.site_id, 0) as site_id'),
                     DB::raw('COALESCE(programs.program_id, 0) as program_id'),
@@ -257,98 +217,56 @@ DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
                 )
                 ->where('class_staffing.active_status', 1)
                 ->where('classes.total_target', '>', 0)
+                ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
 
-                $dateRangeId = $dateRangeData->date_id;
-                $weekName = $dateRangeData->week_name;
-                $computedSums[$dateRangeId] = [];
-                foreach ($uniqueSiteIds as $siteData) {
-                    $siteId = $siteData->site_id;
-                    $siteName = $siteData->site_name;
+            $computedSums[$dateRangeId] = [];
+
+            foreach ($staffing as $item) {
+                $siteId = $item->site_id;
+                $programId = $item->program_id;
+
+                if (!isset($computedSums[$dateRangeId][$siteId])) {
                     $computedSums[$dateRangeId][$siteId] = [];
-                    $uniqueProgramIds = DB::table('programs')
-                        ->join('classes', 'programs.id', '=', 'classes.program_id')
-                        ->where('programs.site_id', $siteId)
-                        ->where('classes.status', 'Active')
-                        ->select([
-                            DB::raw('COALESCE(programs.id, 0) as program_id'),
-                            DB::raw('COALESCE(programs.name, null) as program_name'),
-                        ]);
-                    if (!empty($programNum)) {
-                        $programNum = is_array($programNum) ? $programNum : [$programNum];
-                        $uniqueProgramIds->whereIn('programs.id', $programNum);
-                    }
-                    $uniqueProgramIds = $uniqueProgramIds->distinct()->get();
-                    foreach ($uniqueProgramIds as $programData) {
-                        $programId = $programData->program_id;
-                        $programName = $programData->program_name;
-                        $computedSums[$dateRangeId][$siteId][$programId] = [];
-                        $WeekMonthSiteProgram = $staffing
-                            ->where('date_range_id', $dateRangeId)
-                            ->where('site_id', $siteId)
-                            ->where('program_id', $programId);
-                        $sums = [
-                            'total_target' => $WeekMonthSiteProgram->sum('total_target'),
-                            'internal' => $WeekMonthSiteProgram->sum('show_ups_internal'),
-                            'external' => $WeekMonthSiteProgram->sum('show_ups_external'),
-                            'total' => $WeekMonthSiteProgram->sum('show_ups_total'),
-                            'cap_starts' => $WeekMonthSiteProgram->sum('cap_starts'),
-                            'day_1' => $WeekMonthSiteProgram->sum('day_1'),
-                            'day_2' => $WeekMonthSiteProgram->sum('day_2'),
-                            'day_3' => $WeekMonthSiteProgram->sum('day_3'),
-                            'day_4' => $WeekMonthSiteProgram->sum('day_4'),
-                            'day_5' => $WeekMonthSiteProgram->sum('day_5'),
-                            'filled' => $WeekMonthSiteProgram->sum('open'),
-                            'open' => $WeekMonthSiteProgram->sum('filled'),
-                            'classes' => $WeekMonthSiteProgram->sum('classes_number'),
-                        ];
-                        if ( $sums['total_target'] != 0) {
-
-                            if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
-                                $computedSums[$dateRangeId][$siteId][$programId] = [
-
-                                    'week_name' => $WeekMonthSiteProgram->first()->week_name,
-                                    'site_name' => $WeekMonthSiteProgram->first()->site_name,
-                                    'program_name' => $WeekMonthSiteProgram->first()->program_name,
-                                    'total_target' => $sums['total_target'],
-                                    'internal' => $sums['internal'],
-                                    'external' => $sums['external'],
-                                    'total' => $sums['total'],
-                                    'cap_starts' => $sums['cap_starts'],
-                                    'day_1' => $sums['day_1'],
-                                    'day_2' => $sums['day_2'],
-                                    'day_3' => $sums['day_3'],
-                                    'day_4' => $sums['day_4'],
-                                    'day_5' => $sums['day_5'],
-                                    'filled' => $sums['filled'],
-                                    'open' => $sums['open'],
-                                    'classes' => $sums['classes'],
-                                ];
-                            } else {
-                                $computedSums[$dateRangeId][$siteId][$programId] = [
-
-                                    'week_name' => $weekName,
-                                    'site_name' => $siteName,
-                                    'program_name' => $programName,
-                                    'total_target' => 0,
-                                    'internal' => 0,
-                                    'external' => 0,
-                                    'total' => 0,
-                                    'cap_starts' => 0,
-                                    'day_1' => 0,
-                                    'day_2' => 0,
-                                    'day_3' => 0,
-                                    'day_4' => 0,
-                                    'day_5' => 0,
-                                    'filled' => 0,
-                                    'open' => 0,
-                                    'classes' => 0,
-                                ];
-                            }
-                        }
-                    }
                 }
+
+                if (!isset($computedSums[$dateRangeId][$siteId][$programId])) {
+                    $computedSums[$dateRangeId][$siteId][$programId] = [
+                        'week_name' => $item->week_name,
+                        'site_name' => $item->site_name,
+                        'program_name' => $item->program_name,
+                        'total_target' => 0,
+                        'internal' => 0,
+                        'external' => 0,
+                        'total' => 0,
+                        'cap_starts' => 0,
+                        'day_1' => 0,
+                        'day_2' => 0,
+                        'day_3' => 0,
+                        'day_4' => 0,
+                        'day_5' => 0,
+                        'filled' => 0,
+                        'open' => 0,
+                        'classes' => 0,
+                    ];
+                }
+
+                // Perform computation for each site and program
+                $computedSums[$dateRangeId][$siteId][$programId]['total_target'] += $item->total_target;
+                $computedSums[$dateRangeId][$siteId][$programId]['internal'] += $item->show_ups_internal;
+                $computedSums[$dateRangeId][$siteId][$programId]['external'] += $item->show_ups_external;
+                $computedSums[$dateRangeId][$siteId][$programId]['total'] += $item->show_ups_total;
+                $computedSums[$dateRangeId][$siteId][$programId]['cap_starts'] += $item->cap_starts;
+                $computedSums[$dateRangeId][$siteId][$programId]['day_1'] += $item->day_1;
+                $computedSums[$dateRangeId][$siteId][$programId]['day_2'] += $item->day_2;
+                $computedSums[$dateRangeId][$siteId][$programId]['day_3'] += $item->day_3;
+                $computedSums[$dateRangeId][$siteId][$programId]['day_4'] += $item->day_4;
+                $computedSums[$dateRangeId][$siteId][$programId]['day_5'] += $item->day_5;
+                $computedSums[$dateRangeId][$siteId][$programId]['filled'] += $item->filled;
+                $computedSums[$dateRangeId][$siteId][$programId]['open'] += $item->open;
+                $computedSums[$dateRangeId][$siteId][$programId]['classes'] += $item->classes_number;
             }
+        }
 
         $grandTotals = [
             'total_target' => 0,
@@ -365,6 +283,27 @@ DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
             'open' => 0,
             'classes' => 0,
         ];
+
+        foreach ($computedSums as $siteData) {
+            foreach ($siteData as $programData) {
+                foreach ($programData as $sum) {
+                    $grandTotals['total_target'] += $sum['total_target'];
+                    $grandTotals['internal'] += $sum['internal'];
+                    $grandTotals['external'] += $sum['external'];
+                    $grandTotals['total'] += $sum['total'];
+                    $grandTotals['cap_starts'] += $sum['cap_starts'];
+                    $grandTotals['day_1'] += $sum['day_1'];
+                    $grandTotals['day_2'] += $sum['day_2'];
+                    $grandTotals['day_3'] += $sum['day_3'];
+                    $grandTotals['day_4'] += $sum['day_4'];
+                    $grandTotals['day_5'] += $sum['day_5'];
+                    $grandTotals['filled'] += $sum['filled'];
+                    $grandTotals['open'] += $sum['open'];
+                    $grandTotals['classes'] += $sum['classes'];
+                }
+            }
+        }
+
         $computedSums['Grand Total'] = $grandTotals;
         $response = [
             'mps' => $computedSums,
@@ -372,6 +311,7 @@ DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
 
         return response()->json($response);
     }
+
 
     private function removeEmptyArrays(&$array)
     {
