@@ -1013,9 +1013,23 @@ class ClassStaffingController extends Controller
         ]);
     }
 
-    /*
- * Remove the specified resource from storage.
- *
- * @return \Illuminate\Http\Response
- */
+    public function weeklyPipe(Request $request, CapEmailController $emailController)
+    {
+        $weeklyPipe = $emailController->weeklyPipe();
+
+        return view('staffing.view', compact('weeklyPipe'));
+    }
+
+    public function wtd(Request $request, CapEmailController $emailController)
+    {
+        $wtd = $emailController->wtd();
+
+        return view('staffing.view', compact('wtd'));
+    }
+    public function ytd(Request $request, CapEmailController $emailController)
+    {
+        $ytd = $emailController->ytd();
+
+        return view('staffing.view', compact('ytd'));
+    }
 }

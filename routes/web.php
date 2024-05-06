@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CapEmailController;
 use App\Http\Controllers\ClassesController;
+use App\Http\Controllers\ClassStaffingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,3 +27,5 @@ Route::post('render', [CapEmailController::class, 'sendEmail']);
 Route::post('sr_render', [CapEmailController::class, 'sendSR']);
 Route::get('out', [CapEmailController::class, 'OutOfSla']);
 Route::get('cancel', [CapEmailController::class, 'Cancelled']);
+Route::get('ytd', [CapEmailController::class, 'ytd']);
+Route::get('ytd', [ClassStaffingController::class, 'ytd']);

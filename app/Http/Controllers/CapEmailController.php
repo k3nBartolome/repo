@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DashboardClassesExportWeek;
+use App\Exports\StaffingExport;
 use App\Models\Classes;
 use App\Models\DateRange;
 use App\Models\Program;
@@ -20,53 +21,126 @@ class CapEmailController extends Controller
 
     public function sendEmailStaffing(Request $request)
     {
-        $mappedGroupedClasses = $this->retrieveDataForEmail();
-        $mappedExternalClasses = $this->retrieveExternalForEmail();
-        $mappedInternalClasses = $this->retrieveInternalForEmail();
-        $mappedClassesMoved = $this->classesMoved();
-        $mappedClassesCancelled = $this->classesCancelled();
-        $mappedClassesSla = $this->classesSla();
-        $outOfSlaHeadCount = $this->OutOfSla();
-        $cancelledHeadCount = $this->Cancelled();
-        $outOfSlaHeadCountMonth = $this->OutOfSlaMonth();
-        $cancelledHeadCountMonth = $this->CancelledMonth();
-        $mappedGroupedClassesWeek = $this->retrieveDataForEmailWeek();
-        $mappedClasses = $this->retrieveDataForClassesEmail();
-        $mappedB2Classes = $this->retrieveB2DataForEmail();
+        /* $weeklyPipe = $this->retrieveWeeklyPipe();
+        $wtd = $this->retrieveWTD(); */
+        $ytd = $this->ytd();
         $excelFileName = 'capfile' . time() . '.xlsx';
         $worksheetNames = [
-            'Hiring Summary',
-            'Site Summary',
+            /* 'Weekly Pipe',
+            'WTD', */
+            'YTD',
 
         ];
-        Excel::store(new DashboardClassesExportWeek(
-            $mappedGroupedClassesWeek,
-            $mappedGroupedClasses,
-            $mappedExternalClasses,
-            $mappedInternalClasses,
-            $mappedClassesMoved,
-            $mappedClassesCancelled,
-            $mappedClassesSla,
-            $outOfSlaHeadCount,
-            $cancelledHeadCount,
-            $outOfSlaHeadCountMonth,
-            $cancelledHeadCountMonth,
+        Excel::store(new StaffingExport(
+            //$weeklyPipe,
+            //$wtd,
+            $ytd,
             $worksheetNames,
         ), 'public/' . $excelFileName);
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Jemalyn.Fabiano@vxi.com'];
-        $subject = 'PH TA Hiring Summary - as of ' . date('F j, Y');
+        $recipients = ['kryss.bartolome@vxi.com'];
+        $subject = 'PH TA Hiring Tracker - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
-        Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
+        Mail::send('staffing', [/* 'weeklyPipe' => $weeklyPipe, 'wtd' => $wtd, */'ytd' => $ytd], function ($message) use ($recipients, $subject, $excelFilePath) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
             $message->subject($subject);
             $message->attach($excelFilePath, [
-                'as' => '2024 PH TA Hiring Summary.xlsx',
+                'as' => '2024 PH TA Hiring Tracker.xlsx',
                 'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]);
         });
         return response()->json(['message' => 'Email sent successfully']);
     }
+    public function ytd()
+    {
+        $distinctMonths = DB::table('date_ranges')
+            ->select([
+                'month_num',
+                DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+            ])
+            ->distinct()
+            ->get();
+        $ytd = [];
+        $grandTotals = [
+            'total_target' => 0,
+            'internal' => 0,
+            'external' => 0,
+            'total' => 0,
+            'fillrate' => 0,
+            'day_1' => 0,
+            'day_1sup' => 0,
+            'pipeline_total' => 0,
+            'hires_goal' => 0,
+        ];
+        $totalShowUpsTotalAllMonths = 0;
+        $totalTargetsAllMonths = 0;
+        $totalDay1AllMonths = 0;
+        $totalPipelineTotalAllMonths = 0;
+        foreach ($distinctMonths as $monthData) {
+            $monthNum = $monthData->month_num;
+            $monthName = $monthData->month_name;
+            $year = 2024;
+            $staffing = DB::table('class_staffing')
+                ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+                ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+                ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+                ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+                ->select(
+                    'class_staffing.*',
+                    'classes.*',
+                    'sites.*',
+                    'programs.*',
+                    'date_ranges.*',
+                    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+                    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+                    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+                    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+                    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+                    DB::raw('COALESCE(sites.name, null) as site_name'),
+                    DB::raw('COALESCE(programs.name, null) as program_name')
+                )
+                ->where('class_staffing.active_status', 1)
+                ->where('date_ranges.month_num', $monthNum)
+                ->where('date_ranges.year', $year)
+                ->get();
+            $totalShowUpsTotalAllMonths += $staffing->sum('show_ups_total');
+            $totalTargetsAllMonths += $staffing->sum('total_target');
+            $totalDay1AllMonths += $staffing->sum('day_1');
+            $totalPipelineTotalAllMonths += $staffing->sum('pipeline_total');
+            $ytd[$monthName] = [
+                'month' => $monthName,
+                'total_target' => $staffing->sum('total_target'),
+                'internal' => $staffing->sum('show_ups_internal'),
+                'external' => $staffing->sum('show_ups_external'),
+                'total' => $staffing->sum('show_ups_total'),
+                'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'day_1' => $staffing->sum('day_1'),
+                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'pipeline_total' => $staffing->sum('pipeline_total'),
+                'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+            ];
+            foreach ($grandTotals as $key => $value) {
+                if ($key !== 'fillrate') {
+                    $grandTotals[$key] += $ytd[$monthName][$key];
+                }
+            }
+        }
+        $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
+            number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
+            number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
+            number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        $grandTotals['fillrate'] = $fillRateGrandTotal;
+        $grandTotals['day_1sup'] = $day1SupGrandTotal;
+        $grandTotals['hires_goal'] = $hiresGoalGrandTotal;
+        $ytd['Grand Total'] = $grandTotals;
+
+        return $ytd;
+    }
+
+    //capfile
     public function sendEmail(Request $request)
     {
         $mappedGroupedClasses = $this->retrieveDataForEmail();
