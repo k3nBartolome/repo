@@ -28,4 +28,4 @@ Route::post('sr_render', [CapEmailController::class, 'sendSR']);
 Route::get('out', [CapEmailController::class, 'OutOfSla']);
 Route::get('cancel', [CapEmailController::class, 'Cancelled']);
 Route::get('ytd', [CapEmailController::class, 'ytd']);
-Route::get('ytd', [ClassStaffingController::class, 'ytd']);
+Route::get('ytdstaffing', [ClassStaffingController::class, 'ytd']);

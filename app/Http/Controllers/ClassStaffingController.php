@@ -548,7 +548,7 @@ class ClassStaffingController extends Controller
         return Excel::download(new ClassStaffingExports($dataToExport), 'your_filename.xlsx');
     }
 
-    public function mpsMonth(Request $request)
+   /*  public function mpsMonth(Request $request)
     {
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
@@ -653,9 +653,9 @@ class ClassStaffingController extends Controller
         return response()->json([
             'mps' => $computedSums,
         ]);
-    }
+    } */
 
-    /*     public function mpsMonth(Request $request)
+         public function mpsMonth(Request $request)
     {
     $siteId = $request->input('site_id');
     $distinctMonths = DB::table('date_ranges')
@@ -747,7 +747,7 @@ class ClassStaffingController extends Controller
     return response()->json([
     'mps' => $computedSums,
     ]);
-    } */
+    } 
     public function mpsSite(Request $request)
     {
         $monthNum = $request->input('month_num');
