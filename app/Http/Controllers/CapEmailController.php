@@ -126,20 +126,35 @@ class CapEmailController extends Controller
                 }
             }
         }
+        
+        // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
             number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
             number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
             number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $grandTotals['fillrate'] = $fillRateGrandTotal;
-        $grandTotals['day_1sup'] = $day1SupGrandTotal;
-        $grandTotals['hires_goal'] = $hiresGoalGrandTotal;
-        $ytd['Grand Total'] = $grandTotals;
-
+    
+        // Create Grand Total row
+        $grandTotalRow = [
+            'month' => 'Grand Total',
+            'total_target' => $totalTargetsAllMonths,
+            'internal' => null, // Fill with your calculation if needed
+            'external' => null, // Fill with your calculation if needed
+            'total' => $totalShowUpsTotalAllMonths,
+            'fillrate' => $fillRateGrandTotal,
+            'day_1' => $totalDay1AllMonths,
+            'day_1sup' => $day1SupGrandTotal,
+            'pipeline_total' => $totalPipelineTotalAllMonths,
+            'hires_goal' => $hiresGoalGrandTotal
+        ];
+    
+        // Merge Grand Total row with the rest of the data
+        $ytd = array_merge([$grandTotalRow], $ytd);
+    
         return $ytd;
     }
-
+    
     //capfile
     public function sendEmail(Request $request)
     {
