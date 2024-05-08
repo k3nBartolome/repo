@@ -8442,6 +8442,27 @@ class ClassesController extends Controller
 
         return view('sr_pending_email.view', compact('formattedResult'));
     }
+    public function weeklyPipeForEmail(Request $request, CapEmailController $emailController)
+    {
+        $weeklyPipe = $emailController->weeklyPipe();
+
+        return view('staffing.view', compact('weeklyPipe'));
+    }
+
+    public function wtdForEmail(Request $request)
+    {
+        $wtd = $this->wtd();
+    
+        return view('staffing.view', compact('wtd'));
+    }
+    
+    public function ytdForEmail(Request $request)
+    {
+        $ytd = $this->ytd();
+    
+        return view('staffing.view', compact('ytd'));
+    }
+    
     public function OutOfSla()
     {
         $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();

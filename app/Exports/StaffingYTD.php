@@ -24,7 +24,7 @@ class StaffingYTD implements FromCollection, WithHeadings, WithTitle
     }
     public function title(): string
     {
-        return 'WTD';
+        return 'YTD';
     }
     public function headings(): array
     {

@@ -166,14 +166,10 @@ class ClassStaffingController extends Controller
         ]);
     }
 
-    public function mpsWeek(Request $request)
+    public function mpsWeek()
     {
-        $siteNum = $request->input('site_id');
-        $programNum = $request->input('program_id');
-        $dateNum = $request->input('date_id');
-
         $computedSums = [];
-
+    
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
@@ -183,7 +179,7 @@ class ClassStaffingController extends Controller
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
         }
-
+    
         $distinctDateRanges = DB::table('date_ranges')
             ->whereIn('week_end', [
                 Carbon::parse($dateRange->week_end)->subWeek(),
@@ -191,7 +187,7 @@ class ClassStaffingController extends Controller
                 Carbon::parse($dateRange->week_end)->addWeek(),
             ])
             ->pluck('date_id');
-
+    
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
@@ -213,104 +209,106 @@ class ClassStaffingController extends Controller
                     DB::raw('COALESCE(sites.site_id, 0) as site_id'),
                     DB::raw('COALESCE(programs.program_id, 0) as program_id'),
                     DB::raw('COALESCE(sites.name, null) as site_name'),
-                    DB::raw('COALESCE(programs.name, null) as program_name')
+                    DB::raw('COALESCE(programs.name, null) as program_name'),
+                    DB::raw('COALESCE(programs.program_group, null) as program_group')
                 )
                 ->where('class_staffing.active_status', 1)
                 ->where('classes.total_target', '>', 0)
                 ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
-
-            $computedSums[$dateRangeId] = [];
-
+    
             foreach ($staffing as $item) {
                 $siteId = $item->site_id;
                 $programId = $item->program_id;
-
-                if (!isset($computedSums[$dateRangeId][$siteId])) {
-                    $computedSums[$dateRangeId][$siteId] = [];
-                }
-
-                if (!isset($computedSums[$dateRangeId][$siteId][$programId])) {
-                    $computedSums[$dateRangeId][$siteId][$programId] = [
+    
+                $key = $dateRangeId . '_' . $siteId . '_' . $programId;
+    
+                if (!isset($computedSums[$key])) {
+                    $computedSums[$key] = [
                         'week_name' => $item->week_name,
                         'site_name' => $item->site_name,
                         'program_name' => $item->program_name,
+                        'program_group' => $item->program_group,
                         'total_target' => 0,
-                        'internal' => 0,
-                        'external' => 0,
-                        'total' => 0,
-                        'cap_starts' => 0,
+                        'show_ups_internal' => 0,
+                        'show_ups_external' => 0,
+                        'show_ups_total' => 0,
+                        'fillrate' => 0,
                         'day_1' => 0,
-                        'day_2' => 0,
-                        'day_3' => 0,
-                        'day_4' => 0,
-                        'day_5' => 0,
-                        'filled' => 0,
-                        'open' => 0,
-                        'classes' => 0,
+                        'day_1sup' => 0,
+                        'pipeline_total' => 0,
+                        'hires_goal' => 0,
                     ];
                 }
-
-                // Perform computation for each site and program
-                $computedSums[$dateRangeId][$siteId][$programId]['total_target'] += $item->total_target;
-                $computedSums[$dateRangeId][$siteId][$programId]['internal'] += $item->show_ups_internal;
-                $computedSums[$dateRangeId][$siteId][$programId]['external'] += $item->show_ups_external;
-                $computedSums[$dateRangeId][$siteId][$programId]['total'] += $item->show_ups_total;
-                $computedSums[$dateRangeId][$siteId][$programId]['cap_starts'] += $item->cap_starts;
-                $computedSums[$dateRangeId][$siteId][$programId]['day_1'] += $item->day_1;
-                $computedSums[$dateRangeId][$siteId][$programId]['day_2'] += $item->day_2;
-                $computedSums[$dateRangeId][$siteId][$programId]['day_3'] += $item->day_3;
-                $computedSums[$dateRangeId][$siteId][$programId]['day_4'] += $item->day_4;
-                $computedSums[$dateRangeId][$siteId][$programId]['day_5'] += $item->day_5;
-                $computedSums[$dateRangeId][$siteId][$programId]['filled'] += $item->filled;
-                $computedSums[$dateRangeId][$siteId][$programId]['open'] += $item->open;
-                $computedSums[$dateRangeId][$siteId][$programId]['classes'] += $item->classes_number;
+    
+                $computedSums[$key]['total_target'] += $item->total_target;
+                $computedSums[$key]['show_ups_internal'] += $item->show_ups_internal;
+                $computedSums[$key]['show_ups_external'] += $item->show_ups_external;
+                $computedSums[$key]['show_ups_total'] += $item->show_ups_total;
+                $computedSums[$key]['day_1'] += $item->day_1;
+                $computedSums[$key]['pipeline_total'] += $item->pipeline_total;
+                $computedSums[$key]['hires_goal'] += $item->day_4;
             }
         }
-
+    
         $grandTotals = [
             'total_target' => 0,
-            'internal' => 0,
-            'external' => 0,
-            'total' => 0,
-            'cap_starts' => 0,
+            'show_ups_internal' => 0,
+            'show_ups_external' => 0,
+            'show_ups_total' => 0,
+            'fillrate' => 0,
             'day_1' => 0,
-            'day_2' => 0,
-            'day_3' => 0,
-            'day_4' => 0,
-            'day_5' => 0,
-            'filled' => 0,
-            'open' => 0,
-            'classes' => 0,
+            'day_1sup' => 0,
+            'pipeline_total' => 0,
+            'hires_goal' => 0,
         ];
-
-        foreach ($computedSums as $siteData) {
-            foreach ($siteData as $programData) {
-                foreach ($programData as $sum) {
-                    $grandTotals['total_target'] += $sum['total_target'];
-                    $grandTotals['internal'] += $sum['internal'];
-                    $grandTotals['external'] += $sum['external'];
-                    $grandTotals['total'] += $sum['total'];
-                    $grandTotals['cap_starts'] += $sum['cap_starts'];
-                    $grandTotals['day_1'] += $sum['day_1'];
-                    $grandTotals['day_2'] += $sum['day_2'];
-                    $grandTotals['day_3'] += $sum['day_3'];
-                    $grandTotals['day_4'] += $sum['day_4'];
-                    $grandTotals['day_5'] += $sum['day_5'];
-                    $grandTotals['filled'] += $sum['filled'];
-                    $grandTotals['open'] += $sum['open'];
-                    $grandTotals['classes'] += $sum['classes'];
-                }
-            }
+    
+        $totalCount = 0;
+        foreach ($computedSums as $sum) {
+            $totalCount++;
+    
+            $grandTotals['total_target'] += $sum['total_target'];
+            $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
+            $grandTotals['show_ups_external'] += $sum['show_ups_external'];
+            $grandTotals['show_ups_total'] += $sum['show_ups_total'];
+            $grandTotals['pipeline_total'] += $sum['pipeline_total'];
+            $grandTotals['day_1'] += $sum['day_1'];
+    
+            $grandTotals['fillrate'] += $sum['fillrate'] / $totalCount;
+            $grandTotals['day_1sup'] += $sum['day_1sup'] / $totalCount;
+            $grandTotals['hires_goal'] += $sum['hires_goal'] / $totalCount;
         }
+    
+        // Mapped Grand Total
+       // Mapped Grand Total
+$mappedGrandTotal = [
+    'week_name' => 'Grand Total',
+    'site_name' => '',
+    'program_name' => '',
+    'program_group' => '',
+    'total_target' => $grandTotals['total_target'],
+    'show_ups_internal' => $grandTotals['show_ups_internal'],
+    'show_ups_external' => $grandTotals['show_ups_external'],
+    'show_ups_total' => $grandTotals['show_ups_total'],
+    'fillrate' => $grandTotals['fillrate'],
+    'day_1' => $grandTotals['day_1'],
+    'day_1sup' => $grandTotals['day_1sup'],
+    'pipeline_total' => $grandTotals['pipeline_total'],
+    'hires_goal' => $grandTotals['hires_goal'],
+];
 
-        $computedSums['Grand Total'] = $grandTotals;
+    
+        // Append Mapped Grand Total to $computedSums
+        $computedSums['Grand Total'] = $mappedGrandTotal;
+    
         $response = [
             'mps' => $computedSums,
         ];
-
+    
         return response()->json($response);
     }
+    
+    
 
     private function removeEmptyArrays(&$array)
     {
@@ -359,18 +357,14 @@ class ClassStaffingController extends Controller
         $computedSums = [];
         $grandTotals = [
             'total_target' => 0,
-            'internal' => 0,
-            'external' => 0,
-            'total' => 0,
-            'cap_starts' => 0,
+            'show_ups_internal' => 0,
+            'show_ups_external' => 0,
+            'show_ups_total' => 0,
+            'fillrate' => 0,
             'day_1' => 0,
-            'day_2' => 0,
-            'day_3' => 0,
-            'day_4' => 0,
-            'day_5' => 0,
-            'filled' => 0,
-            'open' => 0,
-            'classes' => 0,
+            'day_1sup' => 0,
+            'pipeline_total' => 0,
+            'hires_goal' => 0,
         ];
         $computedSums = [];
 
@@ -447,18 +441,15 @@ class ClassStaffingController extends Controller
 
                         $sums = [
                             'total_target' => $WeekMonthSiteProgram->sum('total_target'),
-                            'internal' => $WeekMonthSiteProgram->sum('show_ups_internal'),
-                            'external' => $WeekMonthSiteProgram->sum('show_ups_external'),
-                            'total' => $WeekMonthSiteProgram->sum('show_ups_total'),
-                            'cap_starts' => $WeekMonthSiteProgram->sum('cap_starts'),
+                            'show_ups_internal' => $WeekMonthSiteProgram->sum('show_ups_internal'),
+                            'show_ups_external' => $WeekMonthSiteProgram->sum('show_ups_external'),
+                            'show_ups_total' => $WeekMonthSiteProgram->sum('show_ups_total'),
+                            'fillrate' => $WeekMonthSiteProgram->sum('total_target') != 0 ? number_format(($WeekMonthSiteProgram->sum('show_ups_total') / $WeekMonthSiteProgram->sum('total_target')) * 100, 2) : 0,
                             'day_1' => $WeekMonthSiteProgram->sum('day_1'),
-                            'day_2' => $WeekMonthSiteProgram->sum('day_2'),
-                            'day_3' => $WeekMonthSiteProgram->sum('day_3'),
-                            'day_4' => $WeekMonthSiteProgram->sum('day_4'),
-                            'day_5' => $WeekMonthSiteProgram->sum('day_5'),
-                            'filled' => $WeekMonthSiteProgram->sum('open'),
-                            'open' => $WeekMonthSiteProgram->sum('filled'),
-                            'classes' => $WeekMonthSiteProgram->sum('classes_number'),
+                            'day_1sup' => $WeekMonthSiteProgram->sum('total_target') != 0 ? number_format(($WeekMonthSiteProgram->sum('day_1') / $WeekMonthSiteProgram->sum('total_target')) * 100, 2) : 0,
+                            'pipeline_total' => $WeekMonthSiteProgram->sum('pipeline_total'),
+                            'hires_goal' => $WeekMonthSiteProgram->sum('total_target') != 0 ? number_format(($WeekMonthSiteProgram->sum('pipeline_total') / $WeekMonthSiteProgram->sum('total_target')) * 100, 2) : 0,
+
                         ];
 
                         if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
@@ -468,18 +459,15 @@ class ClassStaffingController extends Controller
                                 'site_name' => $WeekMonthSiteProgram->first()->site_name,
                                 'program_name' => $WeekMonthSiteProgram->first()->program_name,
                                 'total_target' => $sums['total_target'],
-                                'internal' => $sums['internal'],
-                                'external' => $sums['external'],
-                                'total' => $sums['total'],
-                                'cap_starts' => $sums['cap_starts'],
+                                'show_ups_internal' => $sums['show_ups_internal'],
+                                'show_ups_external' => $sums['show_ups_external'],
+                                'show_ups_total' => $sums['show_ups_total'],
+                                'fillrate' => $sums['fillrate'],
                                 'day_1' => $sums['day_1'],
-                                'day_2' => $sums['day_2'],
-                                'day_3' => $sums['day_3'],
-                                'day_4' => $sums['day_4'],
-                                'day_5' => $sums['day_5'],
-                                'filled' => $sums['filled'],
-                                'open' => $sums['open'],
-                                'classes' => $sums['classes'],
+                                'day_1sup' => $sums['day_1sup'],
+                                'pipeline_total' => $sums['pipeline_total'],
+                                'hires_goal' => $sums['hires_goal'],
+
                             ];
                         } else {
                             $computedSums[$month][$dateRangeId][$siteId][$programId] = [
@@ -488,18 +476,14 @@ class ClassStaffingController extends Controller
                                 'site_name' => $siteName,
                                 'program_name' => $programName,
                                 'total_target' => 0,
-                                'internal' => 0,
-                                'external' => 0,
-                                'total' => 0,
-                                'cap_starts' => 0,
+                                'show_ups_internal' => 0,
+                                'show_ups_external' => 0,
+                                'show_ups_total' => 0,
+                                'fillrate' => 0,
                                 'day_1' => 0,
-                                'day_2' => 0,
-                                'day_3' => 0,
-                                'day_4' => 0,
-                                'day_5' => 0,
-                                'filled' => 0,
-                                'open' => 0,
-                                'classes' => 0,
+                                'day_1sup' => 0,
+                                'pipeline_total' => 0,
+                                'hires_goal' => 0,
                             ];
                         }
                     }
@@ -521,18 +505,14 @@ class ClassStaffingController extends Controller
                                 'site_name' => $programDetails['site_name'],
                                 'program_name' => $programDetails['program_name'],
                                 'total_target' => $programDetails['total_target'] ?? 0,
-                                'internal' => $programDetails['internal'] ?? 0,
-                                'external' => $programDetails['external'] ?? 0,
-                                'total' => $programDetails['total'] ?? 0,
-                                'cap_starts' => $programDetails['cap_starts'] ?? 0,
+                                'show_ups_internal' => $programDetails['show_ups_internal'] ?? 0,
+                                'show_ups_external' => $programDetails['show_ups_external'] ?? 0,
+                                'show_ups_total' => $programDetails['show_ups_total'] ?? 0,
+                                'fillrate' => $programDetails['fillrate'] ?? 0,
                                 'day_1' => $programDetails['day_1'] ?? 0,
-                                'day_2' => $programDetails['day_2'] ?? 0,
-                                'day_3' => $programDetails['day_3'] ?? 0,
-                                'day_4' => $programDetails['day_4'] ?? 0,
-                                'day_5' => $programDetails['day_5'] ?? 0,
-                                'filled' => $programDetails['filled'] ?? 0,
-                                'open' => $programDetails['open'] ?? 0,
-                                'classes' => $programDetails['classes'] ?? 0,
+                                'day_1sup' => $programDetails['day_1sup'] ?? 0,
+                                'pipeline_total' => $programDetails['pipeline_total'] ?? 0,
+                                'hires_goal' => $programDetails['hires_goal'] ?? 0,
                             ];
                         }
                     }
@@ -547,144 +527,56 @@ class ClassStaffingController extends Controller
         return Excel::download(new ClassStaffingExports($dataToExport), 'your_filename.xlsx');
     }
 
-    /*  public function mpsMonth(Request $request)
+    public function mpsMonth(Request $request)
     {
-    $year = 2024;
-    $date = Carbon::now()->format('Y-m-d');
-    $month = null;
+        $year = 2024;
+        $date = Carbon::now()->format('Y-m-d');
+        $month = null;
 
-    $dateRange = DB::table('date_ranges')
-    ->select('month', 'month_num')
-    ->where('week_start', '<=', $date)
-    ->where('week_end', '>=', $date)
-    ->first();
+        $dateRange = DB::table('date_ranges')
+            ->select('month', 'month_num')
+            ->where('week_start', '<=', $date)
+            ->where('week_end', '>=', $date)
+            ->first();
 
-    if ($dateRange) {
-    $month = $dateRange->month_num;
-    }
+        if ($dateRange) {
+            $month = $dateRange->month_num;
+        }
 
-    $distinctMonthsAndWeeks = DB::table('date_ranges')
-    ->select([
-    'month_num',
-    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
-    'week_start',
-    'week_end',
-    ])
-    ->where('year', $year)
-    ->where('month_num', $month)
-    ->distinct()
-    ->get();
-
-    $computedSums = [];
-    $grandTotals = [
-    'total_target' => 0,
-    'internal' => 0,
-    'external' => 0,
-    'total' => 0,
-    'fillrate' => 0,
-    'day_1' => 0,
-    'day_1sup' => 0,
-    'pipeline_total' => 0,
-    'hires_goal' => 0,
-    ];
-
-    foreach ($distinctMonthsAndWeeks as $item) {
-    $monthNum = $item->month_num;
-    $monthName = $item->month_name;
-    $weekStart = $item->week_start;
-    $weekEnd = $item->week_end;
-
-    $staffing = DB::table('class_staffing')
-    ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
-    ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
-    ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
-    ->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
-    ->select(
-    'class_staffing.*',
-    'classes.*',
-    'sites.*',
-    'programs.*',
-    'date_ranges.*',
-    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
-    DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
-    DB::raw('COALESCE(date_ranges.month, null) as month_name'),
-    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-    DB::raw('COALESCE(date_ranges.week_start, null) as week_start'),
-    DB::raw('COALESCE(date_ranges.week_end, null) as week_end'),
-    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
-    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
-    DB::raw('COALESCE(sites.name, null) as site_name'),
-    DB::raw('COALESCE(programs.name, null) as program_name')
-    )
-    ->where('date_ranges.month_num', $monthNum)
-    ->where('date_ranges.year', $year)
-    ->where('date_ranges.week_start', $weekStart)
-    ->where('date_ranges.week_end', $weekEnd)
-    ->when($request->input('site_id'), function ($query, $siteId) {
-    return $query->where('sites.id', $siteId);
-    })
-    ->get();
-
-    $computedSums[$monthName][$weekStart . ' - ' . $weekEnd] = [
-    'month' => $monthName,
-    'week_start' => $weekStart,
-    'week_end' => $weekEnd,
-    'total_target' => $staffing->sum('total_target'),
-    'pipeline_total' => $staffing->sum('pipeline_total'),
-    'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
-    'total' => $staffing->sum('show_ups_total'),
-    'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
-
-    'internal' => $staffing->sum('show_ups_internal'),
-    'external' => $staffing->sum('show_ups_external'),
-    'day_1' => $staffing->sum('day_1'),
-    'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
-    ];
-
-    foreach ($grandTotals as $key => $value) {
-    if ($key !== 'fillrate') {
-    $grandTotals[$key] += $computedSums[$monthName][$weekStart . ' - ' . $weekEnd][$key];
-    }
-    }
-    }
-    $computedSums['Grand Total'] = $grandTotals;
-
-    return response()->json([
-    'mps' => $computedSums,
-    ]);
-    } */
-
-    public function mpsMonth()
-    {
-        $distinctMonths = DB::table('date_ranges')
+        $distinctMonthsAndWeeks = DB::table('date_ranges')
             ->select([
                 'month_num',
                 DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+                'week_start',
+                'week_end',
             ])
+            ->where('year', $year)
+            ->where('month_num', $month)
             ->distinct()
             ->get();
-        $ytd = [];
+
+        $flattenedData = [];
         $grandTotals = [
             'total_target' => 0,
+            'pipeline_total' => 0,
+            'pipeline_goal' => 0,
+            'total_internal' => 0,
+            'total_external' => 0,
+            'jo' => 0,
+            'versant' => 0,
             'internal' => 0,
             'external' => 0,
-            'total' => 0,
-            'fillrate' => 0,
+            'total_show_ups' => 0,
+            'fill_rate' => 0,
             'day_1' => 0,
             'day_1sup' => 0,
-            'pipeline_total' => 0,
-            'hires_goal' => 0,
         ];
-        $totalShowUpsTotalAllMonths = 0;
-        $totalTargetsAllMonths = 0;
-        $totalDay1AllMonths = 0;
-        $totalPipelineTotalAllMonths = 0;
-        $totalInternalAllMonths = 0;
-        $totalExternalAllMonths = 0;
-        foreach ($distinctMonths as $monthData) {
-            $monthNum = $monthData->month_num;
-            $monthName = $monthData->month_name;
-            $year = 2024;
+
+        foreach ($distinctMonthsAndWeeks as $item) {
+            $monthName = $item->month_name;
+            $weekStart = $item->week_start;
+            $weekEnd = $item->week_end;
+
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
@@ -700,69 +592,191 @@ class ClassStaffingController extends Controller
                     DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
                     DB::raw('COALESCE(date_ranges.month, null) as month_name'),
                     DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                    DB::raw('COALESCE(date_ranges.week_start, null) as week_start'),
+                    DB::raw('COALESCE(date_ranges.week_end, null) as week_end'),
                     DB::raw('COALESCE(sites.site_id, 0) as site_id'),
                     DB::raw('COALESCE(programs.program_id, 0) as program_id'),
                     DB::raw('COALESCE(sites.name, null) as site_name'),
                     DB::raw('COALESCE(programs.name, null) as program_name')
                 )
-                ->where('class_staffing.active_status', 1)
-                ->where('date_ranges.month_num', $monthNum)
+                ->where('date_ranges.month_num', $item->month_num)
                 ->where('date_ranges.year', $year)
+                ->where('date_ranges.week_start', $weekStart)
+                ->where('date_ranges.week_end', $weekEnd)
                 ->get();
-                dd($staffing);
-            $totalShowUpsTotalAllMonths += $staffing->sum('show_ups_total');
-            $totalTargetsAllMonths += $staffing->sum('total_target');
-            $totalDay1AllMonths += $staffing->sum('day_1');
-            $totalInternalAllMonths += $staffing->sum('internal');
-            $totalExternalAllMonths += $staffing->sum('external');
-            $totalPipelineTotalAllMonths += $staffing->sum('pipeline_total');
-            $ytd[$monthName] = [
+
+            $flattenedData[] = [
                 'month' => $monthName,
+                'week_start' => $weekStart,
+                'week_end' => $weekEnd,
                 'total_target' => $staffing->sum('total_target'),
-                'internal' => $staffing->sum('show_ups_internal'),
+                'pipeline_total' => $staffing->sum('pipeline_total'),
+                'pipeline_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'total_internal' => $staffing->sum('internals_hires'),
+                'total_external' => $staffing->sum('with_jo'),
+                'jo' => $staffing->sum('pending_jo'),
+                'versant' => $staffing->sum('pending_berlitz'),
+                'internal' => $staffing->sum('internal'),
                 'external' => $staffing->sum('show_ups_external'),
-                'total' => $staffing->sum('show_ups_total'),
-                'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'total_show_ups' => $staffing->sum('show_ups_total'),
+                'fill_rate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
                 'day_1' => $staffing->sum('day_1'),
                 'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
-                'pipeline_total' => $staffing->sum('pipeline_total'),
-                'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
             ];
+
             foreach ($grandTotals as $key => $value) {
                 if ($key !== 'fillrate') {
-                    $grandTotals[$key] += $ytd[$monthName][$key];
+                    $grandTotals[$key] += $flattenedData[count($flattenedData) - 1][$key];
                 }
             }
         }
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
-        $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
-        $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 2) : 0;
+        $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 2) : 0;
+        $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 2) : 0;
 
-        // Create Grand Total row
+        // Construct the Grand Total row
         $grandTotalRow = [
             'month' => 'Grand Total',
-            'total_target' => $totalTargetsAllMonths,
-            'internal' => $totalInternalAllMonths, // Fill with your calculation if needed
-            'external' => $totalExternalAllMonths, // Fill with your calculation if needed
-            'total' => $totalShowUpsTotalAllMonths,
-            'fillrate' => $fillRateGrandTotal,
-            'day_1' => $totalDay1AllMonths,
+            'week_start' => '',
+            'week_end' => '',
+            'total_target' => $grandTotals['total_target'],
+            'pipeline_total' => $grandTotals['pipeline_total'],
+            'pipeline_goal' => $grandTotals['pipeline_goal'],
+            'total_internal' => $grandTotals['total_internal'],
+            'total_external' => $grandTotals['total_external'],
+            'jo' => $grandTotals['jo'],
+            'versant' => $grandTotals['versant'],
+            'internal' => $grandTotals['internal'],
+            'external' => $grandTotals['external'],
+            'total_show_ups' => $grandTotals['total_show_ups'],
+            'fill_rate' => $fillRateGrandTotal,
+            'day_1' => $grandTotals['day_1'],
             'day_1sup' => $day1SupGrandTotal,
-            'pipeline_total' => $totalPipelineTotalAllMonths,
-            'hires_goal' => $hiresGoalGrandTotal,
         ];
 
-        // Merge Grand Total row with the rest of the data
-        $ytd = array_merge([$grandTotalRow], $ytd);
+        // Add the Grand Total row to the flattened data
+        $flattenedData[] = $grandTotalRow;
+
         return response()->json([
-            'mps' => $ytd,
+            'mps' => $flattenedData,
         ]);
     }
+
+/*     public function mpsMonth()
+{
+$distinctMonths = DB::table('date_ranges')
+->select([
+'month_num',
+DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+])
+->distinct()
+->get();
+$ytd = [];
+$grandTotals = [
+'total_target' => 0,
+'internal' => 0,
+'external' => 0,
+'total' => 0,
+'fillrate' => 0,
+'day_1' => 0,
+'day_1sup' => 0,
+'pipeline_total' => 0,
+'hires_goal' => 0,
+];
+$totalShowUpsTotalAllMonths = 0;
+$totalTargetsAllMonths = 0;
+$totalDay1AllMonths = 0;
+$totalPipelineTotalAllMonths = 0;
+$totalInternalAllMonths = 0;
+$totalExternalAllMonths = 0;
+foreach ($distinctMonths as $monthData) {
+$monthNum = $monthData->month_num;
+$monthName = $monthData->month_name;
+$year = 2024;
+$staffing = DB::table('class_staffing')
+->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+->leftJoin('programs', 'classes.program_id', '=', 'programs.id')
+->select(
+'class_staffing.*',
+'classes.*',
+'sites.*',
+'programs.*',
+'date_ranges.*',
+DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+DB::raw('COALESCE(date_ranges.month_num, 0) as month_num'),
+DB::raw('COALESCE(date_ranges.month, null) as month_name'),
+DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+DB::raw('COALESCE(sites.name, null) as site_name'),
+DB::raw('COALESCE(programs.name, null) as program_name')
+)
+->where('class_staffing.active_status', 1)
+->where('classes.status', 'Active')
+->where('date_ranges.month_num', $monthNum)
+->where('date_ranges.year', $year)
+->get();
+
+$totalShowUpsTotalAllMonths += $staffing->sum('show_ups_total');
+$totalTargetsAllMonths += $staffing->sum('total_target');
+$totalDay1AllMonths += $staffing->sum('day_1');
+$totalInternalAllMonths += $staffing->sum('show_ups_internal');
+$totalExternalAllMonths += $staffing->sum('show_ups_external');
+$totalPipelineTotalAllMonths += $staffing->sum('pipeline_total');
+$ytd[$monthName] = [
+'month' => $monthName,
+'total_target' => $staffing->sum('total_target'),
+'internal' => $staffing->sum('show_ups_internal'),
+'external' => $staffing->sum('show_ups_external'),
+'total' => $staffing->sum('show_ups_total'),
+'fillrate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+'day_1' => $staffing->sum('day_1'),
+'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
+'pipeline_total' => $staffing->sum('pipeline_total'),
+'hires_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+];
+foreach ($grandTotals as $key => $value) {
+if ($key !== 'fillrate') {
+$grandTotals[$key] += $ytd[$monthName][$key];
+}
+}
+}
+
+// Calculate fill rate, day 1 supervision rate, and hires goal
+$fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
+number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+$day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
+number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+$hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
+number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+
+// Create Grand Total row
+$grandTotalRow = [
+'month' => 'Grand Total',
+'total_target' => $totalTargetsAllMonths,
+'internal' => $totalInternalAllMonths, // Fill with your calculation if needed
+'external' => $totalExternalAllMonths, // Fill with your calculation if needed
+'total' => $totalShowUpsTotalAllMonths,
+'fillrate' => $fillRateGrandTotal,
+'day_1' => $totalDay1AllMonths,
+'day_1sup' => $day1SupGrandTotal,
+'pipeline_total' => $totalPipelineTotalAllMonths,
+'hires_goal' => $hiresGoalGrandTotal,
+];
+
+// Merge Grand Total row with the rest of the data
+$ytd = array_merge([$grandTotalRow], $ytd);
+return response()->json([
+'mps' => $ytd,
+]);
+} */
     public function mpsSite(Request $request)
     {
         $monthNum = $request->input('month_num');
@@ -1028,23 +1042,4 @@ class ClassStaffingController extends Controller
         ]);
     }
 
-    public function weeklyPipeForEmail(Request $request, CapEmailController $emailController)
-    {
-        $weeklyPipe = $emailController->weeklyPipe();
-
-        return view('staffing.view', compact('weeklyPipe'));
-    }
-
-    public function wtdForEmail(Request $request, CapEmailController $emailController)
-    {
-        $wtd = $emailController->wtd();
-
-        return view('staffing.view', compact('wtd'));
-    }
-    public function ytdForEmail(Request $request, CapEmailController $emailController)
-    {
-        $ytd = $emailController->ytd();
-
-        return view('staffing.view', compact('ytd'));
-    }
 }
