@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $controller = new CapEmailController();
             $controller->sendEmailStaffing(new Request());
-        })->dailyAt('02:00')->timezone('Asia/Manila');
+        })->dailyAt('14:12')->timezone('Asia/Manila');
     }
 
     /**

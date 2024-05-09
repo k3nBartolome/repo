@@ -20,37 +20,43 @@ class CapEmailController extends Controller
 {
 
     public function sendEmailStaffing(Request $request)
-    {
-        $weeklyPipe = $this->weeklyPipe();
-        $wtd = $this->wtd();
-        $ytd = $this->ytd();
-        $excelFileName = 'capfile' . time() . '.xlsx';
-        $worksheetNames = [
-            'Weekly Pipe',
-            'WTD',
-            'YTD',
+{
+    $weeklyPipe = $this->weeklyPipe();
+    $wtd = $this->wtd();
+    $ytd = $this->ytd();
+    
+    $excelFileName = '00 PH Hiring Tracker_' . date('Y-m-d') . '.xlsx';
+    
+    $worksheetNames = [
+        'Weekly Pipe',
+        'WTD',
+        'YTD',
+    ];
+    
+    Excel::store(new StaffingExport(
+        $weeklyPipe,
+        $wtd,
+        $ytd,
+        $worksheetNames,
+    ), 'public/' . $excelFileName);
 
-        ];
-        Excel::store(new StaffingExport(
-            $weeklyPipe,
-            $wtd,
-            $ytd,
-            $worksheetNames,
-        ), 'public/' . $excelFileName);
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com'];
-        $subject = 'PH TA Hiring Tracker - as of ' . date('F j, Y');
-        $excelFilePath = public_path('storage/' . $excelFileName);
-        Mail::send('staffing', [ 'ytd' => $ytd,'wtd' => $wtd,'weeklyPipe'=>$weeklyPipe], function ($message) use ($recipients, $subject, $excelFilePath) {
-            $message->from('TA.Insights@vxi.com', 'TA Reports');
-            $message->to($recipients);
-            $message->subject($subject);
-            $message->attach($excelFilePath, [
-                'as' => '2024 PH TA Hiring Tracker.xlsx',
-                'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-            ]);
-        });
-        return response()->json(['message' => 'Email sent successfully']);
-    }
+    $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com'];
+    $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
+    $excelFilePath = public_path('storage/' . $excelFileName);
+
+    Mail::send('staffing', [ 'ytd' => $ytd,'wtd' => $wtd,'weeklyPipe'=>$weeklyPipe], function ($message) use ($recipients, $subject, $excelFilePath, $excelFileName) {
+        $message->from('TA.Insights@vxi.com', 'TA Reports');
+        $message->to($recipients);
+        $message->subject($subject);
+        $message->attach($excelFilePath, [
+            'as' => $excelFileName,
+            'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        ]);
+    });
+
+    return response()->json(['message' => 'Email sent successfully']);
+}
+
     public function weeklyPipe()
 {
     $weeklyPipe = [];
@@ -75,32 +81,35 @@ class CapEmailController extends Controller
     
     foreach ($distinctDateRanges as $dateRangeId) {
         $staffing = DB::table('class_staffing')
-            ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
-            ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
-            ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
-            ->leftJoin('programs', function ($join) {
-                $join->on('classes.program_id', '=', 'programs.id')
-                    ->on('sites.id', '=', 'programs.site_id');
-            })
-            ->select(
-                'class_staffing.*',
-                'classes.*',
-                'sites.*',
-                'programs.*',
-                'date_ranges.*',
-                DB::raw('COALESCE(classes.total_target, 0) as total'),
-                DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
-                DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-                DB::raw('COALESCE(sites.site_id, 0) as site_id'),
-                DB::raw('COALESCE(programs.program_id, 0) as program_id'),
-                DB::raw('COALESCE(sites.name, null) as site_name'),
-                DB::raw('COALESCE(programs.name, null) as program_name'),
-                DB::raw('COALESCE(programs.program_group, null) as program_group')
-            )
-            ->where('class_staffing.active_status', 1)
-            ->where('classes.total_target', '>', 0)
-            ->where('date_ranges.date_id', $dateRangeId)
-            ->get();
+    ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+    ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+    ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+    ->leftJoin('programs', function ($join) {
+        $join->on('classes.program_id', '=', 'programs.id')
+            ->on('sites.id', '=', 'programs.site_id');
+    })
+    ->select(
+        'class_staffing.*',
+        'classes.*',
+        'sites.*',
+        'programs.*',
+        'date_ranges.*',
+        DB::raw('COALESCE(classes.total_target, 0) as total'),
+        DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+        DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+        DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+        DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+        DB::raw('COALESCE(sites.name, null) as site_name'),
+        DB::raw('COALESCE(programs.name, null) as program_name'),
+        DB::raw('COALESCE(programs.program_group, null) as program_group')
+    )
+    ->where('class_staffing.active_status', 1)
+    ->where('classes.total_target', '>', 0)
+    ->where('date_ranges.date_id', $dateRangeId)
+    ->orderBy('sites.site_id') // Order by site_id
+    ->orderBy('programs.name') // Then order by program_name
+    ->get();
+
     
         foreach ($staffing as $item) {
             $siteId = $item->site_id;
