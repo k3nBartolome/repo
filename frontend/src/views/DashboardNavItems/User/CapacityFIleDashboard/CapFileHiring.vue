@@ -642,7 +642,7 @@
                   Apr
                 </th>
                 <th
-                  :colspan="showMayColumn ? 5 : 1"
+                  :colspan="showMayColumn ? 6 : 1"
                   :rowspan="showMayColumn ? 1 : 3"
                   :class="{
                     'bg-red-500': !showMayColumn,
@@ -656,7 +656,7 @@
                   May
                 </th>
                 <th
-                  :colspan="showJunColumn ? 6 : 1"
+                  :colspan="showJunColumn ? 5 : 1"
                   :rowspan="showJunColumn ? 1 : 3"
                   :class="{
                     'bg-red-500': !showJunColumn,
@@ -857,6 +857,9 @@
                 <th class="px-1 border-2 border-gray-300" v-if="showMayColumn">
                   May 19
                 </th>
+                <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
+                  May 26
+                </th>
                 <th
                   class="px-1 border-2 border-gray-300"
                   style="vertical-align: middle"
@@ -865,9 +868,7 @@
                 >
                   May
                 </th>
-                <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
-                  May 26
-                </th>
+
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
                   Jun 3
                 </th>
@@ -1082,10 +1083,10 @@
                 <th class="px-1 border-2 border-gray-300" v-if="showMayColumn">
                   May 25
                 </th>
-
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
                   Jun 2
                 </th>
+
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
                   Jun 8
                 </th>
@@ -1347,15 +1348,16 @@
                   </td>
                   <td
                     class="font-semibold text-center border-2 border-gray-300"
-                  >
-                    {{ item.May }}
-                  </td>
-                  <td
-                    class="font-semibold text-center border-2 border-gray-300"
-                    v-if="showJunColumn"
+                    v-if="showMayColumn"
                   >
                     {{ item.Week22 }}
                   </td>
+                  <td
+                    class="font-semibold text-center border-2 border-gray-300"
+                  >
+                    {{ item.May }}
+                  </td>
+
                   <td
                     class="font-semibold text-center border-2 border-gray-300"
                     v-if="showJunColumn"
@@ -1701,7 +1703,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteclasses",
+          "http://127.0.0.1:8000/api/siteclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1729,7 +1731,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardinternal",
+          "http://127.0.0.1:8000/api/classesdashboardinternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1757,7 +1759,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardexternal",
+          "http://127.0.0.1:8000/api/classesdashboardexternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1786,7 +1788,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/b2percentage",
+          "http://127.0.0.1:8000/api/b2percentage",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1816,7 +1818,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboard",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1857,7 +1859,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1890,7 +1892,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1915,7 +1917,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

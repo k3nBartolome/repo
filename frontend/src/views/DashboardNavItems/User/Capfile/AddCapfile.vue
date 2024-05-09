@@ -452,7 +452,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -476,7 +476,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -500,7 +500,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -516,69 +516,68 @@ export default {
     },
 
     addClass() {
-  this.loading = true;
-  const formData = {
-    site_id: this.sites_selected,
-    program_id: this.programs_selected,
-    type_of_hiring: this.type_of_hiring,
-    external_target: this.external_target,
-    internal_target: this.internal_target,
-    total_target: this.total_target,
-    notice_days: this.notice_days,
-    notice_weeks: this.notice_weeks,
-    with_erf: this.with_erf,
-    erf_number: this.erf_number,
-    category: this.category,
-    original_start_date: this.original_start_date,
-    wfm_date_requested: this.wfm_date_requested,
-    within_sla: this.within_sla,
-    remarks: this.remarks,
-    date_range_id: this.date_selected,
-    approved_status: "pending",
-    approved_by: this.approved_by,
-    status: "Active",
-    created_by: this.$store.state.user_id,
-  };
-  const token = this.$store.state.token;
-  const headers = {
-    Authorization: `Bearer ${token}`,
-  };
-  axios
-    .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
-    .then((response) => {
-      console.log(response.data);
-      this.site_id = "";
-      this.program_id = "";
-      this.type_of_hiring = "";
-      this.external_target = "";
-      this.internal_target = "";
-      this.total_target = "";
-      this.notice_days = "";
-      this.notice_weeks = "";
-      this.with_erf = "";
-      this.erf_number = "";
-      this.category = "";
-      this.original_start_date = "";
-      this.wfm_date_requested = "";
-      this.within_sla = "";
-      this.remarks = "";
-      this.date_range_id = "";
-      this.approved_status = "";
-      this.created_by = "";
-      this.approved_by = "";
-      this.two_dimensional_id = "";
-      this.$router.push("/capfile", () => {
-        location.reload();
-      });
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-    })
-    .finally(() => {
-      this.loading = false;
-    });
-},
-
+      this.loading = true;
+      const formData = {
+        site_id: this.sites_selected,
+        program_id: this.programs_selected,
+        type_of_hiring: this.type_of_hiring,
+        external_target: this.external_target,
+        internal_target: this.internal_target,
+        total_target: this.total_target,
+        notice_days: this.notice_days,
+        notice_weeks: this.notice_weeks,
+        with_erf: this.with_erf,
+        erf_number: this.erf_number,
+        category: this.category,
+        original_start_date: this.original_start_date,
+        wfm_date_requested: this.wfm_date_requested,
+        within_sla: this.within_sla,
+        remarks: this.remarks,
+        date_range_id: this.date_selected,
+        approved_status: "pending",
+        approved_by: this.approved_by,
+        status: "Active",
+        created_by: this.$store.state.user_id,
+      };
+      const token = this.$store.state.token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+      axios
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
+        .then((response) => {
+          console.log(response.data);
+          this.site_id = "";
+          this.program_id = "";
+          this.type_of_hiring = "";
+          this.external_target = "";
+          this.internal_target = "";
+          this.total_target = "";
+          this.notice_days = "";
+          this.notice_weeks = "";
+          this.with_erf = "";
+          this.erf_number = "";
+          this.category = "";
+          this.original_start_date = "";
+          this.wfm_date_requested = "";
+          this.within_sla = "";
+          this.remarks = "";
+          this.date_range_id = "";
+          this.approved_status = "";
+          this.created_by = "";
+          this.approved_by = "";
+          this.two_dimensional_id = "";
+          this.$router.push("/capfile", () => {
+            location.reload();
+          });
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
   },
 };
 </script>

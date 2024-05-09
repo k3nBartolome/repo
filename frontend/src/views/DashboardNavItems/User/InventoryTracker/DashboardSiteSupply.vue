@@ -302,7 +302,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -322,7 +322,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/itemsboth2",
+          "http://127.0.0.1:8000/api/itemsboth2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -333,12 +333,12 @@ export default {
           this.items = response.data.items;
           this.totalItems = this.items.length;
 
-          const filteredData = this.items.filter(item => item.quantity > 0);
-      this.filteredTotalSupply = filteredData.length;
-      this.filteredTotalOriginalQuantity = this.calculateSum(
-        filteredData,
-        "original_quantity"
-      );
+          const filteredData = this.items.filter((item) => item.quantity > 0);
+          this.filteredTotalSupply = filteredData.length;
+          this.filteredTotalOriginalQuantity = this.calculateSum(
+            filteredData,
+            "original_quantity"
+          );
           this.filteredTotalRemaining = this.calculateSum(
             filteredData,
             "quantity"
