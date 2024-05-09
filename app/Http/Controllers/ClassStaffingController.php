@@ -18,9 +18,9 @@ class ClassStaffingController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $classStaffing = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
+        $query = ClassStaffing::with(['classes.site', 'classes.program', 'classes.dateRange', 'classes.createdByUser', 'classes.updatedByUser'])
             ->whereHas('classes.dateRange', function ($query) {
                 $query->where('year', 2024);
             })
@@ -30,17 +30,46 @@ class ClassStaffingController extends Controller
             ->whereHas('classes.program', function ($query) {
                 $query->where('is_active', 1);
             })
-            ->where('active_status', '1')
-            ->get();
+            ->where('active_status', '1');
+
+        if ($request->has('site_id') && $request->site_id !== null) {
+            $query->whereHas('classes.site', function ($query) use ($request) {
+                $query->where('id', $request->site_id);
+            });
+        }
+
+        if ($request->has('program_id') && $request->program_id !== null) {
+            $query->whereHas('classes.program', function ($query) use ($request) {
+                $query->where('id', $request->program_id);
+            });
+        }
+
+        if ($request->has('month_num') && $request->month_num !== null) {
+            $query->whereHas('classes.dateRange', function ($query) use ($request) {
+                $query->where('month_num', $request->month_num);
+            });
+        }
+
+        if ($request->has('date_range_id') && $request->date_range_id !== null) {
+            $query->whereHas('classes.dateRange', function ($query) use ($request) {
+                $query->where('id', $request->date_range_id);
+            });
+        }
+
+
+        $classStaffing = $query->get();
 
         if ($classStaffing->isEmpty()) {
-            return response()->json(['error' => 'Classes not found'], 404);
+            return response()->json(['class_staffing' => []]);
         }
 
         return response()->json([
             'class_staffing' => $classStaffing,
         ]);
     }
+
+
+
 
     public function index2()
     {
@@ -532,17 +561,14 @@ class ClassStaffingController extends Controller
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
         $month = null;
-
         $dateRange = DB::table('date_ranges')
             ->select('month', 'month_num')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
             ->first();
-
         if ($dateRange) {
             $month = $dateRange->month_num;
         }
-
         $distinctMonthsAndWeeks = DB::table('date_ranges')
             ->select([
                 'month_num',
@@ -554,7 +580,6 @@ class ClassStaffingController extends Controller
             ->where('month_num', $month)
             ->distinct()
             ->get();
-
         $flattenedData = [];
         $grandTotals = [
             'total_target' => 0,
@@ -571,12 +596,10 @@ class ClassStaffingController extends Controller
             'day_1' => 0,
             'day_1sup' => 0,
         ];
-
         foreach ($distinctMonthsAndWeeks as $item) {
             $monthName = $item->month_name;
             $weekStart = $item->week_start;
             $weekEnd = $item->week_end;
-
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
@@ -604,14 +627,13 @@ class ClassStaffingController extends Controller
                 ->where('date_ranges.week_start', $weekStart)
                 ->where('date_ranges.week_end', $weekEnd)
                 ->get();
-
             $flattenedData[] = [
                 'month' => $monthName,
                 'week_start' => $weekStart,
                 'week_end' => $weekEnd,
                 'total_target' => $staffing->sum('total_target'),
                 'pipeline_total' => $staffing->sum('pipeline_total'),
-                'pipeline_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'pipeline_goal' => $staffing->sum('total_target') != 0 ? ($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100 : 0,
                 'total_internal' => $staffing->sum('internals_hires'),
                 'total_external' => $staffing->sum('with_jo'),
                 'jo' => $staffing->sum('pending_jo'),
@@ -619,9 +641,9 @@ class ClassStaffingController extends Controller
                 'internal' => $staffing->sum('internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'total_show_ups' => $staffing->sum('show_ups_total'),
-                'fill_rate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'fill_rate' => $staffing->sum('total_target') != 0 ? ($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100 : 0,
                 'day_1' => $staffing->sum('day_1'),
-                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'day_1sup' => $staffing->sum('total_target') != 0 ? ($staffing->sum('day_1') / $staffing->sum('total_target')) * 100 : 0,
             ];
 
             foreach ($grandTotals as $key => $value) {
@@ -630,23 +652,20 @@ class ClassStaffingController extends Controller
                 }
             }
         }
-
-        // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 2) : 0;
+            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100) . '%' : '0%';
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 2) : 0;
+            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100) . '%' : '0%';
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 2) : 0;
+            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100) . '%' : '0%';
 
-        // Construct the Grand Total row
         $grandTotalRow = [
             'month' => 'Grand Total',
             'week_start' => '',
             'week_end' => '',
             'total_target' => $grandTotals['total_target'],
             'pipeline_total' => $grandTotals['pipeline_total'],
-            'pipeline_goal' => $grandTotals['pipeline_goal'],
+            'pipeline_goal' => $hiresGoalGrandTotal,
             'total_internal' => $grandTotals['total_internal'],
             'total_external' => $grandTotals['total_external'],
             'jo' => $grandTotals['jo'],
@@ -658,10 +677,7 @@ class ClassStaffingController extends Controller
             'day_1' => $grandTotals['day_1'],
             'day_1sup' => $day1SupGrandTotal,
         ];
-
-        // Add the Grand Total row to the flattened data
         $flattenedData[] = $grandTotalRow;
-
         return response()->json([
             'mps' => $flattenedData,
         ]);
