@@ -16,7 +16,7 @@
     <div>
         <p style="margin: 10px 0;">Hi Team,</p>
         <p style="margin: 10px 0;">Please see below for the most updated Staffing Hiring Updates.</p>
-        <div style="margin: 10px 0">
+       {{--  <div style="margin: 10px 0">
             <p style="margin: 10px 0;">YTD</p>
             <table style="width: 70%; border-collapse: collapse;">
                 <thead>
@@ -70,7 +70,7 @@
                     @endforeach
                 </tbody>
             </table>
-        </div>
+        </div> --}}
         <div style="margin: 10px 0">
             <p style="margin: 10px 0;">WTD</p>
             <table style="width: 70%; border-collapse: collapse;">
@@ -79,9 +79,7 @@
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Month</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
-                            Week Start</th>
-                        <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
-                            Week End</th>
+                            Week Name</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Total Target</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
@@ -117,9 +115,7 @@
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
                                     {{ isset($data1['month']) ? $data1['month'] : '' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
-                                    {{ isset($data1['week_start']) ? $data1['week_start'] : '' }}</td>
-                                <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
-                                    {{ isset($data1['week_end']) ? $data1['week_end'] : '' }}</td>
+                                    {{ isset($data1['week_name']) ? $data1['week_name'] : '' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['total_target']) ? $data1['total_target'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">

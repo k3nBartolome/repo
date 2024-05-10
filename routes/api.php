@@ -94,7 +94,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
 
     // Classes Routes
     Route::get('classes', [ClassesController::class, 'index']);
-    Route::get('classes/{id}', [ClassesController::class, 'show']);
     Route::delete('classes/{id}', [ClassesController::class, 'destroy']);
     Route::get('classesall', [ClassesController::class, 'classesAll']);
     Route::get('cstat', [ClassesController::class, 'cstat']);
@@ -227,3 +226,4 @@ Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
 Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);
 Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
 Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
+Route::get('classes/{id}', [ClassesController::class, 'show']);

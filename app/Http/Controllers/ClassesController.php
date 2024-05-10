@@ -533,15 +533,21 @@ class ClassesController extends Controller
     public function show($id)
     {
         $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
-
+        
+        $staffingModel = ClassStaffing::where('classes_id', $id)
+            ->where('active_status', 1)
+            ->first();
+    
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
-
+    
         return response()->json([
             'class' => $class,
+            'staffingModel' => $staffingModel,
         ]);
     }
+    
 
     public function staffing($classesId)
     {
@@ -7891,6 +7897,10 @@ class ClassesController extends Controller
         $newClass->status = 'Moved';
         $newClass->requested_by = json_encode($requested_by);
         $newClass->save();
+
+        $staffingModel = ClassStaffing::where('classes_id', $id)
+    ->where('active', true)
+    ->first();
 
         return new ClassesResource($newClass);
     }

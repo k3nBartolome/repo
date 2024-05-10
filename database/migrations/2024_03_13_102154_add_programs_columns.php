@@ -18,8 +18,7 @@ class AddProgramsColumns extends Migration
             $table->string('id_creation')->nullable();
             $table->string('pre_emps')->nullable();
 
-            DB::statement('ALTER TABLE programs ALTER COLUMN b2 VARCHAR(255)');
-
+            $table->string('b2', 255)->change();
             $table->renameColumn('b2', 'program_type');
         });
     }
@@ -36,8 +35,7 @@ class AddProgramsColumns extends Migration
             $table->dropColumn('id_creation');
             $table->dropColumn('pre_emps');
 
-            DB::statement('ALTER TABLE programs ALTER COLUMN program_type bit');
-
+            $table->string('program_type', 1)->change(); // Change the length as per your needs
             $table->renameColumn('program_type', 'b2');
         });
     }
