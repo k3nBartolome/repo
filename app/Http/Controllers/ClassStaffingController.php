@@ -198,7 +198,7 @@ class ClassStaffingController extends Controller
     public function mpsWeek()
     {
         $computedSums = [];
-
+    
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
@@ -208,7 +208,7 @@ class ClassStaffingController extends Controller
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
         }
-
+    
         $distinctDateRanges = DB::table('date_ranges')
             ->whereIn('week_end', [
                 Carbon::parse($dateRange->week_end)->subWeek(),
@@ -216,7 +216,7 @@ class ClassStaffingController extends Controller
                 Carbon::parse($dateRange->week_end)->addWeek(),
             ])
             ->pluck('date_id');
-
+    
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
@@ -245,13 +245,13 @@ class ClassStaffingController extends Controller
                 ->where('classes.total_target', '>', 0)
                 ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
-
+    
             foreach ($staffing as $item) {
                 $siteId = $item->site_id;
                 $programId = $item->program_id;
-
+    
                 $key = $dateRangeId . '_' . $siteId . '_' . $programId;
-
+    
                 if (!isset($computedSums[$key])) {
                     $computedSums[$key] = [
                         'week_name' => $item->week_name,
@@ -269,17 +269,23 @@ class ClassStaffingController extends Controller
                         'hires_goal' => 0,
                     ];
                 }
-
+    
                 $computedSums[$key]['total_target'] += $item->total_target;
                 $computedSums[$key]['show_ups_internal'] += $item->show_ups_internal;
                 $computedSums[$key]['show_ups_external'] += $item->show_ups_external;
                 $computedSums[$key]['show_ups_total'] += $item->show_ups_total;
                 $computedSums[$key]['day_1'] += $item->day_1;
                 $computedSums[$key]['pipeline_total'] += $item->pipeline_total;
-                $computedSums[$key]['hires_goal'] += $item->day_4;
+                $computedSums[$key]['hires_goal'] = $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0;
+    
+                // Compute fill rate
+                $computedSums[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 2) : 0;
+    
+                // Compute day_1sup
+                $computedSums[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 2) : 0;
             }
         }
-
+    
         $grandTotals = [
             'total_target' => 0,
             'show_ups_internal' => 0,
@@ -291,24 +297,33 @@ class ClassStaffingController extends Controller
             'pipeline_total' => 0,
             'hires_goal' => 0,
         ];
-
+    
         $totalCount = 0;
+        $totalFillrate = 0;
+        $totalDay1sup = 0;
+        $totalHiresGoal = 0;
+    
         foreach ($computedSums as $sum) {
             $totalCount++;
-
+    
             $grandTotals['total_target'] += $sum['total_target'];
             $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
             $grandTotals['show_ups_external'] += $sum['show_ups_external'];
             $grandTotals['show_ups_total'] += $sum['show_ups_total'];
             $grandTotals['pipeline_total'] += $sum['pipeline_total'];
             $grandTotals['day_1'] += $sum['day_1'];
-
-            $grandTotals['fillrate'] += $sum['fillrate'] / $totalCount;
-            $grandTotals['day_1sup'] += $sum['day_1sup'] / $totalCount;
-            $grandTotals['hires_goal'] += $sum['hires_goal'] / $totalCount;
+            
+            // Sum up for average calculation
+            $totalFillrate += $sum['fillrate'];
+            $totalDay1sup += $sum['day_1sup'];
+            $totalHiresGoal += $sum['hires_goal'];
         }
-
-        // Mapped Grand Total
+    
+        // Calculate averages
+        $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 2) : 0;
+        $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 2) : 0;
+        $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 2) : 0;
+    
         // Mapped Grand Total
         $mappedGrandTotal = [
             'week_name' => 'Grand Total',
@@ -325,18 +340,17 @@ class ClassStaffingController extends Controller
             'pipeline_total' => $grandTotals['pipeline_total'],
             'hires_goal' => $grandTotals['hires_goal'],
         ];
-
-
+    
         // Append Mapped Grand Total to $computedSums
         $computedSums['Grand Total'] = $mappedGrandTotal;
-
+    
         $response = [
             'mps' => $computedSums,
         ];
-
+    
         return response()->json($response);
     }
-
+    
 
 
     private function removeEmptyArrays(&$array)
