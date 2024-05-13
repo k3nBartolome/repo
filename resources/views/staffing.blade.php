@@ -85,7 +85,7 @@
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Overall Pipeline</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
-                            Pipeline To Goal</th>
+                            Pipeline To Goal%</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Total Internals</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
@@ -101,7 +101,7 @@
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Total SU</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
-                            Fill Rate</th>
+                            Fill Rate%</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Day 1</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
@@ -121,7 +121,7 @@
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['pipeline_total']) ? $data1['pipeline_total'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['pipeline_goal']) ? $data1['pipeline_goal'] : 'N/A' }}</td>
+                                    {{ isset($data1['pipeline_goal']) ? $data1['pipeline_goal'] : 'N/A' }}%</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['total_internal']) ? $data1['total_internal'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
@@ -137,11 +137,11 @@
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['total_show_ups']) ? $data1['total_show_ups'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['fill_rate']) ? $data1['fill_rate'] : 'N/A' }}</td>
+                                    {{ isset($data1['fill_rate']) ? $data1['fill_rate'] : 'N/A' }}%</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['day_1']) ? $data1['day_1'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['day_1sup']) ? $data1['day_1sup'] : 'N/A' }}</td>
+                                    {{ isset($data1['day_1sup']) ? $data1['day_1sup'] : 'N/A' }} %</td>
                             @endif
 
 
@@ -204,15 +204,15 @@
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['show_ups_total']) ? $data1['show_ups_total'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['fillrate']) ? $data1['fillrate'] : 'N/A' }}</td>
+                                    {{ isset($data1['fillrate']) ? $data1['fillrate'] : 'N/A' }}%</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['day_1']) ? $data1['day_1'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['day_1sup']) ? $data1['day_1sup'] : 'N/A' }}</td>
+                                    {{ isset($data1['day_1sup']) ? $data1['day_1sup'] : 'N/A' }}%</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['pipeline_total']) ? $data1['pipeline_total'] : 'N/A' }}</td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
-                                    {{ isset($data1['hires_goal']) ? $data1['hires_goal'] : 'N/A' }}</td>
+                                    {{ isset($data1['hires_goal']) ? $data1['hires_goal'] : 'N/A' }}%</td>
                             @endif
 
 

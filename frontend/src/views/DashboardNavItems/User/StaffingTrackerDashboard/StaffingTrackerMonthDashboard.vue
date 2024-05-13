@@ -45,26 +45,20 @@
         <thead>
           <tr class="border-b-4 border-gray-300 bg-gray-100 text-center">
             <th class="border-2 border-gray-300 px-4 py-2 truncate">Month</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Target</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">
-              Internal
-            </th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">
-              External
-            </th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">
-              Overall Starts
-            </th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day1</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day2</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day3</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day4</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day5</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">
-              Total Classes
-            </th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Filled</th>
-            <th class="border-2 border-gray-300 px-4 py-2 truncate">Open</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Week Name</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Total Target</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Over Pipeline</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Pipeline To Goal</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Total Internals</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Total Externals</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">For JO</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">For Testing</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Internal</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">External</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Total SU</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Fill Rate%</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day 1</th>
+            <th class="border-2 border-gray-300 px-4 py-2 truncate">Day 1%</th>
           </tr>
         </thead>
         <tbody v-for="(mps1, index) in mps" :key="index">
