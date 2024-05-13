@@ -72,7 +72,7 @@
             </table>
         </div> --}}
         <div style="margin: 10px 0">
-            <p style="margin: 10px 0;">WTD</p>
+            <p style="margin: 10px 0;">MTD</p>
             <table style="width: 70%; border-collapse: collapse;">
                 <thead>
                     <tr>

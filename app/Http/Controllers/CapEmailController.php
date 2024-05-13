@@ -28,7 +28,7 @@ class CapEmailController extends Controller
 
         $worksheetNames = [
             'Weekly Pipe',
-            'WTD',
+            'MTD',
             /*  'YTD', */
         ];
 
@@ -59,18 +59,17 @@ class CapEmailController extends Controller
     public function weeklyPipe()
     {
         $weeklyPipe = [];
-        $weeklyPipe = [];
-        
+        $year=2024;
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
+            ->where('year',  $year)
             ->first();
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
         }
-    
         $distinctDateRanges = DB::table('date_ranges')
             ->whereIn('week_end', [
                 Carbon::parse($dateRange->week_end)->subWeek(),
@@ -78,7 +77,6 @@ class CapEmailController extends Controller
                 Carbon::parse($dateRange->week_end)->addWeek(),
             ])
             ->pluck('date_id');
-    
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
@@ -105,15 +103,13 @@ class CapEmailController extends Controller
                 )
                 ->where('class_staffing.active_status', 1)
                 ->where('classes.total_target', '>', 0)
+                ->where('sites.country', 'Philippines')
                 ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
-    
             foreach ($staffing as $item) {
                 $siteId = $item->site_id;
                 $programId = $item->program_id;
-    
                 $key = $dateRangeId . '_' . $siteId . '_' . $programId;
-    
                 if (!isset($weeklyPipe[$key])) {
                     $weeklyPipe[$key] = [
                         'week_name' => $item->week_name,
@@ -131,7 +127,6 @@ class CapEmailController extends Controller
                         'hires_goal' => 0,
                     ];
                 }
-    
                 $weeklyPipe[$key]['total_target'] += $item->total_target;
                 $weeklyPipe[$key]['show_ups_internal'] += $item->show_ups_internal;
                 $weeklyPipe[$key]['show_ups_external'] += $item->show_ups_external;
@@ -143,7 +138,6 @@ class CapEmailController extends Controller
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
             }
         }
-    
         $grandTotals = [
             'total_target' => 0,
             'show_ups_internal' => 0,
@@ -155,34 +149,25 @@ class CapEmailController extends Controller
             'pipeline_total' => 0,
             'hires_goal' => 0,
         ];
-    
         $totalCount = 0;
         $totalFillrate = 0;
         $totalDay1sup = 0;
         $totalHiresGoal = 0;
-    
         foreach ($weeklyPipe as $sum) {
             $totalCount++;
-    
             $grandTotals['total_target'] += $sum['total_target'];
             $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
             $grandTotals['show_ups_external'] += $sum['show_ups_external'];
             $grandTotals['show_ups_total'] += $sum['show_ups_total'];
             $grandTotals['pipeline_total'] += $sum['pipeline_total'];
             $grandTotals['day_1'] += $sum['day_1'];
-            
-            // Sum up for average calculation
             $totalFillrate += $sum['fillrate'];
             $totalDay1sup += $sum['day_1sup'];
             $totalHiresGoal += $sum['hires_goal'];
         }
-    
-        // Calculate averages
         $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
         $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
         $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
-    
-        // Mapped Grand Total
         $mappedGrandTotal = [
             'week_name' => 'Grand Total',
             'site_name' => '',
@@ -198,8 +183,6 @@ class CapEmailController extends Controller
             'pipeline_total' => $grandTotals['pipeline_total'],
             'hires_goal' => $grandTotals['hires_goal'],
         ];
-    
-        // Append Mapped Grand Total to $weeklyPipe
         $weeklyPipe['Grand Total'] = $mappedGrandTotal;
         return $weeklyPipe;
     }
