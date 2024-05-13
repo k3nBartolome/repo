@@ -39,7 +39,7 @@ class CapEmailController extends Controller
             $worksheetNames,
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'];
         $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
 
@@ -271,7 +271,7 @@ class CapEmailController extends Controller
                 'week_name' => $weekName,
                 'total_target' => $staffing->sum('total_target'),
                 'pipeline_total' => $staffing->sum('pipeline_total'),
-                'pipeline_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'pipeline_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 1) : 0,
                 'total_internal' => $staffing->sum('internals_hires'),
                 'total_external' => $staffing->sum('with_jo'),
                 'jo' => $staffing->sum('pending_jo'),
@@ -279,9 +279,9 @@ class CapEmailController extends Controller
                 'internal' => $staffing->sum('internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'total_show_ups' => $staffing->sum('show_ups_total'),
-                'fill_rate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'fill_rate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 1) : 0,
                 'day_1' => $staffing->sum('day_1'),
-                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 2) : 0,
+                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 1) : 0,
             ];
 
             foreach ($grandTotals as $key => $value) {
@@ -293,11 +293,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 2) : 0;
+        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 2) : 0;
+        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 2) : 0;
+        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
 
         // Construct the Grand Total row
         $grandTotalRow = [
