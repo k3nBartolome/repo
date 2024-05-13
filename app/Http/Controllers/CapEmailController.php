@@ -59,7 +59,8 @@ class CapEmailController extends Controller
     public function weeklyPipe()
     {
         $weeklyPipe = [];
-    
+        $weeklyPipe = [];
+        
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
@@ -137,13 +138,9 @@ class CapEmailController extends Controller
                 $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
                 $weeklyPipe[$key]['day_1'] += $item->day_1;
                 $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] = $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 2) : 0;
-    
-                // Compute fill rate
-                $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 2) : 0;
-    
-                // Compute day_1sup
-                $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 2) : 0;
+                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total /$item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
             }
         }
     
@@ -181,9 +178,9 @@ class CapEmailController extends Controller
         }
     
         // Calculate averages
-        $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 2) : 0;
-        $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 2) : 0;
-        $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 2) : 0;
+        $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
+        $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
+        $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
     
         // Mapped Grand Total
         $mappedGrandTotal = [

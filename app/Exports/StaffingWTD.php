@@ -43,7 +43,7 @@ class StaffingWTD implements FromCollection, WithHeadings, WithTitle
             'Internal',
             'External',
             'Total SU',
-            'Fill Rate',
+            'Fill Rate %',
             'Day 1 SU',
             'Day 1 SU %',
         ];

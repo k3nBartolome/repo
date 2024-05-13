@@ -172,7 +172,7 @@
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Total</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
-                            fillrate</th>
+                            Fill Rate%</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Day 1</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">

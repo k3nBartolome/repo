@@ -32,17 +32,16 @@ class StaffingWeeklyPipe implements FromCollection, WithHeadings, WithTitle
             'Hiring Week',
             'Site',
             'Program',
-            'Pipeline',
             'Program Group',
             'Total Target',
             'Internal',
             'External',
             'Total SU',
-            'Fill Rate',
+            'Fill Rate %',
             'Day 1 SU',
             'Day 1 SU %',
             'Total Hires',
-            'Pipeline to Goal'
+            'Pipeline to Goal %'
         ];
     }
 }
