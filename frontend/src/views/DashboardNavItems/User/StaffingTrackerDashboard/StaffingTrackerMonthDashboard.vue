@@ -1,44 +1,5 @@
 <template>
-  <div class="py-0">
-    <div class="container mx-auto mt-4 px-4 py-0">
-      <div class="mb-4 md:flex md:space-x-2 md:items-center py-0">
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <select
-            v-model="sites_selected"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
-          >
-            <option disabled value="" selected>Please select Site</option>
-            <option v-for="site in sites" :key="site.id" :value="site.id">
-              {{ site.name }}
-            </option>
-          </select>
-        </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <select
-            v-model="programs_selected"
-            class="px-4 py-2 border rounded-lg w-full bg-gray-100"
-          >
-            <option disabled value="" selected>Please select Program</option>
-            <option
-              v-for="program in programs"
-              :key="program.id"
-              :value="program.id"
-            >
-              {{ program.name }}
-            </option>
-          </select>
-        </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <button
-            class="px-4 py-2 bg-red-500 text-white rounded-lg w-full"
-            @click="resetFilters"
-          >
-            Reset Filters
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+  
   <div class="px-4">
     <div class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto">
       <table class="min-w-full border-collapse border-2 border-gray-300">
@@ -65,71 +26,36 @@
           <tr
             class="text-black bg-white border-b-2 border-gray-400 border-solid"
           >
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semibold truncate"
-            >
-              {{ mps1.month }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.total_target }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.internal }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.external }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.total }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.day_1 }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.day_2 }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.day_3 }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.day_4 }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.day_5 }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.classes }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.filled }}
-            </td>
-            <td
-              class="border-2 border-gray-300 px-4 py-2 text-left font-semiboldtruncate"
-            >
-              {{ mps1.open }}
-            </td>
+          <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
+            {{mps1.month}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
+            {{mps1.week_name}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.total_target}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.pipeline_total}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.pipeline_goal}}%</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.total_internal}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.total_external}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.jo}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.versant}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.internal}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.external}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.total_show_ups}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.fill_rate}}%</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.day_1}}</td>
+        <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
+            {{mps1.day_1sup}} %</td>
           </tr>
         </tbody>
       </table>
@@ -154,14 +80,7 @@ export default {
     };
   },
   watch: {
-    sites_selected: {
-      handler: "getStaffing",
-      immediate: true,
-    },
-    programs_selected: {
-      handler: "getStaffing",
-      immediate: true,
-    },
+    
   },
   mounted() {
     this.getStaffing();
@@ -176,17 +95,8 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "http://10.109.2.112:8081/api/mpsmonth";
-        const params = {};
-        if (this.sites_selected) {
-          params.site_id = this.sites_selected;
-        }
-        if (this.programs_selected) {
-          params.program_id = this.programs_selected;
-        }
-        if (Object.keys(params).length > 0) {
-          apiUrl += `?${new URLSearchParams(params).toString()}`;
-        }
+        let apiUrl = "http://127.0.0.1:8000/api/mpsmonth";
+        
         const response = await axios.get(apiUrl, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -201,7 +111,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -220,7 +130,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(`http://10.109.2.112:8081/api/programs`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/programs`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

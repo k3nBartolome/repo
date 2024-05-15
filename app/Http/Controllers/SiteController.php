@@ -166,6 +166,7 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill( $request->all() );
         $site->country = 'Jamaica';
+        $site->site_id = $site->id;
         $site->save();
 
         return response()->json( [ 'data' => $site ] );
@@ -189,6 +190,7 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill( $request->all() );
         $site->country = 'Guatemala';
+        $site->site_id = $site->id;
         $site->save();
 
         return response()->json( [ 'data' => $site ] );

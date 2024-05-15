@@ -39,22 +39,7 @@
               class="w-full px-4 py-2 bg-white border rounded-lg"
           /></label>
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <label class="block font-semibold"
-            >Program Type<select
-              v-model="program_type"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              required
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="BAU" selected>BAU</option>
-              <option value="B2" selected>B2</option>
-              <option value="COMCAST" selected>COMCAST</option>
-              <option value="DULY" selected>DULY</option>
-              <option value="TEMU" selected>TEMU</option>
-            </select></label
-          >
-        </div>
+       
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <label class="block font-semibold"
             >ID Creation<select
@@ -138,7 +123,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/programs/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -153,7 +138,7 @@ export default {
           this.description = programObj.description;
           this.program_group = programObj.program_group;
           this.sites_selected = programObj.site_id;
-          this.program_type = programObj.program_type;
+        
           (this.pre_emps = programObj.pre_emps),
             (this.id_creation = programObj.id_creation),
             console.log(programObj);
@@ -168,7 +153,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites7", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -190,7 +175,7 @@ export default {
         name: this.name,
         description: this.description,
         program_group: this.program_group,
-        program_type: this.program_type,
+       
         pre_emps: this.pre_emps,
         id_creation: this.id_creation,
         site_id: this.sites_selected,
@@ -198,7 +183,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/programs/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/programsother/" + this.$route.params.id,
           formData,
           {
             headers: {
@@ -211,7 +196,7 @@ export default {
           this.name = "";
           this.description = "";
           this.program_group = "";
-          this.program_type = "";
+         
           this.id_creation = "";
           this.pre_emps = "";
           this.sites_selected = "";

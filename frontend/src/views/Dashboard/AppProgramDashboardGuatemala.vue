@@ -139,22 +139,7 @@
               class="w-full px-4 py-2 bg-white border rounded-lg"
           /></label>
         </div>
-        <div class="w-full md:w-1/3 mt-4 md:mt-0">
-          <label class="block font-semibold"
-            >Program Type<select
-              v-model="program_type"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              required
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="BAU" selected>BAU</option>
-              <option value="B2" selected>B2</option>
-              <option value="Comcast" selected>Comcast</option>
-              <option value="DULY" selected>DULY</option>
-              <option value="TEMU" selected>TEMU</option>
-            </select></label
-          >
-        </div>
+       
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <label class="block font-semibold"
             >ID Creation<select
@@ -312,7 +297,7 @@ export default {
       sites_selected: "",
       errorMessage: "",
       sites: [],
-      program_type: "",
+     
       pre_emps: "",
       id_creation: "",
       ShowDeactivateModal: false,
@@ -325,10 +310,7 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
-        {
-          data: "program_type",
-          title: "Program Type",
-        },
+       
         {
           data: "id_creation",
           title: "ID Creation?",
@@ -371,10 +353,7 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
-        {
-          data: "program_type",
-          title: "Program Type",
-        },
+      
         {
           data: "id_creation",
           title: "ID Creation?",
@@ -466,7 +445,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/programs_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.successMessage = "Program activated successfully!";
@@ -494,7 +473,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/programs_deactivate/${id}`,
+          `http://127.0.0.1:8000/api/programs_deactivate/${id}`,
           form,
           config
         )
@@ -515,7 +494,7 @@ export default {
     async getPrograms() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs7",
+          "http://127.0.0.1:8000/api/programs7",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -537,7 +516,7 @@ export default {
     async getPrograms2() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs8",
+          "http://127.0.0.1:8000/api/programs8",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -559,7 +538,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites7", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -582,14 +561,14 @@ export default {
         program_group: this.program_group,
         site_id: this.sites_selected,
         is_active: 1,
-        program_type: this.program_type,
+      
         pre_emps: this.pre_emps,
         id_creation: this.id_creation,
         created_by: this.$store.state.user_id,
       };
 
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData, {
+        .post("http://127.0.0.1:8000/api/programsother", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -620,7 +599,7 @@ export default {
       this.description = "";
       this.program_group = "";
       this.sites_selected = "";
-      this.program_type = "";
+   
       this.id_creation = "";
       this.pre_emps = "";
     },

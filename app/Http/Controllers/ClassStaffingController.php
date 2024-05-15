@@ -573,26 +573,30 @@ class ClassStaffingController extends Controller
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
         $month = null;
+
         $dateRange = DB::table('date_ranges')
             ->select('month', 'month_num')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
             ->first();
+
         if ($dateRange) {
             $month = $dateRange->month_num;
         }
+
         $distinctMonthsAndWeeks = DB::table('date_ranges')
             ->select([
                 'month_num',
                 DB::raw('COALESCE(date_ranges.month, null) as month_name'),
                 'week_start',
-                'week_end',
+                'week_end', 'date_range',
             ])
             ->where('year', $year)
             ->where('month_num', $month)
             ->distinct()
             ->get();
-        $flattenedData = [];
+
+        $wtd = [];
         $grandTotals = [
             'total_target' => 0,
             'pipeline_total' => 0,
@@ -608,10 +612,13 @@ class ClassStaffingController extends Controller
             'day_1' => 0,
             'day_1sup' => 0,
         ];
+
         foreach ($distinctMonthsAndWeeks as $item) {
             $monthName = $item->month_name;
             $weekStart = $item->week_start;
             $weekEnd = $item->week_end;
+            $weekName = $item->date_range;
+
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
                 ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
@@ -634,18 +641,19 @@ class ClassStaffingController extends Controller
                     DB::raw('COALESCE(sites.name, null) as site_name'),
                     DB::raw('COALESCE(programs.name, null) as program_name')
                 )
+                ->where('class_staffing.active_status', 1)
                 ->where('date_ranges.month_num', $item->month_num)
                 ->where('date_ranges.year', $year)
                 ->where('date_ranges.week_start', $weekStart)
                 ->where('date_ranges.week_end', $weekEnd)
                 ->get();
-            $flattenedData[] = [
+
+            $wtd[] = [
                 'month' => $monthName,
-                'week_start' => $weekStart,
-                'week_end' => $weekEnd,
+                'week_name' => $weekName,
                 'total_target' => $staffing->sum('total_target'),
                 'pipeline_total' => $staffing->sum('pipeline_total'),
-                'pipeline_goal' => $staffing->sum('total_target') != 0 ? ($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100 : 0,
+                'pipeline_goal' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('pipeline_total') / $staffing->sum('total_target')) * 100, 1) : 0,
                 'total_internal' => $staffing->sum('internals_hires'),
                 'total_external' => $staffing->sum('with_jo'),
                 'jo' => $staffing->sum('pending_jo'),
@@ -653,31 +661,31 @@ class ClassStaffingController extends Controller
                 'internal' => $staffing->sum('internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'total_show_ups' => $staffing->sum('show_ups_total'),
-                'fill_rate' => $staffing->sum('total_target') != 0 ? ($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100 : 0,
+                'fill_rate' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('show_ups_total') / $staffing->sum('total_target')) * 100, 1) : 0,
                 'day_1' => $staffing->sum('day_1'),
-                'day_1sup' => $staffing->sum('total_target') != 0 ? ($staffing->sum('day_1') / $staffing->sum('total_target')) * 100 : 0,
+                'day_1sup' => $staffing->sum('total_target') != 0 ? number_format(($staffing->sum('day_1') / $staffing->sum('total_target')) * 100, 1) : 0,
             ];
 
             foreach ($grandTotals as $key => $value) {
                 if ($key !== 'fillrate') {
-                    $grandTotals[$key] += $flattenedData[count($flattenedData) - 1][$key];
+                    $grandTotals[$key] += $wtd[count($wtd) - 1][$key];
                 }
             }
         }
-        $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100) . '%' : '0%';
-        $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100) . '%' : '0%';
-        $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100) . '%' : '0%';
 
+        // Calculate fill rate, day 1 supervision rate, and hires goal
+        $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+        $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+        $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
+        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
         $grandTotalRow = [
             'month' => 'Grand Total',
-            'week_start' => '',
-            'week_end' => '',
+            'week_name' => '',
             'total_target' => $grandTotals['total_target'],
             'pipeline_total' => $grandTotals['pipeline_total'],
-            'pipeline_goal' => $hiresGoalGrandTotal,
+            'pipeline_goal' => $grandTotals['pipeline_goal'],
             'total_internal' => $grandTotals['total_internal'],
             'total_external' => $grandTotals['total_external'],
             'jo' => $grandTotals['jo'],
@@ -689,9 +697,10 @@ class ClassStaffingController extends Controller
             'day_1' => $grandTotals['day_1'],
             'day_1sup' => $day1SupGrandTotal,
         ];
-        $flattenedData[] = $grandTotalRow;
+
+        $wtd[] = $grandTotalRow;
         return response()->json([
-            'mps' => $flattenedData,
+            'mps' => $wtd,
         ]);
     }
 

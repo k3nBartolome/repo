@@ -135,7 +135,8 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
-
+        $program->program_id = $program->id;
+        $program->save();
         return response()->json(['data' => $program], 201);
     }
 
@@ -146,6 +147,58 @@ class ProgramController extends Controller
             'description' => 'sometimes',
             'program_group' => 'sometimes',
             'program_type' => 'sometimes',
+            'id_creation' => 'sometimes',
+            'pre_emps' => 'sometimes',
+
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $program = Program::find($id);
+        if (!$program) {
+            return response()->json(['error' => 'Program not found'], 404);
+        }
+
+        $program->fill($request->all());
+        $program->save();
+
+        return response()->json(['data' => $program]);
+    }
+    public function storeother(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => [
+                'required',
+                Rule::unique('programs')->where(function ($query) use ($request) {
+                    return $query->where('site_id', $request->input('site_id'));
+                }),
+            ],
+            'description' => 'required',
+            'program_group' => 'sometimes',
+            'site_id' => 'required|exists:sites,id',
+            'is_active' => 'required|boolean',
+            'id_creation' => 'sometimes',
+            'pre_emps' => 'sometimes',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $program = Program::create($request->all());
+        $program->program_id = $program->id;
+        $program->save();
+        return response()->json(['data' => $program], 201);
+    }
+
+    public function updateother(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'sometimes',
+            'description' => 'sometimes',
+            'program_group' => 'sometimes',
             'id_creation' => 'sometimes',
             'pre_emps' => 'sometimes',
 

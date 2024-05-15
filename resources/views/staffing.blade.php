@@ -185,7 +185,10 @@
                 </thead>
                 <tbody>
                     @foreach ($weeklyPipe as $data1)
-                        <tr @if ($loop->last) class="last-row" @endif>
+                    <tr @if ($loop->last) class="last-row" @else style="{{ isset($data1['hires_goal']) ? 
+                        ($data1['hires_goal'] >= 80 ? 'background-color: #90EE90;' : 
+                            ($data1['hires_goal'] >= 50 ? 'background-color:#ffd966;' : 'background-color:#ff6f6f;')) 
+                        : '' }}" @endif>
                             @if (is_array($data1))
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
                                     {{ isset($data1['week_name']) ? $data1['week_name'] : '' }}</td>
