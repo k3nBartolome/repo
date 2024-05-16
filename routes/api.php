@@ -84,15 +84,15 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('programs7', [ProgramController::class, 'index7']);
     Route::get('programs8', [ProgramController::class, 'index8']);
     Route::get('programs/{id}', [ProgramController::class, 'show']);
-    Route::post('programs', [ProgramController::class, 'store']);
+    Route::post('programsother', [ProgramController::class, 'store']);
     Route::put('programs/{id}', [ProgramController::class, 'update']);
-    Route::post('programsother', [ProgramController::class, 'storeother']);
+    Route::post('programs', [ProgramController::class, 'storeother']);
     Route::put('programsother/{id}', [ProgramController::class, 'updateother']);
     Route::put('programs_activate/{id}', [ProgramController::class, 'activate']);
     Route::put('programs_deactivate/{id}', [ProgramController::class, 'deactivate']);
     Route::delete('programs/{id}', [ProgramController::class, 'destroy']);
     Route::get('programs_selected/{siteId}', [ProgramController::class, 'indexBySite']);
-    Route::get('programs_selected/{siteIds}', [ProgramController::class, 'perSite']);
+    Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 
     // Classes Routes
     Route::get('classes', [ClassesController::class, 'index']);
@@ -126,6 +126,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('mps', [ClassStaffingController::class, 'mps']);
 
     Route::get('mpssite', [ClassStaffingController::class, 'mpsSite']);
+    Route::get('programs_selected', [ProgramController::class, 'perSite']);
     Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
     Route::get('siteclasses', [ClassesController::class, 'dashboardSiteClasses']);
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
@@ -228,3 +229,4 @@ Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExpor
 Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
 Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
+Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);

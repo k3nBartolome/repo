@@ -1191,8 +1191,6 @@ export default {
     this.getClassesAll();
     this.getSites();
     this.getPrograms();
-    this.getDateRange();
-    this.getMonth();
   },
   watch: {
     month_selected: {
@@ -1283,25 +1281,6 @@ export default {
         this.isLoading = false; // Set loading state back to false, regardless of success or failure
       }
     },
-    async getMonth() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/months", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.months = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching sites");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async exportToExcel() {
       // Set export loading to true before making the request
       try {
@@ -1358,34 +1337,6 @@ export default {
         console.log(error);
       }
     },
-    async getDateRange() {
-      if (!this.month_selected) {
-        return;
-      }
-      try {
-        const token = this.$store.state.token;
-        const monthId = this.month_selected.map((month) => month.month_num);
-
-        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
-          ","
-        )}`;
-
-        const response = await axios.get(url, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (response.status === 200) {
-          this.daterange = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching week");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
     async getPrograms() {
       if (!this.sites_selected) {
         return;
@@ -1395,7 +1346,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://127.0.0.1:8000/api/programs_selected/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

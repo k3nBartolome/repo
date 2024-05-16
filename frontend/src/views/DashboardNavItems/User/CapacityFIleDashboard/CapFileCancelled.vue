@@ -1404,7 +1404,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://127.0.0.1:8000/api/programs_selected/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

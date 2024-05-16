@@ -7,16 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class SiteController extends Controller
- {
+class SiteController extends Controller {
     /**
     * Display a listing of the resource.
     *
     * @return \Illuminate\Http\Response
     */
 
-    public function index()
- {
+    public function index() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 1 )
         ->where( 'country', 'Philippines' )
@@ -25,8 +23,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index2()
- {
+    public function index2() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 0 )
         ->where( 'country', 'Philippines' )
@@ -35,8 +32,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index3()
- {
+    public function index3() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 1 )
         ->where( 'country', 'India' )
@@ -45,8 +41,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index4()
- {
+    public function index4() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 0 )
         ->where( 'country', 'India' )
@@ -55,8 +50,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index5()
- {
+    public function index5() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 1 )
         ->where( 'country', 'Jamaica' )
@@ -65,8 +59,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index6()
- {
+    public function index6() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 0 )
         ->where( 'country', 'Jamaica' )
@@ -75,8 +68,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index7()
- {
+    public function index7() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 1 )
         ->where( 'country', 'Guatemala' )
@@ -85,8 +77,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $sites ] );
     }
 
-    public function index8()
- {
+    public function index8() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
         ->where( 'is_active', 0 )
         ->where( 'country', 'Guatemala' )
@@ -101,8 +92,7 @@ class SiteController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function store( Request $request )
- {
+    public function store( Request $request ) {
         $validator = Validator::make( $request->all(), [
             'name' => 'required|unique:sites',
             'description' => 'required',
@@ -119,14 +109,14 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill( $request->all() );
         $site->country = 'Philippines';
+        $site->save();
         $site->site_id = $site->id;
         $site->save();
 
         return response()->json( [ 'data' => $site ] );
     }
 
-    public function store2( Request $request )
- {
+    public function store2( Request $request ) {
         $validator = Validator::make( $request->all(), [
             'name' => 'required|unique:sites',
             'description' => 'required',
@@ -144,12 +134,13 @@ class SiteController extends Controller
         $site->fill( $request->all() );
         $site->country = 'India';
         $site->save();
+        $site->site_id = $site->id;
+        $site->save();
 
         return response()->json( [ 'data' => $site ] );
     }
 
-    public function store3( Request $request )
- {
+    public function store3( Request $request ) {
         $validator = Validator::make( $request->all(), [
             'name' => 'required|unique:sites',
             'description' => 'required',
@@ -166,14 +157,14 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill( $request->all() );
         $site->country = 'Jamaica';
+        $site->save();
         $site->site_id = $site->id;
         $site->save();
 
         return response()->json( [ 'data' => $site ] );
     }
 
-    public function store4( Request $request )
- {
+    public function store4( Request $request ) {
         $validator = Validator::make( $request->all(), [
             'name' => 'required|unique:sites',
             'description' => 'required',
@@ -190,9 +181,9 @@ class SiteController extends Controller
         $site = new Site();
         $site->fill( $request->all() );
         $site->country = 'Guatemala';
+        $site->save();
         $site->site_id = $site->id;
         $site->save();
-
         return response()->json( [ 'data' => $site ] );
     }
 
@@ -202,8 +193,7 @@ class SiteController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function show( $id )
- {
+    public function show( $id ) {
         $site = Site::FindOrFail( $id );
 
         return response()->json( [ 'data' => $site ] );
@@ -215,8 +205,7 @@ class SiteController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function update( Request $request, $id )
- {
+    public function update( Request $request, $id ) {
         $validator = Validator::make( $request->all(), [
             'name' => 'sometimes|unique:sites,name,' . $id,
             'description' => 'sometimes',
@@ -246,8 +235,7 @@ class SiteController extends Controller
     * @return \Illuminate\Http\Response
     */
 
-    public function destroy( $id )
- {
+    public function destroy( $id ) {
         $site = Site::find( $id );
 
         if ( !$site ) {
@@ -259,8 +247,7 @@ class SiteController extends Controller
         return response()->json( null, 204 );
     }
 
-    public function deactivate( Request $request, $id )
- {
+    public function deactivate( Request $request, $id ) {
         $validator = Validator::make( $request->all(), [
             'is_Active' => 'sometimes',
         ] );
@@ -280,8 +267,7 @@ class SiteController extends Controller
         return response()->json( [ 'data' => $site ] );
     }
 
-    public function activate( Request $request, $id )
- {
+    public function activate( Request $request, $id ) {
         $validator = Validator::make( $request->all(), [
             'is_Active' => 'sometimes',
         ] );

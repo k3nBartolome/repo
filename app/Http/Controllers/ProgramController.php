@@ -135,6 +135,7 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
+        $program->save();
         $program->program_id = $program->id;
         $program->save();
         return response()->json(['data' => $program], 201);
@@ -188,8 +189,10 @@ class ProgramController extends Controller
         }
 
         $program = Program::create($request->all());
+        $program->save();
         $program->program_id = $program->id;
         $program->save();
+
         return response()->json(['data' => $program], 201);
     }
 
