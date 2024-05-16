@@ -59,7 +59,7 @@ class CapEmailController extends Controller
     public function weeklyPipe()
     {
         $weeklyPipe = [];
-        $year=2024;
+        $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
@@ -133,7 +133,7 @@ class CapEmailController extends Controller
                 $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
                 $weeklyPipe[$key]['day_1'] += $item->day_1;
                 $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total /$item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
             }
@@ -293,11 +293,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
 
         // Construct the Grand Total row
         $grandTotalRow = [
@@ -407,11 +407,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
 
         // Create Grand Total row
         $grandTotalRow = [
@@ -703,7 +703,10 @@ class CapEmailController extends Controller
                     $subquery->where('is_active', 1);
                 })
                 ->where('site_id', $siteId)
-                ->where('status', 'Cancelled')
+                ->where(function ($query) {
+                    $query->where('status', 'Cancelled')
+                        ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                })
                 ->get();
             $totalTarget = $classes->sum('total_target');
             $pipelineOffered = $classes->sum('pipeline_offered');
@@ -786,7 +789,10 @@ class CapEmailController extends Controller
                     $subquery->where('is_active', 1);
                 })
                 ->where('site_id', $siteId)
-                ->where('status', 'Cancelled')
+                ->where(function ($query) {
+                    $query->where('status', 'Cancelled')
+                        ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                })
                 ->get();
             $totalTarget = $classes->sum('total_target');
             $pipelineOffered = $classes->sum('pipeline_offered'); // Compute pipeline offered
@@ -976,7 +982,10 @@ class CapEmailController extends Controller
                 $query->where('year', '=', '2024');
             })
             ->with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-            ->where('status', 'Cancelled')
+            ->where(function ($query) {
+                $query->where('status', 'Cancelled')
+                    ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+            })
             ->get();
 
         $formattedClasses = $classes->map(function ($class) {

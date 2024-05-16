@@ -423,7 +423,10 @@ class ClassesController extends Controller
             'cancelled' => Classes::whereHas('site', function ($query) {
                 $query->where('country', '=', 'Philippines');
             })
-                ->where('status', 'cancelled')
+                ->where(function ($query) {
+                    $query->where('status', 'Cancelled')
+                        ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                })
                 ->count(),
 
             'moved' => Classes::whereHas('site', function ($query) {
@@ -533,21 +536,21 @@ class ClassesController extends Controller
     public function show($id)
     {
         $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
-        
+
         $staffingModel = ClassStaffing::where('classes_id', $id)
             ->where('active_status', 1)
             ->first();
-    
+
         if (!$class) {
             return response()->json(['error' => 'Class not found'], 404);
         }
-    
+
         return response()->json([
             'class' => $class,
             'staffingModel' => $staffingModel,
         ]);
     }
-    
+
 
     public function staffing($classesId)
     {
@@ -1190,7 +1193,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -2230,7 +2236,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -3270,7 +3279,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -4901,6 +4913,10 @@ class ClassesController extends Controller
     {
 
         $query = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser', 'cancelledByUser'])
+            /*  ->where(function ($query) {
+                $query->where('status', 'Cancelled')
+                    ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+            }) */
             ->where('status', 'Cancelled')
             ->whereHas('site', function ($query) use ($request) {
                 $query->where('country', '=', 'Philippines')
@@ -5077,7 +5093,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -6108,7 +6127,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -7139,7 +7161,10 @@ class ClassesController extends Controller
                 $classes = Classes::where('site_id', $program->site_id)
                     ->where('program_id', $programId)
                     ->where('date_range_id', $dateRange->id)
-                    ->where('status', 'Cancelled')
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
                     ->get();
 
                 $totalTarget = $classes->sum('total_target');
@@ -7891,16 +7916,14 @@ class ClassesController extends Controller
         $class = Classes::find($id);
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
-        $newClass->changes = 'Pushedback';
-        $newClass->status = 'Moved';
+        $newClass->status = $request->status;
         $newClass->requested_by = json_encode($requested_by);
         $newClass->save();
         $class->fill($request->all());
+        $class->status = 'Active';
         $class->save();
-        
-        $staffingModel = ClassStaffing::where('classes_id', $id)
-    ->where('active', true)
-    ->first();
+
+
 
         return new ClassesResource($newClass);
     }
@@ -7999,8 +8022,9 @@ class ClassesController extends Controller
         $newClass->status = 'Cancelled';
         $newClass->save();
         $class->status = 'Cancelled Class';
+        $class->cancelled_date = $request->input('cancelled_date');
         $class->save();
-       
+
 
         // @ts-ignore
         return new ClassesResource($class);
@@ -8689,7 +8713,10 @@ class ClassesController extends Controller
                     $subquery->where('is_active', 1);
                 })
                 ->where('site_id', $siteId)
-                ->where('status', 'Cancelled')
+                ->where(function ($query) {
+                    $query->where('status', 'Cancelled')
+                        ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                })
                 ->get();
             $totalTarget = $classes->sum('total_target');
             $pipelineOffered = $classes->sum('pipeline_offered');
@@ -8775,8 +8802,12 @@ class ClassesController extends Controller
                     $subquery->where('is_active', 1);
                 })
                 ->where('site_id', $siteId)
-                ->where('status', 'Cancelled')
+                ->where(function ($query) {
+                    $query->where('status', 'Cancelled')
+                        ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                })
                 ->get();
+
             $totalTarget = $classes->sum('total_target');
             $pipelineOffered = $classes->sum('pipeline_offered');
             $notice_weeks = $classes->avg('notice_weeks');

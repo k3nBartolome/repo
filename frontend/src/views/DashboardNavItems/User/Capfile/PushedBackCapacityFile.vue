@@ -256,6 +256,17 @@
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="py-6 flex space-x-4">
           <label class="block">
+            Target and Dates
+            <input
+              type="radio"
+              v-model="changes"
+              required
+              checked
+              value="Change Targets and Dates"
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+          <label class="block">
             Targets
             <input
               type="radio"
@@ -276,13 +287,22 @@
             />
           </label>
           <label class="block">
-            Both
+            Type of Hiring
             <input
               type="radio"
               v-model="changes"
+              value="Change Type of Hiring"
               required
-              checked
-              value="Change Targets and Dates"
+              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
+            />
+          </label>
+          <label class="block">
+            Category
+            <input
+              type="radio"
+              v-model="changes"
+              value="Change Category"
+              required
               class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </label>
@@ -331,8 +351,8 @@
           <label class="block">
             Type of Hiring
             <select
-              disabled
               v-model="type_of_hiring"
+              :disabled="isTypeOfHiringDisabled"
               class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
@@ -455,7 +475,7 @@
           <label class="block"
             >Category
             <select
-              required
+              :disabled="isCategoryDisabled"
               v-model="category"
               class="w-full px-4 py-2 bg-white border rounded-lg"
             >
@@ -469,41 +489,41 @@
           <label class="block"
             >Within SLA?
             <select
-            required
-            v-model="within_sla"
-            class="w-full px-4 py-2 bg-white border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Within SLA">Within SLA</option>
-            <option value="Within SLA - Decrease in Demand (Cancellation)">
-              Within SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Within SLA - Increase in Demand">
-              Within SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA - Decrease in Demand (Cancellation)">
-              Outside SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Outside SLA-Cancellation">
-              Outside SLA-Cancellation
-            </option>
-            <option value="Outside SLA - Increase in Demand">
-              Outside SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA-Change in Start Date">
-              Outside SLA-Change in Start Date
-            </option>
-            <option value="Outside SLA-Change in Profile">
-              Outside SLA-Change in Profile
-            </option>
-            <option value="Outside SLA-Change in Process/Assessments">
-              Outside SLA-Change in Process/Assessments
-            </option>
-            <option value="Outside SLA-New class added">
-              Outside SLA-New class added
-            </option>
-            <option value="OV Support">OV Support</option>
-          </select>
+              required
+              v-model="within_sla"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Within SLA">Within SLA</option>
+              <option value="Within SLA - Decrease in Demand (Cancellation)">
+                Within SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Within SLA - Increase in Demand">
+                Within SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA - Decrease in Demand (Cancellation)">
+                Outside SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Outside SLA-Cancellation">
+                Outside SLA-Cancellation
+              </option>
+              <option value="Outside SLA - Increase in Demand">
+                Outside SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
+              </option>
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
+              </option>
+              <option value="Outside SLA-New class added">
+                Outside SLA-New class added
+              </option>
+              <option value="OV Support">OV Support</option>
+            </select>
           </label>
         </div>
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
@@ -703,6 +723,10 @@ export default {
         return true;
       } else if (this.changes === "Change Targets") {
         return false;
+      } else if (this.changes === "Change Type of Hiring") {
+        return false;
+      } else if (this.changes === "Change Category") {
+        return false;
       } else {
         return false;
       }
@@ -712,8 +736,38 @@ export default {
         return true;
       } else if (this.changes === "Change Dates") {
         return false;
+      } else if (this.changes === "Change Type of Hiring") {
+        return false;
+      } else if (this.changes === "Change Category") {
+        return false;
       } else {
         return false;
+      }
+    },
+    isCategoryDisabled() {
+      if (this.changes === "Change Type of Hiring") {
+        return true;
+      } else if (this.changes === "Change Dates") {
+        return true;
+      } else if (this.changes === "Change Category") {
+        return false;
+      } else if (this.changes === "Change Targets") {
+        return true;
+      } else {
+        return true;
+      }
+    },
+    isTypeOfHiringDisabled() {
+      if (this.changes === "Change Category") {
+        return true;
+      } else if (this.changes === "Change Dates") {
+        return true;
+      } else if (this.changes === "Change Type of Hiring") {
+        return false;
+      } else if (this.changes === "Change Targets") {
+        return true;
+      } else {
+        return true;
       }
     },
     total_target_computed() {
@@ -919,6 +973,24 @@ export default {
       // Convert requested_by array to JSON string with required format
       const requested_by_string = JSON.stringify([filtered_requested_by]);
       this.loading = true;
+
+      // Determine the status based on changes
+      let status;
+      if (
+        this.changes === "Change Dates" ||
+        this.changes === "Change Targets" ||
+        this.changes === "Change Targets and Dates"
+      ) {
+        status = "Moved";
+      } else if (
+        this.changes === "Change Type of Hiring" ||
+        this.changes === "Change Category"
+      ) {
+        status = "Changed";
+      } else {
+        status = "Active"; // Default status if none of the conditions are met
+      }
+
       // Other form data
       const formData = {
         site_id: this.sites_selected,
@@ -939,7 +1011,7 @@ export default {
         erf_number: this.erf_number,
         date_range_id: this.date_selected,
         approved_status: "pending",
-        status: "Active",
+        status: status,
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
         changes: this.changes,

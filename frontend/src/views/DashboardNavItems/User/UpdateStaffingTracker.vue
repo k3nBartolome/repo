@@ -10,6 +10,11 @@
     <div
       class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
     >
+      <div class="mb-2">
+        <h2 class="text-base font-bold text-left text-orange-600">
+          Class Information
+        </h2>
+      </div>
       <form
         class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
       >
@@ -178,8 +183,14 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
+        <div class="mb-2">
+          <h2 class="text-base font-bold text-left text-orange-600">
+            Day Show-ups
+          </h2>
+        </div>
+
         <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-3"
         >
           <label class="block">
             Day 1
@@ -226,15 +237,15 @@
               required
             />
           </label>
-          <label class="block">
-            Day 6
-            <input
-              type="number"
-              v-model="day_6"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-            />
-          </label>
+          <!--   <label class="block">
+        Day 6
+        <input
+          type="number"
+          v-model="day_6"
+          class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+          required
+        />
+      </label> -->
           <label class="block">
             Total_Endorsed
             <input
@@ -248,10 +259,16 @@
         </div>
       </div>
     </div>
+
     <div class="py-2 bg-gray-100">
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
+        <div class="mb-2">
+          <h2 class="text-base font-bold text-left text-orange-600">
+            Show-ups
+          </h2>
+        </div>
         <div
           class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
         >
@@ -318,15 +335,6 @@
             </select>
           </label>
           <label class="block">
-            Internals
-            <input
-              type="number"
-              v-model="internals_hires"
-              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
-              required
-            />
-          </label>
-          <label class="block">
             Additional Extended JO
             <input
               type="number"
@@ -372,14 +380,28 @@
       <div
         class="px-4 py-6 mx-auto bg-white border-2 border-orange-600 max-w-7xl sm:px-6 lg:px-8"
       >
+        <div class="mb-2">
+          <h2 class="text-base font-bold text-left text-orange-600">
+            Pipeline
+          </h2>
+        </div>
         <div
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
+          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-3"
         >
           <label class="block">
             With JO
             <input
               type="number"
               v-model="with_jo"
+              class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              required
+            />
+          </label>
+          <label class="block">
+            Internals
+            <input
+              type="number"
+              v-model="internals_hires"
               class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
             />
@@ -1267,9 +1289,9 @@ export default {
         day_3: this.day_3,
         day_4: this.day_4,
         day_5: this.day_5,
-        day_6: this.day_6,
-        day_7: this.day_7,
-        day_8: this.day_8,
+        // day_6: this.day_6,
+        //day_7: this.day_7,
+        //day_8: this.day_8,
         open: this.open,
         filled: this.filled,
         total_endorsed: this.total_endorsed,
@@ -1322,7 +1344,7 @@ export default {
           this.day_3 = "";
           this.day_4 = "";
           this.day_5 = "";
-          this.day_6 = "";
+          // this.day_6 = "";
           this.open = "";
           this.filled = "";
           this.total_endorsed = "";
