@@ -1063,17 +1063,16 @@ return response()->json([
         $classes->save();
 
         $class = ClassStaffing::find($id);
+        $newClass = $class->replicate();
+        $newClass->active_status = '0';
+        $newClass->save();
         $class->fill($request->all());
         $class->active_status = '1';
         $class->transaction = 'Update';
         $class->updated_by = $request->input('updated_by');
         $class->save();
 
-        $newClass = $class->replicate();
-
-
-        $newClass->active_status = '0';
-        $newClass->save();
+     
 
         return response()->json([
             'class' => $class,

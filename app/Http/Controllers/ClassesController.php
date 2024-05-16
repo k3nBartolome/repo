@@ -7889,15 +7889,15 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-        $class->fill($request->all());
-        $class->save();
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->changes = 'Pushedback';
         $newClass->status = 'Moved';
         $newClass->requested_by = json_encode($requested_by);
         $newClass->save();
-
+        $class->fill($request->all());
+        $class->save();
+        
         $staffingModel = ClassStaffing::where('classes_id', $id)
     ->where('active', true)
     ->first();
@@ -7992,14 +7992,15 @@ class ClassesController extends Controller
         }
 
         $class = Classes::find($id);
-        $class->status = 'Cancelled Class';
-        $class->save();
         $newClass = $class->replicate();
         $newClass->cancelled_by = json_encode($cancelled_by);
         $newClass->changes = 'Cancellation';
         $newClass->cancelled_date = $request->input('cancelled_date');
         $newClass->status = 'Cancelled';
         $newClass->save();
+        $class->status = 'Cancelled Class';
+        $class->save();
+       
 
         // @ts-ignore
         return new ClassesResource($class);

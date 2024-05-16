@@ -442,18 +442,27 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Within SLA?
-            <select
+              <select
               required
               v-model="within_sla"
               class="w-full px-4 py-2 bg-white border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="Within SLA">Within SLA</option>
+              <option value="Within SLA - Decrease in Demand (Cancellation)">
+                Within SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Within SLA - Increase in Demand">
+                Within SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA - Decrease in Demand (Cancellation)">
+                Outside SLA - Decrease in Demand (Cancellation)
+              </option>
               <option value="Outside SLA-Cancellation">
                 Outside SLA-Cancellation
               </option>
-              <option value="Outside SLA-Change in Demand">
-                Outside SLA-Change in Demand
+              <option value="Outside SLA - Increase in Demand">
+                Outside SLA - Increase in Demand
               </option>
               <option value="Outside SLA-Change in Start Date">
                 Outside SLA-Change in Start Date
