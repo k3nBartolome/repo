@@ -1289,9 +1289,6 @@ export default {
         day_3: this.day_3,
         day_4: this.day_4,
         day_5: this.day_5,
-        // day_6: this.day_6,
-        //day_7: this.day_7,
-        //day_8: this.day_8,
         open: this.open,
         filled: this.filled,
         total_endorsed: this.total_endorsed,
@@ -1344,7 +1341,6 @@ export default {
           this.day_3 = "";
           this.day_4 = "";
           this.day_5 = "";
-          // this.day_6 = "";
           this.open = "";
           this.filled = "";
           this.total_endorsed = "";

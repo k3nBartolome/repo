@@ -537,7 +537,7 @@ class ClassesController extends Controller
     {
         $class = Classes::with(['site', 'program', 'dateRange', 'createdByUser', 'updatedByUser'])->find($id);
 
-        $staffingModel = ClassStaffing::where('classes_id', $id)
+        $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
             ->where('active_status', 1)
             ->first();
 
@@ -7922,6 +7922,11 @@ class ClassesController extends Controller
         $class->fill($request->all());
         $class->status = 'Active';
         $class->save();
+
+        $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
+        ->where('active_status', 1)
+        ->first();
+
 
 
 

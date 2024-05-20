@@ -1184,9 +1184,11 @@ export default {
       showDecColumn: false,
       showAll: true,
       isLoading: false,
+
     };
   },
-  computed: {},
+  computed: {
+  },
   mounted() {
     this.getClassesAll();
     this.getSites();
@@ -1283,6 +1285,7 @@ export default {
         this.isLoading = false; // Set loading state back to false, regardless of success or failure
       }
     },
+
     async exportToExcel() {
       // Set export loading to true before making the request
       try {
@@ -1339,7 +1342,7 @@ export default {
         console.log(error);
       }
     },
-   
+
     async getPrograms() {
       if (!this.sites_selected) {
         return;

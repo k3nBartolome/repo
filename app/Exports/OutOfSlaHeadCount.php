@@ -5,10 +5,10 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Collection;
 
-class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle
- {
+class OutOfSlaHeadCount implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize {
     protected $data;
     protected $title;
 

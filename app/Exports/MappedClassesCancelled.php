@@ -5,10 +5,10 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Collection;
 
-class MappedClassesCancelled implements FromCollection, WithHeadings, WithTitle
-{
+class MappedClassesCancelled implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize {
     protected $data;
     protected $title;
 
@@ -24,7 +24,7 @@ class MappedClassesCancelled implements FromCollection, WithHeadings, WithTitle
     }
     public function title(): string
     {
-        return 'Cancelled'; 
+        return 'Cancelled';
     }
     public function headings(): array
     {
@@ -69,7 +69,7 @@ class MappedClassesCancelled implements FromCollection, WithHeadings, WithTitle
             'Cancelled Date',
             'Created At',
             'Updated At',
-          
+
         ];
     }
 }

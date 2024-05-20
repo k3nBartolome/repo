@@ -6,9 +6,9 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class StaffingWTD implements FromCollection, WithHeadings, WithTitle
- {
+class StaffingWTD implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize {
     protected $data;
     protected $title;
 

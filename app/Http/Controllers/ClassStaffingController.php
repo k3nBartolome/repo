@@ -196,9 +196,9 @@ class ClassStaffingController extends Controller
     }
 
     public function mpsWeek()
-    {
-        $weeklyPipe = [];
-        $year=2024;
+{
+    $weeklyPipe = [];
+        $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
@@ -209,7 +209,7 @@ class ClassStaffingController extends Controller
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
         }
-    
+
         $distinctDateRanges = DB::table('date_ranges')
             ->whereIn('week_end', [
                 Carbon::parse($dateRange->week_end)->subWeek(),
@@ -217,7 +217,7 @@ class ClassStaffingController extends Controller
                 Carbon::parse($dateRange->week_end)->addWeek(),
             ])
             ->pluck('date_id');
-    
+
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
@@ -247,13 +247,13 @@ class ClassStaffingController extends Controller
                 ->where('sites.country', 'Philippines')
                 ->where('date_ranges.date_id', $dateRangeId)
                 ->get();
-    
+
             foreach ($staffing as $item) {
                 $siteId = $item->site_id;
                 $programId = $item->program_id;
-    
-                $key = $dateRangeId . '_' . $siteId . '_' . $programId;
-    
+
+                $key = $dateRangeId . '' . $siteId . '' . $programId;
+
                 if (!isset($weeklyPipe[$key])) {
                     $weeklyPipe[$key] = [
                         'week_name' => $item->week_name,
@@ -269,21 +269,36 @@ class ClassStaffingController extends Controller
                         'day_1sup' => 0,
                         'pipeline_total' => 0,
                         'hires_goal' => 0,
+                        'color_status' => '',
                     ];
                 }
-    
+
                 $weeklyPipe[$key]['total_target'] += $item->total_target;
                 $weeklyPipe[$key]['show_ups_internal'] += $item->show_ups_internal;
                 $weeklyPipe[$key]['show_ups_external'] += $item->show_ups_external;
                 $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
                 $weeklyPipe[$key]['day_1'] += $item->day_1;
                 $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total /$item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
+                if ($distinctDateRanges[0] == $dateRangeId ) {
+                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['fillrate'] >= 100) ? 'Green' : 'Red';
+                }
+                else if ($distinctDateRanges[1] == $dateRangeId ) {
+                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';}
+                elseif ($distinctDateRanges[2] == $dateRangeId) {
+                    if ($weeklyPipe[$key]['hires_goal'] >= 100) {
+                        $weeklyPipe[$key]['color_status'] = 'Green';
+                    } elseif ($weeklyPipe[$key]['hires_goal'] >= 50) {
+                        $weeklyPipe[$key]['color_status'] = 'Yellow';
+                    } else {
+                        $weeklyPipe[$key]['color_status'] = 'Red';
+                    }
+                }
             }
         }
-    
+
         $grandTotals = [
             'total_target' => 0,
             'show_ups_internal' => 0,
@@ -295,33 +310,33 @@ class ClassStaffingController extends Controller
             'pipeline_total' => 0,
             'hires_goal' => 0,
         ];
-    
+
         $totalCount = 0;
         $totalFillrate = 0;
         $totalDay1sup = 0;
         $totalHiresGoal = 0;
-    
+
         foreach ($weeklyPipe as $sum) {
             $totalCount++;
-    
+
             $grandTotals['total_target'] += $sum['total_target'];
             $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
             $grandTotals['show_ups_external'] += $sum['show_ups_external'];
             $grandTotals['show_ups_total'] += $sum['show_ups_total'];
             $grandTotals['pipeline_total'] += $sum['pipeline_total'];
             $grandTotals['day_1'] += $sum['day_1'];
-            
+
             // Sum up for average calculation
             $totalFillrate += $sum['fillrate'];
             $totalDay1sup += $sum['day_1sup'];
             $totalHiresGoal += $sum['hires_goal'];
         }
-    
+
         // Calculate averages
         $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
         $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
         $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
-    
+
         // Mapped Grand Total
         $mappedGrandTotal = [
             'week_name' => 'Grand Total',
@@ -337,18 +352,20 @@ class ClassStaffingController extends Controller
             'day_1sup' => $grandTotals['day_1sup'],
             'pipeline_total' => $grandTotals['pipeline_total'],
             'hires_goal' => $grandTotals['hires_goal'],
+            'color_status' => '',
         ];
-    
+
         // Append Mapped Grand Total to $weeklyPipe
         $weeklyPipe['Grand Total'] = $mappedGrandTotal;
-    
-        $response = [
-            'mps' => $weeklyPipe,
-        ];
-    
-        return response()->json($response);
-    }
-    
+
+    $response = [
+        'mps' => $weeklyPipe,
+    ];
+
+    return response()->json($response);
+}
+
+
 
 
     private function removeEmptyArrays(&$array)
@@ -1072,7 +1089,7 @@ return response()->json([
         $class->updated_by = $request->input('updated_by');
         $class->save();
 
-     
+
 
         return response()->json([
             'class' => $class,

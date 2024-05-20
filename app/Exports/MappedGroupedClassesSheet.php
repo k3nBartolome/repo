@@ -1,13 +1,10 @@
 <?php
-
-namespace App\Exports;
-
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Illuminate\Support\Collection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTitle {
+class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize {
     protected $data;
     protected $title;
 
@@ -22,11 +19,9 @@ class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTit
 
     public function title(): string {
         return 'Site Summary';
-        // Specify the title of the worksheet
     }
 
     public function headings(): array {
-        // Define your headings for MappedB2Classes sheet
         return [
             'Site Name',
             'Jan',
@@ -42,7 +37,6 @@ class MappedGroupedClassesSheet implements FromCollection, WithHeadings, WithTit
             'Nov',
             'Dec',
             'Total'
-
         ];
     }
 }
