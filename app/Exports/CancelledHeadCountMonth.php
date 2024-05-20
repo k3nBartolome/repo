@@ -8,8 +8,7 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Collection;
 
-class CancelledHeadCountMonth implements FromCollection, WithHeadings, WithTitle
- {
+class CancelledHeadCountMonth implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize {
     protected $data;
     protected $title;
 

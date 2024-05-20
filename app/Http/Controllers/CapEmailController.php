@@ -39,7 +39,7 @@ class CapEmailController extends Controller
             $worksheetNames,
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com',  'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com' ];
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'];
         $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
 
@@ -65,7 +65,7 @@ class CapEmailController extends Controller
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
-            ->where('year',  $year)
+            ->where('year', $year)
             ->first();
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
@@ -140,15 +140,14 @@ class CapEmailController extends Controller
                 $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
                 $weeklyPipe[$key]['day_1'] += $item->day_1;
                 $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
-                if ($distinctDateRanges[0] == $dateRangeId ) {
+                if ($distinctDateRanges[0] == $dateRangeId) {
                     $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['fillrate'] >= 100) ? 'Green' : 'Red';
-                }
-                else if ($distinctDateRanges[1] == $dateRangeId ) {
-                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';}
-                elseif ($distinctDateRanges[2] == $dateRangeId) {
+                } else if ($distinctDateRanges[1] == $dateRangeId) {
+                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
+                } elseif ($distinctDateRanges[2] == $dateRangeId) {
                     if ($weeklyPipe[$key]['hires_goal'] >= 100) {
                         $weeklyPipe[$key]['color_status'] = 'Green';
                     } elseif ($weeklyPipe[$key]['hires_goal'] >= 50) {
@@ -327,11 +326,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
 
         // Construct the Grand Total row
         $grandTotalRow = [
@@ -441,11 +440,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
-            number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+        number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
 
         // Create Grand Total row
         $grandTotalRow = [
@@ -511,7 +510,7 @@ class CapEmailController extends Controller
             $cancelledHeadCountMonth,
             $worksheetNames,
         ), 'public/' . $excelFileName);
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com' /* , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'*/];
         $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
         Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
