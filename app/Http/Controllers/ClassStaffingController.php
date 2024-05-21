@@ -196,8 +196,8 @@ class ClassStaffingController extends Controller
     }
 
     public function mpsWeek()
-{
-    $weeklyPipe = [];
+    {
+        $weeklyPipe = [];
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
         $dateRange = DB::table('date_ranges')
@@ -217,6 +217,8 @@ class ClassStaffingController extends Controller
                 Carbon::parse($dateRange->week_end)->addWeek(),
             ])
             ->pluck('date_id');
+
+        $weeklyTotals = []; // Initialize weekly totals array
 
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
@@ -273,6 +275,7 @@ class ClassStaffingController extends Controller
                     ];
                 }
 
+                // Accumulate values
                 $weeklyPipe[$key]['total_target'] += $item->total_target;
                 $weeklyPipe[$key]['show_ups_internal'] += $item->show_ups_internal;
                 $weeklyPipe[$key]['show_ups_external'] += $item->show_ups_external;
@@ -282,12 +285,12 @@ class ClassStaffingController extends Controller
                 $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
-                if ($distinctDateRanges[0] == $dateRangeId ) {
+
+                if ($distinctDateRanges[0] == $dateRangeId) {
                     $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['fillrate'] >= 100) ? 'Green' : 'Red';
-                }
-                else if ($distinctDateRanges[1] == $dateRangeId ) {
-                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';}
-                elseif ($distinctDateRanges[2] == $dateRangeId) {
+                } elseif ($distinctDateRanges[1] == $dateRangeId) {
+                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
+                } elseif ($distinctDateRanges[2] == $dateRangeId) {
                     if ($weeklyPipe[$key]['hires_goal'] >= 100) {
                         $weeklyPipe[$key]['color_status'] = 'Green';
                     } elseif ($weeklyPipe[$key]['hires_goal'] >= 50) {
@@ -296,7 +299,45 @@ class ClassStaffingController extends Controller
                         $weeklyPipe[$key]['color_status'] = 'Red';
                     }
                 }
+
+                // Initialize or update weekly totals
+                if (!isset($weeklyTotals[$dateRangeId])) {
+                    $weeklyTotals[$dateRangeId] = [
+                        'total_target' => 0,
+                        'show_ups_internal' => 0,
+                        'show_ups_external' => 0,
+                        'show_ups_total' => 0,
+                        'day_1' => 0,
+                        'pipeline_total' => 0,
+                    ];
+                }
+                $weeklyTotals[$dateRangeId]['total_target'] += $item->total_target;
+                $weeklyTotals[$dateRangeId]['show_ups_internal'] += $item->show_ups_internal;
+                $weeklyTotals[$dateRangeId]['show_ups_external'] += $item->show_ups_external;
+                $weeklyTotals[$dateRangeId]['show_ups_total'] += $item->show_ups_total;
+                $weeklyTotals[$dateRangeId]['day_1'] += $item->day_1;
+                $weeklyTotals[$dateRangeId]['pipeline_total'] += $item->pipeline_total;
             }
+        }
+
+        // Calculate and add weekly totals to $weeklyPipe
+        foreach ($weeklyTotals as $dateRangeId => $totals) {
+            $weeklyPipe["Weekly Total $dateRangeId"] = [
+                'week_name' => "Weekly Total for $dateRangeId",
+                'site_name' => '',
+                'program_name' => '',
+                'program_group' => '',
+                'total_target' => $totals['total_target'],
+                'show_ups_internal' => $totals['show_ups_internal'],
+                'show_ups_external' => $totals['show_ups_external'],
+                'show_ups_total' => $totals['show_ups_total'],
+                'fillrate' => $totals['total_target'] != 0 ? number_format(($totals['show_ups_total'] / $totals['total_target']) * 100, 1) : 0,
+                'day_1' => $totals['day_1'],
+                'day_1sup' => $totals['total_target'] != 0 ? number_format(($totals['day_1'] / $totals['total_target']) * 100, 1) : 0,
+                'pipeline_total' => $totals['pipeline_total'],
+                'hires_goal' => $totals['total_target'] != 0 ? number_format(($totals['pipeline_total'] / $totals['total_target']) * 100, 1) : 0,
+                'color_status' => '',
+            ];
         }
 
         $grandTotals = [
@@ -317,6 +358,10 @@ class ClassStaffingController extends Controller
         $totalHiresGoal = 0;
 
         foreach ($weeklyPipe as $sum) {
+            if (strpos($sum['week_name'], 'Weekly Total') !== false) {
+                continue;
+            }
+
             $totalCount++;
 
             $grandTotals['total_target'] += $sum['total_target'];
@@ -354,16 +399,15 @@ class ClassStaffingController extends Controller
             'hires_goal' => $grandTotals['hires_goal'],
             'color_status' => '',
         ];
-
-        // Append Mapped Grand Total to $weeklyPipe
         $weeklyPipe['Grand Total'] = $mappedGrandTotal;
 
-    $response = [
-        'mps' => $weeklyPipe,
-    ];
+        $response = [
+            'mps' => $weeklyPipe,
+        ];
 
-    return response()->json($response);
-}
+        return response()->json($response);
+    }
+
 
 
 
@@ -692,11 +736,11 @@ class ClassStaffingController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
         $grandTotalRow = [
             'month' => 'Grand Total',
             'week_name' => '',
