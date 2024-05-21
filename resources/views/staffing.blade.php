@@ -70,6 +70,11 @@
                             Day 1</th>
                         <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
                             Day 1%</th>
+                            <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                                Hires to Goal%</th>
+                            <th style="padding: 5px; text-align: left; background-color: blue; color: white;">
+                                Status</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -123,6 +128,12 @@
                                 </td>
                                 <td style="border: 1px solid #ccc; padding: 5px; text-align: left; ">
                                     {{ isset($data1['day_1sup']) ? $data1['day_1sup'] : 'N/A' }} %
+                                </td>
+                                <td style="border: 1px solid #ccc; padding: 5px; text-align: left;">
+                                    {{ isset($data1['hires_goal']) ? $data1['hires_goal'] : 'N/A' }}%
+                                </td>
+                                <td @if (isset($data1['color_status'])) class="@if ($data1['color_status'] == 'Red')red-bg @elseif($data1['color_status'] == 'Green')green-bg @elseif($data1['color_status'] == 'Yellow')yellow-bg @else white-bg @endif"@endif>
+                                    {{ $data1['color_status'] }}
                                 </td>
                             @endif
 
