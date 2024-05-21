@@ -39,7 +39,7 @@ class CapEmailController extends Controller
             $worksheetNames,
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'];
+        $recipients = ['kryss.bartolome@vxi.com' /* , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'  */];
         $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
 
@@ -58,14 +58,15 @@ class CapEmailController extends Controller
 
     public function weeklyPipe()
     {
-        $weeklyPipe = [];
+
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
+
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
-            ->where('year', $year)
+            ->where('year',  $year)
             ->first();
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
@@ -76,8 +77,13 @@ class CapEmailController extends Controller
                 Carbon::parse($dateRange->week_end)->subWeek(),
                 $dateRange->week_end,
                 Carbon::parse($dateRange->week_end)->addWeek(),
+                Carbon::parse($dateRange->week_end)->addWeeks(2),
+
             ])
             ->pluck('date_id');
+
+        $weeklyTotals = [];
+        $weeklyData = [];
 
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
@@ -112,11 +118,16 @@ class CapEmailController extends Controller
             foreach ($staffing as $item) {
                 $siteId = $item->site_id;
                 $programId = $item->program_id;
+                $weekName = $item->week_name;
 
                 $key = $dateRangeId . '' . $siteId . '' . $programId;
 
-                if (!isset($weeklyPipe[$key])) {
-                    $weeklyPipe[$key] = [
+                if (!isset($weeklyData[$weekName])) {
+                    $weeklyData[$weekName] = [];
+                }
+
+                if (!isset($weeklyData[$weekName][$key])) {
+                    $weeklyData[$weekName][$key] = [
                         'week_name' => $item->week_name,
                         'site_name' => $item->site_name,
                         'program_name' => $item->program_name,
@@ -126,6 +137,9 @@ class CapEmailController extends Controller
                         'show_ups_external' => 0,
                         'show_ups_total' => 0,
                         'fillrate' => 0,
+                        'pending_jo' => 0,
+                        'pending_berlitz' => 0,
+                        'pending_ov' => 0,
                         'day_1' => 0,
                         'day_1sup' => 0,
                         'pipeline_total' => 0,
@@ -133,32 +147,92 @@ class CapEmailController extends Controller
                         'color_status' => '',
                     ];
                 }
+                $weeklyData[$weekName][$key]['pending_ov'] += $item->pending_ov;
+                $weeklyData[$weekName][$key]['pending_jo'] += $item->pending_jo;
+                $weeklyData[$weekName][$key]['pending_berlitz'] += $item->pending_berlitz;
+                $weeklyData[$weekName][$key]['total_target'] += $item->total_target;
+                $weeklyData[$weekName][$key]['show_ups_internal'] += $item->show_ups_internal;
+                $weeklyData[$weekName][$key]['show_ups_external'] += $item->show_ups_external;
+                $weeklyData[$weekName][$key]['show_ups_total'] += $item->show_ups_total;
+                $weeklyData[$weekName][$key]['day_1'] += $item->day_1;
+                $weeklyData[$weekName][$key]['pipeline_total'] += $item->pipeline_total;
+                $weeklyData[$weekName][$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
+                $weeklyData[$weekName][$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
+                $weeklyData[$weekName][$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
 
-                $weeklyPipe[$key]['total_target'] += $item->total_target;
-                $weeklyPipe[$key]['show_ups_internal'] += $item->show_ups_internal;
-                $weeklyPipe[$key]['show_ups_external'] += $item->show_ups_external;
-                $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
-                $weeklyPipe[$key]['day_1'] += $item->day_1;
-                $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
-                $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
-                $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
                 if ($distinctDateRanges[0] == $dateRangeId) {
-                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['fillrate'] >= 100) ? 'Green' : 'Red';
-                } else if ($distinctDateRanges[1] == $dateRangeId) {
-                    $weeklyPipe[$key]['color_status'] = ($weeklyPipe[$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
-                } elseif ($distinctDateRanges[2] == $dateRangeId) {
-                    if ($weeklyPipe[$key]['hires_goal'] >= 100) {
-                        $weeklyPipe[$key]['color_status'] = 'Green';
-                    } elseif ($weeklyPipe[$key]['hires_goal'] >= 50) {
-                        $weeklyPipe[$key]['color_status'] = 'Yellow';
+                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['fillrate'] >= 100) ? 'Green' : 'Red';
+                } elseif ($distinctDateRanges[1] == $dateRangeId) {
+                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
+                }
+                elseif ($distinctDateRanges[2] == $dateRangeId) {
+                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
+                }
+                 elseif ($distinctDateRanges[3] == $dateRangeId) {
+                    if ($weeklyData[$weekName][$key]['hires_goal'] >= 100) {
+                        $weeklyData[$weekName][$key]['color_status'] = 'Green';
+                    } elseif ($weeklyData[$weekName][$key]['hires_goal'] >= 50) {
+                        $weeklyData[$weekName][$key]['color_status'] = 'Yellow';
                     } else {
-                        $weeklyPipe[$key]['color_status'] = 'Red';
+                        $weeklyData[$weekName][$key]['color_status'] = 'Red';
                     }
                 }
+
+                if (!isset($weeklyTotals[$weekName])) {
+                    $weeklyTotals[$weekName] = [
+                        'total_target' => 0,
+                        'show_ups_internal' => 0,
+                        'show_ups_external' => 0,
+                        'show_ups_total' => 0,
+                        'day_1' => 0,
+                        'pipeline_total' => 0,
+                        'pending_jo' => 0,
+            'pending_berlitz' => 0,
+            'pending_ov' => 0,
+                    ];
+                }
+                $weeklyTotals[$weekName]['total_target'] += $item->total_target;
+                $weeklyTotals[$weekName]['show_ups_internal'] += $item->show_ups_internal;
+                $weeklyTotals[$weekName]['show_ups_external'] += $item->show_ups_external;
+                $weeklyTotals[$weekName]['show_ups_total'] += $item->show_ups_total;
+                $weeklyTotals[$weekName]['day_1'] += $item->day_1;
+                $weeklyTotals[$weekName]['pipeline_total'] += $item->pipeline_total;
+                $weeklyTotals[$weekName]['pending_jo'] += $item->pending_jo;
+                $weeklyTotals[$weekName]['pending_berlitz'] += $item->pending_berlitz;
+                $weeklyTotals[$weekName]['pending_ov'] += $item->pending_ov;
             }
         }
 
+        // Prepare the weekly pipe data with weekly totals
+        $weeklyPipeWithTotals = [];
+
+        foreach ($weeklyData as $weekName => $weekItems) {
+            // Add the weekly total for this week
+            $weeklyPipeWithTotals["Weekly Total $weekName"] = [
+                'week_name' => "Weekly Total for $weekName",
+                'site_name' => '',
+                'program_name' => '',
+                'program_group' => '',
+                'total_target' => $weeklyTotals[$weekName]['total_target'],
+                'show_ups_internal' => $weeklyTotals[$weekName]['show_ups_internal'],
+                'show_ups_external' => $weeklyTotals[$weekName]['show_ups_external'],
+                'show_ups_total' => $weeklyTotals[$weekName]['show_ups_total'],
+                'fillrate' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['show_ups_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
+                'pending_jo' => $weeklyTotals[$weekName]['pending_jo'],
+                'pending_berlitz' => $weeklyTotals[$weekName]['pending_berlitz'],
+                'pending_ov' => $weeklyTotals[$weekName]['pending_ov'],
+                'day_1' => $weeklyTotals[$weekName]['day_1'],
+                'day_1sup' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['day_1'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
+                'pipeline_total' => $weeklyTotals[$weekName]['pipeline_total'],
+                'hires_goal' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['pipeline_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
+                'color_status' => '',
+            ];
+
+            // Add the week's data
+            $weeklyPipeWithTotals = array_merge($weeklyPipeWithTotals, $weekItems);
+        }
+
+        // Calculate the grand totals
         $grandTotals = [
             'total_target' => 0,
             'show_ups_internal' => 0,
@@ -169,6 +243,9 @@ class CapEmailController extends Controller
             'day_1sup' => 0,
             'pipeline_total' => 0,
             'hires_goal' => 0,
+            'pending_jo' => 0,
+            'pending_berlitz' => 0,
+            'pending_ov' => 0,
         ];
 
         $totalCount = 0;
@@ -176,7 +253,11 @@ class CapEmailController extends Controller
         $totalDay1sup = 0;
         $totalHiresGoal = 0;
 
-        foreach ($weeklyPipe as $sum) {
+        foreach ($weeklyPipeWithTotals as $key => $sum) {
+            if (strpos($sum['week_name'], 'Weekly Total') !== false) {
+                continue;
+            }
+
             $totalCount++;
 
             $grandTotals['total_target'] += $sum['total_target'];
@@ -185,6 +266,9 @@ class CapEmailController extends Controller
             $grandTotals['show_ups_total'] += $sum['show_ups_total'];
             $grandTotals['pipeline_total'] += $sum['pipeline_total'];
             $grandTotals['day_1'] += $sum['day_1'];
+            $grandTotals['pending_jo'] += $sum['pending_jo'];
+            $grandTotals['pending_berlitz'] += $sum['pending_berlitz'];
+            $grandTotals['pending_ov'] += $sum['pending_ov'];
 
             // Sum up for average calculation
             $totalFillrate += $sum['fillrate'];
@@ -208,6 +292,9 @@ class CapEmailController extends Controller
             'show_ups_external' => $grandTotals['show_ups_external'],
             'show_ups_total' => $grandTotals['show_ups_total'],
             'fillrate' => $grandTotals['fillrate'],
+            'pending_jo' => $grandTotals['pending_jo'],
+            'pending_berlitz' => $grandTotals['pending_berlitz'],
+            'pending_ov' => $grandTotals['pending_ov'],
             'day_1' => $grandTotals['day_1'],
             'day_1sup' => $grandTotals['day_1sup'],
             'pipeline_total' => $grandTotals['pipeline_total'],
@@ -215,8 +302,8 @@ class CapEmailController extends Controller
             'color_status' => '',
         ];
 
-        // Append Mapped Grand Total to $weeklyPipe
-        $weeklyPipe['Grand Total'] = $mappedGrandTotal;
+        // Merge Grand Total and Weekly Pipe Data with Totals
+        $weeklyPipe = array_merge(['Grand Total' => $mappedGrandTotal], $weeklyPipeWithTotals);
         return $weeklyPipe;
     }
     public function wtd()
@@ -256,6 +343,7 @@ class CapEmailController extends Controller
             'total_external' => 0,
             'jo' => 0,
             'versant' => 0,
+            'ov' => 0,
             'internal' => 0,
             'external' => 0,
             'total_show_ups' => 0,
@@ -309,6 +397,7 @@ class CapEmailController extends Controller
                 'total_external' => $staffing->sum('with_jo'),
                 'jo' => $staffing->sum('pending_jo'),
                 'versant' => $staffing->sum('pending_berlitz'),
+                'ov' => $staffing->sum('pending_ov'),
                 'internal' => $staffing->sum('internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'total_show_ups' => $staffing->sum('show_ups_total'),
@@ -331,8 +420,6 @@ class CapEmailController extends Controller
         number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
         number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
-
-        // Construct the Grand Total row
         $grandTotalRow = [
             'month' => 'Grand Total',
             'week_name' => '',
@@ -343,6 +430,7 @@ class CapEmailController extends Controller
             'total_external' => $grandTotals['total_external'],
             'jo' => $grandTotals['jo'],
             'versant' => $grandTotals['versant'],
+            'ov' => $grandTotals['ov'],
             'internal' => $grandTotals['internal'],
             'external' => $grandTotals['external'],
             'total_show_ups' => $grandTotals['total_show_ups'],
@@ -1236,13 +1324,13 @@ class CapEmailController extends Controller
                         'Week19' => $weeklyData['71'] != 0 ? $weeklyData['71'] : '',
                         'Week20' => $weeklyData['72'] != 0 ? $weeklyData['72'] : '',
                         'Week21' => $weeklyData['73'] != 0 ? $weeklyData['73'] : '',
+                        'May' => collect($weeklyData)->only([70, 71, 72, 73])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73])->sum() : '',
                         'Week22' => $weeklyData['74'] != 0 ? $weeklyData['74'] : '',
-                        'May' => collect($weeklyData)->only([70, 71, 72, 73,74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73,74])->sum() : '',
                         'Week23' => $weeklyData['75'] != 0 ? $weeklyData['75'] : '',
                         'Week24' => $weeklyData['76'] != 0 ? $weeklyData['76'] : '',
                         'Week25' => $weeklyData['77'] != 0 ? $weeklyData['77'] : '',
                         'Week26' => $weeklyData['78'] != 0 ? $weeklyData['78'] : '',
-                        'Jun' => collect($weeklyData)->only([ 75, 76, 77, 78])->sum() != 0 ? collect($weeklyData)->only([ 75, 76, 77, 78])->sum() : '',
+                        'Jun' => collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() : '',
                         'Week27' => $weeklyData['79'] != 0 ? $weeklyData['79'] : '',
                         'Week28' => $weeklyData['80'] != 0 ? $weeklyData['80'] : '',
                         'Week29' => $weeklyData['81'] != 0 ? $weeklyData['81'] : '',
@@ -2049,13 +2137,13 @@ class CapEmailController extends Controller
                         'Week19' => $weeklyData['71'] != 0 ? $weeklyData['71'] : '',
                         'Week20' => $weeklyData['72'] != 0 ? $weeklyData['72'] : '',
                         'Week21' => $weeklyData['73'] != 0 ? $weeklyData['73'] : '',
+                        'May' => collect($weeklyData)->only([70, 71, 72, 73])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73])->sum() : '',
                         'Week22' => $weeklyData['74'] != 0 ? $weeklyData['74'] : '',
-                        'May' => collect($weeklyData)->only([70, 71, 72, 73,74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73,74])->sum() : '',
                         'Week23' => $weeklyData['75'] != 0 ? $weeklyData['75'] : '',
                         'Week24' => $weeklyData['76'] != 0 ? $weeklyData['76'] : '',
                         'Week25' => $weeklyData['77'] != 0 ? $weeklyData['77'] : '',
                         'Week26' => $weeklyData['78'] != 0 ? $weeklyData['78'] : '',
-                        'Jun' => collect($weeklyData)->only([ 75, 76, 77, 78])->sum() != 0 ? collect($weeklyData)->only([ 75, 76, 77, 78])->sum() : '',
+                        'Jun' => collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($weeklyData)->only([74, 75, 76, 77, 78])->sum() : '',
                         'Week27' => $weeklyData['79'] != 0 ? $weeklyData['79'] : '',
                         'Week28' => $weeklyData['80'] != 0 ? $weeklyData['80'] : '',
                         'Week29' => $weeklyData['81'] != 0 ? $weeklyData['81'] : '',
