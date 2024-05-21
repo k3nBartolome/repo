@@ -1767,7 +1767,7 @@ export default {
         show_ups_total: this.show_ups_total,
         deficit: this.deficit,
         percentage: this.percentage,
-        // status: this.status,
+       // status: this.status,
         internals_hires: this.internals_hires,
         externals_hires: this.externals_hires,
         additional_extended_jo: this.additional_extended_jo,

@@ -199,7 +199,8 @@ class ClassStaffingController extends Controller
     {
         $weeklyPipe = [];
         $year = 2024;
-        $date = Carbon::now()->format('Y-m-d');
+        $date = Carbon::create(2024, 5, 15)->format('Y-m-d');
+
         $dateRange = DB::table('date_ranges')
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
@@ -218,7 +219,7 @@ class ClassStaffingController extends Controller
             ])
             ->pluck('date_id');
 
-        $weeklyTotals = []; // Initialize weekly totals array
+        $weeklyTotals = [];
 
         foreach ($distinctDateRanges as $dateRangeId) {
             $staffing = DB::table('class_staffing')
@@ -275,14 +276,13 @@ class ClassStaffingController extends Controller
                     ];
                 }
 
-                // Accumulate values
                 $weeklyPipe[$key]['total_target'] += $item->total_target;
                 $weeklyPipe[$key]['show_ups_internal'] += $item->show_ups_internal;
                 $weeklyPipe[$key]['show_ups_external'] += $item->show_ups_external;
                 $weeklyPipe[$key]['show_ups_total'] += $item->show_ups_total;
                 $weeklyPipe[$key]['day_1'] += $item->day_1;
                 $weeklyPipe[$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyPipe[$key]['hires_goal'] =  $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
+                $weeklyPipe[$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyPipe[$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
 
@@ -300,9 +300,8 @@ class ClassStaffingController extends Controller
                     }
                 }
 
-                // Initialize or update weekly totals
-                if (!isset($weeklyTotals[$dateRangeId])) {
-                    $weeklyTotals[$dateRangeId] = [
+                if (!isset($weeklyTotals[$item->week_name])) {
+                    $weeklyTotals[$item->week_name] = [
                         'total_target' => 0,
                         'show_ups_internal' => 0,
                         'show_ups_external' => 0,
@@ -311,19 +310,20 @@ class ClassStaffingController extends Controller
                         'pipeline_total' => 0,
                     ];
                 }
-                $weeklyTotals[$dateRangeId]['total_target'] += $item->total_target;
-                $weeklyTotals[$dateRangeId]['show_ups_internal'] += $item->show_ups_internal;
-                $weeklyTotals[$dateRangeId]['show_ups_external'] += $item->show_ups_external;
-                $weeklyTotals[$dateRangeId]['show_ups_total'] += $item->show_ups_total;
-                $weeklyTotals[$dateRangeId]['day_1'] += $item->day_1;
-                $weeklyTotals[$dateRangeId]['pipeline_total'] += $item->pipeline_total;
+                $weeklyTotals[$item->week_name]['total_target'] += $item->total_target;
+                $weeklyTotals[$item->week_name]['show_ups_internal'] += $item->show_ups_internal;
+                $weeklyTotals[$item->week_name]['show_ups_external'] += $item->show_ups_external;
+                $weeklyTotals[$item->week_name]['show_ups_total'] += $item->show_ups_total;
+                $weeklyTotals[$item->week_name]['day_1'] += $item->day_1;
+                $weeklyTotals[$item->week_name]['pipeline_total'] += $item->pipeline_total;
             }
         }
 
-        // Calculate and add weekly totals to $weeklyPipe
-        foreach ($weeklyTotals as $dateRangeId => $totals) {
-            $weeklyPipe["Weekly Total $dateRangeId"] = [
-                'week_name' => "Weekly Total for $dateRangeId",
+        $weeklyTotalPipe = [];
+
+        foreach ($weeklyTotals as $weekName => $totals) {
+            $weeklyTotalPipe["Weekly Total $weekName"] = [
+                'week_name' => "Weekly Total for $weekName",
                 'site_name' => '',
                 'program_name' => '',
                 'program_group' => '',
@@ -358,10 +358,6 @@ class ClassStaffingController extends Controller
         $totalHiresGoal = 0;
 
         foreach ($weeklyPipe as $sum) {
-            if (strpos($sum['week_name'], 'Weekly Total') !== false) {
-                continue;
-            }
-
             $totalCount++;
 
             $grandTotals['total_target'] += $sum['total_target'];
@@ -371,18 +367,15 @@ class ClassStaffingController extends Controller
             $grandTotals['pipeline_total'] += $sum['pipeline_total'];
             $grandTotals['day_1'] += $sum['day_1'];
 
-            // Sum up for average calculation
             $totalFillrate += $sum['fillrate'];
             $totalDay1sup += $sum['day_1sup'];
             $totalHiresGoal += $sum['hires_goal'];
         }
 
-        // Calculate averages
         $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
         $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
         $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
 
-        // Mapped Grand Total
         $mappedGrandTotal = [
             'week_name' => 'Grand Total',
             'site_name' => '',
@@ -399,14 +392,14 @@ class ClassStaffingController extends Controller
             'hires_goal' => $grandTotals['hires_goal'],
             'color_status' => '',
         ];
-        $weeklyPipe['Grand Total'] = $mappedGrandTotal;
 
         $response = [
-            'mps' => $weeklyPipe,
+            'mps' => array_merge(['Grand Total' => $mappedGrandTotal], $weeklyTotalPipe, $weeklyPipe),
         ];
 
         return response()->json($response);
     }
+
 
 
 

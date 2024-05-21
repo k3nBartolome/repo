@@ -878,7 +878,7 @@ class ClassesController extends Controller
                         'Week20' => $weeklyData['72'] != 0 ? $weeklyData['72'] : '',
                         'Week21' => $weeklyData['73'] != 0 ? $weeklyData['73'] : '',
                         'Week22' => $weeklyData['74'] != 0 ? $weeklyData['74'] : '',
-                        'May' => collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73,74])->sum() : '',
+                        'May' => collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() : '',
                         'Week23' => $weeklyData['75'] != 0 ? $weeklyData['75'] : '',
                         'Week24' => $weeklyData['76'] != 0 ? $weeklyData['76'] : '',
                         'Week25' => $weeklyData['77'] != 0 ? $weeklyData['77'] : '',
@@ -4588,7 +4588,7 @@ class ClassesController extends Controller
                         'Week20' => $weeklyData['72'] != 0 ? $weeklyData['72'] : '',
                         'Week21' => $weeklyData['73'] != 0 ? $weeklyData['73'] : '',
                         'Week22' => $weeklyData['74'] != 0 ? $weeklyData['74'] : '',
-                        'May' => collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73,74])->sum() : '',
+                        'May' => collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() != 0 ? collect($weeklyData)->only([70, 71, 72, 73, 74])->sum() : '',
                         'Week23' => $weeklyData['75'] != 0 ? $weeklyData['75'] : '',
                         'Week24' => $weeklyData['76'] != 0 ? $weeklyData['76'] : '',
                         'Week25' => $weeklyData['77'] != 0 ? $weeklyData['77'] : '',
@@ -7923,11 +7923,20 @@ class ClassesController extends Controller
         $class->save();
 
         $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
-        ->where('active_status', 1)
-        ->first();
-
-
-
+            ->where('active_status', 1)
+            ->first();
+        $class->total_target;
+        $staffingModel->show_ups_total;
+        $staffingModel->deficit;
+        $staffingModel->percentage;
+        $staffingModel->open;
+        $staffingModel->classes;
+        $staffingModel->cap_starts;
+        $staffingModel->over_hires;
+        $staffingModel->all_internal_hires;
+        $staffingModel->classes_number;
+        $staffingModel->filled;
+        $$staffingModel->total_endorsed;
 
         return new ClassesResource($newClass);
     }
