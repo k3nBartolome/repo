@@ -7925,20 +7925,34 @@ class ClassesController extends Controller
         $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
             ->where('active_status', 1)
             ->first();
-        $class->total_target;
-        $staffingModel->show_ups_total;
-        $staffingModel->deficit;
-        $staffingModel->percentage;
-        $staffingModel->open;
-        $staffingModel->classes;
-        $staffingModel->cap_starts;
-        $staffingModel->over_hires;
-        $staffingModel->all_internal_hires;
-        $staffingModel->classes_number;
-        $staffingModel->filled;
-        $$staffingModel->total_endorsed;
+        $classTarget = intval($class->total_target);
 
+        $deficit = max(0, floatval($classTarget) - floatval($staffingModel->show_ups_total));
+        $percentage = intval($classTarget) === 0 ? "0%" : number_format((intval($staffingModel->show_ups_total) / intval($classTarget)) * 100, 2) . "%";
+        $overHires = max(0, intval($staffingModel->show_ups_total) - intval($classTarget));
+        $classNumber = intval($classTarget) % 15 > 1
+            ? floor(intval($classTarget) / 15) + 1
+            : floor(intval($classTarget) / 15);
+        $open = max(0, intval($classNumber) - intval($staffingModel->filled));
+        $capStart = intval($staffingModel->show_ups_total) > intval($classTarget)
+            ? intval($classTarget)
+            : (intval($staffingModel->show_ups_total) ?: 0);
+        $internalHires = ($staffingModel->show_ups_internal >= $classTarget && ($deficit === "" || $deficit === 0)) ? 1 : 0;
+        $pipelineTarget = ($staffingModel->pipeline_total > $classTarget) ? $classTarget : $staffingModel->pipeline_total;
+
+        $staffingModel->cap_starts = $open;
+        $staffingModel->open = $capStart;
+        $staffingModel->classes_number = $classNumber;
+        $staffingModel->deficit = $deficit;
+        $staffingModel->percentage = $percentage;
+        $staffingModel->over_hires = $overHires;
+        $staffingModel->internals_hires_all = $internalHires;
+        $staffingModel->pipeline_target = $pipelineTarget;
+        $staffingModel->save();
         return new ClassesResource($newClass);
+        $response = ['data' => $staffingModel];
+
+        return response()->json($response);
     }
     public function editCancelled(Request $request, $id)
     {
@@ -8038,9 +8052,17 @@ class ClassesController extends Controller
         $class->cancelled_date = $request->input('cancelled_date');
         $class->save();
 
+        $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
+            ->where('active_status', 1)
+            ->first();
+        $staffingModel->active_status = 0;
+        $staffingModel->save();
 
         // @ts-ignore
         return new ClassesResource($class);
+        $response = ['data' => $staffingModel];
+
+        return response()->json($response);
     }
     public function retrieveB2DataForEmail(Request $request)
     {
