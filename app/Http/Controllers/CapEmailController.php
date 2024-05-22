@@ -39,7 +39,7 @@ class CapEmailController extends Controller
             $worksheetNames,
         ), 'public/' . $excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com' , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'  ];
+        $recipients = ['kryss.bartolome@vxi.com' , 'arielito.pascua@vxi.com' , 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com' ];
         $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
         $excelFilePath = public_path('storage/' . $excelFileName);
 
@@ -66,7 +66,7 @@ class CapEmailController extends Controller
             ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
-            ->where('year',  $year)
+            ->where('year', $year)
             ->first();
         if (!$dateRange) {
             return response()->json(['error' => 'No date range found for the current date.']);
@@ -164,11 +164,9 @@ class CapEmailController extends Controller
                     $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['fillrate'] >= 100) ? 'Green' : 'Red';
                 } elseif ($distinctDateRanges[1] == $dateRangeId) {
                     $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
-                }
-                elseif ($distinctDateRanges[2] == $dateRangeId) {
+                } elseif ($distinctDateRanges[2] == $dateRangeId) {
                     $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
-                }
-                 elseif ($distinctDateRanges[3] == $dateRangeId) {
+                } elseif ($distinctDateRanges[3] == $dateRangeId) {
                     if ($weeklyData[$weekName][$key]['hires_goal'] >= 100) {
                         $weeklyData[$weekName][$key]['color_status'] = 'Green';
                     } elseif ($weeklyData[$weekName][$key]['hires_goal'] >= 50) {
@@ -187,8 +185,8 @@ class CapEmailController extends Controller
                         'day_1' => 0,
                         'pipeline_total' => 0,
                         'pending_jo' => 0,
-            'pending_berlitz' => 0,
-            'pending_ov' => 0,
+                        'pending_berlitz' => 0,
+                        'pending_ov' => 0,
                     ];
                 }
                 $weeklyTotals[$weekName]['total_target'] += $item->total_target;
@@ -310,28 +308,27 @@ class CapEmailController extends Controller
     {
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
-        $month = null;
 
         $dateRange = DB::table('date_ranges')
-            ->select('month', 'month_num')
+            ->select('week_start', 'week_end')
             ->where('week_start', '<=', $date)
             ->where('week_end', '>=', $date)
+            ->where('year', $year)
             ->first();
 
-        if ($dateRange) {
-            $month = $dateRange->month_num;
+        if (!$dateRange) {
+            return response()->json(['error' => 'No date range found for the current date.']);
         }
 
-        $distinctMonthsAndWeeks = DB::table('date_ranges')
-            ->select([
-                'month_num',
-                DB::raw('COALESCE(date_ranges.month, null) as month_name'),
-                'week_start',
-                'week_end', 'date_range',
+        $distinctDateRanges = DB::table('date_ranges')
+            ->select('date_id', 'month_num', 'month as month_name', 'week_start', 'week_end', 'date_range')
+            ->whereIn('week_end', [
+                Carbon::parse($dateRange->week_end)->subWeek()->format('Y-m-d'),
+                $dateRange->week_end,
+                Carbon::parse($dateRange->week_end)->addWeek()->format('Y-m-d'),
+                Carbon::parse($dateRange->week_end)->addWeeks(2)->format('Y-m-d'),
             ])
             ->where('year', $year)
-            ->where('month_num', $month)
-            ->distinct()
             ->get();
 
         $wtd = [];
@@ -353,11 +350,12 @@ class CapEmailController extends Controller
             'color_status' => '',
         ];
 
-        foreach ($distinctMonthsAndWeeks as $item) {
+        foreach ($distinctDateRanges as $index => $item) {
             $monthName = $item->month_name;
             $weekStart = $item->week_start;
             $weekEnd = $item->week_end;
             $weekName = $item->date_range;
+            $date_id = $item->date_id;
 
             $staffing = DB::table('class_staffing')
                 ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
@@ -382,10 +380,9 @@ class CapEmailController extends Controller
                     DB::raw('COALESCE(programs.name, null) as program_name')
                 )
                 ->where('class_staffing.active_status', 1)
-                ->where('date_ranges.month_num', $item->month_num)
-                ->where('date_ranges.year', $year)
-                ->where('date_ranges.week_start', $weekStart)
-                ->where('date_ranges.week_end', $weekEnd)
+                ->where('classes.total_target', '>', 0)
+                ->where('sites.country', 'Philippines')
+                ->where('date_ranges.date_id', $date_id)
                 ->get();
 
             $totalTarget = $staffing->sum('total_target');
@@ -394,13 +391,23 @@ class CapEmailController extends Controller
             $day1Sup = $totalTarget != 0 ? number_format(($staffing->sum('day_1') / $totalTarget) * 100, 1) : 0;
             $pipelineGoal = $totalTarget != 0 ? number_format(($staffing->sum('pipeline_total') / $totalTarget) * 100, 1) : 0;
 
+            // Determine the color status
             $colorStatus = '';
-            if ($fillRate >= 100) {
-                $colorStatus = 'Green';
-            } elseif ($fillRate >= 50) {
-                $colorStatus = 'Yellow';
+            if ($index == 0) {
+                // First week based on fill rate
+                $colorStatus = $fillRate >= 100 ? 'Green' : 'Red';
+            } elseif ($index < 3) {
+                // Subsequent weeks
+                $colorStatus = $pipelineGoal >= 100 ? 'Green' : 'Red';
             } else {
-                $colorStatus = 'Red';
+                // Grand total
+                if ($pipelineGoal >= 100) {
+                    $colorStatus = 'Green';
+                } elseif ($pipelineGoal >= 50) {
+                    $colorStatus = 'Yellow';
+                } else {
+                    $colorStatus = 'Red';
+                }
             }
 
             $wtd[] = [
@@ -414,7 +421,7 @@ class CapEmailController extends Controller
                 'jo' => $staffing->sum('pending_jo'),
                 'versant' => $staffing->sum('pending_berlitz'),
                 'ov' => $staffing->sum('pending_ov'),
-                'internal' => $staffing->sum('internal'),
+                'internal' => $staffing->sum('show_ups_internal'),
                 'external' => $staffing->sum('show_ups_external'),
                 'total_show_ups' => $totalShowUps,
                 'fill_rate' => $fillRate,
@@ -432,12 +439,13 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
+        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
 
+        // Determine the color status for the grand total
 
         $grandTotalRow = [
             'month' => 'Grand Total',

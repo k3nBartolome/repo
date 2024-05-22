@@ -36,10 +36,14 @@ class StaffingWeeklyPipe implements FromCollection, WithHeadings,  WithTitle, Sh
             'External',
             'Total SU',
             'Fill Rate %',
+            'For JO',
+            'For Testing',
+            'OV',
             'Day 1 SU',
             'Day 1 SU %',
             'Total Hires',
-            'Pipeline to Goal %'
+            'Pipeline to Goal %',
+            'Status'
         ];
     }
 }

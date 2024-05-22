@@ -40,12 +40,14 @@ class StaffingWTD implements FromCollection, WithHeadings,  WithTitle, ShouldAut
             'Total Externals',
             'For JO',
             'For Testing',
+            'OV',
             'Internal',
             'External',
             'Total SU',
             'Fill Rate %',
             'Day 1 SU',
             'Day 1 SU %',
+            'Status'
         ];
     }
 }
