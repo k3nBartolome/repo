@@ -7950,9 +7950,6 @@ class ClassesController extends Controller
         $staffingModel->pipeline_target = $pipelineTarget;
         $staffingModel->save();
         return new ClassesResource($newClass);
-        $response = ['data' => $staffingModel];
-
-        return response()->json($response);
     }
     public function editCancelled(Request $request, $id)
     {
@@ -8060,9 +8057,6 @@ class ClassesController extends Controller
 
         // @ts-ignore
         return new ClassesResource($class);
-        $response = ['data' => $staffingModel];
-
-        return response()->json($response);
     }
     public function retrieveB2DataForEmail(Request $request)
     {

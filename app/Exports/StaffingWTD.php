@@ -4,32 +4,33 @@ namespace App\Exports;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class StaffingWTD implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize {
+class StaffingWTD implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize
+{
     protected $data;
     protected $title;
 
-    public function __construct( $data, $title )
- {
-        $this->data = collect( $data );
+    public function __construct($data, $title)
+    {
+        $this->data = collect($data);
         $this->title = $title;
     }
 
     public function collection()
- {
+    {
         return $this->data;
     }
 
     public function title(): string
- {
+    {
         return 'MTD';
     }
 
     public function headings(): array
- {
+    {
         return [
             'Month',
             'Hiring Week',
@@ -47,7 +48,7 @@ class StaffingWTD implements FromCollection, WithHeadings,  WithTitle, ShouldAut
             'Fill Rate %',
             'Day 1 SU',
             'Day 1 SU %',
-            'Status'
+            'Status',
         ];
     }
 }

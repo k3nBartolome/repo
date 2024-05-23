@@ -17,14 +17,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class CapEmailController extends Controller
 {
-
     public function sendEmailStaffing(Request $request)
     {
         $weeklyPipe = $this->weeklyPipe();
         $wtd = $this->wtd();
         /*  $ytd = $this->ytd(); */
 
-        $excelFileName = '00 PH Hiring Tracker_' . date('Y-m-d') . '.xlsx';
+        $excelFileName = '00 PH Hiring Tracker_'.date('Y-m-d').'.xlsx';
 
         $worksheetNames = [
             'Weekly Pipe',
@@ -37,11 +36,11 @@ class CapEmailController extends Controller
             $wtd,
             //$ytd,
             $worksheetNames,
-        ), 'public/' . $excelFileName);
+        ), 'public/'.$excelFileName);
 
-        $recipients = ['kryss.bartolome@vxi.com' , 'arielito.pascua@vxi.com' , 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com' ];
-        $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
-        $excelFilePath = public_path('storage/' . $excelFileName);
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'];
+        $subject = 'PH Hiring Tracker - as of '.date('F j, Y');
+        $excelFilePath = public_path('storage/'.$excelFileName);
 
         Mail::send('staffing', [/* 'ytd' => $ytd, */'wtd' => $wtd, 'weeklyPipe' => $weeklyPipe], function ($message) use ($recipients, $subject, $excelFilePath, $excelFileName) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
@@ -58,7 +57,6 @@ class CapEmailController extends Controller
 
     public function weeklyPipe()
     {
-
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
 
@@ -78,7 +76,6 @@ class CapEmailController extends Controller
                 $dateRange->week_end,
                 Carbon::parse($dateRange->week_end)->addWeek(),
                 Carbon::parse($dateRange->week_end)->addWeeks(2),
-
             ])
             ->pluck('date_id');
 
@@ -113,6 +110,9 @@ class CapEmailController extends Controller
                 ->where('classes.total_target', '>', 0)
                 ->where('sites.country', 'Philippines')
                 ->where('date_ranges.date_id', $dateRangeId)
+                ->orderBy('date_ranges.id')
+                ->orderBy('sites.name')
+                ->orderBy('programs.name')
                 ->get();
 
             foreach ($staffing as $item) {
@@ -120,7 +120,7 @@ class CapEmailController extends Controller
                 $programId = $item->program_id;
                 $weekName = $item->week_name;
 
-                $key = $dateRangeId . '' . $siteId . '' . $programId;
+                $key = $dateRangeId.''.$siteId.''.$programId;
 
                 if (!isset($weeklyData[$weekName])) {
                     $weeklyData[$weekName] = [];
@@ -256,7 +256,7 @@ class CapEmailController extends Controller
                 continue;
             }
 
-            $totalCount++;
+            ++$totalCount;
 
             $grandTotals['total_target'] += $sum['total_target'];
             $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
@@ -302,8 +302,10 @@ class CapEmailController extends Controller
 
         // Merge Grand Total and Weekly Pipe Data with Totals
         $weeklyPipe = array_merge(['Grand Total' => $mappedGrandTotal], $weeklyPipeWithTotals);
+
         return $weeklyPipe;
     }
+
     public function wtd()
     {
         $year = 2024;
@@ -598,7 +600,7 @@ class CapEmailController extends Controller
         $mappedGroupedClassesWeek = $this->retrieveDataForEmailWeek();
         $mappedClasses = $this->retrieveDataForClassesEmail();
         $mappedB2Classes = $this->retrieveB2DataForEmail();
-        $excelFileName = 'capfile' . time() . '.xlsx';
+        $excelFileName = 'capfile'.time().'.xlsx';
         $worksheetNames = [
             'Hiring Summary',
             'Site Summary',
@@ -625,10 +627,10 @@ class CapEmailController extends Controller
             $outOfSlaHeadCountMonth,
             $cancelledHeadCountMonth,
             $worksheetNames,
-        ), 'public/' . $excelFileName);
+        ), 'public/'.$excelFileName);
         $recipients = ['kryss.bartolome@vxi.com' /* , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'*/];
-        $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
-        $excelFilePath = public_path('storage/' . $excelFileName);
+        $subject = 'PH TA Capacity File - as of '.date('F j, Y');
+        $excelFilePath = public_path('storage/'.$excelFileName);
         Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
@@ -638,8 +640,10 @@ class CapEmailController extends Controller
                 'mime' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             ]);
         });
+
         return response()->json(['message' => 'Email sent successfully']);
     }
+
     public function OutOfSlaMonth()
     {
         $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -731,6 +735,7 @@ class CapEmailController extends Controller
 
         return $outOfSlaHeadCountMonth;
     }
+
     public function OutOfSla()
     {
         $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -811,6 +816,7 @@ class CapEmailController extends Controller
 
         return $outOfSlaHeadCount;
     }
+
     public function CancelledMonth()
     {
         $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -906,6 +912,7 @@ class CapEmailController extends Controller
             'Notice Weeks' => number_format($totalNoticeWeeks, 2),
             'Drivers' => [],
         ];
+
         return $cancelledHeadCountMonth;
     }
 
@@ -1063,6 +1070,7 @@ class CapEmailController extends Controller
 
         return $formattedClasses;
     }
+
     public function classesSla()
     {
         $classes = Classes::whereHas('site', function ($query) {
@@ -1122,6 +1130,7 @@ class CapEmailController extends Controller
 
         return $formattedClasses;
     }
+
     public function classesCancelled()
     {
         $classes = Classes::whereHas('site', function ($query) {
@@ -1184,6 +1193,7 @@ class CapEmailController extends Controller
 
         return $formattedClasses;
     }
+
     public function retrieveDataForEmailWeek()
     {
         $programs = Program::with('site')
@@ -1498,7 +1508,7 @@ class CapEmailController extends Controller
         $formattedResult = $this->AutomatedSrExport();
 
         $recipients = ['kryss.bartolome@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
-        $subject = 'SR Pending Movement - as of ' . date('F j, Y');
+        $subject = 'SR Pending Movement - as of '.date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
@@ -1603,8 +1613,10 @@ class CapEmailController extends Controller
             'December' => $grandTotalByWeek['12'] ?: '',
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
+
         return $mappedGroupedClasses;
     }
+
     public function retrieveInternalForEmail()
     {
         $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -1699,8 +1711,10 @@ class CapEmailController extends Controller
             'December' => $grandTotalByWeek['12'] ?: '',
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
+
         return $mappedExternalClasses;
     }
+
     public function retrieveExternalForEmail()
     {
         $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -1795,8 +1809,10 @@ class CapEmailController extends Controller
             'December' => $grandTotalByWeek['12'] ?: '',
             'GrandTotalByProgram' => $grandTotalForAllPrograms,
         ];
+
         return $mappedExternalClasses;
     }
+
     //sr
     public function srComplianceExport()
     {
@@ -1933,6 +1949,7 @@ class CapEmailController extends Controller
 
         return $mappedResult;
     }
+
     public function AutomatedSrExport()
     {
         $appstepIDs = [1, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 32, 33, 34, 36, 40, 41, 42, 43, 44, 45, 46, 50, 53, 54, 55, 56, 59, 60, 69, 70, 73, 74, 78, 80, 81, 87, 88];
@@ -2002,6 +2019,7 @@ class CapEmailController extends Controller
 
         return $formattedResult;
     }
+
     //capfile
     public function retrieveDataForClassesEmail()
     {
@@ -2357,20 +2375,19 @@ class CapEmailController extends Controller
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
-
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [

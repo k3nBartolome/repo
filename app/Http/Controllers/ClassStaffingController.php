@@ -196,14 +196,13 @@ class ClassStaffingController extends Controller
 
     public function mpsWeek()
     {
-
         $year = 2024;
         $date = Carbon::now()->format('Y-m-d');
 
         $dateRange = DB::table('date_ranges')
-            ->select('week_start', 'week_end')
-            ->where('week_start', '<=', $date)
-            ->where('week_end', '>=', $date)
+            //->select('week_start', 'week_end')
+           // ->where('week_start', '<=', $date)
+           // ->where('week_end', '>=', $date)
             ->where('year', $year)
             ->first();
         if (!$dateRange) {
@@ -216,7 +215,6 @@ class ClassStaffingController extends Controller
                 $dateRange->week_end,
                 Carbon::parse($dateRange->week_end)->addWeek(),
                 Carbon::parse($dateRange->week_end)->addWeeks(2),
-
             ])
             ->pluck('date_id');
 
@@ -251,6 +249,9 @@ class ClassStaffingController extends Controller
                 ->where('classes.total_target', '>', 0)
                 ->where('sites.country', 'Philippines')
                 ->where('date_ranges.date_id', $dateRangeId)
+                ->orderBy('date_ranges.id')
+                ->orderBy('sites.name')
+                ->orderBy('programs.name')
                 ->get();
 
             foreach ($staffing as $item) {
@@ -258,7 +259,7 @@ class ClassStaffingController extends Controller
                 $programId = $item->program_id;
                 $weekName = $item->week_name;
 
-                $key = $dateRangeId . '' . $siteId . '' . $programId;
+                $key = $dateRangeId.''.$siteId.''.$programId;
 
                 if (!isset($weeklyData[$weekName])) {
                     $weeklyData[$weekName] = [];
@@ -394,7 +395,7 @@ class ClassStaffingController extends Controller
                 continue;
             }
 
-            $totalCount++;
+            ++$totalCount;
 
             $grandTotals['total_target'] += $sum['total_target'];
             $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
@@ -587,7 +588,6 @@ class ClassStaffingController extends Controller
                             'day_1sup' => $WeekMonthSiteProgram->sum('total_target') != 0 ? number_format(($WeekMonthSiteProgram->sum('day_1') / $WeekMonthSiteProgram->sum('total_target')) * 100, 2) : 0,
                             'pipeline_total' => $WeekMonthSiteProgram->sum('pipeline_total'),
                             'hires_goal' => $WeekMonthSiteProgram->sum('total_target') != 0 ? number_format(($WeekMonthSiteProgram->sum('pipeline_total') / $WeekMonthSiteProgram->sum('total_target')) * 100, 2) : 0,
-
                         ];
 
                         if (array_sum($sums) > 0 && !in_array(null, $WeekMonthSiteProgram->pluck('month')->toArray())) {
@@ -605,7 +605,6 @@ class ClassStaffingController extends Controller
                                 'day_1sup' => $sums['day_1sup'],
                                 'pipeline_total' => $sums['pipeline_total'],
                                 'hires_goal' => $sums['hires_goal'],
-
                             ];
                         } else {
                             $computedSums[$month][$dateRangeId][$siteId][$programId] = [
@@ -829,10 +828,12 @@ class ClassStaffingController extends Controller
         ];
 
         $wtd[] = $grandTotalRow;
+
         return response()->json([
             'mps' => $wtd,
         ]);
     }
+
     /*     public function mpsMonth()
     {
     $distinctMonths = DB::table('date_ranges')
@@ -1001,10 +1002,10 @@ class ClassStaffingController extends Controller
                 ->where('sites.site_id', $siteId)
                 ->where('date_ranges.year', $year)
                 ->when($monthNum, function ($query) use ($monthNum) {
-                    return $query->where('date_ranges.month_num', 'LIKE', '%' . $monthNum . '%');
+                    return $query->where('date_ranges.month_num', 'LIKE', '%'.$monthNum.'%');
                 })
                 ->when($programId, function ($query) use ($programId) {
-                    return $query->where('programs.program_id', 'LIKE', '%' . $programId . '%');
+                    return $query->where('programs.program_id', 'LIKE', '%'.$programId.'%');
                 })
                 ->get();
             $computedSums[$siteId] = [
