@@ -80,129 +80,101 @@
         <table class="min-w-full border-2 border-collapse border-gray-300">
           <thead>
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-              <th class="px-1 py-1 truncate border-2 border-gray-300">Month</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Week</th>
-              <th class="px-1 py-1 truncate border-2 border-gray-300">Site</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Program
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Target
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Internal
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                External
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Overall Starts
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Day1</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Day2</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Day3</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Day4</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Day5</th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Total Classes
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">
-                Filled
-              </th>
-              <th class="px-2 py-1 truncate border-2 border-gray-300">Open</th>
+              <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Week Name</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Site Name</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Program Name</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Program Group</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Total Target</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Internals</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Externals</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Total</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Fill Rate%</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                For JO</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                For Testing</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                OV</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Day 1</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Day 1%</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Pipeline Total</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Pipeline To Goal%</th>
+            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                Status</th>
             </tr>
           </thead>
           <tbody v-for="(mps1, index) in mps" :key="index">
-            <template v-for="(mps2, index2) in mps1" :key="index2">
-              <template v-for="(mps3, index3) in mps2" :key="index3">
+
                 <tr
                   class="border-2 border-black"
-                  v-for="(mps4, index4) in mps3"
-                  :key="index4"
                 >
-                  <td
-                    class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.month }}
+                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                  {{ mps1.week_name}}
+              </td>
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.site_name}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.week_name }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.program_name}}
                   </td>
-                  <td
-                    class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.site_name }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.program_group}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.program_name }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.total_target}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.total_target }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.show_ups_internal}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.internal }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.show_ups_external}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.external }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.show_ups_total}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.total }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.fillrate}}%
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.day_1 }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.pending_jo}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.day_2 }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.pending_berlitz}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.day_3 }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.pending_ov}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.day_4 }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.day_1}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.day_5 }}
+
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.day_1sup}}%
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.classes }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.pipeline_total}}
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.filled }}
+                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
+                      {{ mps1.hires_goal}}%
                   </td>
-                  <td
-                    class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
-                  >
-                    {{ mps4.open }}
+                  <td >
+                      {{ mps1.color_status}}
                   </td>
                 </tr>
-              </template>
-            </template>
+
           </tbody>
         </table>
       </div>
@@ -313,48 +285,6 @@ export default {
         }
       } catch (error) {
         console.log(error);
-      }
-    },
-    async exportToExcel() {
-      // Set export loading to true before making the request
-      try {
-        const token = this.$store.state.token;
-
-        // Make an API request to trigger the Excel export
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/export-to-excel",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob", // Tell Axios to expect a binary response
-            params: {
-              // Include any parameters needed for the export
-              month_num: this.month_selected.map(
-                (month_num) => month_num.month_num
-              ),
-              site_id: this.sites_selected.map((site) => site.site_id),
-              program_id: this.programs_selected.map(
-                (program) => program.program_id
-              ),
-              date_id: this.week_selected.map(
-                (week_selected) => week_selected.date_id
-              ),
-            },
-          }
-        );
-
-        // Create a Blob and create a download link for the Excel file
-        const blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = "your_filename.xlsx";
-        a.click();
-      } catch (error) {
-        console.error("Error exporting data to Excel", error);
       }
     },
     async getSites() {

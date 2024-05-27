@@ -200,9 +200,9 @@ class ClassStaffingController extends Controller
         $date = Carbon::now()->format('Y-m-d');
 
         $dateRange = DB::table('date_ranges')
-            //->select('week_start', 'week_end')
-           // ->where('week_start', '<=', $date)
-           // ->where('week_end', '>=', $date)
+            /* ->select('week_start', 'week_end')
+            ->where('week_start', '<=', $date)
+            ->where('week_end', '>=', $date) */
             ->where('year', $year)
             ->first();
         if (!$dateRange) {
@@ -210,12 +210,12 @@ class ClassStaffingController extends Controller
         }
 
         $distinctDateRanges = DB::table('date_ranges')
-            ->whereIn('week_end', [
+         /*    ->whereIn('week_end', [
                 Carbon::parse($dateRange->week_end)->subWeek(),
                 $dateRange->week_end,
                 Carbon::parse($dateRange->week_end)->addWeek(),
                 Carbon::parse($dateRange->week_end)->addWeeks(2),
-            ])
+            ]) */
             ->pluck('date_id');
 
         $weeklyTotals = [];
@@ -299,13 +299,7 @@ class ClassStaffingController extends Controller
                 $weeklyData[$weekName][$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
                 $weeklyData[$weekName][$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
 
-                if ($distinctDateRanges[0] == $dateRangeId) {
-                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['fillrate'] >= 100) ? 'Green' : 'Red';
-                } elseif ($distinctDateRanges[1] == $dateRangeId) {
-                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
-                } elseif ($distinctDateRanges[2] == $dateRangeId) {
-                    $weeklyData[$weekName][$key]['color_status'] = ($weeklyData[$weekName][$key]['hires_goal'] >= 100) ? 'Green' : 'Red';
-                } elseif ($distinctDateRanges[3] == $dateRangeId) {
+                if ($dateRangeId) {
                     if ($weeklyData[$weekName][$key]['hires_goal'] >= 100) {
                         $weeklyData[$weekName][$key]['color_status'] = 'Green';
                     } elseif ($weeklyData[$weekName][$key]['hires_goal'] >= 50) {
@@ -440,7 +434,8 @@ class ClassStaffingController extends Controller
         ];
 
         // Merge Grand Total and Weekly Pipe Data with Totals
-        $weeklyPipe = array_merge(['Grand Total' => $mappedGrandTotal], $weeklyPipeWithTotals);
+        $weeklyPipe = ['Grand Total' => $mappedGrandTotal] + $weeklyPipeWithTotals;
+
 
         $response = [
             'mps' => $weeklyPipe,
