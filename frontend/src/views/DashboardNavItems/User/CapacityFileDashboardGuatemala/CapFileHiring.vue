@@ -230,7 +230,7 @@
                   Apr
                 </th>
                 <th
-                  :colspan="showMayColumn ? 6 : 1"
+                  :colspan="showMayColumn ? 5 : 1"
                   :rowspan="showMayColumn ? 1 : 3"
                   :class="{
                     'bg-red-500': !showMayColumn,
@@ -244,7 +244,7 @@
                   May
                 </th>
                 <th
-                  :colspan="showJunColumn ? 5 : 1"
+                  :colspan="showJunColumn ? 6 : 1"
                   :rowspan="showJunColumn ? 1 : 3"
                   :class="{
                     'bg-red-500': !showJunColumn,
@@ -445,9 +445,7 @@
                 <th class="px-1 border-2 border-gray-300" v-if="showMayColumn">
                   May 19
                 </th>
-                <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
-                  May 26
-                </th>
+
                 <th
                   class="px-1 border-2 border-gray-300"
                   style="vertical-align: middle"
@@ -456,7 +454,9 @@
                 >
                   May
                 </th>
-
+                <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
+                  May 26
+                </th>
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
                   Jun 3
                 </th>
