@@ -154,7 +154,12 @@ export default {
       errors: {},
       siteRequestId: null,
       columns: [
-        { data: "id", title: "ID" },
+        {
+          title: "No",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
         {
           data: null,
           title: "Actions",

@@ -373,7 +373,12 @@ export default {
       showModal: false,
       loading: false,
       columns: [
-        { data: "id", title: "ID" },
+        {
+          title: "No",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
         { data: "site.name", title: "Site" },
         { data: "items.item_name", title: "Item Name" },
         { data: "awarded_quantity", title: "Awarded Quantity" },

@@ -153,7 +153,12 @@ export default {
       filteredTotalNormal: 0,
       total: 0,
       columns: [
-        { data: "id", title: "ID" },
+        {
+          title: "No",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
         { data: "site.name", title: "Site" },
         { data: "items.item_name", title: "Item Name" },
         { data: "items.budget_code", title: "Budget Code" },

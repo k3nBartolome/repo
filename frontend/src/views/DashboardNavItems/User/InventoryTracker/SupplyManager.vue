@@ -329,7 +329,12 @@ export default {
       successMessage: "",
       errors: {},
       columns: [
-        { data: "id", title: "ID" },
+        {
+          title: "No",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
         { data: "site.name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },

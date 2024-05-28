@@ -126,7 +126,12 @@ export default {
       showModal: false,
       deniedRequestId: null,
       columns: [
-        { data: "id", title: "ID" },
+        {
+          title: "No",
+          render: function (data, type, row, meta) {
+            return meta.row + 1;
+          },
+        },
         { data: "site.name", title: "Site" },
         { data: "item.item_name", title: "Item Name" },
         { data: "item.budget_code", title: "Budget Code" },
