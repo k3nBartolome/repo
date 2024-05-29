@@ -129,6 +129,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('programs_selected', [ProgramController::class, 'perSite']);
     Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
     Route::get('siteclasses', [ClassesController::class, 'dashboardSiteClasses']);
+    Route::get('siteclassesmoved', [ClassesController::class, 'dashboardSiteClassesMoved']);
+    Route::get('siteclassescancelled', [ClassesController::class, 'dashboardSiteClassesCancelled']);
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
     Route::get('classescancelled', [ClassesController::class, 'dashboardCancelledClasses']);
     Route::get('classesdashboard3', [ClassesController::class, 'dashboardClasses3']);
@@ -137,11 +139,15 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboardinternal', [ClassesController::class, 'dashboardInternalClasses']);
     Route::get('classesdashboardjamaica', [ClassesController::class, 'dashboardClassesJamaica']);
     Route::get('siteclassesjamaica', [ClassesController::class, 'dashboardSiteClassesJamaica']);
+    Route::get('siteclassesjamaicamoved', [ClassesController::class, 'dashboardSiteClassesJamaicaMoved']);
+    Route::get('siteclassesjamaicacancelled', [ClassesController::class, 'dashboardSiteClassesJamaicaCancelled']);
     Route::get('classesdashboardjamaica2', [ClassesController::class, 'dashboardClassesJamaica2']);
     Route::get('classesdashboardjamaica3', [ClassesController::class, 'dashboardClassesJamaica3']);
     Route::get('classesdashboardjamaica4', [ClassesController::class, 'dashboardClassesJamaica4']);
     Route::get('classesdashboardguatemala', [ClassesController::class, 'dashboardClassesGuatemala']);
     Route::get('siteclassesguatemala', [ClassesController::class, 'dashboardSiteClassesGuatemala']);
+    Route::get('siteclassesguatemalamoved', [ClassesController::class, 'dashboardSiteClassesGuatemalaMoved']);
+    Route::get('siteclassesguatemalacancelled', [ClassesController::class, 'dashboardSiteClassesGuatemalaCancelled']);
     Route::get('classesdashboardguatemala2', [ClassesController::class, 'dashboardClassesGuatemala2']);
     Route::get('classesdashboardguatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
     Route::get('classesdashboardguatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);

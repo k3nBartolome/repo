@@ -74,8 +74,15 @@ Pushback
 pushedback
 Pushedback
 remx
+siteclasses
+siteclassescancelled
 siteclassesguatemala
+siteclassesguatemalacancelled
+siteclassesguatemalamoved
 siteclassesjamaica
+siteclassesjamaicacancelled
+siteclassesjamaicamoved
+siteclassesmoved
 siteinventory
 siteinventoryall
 sitely
