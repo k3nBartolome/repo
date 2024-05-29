@@ -10,7 +10,7 @@
                 'selected-tab': isActiveTab('/site_supply_manager/stocks'),
               }"
             >
-              Site Supply
+              Sourcing Supply
             </button>
           </router-link>
         </div>

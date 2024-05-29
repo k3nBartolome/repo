@@ -715,6 +715,7 @@ export default {
       classes: [],
       databaseValue: "",
       showModal: false,
+      isButtonVisible: true,
     };
   },
   computed: {
@@ -791,14 +792,54 @@ export default {
     this.getDateRange();
     this.getClasses();
     this.getTransaction();
+    this.checkClassExists2();
   },
   watch: {
     agreed_start_date: {
       handler: "getDateRange",
       immediate: true,
     },
+    sites_selected() {
+      this.checkClassExists2();
+
+    },
+    programs_selected() {
+      this.checkClassExists2();
+
+    },
+
+    date_selected() {
+      this.checkClassExists2();
+
+    },
   },
   methods: {
+    async checkClassExists2() {
+      try {
+        const token = this.$store.state.token; // Assuming you store the token in Vuex state
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/class_exists2",
+          {
+            params: {
+              sites_selected: this.sites_selected,
+              programs_selected: this.programs_selected,
+              date_selected: this.date_selected,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.isButtonVisible = !response.data.classExists;
+        } else {
+          console.log("Error checking class existence");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
     },

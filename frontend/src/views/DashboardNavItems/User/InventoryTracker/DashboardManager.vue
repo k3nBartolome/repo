@@ -18,7 +18,7 @@
               class="tab-button"
               :class="{ 'selected-tab': isActiveTab('/dashboard_manager/supply') }"
             >
-              Available Supply
+              Available REMX Supply
             </button>
           </router-link>
         </div>
@@ -28,7 +28,7 @@
               class="tab-button"
               :class="{ 'selected-tab': isActiveTab('/dashboard_manager/site_supply') }"
             >
-              Available Site Supply
+              Available Sourcing Supply
             </button>
           </router-link>
         </div>

@@ -375,7 +375,15 @@
           Filter
         </button>
       </div>
-
+      <div class="w-full md:w-1/4">
+        <button
+          type="button"
+          class="w-full px-4 py-2 text-white bg-green-600 rounded-lg"
+          @click="exportToExcel"
+        >
+          Export
+        </button>
+      </div>
       <div class="w-full md:w-1/4">
         <button
           type="button"
@@ -598,6 +606,50 @@ export default {
       this.programs_selected = "";
       this.month_selected = "";
       this.week_selected = "";
+    },
+    async exportToExcel() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/cancelled_export",
+          {
+            params: {
+              sites_selected: this.sites_selected,
+              programs_selected: this.programs_selected,
+              month_selected: this.month_selected,
+              week_selected: this.week_selected,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
+
+        // Check if the response contains data
+        if (response && response.data) {
+          // Create a Blob from the response data
+          const blob = new Blob([response.data], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+
+          // Create a URL for the Blob
+          const url = window.URL.createObjectURL(blob);
+
+          // Create a link element and trigger a download
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "filtered_cancelled_class_data.xlsx";
+          document.body.appendChild(link); // Append the link to the body
+          link.click(); // Simulate a click on the link
+          document.body.removeChild(link); // Remove the link from the body after download
+          window.URL.revokeObjectURL(url); // Revoke the URL to free up memory
+        } else {
+          console.error("Empty response received when exporting data to Excel");
+        }
+      } catch (error) {
+        console.error("Error exporting filtered data to Excel", error);
+      }
     },
     async getClasses(id) {
       try {

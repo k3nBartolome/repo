@@ -5,6 +5,7 @@ use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Controllers\API\User\RoleController;
 use App\Http\Controllers\API\User\UserController;
 use App\Http\Controllers\AwardController;
+use App\Http\Controllers\CapEmailController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
@@ -12,8 +13,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
-use App\Http\Controllers\SiteController;
-use  App\Http\Controllers\CapEmailController;
+use  App\Http\Controllers\SiteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -121,6 +121,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
     Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
     Route::get('history_export', [ClassesController::class, 'dashboardClassesExport2']);
+    Route::get('cancelled_export', [ClassesController::class, 'dashboardCancelledClassesExport']);
     Route::get('export3', [ClassesController::class, 'dashboardClassesExport3']);
     Route::get('export4', [ClassesController::class, 'dashboardClassesExport4']);
     Route::get('mps', [ClassStaffingController::class, 'mps']);
@@ -159,6 +160,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('class_exists', [ClassesController::class, 'classExists']);
+    Route::get('class_exists2', [ClassesController::class, 'classExists2']);
 
     // Class Staffing
     Route::post('classesstaffing', [ClassStaffingController::class, 'store']);

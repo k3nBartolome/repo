@@ -53,13 +53,13 @@
                       to="/inventory/supply_manager"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >Supply Manager</router-link
+                      >REMX Supply</router-link
                     >
                     <router-link
                       to="/site_supply_manager/stocks"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >Site Supply Manager</router-link
+                      >Sourcing Supply</router-link
                     >
                     <router-link
                       to="/site_request_manager/request"
