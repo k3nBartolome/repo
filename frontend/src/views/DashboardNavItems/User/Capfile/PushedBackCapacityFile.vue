@@ -256,53 +256,38 @@
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="py-6 flex space-x-4">
           <label class="block">
-            Target and Dates
-            <input
-              type="radio"
-              v-model="changes"
-              required
-              checked
-              value="Change Targets and Dates"
-              class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
-            />
-          </label>
-          <label class="block">
             Targets
             <input
-              type="radio"
+              type="checkbox"
               v-model="changes"
               value="Change Targets"
-              required
               class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </label>
           <label class="block">
             Dates
             <input
-              type="radio"
+              type="checkbox"
               v-model="changes"
               value="Change Dates"
-              required
               class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </label>
           <label class="block">
             Type of Hiring
             <input
-              type="radio"
+              type="checkbox"
               v-model="changes"
               value="Change Type of Hiring"
-              required
               class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </label>
           <label class="block">
             Category
             <input
-              type="radio"
+              type="checkbox"
               v-model="changes"
               value="Change Category"
-              required
               class="ml-2 mr-4 border-gray-500 focus:ring-indigo-500 focus:border-indigo-500"
             />
           </label>
@@ -352,8 +337,7 @@
             Type of Hiring
             <select
               v-model="type_of_hiring"
-              :disabled="isTypeOfHiringDisabled"
-              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
+              class="w-full px-4 py-2 border rounded-lg"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -368,7 +352,6 @@
             <input
               required
               type="number"
-              :disabled="isTargetDisabled"
               v-model="external_target"
               name="external_target"
               class="w-full px-4 py-2 bg-white border rounded-lg"
@@ -382,7 +365,6 @@
             <input
               required
               type="number"
-              :disabled="isTargetDisabled"
               class="w-full px-4 py-2 bg-white border rounded-lg"
               v-model="internal_target"
               @change="syncTotalTarget"
@@ -398,7 +380,7 @@
               type="number"
               v-model="total_target"
               disabled
-              class="w-full px-4 py-2 bg-white border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
         </div>
@@ -432,7 +414,7 @@
               type="number"
               v-model="notice_days"
               disabled
-              class="w-full px-4 py-2 bg-white border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 rounded-lg"
               @change="syncNoticeWeeks"
             />
           </label>
@@ -443,7 +425,8 @@
             <input
               type="text"
               v-model="notice_weeks"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
+              disabled
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
             />
           </label>
         </div>
@@ -475,7 +458,6 @@
           <label class="block"
             >Category
             <select
-              :disabled="isCategoryDisabled"
               v-model="category"
               class="w-full px-4 py-2 bg-white border rounded-lg"
             >
@@ -533,7 +515,6 @@
               type="date"
               required
               v-model="agreed_start_date"
-              :disabled="isDateDisabled"
               class="w-full px-4 py-2 bg-white border rounded-lg"
               @change="syncNoticeDays"
             />
@@ -669,6 +650,7 @@
       <div class="flex justify-center py-4">
         <button
           type="submit"
+          v-if="isButtonVisible"
           class="self-center px-4 py-1 font-bold text-white bg-orange-500 rounded hover:bg-gray-600"
         >
           <i class="fa fa-save"></i> Pushback
@@ -703,7 +685,8 @@ export default {
       programs: [],
       agreed_start_date: "",
       within_sla: "",
-      changes: "Change Targets and Dates",
+      changes: [],
+      backup: {},
       wave_no: "",
       ta: "",
       wf: "",
@@ -715,62 +698,10 @@ export default {
       classes: [],
       databaseValue: "",
       showModal: false,
-      isButtonVisible: true,
+      isButtonVisible: false,
     };
   },
   computed: {
-    isTargetDisabled() {
-      if (this.changes === "Change Dates") {
-        return true;
-      } else if (this.changes === "Change Targets") {
-        return false;
-      } else if (this.changes === "Change Type of Hiring") {
-        return false;
-      } else if (this.changes === "Change Category") {
-        return false;
-      } else {
-        return false;
-      }
-    },
-    isDateDisabled() {
-      if (this.changes === "Change Targets") {
-        return true;
-      } else if (this.changes === "Change Dates") {
-        return false;
-      } else if (this.changes === "Change Type of Hiring") {
-        return false;
-      } else if (this.changes === "Change Category") {
-        return false;
-      } else {
-        return false;
-      }
-    },
-    isCategoryDisabled() {
-      if (this.changes === "Change Type of Hiring") {
-        return true;
-      } else if (this.changes === "Change Dates") {
-        return true;
-      } else if (this.changes === "Change Category") {
-        return false;
-      } else if (this.changes === "Change Targets") {
-        return true;
-      } else {
-        return true;
-      }
-    },
-    isTypeOfHiringDisabled() {
-      if (this.changes === "Change Category") {
-        return true;
-      } else if (this.changes === "Change Dates") {
-        return true;
-      } else if (this.changes === "Change Type of Hiring") {
-        return false;
-      } else if (this.changes === "Change Targets") {
-        return true;
-      } else {
-        return true;
-      }
-    },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
       const internal = parseInt(this.internal_target) || 0;
@@ -795,38 +726,61 @@ export default {
     this.checkClassExists2();
   },
   watch: {
+    type_of_hiring: function (newVal) {
+      this.checkForChange("type_of_hiring", "Change Type of Hiring", newVal);
+    },
+    external_target: function (newVal) {
+      this.checkForChange("external_target", "Change Targets", newVal);
+    },
+    internal_target: function (newVal) {
+      this.checkForChange("internal_target", "Change Targets", newVal);
+    },
+    category: function (newVal) {
+      this.checkForChange("category", "Change Category", newVal);
+    },
     agreed_start_date: {
-      handler: "getDateRange",
+      handler(newVal) {
+        this.checkForChange("agreed_start_date", "Change Dates", newVal);
+        this.getDateRange();
+      },
       immediate: true,
     },
+
+    /* agreed_start_date: {
+      handler: function (newVal, oldVal) {
+        if (newVal !== oldVal) {
+          this.changes.push("Change Dates");
+        }
+        this.getDateRange();
+      },
+      immediate: true,
+    }, */
     sites_selected() {
       this.checkClassExists2();
-
     },
     programs_selected() {
       this.checkClassExists2();
-
     },
 
     date_selected() {
       this.checkClassExists2();
-
     },
   },
   methods: {
     async checkClassExists2() {
       try {
-        const token = this.$store.state.token; // Assuming you store the token in Vuex state
+        const token = this.$store.state.token;
         const response = await axios.get(
           "http://127.0.0.1:8000/api/class_exists2",
           {
             params: {
+              id: this.$route.params.id,
               sites_selected: this.sites_selected,
               programs_selected: this.programs_selected,
               date_selected: this.date_selected,
             },
             headers: {
-              Authorization: `Bearer ${token}`, // Include the token in the Authorization header
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -925,6 +879,18 @@ export default {
         console.log(error);
       }
     },
+    checkForChange(field, change, newVal) {
+      if (newVal !== this.backup[field]) {
+        if (!this.changes.includes(change)) {
+          this.changes.push(change);
+        }
+      } else {
+        const index = this.changes.indexOf(change);
+        if (index !== -1) {
+          this.changes.splice(index, 1);
+        }
+      }
+    },
     async getClasses() {
       try {
         const token = this.$store.state.token;
@@ -941,15 +907,12 @@ export default {
           const data = response.data;
           const classObj = data.class;
           const nestedRequestedByArray = JSON.parse(classObj.requested_by);
-
-          // Ensure requestedByArray is always an array
           let requestedByArray = Array.isArray(nestedRequestedByArray)
             ? nestedRequestedByArray.flat()
             : [nestedRequestedByArray];
 
           console.log("Parsed requested_by array:", requestedByArray);
 
-          // Assign the concatenated string to requested_by property
           this.sites_selected = classObj.site.id;
           this.programs_selected = classObj.program.id;
           this.type_of_hiring = classObj.type_of_hiring;
@@ -975,9 +938,14 @@ export default {
           this.op = classObj.op;
           this.requested_by = requestedByArray;
 
-          this.wave_no = classObj.wave_no;
-
-          console.log(classObj);
+          // After fetching the data, store the initial state in the backup object
+          this.backup = {
+            type_of_hiring: this.type_of_hiring,
+            external_target: this.external_target,
+            internal_target: this.internal_target,
+            category: this.category,
+            agreed_start_date: this.agreed_start_date,
+          };
         } else {
           console.log("Error fetching classes");
         }
@@ -1006,33 +974,28 @@ export default {
     },
 
     pushClass() {
-      // Filter out any null values from requested_by array
       const filtered_requested_by = this.requested_by.filter(
         (value) => value !== null
       );
-
-      // Convert requested_by array to JSON string with required format
-      const requested_by_string = JSON.stringify([filtered_requested_by]);
+      const changes_string = JSON.stringify(this.changes);
+      const requested_by_string = JSON.stringify(filtered_requested_by);
       this.loading = true;
 
-      // Determine the status based on changes
       let status;
       if (
-        this.changes === "Change Dates" ||
-        this.changes === "Change Targets" ||
-        this.changes === "Change Targets and Dates"
+        this.changes.includes("Change Dates") ||
+        this.changes.includes("Change Targets")
       ) {
         status = "Moved";
       } else if (
-        this.changes === "Change Type of Hiring" ||
-        this.changes === "Change Category"
+        this.changes.includes("Change Type of Hiring") ||
+        this.changes.includes("Change Category")
       ) {
         status = "Changed";
       } else {
-        status = "Active"; // Default status if none of the conditions are met
+        status = "Active";
       }
 
-      // Other form data
       const formData = {
         site_id: this.sites_selected,
         program_id: this.programs_selected,
@@ -1055,7 +1018,7 @@ export default {
         status: status,
         updated_by: this.$store.state.user_id,
         agreed_start_date: this.agreed_start_date,
-        changes: this.changes,
+        changes: changes_string,
         approved_by: this.approved_by,
         ta: this.ta,
         wf: this.wf,
@@ -1068,8 +1031,7 @@ export default {
 
       axios
         .put(
-          "http://127.0.0.1:8000/api/classes/pushedback/" +
-            this.$route.params.id,
+          `http://127.0.0.1:8000/api/classes/pushedback/${this.$route.params.id}`,
           formData,
           {
             headers: {
@@ -1079,7 +1041,6 @@ export default {
         )
         .then((response) => {
           console.log(response.data);
-          // Reset form fields here
           this.resetForm();
           this.$router.push("/capfile", () => {
             location.reload();
@@ -1116,7 +1077,7 @@ export default {
       this.updated_by = "";
       this.agreed_start_date = "";
       this.approved_by = "";
-      this.changes = "Change Targets and Dates";
+      this.changes = [];
       this.ta = "";
       this.wf = "";
       this.tr = "";

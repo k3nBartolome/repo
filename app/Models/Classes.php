@@ -15,6 +15,7 @@ class Classes extends Model
         'requested_by' => 'array',
         'cancelled_by' => 'array',
         'condition' => 'array',
+        'changes' => 'array',
     ];
 
     protected $fillable = [

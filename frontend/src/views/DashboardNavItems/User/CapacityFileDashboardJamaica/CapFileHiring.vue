@@ -159,6 +159,109 @@
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
+                <th class="px-1 border-2 border-gray-300">Site Name</th>
+                <th class="px-1 border-2 border-gray-300">Jan</th>
+                <th class="px-1 border-2 border-gray-300">Feb</th>
+                <th class="px-1 border-2 border-gray-300">Mar</th>
+                <th class="px-1 border-2 border-gray-300">Apr</th>
+                <th class="px-1 border-2 border-gray-300">May</th>
+                <th class="px-1 border-2 border-gray-300">Jun</th>
+                <th class="px-1 border-2 border-gray-300">Jul</th>
+                <th class="px-1 border-2 border-gray-300">Aug</th>
+                <th class="px-1 border-2 border-gray-300">Sep</th>
+                <th class="px-1 border-2 border-gray-300">Oct</th>
+                <th class="px-1 border-2 border-gray-300">Nov</th>
+                <th class="px-1 border-2 border-gray-300">Dec</th>
+                <th class="px-1 border-2 border-gray-300">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="(item, index) in siteclasses" :key="index">
+                <tr
+                  class="text-black bg-white border-b-2 border-gray-400 border-solid"
+                >
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.Site }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.January }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.February }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.March }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.April }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.May }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.June }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.July }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.August }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.September }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.October }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.November }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.December }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.GrandTotalByProgram }}
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
+        <div class="py-2">
+          <label class="font-bold">PER PROGRAM:</label>
+          <table
+            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+          >
+            <thead class="">
+              <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
                 <th
                   class="px-1 border-2 border-gray-300"
                   rowspan="3"
