@@ -257,7 +257,7 @@
         <div class="py-6 flex space-x-4">
           <label class="block">
             Targets
-            <input disabled
+            <input readonly
               type="checkbox"
               v-model="changes"
               value="Change Targets"
@@ -266,7 +266,7 @@
           </label>
           <label class="block">
             Dates
-            <input disabled
+            <input readonly
               type="checkbox"
               v-model="changes"
               value="Change Dates"
@@ -275,7 +275,7 @@
           </label>
           <label class="block">
             Type of Hiring
-            <input disabled
+            <input readonly
               type="checkbox"
               v-model="changes"
               value="Change Type of Hiring"
@@ -284,7 +284,7 @@
           </label>
           <label class="block">
             Category
-            <input disabled
+            <input readonly
               type="checkbox"
               v-model="changes"
               value="Change Category"
@@ -387,7 +387,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Original Start Date
-            <input
+            <input disabled
               type="date"
               v-model="original_start_date"
               class="w-full px-4 py-2 bg-white border rounded-lg"
@@ -398,7 +398,7 @@
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
           <label class="block"
             >Date of Request
-            <input
+            <input disabled
               required
               type="date"
               v-model="wfm_date_requested"
@@ -771,7 +771,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/class_exists2",
+          "http://127.0.0.1:8000/api/class_exists2",
           {
             params: {
               id: this.$route.params.id,
@@ -807,7 +807,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -831,7 +831,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -854,7 +854,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterangeall",
+          "http://127.0.0.1:8000/api/daterangeall",
           { headers }
         );
 
@@ -899,7 +899,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -952,7 +952,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1025,7 +1025,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/classes/pushedback/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/pushedback/${this.$route.params.id}`,
           formData,
           {
             headers: {
