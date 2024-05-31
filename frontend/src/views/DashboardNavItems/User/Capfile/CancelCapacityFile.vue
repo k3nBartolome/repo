@@ -807,14 +807,7 @@ export default {
         if (response.status === 200) {
           const data = response.data;
           const classObj = data.class;
-          const nestedCancelledByArray = JSON.parse(classObj.requested_by);
 
-          // Ensure cancelledByArray is always an array
-          let cancelledByArray = Array.isArray(nestedCancelledByArray)
-            ? nestedCancelledByArray.flat()
-            : [nestedCancelledByArray];
-
-          console.log("Parsed requested_by array:", cancelledByArray);
 
           // Assign the concatenated string to requested_by property
           this.sites_selected = classObj.site.id;
@@ -834,13 +827,13 @@ export default {
           this.erf_number = classObj.erf_number;
           this.approved_by = classObj.approved_by;
           this.wfm_date_requested = classObj.wfm_date_requested;
-          this.remarks = classObj.remarks;
+
           this.ta = classObj.ta;
           this.wf = classObj.wf;
           this.tr = classObj.tr;
           this.cl = classObj.cl;
           this.op = classObj.op;
-          this.cancelled_by = cancelledByArray;
+
 
           this.wave_no = classObj.wave_no;
 

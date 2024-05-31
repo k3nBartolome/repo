@@ -257,7 +257,7 @@
         <div class="py-6 flex space-x-4">
           <label class="block">
             Targets
-            <input
+            <input disabled
               type="checkbox"
               v-model="changes"
               value="Change Targets"
@@ -266,7 +266,7 @@
           </label>
           <label class="block">
             Dates
-            <input
+            <input disabled
               type="checkbox"
               v-model="changes"
               value="Change Dates"
@@ -275,7 +275,7 @@
           </label>
           <label class="block">
             Type of Hiring
-            <input
+            <input disabled
               type="checkbox"
               v-model="changes"
               value="Change Type of Hiring"
@@ -284,7 +284,7 @@
           </label>
           <label class="block">
             Category
-            <input
+            <input disabled
               type="checkbox"
               v-model="changes"
               value="Change Category"
@@ -906,12 +906,7 @@ export default {
         if (response.status === 200) {
           const data = response.data;
           const classObj = data.class;
-          const nestedRequestedByArray = JSON.parse(classObj.requested_by);
-          let requestedByArray = Array.isArray(nestedRequestedByArray)
-            ? nestedRequestedByArray.flat()
-            : [nestedRequestedByArray];
 
-          console.log("Parsed requested_by array:", requestedByArray);
 
           this.sites_selected = classObj.site.id;
           this.programs_selected = classObj.program.id;
@@ -930,13 +925,12 @@ export default {
           this.erf_number = classObj.erf_number;
           this.approved_by = classObj.approved_by;
           this.wfm_date_requested = classObj.wfm_date_requested;
-          this.remarks = classObj.remarks;
+
           this.ta = classObj.ta;
           this.wf = classObj.wf;
           this.tr = classObj.tr;
           this.cl = classObj.cl;
           this.op = classObj.op;
-          this.requested_by = requestedByArray;
 
           // After fetching the data, store the initial state in the backup object
           this.backup = {
