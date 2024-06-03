@@ -390,7 +390,7 @@
             <input disabled
               type="date"
               v-model="original_start_date"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               @change="syncNoticeDays"
             />
           </label>
@@ -402,7 +402,7 @@
               required
               type="date"
               v-model="wfm_date_requested"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
+              class="w-full px-4 py-2 bg-gray-100 border rounded-lg"
               @change="syncNoticeDays"
             />
           </label>
