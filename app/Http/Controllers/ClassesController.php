@@ -8909,11 +8909,22 @@ class ClassesController extends Controller
         $newClass->requested_by = json_encode($requested_by);
         $newClass->changes = json_encode($changes);
         $newClass->save();
+
         $class->fill($request->all());
         $class->changes = 'Add Class';
         $class->status = 'Active';
         $class->save();
 
+        if ($class->within_sla == 'Outside SLA - Increase in Demand') {
+            $out_of_sla_increase = $newClass->total_target - $class->total_target;
+            $class->out_of_sla = $out_of_sla_increase;
+            $class->save();
+        }
+        if ($class->within_sla == 'Outside SLA - Decrease in Demand (Cancellation)') {
+            $out_of_sla_decrease = $newClass->total_target - $class->total_target;
+            $class->out_of_sla = $out_of_sla_decrease;
+            $class->save();
+        }
         $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
             ->where('active_status', 1)
             ->first();
