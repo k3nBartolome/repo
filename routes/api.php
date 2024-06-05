@@ -130,6 +130,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('programs_selected', [ProgramController::class, 'perSite']);
     Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
     Route::get('siteclasses', [ClassesController::class, 'dashboardSiteClasses']);
+
     Route::get('siteclassesmoved', [ClassesController::class, 'dashboardSiteClassesMoved']);
     Route::get('siteclassescancelled', [ClassesController::class, 'dashboardSiteClassesCancelled']);
     Route::get('classesdashboard2', [ClassesController::class, 'dashboardClasses2']);
@@ -238,3 +239,4 @@ Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
 Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
+Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
