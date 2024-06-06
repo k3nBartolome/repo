@@ -264,6 +264,109 @@
             </tbody>
           </table>
         </div>
+        <div class="py-2">
+          <label class="font-bold">OUTSIDE SLA DECREASE IN DEMAND</label>
+          <table
+            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+          >
+            <thead class="">
+              <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
+                <th class="px-1 border-2 border-gray-300">Site Name</th>
+                <th class="px-1 border-2 border-gray-300">Jan</th>
+                <th class="px-1 border-2 border-gray-300">Feb</th>
+                <th class="px-1 border-2 border-gray-300">Mar</th>
+                <th class="px-1 border-2 border-gray-300">Apr</th>
+                <th class="px-1 border-2 border-gray-300">May</th>
+                <th class="px-1 border-2 border-gray-300">Jun</th>
+                <th class="px-1 border-2 border-gray-300">Jul</th>
+                <th class="px-1 border-2 border-gray-300">Aug</th>
+                <th class="px-1 border-2 border-gray-300">Sep</th>
+                <th class="px-1 border-2 border-gray-300">Oct</th>
+                <th class="px-1 border-2 border-gray-300">Nov</th>
+                <th class="px-1 border-2 border-gray-300">Dec</th>
+                <th class="px-1 border-2 border-gray-300">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-for="(item, index) in oos" :key="index">
+                <tr
+                  class="text-black bg-white border-b-2 border-gray-400 border-solid"
+                >
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.Site }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.January }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.February }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.March }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.April }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.May }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.June }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.July }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.August }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.September }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.October }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.November }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.December }}
+                  </td>
+                  <td
+                    class="px-2 font-semibold truncate border-4 border-gray-300"
+                  >
+                    {{ item.GrandTotalByProgram }}
+                  </td>
+                </tr>
+              </template>
+            </tbody>
+          </table>
+        </div>
         <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
           <thead class="">
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -1270,6 +1373,7 @@ export default {
   data() {
     return {
       classes: [],
+      oos: [],
       grandTotal: [],
       grandTotal2: [],
       siteclasses: [],
@@ -1305,6 +1409,7 @@ export default {
     this.getPrograms();
     this.getDateRange();
     this.getMonth();
+    this.getOos();
   },
   watch: {
     month_selected: {
@@ -1325,6 +1430,34 @@ export default {
     },
   },
   methods: {
+    async getOos() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/ooscclasses",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              site_id: this.sites_selected.map((site) => site.site_id),
+              program_id: this.programs_selected.map(
+                (program) => program.program_id
+              ),
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.oss = response.data.data;
+          console.log(response.data.data);
+        } else {
+          console.log("Error fetching data");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     toggleColumnVisibility(month) {
       if (month === "Jan") this.showJanColumn = !this.showJanColumn;
       else if (month === "Feb") this.showFebColumn = !this.showFebColumn;

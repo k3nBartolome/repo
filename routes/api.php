@@ -240,3 +240,4 @@ Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
 Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
+Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
