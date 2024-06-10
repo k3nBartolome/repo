@@ -4251,28 +4251,31 @@ class ClassesController extends Controller
                 $programId = $program->id;
                 $month = $dateRange->month_num;
                 $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
-                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
-                        $subquery->where('month_num', $month)->where('year', $year);
-                    })
-                    ->whereHas('program', function ($subquery) {
+                ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                    $subquery->where('month_num', $month)->where('year', $year);
+                })
+                ->whereHas('program', function ($subquery) {
+                    $subquery->where('is_active', 1);
+                })
+                ->when(true, function ($query) {
+                    $query->whereHas('site', function ($subquery) {
                         $subquery->where('is_active', 1);
-                    })
-
-                    ->when(true, function ($query) {
-                        $query->whereHas('site', function ($subquery) {
-                            $subquery->where('is_active', 1);
-                        });
-                    })
-                    ->when(!empty($siteId), function ($query) use ($siteId) {
-                        $query->whereIn('site_id', $siteId);
-                    })
-                    ->when(!empty($programFilter), function ($query) use ($programFilter) {
-                        $query->whereIn('program_id', $programFilter);
-                    })
-                    ->where('site_id', $programId)
-                    ->where('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)')
-                    ->where('status', 'Cancelled')
-                    ->get();
+                    });
+                })
+                ->when(!empty($siteId), function ($query) use ($siteId) {
+                    $query->whereIn('site_id', $siteId);
+                })
+                ->when(!empty($programFilter), function ($query) use ($programFilter) {
+                    $query->whereIn('program_id', $programFilter);
+                })
+                ->where(function ($query) {
+                    $query->where('status', 'Active')
+                        ->orWhere('status', 'Cancelled');
+                })
+                ->where('site_id', $programId)
+                ->where('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)')
+                ->get();
+            
 
                 $totalTarget = $classes->sum('out_of_sla');
 
