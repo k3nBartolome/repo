@@ -628,7 +628,7 @@ class CapEmailController extends Controller
             $cancelledHeadCountMonth,
             $worksheetNames,
         ), 'public/'.$excelFileName);
-        $recipients = ['kryss.bartolome@vxi.com' /* , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'*/];
+        $recipients = ['kryss.bartolome@vxi.com'  , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
         $subject = 'PH TA Capacity File - as of '.date('F j, Y');
         $excelFilePath = public_path('storage/'.$excelFileName);
         Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {

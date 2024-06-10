@@ -212,7 +212,7 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(item, index) in oos" :key="index">
+            <template v-for="(item, index) in oos1" :key="index">
               <tr
                 class="text-black bg-white border-b-2 border-gray-400 border-solid"
               >
@@ -306,7 +306,7 @@ export default {
   data() {
     return {
       oos: [],
-      oss1: [],
+      oos1: [],
       isLoading: false,
     };
   },
@@ -319,20 +319,16 @@ export default {
   },
   methods: {
     async getOos() {
+      this.isLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/oosclasses",
+          "http://10.109.2.112:8081/api/oosclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              site_id: this.sites_selected.map((site) => site.site_id),
-              program_id: this.programs_selected.map(
-                (program) => program.program_id
-              ),
-            },
+           
           }
         );
 
@@ -345,22 +341,21 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      finally {
+    this.isLoading = false;
+  }
     },
     async getOos1() {
+      this.isLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/ooscclasses",
+          "http://10.109.2.112:8081/api/ooscclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              site_id: this.sites_selected.map((site) => site.site_id),
-              program_id: this.programs_selected.map(
-                (program) => program.program_id
-              ),
-            },
+           
           }
         );
 
@@ -373,6 +368,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+      finally {
+    this.isLoading = false; 
+  }
     },
   },
 };
