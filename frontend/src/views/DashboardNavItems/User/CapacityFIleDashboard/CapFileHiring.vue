@@ -155,7 +155,7 @@
         <div class="py-2">
           <label class="font-bold">PER SITE:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -258,7 +258,7 @@
         <div class="py-2">
           <label class="font-bold">PER SITE INTERNALS:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -361,7 +361,7 @@
         <div class="py-2">
           <label class="font-bold">PER SITE EXTERNALS:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -464,7 +464,7 @@
         <div class="py-2">
           <label class="font-bold">B2 SUMMARY:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -568,7 +568,7 @@
         <div class="py-2">
           <label class="font-bold">PER SITE INTERNALS:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -672,7 +672,7 @@
         <div class="py-2">
           <label class="font-bold">PER PROGRAM:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -1810,7 +1810,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteclasses",
+          "http://127.0.0.1:8000/api/siteclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1839,7 +1839,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardinternal",
+          "http://127.0.0.1:8000/api/classesdashboardinternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1867,7 +1867,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardexternal",
+          "http://127.0.0.1:8000/api/classesdashboardexternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1896,7 +1896,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/b2percentage",
+          "http://127.0.0.1:8000/api/b2percentage",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1926,7 +1926,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboard",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1967,7 +1967,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -2000,7 +2000,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -2025,7 +2025,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 
