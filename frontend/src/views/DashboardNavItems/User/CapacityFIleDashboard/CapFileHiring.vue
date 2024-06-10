@@ -1941,7 +1941,7 @@ export default {
         const token = this.$store.state.token;
         const response = await axios.get(
           "http://10.109.2.112:8081/api/oosclasses",
-          
+          {
             headers: {
               Authorization: `Bearer ${token}`,
             },
