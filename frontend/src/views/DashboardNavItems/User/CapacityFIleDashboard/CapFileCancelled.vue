@@ -79,17 +79,17 @@
     </div>
   </div>
   <div class="py-0">
-    <div class="px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+    <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8">
       <div class="flex items-center">
         <button
           @click="exportToExcel"
-          class="bg-green-600 text-white px-3 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out mr-2"
+          class="px-3 py-2 mr-2 text-white transition duration-300 ease-in-out bg-green-600 rounded-md hover:bg-orange-700"
         >
           Export
         </button>
         <button
           @click="toggleAll"
-          class="px-3 py-2 rounded-md transition duration-300 ease-in-out"
+          class="px-3 py-2 transition duration-300 ease-in-out rounded-md"
           :class="{
             'bg-red-600 text-white': showJanColumn,
             'bg-blue-500 text-white': !showJanColumn,
@@ -101,14 +101,14 @@
         </button>
         <router-link to="/cancelled_list">
           <button
-            class="bg-orange-600 text-white px-4 py-2 rounded-md hover:bg-orange-700 transition duration-300 ease-in-out ml-2"
+            class="px-4 py-2 ml-2 text-white transition duration-300 ease-in-out bg-orange-600 rounded-md hover:bg-orange-700"
           >
             View List
           </button>
         </router-link>
       </div>
 
-      <div class="grid grid-cols-1 gap-2 md:grid-cols-2 py-2 ml-4 items-center">
+      <div class="grid items-center grid-cols-1 gap-2 py-2 ml-4 md:grid-cols-2">
         <div>
           <label class="block mb-2">Sites</label>
           <MultiSelect
@@ -117,7 +117,7 @@
             filter
             optionLabel="name"
             placeholder="Select Sites"
-            class="w-full p-2 border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="w-full p-2 transition-all duration-300 ease-in-out border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{
               backgroundColor: 'white',
@@ -139,7 +139,7 @@
             filter
             optionLabel="name"
             placeholder="Select Programs"
-            class="w-full p-2 border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50 transition-all duration-300 ease-in-out"
+            class="w-full p-2 transition-all duration-300 ease-in-out border border-gray-300 rounded-md md:w-60 focus:ring focus:ring-orange-500 focus:ring-opacity-50 hover:border-orange-500 hover:ring hover:ring-orange-500 hover:ring-opacity-50"
             :selected-items-class="'bg-orange-500 text-white'"
             :panel-style="{
               backgroundColor: 'white',
@@ -159,12 +159,12 @@
   <div class="px-2 overflow-x-auto overflow-y-auto">
     <div class="p-4">
       <div
-        class="bg-white shadow-md rounded-lg overflow-x-auto overflow-y-auto"
+        class="overflow-x-auto overflow-y-auto bg-white rounded-lg shadow-md"
       >
         <div class="py-2">
           <label class="font-bold">PER SITE:</label>
           <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
+            class="min-w-full py-4 border-2 border-collapse border-gray-300"
           >
             <thead class="">
               <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
@@ -264,110 +264,8 @@
             </tbody>
           </table>
         </div>
-        <div class="py-2">
-          <label class="font-bold">OUTSIDE SLA DECREASE IN DEMAND</label>
-          <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
-          >
-            <thead class="">
-              <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-                <th class="px-1 border-2 border-gray-300">Site Name</th>
-                <th class="px-1 border-2 border-gray-300">Jan</th>
-                <th class="px-1 border-2 border-gray-300">Feb</th>
-                <th class="px-1 border-2 border-gray-300">Mar</th>
-                <th class="px-1 border-2 border-gray-300">Apr</th>
-                <th class="px-1 border-2 border-gray-300">May</th>
-                <th class="px-1 border-2 border-gray-300">Jun</th>
-                <th class="px-1 border-2 border-gray-300">Jul</th>
-                <th class="px-1 border-2 border-gray-300">Aug</th>
-                <th class="px-1 border-2 border-gray-300">Sep</th>
-                <th class="px-1 border-2 border-gray-300">Oct</th>
-                <th class="px-1 border-2 border-gray-300">Nov</th>
-                <th class="px-1 border-2 border-gray-300">Dec</th>
-                <th class="px-1 border-2 border-gray-300">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="(item, index) in oos" :key="index">
-                <tr
-                  class="text-black bg-white border-b-2 border-gray-400 border-solid"
-                >
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.Site }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.January }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.February }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.March }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.April }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.May }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.June }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.July }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.August }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.September }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.October }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.November }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.December }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.GrandTotalByProgram }}
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
-        <table class="min-w-full border-2 border-collapse border-gray-300 py-4">
+
+        <table class="min-w-full py-4 border-2 border-collapse border-gray-300">
           <thead class="">
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
               <th
@@ -1373,7 +1271,6 @@ export default {
   data() {
     return {
       classes: [],
-      oos: [],
       grandTotal: [],
       grandTotal2: [],
       siteclasses: [],
@@ -1409,7 +1306,6 @@ export default {
     this.getPrograms();
     this.getDateRange();
     this.getMonth();
-    this.getOos();
   },
   watch: {
     month_selected: {
@@ -1430,34 +1326,7 @@ export default {
     },
   },
   methods: {
-    async getOos() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/ooscclasses",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              site_id: this.sites_selected.map((site) => site.site_id),
-              program_id: this.programs_selected.map(
-                (program) => program.program_id
-              ),
-            },
-          }
-        );
 
-        if (response.status === 200) {
-          this.oos = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching data");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     toggleColumnVisibility(month) {
       if (month === "Jan") this.showJanColumn = !this.showJanColumn;
       else if (month === "Feb") this.showFebColumn = !this.showFebColumn;
@@ -1491,7 +1360,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteclassescancelled",
+          "http://127.0.0.1:8000/api/siteclassescancelled",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1521,7 +1390,7 @@ export default {
 
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard3",
+          "http://127.0.0.1:8000/api/classesdashboard3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1561,7 +1430,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/months", {
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1584,7 +1453,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export3", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1617,7 +1486,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1641,7 +1510,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `http://10.109.2.112:8081/api/daterange_select/${monthId.join(
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -1670,7 +1539,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

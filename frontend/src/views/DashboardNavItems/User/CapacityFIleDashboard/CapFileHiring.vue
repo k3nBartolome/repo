@@ -668,109 +668,7 @@
             </tbody>
           </table>
         </div>
-        <div class="py-2">
-          <label class="font-bold">OUTSIDE SLA INCREASE IN DEMAND</label>
-          <table
-            class="min-w-full border-2 border-collapse border-gray-300 py-4"
-          >
-            <thead class="">
-              <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-                <th class="px-1 border-2 border-gray-300">Site Name</th>
-                <th class="px-1 border-2 border-gray-300">Jan</th>
-                <th class="px-1 border-2 border-gray-300">Feb</th>
-                <th class="px-1 border-2 border-gray-300">Mar</th>
-                <th class="px-1 border-2 border-gray-300">Apr</th>
-                <th class="px-1 border-2 border-gray-300">May</th>
-                <th class="px-1 border-2 border-gray-300">Jun</th>
-                <th class="px-1 border-2 border-gray-300">Jul</th>
-                <th class="px-1 border-2 border-gray-300">Aug</th>
-                <th class="px-1 border-2 border-gray-300">Sep</th>
-                <th class="px-1 border-2 border-gray-300">Oct</th>
-                <th class="px-1 border-2 border-gray-300">Nov</th>
-                <th class="px-1 border-2 border-gray-300">Dec</th>
-                <th class="px-1 border-2 border-gray-300">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-for="(item, index) in oos" :key="index">
-                <tr
-                  class="text-black bg-white border-b-2 border-gray-400 border-solid"
-                >
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.Site }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.January }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.February }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.March }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.April }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.May }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.June }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.July }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.August }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.September }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.October }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.November }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.December }}
-                  </td>
-                  <td
-                    class="px-2 font-semibold truncate border-4 border-gray-300"
-                  >
-                    {{ item.GrandTotalByProgram }}
-                  </td>
-                </tr>
-              </template>
-            </tbody>
-          </table>
-        </div>
+
         <div class="py-2">
           <label class="font-bold">PER PROGRAM:</label>
           <table
@@ -1809,7 +1707,7 @@ export default {
   data() {
     return {
       classes: [],
-      oos: [],
+
       siteclasses: [],
       internal: [],
       external: [],
@@ -1846,7 +1744,7 @@ export default {
     this.getClassesAll();
     this.getSites();
     this.getPrograms();
-    this.getOos();
+
   },
   watch: {
     sites_selected: [
@@ -1912,7 +1810,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteclasses",
+          "http://127.0.0.1:8000/api/siteclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1936,39 +1834,12 @@ export default {
         console.log(error);
       }
     },
-    async getOos() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/oosclasses",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {
-              site_id: this.sites_selected.map((site) => site.site_id),
-              program_id: this.programs_selected.map(
-                (program) => program.program_id
-              ),
-            },
-          }
-        );
 
-        if (response.status === 200) {
-          this.oos = response.data.data;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching data");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
     async getClassesInternal() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardinternal",
+          "http://127.0.0.1:8000/api/classesdashboardinternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1996,7 +1867,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboardexternal",
+          "http://127.0.0.1:8000/api/classesdashboardexternal",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -2025,7 +1896,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/b2percentage",
+          "http://127.0.0.1:8000/api/b2percentage",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -2055,7 +1926,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesdashboard",
+          "http://127.0.0.1:8000/api/classesdashboard",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -2096,7 +1967,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("http://10.109.2.112:8081/api/export2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -2129,7 +2000,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -2154,7 +2025,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

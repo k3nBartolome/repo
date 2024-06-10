@@ -78,6 +78,22 @@
             </button>
           </router-link>
         </div>
+        <div class="col-md-2 col-sm-6">
+          <router-link
+            to="/capfile/outofsla"
+            class="link-button"
+            v-if="isUser || isSourcing"
+          >
+            <button
+              class="tab-button"
+              :class="{
+                'selected-tab': isActiveTab('/capfile/outofsla'),
+              }"
+            >
+              Out of SLA
+            </button>
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
