@@ -753,18 +753,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Philippines');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -772,6 +772,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -785,8 +788,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -794,9 +802,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -817,66 +833,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -946,84 +1063,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -1322,18 +1366,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Philippines');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -1341,6 +1385,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -1357,8 +1404,16 @@ class ClassesController extends Controller
                             ->orWhere('within_sla', 'LIKE', '%Cancellation%');
                     })
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -1366,9 +1421,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -1389,73 +1452,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -1519,84 +1682,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -1626,18 +1716,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Philippines');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -1645,6 +1735,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -1658,8 +1751,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Moved')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Moved')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -1667,9 +1765,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -1690,66 +1796,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -1819,84 +2026,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -1926,18 +2060,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -1945,6 +2079,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -1958,8 +2095,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -1967,9 +2109,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -1990,66 +2140,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -2119,84 +2370,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -2367,18 +2545,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -2386,6 +2564,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -2402,8 +2583,16 @@ class ClassesController extends Controller
                             ->orWhere('within_sla', 'LIKE', '%Cancellation%');
                     })
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -2411,9 +2600,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -2434,73 +2631,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -2564,84 +2861,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -2671,18 +2895,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -2690,6 +2914,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -2703,8 +2930,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Moved')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Moved')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -2712,9 +2944,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -2735,66 +2975,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -2864,84 +3205,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -2971,18 +3239,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -2990,6 +3258,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -3003,8 +3274,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -3012,9 +3288,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -3035,66 +3319,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -3164,84 +3549,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -3412,18 +3724,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -3431,6 +3743,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -3447,8 +3762,16 @@ class ClassesController extends Controller
                             ->orWhere('within_sla', 'LIKE', '%Cancellation%');
                     })
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -3456,9 +3779,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -3479,73 +3810,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -3609,84 +4040,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -3716,18 +4074,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -3735,6 +4093,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -3748,8 +4109,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Moved')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Moved')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -3757,9 +4123,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -3780,66 +4154,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -3909,84 +4384,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -7020,18 +7422,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -7039,6 +7441,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -7052,8 +7457,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -7061,9 +7471,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -7084,73 +7502,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -7214,85 +7732,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -7448,18 +7892,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -7467,6 +7911,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -7483,8 +7930,16 @@ class ClassesController extends Controller
                             ->orWhere('within_sla', 'LIKE', '%Cancellation%');
                     })
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -7492,9 +7947,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -7515,73 +7978,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -7645,85 +8208,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -7753,18 +8242,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Jamaica');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -7772,6 +8261,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -7785,8 +8277,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Moved')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Moved')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -7794,9 +8291,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -7817,66 +8322,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -7946,85 +8552,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -8054,18 +8586,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -8073,6 +8605,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -8086,8 +8621,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Active')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Active')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -8095,9 +8635,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -8118,73 +8666,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -8248,85 +8896,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -8482,18 +9056,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -8501,6 +9075,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -8517,8 +9094,16 @@ class ClassesController extends Controller
                             ->orWhere('within_sla', 'LIKE', '%Cancellation%');
                     })
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where(function ($query) {
+                        $query->where('status', 'Cancelled')
+                            ->orWhere('within_sla', 'LIKE', '%Cancellation%');
+                    })
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -8526,9 +9111,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -8549,73 +9142,173 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
                         'Site' => $siteName,
                         'Program' => $programName,
                         'Week1' => $weeklyData['53'] != 0 ? $weeklyData['53'] : '',
-
                         'Week2' => $weeklyData['54'] != 0 ? $weeklyData['54'] : '',
                         'Week3' => $weeklyData['55'] != 0 ? $weeklyData['55'] : '',
                         'Week4' => $weeklyData['56'] != 0 ? $weeklyData['56'] : '',
@@ -8679,85 +9372,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
@@ -8787,18 +9406,18 @@ class ClassesController extends Controller
                     $subquery->where('country', 'Guatemala');
                 });
             })
-
-            ->where('is_active', 1) // You can keep or remove this line based on your requirements
+            ->where('is_active', 1)
             ->get();
 
         $year = 2024;
-        $dateRanges = DateRange::where('year', $year)
-            ->get();
+        $dateRanges = DateRange::where('year', $year)->get();
 
         $groupedClasses = [];
         $grandTotalByWeek = [];
         $grandTotalByMonth = [];
         $grandTotalByProgram = [];
+        $grandTotalBySiteByWeek = [];
+        $overallGrandTotalByWeek = [];
 
         foreach ($programs as $program) {
             $siteName = $program->site->name;
@@ -8806,6 +9425,9 @@ class ClassesController extends Controller
 
             if (!isset($grandTotalByProgram[$siteName])) {
                 $grandTotalByProgram[$siteName] = [];
+            }
+            if (!isset($grandTotalBySiteByWeek[$siteName])) {
+                $grandTotalBySiteByWeek[$siteName] = [];
             }
             $grandTotalByProgram[$siteName][$programName] = 0;
 
@@ -8819,8 +9441,13 @@ class ClassesController extends Controller
                     ->where('date_range_id', $dateRange->id)
                     ->where('status', 'Moved')
                     ->get();
+                $classes1 = Classes::where('site_id', $program->site_id)
+                    ->where('date_range_id', $dateRange->id)
+                    ->where('status', 'Moved')
+                    ->get();
 
                 $totalTarget = $classes->sum('total_target');
+                $totalTarget1 = $classes1->sum('total_target');
 
                 if (!isset($grandTotalByWeek[$week])) {
                     $grandTotalByWeek[$week] = 0;
@@ -8828,9 +9455,17 @@ class ClassesController extends Controller
                 if (!isset($grandTotalByMonth[$month])) {
                     $grandTotalByMonth[$month] = 0;
                 }
+                if (!isset($grandTotalBySiteByWeek[$siteName][$week])) {
+                    $grandTotalBySiteByWeek[$siteName][$week] = 0;
+                }
+                if (!isset($overallGrandTotalByWeek[$week])) {
+                    $overallGrandTotalByWeek[$week] = 0;
+                }
 
                 $grandTotalByWeek[$week] += $totalTarget;
                 $grandTotalByMonth[$month] += $totalTarget;
+                $grandTotalBySiteByWeek[$siteName][$week] += $totalTarget;
+                $overallGrandTotalByWeek[$week] += $totalTarget;
 
                 $grandTotalByProgram[$siteName][$programName] += $totalTarget;
 
@@ -8851,66 +9486,167 @@ class ClassesController extends Controller
 
         $mappedGroupedClasses = [];
 
+        $totalGrandOverallWeekly = [];
+
+        foreach (range(53, 104) as $week) {
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+        }
+        $mappedtotalGrandOverallWeekly = [
+            'Site' => 'GRAND TOTAL',
+            'Program' => '',
+            'Week1' => $totalGrandOverallWeekly['Week1'] != 0 ? $totalGrandOverallWeekly['Week1'] : '',
+            'Week2' => $totalGrandOverallWeekly['Week2'] != 0 ? $totalGrandOverallWeekly['Week2'] : '',
+            'Week3' => $totalGrandOverallWeekly['Week3'] != 0 ? $totalGrandOverallWeekly['Week3'] : '',
+            'Week4' => $totalGrandOverallWeekly['Week4'] != 0 ? $totalGrandOverallWeekly['Week4'] : '',
+            'Jan' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+            'Week5' => $totalGrandOverallWeekly['Week5'] != 0 ? $totalGrandOverallWeekly['Week5'] : '',
+            'Week6' => $totalGrandOverallWeekly['Week6'] != 0 ? $totalGrandOverallWeekly['Week6'] : '',
+            'Week7' => $totalGrandOverallWeekly['Week7'] != 0 ? $totalGrandOverallWeekly['Week7'] : '',
+            'Week8' => $totalGrandOverallWeekly['Week8'] != 0 ? $totalGrandOverallWeekly['Week8'] : '',
+            'Feb' => collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+            'Week9' => $totalGrandOverallWeekly['Week9'] != 0 ? $totalGrandOverallWeekly['Week9'] : '',
+            'Week10' => $totalGrandOverallWeekly['Week10'] != 0 ? $totalGrandOverallWeekly['Week10'] : '',
+            'Week11' => $totalGrandOverallWeekly['Week11'] != 0 ? $totalGrandOverallWeekly['Week11'] : '',
+            'Week12' => $totalGrandOverallWeekly['Week12'] != 0 ? $totalGrandOverallWeekly['Week12'] : '',
+            'Week13' => $totalGrandOverallWeekly['Week13'] != 0 ? $totalGrandOverallWeekly['Week13'] : '',
+            'Mar' => collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+            'Week14' => $totalGrandOverallWeekly['Week14'] != 0 ? $totalGrandOverallWeekly['Week14'] : '',
+            'Week15' => $totalGrandOverallWeekly['Week15'] != 0 ? $totalGrandOverallWeekly['Week15'] : '',
+            'Week16' => $totalGrandOverallWeekly['Week16'] != 0 ? $totalGrandOverallWeekly['Week16'] : '',
+            'Week17' => $totalGrandOverallWeekly['Week17'] != 0 ? $totalGrandOverallWeekly['Week17'] : '',
+            'Apr' => collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+            'Week18' => $totalGrandOverallWeekly['Week18'] != 0 ? $totalGrandOverallWeekly['Week18'] : '',
+            'Week19' => $totalGrandOverallWeekly['Week19'] != 0 ? $totalGrandOverallWeekly['Week19'] : '',
+            'Week20' => $totalGrandOverallWeekly['Week20'] != 0 ? $totalGrandOverallWeekly['Week20'] : '',
+            'Week21' => $totalGrandOverallWeekly['Week21'] != 0 ? $totalGrandOverallWeekly['Week21'] : '',
+            'May' => collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+            'Week22' => $totalGrandOverallWeekly['Week22'] != 0 ? $totalGrandOverallWeekly['Week22'] : '',
+            'Week23' => $totalGrandOverallWeekly['Week23'] != 0 ? $totalGrandOverallWeekly['Week23'] : '',
+            'Week24' => $totalGrandOverallWeekly['Week24'] != 0 ? $totalGrandOverallWeekly['Week24'] : '',
+            'Week25' => $totalGrandOverallWeekly['Week25'] != 0 ? $totalGrandOverallWeekly['Week25'] : '',
+            'Week26' => $totalGrandOverallWeekly['Week26'] != 0 ? $totalGrandOverallWeekly['Week26'] : '',
+            'Jun' => collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+            'Week27' => $totalGrandOverallWeekly['Week27'] != 0 ? $totalGrandOverallWeekly['Week27'] : '',
+            'Week28' => $totalGrandOverallWeekly['Week28'] != 0 ? $totalGrandOverallWeekly['Week28'] : '',
+            'Week29' => $totalGrandOverallWeekly['Week29'] != 0 ? $totalGrandOverallWeekly['Week29'] : '',
+            'Week30' => $totalGrandOverallWeekly['Week30'] != 0 ? $totalGrandOverallWeekly['Week30'] : '',
+            'Jul' => collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+            'Week31' => $totalGrandOverallWeekly['Week31'] != 0 ? $totalGrandOverallWeekly['Week31'] : '',
+            'Week32' => $totalGrandOverallWeekly['Week32'] != 0 ? $totalGrandOverallWeekly['Week32'] : '',
+            'Week33' => $totalGrandOverallWeekly['Week33'] != 0 ? $totalGrandOverallWeekly['Week33'] : '',
+            'Week34' => $totalGrandOverallWeekly['Week34'] != 0 ? $totalGrandOverallWeekly['Week34'] : '',
+            'Week35' => $totalGrandOverallWeekly['Week35'] != 0 ? $totalGrandOverallWeekly['Week35'] : '',
+            'Aug' => collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+            'Week36' => $totalGrandOverallWeekly['Week36'] != 0 ? $totalGrandOverallWeekly['Week36'] : '',
+            'Week37' => $totalGrandOverallWeekly['Week37'] != 0 ? $totalGrandOverallWeekly['Week37'] : '',
+            'Week38' => $totalGrandOverallWeekly['Week38'] != 0 ? $totalGrandOverallWeekly['Week38'] : '',
+            'Week39' => $totalGrandOverallWeekly['Week39'] != 0 ? $totalGrandOverallWeekly['Week39'] : '',
+            'Sep' => collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+            'Week40' => $totalGrandOverallWeekly['Week40'] != 0 ? $totalGrandOverallWeekly['Week40'] : '',
+            'Week41' => $totalGrandOverallWeekly['Week41'] != 0 ? $totalGrandOverallWeekly['Week41'] : '',
+            'Week42' => $totalGrandOverallWeekly['Week42'] != 0 ? $totalGrandOverallWeekly['Week42'] : '',
+            'Week43' => $totalGrandOverallWeekly['Week43'] != 0 ? $totalGrandOverallWeekly['Week43'] : '',
+            'Oct' => collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+            'Week44' => $totalGrandOverallWeekly['Week44'] != 0 ? $totalGrandOverallWeekly['Week44'] : '',
+            'Week45' => $totalGrandOverallWeekly['Week45'] != 0 ? $totalGrandOverallWeekly['Week45'] : '',
+            'Week46' => $totalGrandOverallWeekly['Week46'] != 0 ? $totalGrandOverallWeekly['Week46'] : '',
+            'Week47' => $totalGrandOverallWeekly['Week47'] != 0 ? $totalGrandOverallWeekly['Week47'] : '',
+            'Week48' => $totalGrandOverallWeekly['Week48'] != 0 ? $totalGrandOverallWeekly['Week48'] : '',
+            'Nov' => collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+            'Week49' => $totalGrandOverallWeekly['Week49'] != 0 ? $totalGrandOverallWeekly['Week49'] : '',
+            'Week50' => $totalGrandOverallWeekly['Week50'] != 0 ? $totalGrandOverallWeekly['Week50'] : '',
+            'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
+            'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
+            'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+        ];
+        $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
+            $totalGrandWeekly = [];
+            foreach (range(53, 104) as $week) {
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+            }
+            $mappedTotalGrandWeekly = [
+                'Site' => $siteName,
+                'Program' => '',
+                'Week1' => $totalGrandWeekly['Week1'] != 0 ? $totalGrandWeekly['Week1'] : '',
+                'Week2' => $totalGrandWeekly['Week2'] != 0 ? $totalGrandWeekly['Week2'] : '',
+                'Week3' => $totalGrandWeekly['Week3'] != 0 ? $totalGrandWeekly['Week3'] : '',
+                'Week4' => $totalGrandWeekly['Week4'] != 0 ? $totalGrandWeekly['Week4'] : '',
+                'Jan' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4'])->sum() : '',
+                'Week5' => $totalGrandWeekly['Week5'] != 0 ? $totalGrandWeekly['Week5'] : '',
+                'Week6' => $totalGrandWeekly['Week6'] != 0 ? $totalGrandWeekly['Week6'] : '',
+                'Week7' => $totalGrandWeekly['Week7'] != 0 ? $totalGrandWeekly['Week7'] : '',
+                'Week8' => $totalGrandWeekly['Week8'] != 0 ? $totalGrandWeekly['Week8'] : '',
+                'Feb' => collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week5', 'Week6', 'Week7', 'Week8'])->sum() : '',
+                'Week9' => $totalGrandWeekly['Week9'] != 0 ? $totalGrandWeekly['Week9'] : '',
+                'Week10' => $totalGrandWeekly['Week10'] != 0 ? $totalGrandWeekly['Week10'] : '',
+                'Week11' => $totalGrandWeekly['Week11'] != 0 ? $totalGrandWeekly['Week11'] : '',
+                'Week12' => $totalGrandWeekly['Week12'] != 0 ? $totalGrandWeekly['Week12'] : '',
+                'Week13' => $totalGrandWeekly['Week13'] != 0 ? $totalGrandWeekly['Week13'] : '',
+                'Mar' => collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week9', 'Week10', 'Week11', 'Week12', 'Week13'])->sum() : '',
+                'Week14' => $totalGrandWeekly['Week14'] != 0 ? $totalGrandWeekly['Week14'] : '',
+                'Week15' => $totalGrandWeekly['Week15'] != 0 ? $totalGrandWeekly['Week15'] : '',
+                'Week16' => $totalGrandWeekly['Week16'] != 0 ? $totalGrandWeekly['Week16'] : '',
+                'Week17' => $totalGrandWeekly['Week17'] != 0 ? $totalGrandWeekly['Week17'] : '',
+                'Apr' => collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week14', 'Week15', 'Week16', 'Week17'])->sum() : '',
+                'Week18' => $totalGrandWeekly['Week18'] != 0 ? $totalGrandWeekly['Week18'] : '',
+                'Week19' => $totalGrandWeekly['Week19'] != 0 ? $totalGrandWeekly['Week19'] : '',
+                'Week20' => $totalGrandWeekly['Week20'] != 0 ? $totalGrandWeekly['Week20'] : '',
+                'Week21' => $totalGrandWeekly['Week21'] != 0 ? $totalGrandWeekly['Week21'] : '',
+                'May' => collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week18', 'Week19', 'Week20', 'Week21'])->sum() : '',
+                'Week22' => $totalGrandWeekly['Week22'] != 0 ? $totalGrandWeekly['Week22'] : '',
+                'Week23' => $totalGrandWeekly['Week23'] != 0 ? $totalGrandWeekly['Week23'] : '',
+                'Week24' => $totalGrandWeekly['Week24'] != 0 ? $totalGrandWeekly['Week24'] : '',
+                'Week25' => $totalGrandWeekly['Week25'] != 0 ? $totalGrandWeekly['Week25'] : '',
+                'Week26' => $totalGrandWeekly['Week26'] != 0 ? $totalGrandWeekly['Week26'] : '',
+                'Jun' => collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week22', 'Week23', 'Week24', 'Week25', 'Week26'])->sum() : '',
+                'Week27' => $totalGrandWeekly['Week27'] != 0 ? $totalGrandWeekly['Week27'] : '',
+                'Week28' => $totalGrandWeekly['Week28'] != 0 ? $totalGrandWeekly['Week28'] : '',
+                'Week29' => $totalGrandWeekly['Week29'] != 0 ? $totalGrandWeekly['Week29'] : '',
+                'Week30' => $totalGrandWeekly['Week30'] != 0 ? $totalGrandWeekly['Week30'] : '',
+                'Jul' => collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week27', 'Week28', 'Week29', 'Week30'])->sum() : '',
+                'Week31' => $totalGrandWeekly['Week31'] != 0 ? $totalGrandWeekly['Week31'] : '',
+                'Week32' => $totalGrandWeekly['Week32'] != 0 ? $totalGrandWeekly['Week32'] : '',
+                'Week33' => $totalGrandWeekly['Week33'] != 0 ? $totalGrandWeekly['Week33'] : '',
+                'Week34' => $totalGrandWeekly['Week34'] != 0 ? $totalGrandWeekly['Week34'] : '',
+                'Week35' => $totalGrandWeekly['Week35'] != 0 ? $totalGrandWeekly['Week35'] : '',
+                'Aug' => collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week31', 'Week32', 'Week33', 'Week34', 'Week35'])->sum() : '',
+                'Week36' => $totalGrandWeekly['Week36'] != 0 ? $totalGrandWeekly['Week36'] : '',
+                'Week37' => $totalGrandWeekly['Week37'] != 0 ? $totalGrandWeekly['Week37'] : '',
+                'Week38' => $totalGrandWeekly['Week38'] != 0 ? $totalGrandWeekly['Week38'] : '',
+                'Week39' => $totalGrandWeekly['Week39'] != 0 ? $totalGrandWeekly['Week39'] : '',
+                'Sep' => collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week36', 'Week37', 'Week38', 'Week39'])->sum() : '',
+                'Week40' => $totalGrandWeekly['Week40'] != 0 ? $totalGrandWeekly['Week40'] : '',
+                'Week41' => $totalGrandWeekly['Week41'] != 0 ? $totalGrandWeekly['Week41'] : '',
+                'Week42' => $totalGrandWeekly['Week42'] != 0 ? $totalGrandWeekly['Week42'] : '',
+                'Week43' => $totalGrandWeekly['Week43'] != 0 ? $totalGrandWeekly['Week43'] : '',
+                'Oct' => collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week40', 'Week41', 'Week42', 'Week43'])->sum() : '',
+                'Week44' => $totalGrandWeekly['Week44'] != 0 ? $totalGrandWeekly['Week44'] : '',
+                'Week45' => $totalGrandWeekly['Week45'] != 0 ? $totalGrandWeekly['Week45'] : '',
+                'Week46' => $totalGrandWeekly['Week46'] != 0 ? $totalGrandWeekly['Week46'] : '',
+                'Week47' => $totalGrandWeekly['Week47'] != 0 ? $totalGrandWeekly['Week47'] : '',
+                'Week48' => $totalGrandWeekly['Week48'] != 0 ? $totalGrandWeekly['Week48'] : '',
+                'Nov' => collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week44', 'Week45', 'Week46', 'Week47', 'Week48'])->sum() : '',
+                'Week49' => $totalGrandWeekly['Week49'] != 0 ? $totalGrandWeekly['Week49'] : '',
+                'Week50' => $totalGrandWeekly['Week50'] != 0 ? $totalGrandWeekly['Week50'] : '',
+                'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
+                'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
+                'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            ];
+
+            if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
+                $mappedGroupedClasses[] = $mappedTotalGrandWeekly;
+            }
+
             foreach ($siteData as $programName => $programData) {
-                $weeklyData = [
-                    '53' => 0,
-                    '54' => 0,
-                    '55' => 0,
-                    '56' => 0,
-                    '57' => 0,
-                    '58' => 0,
-                    '59' => 0,
-                    '60' => 0,
-                    '61' => 0,
-                    '62' => 0,
-                    '63' => 0,
-                    '64' => 0,
-                    '65' => 0,
-                    '66' => 0,
-                    '67' => 0,
-                    '68' => 0,
-                    '69' => 0,
-                    '70' => 0,
-                    '71' => 0,
-                    '72' => 0,
-                    '73' => 0,
-                    '74' => 0,
-                    '75' => 0,
-                    '76' => 0,
-                    '77' => 0,
-                    '78' => 0,
-                    '79' => 0,
-                    '80' => 0,
-                    '81' => 0,
-                    '82' => 0,
-                    '83' => 0,
-                    '84' => 0,
-                    '85' => 0,
-                    '86' => 0,
-                    '87' => 0,
-                    '88' => 0,
-                    '89' => 0,
-                    '90' => 0,
-                    '91' => 0,
-                    '92' => 0,
-                    '93' => 0,
-                    '94' => 0,
-                    '95' => 0,
-                    '96' => 0,
-                    '97' => 0,
-                    '98' => 0,
-                    '99' => 0,
-                    '100' => 0,
-                    '101' => 0,
-                    '102' => 0,
-                    '103' => 0,
-                    '104' => 0,
-                ];
+                $weeklyData = array_fill_keys(range(53, 104), 0);
 
                 foreach ($programData as $week => $weekData) {
                     $weeklyData[$week] = isset($weekData['total_target']) ? $weekData['total_target'] : 0;
                 }
+
                 $grandTotal = $grandTotalByProgram[$siteName][$programName];
                 if ($grandTotal != 0) {
                     $mappedGroupedClasses[] = [
@@ -8980,84 +9716,11 @@ class ClassesController extends Controller
                         'Week51' => $weeklyData['103'] != 0 ? $weeklyData['103'] : '',
                         'Week52' => $weeklyData['104'] != 0 ? $weeklyData['104'] : '',
                         'Dec' => collect($weeklyData)->only([101, 102, 103, 104])->sum() != 0 ? collect($weeklyData)->only([101, 102, 103, 104])->sum() : '',
-
                         'GrandTotalByProgram' => $grandTotal,
                     ];
                 }
             }
         }
-
-        $grandTotalForAllPrograms = array_sum(array_map('array_sum', $grandTotalByProgram));
-
-        $mappedGroupedClasses[] = [
-            'Site' => 'Grand Total',
-            'Program' => '',
-            'Week1' => $grandTotalByWeek['53'] != 0 ? $grandTotalByWeek['53'] : '',
-            'Week2' => $grandTotalByWeek['54'] != 0 ? $grandTotalByWeek['54'] : '',
-            'Week3' => $grandTotalByWeek['55'] != 0 ? $grandTotalByWeek['55'] : '',
-            'Week4' => $grandTotalByWeek['56'] != 0 ? $grandTotalByWeek['56'] : '',
-            'Jan' => collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() != 0 ? collect($grandTotalByWeek)->only([53, 54, 55, 56])->sum() : '',
-            'Week5' => $grandTotalByWeek['57'] != 0 ? $grandTotalByWeek['57'] : '',
-            'Week6' => $grandTotalByWeek['58'] != 0 ? $grandTotalByWeek['58'] : '',
-            'Week7' => $grandTotalByWeek['59'] != 0 ? $grandTotalByWeek['59'] : '',
-            'Week8' => $grandTotalByWeek['60'] != 0 ? $grandTotalByWeek['60'] : '',
-            'Feb' => collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() != 0 ? collect($grandTotalByWeek)->only([57, 58, 59, 60])->sum() : '',
-            'Week9' => $grandTotalByWeek['61'] != 0 ? $grandTotalByWeek['61'] : '',
-            'Week10' => $grandTotalByWeek['62'] != 0 ? $grandTotalByWeek['62'] : '',
-            'Week11' => $grandTotalByWeek['63'] != 0 ? $grandTotalByWeek['63'] : '',
-            'Week12' => $grandTotalByWeek['64'] != 0 ? $grandTotalByWeek['64'] : '',
-            'Week13' => $grandTotalByWeek['65'] != 0 ? $grandTotalByWeek['65'] : '',
-            'Mar' => collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() != 0 ? collect($grandTotalByWeek)->only([61, 62, 63, 64, 65])->sum() : '',
-            'Week14' => $grandTotalByWeek['66'] != 0 ? $grandTotalByWeek['66'] : '',
-            'Week15' => $grandTotalByWeek['67'] != 0 ? $grandTotalByWeek['67'] : '',
-            'Week16' => $grandTotalByWeek['68'] != 0 ? $grandTotalByWeek['68'] : '',
-            'Week17' => $grandTotalByWeek['69'] != 0 ? $grandTotalByWeek['69'] : '',
-            'Apr' => collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() != 0 ? collect($grandTotalByWeek)->only([66, 67, 68, 69])->sum() : '',
-            'Week18' => $grandTotalByWeek['70'] != 0 ? $grandTotalByWeek['70'] : '',
-            'Week19' => $grandTotalByWeek['71'] != 0 ? $grandTotalByWeek['71'] : '',
-            'Week20' => $grandTotalByWeek['72'] != 0 ? $grandTotalByWeek['72'] : '',
-            'Week21' => $grandTotalByWeek['73'] != 0 ? $grandTotalByWeek['73'] : '',
-            'May' => collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() != 0 ? collect($grandTotalByWeek)->only([70, 71, 72, 73])->sum() : '',
-            'Week22' => $grandTotalByWeek['74'] != 0 ? $grandTotalByWeek['74'] : '',
-            'Week23' => $grandTotalByWeek['75'] != 0 ? $grandTotalByWeek['75'] : '',
-            'Week24' => $grandTotalByWeek['76'] != 0 ? $grandTotalByWeek['76'] : '',
-            'Week25' => $grandTotalByWeek['77'] != 0 ? $grandTotalByWeek['77'] : '',
-            'Week26' => $grandTotalByWeek['78'] != 0 ? $grandTotalByWeek['78'] : '',
-            'Jun' => collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() != 0 ? collect($grandTotalByWeek)->only([74, 75, 76, 77, 78])->sum() : '',
-            'Week27' => $grandTotalByWeek['79'] != 0 ? $grandTotalByWeek['79'] : '',
-            'Week28' => $grandTotalByWeek['80'] != 0 ? $grandTotalByWeek['80'] : '',
-            'Week29' => $grandTotalByWeek['81'] != 0 ? $grandTotalByWeek['81'] : '',
-            'Week30' => $grandTotalByWeek['82'] != 0 ? $grandTotalByWeek['82'] : '',
-            'Jul' => collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() != 0 ? collect($grandTotalByWeek)->only([79, 80, 81, 82])->sum() : '',
-            'Week31' => $grandTotalByWeek['83'] != 0 ? $grandTotalByWeek['83'] : '',
-            'Week32' => $grandTotalByWeek['84'] != 0 ? $grandTotalByWeek['84'] : '',
-            'Week33' => $grandTotalByWeek['85'] != 0 ? $grandTotalByWeek['85'] : '',
-            'Week34' => $grandTotalByWeek['86'] != 0 ? $grandTotalByWeek['86'] : '',
-            'Week35' => $grandTotalByWeek['87'] != 0 ? $grandTotalByWeek['87'] : '',
-            'Aug' => collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() != 0 ? collect($grandTotalByWeek)->only([83, 84, 85, 86, 87])->sum() : '',
-            'Week36' => $grandTotalByWeek['88'] != 0 ? $grandTotalByWeek['88'] : '',
-            'Week37' => $grandTotalByWeek['89'] != 0 ? $grandTotalByWeek['89'] : '',
-            'Week38' => $grandTotalByWeek['90'] != 0 ? $grandTotalByWeek['90'] : '',
-            'Week39' => $grandTotalByWeek['91'] != 0 ? $grandTotalByWeek['91'] : '',
-            'Sep' => collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() != 0 ? collect($grandTotalByWeek)->only([88, 89, 90, 91])->sum() : '',
-            'Week40' => $grandTotalByWeek['92'] != 0 ? $grandTotalByWeek['92'] : '',
-            'Week41' => $grandTotalByWeek['93'] != 0 ? $grandTotalByWeek['93'] : '',
-            'Week42' => $grandTotalByWeek['94'] != 0 ? $grandTotalByWeek['94'] : '',
-            'Week43' => $grandTotalByWeek['95'] != 0 ? $grandTotalByWeek['95'] : '',
-            'Oct' => collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() != 0 ? collect($grandTotalByWeek)->only([92, 93, 94, 95])->sum() : '',
-            'Week44' => $grandTotalByWeek['96'] != 0 ? $grandTotalByWeek['96'] : '',
-            'Week45' => $grandTotalByWeek['97'] != 0 ? $grandTotalByWeek['97'] : '',
-            'Week46' => $grandTotalByWeek['98'] != 0 ? $grandTotalByWeek['98'] : '',
-            'Week47' => $grandTotalByWeek['99'] != 0 ? $grandTotalByWeek['99'] : '',
-            'Week48' => $grandTotalByWeek['100'] != 0 ? $grandTotalByWeek['100'] : '',
-            'Nov' => collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() != 0 ? collect($grandTotalByWeek)->only([96, 97, 98, 99, 100])->sum() : '',
-            'Week49' => $grandTotalByWeek['101'] != 0 ? $grandTotalByWeek['101'] : '',
-            'Week50' => $grandTotalByWeek['102'] != 0 ? $grandTotalByWeek['102'] : '',
-            'Week51' => $grandTotalByWeek['103'] != 0 ? $grandTotalByWeek['103'] : '',
-            'Week52' => $grandTotalByWeek['104'] != 0 ? $grandTotalByWeek['104'] : '',
-            'Dec' => collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() != 0 ? collect($grandTotalByWeek)->only([101, 102, 103, 104])->sum() : '',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms,
-        ];
 
         $response = [
             'classes' => $mappedGroupedClasses,
