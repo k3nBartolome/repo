@@ -23,7 +23,7 @@ class CapEmailController extends Controller
         $wtd = $this->wtd();
         /*  $ytd = $this->ytd(); */
 
-        $excelFileName = '00 PH Hiring Tracker_'.date('Y-m-d').'.xlsx';
+        $excelFileName = '00 PH Hiring Tracker_' . date('Y-m-d') . '.xlsx';
 
         $worksheetNames = [
             'Weekly Pipe',
@@ -36,11 +36,11 @@ class CapEmailController extends Controller
             $wtd,
             //$ytd,
             $worksheetNames,
-        ), 'public/'.$excelFileName);
+        ), 'public/' . $excelFileName);
 
         $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com'];
-        $subject = 'PH Hiring Tracker - as of '.date('F j, Y');
-        $excelFilePath = public_path('storage/'.$excelFileName);
+        $subject = 'PH Hiring Tracker - as of ' . date('F j, Y');
+        $excelFilePath = public_path('storage/' . $excelFileName);
 
         Mail::send('staffing', [/* 'ytd' => $ytd, */'wtd' => $wtd, 'weeklyPipe' => $weeklyPipe], function ($message) use ($recipients, $subject, $excelFilePath, $excelFileName) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
@@ -120,7 +120,7 @@ class CapEmailController extends Controller
                 $programId = $item->program_id;
                 $weekName = $item->week_name;
 
-                $key = $dateRangeId.''.$siteId.''.$programId;
+                $key = $dateRangeId . '' . $siteId . '' . $programId;
 
                 if (!isset($weeklyData[$weekName])) {
                     $weeklyData[$weekName] = [];
@@ -441,11 +441,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['total_show_ups'] / $grandTotals['total_target']) * 100, 1) : 0;
         $day1SupGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['day_1'] / $grandTotals['total_target']) * 100, 1) : 0;
         $hiresGoalGrandTotal = $grandTotals['total_target'] != 0 ?
-        number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
+            number_format(($grandTotals['pipeline_total'] / $grandTotals['total_target']) * 100, 1) : 0;
 
         // Determine the color status for the grand total
 
@@ -558,11 +558,11 @@ class CapEmailController extends Controller
 
         // Calculate fill rate, day 1 supervision rate, and hires goal
         $fillRateGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalShowUpsTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $day1SupGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalDay1AllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
         $hiresGoalGrandTotal = $totalTargetsAllMonths != 0 ?
-        number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
+            number_format(($totalPipelineTotalAllMonths / $totalTargetsAllMonths) * 100, 2) : 0;
 
         // Create Grand Total row
         $grandTotalRow = [
@@ -600,7 +600,9 @@ class CapEmailController extends Controller
         $mappedGroupedClassesWeek = $this->retrieveDataForEmailWeek();
         $mappedClasses = $this->retrieveDataForClassesEmail();
         $mappedB2Classes = $this->retrieveB2DataForEmail();
-        $excelFileName = 'capfile'.time().'.xlsx';
+        $mappedOocClasses = $this->dashboardSiteCancelledOos();
+        $mappedOosClasses = $this->dashboardSiteCancelledOos();
+        $excelFileName = 'capfile' . time() . '.xlsx';
         $worksheetNames = [
             'Hiring Summary',
             'Site Summary',
@@ -613,6 +615,8 @@ class CapEmailController extends Controller
             'YTD Per Site Cancellation',
             'MTD Per Site Out of SLA',
             'MTD Per Site Cancellation',
+            'Out of SLA Decrease in Demand',
+            'Out of SLA Increase in Demand'
         ];
         Excel::store(new DashboardClassesExportWeek(
             $mappedGroupedClassesWeek,
@@ -626,11 +630,13 @@ class CapEmailController extends Controller
             $cancelledHeadCount,
             $outOfSlaHeadCountMonth,
             $cancelledHeadCountMonth,
+            $mappedOocClasses,
+            $mappedOosClasses,
             $worksheetNames,
-        ), 'public/'.$excelFileName);
-        $recipients = ['kryss.bartolome@vxi.com'  , 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
-        $subject = 'PH TA Capacity File - as of '.date('F j, Y');
-        $excelFilePath = public_path('storage/'.$excelFileName);
+        ), 'public/' . $excelFileName);
+        $recipients = ['kryss.bartolome@vxi.com', 'arielito.pascua@vxi.com', 'xaviera.barrantes@vxi.com', 'Philipino.Mercado@vxi.com', 'Aina.Dytioco@vxi.com', 'Ann.Gomez@vxi.com', 'Jemalyn.Fabiano@vxi.com', 'Kathryn.Olis@vxi.com', 'Jay.Juliano@vxi.com', 'Yen.Gelido-Alejandro@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
+        $subject = 'PH TA Capacity File - as of ' . date('F j, Y');
+        $excelFilePath = public_path('storage/' . $excelFileName);
         Mail::send('email', ['mappedGroupedClasses' => $mappedGroupedClasses, 'mappedClasses' => $mappedClasses, 'mappedB2Classes' => $mappedB2Classes, 'mappedExternalClasses' => $mappedExternalClasses, 'mappedInternalClasses' => $mappedInternalClasses], function ($message) use ($recipients, $subject, $excelFilePath) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
             $message->to($recipients);
@@ -643,7 +649,225 @@ class CapEmailController extends Controller
 
         return response()->json(['message' => 'Email sent successfully']);
     }
+    public function dashboardSiteOos()
+    {
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
 
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+
+                    ->when(true, function ($query) {
+                        $query->whereHas('site', function ($subquery) {
+                            $subquery->where('is_active', 1);
+                        });
+                    })
+
+                    ->where('site_id', $programId)
+                    ->where('within_sla', 'Outside SLA - Increase in Demand')
+                    /* ->orWhere('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)') */
+                    ->where('status', 'Active')
+                    ->get();
+
+                $totalTarget = $classes->sum('out_of_sla');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['out_of_sla' => 0];
+                }
+                $groupedClasses[$siteName][$month]['out_of_sla'] += $totalTarget;
+            }
+        }
+
+        $mappedOosClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['out_of_sla']) ? $weekData['out_of_sla'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedOosClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedOosClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        $response = [
+            'data' => $mappedOosClasses,
+        ];
+
+        return response()->json($response);
+    }
+
+    public function dashboardSiteCancelledOos()
+    {
+        $programs = Site::where('is_active', 1)->where('country', 'Philippines')->get();
+
+        $year = 2024;
+        $dateRanges = DateRange::select('month_num')->where('year', $year)->groupBy('month_num')->get();
+
+        $groupedClasses = [];
+        $grandTotalByWeek = [];
+        $grandTotalByProgram = [];
+
+        foreach ($programs as $program) {
+            $siteName = $program->name;
+            if (!isset($grandTotalByProgram[$siteName])) {
+                $grandTotalByProgram[$siteName] = 0;
+            }
+            foreach ($dateRanges as $dateRange) {
+                $programId = $program->id;
+                $month = $dateRange->month_num;
+                $classes = Classes::with('site', 'program', 'dateRange', 'createdByUser', 'updatedByUser')
+                    ->whereHas('dateRange', function ($subquery) use ($month, $year) {
+                        $subquery->where('month_num', $month)->where('year', $year);
+                    })
+                    ->whereHas('program', function ($subquery) {
+                        $subquery->where('is_active', 1);
+                    })
+                    ->when(true, function ($query) {
+                        $query->whereHas('site', function ($subquery) {
+                            $subquery->where('is_active', 1);
+                        });
+                    })
+                    ->where(function ($query) {
+                        $query->where('status', 'Active')
+                            ->orWhere('status', 'Cancelled');
+                    })
+                    ->where('site_id', $programId)
+                    ->where('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)')
+                    ->get();
+
+                $totalTarget = $classes->sum('out_of_sla');
+
+                if (!isset($grandTotalByWeek[$month])) {
+                    $grandTotalByWeek[$month] = 0;
+                }
+
+                $grandTotalByWeek[$month] += $totalTarget;
+                $grandTotalByProgram[$siteName] += $totalTarget;
+
+                if (!isset($groupedClasses[$siteName][$month])) {
+                    $groupedClasses[$siteName][$month] = ['out_of_sla' => 0];
+                }
+                $groupedClasses[$siteName][$month]['out_of_sla'] += $totalTarget;
+            }
+        }
+
+        $mappedOocClasses = [];
+        foreach ($groupedClasses as $siteName => $siteData) {
+            $weeklyData = [
+                '1' => 0, '2' => 0, '3' => 0, '4' => 0, '5' => 0, '6' => 0, '7' => 0, '8' => 0,
+                '9' => 0, '10' => 0, '11' => 0, '12' => 0,
+            ];
+            foreach ($siteData as $month => $weekData) {
+                $weeklyData[$month] = isset($weekData['out_of_sla']) ? $weekData['out_of_sla'] : 0;
+            }
+            $grandTotal = $grandTotalByProgram[$siteName];
+            if ($grandTotal != 0) {
+                $mappedOocClasses[] = [
+                    'Site' => $siteName,
+                    'January' => $weeklyData['1'] ?: '',
+                    'February' => $weeklyData['2'] ?: '',
+                    'March' => $weeklyData['3'] ?: '',
+                    'April' => $weeklyData['4'] ?: '',
+                    'May' => $weeklyData['5'] ?: '',
+                    'June' => $weeklyData['6'] ?: '',
+                    'July' => $weeklyData['7'] ?: '',
+                    'August' => $weeklyData['8'] ?: '',
+                    'September' => $weeklyData['9'] ?: '',
+                    'October' => $weeklyData['10'] ?: '',
+                    'November' => $weeklyData['11'] ?: '',
+                    'December' => $weeklyData['12'] ?: '',
+                    'GrandTotalByProgram' => $grandTotal,
+                ];
+            }
+        }
+
+        $grandTotalForAllPrograms = array_sum($grandTotalByProgram);
+
+        $mappedOocClasses[] = [
+            'Site' => 'Grand Total',
+            'January' => $grandTotalByWeek['1'] ?: '',
+            'February' => $grandTotalByWeek['2'] ?: '',
+            'March' => $grandTotalByWeek['3'] ?: '',
+            'April' => $grandTotalByWeek['4'] ?: '',
+            'May' => $grandTotalByWeek['5'] ?: '',
+            'June' => $grandTotalByWeek['6'] ?: '',
+            'July' => $grandTotalByWeek['7'] ?: '',
+            'August' => $grandTotalByWeek['8'] ?: '',
+            'September' => $grandTotalByWeek['9'] ?: '',
+            'October' => $grandTotalByWeek['10'] ?: '',
+            'November' => $grandTotalByWeek['11'] ?: '',
+            'December' => $grandTotalByWeek['12'] ?: '',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms,
+        ];
+        $response = [
+            'data' => $mappedOocClasses,
+        ];
+
+        return response()->json($response);
+    }
     public function OutOfSlaMonth()
     {
         $sites = Site::where('is_active', 1)->where('country', 'Philippines')->get();
@@ -1289,7 +1513,7 @@ class CapEmailController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -1358,13 +1582,13 @@ class CapEmailController extends Controller
             'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
             'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
             'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
-            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() : '',
         ];
         $mappedGroupedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -1433,7 +1657,7 @@ class CapEmailController extends Controller
                 'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
                 'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
                 'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
-                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() : '',
             ];
 
             if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
@@ -1549,7 +1773,7 @@ class CapEmailController extends Controller
         $formattedResult = $this->AutomatedSrExport();
 
         $recipients = ['kryss.bartolome@vxi.com', 'PH_Talent_Acquisition_Leaders@vxi.com', 'PH_Talent_Acquisition_Management_Team@vxi.com'];
-        $subject = 'SR Pending Movement - as of '.date('F j, Y');
+        $subject = 'SR Pending Movement - as of ' . date('F j, Y');
 
         Mail::send('sr_pending_email', ['mappedResult' => $mappedResult, 'formattedResult' => $formattedResult], function ($message) use ($recipients, $subject) {
             $message->from('TA.Insights@vxi.com', 'TA Reports');
@@ -2157,7 +2381,7 @@ class CapEmailController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -2226,13 +2450,13 @@ class CapEmailController extends Controller
             'Week51' => $totalGrandOverallWeekly['Week51'] != 0 ? $totalGrandOverallWeekly['Week51'] : '',
             'Week52' => $totalGrandOverallWeekly['Week52'] != 0 ? $totalGrandOverallWeekly['Week52'] : '',
             'Dec' => collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
-            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+            'GrandTotalByProgram' => collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() != 0 ? collect($totalGrandOverallWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() : '',
         ];
         $mappedClasses[] = $mappedtotalGrandOverallWeekly;
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -2301,7 +2525,7 @@ class CapEmailController extends Controller
                 'Week51' => $totalGrandWeekly['Week51'] != 0 ? $totalGrandWeekly['Week51'] : '',
                 'Week52' => $totalGrandWeekly['Week52'] != 0 ? $totalGrandWeekly['Week52'] : '',
                 'Dec' => collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week49', 'Week50', 'Week51', 'Week52'])->sum() : '',
-                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1','Week2','Week3','Week4','Week5','Week6','Week7','Week8','Week9','Week10','Week11','Week12','Week13','Week14','Week15','Week16','Week17','Week18','Week19','Week20','Week21','Week22','Week23','Week24','Week25','Week26','Week27','Week28','Week29','Week30','Week31','Week32','Week33','Week34','Week35','Week36','Week37','Week38','Week39','Week40','Week41','Week42','Week43','Week44','Week45','Week46','Week47','Week48','Week49','Week50','Week51','Week52',])->sum() : '',
+                'GrandTotalByProgram' => collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() != 0 ? collect($totalGrandWeekly)->only(['Week1', 'Week2', 'Week3', 'Week4', 'Week5', 'Week6', 'Week7', 'Week8', 'Week9', 'Week10', 'Week11', 'Week12', 'Week13', 'Week14', 'Week15', 'Week16', 'Week17', 'Week18', 'Week19', 'Week20', 'Week21', 'Week22', 'Week23', 'Week24', 'Week25', 'Week26', 'Week27', 'Week28', 'Week29', 'Week30', 'Week31', 'Week32', 'Week33', 'Week34', 'Week35', 'Week36', 'Week37', 'Week38', 'Week39', 'Week40', 'Week41', 'Week42', 'Week43', 'Week44', 'Week45', 'Week46', 'Week47', 'Week48', 'Week49', 'Week50', 'Week51', 'Week52',])->sum() : '',
             ];
 
             if ($mappedTotalGrandWeekly['GrandTotalByProgram'] != 0) {
@@ -2463,19 +2687,19 @@ class CapEmailController extends Controller
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [

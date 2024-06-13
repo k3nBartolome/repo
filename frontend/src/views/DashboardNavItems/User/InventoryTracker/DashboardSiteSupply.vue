@@ -191,6 +191,7 @@ export default {
         { data: "site.name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
+        { data: "original_quantity", title: "Original Quantity" },
         { data: "cost", title: "Price" },
         { data: "total_cost", title: "Total Price" },
         { data: "budget_code", title: "Budget Code" },
@@ -202,6 +203,8 @@ export default {
           title: "Date Received",
           render: (data) => (data ? data.slice(0, -3) : ""),
         },
+        { data: "received_by.name", title: "Received By" },
+        { data: "created_by.name", title: "Added By" },
       ],
     };
   },

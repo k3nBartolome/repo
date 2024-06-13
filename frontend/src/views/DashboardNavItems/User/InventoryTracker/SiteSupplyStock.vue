@@ -538,6 +538,7 @@ export default {
             return data ? data : 0;
           },
         },
+        { data: "original_quantity", title: "Original Quantity" },
         { data: "cost", title: "Price" },
         {
           data: "total_cost",
