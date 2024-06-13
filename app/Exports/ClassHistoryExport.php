@@ -5,8 +5,9 @@ namespace App\Exports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ClassHistoryExport implements FromCollection, WithHeadings
+class ClassHistoryExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $data;
 

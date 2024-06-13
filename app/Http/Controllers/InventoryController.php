@@ -95,7 +95,45 @@ class InventoryController extends Controller
             'Request' => $inventory,
         ]);
     }
+    public function transferRemxItem(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_less_id' => 'required',
+            'site_id' => 'required',
+            'quantity_approved' => 'required',
+            'transferred_by' => 'required',
+            'transferred_from' => 'required',
+            'transferred_to' => 'required',
+        ]);
 
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $inventory = new Inventory();
+        $inventory->fill($request->all());
+        $inventory->transaction_type = 'Transfer Request';
+        $inventory->transferred_by = $inventory->transferred_by;
+        $inventory->transferred_from = $inventory->transferred_from;
+        $inventory->transferred_to = $inventory->transferred_to;
+
+        $inventory->save();
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+
+        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->original_request = $inventory->quantity_approved;
+        $inventory->inventory_id = $inventory->id;
+        $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
+        $inventory->save();
+
+        $requestedItem = Items::find($request->item_less_id);
+        $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->save();
+
+        return response()->json([
+            'Request' => $inventory,
+        ]);
+    }
     public function awardNormalItem(Request $request)
     {
         $validator = Validator::make($request->all(), [

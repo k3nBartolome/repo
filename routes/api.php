@@ -195,6 +195,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     //Inventory
     Route::post('inventory', [InventoryController::class, 'requestItem']);
     Route::post('transfer', [InventoryController::class, 'transferItem']);
+    Route::post('transferremx', [InventoryController::class, 'transferRemxItem']);
     Route::put('inventory/cancel/{id}', [InventoryController::class, 'cancelledItem']);
     Route::put('inventory/denied/{id}', [InventoryController::class, 'deniedItem']);
     //Route::put('inventory/transfer/{id}', [InventoryController::class, 'transferItem']);

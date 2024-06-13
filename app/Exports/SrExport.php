@@ -5,8 +5,9 @@ namespace App\Exports;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class SrExport implements FromCollection, WithHeadings
+class SrExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
     protected $data;
 
@@ -24,13 +25,13 @@ class SrExport implements FromCollection, WithHeadings
     {
         return [
             'SR ID',
-            'Date', 
+            'Date',
             'Last Name',
             'First Name',
-            'Middle Name', 
-            'Site', 
+            'Middle Name',
+            'Site',
             'Mobile No.',
-            'GenSource', 
+            'GenSource',
             'SpecSource',
             'Step',
             'AppStep',

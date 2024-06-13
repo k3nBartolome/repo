@@ -8,24 +8,29 @@ use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Illuminate\Support\Collection;
 
-class StaffingYTD implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize {
+class StaffingYTD implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize
+{
     protected $data;
     protected $title;
 
-    public function __construct( $data, $title ) {
-        $this->data = collect( $data );
+    public function __construct($data, $title)
+    {
+        $this->data = collect($data);
         $this->title = $title;
     }
 
-    public function collection() {
+    public function collection()
+    {
         return $this->data;
     }
 
-    public function title(): string {
+    public function title(): string
+    {
         return 'YTD';
     }
 
-    public function headings(): array {
+    public function headings(): array
+    {
         return [
             'Month',
             'Total Target',

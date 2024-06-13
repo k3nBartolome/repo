@@ -61,6 +61,8 @@ mpsweek
 Nums
 nunomaduro
 officedocument
+ooscclasses
+oosclasses
 openxmlformats
 percentageguatemala
 percentagejamaica
@@ -92,6 +94,7 @@ storeother
 subquery
 subsubquery
 sumtotaltarget
+transferremx
 updateclassesstaffing
 updateother
 webclassesdashboard
