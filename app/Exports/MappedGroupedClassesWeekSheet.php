@@ -6,9 +6,12 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
 use Illuminate\Support\Collection;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings,  WithTitle, ShouldAutoSize {
+class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize, WithEvents {
     protected $data;
     protected $title;
 
@@ -97,6 +100,76 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings,  Wi
             'Dec 22 - Dec 28',
             'December',
             'Total',
+        ];
+    }
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                $sheet = $event->sheet->getDelegate();
+
+                $sheet->getStyle('A1:BO1')->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'color' => ['argb' => '000000']
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ]
+                ]);
+                foreach (range('A', 'BO') as $column) {
+                    $cell = $sheet->getCell($column . '1');
+                    $cell->setValue(strtoupper($cell->getValue()));
+                }
+                $lastRowBO = $sheet->getHighestRow('BO');
+                $sheet->getStyle('BO2:BO' . $lastRowBO)->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'color' => ['argb' => 'FFFFFF']
+                    ],
+                    'fill' => [
+                        'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                        'startColor' => ['argb' => '0000FF']
+                    ],
+                    'alignment' => [
+                        'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    ]
+                ]);
+                $columns = ['G', 'L', 'R', 'W', 'AB', 'AH', 'AM', 'AS', 'AX', 'BC', 'BI', 'BN'];
+                foreach ($columns as $column) {
+                    $sheet->getStyle($column . '2:' . $column . $lastRowBO)->applyFromArray([
+                        'font' => [
+                            'bold' => true,
+                            'color' => ['argb' => 'FFFFFF']
+                        ],
+                        'fill' => [
+                            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                            'startColor' => ['argb' => '0000FF']
+                        ],
+                        'alignment' => [
+                            'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                        ]
+                    ]);
+                }
+
+                for ($row = 2; $row <= $sheet->getHighestRow(); $row++) {
+                    if (empty($sheet->getCell('B' . $row)->getValue())) {
+                        $sheet->getStyle('C' . $row . ':BO' . $row)->applyFromArray([
+                            'font' => [
+                                'bold' => true,
+                                'color' => ['argb' => 'FFFFFF']
+                            ],
+                            'fill' => [
+                                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                                'startColor' => ['argb' => '0000FF']
+                            ],
+                            'alignment' => [
+                                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                            ]
+                        ]);
+                    }
+                }
+            },
         ];
     }
 }
