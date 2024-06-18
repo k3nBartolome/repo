@@ -80,101 +80,180 @@
         <table class="min-w-full border-2 border-collapse border-gray-300">
           <thead>
             <tr class="text-center bg-gray-100 border-b-4 border-gray-300">
-              <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Week Name</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Site Name</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Program Name</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Program Group</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Total Target</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Internals</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Externals</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Total</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Fill Rate%</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                For JO</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                For Testing</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                OV</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Day 1</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Day 1%</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Pipeline Total</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Pipeline To Goal%</th>
-            <th  class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                Status</th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Week Name
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Site Name
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Program Name
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Program Group
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Total Target
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Internals
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Externals
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Total
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Fill Rate%
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                For JO
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                For Testing
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                OV
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Day 1
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Day 1%
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Pipeline Total
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Pipeline To Goal%
+              </th>
+              <th
+                class="px-1 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                Status
+              </th>
             </tr>
           </thead>
           <tbody v-for="(mps1, index) in mps" :key="index">
-
-                <tr
-                  class="border-2 border-black"
-                >
-                <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                  {{ mps1.week_name}}
+            <tr class="border-2 border-black">
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.week_name }}
               </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.site_name}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.program_name}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.program_group}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.total_target}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.show_ups_internal}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.show_ups_external}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.show_ups_total}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.fillrate}}%
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.pending_jo}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.pending_berlitz}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.pending_ov}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.day_1}}
-                  </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.site_name }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.program_name }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.program_group }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.total_target }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.show_ups_internal }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.show_ups_external }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.show_ups_total }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.fillrate }}%
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.pending_jo }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.pending_berlitz }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.pending_ov }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.day_1 }}
+              </td>
 
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.day_1sup}}%
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.pipeline_total}}
-                  </td>
-                  <td class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300">
-                      {{ mps1.hires_goal}}%
-                  </td>
-                  <td >
-                      {{ mps1.color_status}}
-                  </td>
-                </tr>
-
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.day_1sup }}%
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.pipeline_total }}
+              </td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
+                {{ mps1.hires_goal }}%
+              </td>
+              <td>
+                {{ mps1.color_status }}
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -244,7 +323,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("http://10.109.2.112:8081/api/mpsweek", {
+        const response = await axios.get("http://127.0.0.1:8000/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -271,7 +350,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/months", {
+        const response = await axios.get("http://127.0.0.1:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -290,7 +369,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -314,7 +393,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `http://10.109.2.112:8081/api/daterange_select/${monthId.join(
+        const url = `http://127.0.0.1:8000/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -343,7 +422,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `http://10.109.2.112:8081/api/programs_select/${siteId.join(
+        const url = `http://127.0.0.1:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

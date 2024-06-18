@@ -139,7 +139,7 @@
               class="w-full px-4 py-2 bg-white border rounded-lg"
           /></label>
         </div>
-      
+
         <div class="w-full md:w-1/3 mt-4 md:mt-0">
           <label class="block font-semibold"
             >ID Creation<select
@@ -310,7 +310,7 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
-      
+
         {
           data: "id_creation",
           title: "ID Creation?",
@@ -353,7 +353,7 @@ export default {
         { data: "name", title: "Name" },
         { data: "site.name", title: "Site" },
         { data: "description", title: "Description" },
-       
+
         {
           data: "id_creation",
           title: "ID Creation?",
@@ -445,7 +445,7 @@ export default {
       };
 
       axios
-        .put(`http://10.109.2.112:8081/api/programs_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/programs_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.successMessage = "Program activated successfully!";
@@ -473,7 +473,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8081/api/programs_deactivate/${id}`,
+          `http://127.0.0.1:8000/api/programs_deactivate/${id}`,
           form,
           config
         )
@@ -494,7 +494,7 @@ export default {
     async getPrograms() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs5",
+          "http://127.0.0.1:8000/api/programs5",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -516,7 +516,7 @@ export default {
     async getPrograms2() {
       try {
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs6",
+          "http://127.0.0.1:8000/api/programs6",
           {
             headers: {
               Authorization: `Bearer ${this.$store.state.token}`,
@@ -538,7 +538,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites5", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -561,14 +561,14 @@ export default {
         program_group: this.program_group,
         site_id: this.sites_selected,
         is_active: 1,
-      
+
         pre_emps: this.pre_emps,
         id_creation: this.id_creation,
         created_by: this.$store.state.user_id,
       };
 
       axios
-        .post("http://10.109.2.112:8081/api/programsother", formData, {
+        .post("http://127.0.0.1:8000/api/programsother", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

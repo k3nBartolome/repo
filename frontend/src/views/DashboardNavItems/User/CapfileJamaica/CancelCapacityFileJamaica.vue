@@ -352,41 +352,41 @@
           <label class="block"
             >Within SLA?
             <select
-            required
-            v-model="within_sla"
-            class="w-full px-4 py-2 bg-white border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Within SLA">Within SLA</option>
-            <option value="Within SLA - Decrease in Demand (Cancellation)">
-              Within SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Within SLA - Increase in Demand">
-              Within SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA - Decrease in Demand (Cancellation)">
-              Outside SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Outside SLA-Cancellation">
-              Outside SLA-Cancellation
-            </option>
-            <option value="Outside SLA - Increase in Demand">
-              Outside SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA-Change in Start Date">
-              Outside SLA-Change in Start Date
-            </option>
-            <option value="Outside SLA-Change in Profile">
-              Outside SLA-Change in Profile
-            </option>
-            <option value="Outside SLA-Change in Process/Assessments">
-              Outside SLA-Change in Process/Assessments
-            </option>
-            <option value="Outside SLA-New class added">
-              Outside SLA-New class added
-            </option>
-            <option value="OV Support">OV Support</option>
-          </select>
+              required
+              v-model="within_sla"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Within SLA">Within SLA</option>
+              <option value="Within SLA - Decrease in Demand (Cancellation)">
+                Within SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Within SLA - Increase in Demand">
+                Within SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA - Decrease in Demand (Cancellation)">
+                Outside SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Outside SLA-Cancellation">
+                Outside SLA-Cancellation
+              </option>
+              <option value="Outside SLA - Increase in Demand">
+                Outside SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
+              </option>
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
+              </option>
+              <option value="Outside SLA-New class added">
+                Outside SLA-New class added
+              </option>
+              <option value="OV Support">OV Support</option>
+            </select>
           </label>
         </div>
         <div class="w-full mt-1 md:w-1/5 md:mt-0">
@@ -632,7 +632,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites5", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -657,7 +657,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/programs5",
+          "http://127.0.0.1:8000/api/programs5",
           {
             headers,
           }
@@ -678,7 +678,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -701,7 +701,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -723,7 +723,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -800,7 +800,7 @@ export default {
 
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {

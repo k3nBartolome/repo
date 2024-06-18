@@ -159,38 +159,38 @@
           <label class="block"
             >Within SLA?
             <select
-            required
-            v-model="within_sla"
-            class="w-full px-4 py-2 bg-white border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="Within SLA">Within SLA</option>
-            <option value="Within SLA - Decrease in Demand (Cancellation)">
-              Within SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Within SLA - Increase in Demand">
-              Within SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA - Decrease in Demand (Cancellation)">
-              Outside SLA - Decrease in Demand (Cancellation)
-            </option>
-            <option value="Outside SLA - Increase in Demand">
-              Outside SLA - Increase in Demand
-            </option>
-            <option value="Outside SLA-Change in Start Date">
-              Outside SLA-Change in Start Date
-            </option>
-            <option value="Outside SLA-Change in Profile">
-              Outside SLA-Change in Profile
-            </option>
-            <option value="Outside SLA-Change in Process/Assessments">
-              Outside SLA-Change in Process/Assessments
-            </option>
-            <option value="Outside SLA-New class added">
-              Outside SLA-New class added
-            </option>
-            <option value="OV Support">OV Support</option>
-          </select>
+              required
+              v-model="within_sla"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="Within SLA">Within SLA</option>
+              <option value="Within SLA - Decrease in Demand (Cancellation)">
+                Within SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Within SLA - Increase in Demand">
+                Within SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA - Decrease in Demand (Cancellation)">
+                Outside SLA - Decrease in Demand (Cancellation)
+              </option>
+              <option value="Outside SLA - Increase in Demand">
+                Outside SLA - Increase in Demand
+              </option>
+              <option value="Outside SLA-Change in Start Date">
+                Outside SLA-Change in Start Date
+              </option>
+              <option value="Outside SLA-Change in Profile">
+                Outside SLA-Change in Profile
+              </option>
+              <option value="Outside SLA-Change in Process/Assessments">
+                Outside SLA-Change in Process/Assessments
+              </option>
+              <option value="Outside SLA-New class added">
+                Outside SLA-New class added
+              </option>
+              <option value="OV Support">OV Support</option>
+            </select>
           </label>
           <label class="block"
             >Agreed Start Date
@@ -441,7 +441,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites3")
+        .get("http://127.0.0.1:8000/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -453,7 +453,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/programs3")
+        .get("http://127.0.0.1:8000/api/programs3")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -464,7 +464,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("http://10.109.2.112:8081/api/transaction/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -476,7 +476,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/daterange")
+        .get("http://127.0.0.1:8000/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -487,7 +487,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("http://10.109.2.112:8081/api/classes/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -533,7 +533,7 @@ export default {
       };
       axios
         .put(
-          "http://10.109.2.112:8081/api/classes/cancel/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/classes/cancel/" + this.$route.params.id,
           formData
         )
         .then((response) => {

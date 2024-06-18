@@ -2,89 +2,30 @@
   <div class="px-0 pt-1 border-b border-gray-200 dark:border-gray-700">
     <div class="container">
       <div class="row">
-        <div class="col-md-2 col-sm-6">
-          <router-link to="/site_request_manager/request" class="link-button">
+        <div class="col-md-2 col-sm-2">
+          <router-link to="/supply_manager/stocks" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/site_request_manager/request'),
+                'selected-tab': isActiveTab('/supply_manager/stocks'),
               }"
             >
-              Request
+              Remx Supply
             </button>
           </router-link>
         </div>
-        <div class="col-md-2 col-sm-6">
-          <router-link to="/site_request_manager/pending" class="link-button">
+        <div class="col-md-2 col-sm-2">
+          <router-link to="/supply_manager/transfer" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/site_request_manager/pending'),
+                'selected-tab': isActiveTab('/supply_manager/transfer'),
               }"
             >
-              Pending Request
-              <span v-if="totalPending > 0" class="count-notification">{{
-                totalPending
-              }}</span>
-            </button>
-          </router-link>
-        </div>
-        <div class="col-md-2 col-sm-6">
-          <router-link to="/site_request_manager/approved" class="link-button">
-            <button
-              class="tab-button"
-              :class="{
-                'selected-tab': isActiveTab('/site_request_manager/approved'),
-              }"
-            >
-              Approved Request
-            </button>
-          </router-link>
-        </div>
-        <div class="col-md-2 col-sm-6">
-          <router-link
-            to="/site_request_manager/denied"
-            v-if="isUser || isRemx || isBudget || isSourcing"
-            class="link-button"
-          >
-            <button
-              class="tab-button"
-              :class="{
-                'selected-tab': isActiveTab('/site_request_manager/denied'),
-              }"
-            >
-              Denied Request
-            </button>
-          </router-link>
-        </div>
-        <div class="col-md-2 col-sm-6">
-          <router-link
-            to="/site_request_manager/received"
-            v-if="isUser || isRemx || isBudget || isSourcing"
-            class="link-button"
-          >
-            <button
-              class="tab-button"
-              :class="{
-                'selected-tab': isActiveTab('/site_request_manager/received'),
-              }"
-            >
-              Receive
+              Site Transfer
               <span v-if="totalReceived > 0" class="count-notification">{{
                 totalReceived
               }}</span>
-            </button>
-          </router-link>
-        </div>
-        <div class="col-md-2 col-sm-6">
-          <router-link to="/site_request_manager/cancelled" class="link-button">
-            <button
-              class="tab-button"
-              :class="{
-                'selected-tab': isActiveTab('/site_request_manager/cancelled'),
-              }"
-            >
-              Cancelled Request
             </button>
           </router-link>
         </div>
@@ -99,23 +40,21 @@
     </div>
   </main>
 </template>
-
 <script>
 import axios from "axios";
 export default {
   data() {
     return {
       inventory: [],
-      totalPending: "",
       totalReceived: "",
       Total: "",
     };
   },
   mounted() {
+    this.getInventory();
     this.$router.afterEach(() => {
       window.location.reload();
     });
-    this.getInventory();
   },
   computed: {
     isUser() {
@@ -136,11 +75,14 @@ export default {
     },
   },
   methods: {
+    isActiveTab(route) {
+      return this.$route.path === route;
+    },
     async getInventory() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventoryall",
+          "http://127.0.0.1:8000/api/inventory/alltransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -151,17 +93,14 @@ export default {
         if (response.status === 200) {
           this.inventory = response.data.inventory;
 
-          const pendingItems = this.inventory.filter(
-            (item) => item.status === "Pending"
-          );
           const receivedItems = this.inventory.filter(
             (item) =>
-              item.status === "Approved" && item.approved_status === null
+              item.transaction_type === "Transfer Request" &&
+              item.received_status === null
           );
 
-          this.totalPending = pendingItems.length;
           this.totalReceived = receivedItems.length;
-          this.Total = this.totalPending + this.totalReceived;
+          this.Total = this.totalReceived;
         } else {
           console.log("Error fetching inventory");
         }
@@ -169,13 +108,9 @@ export default {
         console.log(error);
       }
     },
-    isActiveTab(route) {
-      return this.$route.path === route;
-    },
   },
 };
 </script>
-
 <style>
 * {
   margin: 0;
