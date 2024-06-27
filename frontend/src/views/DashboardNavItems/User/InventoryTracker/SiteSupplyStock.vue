@@ -1,6 +1,6 @@
 <template>
   <header class="w-full">
-    <h2 class="pl-8 pb-8 font-bold tracking-tight text-gray-900">
+    <h2 class="pb-8 pl-8 font-bold tracking-tight text-gray-900">
       Sourcing Supply Manager
     </h2>
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
@@ -79,7 +79,7 @@
                   </p>
                 </label>
               </div>
-              <div class="col-span-1 hidden">
+              <div class="hidden col-span-1">
                 <label class="block">
                   Site
                   <select
@@ -105,7 +105,7 @@
                   </p>
                 </label>
               </div>
-              <div class="col-span-1 hidden">
+              <div class="hidden col-span-1">
                 <label class="block">
                   Item Name
                   <select
@@ -126,7 +126,7 @@
                   </select>
                   <p
                     v-if="errors.items_selected"
-                    class="text-red-500 text-xs mt-1"
+                    class="mt-1 text-xs text-red-500"
                   >
                     {{ errors.items_selected }}
                   </p>
@@ -529,7 +529,7 @@ export default {
           `;
           }.bind(this),
         },
-        { data: "site.name", title: "Site" },
+        { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
         {
           data: "quantity",
@@ -563,32 +563,27 @@ export default {
         },
 
         {
-          data: "received_by.name",
+          data: "received_by",
           title: "Received By",
-          render: (data, type, row) => {
-            return row.received_by ? row.received_by.name : "N/A";
-          },
+        
         },
         {
-          data: "transferred_by.name",
-          title: "Transferred By",
-          render: (data, type, row) => {
-            return row.transferred_by ? row.transferred_by.name : "N/A";
-          },
+          data: "transferred_from",
+          title: "Transferred From"
         },
         {
-          data: "created_by.name",
+          data: "transferred_by",
+          title: "Transferred By"
+        },
+        {
+          data: "created_by",
           title: "Added By",
-          render: (data, type, row) => {
-            return row.created_by ? row.created_by.name : "N/A";
-          },
+        
         },
         {
           data: "date_added",
           title: "Added Date",
-          render: (data, type, row) => {
-            return row.date_added ? row.date_added.slice(0, -3) : "N/A";
-          },
+         
         },
       ],
     };

@@ -162,7 +162,7 @@ export default {
           `;
           }.bind(this), // Bind the render function to the component's context
         },
-        { data: "site.name", title: "Site" },
+        { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "estimated_cost", title: "Estimated Cost Per Item" },

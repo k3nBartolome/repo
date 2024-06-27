@@ -84,7 +84,7 @@
                 Site
                 <select
                   v-model="sites_selected"
-                  class="block w-full mt-1 bg-white border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                  class="block w-full mt-1 bg-white border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
                   @change="getPrograms"
                 >
                   <option disabled value="" selected>Please select one</option>
@@ -188,7 +188,7 @@ export default {
             return meta.row + 1;
           },
         },
-        { data: "site.name", title: "Site" },
+        { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "original_quantity", title: "Original Quantity" },
@@ -204,7 +204,7 @@ export default {
           render: (data) => (data ? data.slice(0, -3) : ""),
         },
 
-        { data: "created_by.name", title: "Added By" },
+        { data: "created_by", title: "Added By" },
       ],
     };
   },

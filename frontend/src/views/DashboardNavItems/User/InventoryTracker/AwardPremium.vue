@@ -379,12 +379,13 @@ export default {
             return meta.row + 1;
           },
         },
-        { data: "site.name", title: "Site" },
-        { data: "items.item_name", title: "Item Name" },
+        { data: "site_name", title: "Site" },
+        { data: "item_name", title: "Item Name" },
+        { data: "budget_code", title: "Budget Code" },
         { data: "awarded_quantity", title: "Awarded Quantity" },
         { data: "awardee_hrid", title: "Awardee ID" },
         { data: "awardee_name", title: "Awardee Name" },
-        { data: "released_by.name", title: "Released By" },
+        { data: "released_by", title: "Released By" },
         { data: "date_released", title: "Date Released" },
         { data: "remarks", title: "Remarks" },
         {

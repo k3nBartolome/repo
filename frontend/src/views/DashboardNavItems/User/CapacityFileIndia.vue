@@ -17,7 +17,7 @@
           Site
           <select
             v-model="sites_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
             <option disabled value="" selected>Please select one</option>
@@ -30,7 +30,7 @@
           Programs
           <select
             v-model="programs_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option disabled value="" selected>Please select one</option>
             <option
@@ -46,7 +46,7 @@
           Month
           <select
             v-model="month_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getDateRange"
           >
             <option disabled value="" selected>Please select one</option>
@@ -68,7 +68,7 @@
           Week Range
           <select
             v-model="week_selected"
-            class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option disabled value="" selected>Please select one</option>
             <option

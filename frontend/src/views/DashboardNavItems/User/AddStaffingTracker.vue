@@ -38,7 +38,7 @@
           <select
             disabled
             v-model="site_selected"
-            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             @change="getPrograms"
           >
             <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -51,7 +51,7 @@
           <select
             disabled
             v-model="program_selected"
-            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getPrograms"
           >
@@ -69,7 +69,7 @@
           <select
             disabled
             v-model="type_of_hiring"
-            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
           >
             <option value="attrition">Attrition</option>
             <option value="growth">Growth</option>
@@ -101,7 +101,7 @@
           <select
             disabled
             v-model="hiring_week"
-            class="block w-full mt-1 bg-gray-200 border border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            class="block w-full mt-1 bg-gray-200 border-2 rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             required
             @change="getDateRange"
           >

@@ -58,7 +58,7 @@
                 Site
                 <select
                   v-model="sites_selected"
-                  class="block w-full mt-1 bg-white border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+                  class="block w-full mt-1 bg-white border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
                   @change="getPrograms"
                 >
                   <option disabled value="" selected>Please select one</option>
@@ -159,13 +159,13 @@ export default {
             return meta.row + 1;
           },
         },
-        { data: "site.name", title: "Site" },
-        { data: "items.item_name", title: "Item Name" },
-        { data: "items.budget_code", title: "Budget Code" },
+        { data: "site_name", title: "Site" },
+        { data: "item_name", title: "Item Name" },
+        { data: "budget_code", title: "Budget Code" },
         { data: "awarded_quantity", title: "Released Quantity" },
         { data: "awardee_hrid", title: "Awardee ID" },
         { data: "awardee_name", title: "Awardee Name" },
-        { data: "released_by.name", title: "Released By" },
+        { data: "released_by", title: "Released By" },
         {
           data: "date_released",
           title: "Date Released",

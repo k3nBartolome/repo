@@ -23,6 +23,28 @@ class ItemsController extends Controller
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy->name,
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -32,6 +54,28 @@ class ItemsController extends Controller
         $items = Items::with(['createdBy', 'site'])
             ->where('is_active', 1)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy->name,
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -42,6 +86,28 @@ class ItemsController extends Controller
             ->where('is_active', 1)
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy->name,
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -51,6 +117,31 @@ class ItemsController extends Controller
         $items = SiteInventory::with(['createdBy', 'receivedBy', 'site'])
             ->where('is_active', 1)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -71,6 +162,32 @@ class ItemsController extends Controller
 
         $items = $itemsQuery->get();
 
+        // Map items to include all relevant fields
+        $items = $items->map(function ($item) {
+            return [
+                'id' => $item->id,
+                'item_less_id' => $item->item_less_id,
+                'item_name' => $item->item_name,
+                'quantity' => $item->quantity,
+                'original_quantity' => $item->original_quantity,
+                'cost' => $item->cost,
+                'total_cost' => $item->total_cost,
+                'budget_code' => $item->budget_code,
+                'type' => $item->type,
+                'category' => $item->category,
+                'date_expiry' => $item->date_expiry,
+                'is_active' => $item->is_active,
+                'created_by' => $item->createdBy->name,
+                'site_id' => $item->site_id,
+                'site_name' => $item->site->name,
+                'created_at' => $item->created_at,
+                'updated_at' => $item->updated_at,
+                'date_added' => $item->created_at,
+              
+            ];
+            
+        });
+
         return response()->json(['items' => $items]);
     }
 
@@ -81,6 +198,32 @@ class ItemsController extends Controller
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                    
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -91,6 +234,32 @@ class ItemsController extends Controller
             ->where('is_active', 1)
             ->where('quantity', '>', 0)
             ->get();
+
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                    'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -103,6 +272,31 @@ class ItemsController extends Controller
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                      'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -115,6 +309,31 @@ class ItemsController extends Controller
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                      'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }
@@ -126,6 +345,31 @@ class ItemsController extends Controller
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)
             ->get();
+        $items = $items->map(function ($item) {
+            return [
+                    'id' => $item->id,
+                    'item_less_id' => $item->item_less_id,
+                    'item_name' => $item->item_name,
+                    'quantity' => $item->quantity,
+                    'original_quantity' => $item->original_quantity,
+                    'cost' => $item->cost,
+                    'total_cost' => $item->total_cost,
+                    'budget_code' => $item->budget_code,
+                    'type' => $item->type,
+                    'category' => $item->category,
+                    'date_expiry' => $item->date_expiry,
+                    'is_active' => $item->is_active,
+                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'site_id' => $item->site_id,
+                    'site_name' => $item->site->name,
+                    'created_at' => $item->created_at,
+                    'updated_at' => $item->updated_at,
+                    'date_added' => $item->created_at,
+                ];
+        });
 
         return response()->json(['items' => $items]);
     }

@@ -1,6 +1,6 @@
 <template>
   <header class="w-full">
-    <h2 class="pl-8 pb-8 font-bold tracking-tight text-gray-900">
+    <h2 class="pb-8 pl-8 font-bold tracking-tight text-gray-900">
       REMX Supply Manager
     </h2>
     <div class="flex items-center w-full max-w-screen-xl sm:px-2 lg:px-2">
@@ -335,7 +335,7 @@ export default {
             return meta.row + 1;
           },
         },
-        { data: "site.name", title: "Site" },
+        { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "original_quantity", title: "Original Quantity" },
@@ -350,7 +350,7 @@ export default {
           title: "Added Date",
           render: (data) => (data ? data.slice(0, -3) : ""),
         },
-        { data: "created_by.name", title: "Added By" },
+        { data: "created_by", title: "Added By" },
       ],
     };
   },

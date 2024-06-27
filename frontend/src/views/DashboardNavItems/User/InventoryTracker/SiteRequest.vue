@@ -60,7 +60,7 @@
                 </select>
                 <p
                   v-if="errors.sites_selected"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.sites_selected }}
                 </p>
@@ -114,12 +114,12 @@
                     :key="item.id"
                     :value="item.id"
                   >
-                    {{ item.item_name }}
+                    {{ item.item_name }}-{{ item.site_name}}
                   </option>
                 </select>
                 <p
                   v-if="errors.items_selected"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.items_selected }}
                 </p>
@@ -156,7 +156,7 @@
                 />
                 <p
                   v-if="errors.quantity_approved"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.quantity_approved }}
                 </p>

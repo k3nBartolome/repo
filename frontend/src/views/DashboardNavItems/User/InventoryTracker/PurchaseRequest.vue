@@ -192,7 +192,7 @@ export default {
             return meta.row + 1;
           },
         },
-        { data: "site.name", title: "Site" },
+        { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
         { data: "quantity", title: "Quantity" },
         { data: "estimated_cost", title: "Estimated Cost Per Item" },

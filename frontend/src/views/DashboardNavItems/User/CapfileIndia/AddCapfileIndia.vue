@@ -8,7 +8,7 @@
   <div class="px-12 py-8">
     <form @submit.prevent="addClass">
       <div
-        class="px-12 py-6 mx-auto font-semibold bg-white border border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
+        class="px-12 py-6 mx-auto font-semibold bg-white border-2 border-orange-600 max-w-7xl sm:px-2 lg:px-2"
       >
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-5">
           <label class="block">
@@ -16,7 +16,7 @@
             <select
               disabled
               v-model="sites_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getSites"
             >
@@ -31,7 +31,7 @@
             <select
               disabled
               v-model="programs_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getPrograms"
             >
@@ -50,7 +50,7 @@
             <select
               required
               v-model="type_of_hiring"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="attrition">Attrition</option>
@@ -64,7 +64,7 @@
               required
               type="number"
               v-model="external_target"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget"
             />
           </label>
@@ -74,7 +74,7 @@
               required
               type="number"
               v-model="internal_target"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncTotalTarget"
             />
           </label>
@@ -84,7 +84,7 @@
               type="number"
               v-model="total_target"
               readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block"
@@ -93,7 +93,7 @@
               required
               type="date"
               v-model="original_start_date"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
@@ -104,7 +104,7 @@
               required
               type="date"
               v-model="wfm_date_requested"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeDays"
             />
           </label>
@@ -114,7 +114,7 @@
               type="number"
               v-model="notice_days"
               readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
               @change="syncNoticeWeeks"
             />
           </label>
@@ -124,7 +124,7 @@
               type="text"
               v-model="notice_weeks"
               readonly
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block">
@@ -132,7 +132,7 @@
             <select
               disabled
               v-model="date_selected"
-              class="block w-full mt-1 border border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
               required
               @change="getDateRange"
             >
@@ -151,7 +151,7 @@
             <select
               required
               v-model="with_erf"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="yes">Yes</option>
@@ -163,7 +163,7 @@
             <input
               type="text"
               v-model="erf_number"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
           <label class="block"
@@ -171,7 +171,7 @@
             <select
               required
               v-model="category"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="placeholder">Placeholder</option>
@@ -219,7 +219,7 @@
             <select
               required
               v-model="approved_by"
-              class="block w-full mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             >
               <option disabled value="" selected>Please select one</option>
               <option value="VP-Ops">VP-Ops</option>
@@ -240,7 +240,7 @@
               required
               type="text"
               v-model="remarks"
-              class="block w-full h-20 mt-1 border border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
+              class="block w-full h-20 mt-1 border-2 border-black rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-100"
             />
           </label>
         </div>
