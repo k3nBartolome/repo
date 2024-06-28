@@ -5,29 +5,29 @@
         <div class="flex items-center justify-between h-16">
           <div class="flex items-center">
             <div class="flex-shrink-0">
-              <img class="h-8 w-8" src="logo.png" alt="Logo" />
+              <img class="w-8 h-8" src="logo.png" alt="Logo" />
             </div>
-            <div class="hidden md:block ml-10 flex-grow">
-              <div class="flex items-baseline space-x-4 justify-center">
+            <div class="flex-grow hidden ml-10 md:block">
+              <div class="flex items-baseline justify-center space-x-4">
                 <router-link
                   to="/capfile"
-                  class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   v-if="isUser || isSourcing"
                   >Capacity File</router-link
                 >
                 <router-link
                   to="/staffing"
-                  class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >Staffing Tracker</router-link
                 >
                 <router-link
                   to="/sr_compliance"
-                  class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >SR Pending Movements</router-link
                 >
                 <router-link
                   to="/h&s"
-                  class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
@@ -38,7 +38,7 @@
                   @click="toggleDropdown"
                 >
                   <button
-                    class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Inventory Tracker
                   </button>
@@ -82,7 +82,7 @@
                   @click="toggleDropdown"
                 >
                   <button
-                    class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                     v-if="isUser || isBudget || isRemx || isSourcing"
                   >
                     Budget
@@ -103,7 +103,7 @@
                   @click="toggleDropdown"
                 >
                   <button
-                    class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Admin
                   </button>
@@ -124,14 +124,14 @@
                 </div>
               </div>
             </div>
-            <div class="-mr-2 flex md:hidden">
+            <div class="flex -mr-2 md:hidden">
               <button
                 @click="toggleMobileMenu"
-                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
+                class="inline-flex items-center justify-center p-2 text-gray-400 rounded-md hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
               >
                 <span class="sr-only">Open main menu</span>
                 <svg
-                  class="block h-6 w-6"
+                  class="block w-6 h-6"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
@@ -156,7 +156,7 @@
               @click="toggleDropdown"
             >
               <button
-                class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
               >
                 Country
               </button>
@@ -183,13 +183,13 @@
             </div>
             <router-link
               to="/profile"
-              class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
               >{{ userName }}</router-link
             >
             <router-link
               to="/login"
               @click="logout"
-              class="hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium link-button"
+              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
               >Logout</router-link
             >
           </div>
@@ -202,18 +202,18 @@
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <router-link
             to="/"
-            class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+            class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
             >Home</router-link
           >
           <div class="relative" @click="toggleDropdown">
             <button
-              class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium focus:outline-none"
+              class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none"
             >
               Dropdown
             </button>
             <div
               v-show="dropdownOpen"
-              class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+              class="absolute right-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
             >
               <div
                 class="py-1"
@@ -326,7 +326,7 @@ export default {
 
 .dropdown-content a {
   color: black;
-  padding: 12px 16px;
+  padding: 14px 16px;
   text-decoration: none;
   display: block;
 }

@@ -250,7 +250,9 @@
               >
                 {{ mps1.hires_goal }}%
               </td>
-              <td>
+              <td
+                class="px-2 py-1 font-semibold text-center truncate border-2 border-gray-300"
+              >
                 {{ mps1.color_status }}
               </td>
             </tr>

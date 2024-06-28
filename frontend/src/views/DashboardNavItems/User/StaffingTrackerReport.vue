@@ -38,7 +38,7 @@
             </button>
           </router-link>
         </div>
-        <div class="col-md-2 col-sm-6">
+       <!--  <div class="col-md-2 col-sm-6">
           <router-link to="/staffing_report/site" class="link-button">
             <button
               class="tab-button"
@@ -49,7 +49,7 @@
               Site View
             </button>
           </router-link>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

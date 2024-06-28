@@ -58,7 +58,7 @@
                 />
                 <p
                   v-if="errors.received_quantity"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.received_quantity }}
                 </p>
@@ -206,6 +206,7 @@ export default {
         },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "transferred_by.name", title: "Transferred By" },
+        { data: "transferred_from.name", title: "Transferred From" },
       ],
     };
   },

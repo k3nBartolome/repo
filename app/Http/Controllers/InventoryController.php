@@ -443,6 +443,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
+            
             'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Pending')
@@ -454,7 +455,7 @@ class InventoryController extends Controller
     public function indexAll()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -465,6 +466,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -474,7 +476,7 @@ class InventoryController extends Controller
     public function indexAllTransaction()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -485,6 +487,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])
             ->get();
 
@@ -494,7 +497,7 @@ class InventoryController extends Controller
     public function approved()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -505,6 +508,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->get();
@@ -515,7 +519,7 @@ class InventoryController extends Controller
     public function approvedReceived()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -526,6 +530,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -538,7 +543,7 @@ class InventoryController extends Controller
     public function approvedPending()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -549,6 +554,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -561,7 +567,7 @@ class InventoryController extends Controller
     public function denied()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -572,6 +578,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Denied')
             ->get();
@@ -582,7 +589,7 @@ class InventoryController extends Controller
     public function cancelled()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -593,6 +600,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
@@ -604,7 +612,7 @@ class InventoryController extends Controller
     public function allstatus()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -615,6 +623,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -624,7 +633,7 @@ class InventoryController extends Controller
     public function allrequest()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -635,6 +644,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Transfer Request')
 
             ->get();
@@ -645,7 +655,7 @@ class InventoryController extends Controller
     public function alltransfer()
     {
         $inventory = Inventory::with([
-            'site',
+           'site',
             'item',
             'releasedBy',
             'approvedBy',
@@ -656,6 +666,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
+            'transferredFrom'
         ])->where('transaction_type', 'Transfer Request')
             ->where('status', null)
             ->get();

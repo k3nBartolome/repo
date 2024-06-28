@@ -134,7 +134,7 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
@@ -193,7 +193,7 @@ class ItemsController extends Controller
 
     public function index3()
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
             ->where('is_active', 1)
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
@@ -215,7 +215,7 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
@@ -230,7 +230,7 @@ class ItemsController extends Controller
 
     public function indexAllSite()
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
             ->where('is_active', 1)
             ->where('quantity', '>', 0)
             ->get();
@@ -252,7 +252,7 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
@@ -266,7 +266,7 @@ class ItemsController extends Controller
 
     public function index4($siteId)
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Normal')
@@ -289,7 +289,7 @@ class ItemsController extends Controller
                       'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
@@ -303,7 +303,7 @@ class ItemsController extends Controller
 
     public function index5($siteId)
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Premium')
@@ -326,7 +326,7 @@ class ItemsController extends Controller
                       'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
@@ -340,7 +340,7 @@ class ItemsController extends Controller
 
     public function index2()
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
             ->where('is_active', 1)
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)
@@ -362,7 +362,7 @@ class ItemsController extends Controller
                      'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferred_from? $item->transferred_from : 'N/A',
+                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,

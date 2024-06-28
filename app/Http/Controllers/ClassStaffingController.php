@@ -195,254 +195,246 @@ class ClassStaffingController extends Controller
     }
 
     public function mpsWeek()
-    {
-        $year = 2024;
-        $date = Carbon::now()->format('Y-m-d');
+{
+    $year = 2024;
+    $date = Carbon::now()->format('Y-m-d');
 
-        $dateRange = DB::table('date_ranges')
-            /* ->select('week_start', 'week_end')
-            ->where('week_start', '<=', $date)
-            ->where('week_end', '>=', $date) */
-            ->where('year', $year)
-            ->first();
-        if (!$dateRange) {
-            return response()->json(['error' => 'No date range found for the current date.']);
-        }
+    $dateRange = DB::table('date_ranges')
+        ->where('year', $year)
+        ->first();
+    if (!$dateRange) {
+        return response()->json(['error' => 'No date range found for the current date.']);
+    }
 
-        $distinctDateRanges = DB::table('date_ranges')
-         /*    ->whereIn('week_end', [
-                Carbon::parse($dateRange->week_end)->subWeek(),
-                $dateRange->week_end,
-                Carbon::parse($dateRange->week_end)->addWeek(),
-                Carbon::parse($dateRange->week_end)->addWeeks(2),
-            ]) */
-            ->pluck('date_id');
+    $distinctDateRanges = DB::table('date_ranges')
+        ->pluck('date_id');
 
-        $weeklyTotals = [];
-        $weeklyData = [];
+    $weeklyTotals = [];
+    $weeklyData = [];
 
-        foreach ($distinctDateRanges as $dateRangeId) {
-            $staffing = DB::table('class_staffing')
-                ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
-                ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
-                ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
-                ->leftJoin('programs', function ($join) {
-                    $join->on('classes.program_id', '=', 'programs.id')
-                        ->on('sites.id', '=', 'programs.site_id');
-                })
-                ->select(
-                    'class_staffing.*',
-                    'classes.*',
-                    'sites.*',
-                    'programs.*',
-                    'date_ranges.*',
-                    DB::raw('COALESCE(classes.total_target, 0) as total'),
-                    DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
-                    DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
-                    DB::raw('COALESCE(sites.site_id, 0) as site_id'),
-                    DB::raw('COALESCE(programs.program_id, 0) as program_id'),
-                    DB::raw('COALESCE(sites.name, null) as site_name'),
-                    DB::raw('COALESCE(programs.name, null) as program_name'),
-                    DB::raw('COALESCE(programs.program_group, null) as program_group')
-                )
-                ->where('class_staffing.active_status', 1)
-                ->where('classes.total_target', '>', 0)
-                ->where('sites.country', 'Philippines')
-                ->where('date_ranges.date_id', $dateRangeId)
-                ->orderBy('date_ranges.id')
-                ->orderBy('sites.name')
-                ->orderBy('programs.name')
-                ->get();
+    foreach ($distinctDateRanges as $dateRangeId) {
+        $staffing = DB::table('class_staffing')
+            ->leftJoin('classes', 'class_staffing.classes_id', '=', 'classes.id')
+            ->leftJoin('date_ranges', 'classes.date_range_id', '=', 'date_ranges.id')
+            ->leftJoin('sites', 'classes.site_id', '=', 'sites.id')
+            ->leftJoin('programs', function ($join) {
+                $join->on('classes.program_id', '=', 'programs.id')
+                    ->on('sites.id', '=', 'programs.site_id');
+            })
+            ->select(
+                'class_staffing.*',
+                'classes.*',
+                'sites.*',
+                'programs.*',
+                'date_ranges.*',
+                DB::raw('COALESCE(classes.total_target, 0) as total'),
+                DB::raw('COALESCE(date_ranges.date_id, 0) as date_range_id'),
+                DB::raw('COALESCE(date_ranges.date_range, null) as week_name'),
+                DB::raw('COALESCE(sites.site_id, 0) as site_id'),
+                DB::raw('COALESCE(programs.program_id, 0) as program_id'),
+                DB::raw('COALESCE(sites.name, null) as site_name'),
+                DB::raw('COALESCE(programs.name, null) as program_name'),
+                DB::raw('COALESCE(programs.program_group, null) as program_group')
+            )
+            ->where('class_staffing.active_status', 1)
+            ->where('classes.total_target', '>', 0)
+            ->where('sites.country', 'Philippines')
+            ->where('date_ranges.date_id', $dateRangeId)
+            ->orderBy('date_ranges.id')
+            ->orderBy('sites.name')
+            ->orderBy('programs.name')
+            ->get();
 
-            foreach ($staffing as $item) {
-                $siteId = $item->site_id;
-                $programId = $item->program_id;
-                $weekName = $item->week_name;
+        foreach ($staffing as $item) {
+            $siteId = $item->site_id;
+            $programId = $item->program_id;
+            $weekName = $item->week_name;
 
-                $key = $dateRangeId.''.$siteId.''.$programId;
+            $key = $dateRangeId . '' . $siteId . '' . $programId;
 
-                if (!isset($weeklyData[$weekName])) {
-                    $weeklyData[$weekName] = [];
-                }
-
-                if (!isset($weeklyData[$weekName][$key])) {
-                    $weeklyData[$weekName][$key] = [
-                        'week_name' => $item->week_name,
-                        'site_name' => $item->site_name,
-                        'program_name' => $item->program_name,
-                        'program_group' => $item->program_group,
-                        'total_target' => 0,
-                        'show_ups_internal' => 0,
-                        'show_ups_external' => 0,
-                        'show_ups_total' => 0,
-                        'fillrate' => 0,
-                        'pending_jo' => 0,
-                        'pending_berlitz' => 0,
-                        'pending_ov' => 0,
-                        'day_1' => 0,
-                        'day_1sup' => 0,
-                        'pipeline_total' => 0,
-                        'hires_goal' => 0,
-                        'color_status' => '',
-                    ];
-                }
-                $weeklyData[$weekName][$key]['pending_ov'] += $item->pending_ov;
-                $weeklyData[$weekName][$key]['pending_jo'] += $item->pending_jo;
-                $weeklyData[$weekName][$key]['pending_berlitz'] += $item->pending_berlitz;
-                $weeklyData[$weekName][$key]['total_target'] += $item->total_target;
-                $weeklyData[$weekName][$key]['show_ups_internal'] += $item->show_ups_internal;
-                $weeklyData[$weekName][$key]['show_ups_external'] += $item->show_ups_external;
-                $weeklyData[$weekName][$key]['show_ups_total'] += $item->show_ups_total;
-                $weeklyData[$weekName][$key]['day_1'] += $item->day_1;
-                $weeklyData[$weekName][$key]['pipeline_total'] += $item->pipeline_total;
-                $weeklyData[$weekName][$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
-                $weeklyData[$weekName][$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
-                $weeklyData[$weekName][$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
-
-                if ($dateRangeId) {
-                    if ($weeklyData[$weekName][$key]['hires_goal'] >= 100) {
-                        $weeklyData[$weekName][$key]['color_status'] = 'Green';
-                    } elseif ($weeklyData[$weekName][$key]['hires_goal'] >= 50) {
-                        $weeklyData[$weekName][$key]['color_status'] = 'Yellow';
-                    } else {
-                        $weeklyData[$weekName][$key]['color_status'] = 'Red';
-                    }
-                }
-
-                if (!isset($weeklyTotals[$weekName])) {
-                    $weeklyTotals[$weekName] = [
-                        'total_target' => 0,
-                        'show_ups_internal' => 0,
-                        'show_ups_external' => 0,
-                        'show_ups_total' => 0,
-                        'day_1' => 0,
-                        'pipeline_total' => 0,
-                        'pending_jo' => 0,
-                        'pending_berlitz' => 0,
-                        'pending_ov' => 0,
-                    ];
-                }
-                $weeklyTotals[$weekName]['total_target'] += $item->total_target;
-                $weeklyTotals[$weekName]['show_ups_internal'] += $item->show_ups_internal;
-                $weeklyTotals[$weekName]['show_ups_external'] += $item->show_ups_external;
-                $weeklyTotals[$weekName]['show_ups_total'] += $item->show_ups_total;
-                $weeklyTotals[$weekName]['day_1'] += $item->day_1;
-                $weeklyTotals[$weekName]['pipeline_total'] += $item->pipeline_total;
-                $weeklyTotals[$weekName]['pending_jo'] += $item->pending_jo;
-                $weeklyTotals[$weekName]['pending_berlitz'] += $item->pending_berlitz;
-                $weeklyTotals[$weekName]['pending_ov'] += $item->pending_ov;
-            }
-        }
-
-        // Prepare the weekly pipe data with weekly totals
-        $weeklyPipeWithTotals = [];
-
-        foreach ($weeklyData as $weekName => $weekItems) {
-            // Add the weekly total for this week
-            $weeklyPipeWithTotals["Weekly Total $weekName"] = [
-                'week_name' => "Weekly Total for $weekName",
-                'site_name' => '',
-                'program_name' => '',
-                'program_group' => '',
-                'total_target' => $weeklyTotals[$weekName]['total_target'],
-                'show_ups_internal' => $weeklyTotals[$weekName]['show_ups_internal'],
-                'show_ups_external' => $weeklyTotals[$weekName]['show_ups_external'],
-                'show_ups_total' => $weeklyTotals[$weekName]['show_ups_total'],
-                'fillrate' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['show_ups_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
-                'pending_jo' => $weeklyTotals[$weekName]['pending_jo'],
-                'pending_berlitz' => $weeklyTotals[$weekName]['pending_berlitz'],
-                'pending_ov' => $weeklyTotals[$weekName]['pending_ov'],
-                'day_1' => $weeklyTotals[$weekName]['day_1'],
-                'day_1sup' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['day_1'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
-                'pipeline_total' => $weeklyTotals[$weekName]['pipeline_total'],
-                'hires_goal' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['pipeline_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
-                'color_status' => '',
-            ];
-
-            // Add the week's data
-            $weeklyPipeWithTotals = array_merge($weeklyPipeWithTotals, $weekItems);
-        }
-
-        // Calculate the grand totals
-        $grandTotals = [
-            'total_target' => 0,
-            'show_ups_internal' => 0,
-            'show_ups_external' => 0,
-            'show_ups_total' => 0,
-            'fillrate' => 0,
-            'day_1' => 0,
-            'day_1sup' => 0,
-            'pipeline_total' => 0,
-            'hires_goal' => 0,
-            'pending_jo' => 0,
-            'pending_berlitz' => 0,
-            'pending_ov' => 0,
-        ];
-
-        $totalCount = 0;
-        $totalFillrate = 0;
-        $totalDay1sup = 0;
-        $totalHiresGoal = 0;
-
-        foreach ($weeklyPipeWithTotals as $key => $sum) {
-            if (strpos($sum['week_name'], 'Weekly Total') !== false) {
-                continue;
+            if (!isset($weeklyData[$weekName])) {
+                $weeklyData[$weekName] = [];
             }
 
-            ++$totalCount;
+            if (!isset($weeklyData[$weekName][$key])) {
+                $weeklyData[$weekName][$key] = [
+                    'week_name' => $item->week_name,
+                    'site_name' => $item->site_name,
+                    'program_name' => $item->program_name,
+                    'program_group' => $item->program_group,
+                    'total_target' => 0,
+                    'show_ups_internal' => 0,
+                    'show_ups_external' => 0,
+                    'show_ups_total' => 0,
+                    'fillrate' => 0,
+                    'pending_jo' => 0,
+                    'pending_berlitz' => 0,
+                    'pending_ov' => 0,
+                    'day_1' => 0,
+                    'day_1sup' => 0,
+                    'pipeline_total' => 0,
+                    'hires_goal' => 0,
+                    'color_status' => '',
+                ];
+            }
+            $weeklyData[$weekName][$key]['pending_ov'] += $item->pending_ov;
+            $weeklyData[$weekName][$key]['pending_jo'] += $item->pending_jo;
+            $weeklyData[$weekName][$key]['pending_berlitz'] += $item->pending_berlitz;
+            $weeklyData[$weekName][$key]['total_target'] += $item->total_target;
+            $weeklyData[$weekName][$key]['show_ups_internal'] += $item->show_ups_internal;
+            $weeklyData[$weekName][$key]['show_ups_external'] += $item->show_ups_external;
+            $weeklyData[$weekName][$key]['show_ups_total'] += $item->show_ups_total;
+            $weeklyData[$weekName][$key]['day_1'] += $item->day_1;
+            $weeklyData[$weekName][$key]['pipeline_total'] += $item->pipeline_total;
+            $weeklyData[$weekName][$key]['hires_goal'] = $item->total_target != 0 ? number_format(($item->pipeline_total / $item->total_target) * 100, 1) : 0;
+            $weeklyData[$weekName][$key]['fillrate'] = $item->total_target != 0 ? number_format(($item->show_ups_total / $item->total_target) * 100, 1) : 0;
+            $weeklyData[$weekName][$key]['day_1sup'] = $item->total_target != 0 ? number_format(($item->day_1 / $item->total_target) * 100, 1) : 0;
 
-            $grandTotals['total_target'] += $sum['total_target'];
-            $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
-            $grandTotals['show_ups_external'] += $sum['show_ups_external'];
-            $grandTotals['show_ups_total'] += $sum['show_ups_total'];
-            $grandTotals['pipeline_total'] += $sum['pipeline_total'];
-            $grandTotals['day_1'] += $sum['day_1'];
-            $grandTotals['pending_jo'] += $sum['pending_jo'];
-            $grandTotals['pending_berlitz'] += $sum['pending_berlitz'];
-            $grandTotals['pending_ov'] += $sum['pending_ov'];
+            if ($dateRangeId) {
+                if ($weeklyData[$weekName][$key]['hires_goal'] >= 100) {
+                    $weeklyData[$weekName][$key]['color_status'] = 'Green';
+                } elseif ($weeklyData[$weekName][$key]['hires_goal'] >= 50) {
+                    $weeklyData[$weekName][$key]['color_status'] = 'Yellow';
+                } else {
+                    $weeklyData[$weekName][$key]['color_status'] = 'Red';
+                }
+            }
 
-            // Sum up for average calculation
-            $totalFillrate += $sum['fillrate'];
-            $totalDay1sup += $sum['day_1sup'];
-            $totalHiresGoal += $sum['hires_goal'];
+            if (!isset($weeklyTotals[$weekName])) {
+                $weeklyTotals[$weekName] = [
+                    'total_target' => 0,
+                    'show_ups_internal' => 0,
+                    'show_ups_external' => 0,
+                    'show_ups_total' => 0,
+                    'day_1' => 0,
+                    'pipeline_total' => 0,
+                    'pending_jo' => 0,
+                    'pending_berlitz' => 0,
+                    'pending_ov' => 0,
+                ];
+            }
+            $weeklyTotals[$weekName]['total_target'] += $item->total_target;
+            $weeklyTotals[$weekName]['show_ups_internal'] += $item->show_ups_internal;
+            $weeklyTotals[$weekName]['show_ups_external'] += $item->show_ups_external;
+            $weeklyTotals[$weekName]['show_ups_total'] += $item->show_ups_total;
+            $weeklyTotals[$weekName]['day_1'] += $item->day_1;
+            $weeklyTotals[$weekName]['pipeline_total'] += $item->pipeline_total;
+            $weeklyTotals[$weekName]['pending_jo'] += $item->pending_jo;
+            $weeklyTotals[$weekName]['pending_berlitz'] += $item->pending_berlitz;
+            $weeklyTotals[$weekName]['pending_ov'] += $item->pending_ov;
         }
+    }
 
-        // Calculate averages
-        $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
-        $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
-        $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
+    // Prepare the weekly pipe data with weekly totals
+    $weeklyPipeWithTotals = [];
 
-        // Mapped Grand Total
-        $mappedGrandTotal = [
-            'week_name' => 'Grand Total',
+    foreach ($weeklyData as $weekName => $weekItems) {
+        // Add the weekly total for this week
+        $weeklyPipeWithTotals[] = [
+            'week_name' => "Weekly Total for $weekName",
             'site_name' => '',
             'program_name' => '',
             'program_group' => '',
-            'total_target' => $grandTotals['total_target'],
-            'show_ups_internal' => $grandTotals['show_ups_internal'],
-            'show_ups_external' => $grandTotals['show_ups_external'],
-            'show_ups_total' => $grandTotals['show_ups_total'],
-            'fillrate' => $grandTotals['fillrate'],
-            'pending_jo' => $grandTotals['pending_jo'],
-            'pending_berlitz' => $grandTotals['pending_berlitz'],
-            'pending_ov' => $grandTotals['pending_ov'],
-            'day_1' => $grandTotals['day_1'],
-            'day_1sup' => $grandTotals['day_1sup'],
-            'pipeline_total' => $grandTotals['pipeline_total'],
-            'hires_goal' => $grandTotals['hires_goal'],
+            'total_target' => $weeklyTotals[$weekName]['total_target'],
+            'show_ups_internal' => $weeklyTotals[$weekName]['show_ups_internal'],
+            'show_ups_external' => $weeklyTotals[$weekName]['show_ups_external'],
+            'show_ups_total' => $weeklyTotals[$weekName]['show_ups_total'],
+            'fillrate' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['show_ups_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
+            'pending_jo' => $weeklyTotals[$weekName]['pending_jo'],
+            'pending_berlitz' => $weeklyTotals[$weekName]['pending_berlitz'],
+            'pending_ov' => $weeklyTotals[$weekName]['pending_ov'],
+            'day_1' => $weeklyTotals[$weekName]['day_1'],
+            'day_1sup' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['day_1'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
+            'pipeline_total' => $weeklyTotals[$weekName]['pipeline_total'],
+            'hires_goal' => $weeklyTotals[$weekName]['total_target'] != 0 ? number_format(($weeklyTotals[$weekName]['pipeline_total'] / $weeklyTotals[$weekName]['total_target']) * 100, 1) : 0,
             'color_status' => '',
         ];
 
-        // Merge Grand Total and Weekly Pipe Data with Totals
-        $weeklyPipe = ['Grand Total' => $mappedGrandTotal] + $weeklyPipeWithTotals;
-
-
-        $response = [
-            'mps' => $weeklyPipe,
-        ];
-
-        return response()->json($response);
+        // Add the week's data
+        foreach ($weekItems as $item) {
+            $weeklyPipeWithTotals[] = $item;
+        }
     }
+
+    // Calculate the grand totals
+    $grandTotals = [
+        'total_target' => 0,
+        'show_ups_internal' => 0,
+        'show_ups_external' => 0,
+        'show_ups_total' => 0,
+        'fillrate' => 0,
+        'day_1' => 0,
+        'day_1sup' => 0,
+        'pipeline_total' => 0,
+        'hires_goal' => 0,
+        'pending_jo' => 0,
+        'pending_berlitz' => 0,
+        'pending_ov' => 0,
+    ];
+
+    $totalCount = 0;
+    $totalFillrate = 0;
+    $totalDay1sup = 0;
+    $totalHiresGoal = 0;
+
+    foreach ($weeklyPipeWithTotals as $sum) {
+        if (strpos($sum['week_name'], 'Weekly Total') !== false) {
+            continue;
+        }
+
+        ++$totalCount;
+
+        $grandTotals['total_target'] += $sum['total_target'];
+        $grandTotals['show_ups_internal'] += $sum['show_ups_internal'];
+        $grandTotals['show_ups_external'] += $sum['show_ups_external'];
+        $grandTotals['show_ups_total'] += $sum['show_ups_total'];
+        $grandTotals['pipeline_total'] += $sum['pipeline_total'];
+        $grandTotals['day_1'] += $sum['day_1'];
+        $grandTotals['pending_jo'] += $sum['pending_jo'];
+        $grandTotals['pending_berlitz'] += $sum['pending_berlitz'];
+        $grandTotals['pending_ov'] += $sum['pending_ov'];
+
+        // Sum up for average calculation
+        $totalFillrate += $sum['fillrate'];
+        $totalDay1sup += $sum['day_1sup'];
+        $totalHiresGoal += $sum['hires_goal'];
+    }
+
+    // Calculate averages
+    $grandTotals['fillrate'] = $totalCount != 0 ? number_format($totalFillrate / $totalCount, 1) : 0;
+    $grandTotals['day_1sup'] = $totalCount != 0 ? number_format($totalDay1sup / $totalCount, 1) : 0;
+    $grandTotals['hires_goal'] = $totalCount != 0 ? number_format($totalHiresGoal / $totalCount, 1) : 0;
+
+    // Mapped Grand Total
+    $mappedGrandTotal = [
+        'week_name' => 'Grand Total',
+        'site_name' => '',
+        'program_name' => '',
+        'program_group' => '',
+        'total_target' => $grandTotals['total_target'],
+        'show_ups_internal' => $grandTotals['show_ups_internal'],
+        'show_ups_external' => $grandTotals['show_ups_external'],
+        'show_ups_total' => $grandTotals['show_ups_total'],
+        'fillrate' => $grandTotals['fillrate'],
+        'pending_jo' => $grandTotals['pending_jo'],
+        'pending_berlitz' => $grandTotals['pending_berlitz'],
+        'pending_ov' => $grandTotals['pending_ov'],
+        'day_1' => $grandTotals['day_1'],
+        'day_1sup' => $grandTotals['day_1sup'],
+        'pipeline_total' => $grandTotals['pipeline_total'],
+        'hires_goal' => $grandTotals['hires_goal'],
+        'color_status' => '',
+    ];
+
+    // Merge Grand Total and Weekly Pipe Data with Totals
+    array_unshift($weeklyPipeWithTotals, $mappedGrandTotal);
+
+    $response = [
+        'mps' => $weeklyPipeWithTotals,
+    ];
+
+    return response()->json($response);
+}
 
     private function removeEmptyArrays(&$array)
     {
