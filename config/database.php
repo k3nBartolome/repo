@@ -88,7 +88,20 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
-
+        'sqlsrv_linked' => [
+            'driver' => 'sqlsrv',
+            'host' => env('LINKED_DB_HOST', '10.109.2.112'),
+            'port' => env('LINKED_DB_PORT', '1433'),
+            'database' => env('LINKED_DB_DATABASE', 'VXI_SMART_RECRUIT_PH_V2_PROD'),
+            'username' => env('LINKED_DB_USERNAME', 'vxi_ta'),
+            'password' => env('LINKED_DB_PASSWORD', 'capfilems'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'options' => [
+                PDO::SQLSRV_ATTR_DIRECT_QUERY => true,
+            ],
+        ],
         'pgsql' => [
             'driver' => 'pgsql',
             'url' => env('DATABASE_URL'),
@@ -147,7 +160,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [

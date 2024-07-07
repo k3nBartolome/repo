@@ -13,8 +13,7 @@ use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
-use  App\Http\Controllers\SiteController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -242,5 +241,5 @@ Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
-
+Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
