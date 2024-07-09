@@ -115,7 +115,7 @@
               <router-link :to="`/program_management/edit/${program3.id}`">
                 <button
                   @click="getPrograms(program3.id)"
-                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                 >
                   Edit
                 </button>
@@ -124,7 +124,7 @@
             <td class="px-2 py-2">
               <button
                 @click="deactivateProgram(program3.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 Deactivate
               </button>
@@ -185,7 +185,7 @@
               <router-link :to="`/program_management/edit/${program4.id}`">
                 <button
                   @click="getPrograms(program4.id)"
-                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                  class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-center text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-blue-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
                 >
                   Edit
                 </button>
@@ -194,7 +194,7 @@
             <td class="px-2 py-2">
               <button
                 @click="activateProgram(program4.id)"
-                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
+                class="flex items-center h-8 px-1 py-1 text-xs font-semibold text-white uppercase truncate whitespace-no-wrap transition duration-150 ease-in-out bg-red-600 border-0 rounded-md hover:bg-gray-700 active:bg-gray-900 focus:outline-none disabled:opacity-25"
               >
                 Activate
               </button>
@@ -253,7 +253,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("http://10.109.2.112:8081/api/programs_activate/" + id, form)
+        .put("http://127.0.0.1:8000/api/programs_activate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -270,7 +270,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("http://10.109.2.112:8081/api/programs_deactivate/" + id, form)
+        .put("http://127.0.0.1:8000/api/programs_deactivate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -283,7 +283,7 @@ export default {
     },
     async getPrograms3() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs3")
+        .get("http://127.0.0.1:8000/api/programs3")
         .then((response) => {
           this.programs3 = response.data.data;
           console.log(response.data.data);
@@ -294,7 +294,7 @@ export default {
     },
     async getPrograms4() {
       await axios
-        .get("http://10.109.2.112:8081/api/programs4")
+        .get("http://127.0.0.1:8000/api/programs4")
         .then((response) => {
           this.programs4 = response.data.data;
           console.log(response.data.data);
@@ -306,7 +306,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("http://10.109.2.112:8081/api/sites3")
+        .get("http://127.0.0.1:8000/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -325,7 +325,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/programs", formData)
+        .post("http://127.0.0.1:8000/api/programs", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";
