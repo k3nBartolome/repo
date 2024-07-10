@@ -238,14 +238,54 @@ class ClassesController extends Controller
     }
     public function perxSitev2()
     {
-        $query =DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
-        ->select('Id','Name')->whereNotNull('Name')->distinct()->get();
-
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
+            ->select('Id','Name')
+            ->whereNotNull('Name')
+            ->where('isActive',1)
+            ->distinct()
+            ->get();
+    
         return response()->json([
             'sites' => $query,
         ]);
     }
+    public function perxSiteRegionv2()
+{
+    $query = DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
+        ->select('Id','Name')
+        ->whereNotNull('Name')
+        ->where('isActive',1)
+        ->distinct()
+        ->get();
+
+    // Define your regions and the site IDs that belong to each region
+    $regions = [
+        'QC' => [1, 2, 3,4], // replace with the actual site IDs
+        'L2' => [4, 5, 6],
+        'CLARK' => [7, 8, 9],
+        'DAVAO' => [10, 11, 12],
+    ];
+
+    $grouped = [];
+    foreach ($query as $site) {
+        foreach ($regions as $region => $siteIds) {
+            if (in_array($site->Id, $siteIds)) {
+                if (!isset($grouped[$region])) {
+                    $grouped[$region] = [];
+                }
+                $grouped[$region][] = $site;
+                break;
+            }
+        }
+    }
+
+    return response()->json([
+        'sites' => $grouped,
+    ]);
+}
+
 
     public function perxDate()
     {
