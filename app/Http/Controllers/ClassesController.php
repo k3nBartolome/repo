@@ -330,7 +330,7 @@ class ClassesController extends Controller
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Id', '=', $filterSite);
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
         
@@ -413,7 +413,7 @@ class ClassesController extends Controller
     if ($request->has('filter_site')) {
         $filterSite = $request->input('filter_site');
         if (!empty($filterSite)) {
-            $query->where('SitesDetails.Id', '=', $filterSite);
+            $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
         }
     }
     

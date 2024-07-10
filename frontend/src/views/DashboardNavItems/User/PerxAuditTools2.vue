@@ -35,7 +35,7 @@
             class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Id" :value="site.Id">
+            <option v-for="site in sites" :key="site.Id" :value="site.Name">
               {{ site.Name }}
             </option>
           </select>
