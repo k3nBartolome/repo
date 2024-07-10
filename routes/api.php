@@ -246,3 +246,6 @@ Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classes', [ClassesController::class, 'index']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('perxfilterv2', [ClassesController::class, 'perxFilterv2']);
+Route::get('perx_datev2', [ClassesController::class, 'perxDatev2']);
+Route::get('perx_sitev2', [ClassesController::class, 'perxSitev2']);

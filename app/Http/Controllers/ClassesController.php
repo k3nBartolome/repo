@@ -278,83 +278,84 @@ class ClassesController extends Controller
     }
 
     public function perxFilterv2(Request $request)
-{
-    $query = DB::connection('sqlsrv')
-        ->table('Applicant as ApplicantDetails')
-         ->select(
-                'ApplicantDetails.Id as ApplicantId',
-                'ApplicationDetails.AppliedDate as DateOfApplication',
-                'ApplicantDetails.FirstName as FirstName',
-                'ApplicantDetails.LastName as LastName',
-                'ApplicantDetails.MiddleName as MiddleName',
-                'ApplicantDetails.CellphoneNumber as MobileNumber',
-                'SitesDetails.Name as Site',
-                'SourceOfApplication.Name as SpecSource',
-                'GeneralSource.Name as GeneralSource',
-                'Step.Description as Step',
-                'Status.GeneralStatus as AppStep1',
-                'Status.SpecificStatus as AppStep2',
-                'Referrals.FirstName as ReferrerFirstName',
-                'Referrals.MiddleName as ReferrerMiddleName',
-                'Referrals.LastName as ReferrerLastName',
-                'Referrals.ReferrerHRID as ReffererHRID',
-                'Referrals.ReferrerName as ReffererName'
-            )
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
-
-    if ($request->has('filter_lastname')) {
-        $filterLastName = $request->input('filter_lastname');
-        if (!empty($filterLastName)) {
-            $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
+             ->select(
+                    'ApplicantDetails.Id as ApplicantId',
+                    'ApplicationDetails.AppliedDate as DateOfApplication',
+                    'ApplicantDetails.FirstName as FirstName',
+                    'ApplicantDetails.LastName as LastName',
+                    'ApplicantDetails.MiddleName as MiddleName',
+                    'ApplicantDetails.CellphoneNumber as MobileNumber',
+                    'SitesDetails.Name as Site',
+                    'SourceOfApplication.Name as SpecSource',
+                    'GeneralSource.Name as GeneralSource',
+                    'Step.Description as Step',
+                    'Status.GeneralStatus as AppStep1',
+                    'Status.SpecificStatus as AppStep2',
+                    'Referrals.FirstName as ReferrerFirstName',
+                    'Referrals.MiddleName as ReferrerMiddleName',
+                    'Referrals.LastName as ReferrerLastName',
+                    'Referrals.ReferrerHRID as ReffererHRID',
+                    'Referrals.ReferrerName as ReffererName'
+                )
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
+    
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+            if (!empty($filterLastName)) {
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
+            }
         }
-    }
-
-    if ($request->has('filter_firstname')) {
-        $filterFirstName = $request->input('filter_firstname');
-        if (!empty($filterFirstName)) {
-            $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+    
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+            if (!empty($filterFirstName)) {
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+            }
         }
-    }
-
-    if ($request->has('filter_site')) {
-        $filterSite = $request->input('filter_site');
-        if (!empty($filterSite)) {
-            $query->where('SitesDetails.Id', '=', '$filterSite');
+    
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+            if (!empty($filterSite)) {
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
+            }
         }
-    }
-
-    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-        $filterDateStart = $request->input('filter_date_start');
-        $filterDateEnd = $request->input('filter_date_end');
-        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-            $startDate = date('Y-m-d', strtotime($filterDateStart));
-            $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
-
-            $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+    
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+    
+                $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+            }
         }
-    }
-
-    if ($request->has('filter_contact')) {
-        $filterContact = $request->input('filter_contact');
-        if (!empty($filterContact)) {
-            $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+    
+        if ($request->has('filter_contact')) {
+            $filterContact = $request->input('filter_contact');
+            if (!empty($filterContact)) {
+                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+            }
         }
+    
+        $filteredData = $query->get();
+    
+        return response()->json([
+            'perx' => $filteredData,
+        ]);
     }
-
-    $filteredData = $query->get();
-
-    return response()->json([
-        'perx' => $filteredData,
-    ]);
-}
+    
 
 
     public function perxFilter(Request $request)
