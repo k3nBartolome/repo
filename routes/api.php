@@ -110,13 +110,16 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('check', [ClassesController::class, 'checkCombinationExistence']);
     Route::get('transaction/{id}', [ClassesController::class, 'transaction']);
     Route::get('perxfilter', [ClassesController::class, 'perxFilter']);
+    Route::get('perxfilterv2', [ClassesController::class, 'perxFilterv2']);
     Route::get('sr_compliance', [ClassesController::class, 'srCompliance']);
     Route::get('sr_filter', [ClassesController::class, 'srFilter']);
     Route::get('sr_export', [ClassesController::class, 'srExport']);
     Route::get('sr_date', [ClassesController::class, 'srDate']);
     Route::get('perx_date', [ClassesController::class, 'perxDate']);
+    Route::get('perx_datev2', [ClassesController::class, 'perxDatev2']);
     Route::get('sr_site', [ClassesController::class, 'srSite']);
     Route::get('perx_site', [ClassesController::class, 'perxSite']);
+    Route::get('perx_sitev2', [ClassesController::class, 'perxSitev2']);
     Route::get('export', [ClassesController::class, 'exportFilteredData']);
     Route::get('export2', [ClassesController::class, 'dashboardClassesExport']);
     Route::get('history_export', [ClassesController::class, 'dashboardClassesExport2']);

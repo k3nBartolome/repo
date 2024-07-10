@@ -68,7 +68,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -79,7 +79,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('QueueDate', '>=', $startDate)
                     ->where('QueueDate', '<', $endDate);
@@ -117,7 +117,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -235,6 +235,16 @@ class ClassesController extends Controller
             'sites' => $query,
         ]);
     }
+    public function perxSitev2()
+    {
+        $query =DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
+        ->select('Id','Name')->whereNotNull('Name')->distinct()->get();
+
+        return response()->json([
+            'sites' => $query,
+        ]);
+    }
 
     public function perxDate()
     {
@@ -251,6 +261,101 @@ class ClassesController extends Controller
             'maxDate' => $maxDate,
         ]);
     }
+    public function perxDatev2()
+    {
+        $minDate =DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->min('AppliedDate');
+        $maxDate = DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->max('AppliedDate');
+
+        $minDate = Carbon::parse($minDate)->format('Y-m-d');
+        $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
+
+        return response()->json([
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+        ]);
+    }
+
+    public function perxFilterv2(Request $request)
+{
+    $query = DB::connection('sqlsrv')
+        ->table('Applicant as ApplicantDetails')
+         ->select(
+                'ApplicantDetails.Id as ApplicantId',
+                'ApplicationDetails.AppliedDate as DateOfApplication',
+                'ApplicantDetails.FirstName as FirstName',
+                'ApplicantDetails.LastName as LastName',
+                'ApplicantDetails.MiddleName as MiddleName',
+                'ApplicantDetails.CellphoneNumber as MobileNumber',
+                'SitesDetails.Name as Site',
+                'SourceOfApplication.Name as SpecSource',
+                'GeneralSource.Name as GeneralSource',
+                'Step.Description as Step',
+                'Status.GeneralStatus as AppStep1',
+                'Status.SpecificStatus as AppStep2',
+                'Referrals.FirstName as ReferrerFirstName',
+                'Referrals.MiddleName as ReferrerMiddleName',
+                'Referrals.LastName as ReferrerLastName',
+                'Referrals.ReferrerHRID as ReffererHRID',
+                'Referrals.ReferrerName as ReffererName'
+            )
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
+
+    if ($request->has('filter_lastname')) {
+        $filterLastName = $request->input('filter_lastname');
+        if (!empty($filterLastName)) {
+            $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
+        }
+    }
+
+    if ($request->has('filter_firstname')) {
+        $filterFirstName = $request->input('filter_firstname');
+        if (!empty($filterFirstName)) {
+            $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+        }
+    }
+
+    if ($request->has('filter_site')) {
+        $filterSite = $request->input('filter_site');
+        if (!empty($filterSite)) {
+            $query->where('SitesDetails.Id', '=', '$filterSite');
+        }
+    }
+
+    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+        $filterDateStart = $request->input('filter_date_start');
+        $filterDateEnd = $request->input('filter_date_end');
+        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+            $startDate = date('Y-m-d', strtotime($filterDateStart));
+            $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+
+            $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+        }
+    }
+
+    if ($request->has('filter_contact')) {
+        $filterContact = $request->input('filter_contact');
+        if (!empty($filterContact)) {
+            $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+        }
+    }
+
+    $filteredData = $query->get();
+
+    return response()->json([
+        'perx' => $filteredData,
+    ]);
+}
+
 
     public function perxFilter(Request $request)
     {
@@ -261,7 +366,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -269,7 +374,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -277,7 +382,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -288,7 +393,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -299,7 +404,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -319,7 +424,7 @@ class ClassesController extends Controller
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -327,7 +432,7 @@ class ClassesController extends Controller
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -335,7 +440,7 @@ class ClassesController extends Controller
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -346,7 +451,7 @@ class ClassesController extends Controller
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -357,7 +462,7 @@ class ClassesController extends Controller
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -392,44 +497,39 @@ class ClassesController extends Controller
         'OSS_LOB',
         'OSS_SITE'
         )->get(); */
-        $data = DB::connection('sqlsrv')->select('SELECT
-        ApplicantDetails.FirstName,
-        ApplicantDetails.LastName,
-        ApplicantDetails.MiddleName,
-        ApplicantDetails.CellphoneNumber,
-        Status.GeneralStatus,
-        Status.SpecificStatus,
-        SitesDetails.Name as Site,
-        SourceOfApplication.Name as SpecSource
-    FROM
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[Applicant] AS ApplicantDetails
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[ApplicantApplications] AS ApplicationDetails
-        ON ApplicantDetails.Id = ApplicationDetails.ApplicantId
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[Status] AS Status
-        ON ApplicationDetails.[Status] = Status.Id
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[job] AS JobDetails
-        ON ApplicationDetails.[JobId] = JobDetails.Id
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[Sites] AS SitesDetails
-        ON JobDetails.[SiteId] = SitesDetails.Id
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[ApplicationInformation] AS ApplicationInformation
-        ON ApplicantDetails.Id = ApplicationInformation.UserID
-    LEFT JOIN
-        [SMART_RECRUIT].[VXI_SMART_RECRUIT_PH_V2_PROD].[dbo].[SourceOfApplication] AS SourceOfApplication
-        ON ApplicationInformation.SourceOfApplication = SourceOfApplication.Id
-    
-
-        ');
-
-    
-        $data = cache()->remember('perx_data', $minutes, function () use ($data) {
-            return $data;
+        $data = cache()->remember('perx_data', $minutes, function () {
+            return DB::connection('sqlsrv')
+                ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
+                ->select(
+                    'ApplicantDetails.Id as ApplicantId',
+                    'ApplicationDetails.AppliedDate as DateOfApplication',
+                    'ApplicantDetails.FirstName as FirstName',
+                    'ApplicantDetails.LastName as LastName',
+                    'ApplicantDetails.MiddleName as MiddleName',
+                    'ApplicantDetails.CellphoneNumber as MobileName',
+                    'SitesDetails.Name as Site',
+                    'SourceOfApplication.Name as SpecSource',
+                    'GeneralSource.Name as GeneralSource',
+                    'Step.Description as Step',
+                    'Status.GeneralStatus as AppStep1',
+                    'Status.SpecificStatus as AppStep2',
+                    'Referrals.FirstName as ReferrerFirstName',
+                    'Referrals.MiddleName as ReferrerMiddleName',
+                    'Referrals.LastName as ReferrerLastName',
+                    'Referrals.ReferrerHRID as ReffererHRID',
+                    'Referrals.ReferrerName as ReffererName'
+                )
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id')
+                ->get();
         });
-
         return response()->json([
             'perx' => $data,
         ]);
@@ -869,7 +969,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -944,7 +1044,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -1488,7 +1588,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -1563,7 +1663,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -1832,7 +1932,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -1907,7 +2007,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -2176,7 +2276,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -2251,7 +2351,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -2667,7 +2767,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -2742,7 +2842,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3011,7 +3111,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3086,7 +3186,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3355,7 +3455,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3430,7 +3530,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3846,7 +3946,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3921,7 +4021,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -4190,7 +4290,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -4265,7 +4365,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -6244,7 +6344,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -6319,7 +6419,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -6850,7 +6950,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -6925,7 +7025,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -7194,7 +7294,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -7269,7 +7369,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -7538,7 +7638,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -7613,7 +7713,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8014,7 +8114,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8089,7 +8189,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8358,7 +8458,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8433,7 +8533,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8702,7 +8802,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8777,7 +8877,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -9178,7 +9278,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -9253,7 +9353,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -9522,7 +9622,7 @@ class ClassesController extends Controller
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -9597,7 +9697,7 @@ class ClassesController extends Controller
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -9992,7 +10092,7 @@ class ClassesController extends Controller
         $pipelineTotal = $staffingModel->pipeline_total ?? 0;
         $filled = $staffingModel->filled ?? 0;
         $deficit = max(0, floatval($classTarget) - floatval($showUpsTotal));
-        $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2) . '%';
+        $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2).'%';
         $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
         $classNumber = intval($classTarget) % 15 > 1
         ? floor(intval($classTarget) / 15) + 1
@@ -10194,19 +10294,19 @@ class ClassesController extends Controller
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [
@@ -10328,19 +10428,19 @@ class ClassesController extends Controller
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [
@@ -10462,19 +10562,19 @@ class ClassesController extends Controller
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [

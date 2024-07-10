@@ -1,22 +1,22 @@
 <template>
   <div class="py-0">
-    <header class="bg-white p-4 py-0">
+    <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool</h2>
+        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool v2</h2>
       </div>
     </header>
-    <div class="bg-gray-100 p-4">
+    <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        <div class="w-full md:w-1/4 relative">
+        <div class="relative w-full md:w-1/4">
           <input
             v-model="filterLastName"
             placeholder="Filter by Last Name"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="validateLastName"
           />
           <div
             v-if="filterLastNameError"
-            class="absolute top-full left-0 text-red-500 text-sm"
+            class="absolute left-0 text-sm text-red-500 top-full"
           >
             {{ filterLastNameError }}
           </div>
@@ -25,14 +25,14 @@
           <input
             v-model="filterFirstName"
             placeholder="Filter by First Name"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
           />
         </div>
         <div class="w-full md:w-1/4">
           <select
             v-model="filterSite"
             placeholder="Filter by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
             <option v-for="site in sites" :key="site.Site" :value="site.Site">
@@ -45,7 +45,7 @@
             v-model="filterStartDate"
             type="date"
             placeholder="Start"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterStartDate"
           />
         </div>
@@ -54,20 +54,20 @@
             v-model="filterEndDate"
             type="date"
             placeholder="End by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterEndDate"
           />
         </div>
-        <div class="w-full md:w-1/4 relative">
+        <div class="relative w-full md:w-1/4">
           <input
             v-model="filterContact"
             placeholder="Filter by Mobile No."
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="validateContact"
           />
           <div
             v-if="filterContactError"
-            class="absolute top-full left-0 text-red-500 text-sm"
+            class="absolute left-0 text-sm text-red-500 top-full"
           >
             {{ filterContactError }}
           </div>
@@ -75,7 +75,7 @@
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Filter
           </button>
@@ -83,7 +83,7 @@
         <div class="w-full md:w-1/4">
           <button
             @click="exportToExcel"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Export
           </button>
@@ -91,7 +91,7 @@
       </div>
       <div
         v-if="filterLoading || exportLoading"
-        class="text-center text-blue-500 font-bold"
+        class="font-bold text-center text-blue-500"
       >
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>

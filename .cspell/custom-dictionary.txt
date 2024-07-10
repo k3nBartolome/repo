@@ -30,6 +30,8 @@ countstatus
 cstat
 daterange
 daterangeall
+datev
+Datev
 dbal
 Dispatchable
 Doesnt
@@ -38,6 +40,7 @@ EDSA
 emps
 fakerphp
 fillrate
+Filterv
 firstname
 guzzlehttp
 HRID
@@ -77,6 +80,7 @@ programsother
 Pushback
 pushedback
 Pushedback
+Refferer
 remx
 siteclasses
 siteclassescancelled
@@ -90,6 +94,8 @@ siteclassesmoved
 siteinventory
 siteinventoryall
 sitely
+sitev
+Sitev
 spreadsheetml
 sslmode
 storeother
