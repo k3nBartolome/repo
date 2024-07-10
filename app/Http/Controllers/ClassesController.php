@@ -262,10 +262,10 @@ class ClassesController extends Controller
 
     // Define your regions and the site IDs that belong to each region
     $regions = [
-        'QC' => [1, 2, 3,4], // replace with the actual site IDs
-        'L2' => [4, 5, 6],
-        'CLARK' => [7, 8, 9],
-        'DAVAO' => [10, 11, 12],
+        'QC' => [1,2,3,4,21],
+        'L2' => [5,6,16,19,20],
+        'CLARK' => [11,12,17],
+        'DAVAO' => [7,8,9,10,13,14,15,18,],
     ];
 
     $grouped = [];
