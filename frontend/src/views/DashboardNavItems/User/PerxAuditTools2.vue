@@ -35,7 +35,7 @@
             class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Site" :value="site.Site">
+            <option v-for="site in sites" :key="site.Site" :value="site.Id">
               {{ site.Site }}
             </option>
           </select>
@@ -231,7 +231,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_date",
+          "http://127.0.0.1:8000/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -282,7 +282,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_site",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -305,7 +305,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilter",
+          "http://127.0.0.1:8000/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -333,7 +333,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/export", {
+        const response = await axios.get("http://127.0.0.1:8000/api/export", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
