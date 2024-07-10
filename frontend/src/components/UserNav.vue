@@ -98,7 +98,7 @@
                       to="/perxv2"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >PERX Tool v2</router-link
+                      >PERX Tool SRv2</router-link
                     >
                   </div>
                 </div>
@@ -227,24 +227,7 @@
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
               >
-                <router-link
-                  to="/about"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem"
-                  >About</router-link
-                >
-                <router-link
-                  to="/services"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem"
-                  >Services</router-link
-                >
-                <router-link
-                  to="/contact"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem"
-                  >Contact</router-link
-                >
+                
               </div>
             </div>
           </div>

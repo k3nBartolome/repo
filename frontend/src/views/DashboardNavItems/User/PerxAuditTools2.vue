@@ -2,7 +2,7 @@
   <div class="py-0">
     <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool v2</h2>
+        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool SRv2</h2>
       </div>
     </header>
     <div class="p-4 bg-gray-100">
@@ -35,8 +35,8 @@
             class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Site" :value="site.Id">
-              {{ site.Site }}
+            <option v-for="site in sites" :key="site.Id" :value="site.Id">
+              {{ site.Name }}
             </option>
           </select>
         </div>
@@ -187,28 +187,24 @@ export default {
       sites: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
-        { data: "ApplicationInfoId", title: "SR ID" },
         { data: "DateOfApplication", title: "DateOfApplication" },
         { data: "LastName", title: "LastName" },
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNo", title: "MobileNo" },
+        { data: "MobileNumber", title: "MobileNo" },
         { data: "Site", title: "Site" },
-        { data: "GenSource", title: "GenSource" },
+        { data: "GeneralSource", title: "GenSource" },
         { data: "SpecSource", title: "SpecSource" },
         { data: "Step", title: "Step" },
-        { data: "AppStep", title: "AppStep" },
-        { data: "PERX_HRID", title: "PERX_HRID" },
-        { data: "PERX_Last_Day", title: "PERX_Last_Day" },
-        { data: "PERX_Retract", title: "PERX_Retract" },
-        { data: "PERX_NAME", title: "PERX_NAME" },
-        { data: "OSS_HRID", title: "OSS_HRID" },
-        { data: "OSS_Last_Day", title: "OSS_Last_Day" },
-        { data: "OSS_Retract", title: "OSS_Retract" },
-        { data: "OSS_FNAME", title: "OSS_FNAME" },
-        { data: "OSS_LNAME", title: "OSS_LNAME" },
-        { data: "OSS_LOB", title: "OSS_LOB" },
-        { data: "OSS_SITE", title: "OSS_SITE" },
+        { data: "AppStep1", title: "GenStatus" },
+        { data: "AppStep2", title: "SpecStatus" },
+        { data: "ReferrerHRID", title: " ReferrerHRID" },
+        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
+        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
+        { data: "ReferrerLastName", title: "ReferrerLastName" },
+        { data: "ReferrerName", title: "ReferrerName" },
+        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
+        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" }
       ],
       filterLoading: false,
       exportLoading: false,
@@ -231,7 +227,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_datev2",
+          "http://10.109.2.112:8081/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -282,7 +278,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -305,7 +301,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilterv2",
+          "http://10.109.2.112:8081/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -333,7 +329,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/export", {
+        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
@@ -355,7 +351,7 @@ export default {
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = "filtered_perx_data.xlsx";
+        link.download = "perx_data.xlsx";
         link.click();
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
@@ -363,6 +359,7 @@ export default {
         this.exportLoading = false; // Set export loading to false when the request completes
       }
     },
+    
   },
 };
 </script>
