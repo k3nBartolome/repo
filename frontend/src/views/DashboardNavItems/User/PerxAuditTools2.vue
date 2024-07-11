@@ -41,6 +41,19 @@
           </select>
         </div>
         <div class="w-full md:w-1/4">
+          <select
+            v-model="filterRegion"
+            placeholder="Filter by Region"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option value="CLARK">CLARK</option>
+            <option value="CLARK">DAVAO</option>
+            <option value="CLARK">L2</option>
+            <option value="CLARK">QC</option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
             type="date"
@@ -310,6 +323,7 @@ export default {
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
               filter_contact: this.filterContact,
+              filter_region: this.filterRegion,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -359,7 +373,7 @@ export default {
         this.exportLoading = false; // Set export loading to false when the request completes
       }
     },
-    
+
   },
 };
 </script>

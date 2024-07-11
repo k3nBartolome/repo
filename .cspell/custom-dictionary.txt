@@ -28,6 +28,7 @@ classesstaffing
 classestransaction
 countstatus
 cstat
+Datav
 daterange
 daterangeall
 datev
@@ -38,6 +39,7 @@ Doesnt
 dont
 EDSA
 emps
+Exportv
 fakerphp
 fillrate
 Filterv
@@ -81,6 +83,7 @@ Pushback
 pushedback
 Pushedback
 Refferer
+Regionv
 remx
 siteclasses
 siteclassescancelled

@@ -320,38 +320,54 @@ class ClassesController extends Controller
 
     public function perxFilterv2(Request $request)
     {
+        $regions = [
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
+    
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
-             ->select(
-                    'ApplicantDetails.Id as ApplicantId',
-                    'ApplicationDetails.AppliedDate as DateOfApplication',
-                    'ApplicantDetails.FirstName as FirstName',
-                    'ApplicantDetails.LastName as LastName',
-                    'ApplicantDetails.MiddleName as MiddleName',
-                    'ApplicantDetails.CellphoneNumber as MobileNumber',
-                    'SitesDetails.Name as Site',
-                    'SourceOfApplication.Name as SpecSource',
-                    'GeneralSource.Name as GeneralSource',
-                    'Step.Description as Step',
-                    'Status.GeneralStatus as AppStep1',
-                    'Status.SpecificStatus as AppStep2',
-                    'Referrals.FirstName as ReferrerFirstName',
-                    'Referrals.MiddleName as ReferrerMiddleName',
-                    'Referrals.LastName as ReferrerLastName',
-                    'Referrals.ReferrerHRID as ReferrerHRID',
-                    'Referrals.ReferrerName as ReferrerName',
-                    'ApplicationInformation.ReferrerName as DeclaredReferrerName',
-                    'ApplicationInformation.ReferrerId as DeclaredReferrerId'
-                )
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
-                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
+            ->select(
+                'ApplicantDetails.Id as ApplicantId',
+                'ApplicationDetails.AppliedDate as DateOfApplication',
+                'ApplicantDetails.FirstName as FirstName',
+                'ApplicantDetails.LastName as LastName',
+                'ApplicantDetails.MiddleName as MiddleName',
+                'ApplicantDetails.CellphoneNumber as MobileNumber',
+                'SitesDetails.Name as Site',
+                'SourceOfApplication.Name as SpecSource',
+                'GeneralSource.Name as GeneralSource',
+                'Step.Description as Step',
+                'Status.GeneralStatus as AppStep1',
+                'Status.SpecificStatus as AppStep2',
+                'Referrals.FirstName as ReferrerFirstName',
+                'Referrals.MiddleName as ReferrerMiddleName',
+                'Referrals.LastName as ReferrerLastName',
+                'Referrals.ReferrerHRID as ReferrerHRID',
+                'Referrals.ReferrerName as ReferrerName',
+                'ApplicationInformation.ReferrerName as DeclaredReferrerName',
+                'ApplicationInformation.ReferrerId as DeclaredReferrerId',
+                DB::raw("
+                    CASE 
+                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
+                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
+                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
+                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
+                        ELSE 'UNKNOWN'
+                    END as Region
+                ")
+            )
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicationInformation as ApplicationInformation', 'ApplicantDetails.Id', '=', 'ApplicationInformation.UserID')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'ApplicationInformation.SourceOfApplication', '=', 'SourceOfApplication.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
     
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
@@ -373,7 +389,6 @@ class ClassesController extends Controller
                 $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
-        
     
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
             $filterDateStart = $request->input('filter_date_start');
@@ -393,12 +408,21 @@ class ClassesController extends Controller
             }
         }
     
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                $query->whereIn('SitesDetails.Id', $siteIds);
+            }
+        }
+    
         $filteredData = $query->get();
     
         return response()->json([
             'perx' => $filteredData,
         ]);
     }
+    
     
     public function exportFilteredDatav2(Request $request)
     {
