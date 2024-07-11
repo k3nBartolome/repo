@@ -645,7 +645,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteinventoryall",
+          "http://127.0.0.1:8000/api/siteinventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -666,7 +666,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -707,7 +707,7 @@ export default {
         transferred_from: this.sites1_selected,
       };
       axios
-        .post("http://10.109.2.112:8081/api/transfer", formData, {
+        .post("http://127.0.0.1:8000/api/transfer", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -778,7 +778,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("http://10.109.2.112:8081/api/items_site_supply", formData, {
+        .post("http://127.0.0.1:8000/api/items_site_supply", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
