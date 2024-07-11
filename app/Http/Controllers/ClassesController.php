@@ -330,8 +330,8 @@ class ClassesController extends Controller
                     END as Region
                 "),
                 'SitesDetails.Name as Site',
-                'SourceOfApplication.Name as SpecSource',
                 'GeneralSource.Name as GeneralSource',
+                'SourceOfApplication.Name as SpecSource',
                 'Step.Description as Step',
                 'Status.GeneralStatus as AppStep1',
                 'Status.SpecificStatus as AppStep2',
@@ -436,8 +436,8 @@ class ClassesController extends Controller
                     END as Region
                 "),
                 'SitesDetails.Name as Site',
-                'SourceOfApplication.Name as SpecSource',
                 'GeneralSource.Name as GeneralSource',
+                'SourceOfApplication.Name as SpecSource',
                 'Step.Description as Step',
                 'Status.GeneralStatus as AppStep1',
                 'Status.SpecificStatus as AppStep2',
@@ -570,7 +570,41 @@ class ClassesController extends Controller
             'perx' => $filteredData,
         ]);
     }
-
+    public function leads()
+    {
+        $minutes = 1;
+        $data = cache()->remember('perx_data', $minutes, function () {
+            return DB::connection('sqlsrv')
+                ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
+                ->select('ApplicantDetails.Id as ApplicantId',
+                         'ApplicationDetails.AppliedDate as DateOfApplication',
+                         'UploadLeads.FirstName as FirstName',
+                         'UploadLeads.LastName as LastName',
+                         'UploadLeads.MiddleName as MiddleName',
+                         'UploadLeads.ContactNo as MobileName',
+                         'UploadLeads.EmailAddress as Email',
+                         'SitesDetails.Name as Site',
+                         'GeneralSource.Name as GeneralSource',
+                         'Status.GeneralStatus as GeneralStatus',
+                         'Status.SpecificStatus as SpecificStatus', 
+                         'JobDetails.Title as JobTitle'
+                         )
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+                ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id')
+               
+                //->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
+                ->get();
+        });
+    
+        return response()->json([
+            'leads' => $data,
+        ]);
+    }
     public function exportFilteredData(Request $request)
     {
         $query = DB::connection('secondary_sqlsrv')
@@ -664,8 +698,9 @@ class ClassesController extends Controller
                     'ApplicantDetails.MiddleName as MiddleName',
                     'ApplicantDetails.CellphoneNumber as MobileName',
                     'SitesDetails.Name as Site',
-                    'SourceOfApplication.Name as SpecSource',
                     'GeneralSource.Name as GeneralSource',
+                    'SourceOfApplication.Name as SpecSource',
+                   
                     'Step.Description as Step',
                     'Status.GeneralStatus as AppStep1',
                     'Status.SpecificStatus as AppStep2',
