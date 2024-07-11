@@ -30,6 +30,21 @@
         </div>
         <div class="w-full md:w-1/4">
           <select
+            v-model="filterRegion"
+            placeholder="Filter by Region"
+            class="w-full p-2 border rounded-lg"
+            @change="getSites(filterRegion)"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option value="ALL">All</option>
+            <option value="CLARK">CLARK</option>
+            <option value="DAVAO">DAVAO</option>
+            <option value="L2">L2</option>
+            <option value="QC">QC</option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
+          <select
             v-model="filterSite"
             placeholder="Filter by Site"
             class="w-full p-2 border rounded-lg"
@@ -40,19 +55,7 @@
             </option>
           </select>
         </div>
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterRegion"
-            placeholder="Filter by Region"
-            class="w-full p-2 border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="CLARK">CLARK</option>
-            <option value="CLARK">DAVAO</option>
-            <option value="CLARK">L2</option>
-            <option value="CLARK">QC</option>
-          </select>
-        </div>
+        
         <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
@@ -194,6 +197,7 @@ export default {
       filterStartDate: "",
       filterEndDate: "",
       filterContact: "",
+      filterRegion: "",
       filterLastNameError: "",
       filterContactError: "",
       perx: [],
@@ -205,6 +209,7 @@ export default {
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
         { data: "MobileNumber", title: "MobileNo" },
+        { data: "Region", title: "Region" },
         { data: "Site", title: "Site" },
         { data: "SpecSource", title: "SpecSource" },
         { data: "GeneralSource", title: "GenSource" },
@@ -287,7 +292,7 @@ export default {
           "Mobile No must be at least 4 characters long.";
       }
     },
-    async getSites() {
+    async getSites(filterRegion = '') {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
@@ -296,12 +301,15 @@ export default {
             headers: {
               Authorization: `Bearer ${token}`,
             },
+            params: {
+              filter_region: filterRegion === 'ALL' ? '' : filterRegion
+            }
           }
         );
 
         if (response.status === 200) {
           this.sites = response.data.sites;
-          console.log(response.data.data);
+          console.log(response.data.sites);
         } else {
           console.log("Error fetching sites");
         }
@@ -309,6 +317,7 @@ export default {
         console.log(error);
       }
     },
+
     async fetchData() {
       this.filterLoading = true;
       try {
@@ -323,7 +332,7 @@ export default {
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
               filter_contact: this.filterContact,
-              filter_region: this.filterRegion,
+              filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -351,6 +360,7 @@ export default {
             filter_date_start: this.filterStartDate,
             filter_date_end: this.filterEndDate,
             filter_contact: this.filterContact,
+            filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
           },
           headers: {
             Authorization: `Bearer ${token}`,
@@ -373,7 +383,6 @@ export default {
         this.exportLoading = false; // Set export loading to false when the request completes
       }
     },
-
   },
 };
 </script>

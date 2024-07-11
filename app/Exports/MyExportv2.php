@@ -30,6 +30,7 @@ class MyExportv2 implements FromCollection, WithHeadings, ShouldAutoSize
         'FirstName',
         'MiddleName',
         'MobileNumber',
+        'Region',
         'Site',
         'SpecSource',
         'GeneralSource',

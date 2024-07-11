@@ -236,56 +236,40 @@ class ClassesController extends Controller
             'sites' => $query,
         ]);
     }
-    public function perxSitev2()
+    public function perxSitev2(Request $request)
     {
+        $regions = [
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
+    
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
-            ->select('Id','Name')
+            ->select('Id', 'Name')
             ->whereNotNull('Name')
-            ->where('isActive',1)
-            ->distinct()
-            ->get();
+            ->where('isActive', 1);
     
-        return response()->json([
-            'sites' => $query,
-        ]);
-    }
-    public function perxSiteRegionv2()
-{
-    $query = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites')
-        ->select('Id','Name')
-        ->whereNotNull('Name')
-        ->where('isActive',1)
-        ->distinct()
-        ->get();
-
-    // Define your regions and the site IDs that belong to each region
-    $regions = [
-        'QC' => [1,2,3,4,21],
-        'L2' => [5,6,16,19,20],
-        'CLARK' => [11,12,17],
-        'DAVAO' => [7,8,9,10,13,14,15,18,],
-    ];
-
-    $grouped = [];
-    foreach ($query as $site) {
-        foreach ($regions as $region => $siteIds) {
-            if (in_array($site->Id, $siteIds)) {
-                if (!isset($grouped[$region])) {
-                    $grouped[$region] = [];
-                }
-                $grouped[$region][] = $site;
-                break;
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                $query->whereIn('Id', $siteIds);
             }
         }
+    
+        $query->orderBy('Name');
+    
+        $sites = $query->distinct()->get();
+    
+        return response()->json([
+            'sites' => $sites,
+        ]);
     }
-
-    return response()->json([
-        'sites' => $grouped,
-    ]);
-}
-
+    
+    
+   
 
     public function perxDate()
     {
@@ -336,6 +320,15 @@ class ClassesController extends Controller
                 'ApplicantDetails.LastName as LastName',
                 'ApplicantDetails.MiddleName as MiddleName',
                 'ApplicantDetails.CellphoneNumber as MobileNumber',
+                DB::raw("
+                    CASE 
+                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
+                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
+                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
+                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
+                        ELSE 'UNKNOWN'
+                    END as Region
+                "),
                 'SitesDetails.Name as Site',
                 'SourceOfApplication.Name as SpecSource',
                 'GeneralSource.Name as GeneralSource',
@@ -348,16 +341,7 @@ class ClassesController extends Controller
                 'Referrals.ReferrerHRID as ReferrerHRID',
                 'Referrals.ReferrerName as ReferrerName',
                 'ApplicationInformation.ReferrerName as DeclaredReferrerName',
-                'ApplicationInformation.ReferrerId as DeclaredReferrerId',
-                DB::raw("
-                    CASE 
-                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
-                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
-                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
-                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
-                        ELSE 'UNKNOWN'
-                    END as Region
-                ")
+                'ApplicationInformation.ReferrerId as DeclaredReferrerId'
             )
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
@@ -426,15 +410,31 @@ class ClassesController extends Controller
     
     public function exportFilteredDatav2(Request $request)
     {
+        $regions = [
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
+    
         $query = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
-         ->select(
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
+            ->select(
                 'ApplicantDetails.Id as ApplicantId',
                 'ApplicationDetails.AppliedDate as DateOfApplication',
                 'ApplicantDetails.FirstName as FirstName',
                 'ApplicantDetails.LastName as LastName',
                 'ApplicantDetails.MiddleName as MiddleName',
                 'ApplicantDetails.CellphoneNumber as MobileNumber',
+                DB::raw("
+                    CASE 
+                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
+                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
+                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
+                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
+                        ELSE 'UNKNOWN'
+                    END as Region
+                "),
                 'SitesDetails.Name as Site',
                 'SourceOfApplication.Name as SpecSource',
                 'GeneralSource.Name as GeneralSource',
@@ -448,7 +448,6 @@ class ClassesController extends Controller
                 'Referrals.ReferrerName as ReferrerName',
                 'ApplicationInformation.ReferrerName as DeclaredReferrerName',
                 'ApplicationInformation.ReferrerId as DeclaredReferrerId'
-
             )
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
@@ -459,48 +458,55 @@ class ClassesController extends Controller
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals', 'Referrals.UserId', '=', 'ApplicantDetails.Id');
-
-    if ($request->has('filter_lastname')) {
-        $filterLastName = $request->input('filter_lastname');
-        if (!empty($filterLastName)) {
-            $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
-        }
-    }
-
-    if ($request->has('filter_firstname')) {
-        $filterFirstName = $request->input('filter_firstname');
-        if (!empty($filterFirstName)) {
-            $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
-        }
-    }
-
-    if ($request->has('filter_site')) {
-        $filterSite = $request->input('filter_site');
-        if (!empty($filterSite)) {
-            $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
-        }
-    }
     
-
-    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-        $filterDateStart = $request->input('filter_date_start');
-        $filterDateEnd = $request->input('filter_date_end');
-        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-            $startDate = date('Y-m-d', strtotime($filterDateStart));
-            $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
-
-            $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+            if (!empty($filterLastName)) {
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
+            }
         }
-    }
-
-    if ($request->has('filter_contact')) {
-        $filterContact = $request->input('filter_contact');
-        if (!empty($filterContact)) {
-            $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+    
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+            if (!empty($filterFirstName)) {
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+            }
         }
-    }
-
-    $filteredData = $query->get();
+    
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+            if (!empty($filterSite)) {
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
+            }
+        }
+    
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+    
+                $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+            }
+        }
+    
+        if ($request->has('filter_contact')) {
+            $filterContact = $request->input('filter_contact');
+            if (!empty($filterContact)) {
+                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+            }
+        }
+    
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                $query->whereIn('SitesDetails.Id', $siteIds);
+            }
+        }
+    
+        $filteredData = $query->get();
 
         $filteredDataArray = $filteredData->toArray();
 
