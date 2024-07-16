@@ -35,7 +35,7 @@
             class="w-full p-2 border rounded-lg"
             @change="getSites(filterRegion)"
           >
-            <option disabled value="" selected>Please select one</option>
+            <option disabled value="" selected>Please select Region</option>
             <option value="ALL">All</option>
             <option value="CLARK">CLARK</option>
             <option value="DAVAO">DAVAO</option>
@@ -49,13 +49,48 @@
             placeholder="Filter by Site"
             class="w-full p-2 border rounded-lg"
           >
+            <option disabled value="" selected>Please select Site</option>
+            <option v-for="site in sites" :key="site.Id" :value="site.Name">
+              {{ site.Name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
+          <select
+            v-model="filterStep"
+            placeholder="Filter by Step"
+            class="w-full p-2 border rounded-lg"
+          >
             <option disabled value="" selected>Please select one</option>
             <option v-for="site in sites" :key="site.Id" :value="site.Name">
               {{ site.Name }}
             </option>
           </select>
         </div>
-
+        <div class="w-full md:w-1/4">
+          <select
+            v-model="filterGenStat"
+            placeholder="Filter by GenSource"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.Id" :value="site.Name">
+              {{ site.Name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
+          <select
+            v-model="filterSpecStat"
+            placeholder="Filter by SpecSource"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.Id" :value="site.Name">
+              {{ site.Name }}
+            </option>
+          </select>
+        </div>
         <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
@@ -215,14 +250,7 @@ export default {
         { data: "SpecSource", title: "SpecSource" },
         { data: "Step", title: "Step" },
         { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" },
-        { data: "ReferrerHRID", title: " ReferrerHRID" },
-        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
-        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
-        { data: "ReferrerLastName", title: "ReferrerLastName" },
-        { data: "ReferrerName", title: "ReferrerName" },
-        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
-        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" }
+        { data: "AppStep2", title: "SpecStatus" }
       ],
       filterLoading: false,
       exportLoading: false,

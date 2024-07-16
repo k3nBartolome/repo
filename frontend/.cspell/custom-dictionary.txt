@@ -100,12 +100,14 @@ openingreportfile
 openxmlformats
 orderlist
 organizationchart
+outofsla
 Overhires
 overlaypanel
 panelmenu
 pdfmake
 perx
 Perx
+perxv
 picklist
 primeflex
 primeicons
@@ -155,6 +157,7 @@ tieredmenu
 toastservice
 togglebutton
 Tomzer
+Toolsv
 tooltiptext
 totaltarget
 treeselect

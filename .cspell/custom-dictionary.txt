@@ -27,6 +27,7 @@ classessitedashboard
 classesstaffing
 classestransaction
 countstatus
+createdby
 cstat
 Datav
 daterange
@@ -44,6 +45,7 @@ fakerphp
 fillrate
 Filterv
 firstname
+genstat
 guzzlehttp
 HRID
 indexboth
@@ -99,6 +101,7 @@ siteinventoryall
 sitely
 sitev
 Sitev
+specstat
 spreadsheetml
 sslmode
 storeother

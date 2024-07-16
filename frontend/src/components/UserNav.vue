@@ -31,11 +31,7 @@
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
-                <router-link
-                to="/leads"
-                class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
-                >Leads</router-link
-              >
+               
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"
@@ -90,7 +86,7 @@
                     class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                     v-if="isUser || isBudget || isRemx || isSourcing"
                   >
-                    Budget
+                    Sourcing
                   </button>
                   <div v-show="dropdownOpen" class="dropdown-content">
                     <router-link
@@ -105,6 +101,12 @@
                       role="menuitem"
                       >PERX Tool SRv2</router-link
                     >
+                    <router-link
+                    to="/leads"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                    >Leads</router-link
+                  >
                   </div>
                 </div>
                 <div

@@ -2,7 +2,7 @@
   <div class="py-0">
     <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool SRv2</h2>
+        <h2 class="text-3xl font-bold text-gray-900">Leads Tool</h2>
       </div>
     </header>
     <div class="p-4 bg-gray-100">
@@ -56,7 +56,7 @@
           </select>
         </div>
 
-        <div class="w-full md:w-1/4">
+        <!--   <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
             type="date"
@@ -73,8 +73,8 @@
             class="w-full p-2 border rounded-lg"
             @input="updateFilterEndDate"
           />
-        </div>
-        <div class="relative w-full md:w-1/4">
+        </div> -->
+       <!--  <div class="relative w-full md:w-1/4">
           <input
             v-model="filterContact"
             placeholder="Filter by Mobile No."
@@ -87,7 +87,7 @@
           >
             {{ filterContactError }}
           </div>
-        </div>
+        </div> -->
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
@@ -112,7 +112,7 @@
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>
       <DataTable
-        :data="perx"
+        :data="leads"
         :columns="columns"
         class="table divide-y divide-gray-200 table-auto table-striped"
         :options="{
@@ -138,14 +138,10 @@
         }"
       >
         <thead class="truncate">
-          <tr>
-            <!-- Add your table headers here -->
-          </tr>
+          <tr></tr>
         </thead>
         <tbody class="truncate">
-          <tr v-for="item in perx" :key="item.id">
-            <!-- Add your table row data here -->
-          </tr>
+          <tr v-for="item in leads" :key="item.id"></tr>
         </tbody>
       </DataTable>
     </div>
@@ -165,7 +161,7 @@ import "datatables.net-buttons-bs5";
 import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
-import "bootstrap/dist/js/bootstrap.bundle"; // Make sure to include Bootstrap JavaScript
+import "bootstrap/dist/js/bootstrap.bundle";
 
 // Import DataTables extensions
 import Buttons from "datatables.net-buttons-bs5";
@@ -200,7 +196,7 @@ export default {
       filterRegion: "",
       filterLastNameError: "",
       filterContactError: "",
-      perx: [],
+      leads: [],
       sites: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
@@ -208,21 +204,14 @@ export default {
         { data: "LastName", title: "LastName" },
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNumber", title: "MobileNo" },
-        { data: "Region", title: "Region" },
+        { data: "MobileName", title: "MobileNo" },
+        { data: "Email", title: "Region" },
         { data: "Site", title: "Site" },
         { data: "GeneralSource", title: "GenSource" },
         { data: "SpecSource", title: "SpecSource" },
-        { data: "Step", title: "Step" },
-        { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" },
-        { data: "ReferrerHRID", title: " ReferrerHRID" },
-        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
-        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
-        { data: "ReferrerLastName", title: "ReferrerLastName" },
-        { data: "ReferrerName", title: "ReferrerName" },
-        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
-        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" }
+        { data: "GeneralStatus", title: "GenStatus" },
+        { data: "SpecificStatus", title: "SpecStatus" },
+        { data: "JobTitle", title: "JobTitle" },
       ],
       filterLoading: false,
       exportLoading: false,
@@ -231,21 +220,22 @@ export default {
   mounted() {
     this.getDates();
     this.getSites();
+    this.fetchData();
   },
   computed: {
-    formattedFilterDate() {
+    /*  formattedFilterDate() {
       return this.filterDate
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
         : "";
-    },
+    }, */
   },
 
   methods: {
-    async getDates() {
+     async getDates() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_datev2",
+          "http://127.0.0.1:8000/api/leads_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -296,7 +286,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/leads_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -322,25 +312,22 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilterv2",
-          {
-            params: {
+        const response = await axios.get("http://127.0.0.1:8000/api/leads", {
+           params: {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
-              filter_date_start: this.filterStartDate,
+              /* filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
-              filter_contact: this.filterContact,
+              filter_contact: this.filterContact, */
               filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
             },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        this.perx = response.data.perx;
+        this.leads = response.data.leads;
       } catch (error) {
         console.error("Error fetching filtered data", error);
       } finally {
@@ -349,7 +336,7 @@ export default {
     },
 
     async exportToExcel() {
-      this.exportLoading = true; // Set export loading to true before making the request
+      this.exportLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
@@ -360,7 +347,7 @@ export default {
             filter_date_start: this.filterStartDate,
             filter_date_end: this.filterEndDate,
             filter_contact: this.filterContact,
-            filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
+            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
           },
           headers: {
             Authorization: `Bearer ${token}`,
@@ -375,12 +362,12 @@ export default {
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = "perx_data.xlsx";
+        link.download = "leads_data.xlsx";
         link.click();
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
       } finally {
-        this.exportLoading = false; // Set export loading to false when the request completes
+        this.exportLoading = false;
       }
     },
   },

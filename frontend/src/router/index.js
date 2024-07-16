@@ -62,6 +62,7 @@ import staffingTrackerSiteDashboard from "@/views/DashboardNavItems/User/Staffin
 import staffingTrackerWeekDashboard from "@/views/DashboardNavItems/User/StaffingTrackerDashboard/StaffingTrackerWeekDashboard.vue";
 import perxAuditTools from "@/views/DashboardNavItems/User/PerxAuditTools.vue";
 import perxAuditToolsv2 from "@/views/DashboardNavItems/User/PerxAuditTools2.vue";
+import Leads from "@/views/DashboardNavItems/User/LeadsTool.vue";
 import SrFilterTool from "@/views/DashboardNavItems/User/SrFilterTool.vue";
 import SrManager from "@/views/DashboardNavItems/User/SrManager.vue";
 import pushbackCapacityFileJamaica from "@/views/DashboardNavItems/User/CapfileJamaica/PushedBackCapacityFileJamaica.vue";
@@ -119,6 +120,11 @@ const routes = [
         path: "/perxv2",
         name: "perxAuditToolsv2",
         component: perxAuditToolsv2,
+      },
+      {
+        path: "/leads",
+        name: "Leads",
+        component: Leads,
       },
       {
         path: "/user_management",
