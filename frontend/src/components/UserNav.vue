@@ -20,11 +20,11 @@
                   class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >Staffing Tracker</router-link
                 >
-                <router-link
+                <!-- <router-link
                   to="/sr_compliance"
                   class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >SR Pending Movements</router-link
-                >
+                > -->
                 <router-link
                   to="/h&s"
                   class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
