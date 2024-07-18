@@ -231,6 +231,8 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
     Route::get('awarded/{id}', [AwardController::class, 'show']);
     Route::post('award/{id}', [AwardController::class, 'update']);
+    
+Route::get('leads_date', [ClassesController::class, 'leadsDate']);
 });
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);

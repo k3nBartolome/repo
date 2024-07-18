@@ -421,12 +421,27 @@ class ClassesController extends Controller
         ]);
     }
 
+    public function leadsDatev2()
+    {
+        $minDate = DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->min('DateCreated');
+        $maxDate = DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->max('DateCreated');
+
+        $minDate = Carbon::parse($minDate)->format('Y-m-d');
+        $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
+
+        return response()->json([
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+        ]);
+    }
     public function perxDatev2()
     {
         $minDate = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->min('AppliedDate');
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->min('AppliedDate');
         $maxDate = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->max('AppliedDate');
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->max('AppliedDate');
 
         $minDate = Carbon::parse($minDate)->format('Y-m-d');
         $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
@@ -715,83 +730,84 @@ class ClassesController extends Controller
             'CLARK' => [11, 12, 17],
             'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
         ];
-
+    
         $query = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
-        ->select('ApplicantDetails.Id as ApplicantId',
-                 'ApplicationDetails.AppliedDate as DateOfApplication',
-                 'UploadLeads.FirstName as FirstName',
-                 'UploadLeads.LastName as LastName',
-                 'UploadLeads.MiddleName as MiddleName',
-                 'UploadLeads.ContactNo as MobileName',
-                 'UploadLeads.EmailAddress as Email',
-                 'SitesDetails.Name as Site',
-                 'GeneralSource.Name as GeneralSource',
-                 'Status.GeneralStatus as GeneralStatus',
-                 'Status.SpecificStatus as SpecificStatus',
-                 'JobDetails.Title as JobTitle'
-                 )
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
-
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
+            ->select('ApplicantDetails.Id as ApplicantId',
+                     'ApplicationDetails.AppliedDate as DateOfApplication',
+                     'UploadLeads.FirstName as FirstName',
+                     'UploadLeads.LastName as LastName',
+                     'UploadLeads.MiddleName as MiddleName',
+                     'UploadLeads.ContactNo as MobileName',
+                     'UploadLeads.EmailAddress as Email',
+                     'SitesDetails.Name as Site',
+                     'GeneralSource.Name as GeneralSource',
+                     'Status.GeneralStatus as GeneralStatus',
+                     'Status.SpecificStatus as SpecificStatus',
+                     'JobDetails.Title as JobTitle'
+                     )
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
+    
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
                 $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
-
+    
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
                 $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
-
+    
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
                 $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
-
-         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+    
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
             $filterDateStart = $request->input('filter_date_start');
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
-
-                $query->whereBetween('[UploadLeads].DateCreated', [$startDate, $endDate]);
+    
+                $query->whereBetween('UploadLeads.DateCreated', [$startDate, $endDate]);
             }
         }
-        
+    
         if ($request->has('filter_createdby')) {
             $filterCreatedBy = $request->input('filter_createdby');
             if (!empty($filterCreatedBy)) {
-                $query->where('[UploadLeads].CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
+                $query->where('UploadLeads.CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
             }
         }
-
+    
         if ($request->has('filter_region')) {
             $filterRegion = $request->input('filter_region');
             if (!empty($filterRegion) && isset($regions[$filterRegion])) {
                 $siteIds = $regions[$filterRegion];
                 $query->whereIn('SitesDetails.Id', $siteIds);
             }
-        } 
-
-        $filteredData = $query->get(); 
-
+        }
+    
+        $filteredData = $query->get();
+    
         return response()->json([
             'leads' => $filteredData,
         ]);
     }
+    
 
     public function exportFilteredData(Request $request)
     {

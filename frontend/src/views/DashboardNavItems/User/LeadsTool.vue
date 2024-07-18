@@ -56,7 +56,7 @@
           </select>
         </div>
 
-        <!--   <div class="w-full md:w-1/4">
+        <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
             type="date"
@@ -73,7 +73,7 @@
             class="w-full p-2 border rounded-lg"
             @input="updateFilterEndDate"
           />
-        </div> -->
+        </div>
        <!--  <div class="relative w-full md:w-1/4">
           <input
             v-model="filterContact"
@@ -200,7 +200,7 @@ export default {
       sites: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
-        { data: "DateOfApplication", title: "DateOfApplication" },
+        { data: "DateOfApplication", title: "DatAdded" },
         { data: "LastName", title: "LastName" },
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
@@ -208,7 +208,6 @@ export default {
         { data: "Email", title: "Region" },
         { data: "Site", title: "Site" },
         { data: "GeneralSource", title: "GenSource" },
-        { data: "SpecSource", title: "SpecSource" },
         { data: "GeneralStatus", title: "GenStatus" },
         { data: "SpecificStatus", title: "SpecStatus" },
         { data: "JobTitle", title: "JobTitle" },
@@ -220,10 +219,9 @@ export default {
   mounted() {
     this.getDates();
     this.getSites();
-    this.fetchData();
   },
   computed: {
-    /*  formattedFilterDate() {
+     /* formattedFilterDate() {
       return this.filterDate
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
         : "";
@@ -235,7 +233,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/leads_datev2",
+          "http://10.109.2.112:8081/api/leads_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -286,7 +284,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -312,14 +310,14 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/leads", {
+        const response = await axios.get("http://10.109.2.112:8081/api/leads", {
            params: {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
-              /* filter_date_start: this.filterStartDate,
+              filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
-              filter_contact: this.filterContact, */
+             
               filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
             },
           headers: {
@@ -339,7 +337,7 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
+        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
