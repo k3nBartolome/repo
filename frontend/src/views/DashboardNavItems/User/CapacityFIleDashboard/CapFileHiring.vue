@@ -975,7 +975,7 @@
                   May 26
                 </th>
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
-                  Jun 3
+                  Jun 2
                 </th>
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
                   Jun 9
@@ -1189,7 +1189,7 @@
                   May 25
                 </th>
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">
-                  Jun 2
+                  Jun 1
                 </th>
 
                 <th class="px-1 border-2 border-gray-300" v-if="showJunColumn">

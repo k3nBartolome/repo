@@ -2,16 +2,17 @@
 
 namespace App\Exports;
 
+use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
-use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 use Maatwebsite\Excel\Events\AfterSheet;
-use Illuminate\Support\Collection;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize, WithEvents {
+class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, WithTitle, ShouldAutoSize, WithEvents
+{
     protected $data;
     protected $title;
 
@@ -25,10 +26,12 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, Wit
     {
         return $this->data;
     }
+
     public function title(): string
     {
         return 'Hiring Summary'; // Specify the title of the worksheet
     }
+
     public function headings(): array
     {
         // Define your headings for MappedB2Classes sheet
@@ -61,8 +64,8 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, Wit
             'May 12 - May 18',
             'May 19 - May 25',
             'May',
-            'May 26 - Jun 2',
-            'Jun 3 - Jun 8',
+            'May 26 - Jun 1',
+            'Jun 2 - Jun 8',
             'Jun 9 - Jun 15',
             'Jun 16 - Jun 22',
             'Jun 23 - Jul 29',
@@ -102,70 +105,71 @@ class MappedGroupedClassesWeekSheet implements FromCollection, WithHeadings, Wit
             'Total',
         ];
     }
+
     public function registerEvents(): array
     {
         return [
-            AfterSheet::class => function(AfterSheet $event) {
+            AfterSheet::class => function (AfterSheet $event) {
                 $sheet = $event->sheet->getDelegate();
 
                 $sheet->getStyle('A1:BO1')->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'color' => ['argb' => '000000']
+                        'color' => ['argb' => '000000'],
                     ],
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    ]
+                    ],
                 ]);
                 foreach (range('A', 'BO') as $column) {
-                    $cell = $sheet->getCell($column . '1');
+                    $cell = $sheet->getCell($column.'1');
                     $cell->setValue(strtoupper($cell->getValue()));
                 }
                 $lastRowBO = $sheet->getHighestRow('BO');
-                $sheet->getStyle('BO2:BO' . $lastRowBO)->applyFromArray([
+                $sheet->getStyle('BO2:BO'.$lastRowBO)->applyFromArray([
                     'font' => [
                         'bold' => true,
-                        'color' => ['argb' => 'FFFFFF']
+                        'color' => ['argb' => 'FFFFFF'],
                     ],
                     'fill' => [
                         'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                        'startColor' => ['argb' => '0000FF']
+                        'startColor' => ['argb' => '0000FF'],
                     ],
                     'alignment' => [
                         'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                    ]
+                    ],
                 ]);
                 $columns = ['G', 'L', 'R', 'W', 'AB', 'AH', 'AM', 'AS', 'AX', 'BC', 'BI', 'BN'];
                 foreach ($columns as $column) {
-                    $sheet->getStyle($column . '2:' . $column . $lastRowBO)->applyFromArray([
+                    $sheet->getStyle($column.'2:'.$column.$lastRowBO)->applyFromArray([
                         'font' => [
                             'bold' => true,
-                            'color' => ['argb' => 'FFFFFF']
+                            'color' => ['argb' => 'FFFFFF'],
                         ],
                         'fill' => [
                             'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                            'startColor' => ['argb' => '0000FF']
+                            'startColor' => ['argb' => '0000FF'],
                         ],
                         'alignment' => [
                             'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                        ]
+                        ],
                     ]);
                 }
 
-                for ($row = 2; $row <= $sheet->getHighestRow(); $row++) {
-                    if (empty($sheet->getCell('B' . $row)->getValue())) {
-                        $sheet->getStyle('C' . $row . ':BO' . $row)->applyFromArray([
+                for ($row = 2; $row <= $sheet->getHighestRow(); ++$row) {
+                    if (empty($sheet->getCell('B'.$row)->getValue())) {
+                        $sheet->getStyle('C'.$row.':BO'.$row)->applyFromArray([
                             'font' => [
                                 'bold' => true,
-                                'color' => ['argb' => 'FFFFFF']
+                                'color' => ['argb' => 'FFFFFF'],
                             ],
                             'fill' => [
                                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                                'startColor' => ['argb' => '0000FF']
+                                'startColor' => ['argb' => '0000FF'],
                             ],
                             'alignment' => [
                                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                            ]
+                            ],
                         ]);
                     }
                 }

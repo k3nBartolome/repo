@@ -3,8 +3,8 @@
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class DashboardClassesExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -51,8 +51,8 @@ class DashboardClassesExport implements FromCollection, WithHeadings, ShouldAuto
             'May 12 - May 18',
             'May 19 - May 25',
             'May',
-            'May 26 - Jun 2',
-            'Jun 3 - Jun 8',
+            'May 26 - Jun 1',
+            'Jun 2 - Jun 8',
             'Jun 9 - Jun 15',
             'Jun 16 - Jun 22',
             'Jun 23 - Jul 29',
