@@ -25,7 +25,8 @@ class ClassesController extends Controller
 {
     public function ApplicantsID($id)
     {
-        $applicant = Applicant::findOrFail($id);
+        
+        $applicant = Applicant::where('SR_ID', $id)->firstOrFail();
 
         return response()->json([
             'applicant' => $applicant,

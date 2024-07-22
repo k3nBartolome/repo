@@ -6,19 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Applicant extends Model
 {
-    // Specify the database connection name (if it's different from the default)
     protected $connection = 'sqlsrv';
-
-    // Specify the table name
     protected $table = 'SMART_RECRUIT.PH_TA.dbo.APP_DB';
-
-    // Specify the primary key column name
-    protected $primaryKey = 'SR_ID';
-
-    // Disable the timestamps (created_at and updated_at)
     public $timestamps = false;
-
-    // Define the fillable properties if you want to allow mass assignment
     protected $fillable = [
         'SR_ID',
         'ApplicationDate',
