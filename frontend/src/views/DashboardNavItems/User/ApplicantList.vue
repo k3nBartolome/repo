@@ -2,7 +2,7 @@
   <div class="py-0">
     <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool SRv2</h2>
+        <h2 class="text-3xl font-bold text-gray-900">Applicant Tool SRv2</h2>
       </div>
     </header>
     <div class="p-4 bg-gray-100">
@@ -35,7 +35,7 @@
             class="w-full p-2 border rounded-lg"
             @change="getSites(filterRegion)"
           >
-            <option disabled value="" selected>Please select Region</option>
+            <option disabled value="" selected>Please select one</option>
             <option value="ALL">All</option>
             <option value="CLARK">CLARK</option>
             <option value="DAVAO">DAVAO</option>
@@ -49,48 +49,13 @@
             placeholder="Filter by Site"
             class="w-full p-2 border rounded-lg"
           >
-            <option disabled value="" selected>Please select Site</option>
-            <option v-for="site in sites" :key="site.Id" :value="site.Name">
-              {{ site.Name }}
-            </option>
-          </select>
-        </div>
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterStep"
-            placeholder="Filter by Step"
-            class="w-full p-2 border rounded-lg"
-          >
             <option disabled value="" selected>Please select one</option>
             <option v-for="site in sites" :key="site.Id" :value="site.Name">
               {{ site.Name }}
             </option>
           </select>
         </div>
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterGenStat"
-            placeholder="Filter by GenSource"
-            class="w-full p-2 border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Id" :value="site.Name">
-              {{ site.Name }}
-            </option>
-          </select>
-        </div>
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterSpecStat"
-            placeholder="Filter by SpecSource"
-            class="w-full p-2 border rounded-lg"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Id" :value="site.Name">
-              {{ site.Name }}
-            </option>
-          </select>
-        </div>
+
         <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
@@ -250,7 +215,14 @@ export default {
         { data: "SpecSource", title: "SpecSource" },
         { data: "Step", title: "Step" },
         { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" }
+        { data: "AppStep2", title: "SpecStatus" },
+        { data: "ReferrerHRID", title: " ReferrerHRID" },
+        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
+        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
+        { data: "ReferrerLastName", title: "ReferrerLastName" },
+        { data: "ReferrerName", title: "ReferrerName" },
+        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
+        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" }
       ],
       filterLoading: false,
       exportLoading: false,
@@ -259,6 +231,7 @@ export default {
   mounted() {
     this.getDates();
     this.getSites();
+    this.fetchData();
   },
   computed: {
     formattedFilterDate() {
@@ -351,9 +324,9 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilterv2",
+          "http://127.0.0.1:8000/api/applicants",
           {
-            params: {
+          /*   params: {
               filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
@@ -361,14 +334,14 @@ export default {
               filter_date_end: this.filterEndDate,
               filter_contact: this.filterContact,
               filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
-            },
+            }, */
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
 
-        this.perx = response.data.perx;
+        this.perx = response.data.applicant;
       } catch (error) {
         console.error("Error fetching filtered data", error);
       } finally {
