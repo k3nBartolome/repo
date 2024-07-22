@@ -203,26 +203,99 @@ export default {
       perx: [],
       sites: [],
       columns: [
-        { data: "ApplicantId", title: "ApplicantId" },
-        { data: "DateOfApplication", title: "DateOfApplication" },
-        { data: "LastName", title: "LastName" },
+        { data: "SR_ID", title: "SR_ID" },
+        { data: "ApplicationDate", title: "ApplicationDate" },
         { data: "FirstName", title: "FirstName" },
+        { data: "LastName", title: "LastName" },
         { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNumber", title: "MobileNo" },
-        { data: "Region", title: "Region" },
-        { data: "Site", title: "Site" },
-        { data: "GeneralSource", title: "GenSource" },
-        { data: "SpecSource", title: "SpecSource" },
+        { data: "Suffix", title: "Suffix" },
+        { data: "Email", title: "Email" },
+        { data: "CellphoneNumber", title: "CellphoneNumber" },
+        { data: "BirthDate", title: "BirthDate" },
+        { data: "CivilStatus", title: "CivilStatus" },
+        { data: "MotherFirstName", title: "MotherFirstName" },
+        { data: "MotherLastName", title: "MotherLastName" },
+        { data: "MotherMiddleName", title: "MotherMiddleName" },
+        { data: "C_Country", title: "C_Country" },
+        { data: "C_Region", title: "C_Region" },
+        { data: "C_Province", title: "C_Province" },
+        { data: "C_City", title: "C_City" },
+        { data: "City_Address", title: "City_Address" },
+        { data: "ExpectedSalary", title: "ExpectedSalary" },
         { data: "Step", title: "Step" },
-        { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" },
-        { data: "ReferrerHRID", title: " ReferrerHRID" },
-        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
-        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
-        { data: "ReferrerLastName", title: "ReferrerLastName" },
-        { data: "ReferrerName", title: "ReferrerName" },
-        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
-        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" }
+        { data: "GeneralSource", title: "GeneralSource" },
+        { data: "SpecificSource", title: "SpecificSource" },
+        { data: "GeneralStatus", title: "GeneralStatus" },
+        { data: "SpecificStatus", title: "SpecificStatus" },
+        { data: "PositionApplyingFor", title: "PositionApplyingFor" },
+        { data: "SiteApplied", title: "SiteApplied" },
+        { data: "KO_Score", title: "KO_Score" },
+        { data: "GQ1", title: "GQ1" },
+        { data: "GQ2", title: "GQ2" },
+        { data: "WQ", title: "WQ" },
+        { data: "SVA", title: "SVA" },
+        {
+          data: "HighestEducationalAttainment",
+          title: "HighestEducationalAttainment",
+        },
+        { data: "SchoolName", title: "SchoolName" },
+        { data: "SchoolAddress", title: "SchoolAddress" },
+        { data: "Course", title: "Course" },
+        { data: "SchoolStartDate", title: "SchoolStartDate" },
+        { data: "SchoolEndDate", title: "SchoolEndDate" },
+        { data: "GraduationDate", title: "GraduationDate" },
+        { data: "ReferralID", title: "ReferralID" },
+        { data: "id", title: "id" },
+        { data: "ApplicantAppicationsId", title: "ApplicantAppicationsId" },
+        { data: "ApplicantId", title: "ApplicantId" },
+        { data: "Pronunciation", title: "Pronunciation" },
+        { data: "Grammar", title: "Grammar" },
+        { data: "Fluency", title: "Fluency" },
+        { data: "Lexis", title: "Lexis" },
+        { data: "CCC", title: "CCC" },
+        { data: "Tone", title: "Tone" },
+        { data: "PreEmps", title: "PreEmps" },
+        { data: "EmpBkgrnd", title: "EmpBkgrnd" },
+        { data: "SchedAmenability", title: "SchedAmenability" },
+        { data: "EducAttainment", title: "EducAttainment" },
+        { data: "HealthCond", title: "HealthCond" },
+        { data: "Availability", title: "Availability" },
+        { data: "SitePref", title: "SitePref" },
+        { data: "CustService", title: "CustService" },
+        { data: "Sales", title: "Sales" },
+        { data: "StressTol", title: "StressTol" },
+        { data: "Integrity", title: "Integrity" },
+        { data: "Achievement", title: "Achievement" },
+        { data: "ProblemSolving", title: "ProblemSolving" },
+        { data: "IntervieweeId", title: "IntervieweeId" },
+        { data: "ApplicantApplicationId", title: "ApplicantApplicationId" },
+        { data: "Interviewer", title: "Interviewer" },
+        { data: "LIRemarks", title: "LIRemarks" },
+        { data: "RIRemarks", title: "RIRemarks" },
+        { data: "BCIRemarks", title: "BCIRemarks" },
+        { data: "ProfilingRemarks", title: "ProfilingRemarks" },
+        { data: "Class", title: "Class" },
+        { data: "OVRemarks", title: "OVRemarks" },
+        { data: "OVRecruiter", title: "OVRecruiter" },
+        { data: "OVDate", title: "OVDate" },
+       /*  { data: "ImmediateSupervisorHRID", title: "ImmediateSupervisorHRID" },
+        { data: "ImmediateSupervisorName", title: "ImmediateSupervisorName" },
+        { data: "WorkSetup", title: "WorkSetup" },
+        { data: "CompanyName", title: "CompanyName" },
+        { data: "WorkExpType", title: "WorkExpType" },
+        { data: "LastWorkingDate", title: "LastWorkingDate" },
+        { data: "AdapterIndustry", title: "AdapterIndustry" },
+        { data: "Position", title: "Position" },
+        { data: "Salary", title: "Salary" },
+        { data: "WorkTenureMonths", title: "WorkTenureMonths" },
+        { data: "ReasonForLeaving", title: "ReasonForLeaving" },
+        { data: "AccountType", title: "AccountType" },
+        { data: "ExperienceType", title: "ExperienceType" },
+        { data: "WorkType", title: "WorkType" },
+        { data: "TotalWorkExp", title: "TotalWorkExp" },
+        { data: "TotalWorkExpBPO", title: "TotalWorkExpBPO" },
+        { data: "TotalWorkExpNonBPO", title: "TotalWorkExpNonBPO" },
+        { data: "Segment", title: "Segment" } */
       ],
       filterLoading: false,
       exportLoading: false,
@@ -246,7 +319,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_datev2",
+          "http://10.109.2.112:8081/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -297,7 +370,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -324,7 +397,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/applicants",
+          "http://10.109.2.112:8081/api/applicants",
           {
           /*   params: {
               filter_lastname: this.filterLastName,
@@ -341,7 +414,7 @@ export default {
           }
         );
 
-        this.perx = response.data.applicant;
+        this.perx = response.data.applicants;
       } catch (error) {
         console.error("Error fetching filtered data", error);
       } finally {
@@ -353,7 +426,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
+        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
