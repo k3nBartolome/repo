@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\ClassHistoryExport;
 use App\Exports\DashboardClassesExport;
 use App\Exports\MyExport;
+use App\Exports\LeadsExport;
 use App\Exports\MyExportv2;
 use App\Exports\SrExport;
 use App\Http\Resources\ClassesResource;
@@ -19,9 +20,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
-
+use App\Models\Applicant;
 class ClassesController extends Controller
 {
+    public function ApplicantsID($id)
+    {
+        $applicant = Applicant::findOrFail($id);
+
+        return response()->json([
+            'applicant' => $applicant,
+        ]);
+    }
+    public function Applicants()
+    {
+        $applicants = Applicant::all();
+
+        return response()->json([
+            'applicants' => $applicants,
+        ]);
+    }
     public function srSite()
     {
         $query = SmartRecruitData::on('secondary_sqlsrv')->select('Site')->distinct()->get();
@@ -236,13 +253,14 @@ class ClassesController extends Controller
             'sites' => $query,
         ]);
     }
+
     public function perxApplicantFilterv2(Request $request)
     {
         $regions = [
             'QC' => [1, 2, 3, 4, 21],
             'L2' => [5, 6, 16, 19, 20],
             'CLARK' => [11, 12, 17],
-            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18]];
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18], ];
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
             ->select(
@@ -345,33 +363,36 @@ class ClassesController extends Controller
             }
         }
         $filteredData = $query->get();
+
         return response()->json([
             'perx' => $filteredData,
         ]);
     }
+
     public function perxStatus()
     {
         $query = DB::connection('sqlsrv')
         ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status')
         ->select('GeneralStatus as GeneralStatus',
-                'SpecificStatus as SpecificStatus' )
+                'SpecificStatus as SpecificStatus')
                 ->distinct()->get();
+
         return response()->json([
             'status' => $query,
         ]);
     }
+
     public function perxStep()
     {
         $query = DB::connection('sqlsrv')
         ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step')
-        ->select('Description' )
+        ->select('Description')
         ->distinct()->get();
 
         return response()->json([
             'step' => $query,
         ]);
     }
-
 
     public function perxSitev2(Request $request)
     {
@@ -436,6 +457,7 @@ class ClassesController extends Controller
             'maxDate' => $maxDate,
         ]);
     }
+
     public function perxDatev2()
     {
         $minDate = DB::connection('sqlsrv')
@@ -730,7 +752,7 @@ class ClassesController extends Controller
             'CLARK' => [11, 12, 17],
             'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
         ];
-    
+
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
             ->select('ApplicantDetails.Id as ApplicantId',
@@ -753,46 +775,46 @@ class ClassesController extends Controller
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
-    
+
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
                 $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
-    
+
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
                 $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
-    
+
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
                 $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
-    
+
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
             $filterDateStart = $request->input('filter_date_start');
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
-    
+
                 $query->whereBetween('UploadLeads.DateCreated', [$startDate, $endDate]);
             }
         }
-    
+
         if ($request->has('filter_createdby')) {
             $filterCreatedBy = $request->input('filter_createdby');
             if (!empty($filterCreatedBy)) {
                 $query->where('UploadLeads.CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
             }
         }
-    
+
         if ($request->has('filter_region')) {
             $filterRegion = $request->input('filter_region');
             if (!empty($filterRegion) && isset($regions[$filterRegion])) {
@@ -800,14 +822,99 @@ class ClassesController extends Controller
                 $query->whereIn('SitesDetails.Id', $siteIds);
             }
         }
-    
+
         $filteredData = $query->get();
-    
+
         return response()->json([
             'leads' => $filteredData,
         ]);
     }
-    
+
+    public function exportLeadsData(Request $request)
+    {
+        $regions = [
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
+
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
+            ->select('ApplicantDetails.Id as ApplicantId',
+                     'ApplicationDetails.AppliedDate as DateOfApplication',
+                     'UploadLeads.FirstName as FirstName',
+                     'UploadLeads.LastName as LastName',
+                     'UploadLeads.MiddleName as MiddleName',
+                     'UploadLeads.ContactNo as MobileName',
+                     'UploadLeads.EmailAddress as Email',
+                     'SitesDetails.Name as Site',
+                     'GeneralSource.Name as GeneralSource',
+                     'Status.GeneralStatus as GeneralStatus',
+                     'Status.SpecificStatus as SpecificStatus',
+                     'JobDetails.Title as JobTitle'
+                     )
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
+
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+            if (!empty($filterLastName)) {
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
+            }
+        }
+
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+            if (!empty($filterFirstName)) {
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+            }
+        }
+
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+            if (!empty($filterSite)) {
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
+            }
+        }
+
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
+
+                $query->whereBetween('UploadLeads.DateCreated', [$startDate, $endDate]);
+            }
+        }
+
+        if ($request->has('filter_createdby')) {
+            $filterCreatedBy = $request->input('filter_createdby');
+            if (!empty($filterCreatedBy)) {
+                $query->where('UploadLeads.CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
+            }
+        }
+
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                $query->whereIn('SitesDetails.Id', $siteIds);
+            }
+        }
+
+        $filteredData = $query->get();
+
+        $filteredDataArray = $filteredData->toArray();
+
+        return Excel::download(new LeadsExport($filteredDataArray), 'filtered_leads_data.xlsx');
+    }
 
     public function exportFilteredData(Request $request)
     {

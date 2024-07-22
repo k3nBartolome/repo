@@ -4,8 +4,8 @@ namespace App\Exports;
 
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class LeadsExport implements FromCollection, WithHeadings, ShouldAutoSize
 {
@@ -24,29 +24,18 @@ class LeadsExport implements FromCollection, WithHeadings, ShouldAutoSize
     public function headings(): array
     {
         return [
-            'ApplicantId',
-            'ApplicationInfoId',
-            'DateOfApplication',
-            'LastName',
-            'FirstName',
-            'MiddleName',
-            'MobileNo',
-            'Site',
-            'GenSource',
-            'SpecSource',
-            'Step',
-            'AppStep',
-            'PERX_HRID',
-            'PERX_Last_Day',
-            'PERX_Retract',
-            'PERX_NAME',
-            'OSS_HRID',
-            'OSS_Last_Day',
-            'OSS_Retract',
-            'OSS_FNAME',
-            'OSS_LNAME',
-            'OSS_LOB',
-            'OSS_SITE',
+           'ApplicantId',
+'DateOfApplication',
+'FirstName',
+'LastName',
+'MiddleName',
+'MobileName',
+'Email',
+'Site',
+'GeneralSource',
+'GeneralStatus',
+'SpecificStatus',
+'JobTitle',
         ];
     }
 }

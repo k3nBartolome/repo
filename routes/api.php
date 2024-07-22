@@ -157,6 +157,9 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboardguatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
     Route::get('classesdashboardguatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);
 
+    Route::get('leads_date', [ClassesController::class, 'leadsDate']);
+    Route::get('leads', [ClassesController::class, 'leads']);
+    Route::get('leadsexport', [ClassesController::class, 'exportLeadsData']);
     Route::post('render', [CapEmailController::class, 'sendEmail']);
     Route::get('b2percentage', [ClassesController::class, 'retrieveB2DataForEmail']);
     Route::get('b2percentagejamaica', [ClassesController::class, 'retrieveB2DataForEmailJamaica']);
@@ -231,8 +234,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
     Route::get('awarded/{id}', [AwardController::class, 'show']);
     Route::post('award/{id}', [AwardController::class, 'update']);
-    
-Route::get('leads_date', [ClassesController::class, 'leadsDate']);
 });
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);
@@ -247,5 +248,6 @@ Route::get('classes/{id}', [ClassesController::class, 'show']);
 Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
-Route::get('leads', [ClassesController::class, 'leads']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('applicants/{id}', [ClassesController::class, 'ApplicantsID']);
+Route::get('applicants', [ClassesController::class, 'Applicants']);
