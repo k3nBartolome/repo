@@ -107,6 +107,12 @@
                     role="menuitem"
                     >Leads</router-link
                   >
+                  <router-link
+                  to="/applicants"
+                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                  role="menuitem"
+                  >Applicant Information Tool</router-link
+                >
                   </div>
                 </div>
                 <div

@@ -5,6 +5,76 @@
         <h2 class="text-3xl font-bold text-gray-900">Applicant Tool SRv2</h2>
       </div>
     </header>
+  <!--   <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8"> -->
+    <div
+    class="fixed inset-0 z-50 flex items-center justify-center modal"
+    v-if="showModalWorkExp"
+  >
+    <div class="absolute inset-0 modal-overlay"></div>
+    <div class="w-1/2 max-w-4xl p-8 overflow-auto bg-white rounded-lg shadow-lg h-1/2 max-h-4xl modal-content">
+      <!-- Content of your modal -->
+      <header class="px-4 py-2 border-b-2 border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-800">Work Experience</h2>
+      </header>
+      <button
+        @click="showModalWorkExp = false"
+        class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+      >
+        <svg
+          class="w-6 h-6"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          ></path>
+        </svg>
+      </button>
+      <div class="grid grid-cols-1 gap-4 px-4 py-2">
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">ImmediateSupervisorHRID: {{workExpData.ImmediateSupervisorHRID}}</p>
+          <p class="text-gray-700">ImmediateSupervisorName: {{workExpData.ImmediateSupervisorName}}</p>
+          <p class="text-gray-700">WorkSetup: {{workExpData.WorkSetup}}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">CompanyName: {{workExpData.CompanyName}}</p>
+          <p class="text-gray-700">WorkExpType: {{workExpData.WorkExpType}}</p>
+          <p class="text-gray-700">LastWorkingDate: {{workExpData.LastWorkingDate}}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">AdapterIndustry: {{workExpData.AdapterIndustry}}</p>
+          <p class="text-gray-700">Position: {{workExpData.Position}}</p>
+          <p class="text-gray-700">Salary: {{workExpData.Salary}}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">WorkTenureMonths: {{workExpData.WorkTenureMonths}}</p>
+          <p class="text-gray-700">ReasonForLeaving: {{workExpData.ReasonForLeaving}}</p>
+          <p class="text-gray-700">AccountType: {{workExpData.AccountType}}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">ExperienceType: {{workExpData.ExperienceType}}</p>
+          <p class="text-gray-700">WorkType: {{workExpData.WorkType}}</p>
+          <p class="text-gray-700">TotalWorkExp: {{workExpData.TotalWorkExp}}</p>
+        </div>
+        <div class="grid grid-cols-3 gap-4">
+          <p class="text-gray-700">TotalWorkExpBPO: {{workExpData.TotalWorkExpBPO}}</p>
+          <p class="text-gray-700">TotalWorkExpNonBPO: {{workExpData.TotalWorkExpNonBPO}}</p>
+          <p class="text-gray-700">Segment: {{workExpData.Segment}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+
+    
+  <!--   </div> -->
+
     <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
         <div class="relative w-full md:w-1/4">
@@ -200,10 +270,45 @@ export default {
       filterRegion: "",
       filterLastNameError: "",
       filterContactError: "",
+      showModalWorkExp: false,
+      WorkExpId: null,
+      workExpData: {
+        'ImmediateSupervisorHRID':'',
+        'ImmediateSupervisorName':'',
+        'WorkSetup':'',
+        'CompanyName':'',
+        'WorkExpType':'',
+        'LastWorkingDate':'',
+        'AdapterIndustry':'',
+        'Position':'',
+        'Salary':'',
+        'WorkTenureMonths':'',
+        'ReasonForLeaving':'',
+        'AccountType':'',
+        'ExperienceType':'',
+        'WorkType':'',
+        'TotalWorkExp':'',
+        'TotalWorkExpBPO':'',
+        'TotalWorkExpNonBPO':'',
+        'Segment':'',
+    },
       perx: [],
+      applicants: {},
       sites: [],
       columns: [
         { data: "SR_ID", title: "SR_ID" },
+        {
+  data: null,
+  title: "Actions",
+  orderable: false,
+  searchable: false,
+  render: function (data) {
+    const isUser = this.isUser;
+    return `
+      ${isUser ? `<button class="w-auto text-xs btn btn-primary" onclick="window.vm.openModalForWorkExp(${data.SR_ID})">Work Exp</button>` : ""}
+    `;
+  }.bind(this),
+},
         { data: "ApplicationDate", title: "ApplicationDate" },
         { data: "FirstName", title: "FirstName" },
         { data: "LastName", title: "LastName" },
@@ -216,10 +321,10 @@ export default {
         { data: "MotherFirstName", title: "MotherFirstName" },
         { data: "MotherLastName", title: "MotherLastName" },
         { data: "MotherMiddleName", title: "MotherMiddleName" },
-        { data: "C_Country", title: "C_Country" },
-        { data: "C_Region", title: "C_Region" },
-        { data: "C_Province", title: "C_Province" },
-        { data: "C_City", title: "C_City" },
+        { data: "C_Country", title: "Country" },
+        { data: "C_Region", title: "Region" },
+        { data: "C_Province", title: "Province" },
+        { data: "C_City", title: "City" },
         { data: "City_Address", title: "City_Address" },
         { data: "ExpectedSalary", title: "ExpectedSalary" },
         { data: "Step", title: "Step" },
@@ -246,8 +351,8 @@ export default {
         { data: "GraduationDate", title: "GraduationDate" },
         { data: "ReferralID", title: "ReferralID" },
         { data: "id", title: "id" },
-        { data: "ApplicantAppicationsId", title: "ApplicantAppicationsId" },
-        { data: "ApplicantId", title: "ApplicantId" },
+       /*  { data: "ApplicantAppicationsId", title: "ApplicantAppicationsId" },
+        { data: "ApplicantId", title: "ApplicantId" }, */
         { data: "Pronunciation", title: "Pronunciation" },
         { data: "Grammar", title: "Grammar" },
         { data: "Fluency", title: "Fluency" },
@@ -267,8 +372,8 @@ export default {
         { data: "Integrity", title: "Integrity" },
         { data: "Achievement", title: "Achievement" },
         { data: "ProblemSolving", title: "ProblemSolving" },
-        { data: "IntervieweeId", title: "IntervieweeId" },
-        { data: "ApplicantApplicationId", title: "ApplicantApplicationId" },
+       /*  { data: "IntervieweeId", title: "IntervieweeId" },
+        { data: "ApplicantApplicationId", title: "ApplicantApplicationId" }, */
         { data: "Interviewer", title: "Interviewer" },
         { data: "LIRemarks", title: "LIRemarks" },
         { data: "RIRemarks", title: "RIRemarks" },
@@ -302,9 +407,11 @@ export default {
     };
   },
   mounted() {
+    window.vm = this;
     this.getDates();
     this.getSites();
     this.fetchData();
+    this.openModalForWorkExp();
   },
   computed: {
     formattedFilterDate() {
@@ -312,9 +419,67 @@ export default {
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
         : "";
     },
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
+    },
   },
 
   methods: {
+    async openModalForWorkExp(id) {
+  console.log('SR_ID:', id);
+  this.filterLoading = true;
+  try {
+    const token = this.$store.state.token;
+    const response = await axios.get(`http://10.109.2.112:8081/api/applicants/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = response.data.applicants;
+    this.workExpData.ImmediateSupervisorHRID = data.ImmediateSupervisorHRID;
+this.workExpData.ImmediateSupervisorName = data.ImmediateSupervisorName;
+this.workExpData.WorkSetup              = data.WorkSetup;
+this.workExpData.CompanyName            = data.CompanyName;
+this.workExpData.WorkExpType            = data.WorkExpType;
+this.workExpData.LastWorkingDate        = data.LastWorkingDate;
+this.workExpData.AdapterIndustry        = data.AdapterIndustry;
+this.workExpData.Position               = data.Position;
+this.workExpData.Salary                 = data.Salary;
+this.workExpData.WorkTenureMonths       = data.WorkTenureMonths;
+this.workExpData.ReasonForLeaving       = data.ReasonForLeaving;
+this.workExpData.AccountType            = data.AccountType;
+this.workExpData.ExperienceType         = data.ExperienceType;
+this.workExpData.WorkType               = data.WorkType;
+this.workExpData.TotalWorkExp           = data.TotalWorkExp;
+this.workExpData.TotalWorkExpBPO        = data.TotalWorkExpBPO;
+this.workExpData.TotalWorkExpNonBPO     = data.TotalWorkExpNonBPO;
+this.workExpData.Segment                = data.Segment;
+
+    console.log(this.workExpData);
+    this.showModalWorkExp = true;
+  } catch (error) {
+    console.error("Error fetching filtered data", error);
+  } finally {
+    this.filterLoading = false;
+  }
+},
+
+
+
     async getDates() {
       try {
         const token = this.$store.state.token;
@@ -421,9 +586,8 @@ export default {
         this.filterLoading = false;
       }
     },
-
     async exportToExcel() {
-      this.exportLoading = true; // Set export loading to true before making the request
+      this.exportLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
@@ -454,9 +618,17 @@ export default {
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
       } finally {
-        this.exportLoading = false; // Set export loading to false when the request completes
+        this.exportLoading = false;
       }
     },
   },
 };
 </script>
+<style scoped>
+.modal-content {
+  width: 50vw; /* 50% of the viewport width */
+  height: 50vh; /* 50% of the viewport height */
+  max-width: 80vw; /* Adjust maximum width if necessary */
+  max-height: 80vh; /* Adjust maximum height if necessary */
+}
+</style>

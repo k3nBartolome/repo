@@ -21,17 +21,79 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\Applicant;
+use Exception;
+use Illuminate\Database\QueryException;
+
 class ClassesController extends Controller
 {
-    public function ApplicantsID($id)
+    public function ApplicantsID(Request $request, $id)
     {
-        
-        $applicant = Applicant::where('SR_ID', $id)->firstOrFail();
-
-        return response()->json([
-            'applicant' => $applicant,
-        ]);
+        try {
+            $regions = [
+                'QC' => [1, 2, 3, 4, 21],
+                'L2' => [5, 6, 16, 19, 20],
+                'CLARK' => [11, 12, 17],
+                'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+            ];
+            $id = intval($id);
+            $query = Applicant::where('SR_ID', $id);
+    
+            if ($request->has('filter_lastname')) {
+                $filterLastName = $request->input('filter_lastname');
+                if (!empty($filterLastName)) {
+                    $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                }
+            }
+    
+            if ($request->has('filter_firstname')) {
+                $filterFirstName = $request->input('filter_firstname');
+                if (!empty($filterFirstName)) {
+                    $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                }
+            }
+    
+            if ($request->has('filter_site')) {
+                $filterSite = $request->input('filter_site');
+                if (!empty($filterSite)) {
+                    $query->where('SiteApplied', 'LIKE', '%'.$filterSite.'%');
+                }
+            }
+    
+            if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+                $filterDateStart = $request->input('filter_date_start');
+                $filterDateEnd = $request->input('filter_date_end');
+                if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                    $startDate = date('Y-m-d', strtotime($filterDateStart));
+                    $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
+    
+                    $query->whereBetween('ApplicationDate', [$startDate, $endDate]);
+                }
+            }
+    
+            if ($request->has('filter_contact')) {
+                $filterContact = $request->input('filter_contact');
+                if (!empty($filterContact)) {
+                    $query->where('CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+                }
+            }
+    
+            if ($request->has('filter_region')) {
+                $filterRegion = $request->input('filter_region');
+                if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                    $siteIds = $regions[$filterRegion];
+                    $query->whereIn('SiteApplied', $siteIds);
+                }
+            }
+            $applicant = $query->firstOrFail();
+    
+            return response()->json([
+                'applicants' => $applicant,
+            ]);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
+
     public function Applicants()
     {
         $applicants = Applicant::all();

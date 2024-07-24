@@ -7,11 +7,13 @@ addstaffing
 afterchartdraw
 aftergriddraw
 animateonscroll
+Appications
 avatargroup
 badgedirective
 beforegriddraw
 beforetoolbarcreated
 Bfrtip
+Bkgrnd
 blockui
 cancelcapfile
 cancelcapfileguatemala
@@ -34,6 +36,7 @@ columngroup
 confirmationservice
 confirmdialog
 confirmpopup
+Cust
 datachanged
 dataerror
 datafilecancelled
