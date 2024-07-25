@@ -11,8 +11,10 @@ autoloader
 beyondcode
 Bkgrnd
 Bridgetowne
+cancelledclasses
 capfile
 capfilems
+Centrale
 cfms
 ckeep
 classesall
@@ -90,6 +92,7 @@ Pushedback
 Refferer
 Regionv
 remx
+Robinsons
 Sched
 siteclasses
 siteclassescancelled
@@ -105,6 +108,7 @@ siteinventoryall
 sitely
 sitev
 Sitev
+Souce
 specstat
 spreadsheetml
 srid

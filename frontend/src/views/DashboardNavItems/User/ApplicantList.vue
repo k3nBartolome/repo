@@ -498,12 +498,12 @@ export default {
       exportLoading: false,
     };
   },
+  
   mounted() {
     window.vm = this;
     this.getDates();
     this.getSites();
     this.fetchData();
-    this.openModalForWorkExp();
   },
   computed: {
     formattedData() {
@@ -587,33 +587,108 @@ this.workExpData.Segment                = data.Segment;
     this.filterLoading = false;
   }
 },
+convertToISO(dateStr) {
+  console.log("convertToISO called with:", dateStr);
+
+  if (!dateStr) {
+    console.error("No date string provided.");
+    return "";
+  }
+
+  // Split and parse the date
+  const [month, day, year] = dateStr.split('/');
+  if (!month || !day || !year) {
+    console.error("Invalid date format, expected MM/DD/YYYY but got:", dateStr);
+    return "";
+  }
+
+  // Ensure month and day are zero-padded
+  const formattedMonth = month.padStart(2, '0');
+  const formattedDay = day.padStart(2, '0');
+
+  const isoDate = `${year}-${formattedMonth}-${formattedDay}`;
+  console.log("Converted ISO date:", isoDate);
+  return isoDate;
+}
+,
+  convertToMMDDYYYY(dateStr) {
+    if (!dateStr) return "";
+
+    const [year, month, day] = dateStr.split('-');
+    return `${month}/${day}/${year}`;
+  },
+  async fetchData() {
+  this.filterLoading = true;
+  try {
+    const token = this.$store.state.token;
+
+    const formatDate = (date) => {
+      if (!date) return '';
+      const [year, month, day] = date.split('-');
+      return `${month}/${day}/${year}`;
+    };
+
+    const formattedStartDate = formatDate(this.filterStartDate);
+    const formattedEndDate = formatDate(this.filterEndDate);
+
+    if (!formattedStartDate || !formattedEndDate) {
+      console.error("Invalid date format");
+      return;
+    }
+
+    const response = await axios.get('http://10.109.2.112:8081/api/applicants', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        filter_lastname: this.filterLastName,
+        filter_firstname: this.filterFirstName,
+        filter_site: this.filterSite,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        filter_contact: this.filterContact,
+        filter_region: this.filterRegion,
+      },
+    });
+
+    this.perx = response.data.applicants;
+  } catch (error) {
+    console.error("Error fetching filtered data", error);
+  } finally {
+    this.filterLoading = false;
+  }
+},
 
 
 
-    async getDates() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_datev2",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
 
-        if (response.status === 200) {
-          this.filterStartDate = response.data.minDate;
-          this.filterEndDate = response.data.maxDate;
-          console.log(response.data.minDate);
-          console.log(response.data.maxDate);
-        } else {
-          console.log("Error fetching Date");
+
+  async getDates() {
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.get(
+        "http://10.109.2.112:8081/api/applicantsDate",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } catch (error) {
-        console.log(error);
+      );
+
+      if (response.status === 200) {
+        // Convert dates from MM/DD/YYYY to YYYY-MM-DD
+        this.filterStartDate = this.convertToISO(response.data.minDate);
+        this.filterEndDate = this.convertToISO(response.data.maxDate);
+
+        console.log(this.filterStartDate); // Should be in YYYY-MM-DD format
+        console.log(this.filterEndDate);   // Should be in YYYY-MM-DD format
+      } else {
+        console.log("Error fetching Date");
       }
-    },
+    } catch (error) {
+      console.log(error);
+    }
+  },
     updateFilterStartDate(event) {
       this.filterStartDate = event.target.value;
     },
@@ -666,71 +741,58 @@ this.workExpData.Segment                = data.Segment;
         console.log(error);
       }
     },
-
-    async fetchData() {
-      this.filterLoading = true;
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/applicants",
-          {
-          /*   params: {
-              filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
-              filter_site: this.filterSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
-              filter_contact: this.filterContact,
-              filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
-            }, */
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        this.perx = response.data.applicants;
-      } catch (error) {
-        console.error("Error fetching filtered data", error);
-      } finally {
-        this.filterLoading = false;
-      }
-    },
     async exportToExcel() {
-      this.exportLoading = true;
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterFirstName,
-            filter_site: this.filterSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,
-            filter_contact: this.filterContact,
-            filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+  this.exportLoading = true;
+  try {
+    const token = this.$store.state.token;
 
-        const blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        const url = window.URL.createObjectURL(blob);
+    // Convert dates from YYYY-MM-DD to MM/DD/YYYY format
+    const formatDate = (date) => {
+      if (!date) return '';
+      const [year, month, day] = date.split('-');
+      return `${month}/${day}/${year}`;
+    };
 
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = "perx_data.xlsx";
-        link.click();
-      } catch (error) {
-        console.error("Error exporting filtered data to Excel", error);
-      } finally {
-        this.exportLoading = false;
-      }
-    },
+    const formattedStartDate = formatDate(this.filterStartDate);
+    const formattedEndDate = formatDate(this.filterEndDate);
+
+    if (!formattedStartDate || !formattedEndDate) {
+      console.error("Invalid date format");
+      return;
+    }
+
+    const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
+      params: {
+        filter_lastname: this.filterLastName,
+        filter_firstname: this.filterFirstName,
+        filter_site: this.filterSite,
+        startDate: formattedStartDate,
+        endDate: formattedEndDate,
+        filter_contact: this.filterContact,
+        filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
+      },
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      responseType: "blob",
+    });
+
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "perx_data.xlsx";
+    link.click();
+  } catch (error) {
+    console.error("Error exporting filtered data to Excel", error);
+  } finally {
+    this.exportLoading = false;
+  }
+},
+
   },
 };
 </script>

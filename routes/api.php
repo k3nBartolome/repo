@@ -156,7 +156,9 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('classesdashboardguatemala2', [ClassesController::class, 'dashboardClassesGuatemala2']);
     Route::get('classesdashboardguatemala3', [ClassesController::class, 'dashboardClassesGuatemala3']);
     Route::get('classesdashboardguatemala4', [ClassesController::class, 'dashboardClassesGuatemala4']);
-
+    Route::get('applicants/{id}', [ClassesController::class, 'ApplicantsID']);
+    Route::get('applicants', [ClassesController::class, 'Applicants']);
+    Route::get('applicantsDate', [ClassesController::class, 'ApplicantsDate']);
     Route::get('leads_date', [ClassesController::class, 'leadsDate']);
     Route::get('leads', [ClassesController::class, 'leads']);
     Route::get('leadsexport', [ClassesController::class, 'exportLeadsData']);
@@ -249,5 +251,3 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::get('applicants/{id}', [ClassesController::class, 'ApplicantsID']);
-Route::get('applicants', [ClassesController::class, 'Applicants']);
