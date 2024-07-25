@@ -11,7 +11,7 @@
     v-if="showModalWorkExp"
   >
     <div class="absolute inset-0 modal-overlay"></div>
-    <div class="w-1/2 max-w-4xl p-8 overflow-auto bg-white rounded-lg shadow-lg h-1/2 max-h-4xl modal-content">
+    <div class="p-8 bg-white rounded-lg shadow-lg modal-content">
       <!-- Content of your modal -->
       <header class="px-4 py-2 border-b-2 border-gray-200">
         <h2 class="text-lg font-semibold text-gray-800">Work Experience</h2>
@@ -35,40 +35,132 @@
           ></path>
         </svg>
       </button>
-      <div class="grid grid-cols-1 gap-4 px-4 py-2">
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">ImmediateSupervisorHRID: {{workExpData.ImmediateSupervisorHRID}}</p>
-          <p class="text-gray-700">ImmediateSupervisorName: {{workExpData.ImmediateSupervisorName}}</p>
-          <p class="text-gray-700">WorkSetup: {{workExpData.WorkSetup}}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">CompanyName: {{workExpData.CompanyName}}</p>
-          <p class="text-gray-700">WorkExpType: {{workExpData.WorkExpType}}</p>
-          <p class="text-gray-700">LastWorkingDate: {{workExpData.LastWorkingDate}}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">AdapterIndustry: {{workExpData.AdapterIndustry}}</p>
-          <p class="text-gray-700">Position: {{workExpData.Position}}</p>
-          <p class="text-gray-700">Salary: {{workExpData.Salary}}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">WorkTenureMonths: {{workExpData.WorkTenureMonths}}</p>
-          <p class="text-gray-700">ReasonForLeaving: {{workExpData.ReasonForLeaving}}</p>
-          <p class="text-gray-700">AccountType: {{workExpData.AccountType}}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">ExperienceType: {{workExpData.ExperienceType}}</p>
-          <p class="text-gray-700">WorkType: {{workExpData.WorkType}}</p>
-          <p class="text-gray-700">TotalWorkExp: {{workExpData.TotalWorkExp}}</p>
-        </div>
-        <div class="grid grid-cols-3 gap-4">
-          <p class="text-gray-700">TotalWorkExpBPO: {{workExpData.TotalWorkExpBPO}}</p>
-          <p class="text-gray-700">TotalWorkExpNonBPO: {{workExpData.TotalWorkExpNonBPO}}</p>
-          <p class="text-gray-700">Segment: {{workExpData.Segment}}</p>
-        </div>
+      <div class="px-4 py-2 overflow-auto">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr>
+              <th class="px-4 py-2 border">Immediate Supervisor HRID</th>
+              <th class="px-4 py-2 border">Immediate Supervisor Name</th>
+              <th class="px-4 py-2 border">Work Setup</th>
+              <th class="px-4 py-2 border">Company Name</th>
+              <th class="px-4 py-2 border">Work Exp Type</th>
+              <th class="px-4 py-2 border">Last Working Date</th>
+              <th class="px-4 py-2 border">Adapter Industry</th>
+              <th class="px-4 py-2 border">Position</th>
+              <th class="px-4 py-2 border">Salary</th>
+              <th class="px-4 py-2 border">Work Tenure Months</th>
+              <th class="px-4 py-2 border">Reason for Leaving</th>
+              <th class="px-4 py-2 border">Account Type</th>
+              <th class="px-4 py-2 border">Experience Type</th>
+              <th class="px-4 py-2 border">Total Work Exp</th>
+              <th class="px-4 py-2 border">Total Work Exp BPO</th>
+              <th class="px-4 py-2 border">Total Work Exp Non-BPO</th>
+              <th class="px-4 py-2 border">Segment</th>
+              <th class="px-4 py-2 border">Work Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(row, index) in formattedData" :key="index">
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.ImmediateSupervisorHRID.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.ImmediateSupervisorName.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.WorkSetup.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.CompanyName.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.WorkExpType.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.LastWorkingDate.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.AdapterIndustry.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.Position.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.Salary.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.WorkTenureMonths.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.ReasonForLeaving.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.AccountType.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.ExperienceType.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.TotalWorkExp.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.TotalWorkExpBPO.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.TotalWorkExpNonBPO.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(item, itemIndex) in row.Segment.split(';')" :key="itemIndex">{{ item }}</li>
+                </ul>
+              </td>
+              <td class="px-4 py-2 border">
+                <ul class="list-none p-0">
+                  <li v-for="(workType, workTypeIndex) in row.WorkType.split(';')" :key="workTypeIndex">{{ workType }}</li>
+                </ul>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
+  
+  
+
+  
   
 
 
@@ -414,6 +506,24 @@ export default {
     this.openModalForWorkExp();
   },
   computed: {
+    formattedData() {
+      const maxRows = Math.max(
+        ...Object.values(this.workExpData).map(value =>
+          value ? value.split(';').length : 1
+        )
+      );
+
+      const rows = Array.from({ length: maxRows }).map((_, index) => {
+        const row = {};
+        for (const key in this.workExpData) {
+          const values = this.workExpData[key] ? this.workExpData[key].split(';') : [];
+          row[key] = values[index] || '';
+        }
+        return row;
+      });
+
+      return rows;
+    },
     formattedFilterDate() {
       return this.filterDate
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
@@ -626,9 +736,9 @@ this.workExpData.Segment                = data.Segment;
 </script>
 <style scoped>
 .modal-content {
-  width: 50vw; /* 50% of the viewport width */
-  height: 50vh; /* 50% of the viewport height */
-  max-width: 80vw; /* Adjust maximum width if necessary */
-  max-height: 80vh; /* Adjust maximum height if necessary */
+  width: 50vw; 
+  height: 50vh;
+  max-width: 80vw; 
+  max-height: 80vh;
 }
 </style>
