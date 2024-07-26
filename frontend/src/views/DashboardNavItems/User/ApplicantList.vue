@@ -62,92 +62,92 @@
           <tbody>
             <tr v-for="(row, index) in formattedData" :key="index">
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.ImmediateSupervisorHRID.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.ImmediateSupervisorName.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.WorkSetup.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.CompanyName.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.WorkExpType.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.LastWorkingDate.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.AdapterIndustry.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.Position.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.Salary.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.WorkTenureMonths.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.ReasonForLeaving.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.AccountType.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.ExperienceType.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.TotalWorkExp.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.TotalWorkExpBPO.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.TotalWorkExpNonBPO.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(item, itemIndex) in row.Segment.split(';')" :key="itemIndex">{{ item }}</li>
                 </ul>
               </td>
               <td class="px-4 py-2 border">
-                <ul class="list-none p-0">
+                <ul class="p-0 list-none">
                   <li v-for="(workType, workTypeIndex) in row.WorkType.split(';')" :key="workTypeIndex">{{ workType }}</li>
                 </ul>
               </td>
@@ -157,14 +157,14 @@
       </div>
     </div>
   </div>
-  
-  
-
-  
-  
 
 
-    
+
+
+
+
+
+
   <!--   </div> -->
 
     <div class="p-4 bg-gray-100">
@@ -498,7 +498,7 @@ export default {
       exportLoading: false,
     };
   },
-  
+
   mounted() {
     window.vm = this;
     this.getDates();
@@ -553,7 +553,7 @@ export default {
   this.filterLoading = true;
   try {
     const token = this.$store.state.token;
-    const response = await axios.get(`http://10.109.2.112:8081/api/applicants/${id}`, {
+    const response = await axios.get(`http://127.0.0.1:8000/api/applicants/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -636,7 +636,7 @@ convertToISO(dateStr) {
       return;
     }
 
-    const response = await axios.get('http://10.109.2.112:8081/api/applicants', {
+    const response = await axios.get('http://127.0.0.1:8000/api/applicants', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -667,7 +667,7 @@ convertToISO(dateStr) {
     try {
       const token = this.$store.state.token;
       const response = await axios.get(
-        "http://10.109.2.112:8081/api/applicantsDate",
+        "http://127.0.0.1:8000/api/applicantsDate",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -720,7 +720,7 @@ convertToISO(dateStr) {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -761,7 +761,7 @@ convertToISO(dateStr) {
       return;
     }
 
-    const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
+    const response = await axios.get("http://127.0.0.1:8000/api/applicantsExport", {
       params: {
         filter_lastname: this.filterLastName,
         filter_firstname: this.filterFirstName,
@@ -798,9 +798,9 @@ convertToISO(dateStr) {
 </script>
 <style scoped>
 .modal-content {
-  width: 50vw; 
+  width: 50vw;
   height: 50vh;
-  max-width: 80vw; 
+  max-width: 80vw;
   max-height: 80vh;
 }
 </style>

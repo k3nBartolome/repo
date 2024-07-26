@@ -8,6 +8,7 @@ use App\Exports\LeadsExport;
 use App\Exports\MyExport;
 use App\Exports\MyExportv2;
 use App\Exports\SrExport;
+use App\Exports\ApplicantExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Applicant;
 use App\Models\Classes;
@@ -144,7 +145,92 @@ public function Applicants(Request $request)
         return response()->json(['message' => $e->getMessage()], 500);
     }
 }
+public function ApplicantsExport(Request $request)
+{
+    try {
+        $regions = [
+            'QC' => ['QC North Edsa'],
+            'L2' => ['Bridgetowne', 'Makati', 'MOA'],
+            'CLARK' => ['Clark'],
+            'DAVAO' => ['Davao SM', 'Davao Robinsons', 'Davao Delta', 'Davao Centrale', 'Davao Finance Center'],
+        ];
 
+        $query = Applicant::query();
+
+        \Log::info('Request Data: ', $request->all());
+
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+            if (!empty($filterLastName)) {
+                \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
+                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            }
+        }
+
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+            if (!empty($filterFirstName)) {
+                \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
+                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            }
+        }
+
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+            if (!empty($filterSite)) {
+                \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                $query->where('SiteApplied', 'LIKE', '%' . $filterSite . '%');
+            }
+        }
+
+        if ($request->has('startDate') && $request->has('endDate')) {
+            $filterDateStart = $request->input('startDate');
+            $filterDateEnd = $request->input('endDate');
+
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+
+                \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
+
+                $query->whereBetween(DB::raw("CONVERT(date, ApplicationDate, 101)"), [$startDate, $endDate]);
+            }
+        }
+
+        if ($request->has('filter_contact')) {
+            $filterContact = $request->input('filter_contact');
+            if (!empty($filterContact)) {
+                \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
+                $query->where('CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+            }
+        }
+
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
+                $query->where(function ($q) use ($siteIds) {
+                    foreach ($siteIds as $site) {
+                        $q->orWhere('SiteApplied', 'LIKE', '%' . $site . '%');
+                    }
+                });
+            }
+        }
+
+        // Log the final query for debugging
+        \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+
+        $applicants = $query->get();
+
+        $filteredDataArray = $applicants->toArray();
+
+        return Excel::download(new ApplicantExport($filteredDataArray), 'applicants_sr_data.xlsx');
+    } catch (Exception $e) {
+        return response()->json(['message' => $e->getMessage()], 500);
+    }
+}
     public function srSite()
     {
         $query = SmartRecruitData::on('secondary_sqlsrv')->select('Site')->distinct()->get();
@@ -685,6 +771,24 @@ public function Applicants(Request $request)
             'perx' => $filteredData,
         ]);
     }
+    public function perxFilterNoSrv2(Request $request)
+    {
+    
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals')
+            ->whereNotIn('id', function($subquery) {
+                $subquery->select('referralid')
+                         ->from('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant')
+                         ->whereNotNull('referralid');
+            });
+    
+        $filteredData = $query->get();
+    
+        return response()->json([
+            'perx' => $filteredData,
+        ]);
+    }
+    
 
     public function exportFilteredDatav2(Request $request)
     {

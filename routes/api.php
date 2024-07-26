@@ -159,6 +159,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('applicants/{id}', [ClassesController::class, 'ApplicantsID']);
     Route::get('applicants', [ClassesController::class, 'Applicants']);
     Route::get('applicantsDate', [ClassesController::class, 'ApplicantsDate']);
+    Route::get('applicantsExport', [ClassesController::class, 'ApplicantsExport']);
     Route::get('leads_date', [ClassesController::class, 'leadsDate']);
     Route::get('leads', [ClassesController::class, 'leads']);
     Route::get('leadsexport', [ClassesController::class, 'exportLeadsData']);
