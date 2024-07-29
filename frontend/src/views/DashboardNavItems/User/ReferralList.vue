@@ -291,14 +291,13 @@ export default {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-             /*  filter_lastname: this.filterLastName,
+            params: {filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
-              startDate: formattedStartDate,
-              endDate: formattedEndDate,
+            /*   startDate: formattedStartDate,
+              endDate: formattedEndDate, */
               filter_type: this.filterType,
-              filter_region: this.filterRegion, */
+              filter_region: this.filterRegion, 
             },
           }
         );
