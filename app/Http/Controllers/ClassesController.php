@@ -773,14 +773,11 @@ public function ApplicantsExport(Request $request)
     }
     public function perxFilterNoSrv2(Request $request)
     {
-    
         $query = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as Referrals')
-            ->whereNotIn('id', function($subquery) {
-                $subquery->select('referralid')
-                         ->from('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant')
-                         ->whereNotNull('referralid');
-            });
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
+            ->whereNull('a.referralid')
+            ->select('r.*'); 
     
         $filteredData = $query->get();
     
@@ -788,6 +785,22 @@ public function ApplicantsExport(Request $request)
             'perx' => $filteredData,
         ]);
     }
+    public function perxFilterNoSrExportv2(Request $request)
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
+            ->whereNull('a.referralid')
+            ->select('r.*'); 
+    
+        $filteredData = $query->get();
+    
+        return response()->json([
+            'perx' => $filteredData,
+        ]);
+    }
+    
+    
     
 
     public function exportFilteredDatav2(Request $request)

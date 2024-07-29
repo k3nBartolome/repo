@@ -8,6 +8,7 @@ argb
 autoload
 Autoload
 autoloader
+Barangay
 beyondcode
 Bkgrnd
 Bridgetowne
