@@ -789,7 +789,7 @@ class ClassesController extends Controller
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
 
             ->whereNull('a.referralid')
-            ->select('r.Id',
+            ->select(/* 'r.Id', */
                 /*  'r.JobId',
             'r.UserId', */
                 'r.FirstName',
@@ -876,7 +876,7 @@ class ClassesController extends Controller
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
 
             ->whereNull('a.referralid')
-            ->select('r.Id',
+            ->select(/* 'r.Id', */
                 /*  'r.JobId',
             'r.UserId', */
                 'r.FirstName',

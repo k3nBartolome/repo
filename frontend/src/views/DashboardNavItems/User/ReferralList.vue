@@ -251,7 +251,7 @@ export default {
     window.vm = this;
     this.getDates();
     this.getSites();
-    this.fetchData();
+   /*  this.fetchData(); */
   },
   computed: {
 
