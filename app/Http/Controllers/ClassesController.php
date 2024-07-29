@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ApplicantExport;
 use App\Exports\ClassHistoryExport;
 use App\Exports\DashboardClassesExport;
 use App\Exports\LeadsExport;
 use App\Exports\MyExport;
 use App\Exports\MyExportv2;
 use App\Exports\SrExport;
-use App\Exports\ApplicantExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Applicant;
 use App\Models\Classes;
@@ -27,210 +27,212 @@ use Maatwebsite\Excel\Facades\Excel;
 class ClassesController extends Controller
 {
     public function ApplicantsID($id)
-{
-    try {
-        $id = intval($id);
-        $applicant = Applicant::where('SR_ID', $id)->firstOrFail();
+    {
+        try {
+            $id = intval($id);
+            $applicant = Applicant::where('SR_ID', $id)->firstOrFail();
 
-        return response()->json([
+            return response()->json([
             'applicants' => $applicant,
         ]);
-    } catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()], 500);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
-}
-public function ApplicantsDate()
-{
-    try {
-        $minDate = Applicant::min('ApplicationDate');
-        $maxDate = Applicant::max('ApplicationDate');
 
-        $formattedMinDate = date('m/d/Y', strtotime($minDate));
-        $formattedMaxDate = date('m/d/Y', strtotime($maxDate));
+    public function ApplicantsDate()
+    {
+        try {
+            $minDate = Applicant::min('ApplicationDate');
+            $maxDate = Applicant::max('ApplicationDate');
 
-        return response()->json([
+            $formattedMinDate = date('m/d/Y', strtotime($minDate));
+            $formattedMaxDate = date('m/d/Y', strtotime($maxDate));
+
+            return response()->json([
             'minDate' => $formattedMinDate,
             'maxDate' => $formattedMaxDate,
         ]);
-    } catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()], 500);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
-}
 
-
-public function Applicants(Request $request)
-{
-    try {
-        $regions = [
+    public function Applicants(Request $request)
+    {
+        try {
+            $regions = [
             'QC' => ['QC North Edsa'],
             'L2' => ['Bridgetowne', 'Makati', 'MOA'],
             'CLARK' => ['Clark'],
             'DAVAO' => ['Davao SM', 'Davao Robinsons', 'Davao Delta', 'Davao Centrale', 'Davao Finance Center'],
         ];
 
-        $query = Applicant::query();
+            $query = Applicant::query();
 
-        // Log request data
-        \Log::info('Request Data: ', $request->all());
+            // Log request data
+            \Log::info('Request Data: ', $request->all());
 
-        if ($request->has('filter_lastname')) {
-            $filterLastName = $request->input('filter_lastname');
-            if (!empty($filterLastName)) {
-                \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            if ($request->has('filter_lastname')) {
+                $filterLastName = $request->input('filter_lastname');
+                if (!empty($filterLastName)) {
+                    \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
+                    $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_firstname')) {
-            $filterFirstName = $request->input('filter_firstname');
-            if (!empty($filterFirstName)) {
-                \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            if ($request->has('filter_firstname')) {
+                $filterFirstName = $request->input('filter_firstname');
+                if (!empty($filterFirstName)) {
+                    \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
+                    $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_site')) {
-            $filterSite = $request->input('filter_site');
-            if (!empty($filterSite)) {
-                \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
-                $query->where('SiteApplied', 'LIKE', '%' . $filterSite . '%');
+            if ($request->has('filter_site')) {
+                $filterSite = $request->input('filter_site');
+                if (!empty($filterSite)) {
+                    \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                    $query->where('SiteApplied', 'LIKE', '%'.$filterSite.'%');
+                }
             }
-        }
 
-        if ($request->has('startDate') && $request->has('endDate')) {
-            $filterDateStart = $request->input('startDate');
-            $filterDateEnd = $request->input('endDate');
+            if ($request->has('startDate') && $request->has('endDate')) {
+                $filterDateStart = $request->input('startDate');
+                $filterDateEnd = $request->input('endDate');
 
-            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                    // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
+                    $startDate = date('Y-m-d', strtotime($filterDateStart));
+                    $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
-                \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
+                    \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
 
-                $query->whereBetween(DB::raw("CONVERT(date, ApplicationDate, 101)"), [$startDate, $endDate]);
+                    $query->whereBetween(DB::raw('CONVERT(date, ApplicationDate, 101)'), [$startDate, $endDate]);
+                }
             }
-        }
 
-        if ($request->has('filter_contact')) {
-            $filterContact = $request->input('filter_contact');
-            if (!empty($filterContact)) {
-                \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
-                $query->where('CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+            if ($request->has('filter_contact')) {
+                $filterContact = $request->input('filter_contact');
+                if (!empty($filterContact)) {
+                    \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
+                    $query->where('CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_region')) {
-            $filterRegion = $request->input('filter_region');
-            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
-                $siteIds = $regions[$filterRegion];
-                \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
-                $query->where(function ($q) use ($siteIds) {
-                    foreach ($siteIds as $site) {
-                        $q->orWhere('SiteApplied', 'LIKE', '%' . $site . '%');
-                    }
-                });
+            if ($request->has('filter_region')) {
+                $filterRegion = $request->input('filter_region');
+                if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                    $siteIds = $regions[$filterRegion];
+                    \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
+                    $query->where(function ($q) use ($siteIds) {
+                        foreach ($siteIds as $site) {
+                            $q->orWhere('SiteApplied', 'LIKE', '%'.$site.'%');
+                        }
+                    });
+                }
             }
-        }
 
-        // Log the final query for debugging
-        \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+            // Log the final query for debugging
+            \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
-        $applicants = $query->get();
+            $applicants = $query->get();
 
-        return response()->json([
+            return response()->json([
             'applicants' => $applicants,
         ]);
-    } catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()], 500);
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
+        }
     }
-}
-public function ApplicantsExport(Request $request)
-{
-    try {
-        $regions = [
+
+    public function ApplicantsExport(Request $request)
+    {
+        try {
+            $regions = [
             'QC' => ['QC North Edsa'],
             'L2' => ['Bridgetowne', 'Makati', 'MOA'],
             'CLARK' => ['Clark'],
             'DAVAO' => ['Davao SM', 'Davao Robinsons', 'Davao Delta', 'Davao Centrale', 'Davao Finance Center'],
         ];
 
-        $query = Applicant::query();
+            $query = Applicant::query();
 
-        \Log::info('Request Data: ', $request->all());
+            \Log::info('Request Data: ', $request->all());
 
-        if ($request->has('filter_lastname')) {
-            $filterLastName = $request->input('filter_lastname');
-            if (!empty($filterLastName)) {
-                \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+            if ($request->has('filter_lastname')) {
+                $filterLastName = $request->input('filter_lastname');
+                if (!empty($filterLastName)) {
+                    \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
+                    $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_firstname')) {
-            $filterFirstName = $request->input('filter_firstname');
-            if (!empty($filterFirstName)) {
-                \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            if ($request->has('filter_firstname')) {
+                $filterFirstName = $request->input('filter_firstname');
+                if (!empty($filterFirstName)) {
+                    \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
+                    $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_site')) {
-            $filterSite = $request->input('filter_site');
-            if (!empty($filterSite)) {
-                \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
-                $query->where('SiteApplied', 'LIKE', '%' . $filterSite . '%');
+            if ($request->has('filter_site')) {
+                $filterSite = $request->input('filter_site');
+                if (!empty($filterSite)) {
+                    \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                    $query->where('SiteApplied', 'LIKE', '%'.$filterSite.'%');
+                }
             }
-        }
 
-        if ($request->has('startDate') && $request->has('endDate')) {
-            $filterDateStart = $request->input('startDate');
-            $filterDateEnd = $request->input('endDate');
+            if ($request->has('startDate') && $request->has('endDate')) {
+                $filterDateStart = $request->input('startDate');
+                $filterDateEnd = $request->input('endDate');
 
-            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                    // Convert MM/DD/YYYY to YYYY-MM-DD for comparison
+                    $startDate = date('Y-m-d', strtotime($filterDateStart));
+                    $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
-                \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
+                    \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
 
-                $query->whereBetween(DB::raw("CONVERT(date, ApplicationDate, 101)"), [$startDate, $endDate]);
+                    $query->whereBetween(DB::raw('CONVERT(date, ApplicationDate, 101)'), [$startDate, $endDate]);
+                }
             }
-        }
 
-        if ($request->has('filter_contact')) {
-            $filterContact = $request->input('filter_contact');
-            if (!empty($filterContact)) {
-                \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
-                $query->where('CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+            if ($request->has('filter_contact')) {
+                $filterContact = $request->input('filter_contact');
+                if (!empty($filterContact)) {
+                    \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
+                    $query->where('CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
+                }
             }
-        }
 
-        if ($request->has('filter_region')) {
-            $filterRegion = $request->input('filter_region');
-            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
-                $siteIds = $regions[$filterRegion];
-                \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
-                $query->where(function ($q) use ($siteIds) {
-                    foreach ($siteIds as $site) {
-                        $q->orWhere('SiteApplied', 'LIKE', '%' . $site . '%');
-                    }
-                });
+            if ($request->has('filter_region')) {
+                $filterRegion = $request->input('filter_region');
+                if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                    $siteIds = $regions[$filterRegion];
+                    \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
+                    $query->where(function ($q) use ($siteIds) {
+                        foreach ($siteIds as $site) {
+                            $q->orWhere('SiteApplied', 'LIKE', '%'.$site.'%');
+                        }
+                    });
+                }
             }
+
+            // Log the final query for debugging
+            \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+
+            $applicants = $query->get();
+
+            $filteredDataArray = $applicants->toArray();
+
+            return Excel::download(new ApplicantExport($filteredDataArray), 'applicants_sr_data.xlsx');
+        } catch (Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 500);
         }
-
-        // Log the final query for debugging
-        \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
-
-        $applicants = $query->get();
-
-        $filteredDataArray = $applicants->toArray();
-
-        return Excel::download(new ApplicantExport($filteredDataArray), 'applicants_sr_data.xlsx');
-    } catch (Exception $e) {
-        return response()->json(['message' => $e->getMessage()], 500);
     }
-}
+
     public function srSite()
     {
         $query = SmartRecruitData::on('secondary_sqlsrv')->select('Site')->distinct()->get();
@@ -278,7 +280,7 @@ public function ApplicantsExport(Request $request)
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -289,7 +291,7 @@ public function ApplicantsExport(Request $request)
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('QueueDate', '>=', $startDate)
                     ->where('QueueDate', '<', $endDate);
@@ -327,7 +329,7 @@ public function ApplicantsExport(Request $request)
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -452,7 +454,7 @@ public function ApplicantsExport(Request $request)
             'QC' => [1, 2, 3, 4, 21],
             'L2' => [5, 6, 16, 19, 20],
             'CLARK' => [11, 12, 17],
-            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18]];
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18], ];
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
             ->select(
@@ -498,19 +500,19 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
-                $query->where('ApplicantDetails.LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
-                $query->where('ApplicantDetails.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Name', 'LIKE', '%' . $filterSite . '%');
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -518,7 +520,7 @@ public function ApplicantsExport(Request $request)
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
                 $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
             }
@@ -526,7 +528,7 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_contact')) {
             $filterContact = $request->input('filter_contact');
             if (!empty($filterContact)) {
-                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
             }
         }
         if ($request->has('filter_region')) {
@@ -539,19 +541,19 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_genstat')) {
             $filterGenStat = $request->input('filter_genstat');
             if (!empty($filterGenStat)) {
-                $query->where('Status.GeneralStatus', 'LIKE', '%' . $filterGenStat . '%');
+                $query->where('Status.GeneralStatus', 'LIKE', '%'.$filterGenStat.'%');
             }
         }
         if ($request->has('filter_specstat')) {
             $filterSpecStat = $request->input('filter_specstat');
             if (!empty($filterSpecStat)) {
-                $query->where('Status.SpecificStatus', 'LIKE', '%' . $filterSpecStat . '%');
+                $query->where('Status.SpecificStatus', 'LIKE', '%'.$filterSpecStat.'%');
             }
         }
         if ($request->has('filter_step')) {
             $filterStep = $request->input('filter_step');
             if (!empty($filterStep)) {
-                $query->where('Step.Description', 'LIKE', '%' . $filterStep . '%');
+                $query->where('Step.Description', 'LIKE', '%'.$filterStep.'%');
             }
         }
         $filteredData = $query->get();
@@ -721,21 +723,21 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
-                $query->where('ApplicantDetails.LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
-                $query->where('ApplicantDetails.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Name', 'LIKE', '%' . $filterSite . '%');
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
 
@@ -744,7 +746,7 @@ public function ApplicantsExport(Request $request)
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
                 $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
             }
@@ -753,7 +755,7 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_contact')) {
             $filterContact = $request->input('filter_contact');
             if (!empty($filterContact)) {
-                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -771,37 +773,108 @@ public function ApplicantsExport(Request $request)
             'perx' => $filteredData,
         ]);
     }
+
     public function perxFilterNoSrv2(Request $request)
     {
+        $regions = [
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
+
             ->whereNull('a.referralid')
-            ->select('r.*'); 
-    
-        $filteredData = $query->get();
-    
+            ->select('r.Id',
+                    /*  'r.JobId',
+                     'r.UserId', */
+                     'r.FirstName',
+                     'r.MiddleName',
+                     'r.LastName',
+                     'r.EmailAddress',
+                     'r.ContactNo',
+                     'r.TypeOfReferral',
+                     's.Name as Site',
+                     'r.ReferrerHRID',
+                     'r.ReferrerName',
+                     'r.ReferrerSite',
+                     'r.ReferrerProgram',
+                     /* 'r.CreatedBy', */
+                     'r.DateCreated',
+                     /* 'r.UpdatedBy', */
+                     'r.DateUpdated',);
+
+                     if ($request->has('filter_lastname')) {
+                        $filterLastName = $request->input('filter_lastname');
+                        if (!empty($filterLastName)) {
+                            $query->where('r.LastName', 'LIKE', '%'.$filterLastName.'%');
+                        }
+                    }
+            
+                    if ($request->has('filter_firstname')) {
+                        $filterFirstName = $request->input('filter_firstname');
+                        if (!empty($filterFirstName)) {
+                            $query->where('r.FirstName', 'LIKE', '%'.$filterFirstName.'%');
+                        }
+                    }
+            
+                    if ($request->has('filter_site')) {
+                        $filterSite = $request->input('filter_site');
+                        if (!empty($filterSite)) {
+                            $query->where('r.Site', 'LIKE', '%'.$filterSite.'%');
+                        }
+                    }
+            
+                   /*  if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+                        $filterDateStart = $request->input('filter_date_start');
+                        $filterDateEnd = $request->input('filter_date_end');
+                        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                            $startDate = date('Y-m-d', strtotime($filterDateStart));
+                            $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
+            
+                            $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
+                        }
+                    } */
+            
+                    if ($request->has('filter_type')) {
+                        $filterContact = $request->input('filter_type');
+                        if (!empty($filterType)) {
+                            $query->where('r.TypeOfReferral', 'LIKE', '%'.$filterType.'%');
+                        }
+                    }
+            
+                    if ($request->has('filter_region')) {
+                        $filterRegion = $request->input('filter_region');
+                        if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                            $siteIds = $regions[$filterRegion];
+                            $query->whereIn('S.Id', $siteIds);
+                        }
+                    }
+            
+                    $filteredData = $query->get();
+
         return response()->json([
             'perx' => $filteredData,
         ]);
     }
+
     public function perxFilterNoSrExportv2(Request $request)
     {
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
             ->whereNull('a.referralid')
-            ->select('r.*'); 
-    
+            ->select('r.*');
+
         $filteredData = $query->get();
-    
+
         return response()->json([
             'perx' => $filteredData,
         ]);
     }
-    
-    
-    
 
     public function exportFilteredDatav2(Request $request)
     {
@@ -858,21 +931,21 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
-                $query->where('ApplicantDetails.LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
-                $query->where('ApplicantDetails.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Name', 'LIKE', '%' . $filterSite . '%');
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
 
@@ -881,7 +954,7 @@ public function ApplicantsExport(Request $request)
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
                 $query->whereBetween('ApplicationDetails.AppliedDate', [$startDate, $endDate]);
             }
@@ -890,7 +963,7 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_contact')) {
             $filterContact = $request->input('filter_contact');
             if (!empty($filterContact)) {
-                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
+                $query->where('ApplicantDetails.CellphoneNumber', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -918,7 +991,7 @@ public function ApplicantsExport(Request $request)
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -926,7 +999,7 @@ public function ApplicantsExport(Request $request)
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -934,7 +1007,7 @@ public function ApplicantsExport(Request $request)
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -945,7 +1018,7 @@ public function ApplicantsExport(Request $request)
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -956,7 +1029,7 @@ public function ApplicantsExport(Request $request)
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -1002,21 +1075,21 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
-                $query->where('ApplicantDetails.LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
-                $query->where('ApplicantDetails.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Name', 'LIKE', '%' . $filterSite . '%');
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
 
@@ -1025,7 +1098,7 @@ public function ApplicantsExport(Request $request)
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
                 $query->whereBetween('UploadLeads.DateCreated', [$startDate, $endDate]);
             }
@@ -1034,7 +1107,7 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_createdby')) {
             $filterCreatedBy = $request->input('filter_createdby');
             if (!empty($filterCreatedBy)) {
-                $query->where('UploadLeads.CreatedBy', 'LIKE', '%' . $filterCreatedBy . '%');
+                $query->where('UploadLeads.CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
             }
         }
 
@@ -1088,21 +1161,21 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
-                $query->where('ApplicantDetails.LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('ApplicantDetails.LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
-                $query->where('ApplicantDetails.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('ApplicantDetails.FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                $query->where('SitesDetails.Name', 'LIKE', '%' . $filterSite . '%');
+                $query->where('SitesDetails.Name', 'LIKE', '%'.$filterSite.'%');
             }
         }
 
@@ -1111,7 +1184,7 @@ public function ApplicantsExport(Request $request)
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
                 $query->whereBetween('UploadLeads.DateCreated', [$startDate, $endDate]);
             }
@@ -1120,7 +1193,7 @@ public function ApplicantsExport(Request $request)
         if ($request->has('filter_createdby')) {
             $filterCreatedBy = $request->input('filter_createdby');
             if (!empty($filterCreatedBy)) {
-                $query->where('UploadLeads.CreatedBy', 'LIKE', '%' . $filterCreatedBy . '%');
+                $query->where('UploadLeads.CreatedBy', 'LIKE', '%'.$filterCreatedBy.'%');
             }
         }
 
@@ -1148,7 +1221,7 @@ public function ApplicantsExport(Request $request)
             $filterLastName = $request->input('filter_lastname');
 
             if (!empty($filterLastName)) {
-                $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
+                $query->where('LastName', 'LIKE', '%'.$filterLastName.'%');
             }
         }
 
@@ -1156,7 +1229,7 @@ public function ApplicantsExport(Request $request)
             $filterFirstName = $request->input('filter_firstname');
 
             if (!empty($filterFirstName)) {
-                $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
+                $query->where('FirstName', 'LIKE', '%'.$filterFirstName.'%');
             }
         }
 
@@ -1164,7 +1237,7 @@ public function ApplicantsExport(Request $request)
             $filterSite = $request->input('filter_site');
 
             if (!empty($filterSite)) {
-                $query->where('Site', 'LIKE', '%' . $filterSite . '%');
+                $query->where('Site', 'LIKE', '%'.$filterSite.'%');
             }
         }
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
@@ -1175,7 +1248,7 @@ public function ApplicantsExport(Request $request)
                 $startDate = date('Y-m-d', strtotime($filterDateStart));
                 $endDate = date('Y-m-d', strtotime($filterDateEnd));
 
-                $endDate = date('Y-m-d', strtotime($endDate . ' +1 day'));
+                $endDate = date('Y-m-d', strtotime($endDate.' +1 day'));
 
                 $query->where('DateOfApplication', '>=', $startDate)
                     ->where('DateOfApplication', '<', $endDate);
@@ -1186,7 +1259,7 @@ public function ApplicantsExport(Request $request)
             $filterContact = $request->input('filter_contact');
 
             if (!empty($filterContact)) {
-                $query->where('MobileNo', 'LIKE', '%' . $filterContact . '%');
+                $query->where('MobileNo', 'LIKE', '%'.$filterContact.'%');
             }
         }
 
@@ -1695,7 +1768,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -1770,7 +1843,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -2314,7 +2387,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -2389,7 +2462,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -2658,7 +2731,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -2733,7 +2806,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3002,7 +3075,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3077,7 +3150,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3493,7 +3566,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3568,7 +3641,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -3837,7 +3910,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -3912,7 +3985,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -4181,7 +4254,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -4256,7 +4329,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -4672,7 +4745,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -4747,7 +4820,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -5016,7 +5089,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -5091,7 +5164,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -7070,7 +7143,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -7145,7 +7218,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -7676,7 +7749,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -7751,7 +7824,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8020,7 +8093,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8095,7 +8168,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8364,7 +8437,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8439,7 +8512,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -8840,7 +8913,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -8915,7 +8988,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -9184,7 +9257,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -9259,7 +9332,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -9528,7 +9601,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -9603,7 +9676,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -10004,7 +10077,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -10079,7 +10152,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -10348,7 +10421,7 @@ public function ApplicantsExport(Request $request)
         $totalGrandOverallWeekly = [];
 
         foreach (range(53, 104) as $week) {
-            $totalGrandOverallWeekly['Week' . ($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
+            $totalGrandOverallWeekly['Week'.($week - 52)] = isset($overallGrandTotalByWeek[$week]) ? $overallGrandTotalByWeek[$week] : '';
         }
         $mappedtotalGrandOverallWeekly = [
             'Site' => 'GRAND TOTAL',
@@ -10423,7 +10496,7 @@ public function ApplicantsExport(Request $request)
         foreach ($groupedClasses as $siteName => $siteData) {
             $totalGrandWeekly = [];
             foreach (range(53, 104) as $week) {
-                $totalGrandWeekly['Week' . ($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
+                $totalGrandWeekly['Week'.($week - 52)] = isset($grandTotalBySiteByWeek[$siteName][$week]) ? $grandTotalBySiteByWeek[$siteName][$week] : '';
             }
             $mappedTotalGrandWeekly = [
                 'Site' => $siteName,
@@ -10818,7 +10891,7 @@ public function ApplicantsExport(Request $request)
         $pipelineTotal = $staffingModel->pipeline_total ?? 0;
         $filled = $staffingModel->filled ?? 0;
         $deficit = max(0, floatval($classTarget) - floatval($showUpsTotal));
-        $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2) . '%';
+        $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2).'%';
         $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
         $classNumber = intval($classTarget) % 15 > 1
         ? floor(intval($classTarget) / 15) + 1
@@ -11020,19 +11093,19 @@ public function ApplicantsExport(Request $request)
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [
@@ -11154,19 +11227,19 @@ public function ApplicantsExport(Request $request)
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [
@@ -11288,19 +11361,19 @@ public function ApplicantsExport(Request $request)
         $mappedB2Classes = [];
         $mappedB2Classes[] = [
             'Site' => 'B2 Percentage',
-            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2) . '%' : '0%',
-            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2) . '%' : '0%',
-            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2) . '%' : '0%',
-            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2) . '%' : '0%',
-            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2) . '%' : '0%',
-            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2) . '%' : '0%',
-            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2) . '%' : '0%',
-            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2) . '%' : '0%',
-            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2) . '%' : '0%',
-            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2) . '%' : '0%',
-            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2) . '%' : '0%',
-            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2) . '%' : '0%',
-            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2) . '%' : '0%',
+            'January' => $grandTotalByWeek2['1'] != 0 ? round(($grandTotalByWeek['1'] / $grandTotalByWeek2['1']) * 100, 2).'%' : '0%',
+            'February' => $grandTotalByWeek2['2'] != 0 ? round(($grandTotalByWeek['2'] / $grandTotalByWeek2['2']) * 100, 2).'%' : '0%',
+            'March' => $grandTotalByWeek2['3'] != 0 ? round(($grandTotalByWeek['3'] / $grandTotalByWeek2['3']) * 100, 2).'%' : '0%',
+            'April' => $grandTotalByWeek2['4'] != 0 ? round(($grandTotalByWeek['4'] / $grandTotalByWeek2['4']) * 100, 2).'%' : '0%',
+            'May' => $grandTotalByWeek2['5'] != 0 ? round(($grandTotalByWeek['5'] / $grandTotalByWeek2['5']) * 100, 2).'%' : '0%',
+            'June' => $grandTotalByWeek2['6'] != 0 ? round(($grandTotalByWeek['6'] / $grandTotalByWeek2['6']) * 100, 2).'%' : '0%',
+            'July' => $grandTotalByWeek2['7'] != 0 ? round(($grandTotalByWeek['7'] / $grandTotalByWeek2['7']) * 100, 2).'%' : '0%',
+            'August' => $grandTotalByWeek2['8'] != 0 ? round(($grandTotalByWeek['8'] / $grandTotalByWeek2['8']) * 100, 2).'%' : '0%',
+            'September' => $grandTotalByWeek2['9'] != 0 ? round(($grandTotalByWeek['9'] / $grandTotalByWeek2['9']) * 100, 2).'%' : '0%',
+            'October' => $grandTotalByWeek2['10'] != 0 ? round(($grandTotalByWeek['10'] / $grandTotalByWeek2['10']) * 100, 2).'%' : '0%',
+            'November' => $grandTotalByWeek2['11'] != 0 ? round(($grandTotalByWeek['11'] / $grandTotalByWeek2['11']) * 100, 2).'%' : '0%',
+            'December' => $grandTotalByWeek2['12'] != 0 ? round(($grandTotalByWeek['12'] / $grandTotalByWeek2['12']) * 100, 2).'%' : '0%',
+            'GrandTotalByProgram' => $grandTotalForAllPrograms2 != 0 ? round(($grandTotalForAllPrograms / $grandTotalForAllPrograms2) * 100, 2).'%' : '0%',
         ];
         foreach ($groupedClasses as $siteName => $siteData) {
             $weeklyData = [

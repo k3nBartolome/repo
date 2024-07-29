@@ -31,7 +31,7 @@
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
-               
+
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"
@@ -102,17 +102,17 @@
                       >PERX Tool SRv2</router-link
                     >
                     <router-link
-                    to="/leads"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                    >Leads</router-link
-                  >
-                  <router-link
-                  to="/applicants"
-                  class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                  role="menuitem"
-                  >Applicant Information Tool</router-link
-                >
+                      to="/leads"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Leads</router-link
+                    >
+                    <router-link
+                      to="/applicants"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Applicant Tool</router-link
+                    >
                   </div>
                 </div>
                 <div
@@ -239,9 +239,7 @@
                 role="menu"
                 aria-orientation="vertical"
                 aria-labelledby="options-menu"
-              >
-                
-              </div>
+              ></div>
             </div>
           </div>
         </div>

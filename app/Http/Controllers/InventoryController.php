@@ -74,9 +74,7 @@ class InventoryController extends Controller
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->transaction_type = 'Transfer Request';
-        $inventory->transferred_by = $inventory->transferred_by;
-        $inventory->transferred_from = $inventory->transferred_from;
-        $inventory->transferred_to = $inventory->transferred_to;
+        
 
         $inventory->save();
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
@@ -113,9 +111,7 @@ class InventoryController extends Controller
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->transaction_type = 'Transfer Request';
-        $inventory->transferred_by = $inventory->transferred_by;
-        $inventory->transferred_from = $inventory->transferred_from;
-        $inventory->transferred_to = $inventory->transferred_to;
+        
 
         $inventory->save();
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
@@ -679,24 +675,5 @@ class InventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param \App\Models\c $c
-     *
-     * @return \Illuminate\Http\Response
-     */
+    
 }
