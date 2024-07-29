@@ -390,22 +390,8 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const formatDate = (date) => {
-          if (!date) return "";
-          const [year, month, day] = date.split("-");
-          return `${month}/${day}/${year}`;
-        };
-
-        const formattedStartDate = formatDate(this.filterStartDate);
-        const formattedEndDate = formatDate(this.filterEndDate);
-
-        if (!formattedStartDate || !formattedEndDate) {
-          console.error("Invalid date format");
-          return;
-        }
-
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/applicantsExport",
+          "http://10.109.2.112:8081/api/no_srv2_export",
           {
             params: {
               filter_lastname: this.filterLastName,
