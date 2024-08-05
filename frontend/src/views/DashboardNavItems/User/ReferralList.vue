@@ -221,7 +221,7 @@ export default {
         Segment: "",
       },
       perx: [],
-     
+
       sites: [],
       columns: [
 
@@ -286,7 +286,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/no_srv2",
+          "http://127.0.0.1:8000/api/no_srv2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -297,7 +297,7 @@ export default {
             /*   startDate: formattedStartDate,
               endDate: formattedEndDate, */
               filter_type: this.filterType,
-              filter_region: this.filterRegion, 
+              filter_region: this.filterRegion,
             },
           }
         );
@@ -314,7 +314,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/applicantsDate",
+          "http://127.0.0.1:8000/api/applicantsDate",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -365,7 +365,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -391,7 +391,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/no_srv2_export",
+          "http://127.0.0.1:8000/api/no_srv2_export",
           {
             params: {
               filter_lastname: this.filterLastName,

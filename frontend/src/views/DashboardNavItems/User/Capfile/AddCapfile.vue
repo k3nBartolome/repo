@@ -365,6 +365,166 @@
             </select>
           </label>
         </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Team
+            <input
+              type="text"
+              v-model="team"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Immediate Supervisor HRID
+            <input
+              type="text"
+              v-model="immediate_supervisor_hrid"
+               class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Immediate Supervisor Name
+            <input
+              type="text"
+              v-model="immediate_supervisor_name"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Work Setup
+            <select
+              required
+              v-model="work_setup"
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            >
+              <option disabled value="" selected>Please select one</option>
+              <option value="WAS">WAS</option>
+              <option value="WAH">WAH</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Offer Target
+            <input
+              type="text"
+              v-model="offer_target"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Offer Category Doc
+            <input
+              type="text"
+              v-model="offer_category_doc"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Required Program Specific
+            <input
+              type="text"
+              v-model="required_program_specific"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Program Specific Id
+
+            <input
+              type="text"
+              v-model="program_specific_id"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Basic Pay Training
+            <input
+              type="text"
+              v-model="basic_pay_training"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+      </div>
+      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Basic Pay Production
+            <input
+              type="text"
+              v-model="basic_pay_production"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Night Differential Training
+            <input
+              type="text"
+              v-model="night_differential_training"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Night Differential Production
+            <input
+              type="text"
+              v-model="night_differential_production"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Bonus Training
+            <input
+              type="text"
+              v-model="bonus_training"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
+        <div class="w-full mt-1 md:w-1/5 md:mt-0">
+          <label class="block"
+            >Bonus Production
+            <input
+              type="text"
+              v-model="bonus_production"
+              readonly
+              class="w-full px-4 py-2 bg-white border rounded-lg"
+            />
+          </label>
+        </div>
       </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-1 md:w-5/5 md:mt-0">
@@ -378,6 +538,7 @@
           </label>
         </div>
       </div>
+
       <div class="flex justify-center py-4">
         <button
           type="submit"
@@ -414,6 +575,20 @@ export default {
       sites: [],
       daterange: [],
       programs: [],
+      team: "",
+      immediate_supervisor_hrid: "",
+      immediate_supervisor_name: "",
+      work_setup: "",
+      offer_target: "",
+      offer_category_doc: "",
+      required_program_specific: "",
+      program_specific_id: "",
+      basic_pay_training: "",
+      basic_pay_production: "",
+      night_differential_training: "",
+      night_differential_production: "",
+      bonus_training: "",
+      bonus_production: "",
     };
   },
 
@@ -461,7 +636,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -485,7 +660,7 @@ export default {
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers,
         });
 
@@ -509,7 +684,7 @@ export default {
         };
 
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           { headers }
         );
 
@@ -547,13 +722,27 @@ export default {
         approved_by: this.approved_by,
         status: "Active",
         created_by: this.$store.state.user_id,
+        team: this.team,
+        immediate_supervisor_hrid: this.immediate_supervisor_hrid,
+        immediate_supervisor_name: this.immediate_supervisor_name,
+        work_setup: this.work_setup,
+        offer_target: this.offer_target,
+        offer_category_doc: this.offer_category_doc,
+        required_program_specific: this.required_program_specific,
+        program_specific_id: this.program_specific_id,
+        basic_pay_training: this.basic_pay_training,
+        basic_pay_production: this.basic_pay_production,
+        night_differential_training: this.night_differential_training,
+        night_differential_production: this.night_differential_production,
+        bonus_training: this.bonus_training,
+        bonus_production: this.bonus_production,
       };
       const token = this.$store.state.token;
       const headers = {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -576,6 +765,20 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
+          this.team = "";
+          this.immediate_supervisor_hrid = "";
+          this.immediate_supervisor_name = "";
+          this.work_setup = "";
+          this.offer_target = "";
+          this.offer_category_doc = "";
+          this.required_program_specific = "";
+          this.program_specific_id = "";
+          this.basic_pay_training = "";
+          this.basic_pay_production = "";
+          this.night_differential_training = "";
+          this.night_differential_production = "";
+          this.bonus_training = "";
+          this.bonus_production = "";
           this.$router.push("/capfile", () => {
             location.reload();
           });

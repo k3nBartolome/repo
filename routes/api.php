@@ -254,4 +254,5 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('get_payrate', [ClassesController::class, 'getPayRateByLob']);
 
