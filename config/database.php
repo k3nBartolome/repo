@@ -99,8 +99,7 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
             'options' => [
-                PDO::SQLSRV_ATTR_DIRECT_QUERY => true,
-            ],
+                /* PDO::SQLSRV_ATTR_DIRECT_QUERY => true, */],
         ],
         'pgsql' => [
             'driver' => 'pgsql',

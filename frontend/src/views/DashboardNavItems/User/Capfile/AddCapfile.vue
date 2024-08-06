@@ -86,456 +86,384 @@
   </div>
   <div class="px-12 py-8 font-serifs">
     <form @submit.prevent="addClass">
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Site
-            <select
-              disabled
-              v-model="sites_selected"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              required
-              @change="getSites"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Line of Business
-            <select
-              disabled
-              v-model="programs_selected"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              required
-              @change="getPrograms"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="program in programs"
-                :key="program.id"
-                :value="program.id"
+      <div class="border-red-500 border-2">
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Site
+              <select
+                disabled
+                v-model="sites_selected"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                required
+                @change="getSites"
               >
-                {{ program.name }}
-              </option>
-            </select>
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Type of Hiring
-            <select
-              required
-              v-model="type_of_hiring"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="attrition">Attrition</option>
-              <option value="growth">Growth</option>
-              <option value="attrition and growth">Attrition and Growth</option>
-            </select>
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            External Target
-            <input
-              required
-              type="number"
-              v-model="external_target"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              @change="syncTotalTarget"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Internal Target
-            <input
-              required
-              type="number"
-              v-model="internal_target"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              @change="syncTotalTarget"
-            />
-          </label>
-        </div>
-      </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Total Target
-            <input
-              type="number"
-              v-model="total_target"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Original Start Date
-            <input
-              required
-              type="date"
-              v-model="original_start_date"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              @change="syncNoticeDays"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >WFM Date Requested
-            <input
-              required
-              type="date"
-              v-model="wfm_date_requested"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              @change="syncNoticeDays"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Notice Days
-            <input
-              type="text"
-              v-model="notice_days"
-              readonly
-              @change="syncNoticeWeeks"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <!--
-        <div class="w-full mt-1 md:w-1/5 md:mt-0 relative border rounded-lg">
-          <input
-            type="number"
-            v-model="notice_days"
-            readonly
-            class="w-full px-4 py-2 bg-white border-2 pt-6"
-            @change="syncNoticeWeeks"
-          />
-          <label
-            class="absolute left-3 top-0 bg-white px-1"
-            style="transform: translateY(-50%)"
-            >Notice Days</label
-          >
-        </div> -->
-
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Notice Weeks
-            <input
-              type="text"
-              v-model="notice_weeks"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-      </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block">
-            Weeks Start
-            <select
-              disabled
-              v-model="date_selected"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-              required
-              @change="getDateRange"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option
-                v-for="daterange in daterange"
-                :key="daterange.id"
-                :value="daterange.id"
+                <option disabled value="" selected>Please select one</option>
+                <option v-for="site in sites" :key="site.id" :value="site.id">
+                  {{ site.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Line of Business
+              <select
+                disabled
+                v-model="programs_selected"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                required
+                @change="getPrograms"
               >
-                {{ daterange.date_range }}
-              </option>
-            </select>
-          </label>
+                <option disabled value="" selected>Please select one</option>
+                <option
+                  v-for="program in programs"
+                  :key="program.id"
+                  :value="program.id"
+                >
+                  {{ program.name }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Type of Hiring
+              <select
+                required
+                v-model="type_of_hiring"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="attrition">Attrition</option>
+                <option value="growth">Growth</option>
+                <option value="attrition and growth">
+                  Attrition and Growth
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              External Target
+              <input
+                required
+                type="number"
+                v-model="external_target"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                @change="syncTotalTarget"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Internal Target
+              <input
+                required
+                type="number"
+                v-model="internal_target"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                @change="syncTotalTarget"
+              />
+            </label>
+          </div>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >With ERF?
-            <select
-              required
-              v-model="with_erf"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="yes">Yes</option>
-              <option value="no">No</option>
-            </select>
-          </label>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Total Target
+              <input
+                type="number"
+                v-model="total_target"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Original Start Date
+              <input
+                required
+                type="date"
+                v-model="original_start_date"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                @change="syncNoticeDays"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >WFM Date Requested
+              <input
+                required
+                type="date"
+                v-model="wfm_date_requested"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                @change="syncNoticeDays"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Notice Days
+              <input
+                type="text"
+                v-model="notice_days"
+                readonly
+                @change="syncNoticeWeeks"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Notice Weeks
+              <input
+                type="text"
+                v-model="notice_weeks"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block" v-if="with_erf === 'yes'">
-            ERF Number
-            <input
-              type="text"
-              v-model="erf_number"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block">
+              Weeks Start
+              <select
+                disabled
+                v-model="date_selected"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+                required
+                @change="getDateRange"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option
+                  v-for="daterange in daterange"
+                  :key="daterange.id"
+                  :value="daterange.id"
+                >
+                  {{ daterange.date_range }}
+                </option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >With ERF?
+              <select
+                required
+                v-model="with_erf"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block" v-if="with_erf === 'yes'">
+              ERF Number
+              <input
+                type="text"
+                v-model="erf_number"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Category
+              <select
+                required
+                v-model="category"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="placeholder">Placeholder</option>
+                <option value="confirmed">Confirmed</option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Within SLA?
+              <select
+                required
+                v-model="within_sla"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="Within SLA">Within SLA</option>
+                <option value="Within SLA - Decrease in Demand (Cancellation)">
+                  Within SLA - Decrease in Demand (Cancellation)
+                </option>
+                <option value="Within SLA - Increase in Demand">
+                  Within SLA - Increase in Demand
+                </option>
+                <option value="Outside SLA - Decrease in Demand (Cancellation)">
+                  Outside SLA - Decrease in Demand (Cancellation)
+                </option>
+                <option value="Outside SLA-Cancellation">
+                  Outside SLA-Cancellation
+                </option>
+                <option value="Outside SLA - Increase in Demand">
+                  Outside SLA - Increase in Demand
+                </option>
+                <option value="Outside SLA-Change in Start Date">
+                  Outside SLA-Change in Start Date
+                </option>
+                <option value="Outside SLA-Change in Profile">
+                  Outside SLA-Change in Profile
+                </option>
+                <option value="Outside SLA-Change in Process/Assessments">
+                  Outside SLA-Change in Process/Assessments
+                </option>
+                <option value="Outside SLA-New class added">
+                  Outside SLA-New class added
+                </option>
+                <option value="OV Support">OV Support</option>
+              </select>
+            </label>
+          </div>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Category
-            <select
-              required
-              v-model="category"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="placeholder">Placeholder</option>
-              <option value="confirmed">Confirmed</option>
-            </select>
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Within SLA?
-            <select
-              required
-              v-model="within_sla"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="Within SLA">Within SLA</option>
-              <option value="Within SLA - Decrease in Demand (Cancellation)">
-                Within SLA - Decrease in Demand (Cancellation)
-              </option>
-              <option value="Within SLA - Increase in Demand">
-                Within SLA - Increase in Demand
-              </option>
-              <option value="Outside SLA - Decrease in Demand (Cancellation)">
-                Outside SLA - Decrease in Demand (Cancellation)
-              </option>
-              <option value="Outside SLA-Cancellation">
-                Outside SLA-Cancellation
-              </option>
-              <option value="Outside SLA - Increase in Demand">
-                Outside SLA - Increase in Demand
-              </option>
-              <option value="Outside SLA-Change in Start Date">
-                Outside SLA-Change in Start Date
-              </option>
-              <option value="Outside SLA-Change in Profile">
-                Outside SLA-Change in Profile
-              </option>
-              <option value="Outside SLA-Change in Process/Assessments">
-                Outside SLA-Change in Process/Assessments
-              </option>
-              <option value="Outside SLA-New class added">
-                Outside SLA-New class added
-              </option>
-              <option value="OV Support">OV Support</option>
-            </select>
-          </label>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Approved by
+              <select
+                required
+                v-model="approved_by"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="VP-Ops">VP-Ops</option>
+                <option value="VP-Training">VP-Training</option>
+                <option value="VP-WF">VP-WF</option>
+                <option value="VP-TA">VP-TA</option>
+                <option value="CS">CS</option>
+                <option value="WF">WF</option>
+                <option value="Ops">Ops</option>
+                <option value="Training">Training</option>
+                <option value="TA">TA</option>
+              </select>
+            </label>
+          </div>
         </div>
       </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Approved by
-            <select
-              required
-              v-model="approved_by"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="VP-Ops">VP-Ops</option>
-              <option value="VP-Training">VP-Training</option>
-              <option value="VP-WF">VP-WF</option>
-              <option value="VP-TA">VP-TA</option>
-              <option value="CS">CS</option>
-              <option value="WF">WF</option>
-              <option value="Ops">Ops</option>
-              <option value="Training">Training</option>
-              <option value="TA">TA</option>
-            </select>
-          </label>
+      <!-- SR -->
+      <div v-if="category === 'confirmed'" class="border-red-500 border-2">
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Team
+              <input
+                type="text"
+                v-model="team"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Immediate Supervisor HRID
+              <input
+                type="text"
+                v-model="immediate_supervisor_hrid"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Immediate Supervisor Name
+              <input
+                type="text"
+                v-model="immediate_supervisor_name"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Work Setup
+              <select
+                required
+                v-model="work_setup"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="WAS">WAS</option>
+                <option value="WAH">WAH</option>
+              </select>
+            </label>
+          </div>
         </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Team
-            <input
-              type="text"
-              v-model="team"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Immediate Supervisor HRID
-            <input
-              type="text"
-              v-model="immediate_supervisor_hrid"
-               class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Immediate Supervisor Name
-            <input
-              type="text"
-              v-model="immediate_supervisor_name"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Work Setup
-            <select
-              required
-              v-model="work_setup"
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option value="WAS">WAS</option>
-              <option value="WAH">WAH</option>
-            </select>
-          </label>
-        </div>
-      </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Offer Target
-            <input
-              type="text"
-              v-model="offer_target"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Offer Category Doc
-            <input
-              type="text"
-              v-model="offer_category_doc"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Required Program Specific
-            <input
-              type="text"
-              v-model="required_program_specific"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Program Specific Id
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Offer Target
+              <input
+                type="text"
+                v-model="offer_target"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Offer Category Doc
+              <input
+                type="text"
+                v-model="offer_category_doc"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Required Program Specific
+              <input
+                type="text"
+                v-model="required_program_specific"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+            <label class="block"
+              >Program Specific Id
 
-            <input
-              type="text"
-              v-model="program_specific_id"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Basic Pay Training
-            <input
-              type="text"
-              v-model="basic_pay_training"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
+              <input
+                type="text"
+                v-model="program_specific_id"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
         </div>
       </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Basic Pay Production
-            <input
-              type="text"
-              v-model="basic_pay_production"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Night Differential Training
-            <input
-              type="text"
-              v-model="night_differential_training"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Night Differential Production
-            <input
-              type="text"
-              v-model="night_differential_production"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Bonus Training
-            <input
-              type="text"
-              v-model="bonus_training"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-        <div class="w-full mt-1 md:w-1/5 md:mt-0">
-          <label class="block"
-            >Bonus Production
-            <input
-              type="text"
-              v-model="bonus_production"
-              readonly
-              class="w-full px-4 py-2 bg-white border rounded-lg"
-            />
-          </label>
-        </div>
-      </div>
-      <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-        <div class="w-full mt-1 md:w-5/5 md:mt-0">
-          <label class="block"
-            >Remarks<textarea
-              required
-              type="text"
-              v-model="remarks"
-              class="block w-full h-15 bg-white border rounded-lg"
-            />
-          </label>
+      <!-- Remarks -->
+      <div class="border-red-500 border-2">
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-5/5 md:mt-0">
+            <label class="block"
+              >Remarks<textarea
+                required
+                type="text"
+                v-model="remarks"
+                class="block w-full h-15 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
         </div>
       </div>
 
@@ -575,7 +503,7 @@ export default {
       sites: [],
       daterange: [],
       programs: [],
-      team: "",
+
       immediate_supervisor_hrid: "",
       immediate_supervisor_name: "",
       work_setup: "",
@@ -583,16 +511,35 @@ export default {
       offer_category_doc: "",
       required_program_specific: "",
       program_specific_id: "",
-      basic_pay_training: "",
-      basic_pay_production: "",
-      night_differential_training: "",
-      night_differential_production: "",
-      bonus_training: "",
-      bonus_production: "",
     };
   },
-
+  watch: {
+    category(newValue) {
+      if (newValue !== "confirmed") {
+        this.team = "";
+        this.immediate_supervisor_hrid = "";
+        this.immediate_supervisor_name = "";
+        this.work_setup = "";
+        this.offer_target = "";
+        this.offer_category_doc = "";
+        this.required_program_specific = "";
+        this.program_specific_id = "";
+      }
+    },
+  },
   computed: {
+    team() {
+      const site = this.sites.find((s) => s.id === this.selectedSiteId);
+      const program = this.programs.find(
+        (p) => p.id === this.selectedProgramId
+      );
+      const dateRange = this.daterange.find(
+        (d) => d.id === this.selectedDateRangeId
+      );
+      return `${site ? site.name : ""} ${program ? program.name : ""} ${
+        dateRange ? dateRange.date_range : ""
+      }`.trim();
+    },
     programs_selected() {
       return this.$route.query.program;
     },
