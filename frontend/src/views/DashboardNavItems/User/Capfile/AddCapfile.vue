@@ -357,7 +357,40 @@
       <!-- SR -->
       <div v-if="category === 'confirmed'" class="border-red-500 border-2">
         <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Hire Date
+              <input
+                type="date"
+                v-model="hire_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Start Date
+              <input
+                type="date"
+                v-model="start_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >End Date
+              <input
+                type="date"
+                v-model="end_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Team
               <input
@@ -368,7 +401,7 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Immediate Supervisor HRID
               <input
@@ -378,7 +411,9 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+        </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Immediate Supervisor Name
               <input
@@ -388,7 +423,7 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Work Setup
               <select
@@ -402,9 +437,7 @@
               </select>
             </label>
           </div>
-        </div>
-        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Offer Target
               <input
@@ -415,7 +448,7 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Offer Category Doc
               <input
@@ -426,7 +459,7 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Required Program Specific
               <input
@@ -437,10 +470,11 @@
               />
             </label>
           </div>
-          <div class="w-full mt-1 md:w-1/4 md:mt-0">
+        </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
               >Program Specific Id
-
               <input
                 type="text"
                 v-model="program_specific_id"
@@ -449,8 +483,78 @@
               />
             </label>
           </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Basic Pay Training
+              <input
+                type="text"
+                v-model="basic_pay_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Basic Pay Production
+                <input
+                  type="text"
+                  v-model="basic_pay_production"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Night Differential Training
+                <input
+                  type="text"
+                  v-model="night_differential_training"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Night Differential Production
+                <input
+                  type="text"
+                  v-model="night_differential_production"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+          </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Bonus Training
+              <input
+                type="text"
+                v-model="bonus_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Bonus Production
+              <input
+                type="text"
+                v-model="bonus_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
         </div>
       </div>
+
       <!-- Remarks -->
       <div class="border-red-500 border-2">
         <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
@@ -494,7 +598,7 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      category: "",
+      category: "confirmed",
       notice_days: 0,
       erf_number: "",
       within_sla: "",
@@ -503,7 +607,9 @@ export default {
       sites: [],
       daterange: [],
       programs: [],
-
+      start_date:"",
+      end_date:"",
+      hire_date:"",
       immediate_supervisor_hrid: "",
       immediate_supervisor_name: "",
       work_setup: "",
@@ -511,6 +617,12 @@ export default {
       offer_category_doc: "",
       required_program_specific: "",
       program_specific_id: "",
+      basic_pay_training: "",
+      basic_pay_production: "",
+      night_differential_training: "",
+      night_differential_production: "",
+      bonus_training: "",
+      bonus_production: "",
     };
   },
   watch: {
@@ -524,21 +636,15 @@ export default {
         this.offer_category_doc = "";
         this.required_program_specific = "";
         this.program_specific_id = "";
+        this.start_date="";
+        this.end_date="";
+        this.hire_date="";
       }
     },
   },
   computed: {
     team() {
-      const site = this.sites.find((s) => s.id === this.selectedSiteId);
-      const program = this.programs.find(
-        (p) => p.id === this.selectedProgramId
-      );
-      const dateRange = this.daterange.find(
-        (d) => d.id === this.selectedDateRangeId
-      );
-      return `${site ? site.name : ""} ${program ? program.name : ""} ${
-        dateRange ? dateRange.date_range : ""
-      }`.trim();
+      return `${this.sites_selected} ${this.programs_selected} ${this.date_selected}`.trim();
     },
     programs_selected() {
       return this.$route.query.program;
@@ -564,7 +670,6 @@ export default {
     },
   },
   mounted() {
-    console.log("Component mounted.");
     this.getSites();
     this.getPrograms();
     this.getDateRange();

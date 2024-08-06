@@ -640,6 +640,205 @@
           </label>
         </div>
       </div>
+      <div v-if="category === 'confirmed'" class="border-red-500 border-2">
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Hire Date
+              <input
+                type="date"
+                v-model="hire_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Start Date
+              <input
+                type="date"
+                v-model="start_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >End Date
+              <input
+                type="date"
+                v-model="end_date"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Team
+              <input
+                type="text"
+                v-model="team"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Immediate Supervisor HRID
+              <input
+                type="text"
+                v-model="immediate_supervisor_hrid"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Immediate Supervisor Name
+              <input
+                type="text"
+                v-model="immediate_supervisor_name"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Work Setup
+              <select
+                required
+                v-model="work_setup"
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              >
+                <option disabled value="" selected>Please select one</option>
+                <option value="WAS">WAS</option>
+                <option value="WAH">WAH</option>
+              </select>
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Offer Target
+              <input
+                type="text"
+                v-model="offer_target"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Offer Category Doc
+              <input
+                type="text"
+                v-model="offer_category_doc"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Required Program Specific
+              <input
+                type="text"
+                v-model="required_program_specific"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Program Specific Id
+              <input
+                type="text"
+                v-model="program_specific_id"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Basic Pay Training
+              <input
+                type="text"
+                v-model="basic_pay_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Basic Pay Production
+                <input
+                  type="text"
+                  v-model="basic_pay_production"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Night Differential Training
+                <input
+                  type="text"
+                  v-model="night_differential_training"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+            <div class="w-full mt-1 md:w-1/5 md:mt-0">
+              <label class="block"
+                >Night Differential Production
+                <input
+                  type="text"
+                  v-model="night_differential_production"
+                  readonly
+                  class="w-full px-4 py-2 bg-white border rounded-lg"
+                />
+              </label>
+            </div>
+          </div>
+        <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Bonus Training
+              <input
+                type="text"
+                v-model="bonus_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Bonus Production
+              <input
+                type="text"
+                v-model="bonus_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
         <div class="w-full mt-1 md:w-5/5 md:mt-0">
           <label class="block"
@@ -704,9 +903,28 @@ export default {
       databaseValue: "",
       showModal: false,
       isButtonVisible: false,
+      start_date:"",
+      end_date:"",
+      hire_date:"",
+      immediate_supervisor_hrid: "",
+      immediate_supervisor_name: "",
+      work_setup: "",
+      offer_target: "",
+      offer_category_doc: "",
+      required_program_specific: "",
+      program_specific_id: "",
+      basic_pay_training: "",
+      basic_pay_production: "",
+      night_differential_training: "",
+      night_differential_production: "",
+      bonus_training: "",
+      bonus_production: "",
     };
   },
   computed: {
+    team() {
+      return `${this.sites_selected} ${this.programs_selected} ${this.date_selected}`.trim();
+    },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
       const internal = parseInt(this.internal_target) || 0;
@@ -731,6 +949,22 @@ export default {
     this.checkClassExists2();
   },
   watch: {
+    category(newValue) {
+      this.checkForChange("category", "Change Category", newValue);
+      if (newValue !== "confirmed") {
+        this.team = "";
+        this.immediate_supervisor_hrid = "";
+        this.immediate_supervisor_name = "";
+        this.work_setup = "";
+        this.offer_target = "";
+        this.offer_category_doc = "";
+        this.required_program_specific = "";
+        this.program_specific_id = "";
+        this.start_date = "";
+        this.end_date = "";
+        this.hire_date = "";
+      }
+    },
     type_of_hiring: function (newVal) {
       this.checkForChange("type_of_hiring", "Change Type of Hiring", newVal);
     },
@@ -740,9 +974,7 @@ export default {
     internal_target: function (newVal) {
       this.checkForChange("internal_target", "Change Targets", newVal);
     },
-    category: function (newVal) {
-      this.checkForChange("category", "Change Category", newVal);
-    },
+   
     agreed_start_date: {
       handler(newVal) {
         this.checkForChange("agreed_start_date", "Change Dates", newVal);
