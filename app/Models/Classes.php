@@ -64,8 +64,24 @@ class Classes extends Model
         'tr',
         'cl',
         'op',
-
-    ];
+        'team',
+        'start_date',
+        'end_date',
+        'hire_date',
+        'immediate_supervisor_hrid',
+        'immediate_supervisor_name',
+        'work_setup',
+        'offer_target',
+        'offer_category_doc',
+        'required_program_specific',
+        'program_specific_id',
+        'basic_pay_training',
+        'basic_pay_production',
+        'night_differential_training',
+        'night_differential_production',
+        'bonus_training',
+        'bonus_production',
+     ];
 
     public function site()
     {

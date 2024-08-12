@@ -363,7 +363,7 @@
               <input
                 type="date"
                 v-model="hire_date"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -374,7 +374,7 @@
               <input
                 type="date"
                 v-model="start_date"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -385,7 +385,7 @@
               <input
                 type="date"
                 v-model="end_date"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -427,7 +427,7 @@
             <label class="block"
               >Work Setup
               <select
-                required
+                
                 v-model="work_setup"
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               >
@@ -443,7 +443,7 @@
               <input
                 type="text"
                 v-model="offer_target"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -454,7 +454,7 @@
               <input
                 type="text"
                 v-model="offer_category_doc"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -465,7 +465,7 @@
               <input
                 type="text"
                 v-model="required_program_specific"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -478,7 +478,7 @@
               <input
                 type="text"
                 v-model="program_specific_id"
-                readonly
+                
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -494,41 +494,41 @@
               />
             </label>
           </div>
-        
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Basic Pay Production
-                <input
-                  type="text"
-                  v-model="basic_pay_production"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Night Differential Training
-                <input
-                  type="text"
-                  v-model="night_differential_training"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Night Differential Production
-                <input
-                  type="text"
-                  v-model="night_differential_production"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
+
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Basic Pay Production
+              <input
+                type="text"
+                v-model="basic_pay_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
           </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Night Differential Training
+              <input
+                type="text"
+                v-model="night_differential_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Night Differential Production
+              <input
+                type="text"
+                v-model="night_differential_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        </div>
         <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
           <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
@@ -598,7 +598,7 @@ export default {
       original_start_date: "",
       wfm_date_requested: "",
       remarks: "",
-      category: "confirmed",
+      category: "",
       notice_days: 0,
       erf_number: "",
       within_sla: "",
@@ -607,9 +607,9 @@ export default {
       sites: [],
       daterange: [],
       programs: [],
-      start_date:"",
-      end_date:"",
-      hire_date:"",
+      start_date: "",
+      end_date: "",
+      hire_date: "",
       immediate_supervisor_hrid: "",
       immediate_supervisor_name: "",
       work_setup: "",
@@ -623,6 +623,9 @@ export default {
       night_differential_production: "",
       bonus_training: "",
       bonus_production: "",
+      siteNames: {},
+      programNames: {},
+      dateNames: {},
     };
   },
   watch: {
@@ -636,15 +639,18 @@ export default {
         this.offer_category_doc = "";
         this.required_program_specific = "";
         this.program_specific_id = "";
-        this.start_date="";
-        this.end_date="";
-        this.hire_date="";
+        this.start_date = "";
+        this.end_date = "";
+        this.hire_date = "";
       }
     },
   },
   computed: {
     team() {
-      return `${this.sites_selected} ${this.programs_selected} ${this.date_selected}`.trim();
+      const siteNamesList = this.siteNames[this.sites_selected] || "";
+      const programNamesList = this.programNames[this.programs_selected] || "";
+      const dateName = this.dateNames[this.date_selected] || "";
+      return `${siteNamesList} ${programNamesList} ${dateName}`;
     },
     programs_selected() {
       return this.$route.query.program;
@@ -696,7 +702,11 @@ export default {
 
         if (response.status === 200) {
           this.sites = response.data.data;
-          console.log(response.data.data);
+
+          this.siteNames = this.sites.reduce((map, site) => {
+            map[site.id] = site.name;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching sites");
         }
@@ -705,20 +715,21 @@ export default {
       }
     },
     async getPrograms() {
-      console.log(this.programs_selected);
       try {
         const token = this.$store.state.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
         const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (response.status === 200) {
           this.programs = response.data.data;
-          console.log(response.data.data);
+
+          this.programNames = this.programs.reduce((map, program) => {
+            map[program.id] = program.name;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching programs");
         }
@@ -726,23 +737,36 @@ export default {
         console.log(error);
       }
     },
-
     async getDateRange() {
-      console.log(this.date_selected);
       try {
         const token = this.$store.state.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
         const response = await axios.get(
           "http://127.0.0.1:8000/api/daterange",
-          { headers }
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (response.status === 200) {
           this.daterange = response.data.data;
-          console.log(response.data.data);
+
+          // Create a mapping of date IDs to formatted week_start names
+          this.dateNames = this.daterange.reduce((map, date) => {
+            // Parse the date string into a Date object
+            const weekStartDate = new Date(date.week_start);
+
+            // Format the date to 'MMM DD' (e.g., 'Feb 02')
+            const formattedDate = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+            }).format(weekStartDate);
+
+            // Add to the map
+            map[date.id] = formattedDate;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching date range");
         }

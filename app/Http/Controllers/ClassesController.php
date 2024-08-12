@@ -30,7 +30,7 @@ class ClassesController extends Controller
     public function getPayRateByLob(Request $request)
     {
         $lobid = $request->input('lobid');
-    
+
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2.dbo.PayRate')
             ->select([
@@ -47,11 +47,11 @@ class ClassesController extends Controller
                 'CreatedBy',
                 'CreatedDate',
                 'UpdatedBy',
-                'UpdatedDate'
+                'UpdatedDate',
             ])
             ->where('LobId', $lobid)
             ->get();
-    
+
         return response()->json([
             'payRates' => $query,
         ]);
@@ -670,9 +670,9 @@ class ClassesController extends Controller
     public function leadsDatev2()
     {
         $minDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->min('DateCreated');
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->min('DateCreated');
         $maxDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->max('DateCreated');
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->max('DateCreated');
 
         $minDate = Carbon::parse($minDate)->format('Y-m-d');
         $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
@@ -686,9 +686,9 @@ class ClassesController extends Controller
     public function perxDatev2()
     {
         $minDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->min('AppliedDate');
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->min('AppliedDate');
         $maxDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads')->max('AppliedDate');
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications')->max('AppliedDate');
 
         $minDate = Carbon::parse($minDate)->format('Y-m-d');
         $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
@@ -1476,41 +1476,44 @@ class ClassesController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'notice_weeks' => 'required',
-            'notice_days' => 'required',
-            'external_target' => 'required',
-            'internal_target' => 'required',
-            'total_target' => 'required',
-            'type_of_hiring' => 'required',
-            'within_sla' => 'required',
-            'with_erf' => 'required',
-            'erf_number' => 'nullable',
-            'remarks' => 'required',
-            'status' => 'required',
-            'approved_status' => 'required',
-            'original_start_date' => 'required',
-            'wfm_date_requested' => 'required',
-            'program_id' => 'required',
-            'site_id' => 'required',
-            'created_by' => 'required',
-            'date_range_id' => 'required',
-            'category' => 'required',
-            'approved_by' => 'required',
-            'team'=> 'required',
-            'immediate_supervisor_hrid'=> 'required',
-            'immediate_supervisor_name'=> 'required',
-            'work_setup'=> 'required',
-            'offer_target'=> 'required',
-            'offer_category_doc'=> 'required',
-            'required_program_specific'=> 'required',
-            'program_specific_id'=> 'required',
-            'basic_pay_training'=> 'required',
-            'basic_pay_production'=> 'required',
-            'night_differential_training'=> 'required',
-            'night_differential_production'=> 'required',
-            'bonus_training'=> 'required',
-            'bonus_production'=> 'required',
-        ]);
+        'notice_weeks' => 'required',
+        'notice_days' => 'required',
+        'external_target' => 'required',
+        'internal_target' => 'required',
+        'total_target' => 'required',
+        'type_of_hiring' => 'required',
+        'within_sla' => 'required',
+        'with_erf' => 'required',
+        'erf_number' => 'nullable',
+        'remarks' => 'required',
+        'status' => 'required',
+        'approved_status' => 'required',
+        'original_start_date' => 'required',
+        'wfm_date_requested' => 'required',
+        'program_id' => 'required',
+        'site_id' => 'required',
+        'created_by' => 'required',
+        'date_range_id' => 'required',
+        'category' => 'required',
+        'approved_by' => 'required',
+        'hire_date' => 'nullable',
+        'end_date' => 'nullable',
+        'start_date' => 'nullable',
+        'team' => 'nullable',
+        'immediate_supervisor_hrid' => 'nullable',
+        'immediate_supervisor_name' => 'nullable',
+        'work_setup' => 'nullable',
+        'offer_target' => 'nullable',
+        'offer_category_doc' => 'nullable',
+        'nullable_program_specific' => 'nullable',
+        'program_specific_id' => 'nullable',
+        'basic_pay_training' => 'nullable',
+        'basic_pay_production' => 'nullable',
+        'night_differential_training' => 'nullable',
+        'night_differential_production' => 'nullable',
+        'bonus_training' => 'nullable',
+        'bonus_production' => 'nullable',
+    ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
@@ -1523,6 +1526,47 @@ class ClassesController extends Controller
         $class->save();
         $class->pushedback_id = $class->id;
         $class->save();
+
+        /*   if (
+              $class->hire_date !== null &&
+              $class->end_date !== null &&
+              $class->start_date !== null &&
+              $class->team !== null &&
+              $class->immediate_supervisor_hrid !== null &&
+              $class->immediate_supervisor_name !== null &&
+              $class->work_setup !== null &&
+              $class->offer_target !== null &&
+              $class->offer_category_doc !== null &&
+              $class->nullable_program_specific !== null &&
+              $class->program_specific_id !== null &&
+              $class->basic_pay_training !== null &&
+              $class->basic_pay_production !== null &&
+              $class->night_differential_training !== null &&
+              $class->night_differential_production !== null &&
+              $class->bonus_training !== null &&
+              $class->bonus_production !== null
+          ) {
+              $srClass = new srClass();
+              $srClass->start_date = $class->start_date;
+              $srClass->end_date = $class->end_date;
+              $srClass->hire_date = $class->hire_date;
+              $srClass->team = $class->team;
+              $srClass->immediate_supervisor_hrid = $class->immediate_supervisor_hrid;
+              $srClass->immediate_supervisor_name = $class->immediate_supervisor_name;
+              $srClass->work_setup = $class->work_setup;
+              $srClass->offer_target = $class->offer_target;
+              $srClass->offer_category_doc = $class->offer_category_doc;
+              $srClass->nullable_program_specific = $class->nullable_program_specific;
+              $srClass->program_specific_id = $class->program_specific_id;
+              $srClass->basic_pay_training = $class->basic_pay_training;
+              $srClass->basic_pay_production = $class->basic_pay_production;
+              $srClass->night_differential_training = $class->night_differential_training;
+              $srClass->night_differential_production = $class->night_differential_production;
+              $srClass->bonus_training = $class->bonus_training;
+              $srClass->bonus_production = $class->bonus_production;
+              $srClass->save();
+          } */
+
         $classStaffing = new ClassStaffing();
         $classStaffing->classes_id = $class->id;
         $classStaffing->show_ups_internal = '0';
@@ -1559,7 +1603,7 @@ class ClassesController extends Controller
         $classStaffing->save();
         $classStaffing->class_staffing_id = $classStaffing->id;
         $classStaffing->save();
-        
+
         return new ClassesResource($class);
     }
 
@@ -10966,67 +11010,118 @@ class ClassesController extends Controller
             'op' => 'nullable',
             'ta' => 'nullable',
             'cl' => 'nullable',
+            'hire_date' => 'nullable',
+            'end_date' => 'nullable',
+            'start_date' => 'nullable',
+            'team' => 'nullable',
+            'immediate_supervisor_hrid' => 'nullable',
+            'immediate_supervisor_name' => 'nullable',
+            'work_setup' => 'nullable',
+            'offer_target' => 'nullable',
+            'offer_category_doc' => 'nullable',
+            'nullable_program_specific' => 'nullable',
+            'program_specific_id' => 'nullable',
+            'basic_pay_training' => 'nullable',
+            'basic_pay_production' => 'nullable',
+            'night_differential_training' => 'nullable',
+            'night_differential_production' => 'nullable',
+            'bonus_training' => 'nullable',
+            'bonus_production' => 'nullable',
         ]);
-        $requested_by = [$request->requested_by];
-        $changes = [$request->changes];
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
         $class = Classes::find($id);
+        if (!$class) {
+            return response()->json(['error' => 'Class not found'], 404);
+        }
         $newClass = $class->replicate();
         $newClass->update_status = $class->update_status + 1;
         $newClass->status = $request->status;
-        $newClass->requested_by = json_encode($requested_by);
-        $newClass->changes = json_encode($changes);
+        $newClass->requested_by = json_encode([$request->requested_by]);
+        $newClass->changes = json_encode([$request->changes]);
         $newClass->save();
-
         $class->fill($request->all());
         $class->changes = 'Add Class';
         $class->status = 'Active';
         $class->updated_at = Carbon::now()->format('Y-m-d H:i');
         $class->save();
-
-        if ($request->within_sla == 'Outside SLA - Increase in Demand' || $request->within_sla == 'Outside SLA - Decrease in Demand (Cancellation)') {
+        if (in_array($request->within_sla, [
+            'Outside SLA - Increase in Demand',
+            'Outside SLA - Decrease in Demand (Cancellation)'
+        ])) {
             $out_of_sla_difference = abs($newClass->total_target - $class->total_target);
             $class->out_of_sla = $out_of_sla_difference;
             $class->save();
         }
-
+        if ($class->hire_date && $class->end_date && $class->start_date && $class->team &&
+            $class->immediate_supervisor_hrid && $class->immediate_supervisor_name && $class->work_setup &&
+            $class->offer_target && $class->offer_category_doc && $class->nullable_program_specific &&
+            $class->program_specific_id && $class->basic_pay_training && $class->basic_pay_production &&
+            $class->night_differential_training && $class->night_differential_production &&
+            $class->bonus_training && $class->bonus_production) {
+            $srClass = DB::connection('sqlsrv')
+                ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Class')
+                ->select('Class.team')
+                ->where('Class.team', 'LIKE', '%' . $class->team . '%')
+                ->first();
+            if ($srClass) {
+                $srClass->Lob = $class->program_id;
+                $srClass->Site = $class->site_id;
+                $srClass->start_date = $class->start_date;
+                $srClass->end_date = $class->end_date;
+                $srClass->hire_date = $class->hire_date;
+                $srClass->team = $class->team;
+                $srClass->immediate_supervisor_hrid = $class->immediate_supervisor_hrid;
+                $srClass->immediate_supervisor_name = $class->immediate_supervisor_name;
+                $srClass->work_setup = $class->work_setup;
+                $srClass->offer_target = $class->offer_target;
+                $srClass->offer_category_doc = $class->offer_category_doc;
+                $srClass->nullable_program_specific = $class->nullable_program_specific;
+                $srClass->program_specific_id = $class->program_specific_id;
+                $srClass->basic_pay_training = $class->basic_pay_training;
+                $srClass->basic_pay_production = $class->basic_pay_production;
+                $srClass->night_differential_training = $class->night_differential_training;
+                $srClass->night_differential_production = $class->night_differential_production;
+                $srClass->bonus_training = $class->bonus_training;
+                $srClass->bonus_production = $class->bonus_production;
+                $srClass->save();
+            }
+        }
         $staffingModel = ClassStaffing::where('classes_id', $class->pushedback_id)
             ->where('active_status', 1)
             ->first();
-
-        $classTarget = $class->total_target ?? 0;
-        $showUpsTotal = $staffingModel->show_ups_total ?? 0;
-        $showUpsInternal = $staffingModel->show_ups_internal ?? 0;
-        $pipelineTotal = $staffingModel->pipeline_total ?? 0;
-        $filled = $staffingModel->filled ?? 0;
-        $deficit = max(0, floatval($classTarget) - floatval($showUpsTotal));
-        $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2).'%';
-        $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
-        $classNumber = intval($classTarget) % 15 > 1
-        ? floor(intval($classTarget) / 15) + 1
-        : floor(intval($classTarget) / 15);
-        $open = max(0, intval($classNumber) - intval($filled));
-        $capStart = intval($showUpsTotal) > intval($classTarget)
-        ? intval($classTarget)
-        : intval($showUpsTotal);
-        $internalHires = ($showUpsInternal >= $classTarget && ($deficit === '' || $deficit === 0)) ? 1 : 0;
-        $pipelineTarget = ($pipelineTotal > $classTarget) ? $classTarget : $pipelineTotal;
-
-        $staffingModel->cap_starts = $open;
-        $staffingModel->open = $capStart;
-        $staffingModel->classes_number = $classNumber;
-        $staffingModel->deficit = $deficit;
-        $staffingModel->percentage = $percentage;
-        $staffingModel->over_hires = $overHires;
-        $staffingModel->internals_hires_all = $internalHires;
-        $staffingModel->pipeline_target = $pipelineTarget;
-        $staffingModel->save();
-
+        if ($staffingModel) {
+            $classTarget = $class->total_target ?? 0;
+            $showUpsTotal = $staffingModel->show_ups_total ?? 0;
+            $showUpsInternal = $staffingModel->show_ups_internal ?? 0;
+            $pipelineTotal = $staffingModel->pipeline_total ?? 0;
+            $filled = $staffingModel->filled ?? 0;
+            $deficit = max(0, floatval($classTarget) - floatval($showUpsTotal));
+            $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2) . '%';
+            $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
+            $classNumber = intval($classTarget) % 15 > 1
+                ? floor(intval($classTarget) / 15) + 1
+                : floor(intval($classTarget) / 15);
+            $open = max(0, intval($classNumber) - intval($filled));
+            $capStart = intval($showUpsTotal) > intval($classTarget)
+                ? intval($classTarget)
+                : intval($showUpsTotal);
+            $internalHires = ($showUpsInternal >= $classTarget && ($deficit === '' || $deficit === 0)) ? 1 : 0;
+            $pipelineTarget = ($pipelineTotal > $classTarget) ? $classTarget : $pipelineTotal;
+            $staffingModel->cap_starts = $capStart;
+            $staffingModel->open = $open;
+            $staffingModel->classes_number = $classNumber;
+            $staffingModel->deficit = $deficit;
+            $staffingModel->percentage = $percentage;
+            $staffingModel->over_hires = $overHires;
+            $staffingModel->internals_hires_all = $internalHires;
+            $staffingModel->pipeline_target = $pipelineTarget;
+            $staffingModel->save();
+        }
         return new ClassesResource($newClass);
     }
+    
 
     public function editCancelled(Request $request, $id)
     {

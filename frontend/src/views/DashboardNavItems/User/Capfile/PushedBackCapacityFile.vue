@@ -919,11 +919,17 @@ export default {
       night_differential_production: "",
       bonus_training: "",
       bonus_production: "",
+      siteNames: {},
+      programNames: {},
+      dateNames: {},
     };
   },
   computed: {
     team() {
-      return `${this.sites_selected} ${this.programs_selected} ${this.date_selected}`.trim();
+      const siteNamesList = this.siteNames[this.sites_selected] || "";
+      const programNamesList = this.programNames[this.programs_selected] || "";
+      const dateName = this.dateNames[this.date_selected] || "";
+      return `${siteNamesList} ${programNamesList} WS ${dateName}`;
     },
     total_target_computed() {
       const external = parseInt(this.external_target) || 0;
@@ -1052,7 +1058,11 @@ export default {
 
         if (response.status === 200) {
           this.sites = response.data.data;
-          console.log(response.data.data);
+
+          this.siteNames = this.sites.reduce((map, site) => {
+            map[site.id] = site.name;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching sites");
         }
@@ -1061,20 +1071,21 @@ export default {
       }
     },
     async getPrograms() {
-      console.log(this.programs_selected);
       try {
         const token = this.$store.state.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
         const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         if (response.status === 200) {
           this.programs = response.data.data;
-          console.log(response.data.data);
+
+          this.programNames = this.programs.reduce((map, program) => {
+            map[program.id] = program.name;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching programs");
         }
@@ -1083,32 +1094,35 @@ export default {
       }
     },
     async getDateRange() {
-      console.log(this.agreed_start_date);
       try {
         const token = this.$store.state.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterangeall",
-          { headers }
+          "http://127.0.0.1:8000/api/daterange",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (response.status === 200) {
           this.daterange = response.data.data;
-          console.log(response.data.data);
 
-          for (let i = 0; i < this.daterange.length; i++) {
-            const range = this.daterange[i];
-            if (
-              this.agreed_start_date >= range.week_start &&
-              this.agreed_start_date <= range.week_end
-            ) {
-              this.date_selected = range.id;
-              break;
-            }
-          }
+          // Create a mapping of date IDs to formatted week_start names
+          this.dateNames = this.daterange.reduce((map, date) => {
+            // Parse the date string into a Date object
+            const weekStartDate = new Date(date.week_start);
+
+            // Format the date to 'MMM DD' (e.g., 'Feb 02')
+            const formattedDate = new Intl.DateTimeFormat("en-US", {
+              month: "short",
+              day: "2-digit",
+            }).format(weekStartDate);
+
+            // Add to the map
+            map[date.id] = formattedDate;
+            return map;
+          }, {});
         } else {
           console.log("Error fetching date range");
         }
