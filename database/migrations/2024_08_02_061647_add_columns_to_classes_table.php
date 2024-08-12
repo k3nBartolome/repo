@@ -14,20 +14,23 @@ class AddColumnsToClassesTable extends Migration
     public function up()
     {
         Schema::table('classes', function (Blueprint $table) {
+            $table->datetime('start_date')->nullable();
+            $table->datetime('end_date')->nullable();
+            $table->datetime('hire_date')->nullable();
             $table->string('team')->nullable();
             $table->string('immediate_supervisor_hrid')->nullable();
             $table->string('immediate_supervisor_name')->nullable();
             $table->string('work_setup')->nullable();
-            $table->integer('offer_target')->nullable();
+            $table->string('offer_target')->nullable();
             $table->string('offer_category_doc')->nullable();
             $table->string('required_program_specific')->nullable();
-            $table->integer('program_specific_id')->nullable();
-            $table->integer('basic_pay_training')->nullable();
-            $table->integer('basic_pay_production')->nullable();
-            $table->integer('night_differential_training')->nullable();
-            $table->integer('night_differential_production')->nullable();
-            $table->integer('bonus_training')->nullable();
-            $table->integer('bonus_production')->nullable();
+            $table->string('program_specific_id')->nullable();
+            $table->string('basic_pay_training')->nullable();
+            $table->string('basic_pay_production')->nullable();
+            $table->string('night_differential_training')->nullable();
+            $table->string('night_differential_production')->nullable();
+            $table->string('bonus_training')->nullable();
+            $table->string('bonus_production')->nullable();
         });
     }
 
@@ -58,6 +61,3 @@ class AddColumnsToClassesTable extends Migration
         });
     }
 }
-
-
-
