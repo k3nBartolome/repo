@@ -650,7 +650,7 @@ export default {
       const siteNamesList = this.siteNames[this.sites_selected] || "";
       const programNamesList = this.programNames[this.programs_selected] || "";
       const dateName = this.dateNames[this.date_selected] || "";
-      return `${siteNamesList} ${programNamesList} ${dateName}`;
+      return `${siteNamesList} ${programNamesList} WS ${dateName}`;
     },
     programs_selected() {
       return this.$route.query.program;
@@ -679,33 +679,44 @@ export default {
     this.getSites();
     this.getPrograms();
     this.getDateRange();
+    this.getPayrate();
   },
   methods: {
     async getPayrate() {
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/get_payrate/${this.$route.query.site}`,
-      { headers }
-    );
+        const response = await axios.get(
+          `http://10.109.2.112:8081/api/get_payrate/${this.$route.query.program}`,
+          { headers }
+        );
 
-    if (response.status === 200) {
-      const data = response.data.payRates;
-      const classObj = data.class;
+        if (response.status === 200) {
+          const payRates = response.data.payRates;
 
-      this.basic_pay_production = classObj.BonusProduction;
+          if (payRates.length > 0) {
+            const classObj = payRates[0]; // Access the first object in the array
 
-    } else {
-      console.log("Error fetching classes");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+            // Bind the retrieved data to the component's data properties
+            this.basic_pay_production = classObj.BasicPayProduction;
+            this.basic_pay_training = classObj.BasicPayTraining;
+            this.night_differential_training = classObj.NightDifferentialTraining;
+            this.night_differential_production = classObj.NightDifferentialProduction;
+            this.bonus_training = classObj.BonusTraining;
+            this.bonus_production = classObj.BonusProduction;
+          } else {
+            console.log("No pay rates found for the given LOB ID");
+          }
+        } else {
+          console.log("Error fetching pay rates");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    },
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
     },
@@ -719,7 +730,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -742,7 +753,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
+        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -766,7 +777,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "http://10.109.2.112:8081/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -823,6 +834,9 @@ export default {
         approved_by: this.approved_by,
         status: "Active",
         created_by: this.$store.state.user_id,
+        start_date: this.start_date,
+        end_date: this.end_date,
+        hire_date: this.hire_date,
         team: this.team,
         immediate_supervisor_hrid: this.immediate_supervisor_hrid,
         immediate_supervisor_name: this.immediate_supervisor_name,
@@ -843,7 +857,7 @@ export default {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
+        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";
@@ -866,6 +880,9 @@ export default {
           this.created_by = "";
           this.approved_by = "";
           this.two_dimensional_id = "";
+          this.start_date = "";
+          this.end_date = "";
+          this.hire_date = "";
           this.team = "";
           this.immediate_supervisor_hrid = "";
           this.immediate_supervisor_name = "";

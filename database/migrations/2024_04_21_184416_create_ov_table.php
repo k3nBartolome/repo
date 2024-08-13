@@ -11,7 +11,7 @@ class CreateOvTable extends Migration
      *
      * @return void
      */
-    public function up()
+ /*    public function up()
     {
         Schema::create('ov', function (Blueprint $table) {
             $table->id();
@@ -32,7 +32,7 @@ class CreateOvTable extends Migration
             $table->foreign('apn_id')->references('id')->on('application_info')->nullable();
             $table->foreign('ov_added_by')->references('id')->on('users')->nullable();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

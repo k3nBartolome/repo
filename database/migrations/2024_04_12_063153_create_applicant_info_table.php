@@ -11,7 +11,7 @@ class CreateApplicantInfoTable extends Migration
      *
      * @return void
      */
-    public function up()
+  /*   public function up()
     {
         Schema::create('applicant_info', function (Blueprint $table) {
             $table->id();
@@ -43,7 +43,7 @@ class CreateApplicantInfoTable extends Migration
             $table->foreign('ai_leads_added_by')->references('id')->on('users')->onDelete('set null');
             $table->foreign('ai_last_updated_by')->references('id')->on('users')->onDelete('set null');
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

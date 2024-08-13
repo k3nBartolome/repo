@@ -43,6 +43,9 @@ class AddColumnsToClassesTable extends Migration
     {
         Schema::table('classes', function (Blueprint $table) {
             $table->dropColumn([
+                'start_date',
+                'end_date',
+                'hire_date',
                 'team',
                 'immediate_supervisor_hrid',
                 'immediate_supervisor_name',

@@ -11,7 +11,7 @@ class CreateClassShowUpTable extends Migration
      *
      * @return void
      */
-    public function up()
+/*     public function up()
     {
         Schema::create('class_show_up', function (Blueprint $table) {
             $table->id();
@@ -31,7 +31,7 @@ class CreateClassShowUpTable extends Migration
             $table->foreign('csu_added_by')->references('id')->on('users')->nullable();
             $table->foreign('classes_id')->references('id')->on('classes')->nullable();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

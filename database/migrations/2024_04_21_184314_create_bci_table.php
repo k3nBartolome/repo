@@ -11,7 +11,7 @@ class CreateBciTable extends Migration
      *
      * @return void
      */
-    public function up()
+   /*  public function up()
     {
         Schema::create('bci', function (Blueprint $table) {
             $table->id();
@@ -38,7 +38,7 @@ class CreateBciTable extends Migration
             $table->foreign('apn_id')->references('id')->on('application_info')->nullable();
             $table->foreign('bci_added_by')->references('id')->on('users')->nullable();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

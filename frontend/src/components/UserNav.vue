@@ -31,7 +31,7 @@
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
-
+                  
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"
@@ -113,6 +113,12 @@
                       role="menuitem"
                       >Applicant Tool</router-link
                     >
+                    <router-link
+                    to="/referrals"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                    >Referrals</router-link
+                  >
                   </div>
                 </div>
                 <div

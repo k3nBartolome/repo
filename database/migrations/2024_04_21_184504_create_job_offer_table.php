@@ -11,7 +11,7 @@ class CreateJobOfferTable extends Migration
      *
      * @return void
      */
-    public function up()
+   /*  public function up()
     {
         Schema::create('job_offer', function (Blueprint $table) {
             $table->id();
@@ -37,7 +37,7 @@ class CreateJobOfferTable extends Migration
             $table->foreign('apn_id')->references('id')->on('application_info')->nullable();
             $table->foreign('jo_added_by')->references('id')->on('users')->nullable();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.

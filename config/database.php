@@ -90,9 +90,22 @@ return [
         ],
         'sqlsrv_linked' => [
             'driver' => 'sqlsrv',
+            'host' => env('DB_HOST', '10.109.2.112'),
+            'port' => env('DB_PORT', '1433'),
+            'database' => env('DB_DATABASE', 'VXI_SMART_RECRUIT_PH_V2_PROD'),
+            'username' => env('DB_USERNAME', 'vxi_ta'),
+            'password' => env('DB_PASSWORD', 'capfilems'),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'options' => [
+                /* PDO::SQLSRV_ATTR_DIRECT_QUERY => true, */],
+        ],
+        'sqlsrv_linked2' => [
+            'driver' => 'sqlsrv',
             'host' => env('LINKED_DB_HOST', '10.109.2.112'),
             'port' => env('LINKED_DB_PORT', '1433'),
-            'database' => env('LINKED_DB_DATABASE', 'VXI_SMART_RECRUIT_PH_V2_PROD'),
+            'database' => env('LINKED_DB_DATABASE', 'VXI_SMART_RECRUIT_PH_V2'),
             'username' => env('LINKED_DB_USERNAME', 'vxi_ta'),
             'password' => env('LINKED_DB_PASSWORD', 'capfilems'),
             'charset' => 'utf8',

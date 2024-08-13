@@ -648,7 +648,6 @@
               <input
                 type="date"
                 v-model="hire_date"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -670,7 +669,6 @@
               <input
                 type="date"
                 v-model="end_date"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -712,7 +710,6 @@
             <label class="block"
               >Work Setup
               <select
-                required
                 v-model="work_setup"
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               >
@@ -728,7 +725,6 @@
               <input
                 type="text"
                 v-model="offer_target"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -739,7 +735,6 @@
               <input
                 type="text"
                 v-model="offer_category_doc"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -750,7 +745,6 @@
               <input
                 type="text"
                 v-model="required_program_specific"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -763,7 +757,6 @@
               <input
                 type="text"
                 v-model="program_specific_id"
-                readonly
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -780,40 +773,40 @@
             </label>
           </div>
 
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Basic Pay Production
-                <input
-                  type="text"
-                  v-model="basic_pay_production"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Night Differential Training
-                <input
-                  type="text"
-                  v-model="night_differential_training"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
-            <div class="w-full mt-1 md:w-1/5 md:mt-0">
-              <label class="block"
-                >Night Differential Production
-                <input
-                  type="text"
-                  v-model="night_differential_production"
-                  readonly
-                  class="w-full px-4 py-2 bg-white border rounded-lg"
-                />
-              </label>
-            </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Basic Pay Production
+              <input
+                type="text"
+                v-model="basic_pay_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
           </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Night Differential Training
+              <input
+                type="text"
+                v-model="night_differential_training"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+          <div class="w-full mt-1 md:w-1/5 md:mt-0">
+            <label class="block"
+              >Night Differential Production
+              <input
+                type="text"
+                v-model="night_differential_production"
+                readonly
+                class="w-full px-4 py-2 bg-white border rounded-lg"
+              />
+            </label>
+          </div>
+        </div>
         <div class="py-0 mb-2 md:flex md:space-x-2 md:items-center">
           <div class="w-full mt-1 md:w-1/5 md:mt-0">
             <label class="block"
@@ -903,9 +896,9 @@ export default {
       databaseValue: "",
       showModal: false,
       isButtonVisible: false,
-      start_date:"",
-      end_date:"",
-      hire_date:"",
+      start_date: "",
+      end_date: "",
+      hire_date: "",
       immediate_supervisor_hrid: "",
       immediate_supervisor_name: "",
       work_setup: "",
@@ -1015,7 +1008,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/class_exists2",
+          "http://10.109.2.112:8081/api/class_exists2",
           {
             params: {
               id: this.$route.params.id,
@@ -1051,7 +1044,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1074,11 +1067,14 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/programs",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -1098,7 +1094,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "http://10.109.2.112:8081/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1144,30 +1140,46 @@ export default {
       }
     },
     async getPayrate() {
-  try {
-    const token = this.$store.state.token;
-    const headers = {
-      Authorization: `Bearer ${token}`,
-    };
+      if (!this.programs_selected) {
+        console.log("Program is not selected yet");
+        return;
+      }
 
-    const response = await axios.get(
-      `http://127.0.0.1:8000/api/get_payrate/${this.sites_selected}`,
-      { headers }
-    );
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
 
-    if (response.status === 200) {
-      const data = response.data.payRates;  // Access the correct response data
-      const classObj = data.class;
+        const response = await axios.get(
+          `http://10.109.2.112:8081/api/get_payrate/${this.programs_selected}`,
+          { headers }
+        );
 
-      this.basic_pay_production = classObj.BonusProduction;
+        if (response.status === 200) {
+          const payRates = response.data.payRates;
 
-    } else {
-      console.log("Error fetching classes");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
+          if (payRates.length > 0) {
+            const classObj = payRates[0]; // Access the first object in the array
+
+            this.basic_pay_production = classObj.BasicPayProduction;
+            this.basic_pay_training = classObj.BasicPayTraining;
+            this.night_differential_training =
+              classObj.NightDifferentialTraining;
+            this.night_differential_production =
+              classObj.NightDifferentialProduction;
+            this.bonus_training = classObj.BonusTraining;
+            this.bonus_production = classObj.BonusProduction;
+          } else {
+            console.log("No pay rates found for the given LOB ID");
+          }
+        } else {
+          console.log("Error fetching pay rates");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    },
 
     async getClasses() {
       try {
@@ -1177,7 +1189,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          `http://10.109.2.112:8081/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -1209,7 +1221,17 @@ export default {
           this.tr = classObj.tr;
           this.cl = classObj.cl;
           this.op = classObj.op;
-
+          this.hire_date = classObj.hire_date ? new Date(classObj.hire_date).toISOString().split('T')[0] : '';
+          this.start_date = classObj.start_date ? new Date(classObj.start_date).toISOString().split('T')[0] : '';
+          this.end_date = classObj.end_date ? new Date(classObj.end_date).toISOString().split('T')[0] : '';
+          this.immediate_supervisor_hrid = classObj.immediate_supervisor_hrid;
+          this.immediate_supervisor_name = classObj.immediate_supervisor_name;
+          this.work_setup = classObj.work_setup;
+          this.offer_target = classObj.offer_target;
+          this.offer_category_doc = classObj.offer_category_doc;
+          this.required_program_specific = classObj.required_program_specific;
+          this.program_specific_id = classObj.program_specific_id;
+          this.getPayrate();
           // After fetching the data, store the initial state in the backup object
           this.backup = {
             type_of_hiring: this.type_of_hiring,
@@ -1230,7 +1252,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          "http://10.109.2.112:8081/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1297,13 +1319,30 @@ export default {
         tr: this.tr,
         cl: this.cl,
         op: this.op,
+        start_date: this.start_date,
+        end_date: this.end_date,
+        hire_date: this.hire_date,
+        team: this.team,
+        immediate_supervisor_hrid: this.immediate_supervisor_hrid,
+        immediate_supervisor_name: this.immediate_supervisor_name,
+        work_setup: this.work_setup,
+        offer_target: this.offer_target,
+        offer_category_doc: this.offer_category_doc,
+        required_program_specific: this.required_program_specific,
+        program_specific_id: this.program_specific_id,
+        basic_pay_training: this.basic_pay_training,
+        basic_pay_production: this.basic_pay_production,
+        night_differential_training: this.night_differential_training,
+        night_differential_production: this.night_differential_production,
+        bonus_training: this.bonus_training,
+        bonus_production: this.bonus_production,
       };
 
       const token = this.$store.state.token;
 
       axios
         .put(
-          `http://127.0.0.1:8000/api/classes/pushedback/${this.$route.params.id}`,
+          `http://10.109.2.112:8081/api/classes/pushedback/${this.$route.params.id}`,
           formData,
           {
             headers: {
@@ -1355,6 +1394,22 @@ export default {
       this.tr = "";
       this.cl = "";
       this.op = "";
+      this.start_date = "";
+      this.end_date = "";
+      this.hire_date = "";
+      this.team = "";
+      this.immediate_supervisor_hrid = "";
+      this.immediate_supervisor_name = "";
+      this.work_setup = "";
+      this.offer_target = "";
+      this.offer_category_doc = "";
+      this.required_program_specific = "";
+      this.program_specific_id = "";
+      this.basic_pay_training = "";
+      this.basic_pay_production = "";
+      this.night_differential_training = "";
+      this.night_differential_production = "";
+      this.bonus_training = "";
     },
   },
 };

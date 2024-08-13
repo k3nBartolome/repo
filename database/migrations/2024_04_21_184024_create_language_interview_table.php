@@ -11,7 +11,7 @@ class CreateLanguageInterviewTable extends Migration
      *
      * @return void
      */
-    public function up()
+   /*  public function up()
     {
         Schema::create('language_interview', function (Blueprint $table) {
             $table->id();
@@ -43,7 +43,7 @@ class CreateLanguageInterviewTable extends Migration
             $table->foreign('li_added_by')->references('id')->on('users')->nullable();
         });
     }
-
+ */
     /**
      * Reverse the migrations.
      *
