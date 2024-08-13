@@ -36,6 +36,6 @@ class SmartRecruitClass extends Model
         'CreatedBy',
         'CreatedDate',
         'UpdatedBy',
-        'UpdatedDate'
+        'UpdatedDate',
     ];
 }

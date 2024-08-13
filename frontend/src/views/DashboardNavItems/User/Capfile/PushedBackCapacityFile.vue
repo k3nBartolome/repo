@@ -779,7 +779,7 @@
               />
             </label>
           </div>
-        
+
             <div class="w-full mt-1 md:w-1/5 md:mt-0">
               <label class="block"
                 >Basic Pay Production
@@ -953,6 +953,7 @@ export default {
     this.getClasses();
     this.getTransaction();
     this.checkClassExists2();
+    this.getPayrate();
   },
   watch: {
     category(newValue) {
@@ -980,7 +981,7 @@ export default {
     internal_target: function (newVal) {
       this.checkForChange("internal_target", "Change Targets", newVal);
     },
-   
+
     agreed_start_date: {
       handler(newVal) {
         this.checkForChange("agreed_start_date", "Change Dates", newVal);
@@ -1142,6 +1143,32 @@ export default {
         }
       }
     },
+    async getPayrate() {
+  try {
+    const token = this.$store.state.token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/get_payrate/${this.sites_selected}`,
+      { headers }
+    );
+
+    if (response.status === 200) {
+      const data = response.data.payRates;  // Access the correct response data
+      const classObj = data.class;
+
+      this.basic_pay_production = classObj.BonusProduction;
+
+    } else {
+      console.log("Error fetching classes");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+
     async getClasses() {
       try {
         const token = this.$store.state.token;

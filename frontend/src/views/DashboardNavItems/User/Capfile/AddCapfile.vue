@@ -363,7 +363,7 @@
               <input
                 type="date"
                 v-model="hire_date"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -374,7 +374,7 @@
               <input
                 type="date"
                 v-model="start_date"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -385,7 +385,7 @@
               <input
                 type="date"
                 v-model="end_date"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -427,7 +427,7 @@
             <label class="block"
               >Work Setup
               <select
-                
+
                 v-model="work_setup"
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               >
@@ -443,7 +443,7 @@
               <input
                 type="text"
                 v-model="offer_target"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -454,7 +454,7 @@
               <input
                 type="text"
                 v-model="offer_category_doc"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -465,7 +465,7 @@
               <input
                 type="text"
                 v-model="required_program_specific"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -478,7 +478,7 @@
               <input
                 type="text"
                 v-model="program_specific_id"
-                
+
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -681,6 +681,31 @@ export default {
     this.getDateRange();
   },
   methods: {
+    async getPayrate() {
+  try {
+    const token = this.$store.state.token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/get_payrate/${this.$route.query.site}`,
+      { headers }
+    );
+
+    if (response.status === 200) {
+      const data = response.data.payRates;
+      const classObj = data.class;
+
+      this.basic_pay_production = classObj.BonusProduction;
+
+    } else {
+      console.log("Error fetching classes");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
     syncTotalTarget: function () {
       this.total_target = this.total_target_computed;
     },
