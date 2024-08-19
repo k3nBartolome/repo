@@ -74,7 +74,7 @@
             @input="updateFilterEndDate"
           />
         </div>
-       <!--  <div class="relative w-full md:w-1/4">
+        <!--  <div class="relative w-full md:w-1/4">
           <input
             v-model="filterContact"
             placeholder="Filter by Mobile No."
@@ -221,7 +221,7 @@ export default {
     this.getSites();
   },
   computed: {
-     /* formattedFilterDate() {
+    /* formattedFilterDate() {
       return this.filterDate
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
         : "";
@@ -229,11 +229,11 @@ export default {
   },
 
   methods: {
-     async getDates() {
+    async getDates() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/leads_date",
+          "http://127.0.0.1:8000/api/leads_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -280,18 +280,18 @@ export default {
           "Mobile No must be at least 4 characters long.";
       }
     },
-    async getSites(filterRegion = '') {
+    async getSites(filterRegion = "") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             params: {
-              filter_region: filterRegion === 'ALL' ? '' : filterRegion
-            }
+              filter_region: filterRegion === "ALL" ? "" : filterRegion,
+            },
           }
         );
 
@@ -310,16 +310,16 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/leads", {
-           params: {
-              filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
-              filter_site: this.filterSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
+        const response = await axios.get("http://127.0.0.1:8000/api/leads", {
+          params: {
+            filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_site: this.filterSite,
+            filter_date_start: this.filterStartDate,
+            filter_date_end: this.filterEndDate,
 
-              filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
-            },
+            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
+          },
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -337,20 +337,24 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/leadsexport", {
-          params: {
-            filter_lastname: this.filterLastName,
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/leadsexport",
+          {
+            params: {
+              filter_lastname: this.filterLastName,
               filter_firstname: this.filterFirstName,
               filter_site: this.filterSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
-            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+              filter_region:
+                this.filterRegion === "ALL" ? "" : this.filterRegion,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

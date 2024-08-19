@@ -57,7 +57,7 @@
           </select>
         </div>
 
-     <!--    <div class="w-full md:w-1/4">
+        <!--    <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
             type="date"
@@ -77,14 +77,14 @@
         </div> -->
         <div class="relative w-full md:w-1/4">
           <select
-          v-model="filterType"
-          placeholder="Referral Type"
-          class="w-full p-2 border rounded-lg"
-        >
-          <option disabled value="" selected>Please select Type</option>
-          <option value="SPARX">SPARX</option>
-          <option value="PERX">PERX</option>
-        </select>
+            v-model="filterType"
+            placeholder="Referral Type"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Type</option>
+            <option value="SPARX">SPARX</option>
+            <option value="PERX">PERX</option>
+          </select>
         </div>
         <div class="w-full md:w-1/4">
           <button
@@ -224,8 +224,6 @@ export default {
 
       sites: [],
       columns: [
-
-
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
         { data: "LastName", title: "LastName" },
@@ -251,10 +249,9 @@ export default {
     window.vm = this;
     this.getDates();
     this.getSites();
-   /*  this.fetchData(); */
+    /*  this.fetchData(); */
   },
   computed: {
-
     formattedFilterDate() {
       return this.filterDate
         ? new Date(this.filterDate).toLocaleDateString("en-CA")
@@ -279,28 +276,25 @@ export default {
   },
 
   methods: {
-
     async fetchData() {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get(
-          "http://10.109.2.112:8081/api/no_srv2",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            params: {filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
-              filter_site: this.filterSite,
+        const response = await axios.get("http://127.0.0.1:8000/api/no_srv2", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_site: this.filterSite,
             /*   startDate: formattedStartDate,
               endDate: formattedEndDate, */
-              filter_type: this.filterType,
-              filter_region: this.filterRegion,
-            },
-          }
-        );
+            filter_type: this.filterType,
+            filter_region: this.filterRegion,
+          },
+        });
 
         this.perx = response.data.perx;
       } catch (error) {
@@ -314,7 +308,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/applicantsDate",
+          "http://127.0.0.1:8000/api/applicantsDate",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -357,15 +351,14 @@ export default {
     validateContact() {
       this.filterTypeError = "";
       if (this.filterType && this.filterType.length < 4) {
-        this.filterTypeError =
-          "Mobile No must be at least 4 characters long.";
+        this.filterTypeError = "Mobile No must be at least 4 characters long.";
       }
     },
     async getSites(filterRegion = "") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -391,7 +384,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/no_srv2_export",
+          "http://127.0.0.1:8000/api/no_srv2_export",
           {
             params: {
               filter_lastname: this.filterLastName,

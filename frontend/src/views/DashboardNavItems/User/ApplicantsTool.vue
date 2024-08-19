@@ -250,7 +250,7 @@ export default {
         { data: "SpecSource", title: "SpecSource" },
         { data: "Step", title: "Step" },
         { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" }
+        { data: "AppStep2", title: "SpecStatus" },
       ],
       filterLoading: false,
       exportLoading: false,
@@ -273,7 +273,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_datev2",
+          "http://127.0.0.1:8000/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -320,18 +320,18 @@ export default {
           "Mobile No must be at least 4 characters long.";
       }
     },
-    async getSites(filterRegion = '') {
+    async getSites(filterRegion = "") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             params: {
-              filter_region: filterRegion === 'ALL' ? '' : filterRegion
-            }
+              filter_region: filterRegion === "ALL" ? "" : filterRegion,
+            },
           }
         );
 
@@ -351,7 +351,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perxfilterv2",
+          "http://127.0.0.1:8000/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -360,7 +360,8 @@ export default {
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
               filter_contact: this.filterContact,
-              filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
+              filter_region:
+                this.filterRegion === "ALL" ? "" : this.filterRegion,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -380,7 +381,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
@@ -388,7 +389,7 @@ export default {
             filter_date_start: this.filterStartDate,
             filter_date_end: this.filterEndDate,
             filter_contact: this.filterContact,
-            filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
+            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
           },
           headers: {
             Authorization: `Bearer ${token}`,

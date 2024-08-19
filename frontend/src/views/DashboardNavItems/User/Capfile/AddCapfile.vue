@@ -363,7 +363,6 @@
               <input
                 type="date"
                 v-model="hire_date"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -374,7 +373,6 @@
               <input
                 type="date"
                 v-model="start_date"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -385,7 +383,6 @@
               <input
                 type="date"
                 v-model="end_date"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -427,7 +424,6 @@
             <label class="block"
               >Work Setup
               <select
-
                 v-model="work_setup"
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               >
@@ -443,7 +439,6 @@
               <input
                 type="text"
                 v-model="offer_target"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -454,7 +449,6 @@
               <input
                 type="text"
                 v-model="offer_category_doc"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -465,7 +459,6 @@
               <input
                 type="text"
                 v-model="required_program_specific"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -478,7 +471,6 @@
               <input
                 type="text"
                 v-model="program_specific_id"
-
                 class="w-full px-4 py-2 bg-white border rounded-lg"
               />
             </label>
@@ -690,7 +682,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/get_payrate/${this.$route.query.program}`,
+          `http://127.0.0.1:8000/api/get_payrate/${this.$route.query.program}`,
           { headers }
         );
 
@@ -703,8 +695,10 @@ export default {
             // Bind the retrieved data to the component's data properties
             this.basic_pay_production = classObj.BasicPayProduction;
             this.basic_pay_training = classObj.BasicPayTraining;
-            this.night_differential_training = classObj.NightDifferentialTraining;
-            this.night_differential_production = classObj.NightDifferentialProduction;
+            this.night_differential_training =
+              classObj.NightDifferentialTraining;
+            this.night_differential_production =
+              classObj.NightDifferentialProduction;
             this.bonus_training = classObj.BonusTraining;
             this.bonus_production = classObj.BonusProduction;
           } else {
@@ -730,7 +724,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -753,7 +747,7 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/programs", {
+        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -777,7 +771,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -857,7 +851,7 @@ export default {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("http://10.109.2.112:8081/api/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

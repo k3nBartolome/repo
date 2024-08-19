@@ -725,7 +725,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/siteinventoryall",
+          "http://127.0.0.1:8000/api/siteinventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -746,7 +746,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -763,139 +763,142 @@ export default {
       }
     },
     transferItems() {
-  this.errors = {};
-  this.loading = true; // Set loading to true at the start
+      this.errors = {};
+      this.loading = true; // Set loading to true at the start
 
-  if (!this.sites_selected) {
-    this.errors.sites_selected = "Site is required.";
-  }
-  if (!this.transferred_quantity) {
-    this.errors.transferred_quantity = "Quantity Request is required.";
-  } else if (parseInt(this.transferred_quantity) > parseInt(this.quantity)) {
-    this.errors.transferred_quantity =
-      "Quantity Request cannot exceed available quantity.";
-  }
-
-  if (Object.keys(this.errors).length > 0) {
-    this.loading = false; // Stop loading if there are validation errors
-    return;
-  }
-
-  const formData = {
-    inventory_item_id: this.items_selected,
-    site_id: this.sites_selected,
-    quantity_approved: this.transferred_quantity,
-    transferred_by: this.$store.state.user_id,
-    transferred_to: this.sites_selected,
-    transferred_from: this.sites1_selected,
-  };
-
-  axios
-    .post("http://10.109.2.112:8081/api/transfer", formData, {
-      headers: {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      },
-    })
-    .then((response) => {
-      if (response && response.data && response.data.Request) {
-        console.log(response.data.Request);
-        this.successMessage = "Transferred successfully!";
-        this.showModal = false;
-        window.location.reload();
-      } else {
-        console.error("Response or Request property is undefined.");
+      if (!this.sites_selected) {
+        this.errors.sites_selected = "Site is required.";
       }
-    })
-    .catch((error) => {
-      if (error.response && error.response.data) {
-        console.log(error.response.data);
-      } else {
-        console.error("Error response or error.response.data is undefined.");
+      if (!this.transferred_quantity) {
+        this.errors.transferred_quantity = "Quantity Request is required.";
+      } else if (
+        parseInt(this.transferred_quantity) > parseInt(this.quantity)
+      ) {
+        this.errors.transferred_quantity =
+          "Quantity Request cannot exceed available quantity.";
       }
-    })
-    .finally(() => {
-      this.loading = false; // Set loading to false at the end
-    });
-},
+
+      if (Object.keys(this.errors).length > 0) {
+        this.loading = false; // Stop loading if there are validation errors
+        return;
+      }
+
+      const formData = {
+        inventory_item_id: this.items_selected,
+        site_id: this.sites_selected,
+        quantity_approved: this.transferred_quantity,
+        transferred_by: this.$store.state.user_id,
+        transferred_to: this.sites_selected,
+        transferred_from: this.sites1_selected,
+      };
+
+      axios
+        .post("http://127.0.0.1:8000/api/transfer", formData, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
+        .then((response) => {
+          if (response && response.data && response.data.Request) {
+            console.log(response.data.Request);
+            this.successMessage = "Transferred successfully!";
+            this.showModal = false;
+            window.location.reload();
+          } else {
+            console.error("Response or Request property is undefined.");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            console.log(error.response.data);
+          } else {
+            console.error(
+              "Error response or error.response.data is undefined."
+            );
+          }
+        })
+        .finally(() => {
+          this.loading = false; // Set loading to false at the end
+        });
+    },
 
     addItems() {
-  this.errors = {};
-  this.loading = true;
+      this.errors = {};
+      this.loading = true;
 
-  if (!this.sites_selected) {
-    this.errors.sites_selected = "Site is required.";
-  }
-  if (!this.item_name) {
-    this.errors.item_name = "Item Name is required.";
-  }
-  if (!this.quantity) {
-    this.errors.quantity = "Quantity is required.";
-  }
-  if (!this.cost) {
-    this.errors.cost = "Price is required.";
-  }
-  if (!this.budget_code) {
-    this.errors.budget_code = "Budget Code is required.";
-  } else {
-    console.log("Validating budget code:", this.budget_code);
-    const budgetCodeRegex = /^REC[a-zA-Z0-9]{3}[0-9]{6}$/;
-    if (!budgetCodeRegex.test(this.budget_code)) {
-      this.errors.budget_code =
-        "Budget Code must start with 'REC', followed by 3 alphanumeric characters, and ending with 6 digits.";
-    } else {
-      console.log("Budget code is valid:", this.budget_code);
-    }
-  }
+      if (!this.sites_selected) {
+        this.errors.sites_selected = "Site is required.";
+      }
+      if (!this.item_name) {
+        this.errors.item_name = "Item Name is required.";
+      }
+      if (!this.quantity) {
+        this.errors.quantity = "Quantity is required.";
+      }
+      if (!this.cost) {
+        this.errors.cost = "Price is required.";
+      }
+      if (!this.budget_code) {
+        this.errors.budget_code = "Budget Code is required.";
+      } else {
+        console.log("Validating budget code:", this.budget_code);
+        const budgetCodeRegex = /^REC[a-zA-Z0-9]{3}[0-9]{6}$/;
+        if (!budgetCodeRegex.test(this.budget_code)) {
+          this.errors.budget_code =
+            "Budget Code must start with 'REC', followed by 3 alphanumeric characters, and ending with 6 digits.";
+        } else {
+          console.log("Budget code is valid:", this.budget_code);
+        }
+      }
 
-  if (Object.keys(this.errors).length > 0) {
-    console.log("Form has errors");
-    this.loading = false; // Stop loading when there are errors
-    return;
-  }
+      if (Object.keys(this.errors).length > 0) {
+        console.log("Form has errors");
+        this.loading = false; // Stop loading when there are errors
+        return;
+      }
 
-  const formData = {
-    item_name: this.item_name,
-    quantity: this.quantity,
-    original_quantity: this.quantity,
-    type: this.type,
-    cost: this.cost,
-    total_cost: this.total_cost,
-    category: this.category,
-    budget_code: this.budget_code,
-    date_expiry: this.date_expiry,
-    site_id: this.sites_selected,
-    is_active: 1,
-    created_by: this.$store.state.user_id,
-  };
+      const formData = {
+        item_name: this.item_name,
+        quantity: this.quantity,
+        original_quantity: this.quantity,
+        type: this.type,
+        cost: this.cost,
+        total_cost: this.total_cost,
+        category: this.category,
+        budget_code: this.budget_code,
+        date_expiry: this.date_expiry,
+        site_id: this.sites_selected,
+        is_active: 1,
+        created_by: this.$store.state.user_id,
+      };
 
-  axios
-    .post("http://10.109.2.112:8081/api/items_site_supply", formData, {
-      headers: {
-        Authorization: `Bearer ${this.$store.state.token}`,
-      },
-    })
-    .then((response) => {
-      console.log(response.data);
-      this.item_name = "";
-      this.quantity = "";
-      this.sites_selected = "";
-      this.type = "";
-      this.cost = "";
-      this.total_cost = "";
-      this.category = "";
-      this.budget_code = "";
-      this.date_expiry = "";
-      this.getItems();
-      this.successMessage = "Item Successfully Added!";
-    })
-    .catch((error) => {
-      console.log(error.response.data);
-    })
-    .finally(() => {
-      this.loading = false;
-    });
-},
-
+      axios
+        .post("http://127.0.0.1:8000/api/items_site_supply", formData, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          this.item_name = "";
+          this.quantity = "";
+          this.sites_selected = "";
+          this.type = "";
+          this.cost = "";
+          this.total_cost = "";
+          this.category = "";
+          this.budget_code = "";
+          this.date_expiry = "";
+          this.getItems();
+          this.successMessage = "Item Successfully Added!";
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
   },
 };
 </script>

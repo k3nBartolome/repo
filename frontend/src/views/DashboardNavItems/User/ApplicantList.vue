@@ -5,167 +5,268 @@
         <h2 class="text-3xl font-bold text-gray-900">Applicant Tool SRv2</h2>
       </div>
     </header>
-  <!--   <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8"> -->
+    <!--   <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8"> -->
     <div
-    class="fixed inset-0 z-50 flex items-center justify-center modal"
-    v-if="showModalWorkExp"
-  >
-    <div class="absolute inset-0 modal-overlay"></div>
-    <div class="p-8 bg-white rounded-lg shadow-lg modal-content">
-      <!-- Content of your modal -->
-      <header class="px-4 py-2 border-b-2 border-gray-200">
-        <h2 class="text-lg font-semibold text-gray-800">Work Experience</h2>
-      </header>
-      <button
-        @click="showModalWorkExp = false"
-        class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
-      >
-        <svg
-          class="w-6 h-6"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+      class="fixed inset-0 z-50 flex items-center justify-center modal"
+      v-if="showModalWorkExp"
+    >
+      <div class="absolute inset-0 modal-overlay"></div>
+      <div class="p-8 bg-white rounded-lg shadow-lg modal-content">
+        <!-- Content of your modal -->
+        <header class="px-4 py-2 border-b-2 border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-800">Work Experience</h2>
+        </header>
+        <button
+          @click="showModalWorkExp = false"
+          class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M6 18L18 6M6 6l12 12"
-          ></path>
-        </svg>
-      </button>
-      <div class="px-4 py-2 overflow-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr>
-              <th class="px-4 py-2 border">Immediate Supervisor HRID</th>
-              <th class="px-4 py-2 border">Immediate Supervisor Name</th>
-              <th class="px-4 py-2 border">Work Setup</th>
-              <th class="px-4 py-2 border">Company Name</th>
-              <th class="px-4 py-2 border">Work Exp Type</th>
-              <th class="px-4 py-2 border">Last Working Date</th>
-              <th class="px-4 py-2 border">Adapter Industry</th>
-              <th class="px-4 py-2 border">Position</th>
-              <th class="px-4 py-2 border">Salary</th>
-              <th class="px-4 py-2 border">Work Tenure Months</th>
-              <th class="px-4 py-2 border">Reason for Leaving</th>
-              <th class="px-4 py-2 border">Account Type</th>
-              <th class="px-4 py-2 border">Experience Type</th>
-              <th class="px-4 py-2 border">Total Work Exp</th>
-              <th class="px-4 py-2 border">Total Work Exp BPO</th>
-              <th class="px-4 py-2 border">Total Work Exp Non-BPO</th>
-              <th class="px-4 py-2 border">Segment</th>
-              <th class="px-4 py-2 border">Work Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(row, index) in formattedData" :key="index">
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.ImmediateSupervisorHRID.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.ImmediateSupervisorName.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.WorkSetup.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.CompanyName.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.WorkExpType.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.LastWorkingDate.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.AdapterIndustry.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.Position.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.Salary.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.WorkTenureMonths.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.ReasonForLeaving.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.AccountType.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.ExperienceType.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.TotalWorkExp.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.TotalWorkExpBPO.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.TotalWorkExpNonBPO.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(item, itemIndex) in row.Segment.split(';')" :key="itemIndex">{{ item }}</li>
-                </ul>
-              </td>
-              <td class="px-4 py-2 border">
-                <ul class="p-0 list-none">
-                  <li v-for="(workType, workTypeIndex) in row.WorkType.split(';')" :key="workTypeIndex">{{ workType }}</li>
-                </ul>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+        <div class="px-4 py-2 overflow-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr>
+                <th class="px-4 py-2 border">Immediate Supervisor HRID</th>
+                <th class="px-4 py-2 border">Immediate Supervisor Name</th>
+                <th class="px-4 py-2 border">Work Setup</th>
+                <th class="px-4 py-2 border">Company Name</th>
+                <th class="px-4 py-2 border">Work Exp Type</th>
+                <th class="px-4 py-2 border">Last Working Date</th>
+                <th class="px-4 py-2 border">Adapter Industry</th>
+                <th class="px-4 py-2 border">Position</th>
+                <th class="px-4 py-2 border">Salary</th>
+                <th class="px-4 py-2 border">Work Tenure Months</th>
+                <th class="px-4 py-2 border">Reason for Leaving</th>
+                <th class="px-4 py-2 border">Account Type</th>
+                <th class="px-4 py-2 border">Experience Type</th>
+                <th class="px-4 py-2 border">Total Work Exp</th>
+                <th class="px-4 py-2 border">Total Work Exp BPO</th>
+                <th class="px-4 py-2 border">Total Work Exp Non-BPO</th>
+                <th class="px-4 py-2 border">Segment</th>
+                <th class="px-4 py-2 border">Work Type</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(row, index) in formattedData" :key="index">
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(
+                        item, itemIndex
+                      ) in row.ImmediateSupervisorHRID.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(
+                        item, itemIndex
+                      ) in row.ImmediateSupervisorName.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.WorkSetup.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.CompanyName.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.WorkExpType.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.LastWorkingDate.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.AdapterIndustry.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.Position.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.Salary.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.WorkTenureMonths.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.ReasonForLeaving.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.AccountType.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.ExperienceType.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.TotalWorkExp.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.TotalWorkExpBPO.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.TotalWorkExpNonBPO.split(
+                        ';'
+                      )"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(item, itemIndex) in row.Segment.split(';')"
+                      :key="itemIndex"
+                    >
+                      {{ item }}
+                    </li>
+                  </ul>
+                </td>
+                <td class="px-4 py-2 border">
+                  <ul class="p-0 list-none">
+                    <li
+                      v-for="(workType, workTypeIndex) in row.WorkType.split(
+                        ';'
+                      )"
+                      :key="workTypeIndex"
+                    >
+                      {{ workType }}
+                    </li>
+                  </ul>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-
-
-
-
-
-
-
-  <!--   </div> -->
+    <!--   </div> -->
 
     <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
@@ -365,42 +466,46 @@ export default {
       showModalWorkExp: false,
       WorkExpId: null,
       workExpData: {
-        'ImmediateSupervisorHRID':'',
-        'ImmediateSupervisorName':'',
-        'WorkSetup':'',
-        'CompanyName':'',
-        'WorkExpType':'',
-        'LastWorkingDate':'',
-        'AdapterIndustry':'',
-        'Position':'',
-        'Salary':'',
-        'WorkTenureMonths':'',
-        'ReasonForLeaving':'',
-        'AccountType':'',
-        'ExperienceType':'',
-        'WorkType':'',
-        'TotalWorkExp':'',
-        'TotalWorkExpBPO':'',
-        'TotalWorkExpNonBPO':'',
-        'Segment':'',
-    },
+        ImmediateSupervisorHRID: "",
+        ImmediateSupervisorName: "",
+        WorkSetup: "",
+        CompanyName: "",
+        WorkExpType: "",
+        LastWorkingDate: "",
+        AdapterIndustry: "",
+        Position: "",
+        Salary: "",
+        WorkTenureMonths: "",
+        ReasonForLeaving: "",
+        AccountType: "",
+        ExperienceType: "",
+        WorkType: "",
+        TotalWorkExp: "",
+        TotalWorkExpBPO: "",
+        TotalWorkExpNonBPO: "",
+        Segment: "",
+      },
       perx: [],
       applicants: {},
       sites: [],
       columns: [
         { data: "SR_ID", title: "SR_ID" },
         {
-  data: null,
-  title: "Actions",
-  orderable: false,
-  searchable: false,
-  render: function (data) {
-    const isUser = this.isUser;
-    return `
-      ${isUser ? `<button class="w-auto text-xs btn btn-primary" onclick="window.vm.openModalForWorkExp(${data.SR_ID})">Work Exp</button>` : ""}
+          data: null,
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const isUser = this.isUser;
+            return `
+      ${
+        isUser
+          ? `<button class="w-auto text-xs btn btn-primary" onclick="window.vm.openModalForWorkExp(${data.SR_ID})">Work Exp</button>`
+          : ""
+      }
     `;
-  }.bind(this),
-},
+          }.bind(this),
+        },
         { data: "ApplicationDate", title: "ApplicationDate" },
         { data: "FirstName", title: "FirstName" },
         { data: "LastName", title: "LastName" },
@@ -443,7 +548,7 @@ export default {
         { data: "GraduationDate", title: "GraduationDate" },
         { data: "ReferralID", title: "ReferralID" },
         { data: "id", title: "id" },
-       /*  { data: "ApplicantAppicationsId", title: "ApplicantAppicationsId" },
+        /*  { data: "ApplicantAppicationsId", title: "ApplicantAppicationsId" },
         { data: "ApplicantId", title: "ApplicantId" }, */
         { data: "Pronunciation", title: "Pronunciation" },
         { data: "Grammar", title: "Grammar" },
@@ -464,7 +569,7 @@ export default {
         { data: "Integrity", title: "Integrity" },
         { data: "Achievement", title: "Achievement" },
         { data: "ProblemSolving", title: "ProblemSolving" },
-       /*  { data: "IntervieweeId", title: "IntervieweeId" },
+        /*  { data: "IntervieweeId", title: "IntervieweeId" },
         { data: "ApplicantApplicationId", title: "ApplicantApplicationId" }, */
         { data: "Interviewer", title: "Interviewer" },
         { data: "LIRemarks", title: "LIRemarks" },
@@ -475,7 +580,7 @@ export default {
         { data: "OVRemarks", title: "OVRemarks" },
         { data: "OVRecruiter", title: "OVRecruiter" },
         { data: "OVDate", title: "OVDate" },
-       /*  { data: "ImmediateSupervisorHRID", title: "ImmediateSupervisorHRID" },
+        /*  { data: "ImmediateSupervisorHRID", title: "ImmediateSupervisorHRID" },
         { data: "ImmediateSupervisorName", title: "ImmediateSupervisorName" },
         { data: "WorkSetup", title: "WorkSetup" },
         { data: "CompanyName", title: "CompanyName" },
@@ -508,16 +613,18 @@ export default {
   computed: {
     formattedData() {
       const maxRows = Math.max(
-        ...Object.values(this.workExpData).map(value =>
-          value ? value.split(';').length : 1
+        ...Object.values(this.workExpData).map((value) =>
+          value ? value.split(";").length : 1
         )
       );
 
       const rows = Array.from({ length: maxRows }).map((_, index) => {
         const row = {};
         for (const key in this.workExpData) {
-          const values = this.workExpData[key] ? this.workExpData[key].split(';') : [];
-          row[key] = values[index] || '';
+          const values = this.workExpData[key]
+            ? this.workExpData[key].split(";")
+            : [];
+          row[key] = values[index] || "";
         }
         return row;
       });
@@ -549,146 +656,150 @@ export default {
 
   methods: {
     async openModalForWorkExp(id) {
-  console.log('SR_ID:', id);
-  this.filterLoading = true;
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get(`http://10.109.2.112:8081/api/applicants/${id}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      console.log("SR_ID:", id);
+      this.filterLoading = true;
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/applicants/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
-    const data = response.data.applicants;
-    this.workExpData.ImmediateSupervisorHRID = data.ImmediateSupervisorHRID;
-this.workExpData.ImmediateSupervisorName = data.ImmediateSupervisorName;
-this.workExpData.WorkSetup              = data.WorkSetup;
-this.workExpData.CompanyName            = data.CompanyName;
-this.workExpData.WorkExpType            = data.WorkExpType;
-this.workExpData.LastWorkingDate        = data.LastWorkingDate;
-this.workExpData.AdapterIndustry        = data.AdapterIndustry;
-this.workExpData.Position               = data.Position;
-this.workExpData.Salary                 = data.Salary;
-this.workExpData.WorkTenureMonths       = data.WorkTenureMonths;
-this.workExpData.ReasonForLeaving       = data.ReasonForLeaving;
-this.workExpData.AccountType            = data.AccountType;
-this.workExpData.ExperienceType         = data.ExperienceType;
-this.workExpData.WorkType               = data.WorkType;
-this.workExpData.TotalWorkExp           = data.TotalWorkExp;
-this.workExpData.TotalWorkExpBPO        = data.TotalWorkExpBPO;
-this.workExpData.TotalWorkExpNonBPO     = data.TotalWorkExpNonBPO;
-this.workExpData.Segment                = data.Segment;
+        const data = response.data.applicants;
+        this.workExpData.ImmediateSupervisorHRID = data.ImmediateSupervisorHRID;
+        this.workExpData.ImmediateSupervisorName = data.ImmediateSupervisorName;
+        this.workExpData.WorkSetup = data.WorkSetup;
+        this.workExpData.CompanyName = data.CompanyName;
+        this.workExpData.WorkExpType = data.WorkExpType;
+        this.workExpData.LastWorkingDate = data.LastWorkingDate;
+        this.workExpData.AdapterIndustry = data.AdapterIndustry;
+        this.workExpData.Position = data.Position;
+        this.workExpData.Salary = data.Salary;
+        this.workExpData.WorkTenureMonths = data.WorkTenureMonths;
+        this.workExpData.ReasonForLeaving = data.ReasonForLeaving;
+        this.workExpData.AccountType = data.AccountType;
+        this.workExpData.ExperienceType = data.ExperienceType;
+        this.workExpData.WorkType = data.WorkType;
+        this.workExpData.TotalWorkExp = data.TotalWorkExp;
+        this.workExpData.TotalWorkExpBPO = data.TotalWorkExpBPO;
+        this.workExpData.TotalWorkExpNonBPO = data.TotalWorkExpNonBPO;
+        this.workExpData.Segment = data.Segment;
 
-    console.log(this.workExpData);
-    this.showModalWorkExp = true;
-  } catch (error) {
-    console.error("Error fetching filtered data", error);
-  } finally {
-    this.filterLoading = false;
-  }
-},
-convertToISO(dateStr) {
-  console.log("convertToISO called with:", dateStr);
-
-  if (!dateStr) {
-    console.error("No date string provided.");
-    return "";
-  }
-
-  // Split and parse the date
-  const [month, day, year] = dateStr.split('/');
-  if (!month || !day || !year) {
-    console.error("Invalid date format, expected MM/DD/YYYY but got:", dateStr);
-    return "";
-  }
-
-  // Ensure month and day are zero-padded
-  const formattedMonth = month.padStart(2, '0');
-  const formattedDay = day.padStart(2, '0');
-
-  const isoDate = `${year}-${formattedMonth}-${formattedDay}`;
-  console.log("Converted ISO date:", isoDate);
-  return isoDate;
-}
-,
-  convertToMMDDYYYY(dateStr) {
-    if (!dateStr) return "";
-
-    const [year, month, day] = dateStr.split('-');
-    return `${month}/${day}/${year}`;
-  },
-  async fetchData() {
-  this.filterLoading = true;
-  try {
-    const token = this.$store.state.token;
-
-    const formatDate = (date) => {
-      if (!date) return '';
-      const [year, month, day] = date.split('-');
-      return `${month}/${day}/${year}`;
-    };
-
-    const formattedStartDate = formatDate(this.filterStartDate);
-    const formattedEndDate = formatDate(this.filterEndDate);
-
-    if (!formattedStartDate || !formattedEndDate) {
-      console.error("Invalid date format");
-      return;
-    }
-
-    const response = await axios.get('http://10.109.2.112:8081/api/applicants', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        filter_lastname: this.filterLastName,
-        filter_firstname: this.filterFirstName,
-        filter_site: this.filterSite,
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-        filter_contact: this.filterContact,
-        filter_region: this.filterRegion,
-      },
-    });
-
-    this.perx = response.data.applicants;
-  } catch (error) {
-    console.error("Error fetching filtered data", error);
-  } finally {
-    this.filterLoading = false;
-  }
-},
-
-
-
-
-
-  async getDates() {
-    try {
-      const token = this.$store.state.token;
-      const response = await axios.get(
-        "http://10.109.2.112:8081/api/applicantsDate",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (response.status === 200) {
-        // Convert dates from MM/DD/YYYY to YYYY-MM-DD
-        this.filterStartDate = this.convertToISO(response.data.minDate);
-        this.filterEndDate = this.convertToISO(response.data.maxDate);
-
-        console.log(this.filterStartDate); // Should be in YYYY-MM-DD format
-        console.log(this.filterEndDate);   // Should be in YYYY-MM-DD format
-      } else {
-        console.log("Error fetching Date");
+        console.log(this.workExpData);
+        this.showModalWorkExp = true;
+      } catch (error) {
+        console.error("Error fetching filtered data", error);
+      } finally {
+        this.filterLoading = false;
       }
-    } catch (error) {
-      console.log(error);
-    }
-  },
+    },
+    convertToISO(dateStr) {
+      console.log("convertToISO called with:", dateStr);
+
+      if (!dateStr) {
+        console.error("No date string provided.");
+        return "";
+      }
+
+      // Split and parse the date
+      const [month, day, year] = dateStr.split("/");
+      if (!month || !day || !year) {
+        console.error(
+          "Invalid date format, expected MM/DD/YYYY but got:",
+          dateStr
+        );
+        return "";
+      }
+
+      // Ensure month and day are zero-padded
+      const formattedMonth = month.padStart(2, "0");
+      const formattedDay = day.padStart(2, "0");
+
+      const isoDate = `${year}-${formattedMonth}-${formattedDay}`;
+      console.log("Converted ISO date:", isoDate);
+      return isoDate;
+    },
+    convertToMMDDYYYY(dateStr) {
+      if (!dateStr) return "";
+
+      const [year, month, day] = dateStr.split("-");
+      return `${month}/${day}/${year}`;
+    },
+    async fetchData() {
+      this.filterLoading = true;
+      try {
+        const token = this.$store.state.token;
+
+        const formatDate = (date) => {
+          if (!date) return "";
+          const [year, month, day] = date.split("-");
+          return `${month}/${day}/${year}`;
+        };
+
+        const formattedStartDate = formatDate(this.filterStartDate);
+        const formattedEndDate = formatDate(this.filterEndDate);
+
+        if (!formattedStartDate || !formattedEndDate) {
+          console.error("Invalid date format");
+          return;
+        }
+
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/applicants",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterFirstName,
+              filter_site: this.filterSite,
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+              filter_contact: this.filterContact,
+              filter_region: this.filterRegion,
+            },
+          }
+        );
+
+        this.perx = response.data.applicants;
+      } catch (error) {
+        console.error("Error fetching filtered data", error);
+      } finally {
+        this.filterLoading = false;
+      }
+    },
+
+    async getDates() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/applicantsDate",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          // Convert dates from MM/DD/YYYY to YYYY-MM-DD
+          this.filterStartDate = this.convertToISO(response.data.minDate);
+          this.filterEndDate = this.convertToISO(response.data.maxDate);
+
+          console.log(this.filterStartDate); // Should be in YYYY-MM-DD format
+          console.log(this.filterEndDate); // Should be in YYYY-MM-DD format
+        } else {
+          console.log("Error fetching Date");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     updateFilterStartDate(event) {
       this.filterStartDate = event.target.value;
     },
@@ -716,18 +827,18 @@ convertToISO(dateStr) {
           "Mobile No must be at least 4 characters long.";
       }
     },
-    async getSites(filterRegion = '') {
+    async getSites(filterRegion = "") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/perx_sitev2",
+          "http://127.0.0.1:8000/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
             },
             params: {
-              filter_region: filterRegion === 'ALL' ? '' : filterRegion
-            }
+              filter_region: filterRegion === "ALL" ? "" : filterRegion,
+            },
           }
         );
 
@@ -742,57 +853,60 @@ convertToISO(dateStr) {
       }
     },
     async exportToExcel() {
-  this.exportLoading = true;
-  try {
-    const token = this.$store.state.token;
+      this.exportLoading = true;
+      try {
+        const token = this.$store.state.token;
 
-    // Convert dates from YYYY-MM-DD to MM/DD/YYYY format
-    const formatDate = (date) => {
-      if (!date) return '';
-      const [year, month, day] = date.split('-');
-      return `${month}/${day}/${year}`;
-    };
+        // Convert dates from YYYY-MM-DD to MM/DD/YYYY format
+        const formatDate = (date) => {
+          if (!date) return "";
+          const [year, month, day] = date.split("-");
+          return `${month}/${day}/${year}`;
+        };
 
-    const formattedStartDate = formatDate(this.filterStartDate);
-    const formattedEndDate = formatDate(this.filterEndDate);
+        const formattedStartDate = formatDate(this.filterStartDate);
+        const formattedEndDate = formatDate(this.filterEndDate);
 
-    if (!formattedStartDate || !formattedEndDate) {
-      console.error("Invalid date format");
-      return;
-    }
+        if (!formattedStartDate || !formattedEndDate) {
+          console.error("Invalid date format");
+          return;
+        }
 
-    const response = await axios.get("http://10.109.2.112:8081/api/applicantsExport", {
-      params: {
-        filter_lastname: this.filterLastName,
-        filter_firstname: this.filterFirstName,
-        filter_site: this.filterSite,
-        startDate: formattedStartDate,
-        endDate: formattedEndDate,
-        filter_contact: this.filterContact,
-        filter_region: this.filterRegion === 'ALL' ? '' : this.filterRegion,
-      },
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      responseType: "blob",
-    });
+        const response = await axios.get(
+          "http://127.0.0.1:8000/api/applicantsExport",
+          {
+            params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterFirstName,
+              filter_site: this.filterSite,
+              startDate: formattedStartDate,
+              endDate: formattedEndDate,
+              filter_contact: this.filterContact,
+              filter_region:
+                this.filterRegion === "ALL" ? "" : this.filterRegion,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
-    const blob = new Blob([response.data], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const url = window.URL.createObjectURL(blob);
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
 
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "perx_data.xlsx";
-    link.click();
-  } catch (error) {
-    console.error("Error exporting filtered data to Excel", error);
-  } finally {
-    this.exportLoading = false;
-  }
-},
-
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "perx_data.xlsx";
+        link.click();
+      } catch (error) {
+        console.error("Error exporting filtered data to Excel", error);
+      } finally {
+        this.exportLoading = false;
+      }
+    },
   },
 };
 </script>
