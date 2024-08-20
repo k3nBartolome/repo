@@ -10,12 +10,12 @@
 
         <div class="w-full md:w-1/4">
           <select
-            v-model="filterSite"
+            v-model="filterSite" @change="getLob(filterSite)"
             placeholder="Filter by Site"
             class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Id" :value="site.Name">
+            <option v-for="site in sites" :key="site.Id" :value="site.Id">
               {{ site.Name }}
             </option>
           </select>
@@ -27,7 +27,7 @@
             class="w-full p-2 border rounded-lg"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="lob in lobs" :key="lob.Id" :value="lob.Name">
+            <option v-for="lob in lobs" :key="lob.Id" :value="lob.Id">
               {{ lob.Name }}
             </option>
           </select>
@@ -64,7 +64,7 @@
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>
       <DataTable
-        :data="perx"
+        :data="classes"
         :columns="columns"
         class="table divide-y divide-gray-200 table-auto table-striped"
         :options="{
@@ -95,7 +95,7 @@
           </tr>
         </thead>
         <tbody class="truncate">
-          <tr v-for="item in perx" :key="item.id">
+          <tr v-for="item in classes" :key="item.id">
             <!-- Add your table row data here -->
           </tr>
         </tbody>
@@ -175,6 +175,7 @@ export default {
   },
   mounted() {
     this.getSites();
+    this.getLob();
   },
   computed: {
 
@@ -185,7 +186,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -207,20 +208,20 @@ export default {
     async getLob(filterSite = "") {
   try {
     const token = this.$store.state.token;
-    const response = await axios.get("http://127.0.0.1:8000/api/lobv2", {
+    const response = await axios.get("http://10.109.2.112:8081/api/lobv2", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
       params: {
-        filter_site: filterSite === "ALL" ? "" : filterSite,
+        site_id: filterSite === "ALL" ? "" : filterSite,
       },
     });
 
     if (response.status === 200) {
-      this.sites = [{ id: "ALL", name: "All Sites" }, ...response.data.sites];
-      console.log(this.sites);
+      this.lobs = response.data.lobs;
+      console.log(this.lobs);
     } else {
-      console.log("Error fetching sites");
+      console.log("Error fetching LOBs");
     }
   } catch (error) {
     console.log(error);
@@ -228,12 +229,13 @@ export default {
 },
 
 
+
     async fetchData() {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classes_information",
+          "http://10.109.2.112:8081/api/classes_information",
           {
             params: {
               filter_lob: this.filterLob,
@@ -259,7 +261,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
+        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
