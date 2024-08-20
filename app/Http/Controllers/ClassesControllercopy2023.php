@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
-class ClassesController extends Controller
+class ClassesControllercopy2023 extends Controller
 {
     public function srSite()
     {

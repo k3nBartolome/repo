@@ -2,47 +2,12 @@
   <div class="py-0">
     <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool SRv2</h2>
+        <h2 class="text-3xl font-bold text-gray-900">Classes</h2>
       </div>
     </header>
     <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        <div class="relative w-full md:w-1/4">
-          <input
-            v-model="filterLastName"
-            placeholder="Filter by Last Name"
-            class="w-full p-2 border rounded-lg"
-            @input="validateLastName"
-          />
-          <div
-            v-if="filterLastNameError"
-            class="absolute left-0 text-sm text-red-500 top-full"
-          >
-            {{ filterLastNameError }}
-          </div>
-        </div>
-        <div class="w-full md:w-1/4">
-          <input
-            v-model="filterFirstName"
-            placeholder="Filter by First Name"
-            class="w-full p-2 border rounded-lg"
-          />
-        </div>
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterRegion"
-            placeholder="Filter by Region"
-            class="w-full p-2 border rounded-lg"
-            @change="getSites(filterRegion)"
-          >
-            <option disabled value="" selected>Please select one</option>
-            <option value="ALL">All</option>
-            <option value="CLARK">CLARK</option>
-            <option value="DAVAO">DAVAO</option>
-            <option value="L2">L2</option>
-            <option value="QC">QC</option>
-          </select>
-        </div>
+
         <div class="w-full md:w-1/4">
           <select
             v-model="filterSite"
@@ -55,38 +20,25 @@
             </option>
           </select>
         </div>
-
         <div class="w-full md:w-1/4">
-          <input
-            v-model="filterStartDate"
-            type="date"
-            placeholder="Start"
+          <select
+            v-model="filterLob"
+            placeholder="Filter by Lob"
             class="w-full p-2 border rounded-lg"
-            @input="updateFilterStartDate"
-          />
-        </div>
-        <div class="w-full md:w-1/4">
-          <input
-            v-model="filterEndDate"
-            type="date"
-            placeholder="End by Site"
-            class="w-full p-2 border rounded-lg"
-            @input="updateFilterEndDate"
-          />
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="lob in lobs" :key="lob.Id" :value="lob.Name">
+              {{ lob.Name }}
+            </option>
+          </select>
         </div>
         <div class="relative w-full md:w-1/4">
           <input
-            v-model="filterContact"
-            placeholder="Filter by Mobile No."
+            v-model="filterWave"
+            placeholder="Filter by Wave No."
             class="w-full p-2 border rounded-lg"
-            @input="validateContact"
+
           />
-          <div
-            v-if="filterContactError"
-            class="absolute left-0 text-sm text-red-500 top-full"
-          >
-            {{ filterContactError }}
-          </div>
         </div>
         <div class="w-full md:w-1/4">
           <button
@@ -191,108 +143,45 @@ export default {
   components: { DataTable },
   data() {
     return {
-      filterLastName: "",
-      filterFirstName: "",
+
       filterSite: "",
-      filterStartDate: "",
-      filterEndDate: "",
-      filterContact: "",
-      filterRegion: "",
-      filterLastNameError: "",
-      filterContactError: "",
-      perx: [],
+      filterWave: "",
+      filterLob: "",
+      selectedSite: "ALL",
+      classes: [],
       sites: [],
+      lobs: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
-        { data: "DateOfApplication", title: "DateOfApplication" },
-        { data: "LastName", title: "LastName" },
-        { data: "FirstName", title: "FirstName" },
-        { data: "MiddleName", title: "MiddleName" },
-        { data: "MobileNumber", title: "MobileNo" },
-        { data: "Region", title: "Region" },
-        { data: "Site", title: "Site" },
-        { data: "GeneralSource", title: "GenSource" },
-        { data: "SpecSource", title: "SpecSource" },
-        { data: "Step", title: "Step" },
-        { data: "AppStep1", title: "GenStatus" },
-        { data: "AppStep2", title: "SpecStatus" },
-        { data: "ReferrerHRID", title: " ReferrerHRID" },
-        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
-        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
-        { data: "ReferrerLastName", title: "ReferrerLastName" },
-        { data: "ReferrerName", title: "ReferrerName" },
-        { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
-        { data: "DeclaredReferrerId", title: "DeclaredReferrerId" },
+        { data: "HRID", title: "HRID" },
+        { data: "LastName", title: "Last Name" },
+        { data: "FirstName", title: "First Name" },
+        { data: "MiddleName", title: "Middle Name" },
+        { data: "DateHired", title: "Date Hired" },
+        { data: "Lob", title: "Account" },
+        { data: "Wave", title: "Wave" },
+        { data: "Position", title: "Position" },
+        { data: "Site", title: "BLDG Assignment" },
+        { data: "Salary", title: "Monthly Salary" },
+        { data: "ND_Training", title: "ND%-Training" },
+        { data: "ND_Production", title: "ND%-Production" },
+        { data: "MS-Production", title: "Mid-Shift%-Production" },
+        { data: "ComplexityAllowance", title: "Complexity Allowance" },
+
       ],
       filterLoading: false,
       exportLoading: false,
     };
   },
   mounted() {
-    this.getDates();
     this.getSites();
   },
   computed: {
-    formattedFilterDate() {
-      return this.filterDate
-        ? new Date(this.filterDate).toLocaleDateString("en-CA")
-        : "";
-    },
+
   },
 
   methods: {
-    async getDates() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_datev2",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          this.filterStartDate = response.data.minDate;
-          this.filterEndDate = response.data.maxDate;
-          console.log(response.data.minDate);
-          console.log(response.data.maxDate);
-        } else {
-          console.log("Error fetching Date");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    updateFilterStartDate(event) {
-      this.filterStartDate = event.target.value;
-    },
-
-    updateFilterEndDate(event) {
-      this.filterEndDate = event.target.value;
-    },
-
-    formatDateForInput(date) {
-      const formattedDate = new Date(date).toISOString().split("T")[0];
-      return formattedDate;
-    },
-
-    validateLastName() {
-      this.filterLastNameError = "";
-      if (this.filterLastName && this.filterLastName.length < 2) {
-        this.filterLastNameError =
-          "Last Name must be at least 2 characters long.";
-      }
-    },
-    validateContact() {
-      this.filterContactError = "";
-      if (this.filterContact && this.filterContact.length < 4) {
-        this.filterContactError =
-          "Mobile No must be at least 4 characters long.";
-      }
-    },
-    async getSites(filterRegion = "") {
+    async getSites() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
@@ -301,9 +190,7 @@ export default {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-            params: {
-              filter_region: filterRegion === "ALL" ? "" : filterRegion,
-            },
+
           }
         );
 
@@ -317,23 +204,42 @@ export default {
         console.log(error);
       }
     },
+    async getLob(filterSite = "") {
+  try {
+    const token = this.$store.state.token;
+    const response = await axios.get("http://127.0.0.1:8000/api/lobv2", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        filter_site: filterSite === "ALL" ? "" : filterSite,
+      },
+    });
+
+    if (response.status === 200) {
+      this.sites = [{ id: "ALL", name: "All Sites" }, ...response.data.sites];
+      console.log(this.sites);
+    } else {
+      console.log("Error fetching sites");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+
 
     async fetchData() {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilterv2",
+          "http://127.0.0.1:8000/api/classes_information",
           {
             params: {
-              filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
+              filter_lob: this.filterLob,
               filter_site: this.filterSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
-              filter_contact: this.filterContact,
-              filter_region:
-                this.filterRegion === "ALL" ? "" : this.filterRegion,
+              filter_contact: this.filterWave,
+
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -341,7 +247,7 @@ export default {
           }
         );
 
-        this.perx = response.data.perx;
+        this.classes = response.data.classes;
       } catch (error) {
         console.error("Error fetching filtered data", error);
       } finally {
@@ -360,7 +266,7 @@ export default {
             filter_site: this.filterSite,
             filter_date_start: this.filterStartDate,
             filter_date_end: this.filterEndDate,
-            filter_contact: this.filterContact,
+            filter_contact: this.filterWave,
             filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
           },
           headers: {

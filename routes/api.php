@@ -168,7 +168,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('b2percentagejamaica', [ClassesController::class, 'retrieveB2DataForEmailJamaica']);
     Route::get('b2percentageguatemala', [ClassesController::class, 'retrieveB2DataForEmailGuatemala']);
     Route::get('no_srv2', [ClassesController::class, 'perxFilterNoSrv2']);
-Route::get('no_srv2_export', [ClassesController::class, 'perxFilterNoSrExportv2']);
+    Route::get('no_srv2_export', [ClassesController::class, 'perxFilterNoSrExportv2']);
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('class_exists', [ClassesController::class, 'classExists']);
@@ -256,3 +256,4 @@ Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos'
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
 Route::get('get_payrate/{id}', [ClassesController::class, 'getPayRateByLob']);
 
+Route::get('classes_information', [ClassesController::class, 'classesInformation']);
