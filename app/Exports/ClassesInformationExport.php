@@ -27,11 +27,11 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
     {
         return [
             'ApplicantId',
-            'HRID',
+            //'HRID',
             'Last Name',
             'First Name',
             'Middle Name',
-            'Date Hired',
+            //'Date Hired',
             'Account',
             'Wave',
             'Position',
@@ -46,7 +46,7 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:J1')->applyFromArray([
+        $sheet->getStyle('A1:H1')->applyFromArray([
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'color' => ['argb' => 'FFADD8E6'],
@@ -55,13 +55,13 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
                 'color' => ['argb' => 'FFFFFFFF'],
             ],
         ]);
-        $sheet->getStyle('K1:O1')->applyFromArray([
+        $sheet->getStyle('I1:M1')->applyFromArray([
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => ['argb' => 'FFFFEFD5'],
+                'color' => ['argb' => 'FFFFFF00'],
             ],
             'font' => [
-                'color' => ['argb' => 'FFFFFFFF'],
+                'color' => ['argb' => 'FF000000'],
             ],
         ]);
 

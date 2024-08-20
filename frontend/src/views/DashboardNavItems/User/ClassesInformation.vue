@@ -7,10 +7,10 @@
     </header>
     <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-
         <div class="w-full md:w-1/4">
           <select
-            v-model="filterSite" @change="getLob(filterSite)"
+            v-model="filterSite"
+            @change="getLob(filterSite)"
             placeholder="Filter by Site"
             class="w-full p-2 border rounded-lg"
           >
@@ -34,10 +34,10 @@
         </div>
         <div class="relative w-full md:w-1/4">
           <input
+            type="number"
             v-model="filterWave"
             placeholder="Filter by Wave No."
             class="w-full p-2 border rounded-lg"
-
           />
         </div>
         <div class="w-full md:w-1/4">
@@ -143,7 +143,6 @@ export default {
   components: { DataTable },
   data() {
     return {
-
       filterSite: "",
       filterWave: "",
       filterLob: "",
@@ -153,22 +152,54 @@ export default {
       lobs: [],
       columns: [
         { data: "ApplicantId", title: "ApplicantId" },
-        { data: "HRID", title: "HRID" },
+        {
+          data: "HRID",
+          title: "HRID",
+          render: function (data) {
+            return data ? data : "TBA"; // If data is null or undefined, return 'TBA'
+          },
+        },
+
         { data: "LastName", title: "Last Name" },
         { data: "FirstName", title: "First Name" },
         { data: "MiddleName", title: "Middle Name" },
-        { data: "DateHired", title: "Date Hired" },
+
+        {
+          data: "DateHired",
+          title: "DateHired",
+          render: function (data) {
+            return data ? data : ""; // If data is null or undefined, return 'TBA'
+          },
+        },
         { data: "Lob", title: "Account" },
         { data: "Wave", title: "Wave" },
         { data: "Position", title: "Position" },
-        { data: "Site", title: "BLDG Assignment" },
+        { data: "Sites", title: "BLDG Assignment" },
         { data: "Salary", title: "Monthly Salary" },
-        { data: "ND_Training", title: "ND%-Training" },
-        { data: "ND_Production", title: "ND%-Production" },
-        { data: "MS-Production", title: "Mid-Shift%-Production" },
+        {
+          data: "ND_Training",
+          title: "ND%-Training",
+          render: function (data) {
+            return `${(data * 100).toFixed(2)}%`;
+          },
+        },
+        {
+          data: "ND_Production",
+          title: "ND%-Production",
+          render: function (data) {
+            return `${(data * 100).toFixed(2)}%`;
+          },
+        },
+        {
+          data: "MS_Production",
+          title: "Mid-Shift%-Production",
+          render: function (data) {
+            return `${(data * 100).toFixed(2)}%`;
+          },
+        },
         { data: "ComplexityAllowance", title: "Complexity Allowance" },
-
       ],
+
       filterLoading: false,
       exportLoading: false,
     };
@@ -177,10 +208,7 @@ export default {
     this.getSites();
     this.getLob();
   },
-  computed: {
-
-  },
-
+  computed: {},
   methods: {
     async getSites() {
       try {
@@ -191,57 +219,59 @@ export default {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-
           }
         );
 
         if (response.status === 200) {
           this.sites = response.data.sites;
-          console.log(response.data.sites);
+          console.log("Sites:", response.data.sites);
         } else {
           console.log("Error fetching sites");
         }
       } catch (error) {
-        console.log(error);
+        console.log("Error:", error);
       }
     },
+
     async getLob(filterSite = "") {
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get("http://10.109.2.112:8081/api/lobv2", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        site_id: filterSite === "ALL" ? "" : filterSite,
-      },
-    });
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("http://10.109.2.112:8081/api/lobv2", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            site_id: filterSite === "ALL" ? "" : filterSite,
+          },
+        });
 
-    if (response.status === 200) {
-      this.lobs = response.data.lobs;
-      console.log(this.lobs);
-    } else {
-      console.log("Error fetching LOBs");
-    }
-  } catch (error) {
-    console.log(error);
-  }
-},
-
-
+        if (response.status === 200) {
+          this.lobs = response.data.lobs;
+          console.log("LOBs:", this.lobs);
+        } else {
+          console.log("Error fetching LOBs");
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    },
 
     async fetchData() {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
+        console.log("Request params:", {
+          filter_site: this.filterSite,
+          filter_lob: this.filterLob,
+          filter_wave: this.filterWave,
+        });
         const response = await axios.get(
           "http://10.109.2.112:8081/api/classes_information",
           {
             params: {
-              filter_lob: this.filterLob,
               filter_site: this.filterSite,
-              filter_contact: this.filterWave,
-
+              filter_lob: this.filterLob,
+              filter_wave: this.filterWave,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -249,45 +279,55 @@ export default {
           }
         );
 
-        this.classes = response.data.classes;
+        if (response.status === 200) {
+          this.classes = response.data.classes;
+          console.log("Filtered classes:", this.classes);
+        } else {
+          console.log("Error fetching filtered data");
+        }
       } catch (error) {
-        console.error("Error fetching filtered data", error);
+        console.error("Error fetching filtered data:", error);
       } finally {
         this.filterLoading = false;
       }
     },
 
     async exportToExcel() {
-      this.exportLoading = true; // Set export loading to true before making the request
+      this.exportLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterFirstName,
-            filter_site: this.filterSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,
-            filter_contact: this.filterWave,
-            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/classes_information_export",
+          {
+            params: {
+              filter_site: this.filterSite,
+              filter_lob: this.filterLob,
+              filter_wave: this.filterWave,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob", // Ensures the response is treated as a binary Blob
+          }
+        );
 
+        // Create a Blob from the response data
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
-        const url = window.URL.createObjectURL(blob);
 
+        // Create a link element to trigger the download
+        const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "perx_data.xlsx";
+        link.download = "classes_data.xlsx"; // Name of the downloaded file
         link.click();
+
+        // Clean up the URL object
+        window.URL.revokeObjectURL(url);
       } catch (error) {
-        console.error("Error exporting filtered data to Excel", error);
+        console.error("Error exporting filtered data to Excel:", error);
+        // Optionally show an error message to the user here
       } finally {
         this.exportLoading = false; // Set export loading to false when the request completes
       }

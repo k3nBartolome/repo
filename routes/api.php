@@ -257,5 +257,6 @@ Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
 Route::get('get_payrate/{id}', [ClassesController::class, 'getPayRateByLob']);
 
 Route::get('classes_information', [ClassesController::class, 'classesInformation']);
+Route::get('classes_information_export', [ClassesController::class, 'classesInformationExport']);
 Route::get('sitev2', [ClassesController::class, 'siteV2']);
 Route::get('lobv2', [ClassesController::class, 'lobV2']);
