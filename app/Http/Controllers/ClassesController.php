@@ -30,32 +30,42 @@ use Maatwebsite\Excel\Facades\Excel;
 class ClassesController extends Controller
 {
     public function classesInformation(Request $request)
-    {
-        $query = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
-            ->select(
-                'ApplicantDetails.FirstName',
-                'ApplicantDetails.LastName',
-                'ApplicantDetails.MiddleName',
-                'ApplicantClass.*',
-                'Classes.*',
-                'LobDetails.*'
-            )
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantClass as ApplicantClass', 'ApplicationDetails.Id', '=', 'ApplicantClass.ApplicantApplicationId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Class as Classes', 'ApplicantClass.ClassId', '=', 'Classes.ClassId')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Lob as LobDetails', 'Classes.Lob', '=', 'LobDetails.Id')
-             ->where('Status.Id', 82);
+{
+    $query = DB::connection('sqlsrv')
+        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
+        ->select(
+            'ApplicantDetails.Id as ApplicantId',
+            'ApplicantDetails.FirstName as FirstName',
+            'ApplicantDetails.LastName as LastName',
+            'ApplicantDetails.MiddleName as MiddleName',
+            'LobDetails.Name as Lob',
+            'Classes.Team as Wave',
+            'PositionApplyingFor.Name as Position',
+            'SitesDetails.Name as Sites',
+            'PayRateDetails.BasicPayTraining as MonthlySalary',
+            'PayRateDetails.NightDifferentialTraining as NDTraining',
+            'PayRateDetails.NightDifferentialProduction as NDProduction',
+            'PayRateDetails.MidShiftProduction as MSProduction',
+            'PayRateDetails.ComplexityAllowance as ComplexityAllowance'
+        )
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'JobDetails.SiteId', '=', 'SitesDetails.Id')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantClass as ApplicantClass', 'ApplicationDetails.Id', '=', 'ApplicantClass.ApplicantApplicationId')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Class as Classes', 'ApplicantClass.ClassId', '=', 'Classes.ClassId')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Lob as LobDetails', 'Classes.Lob', '=', 'LobDetails.Id')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PayRate as PayRateDetails', 'PayRateDetails.LobId', '=', 'LobDetails.Id')
+        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PositionApplyingFor as PositionApplyingFor', 'PositionApplyingFor.Id', '=', 'JobDetails.PositionId')
+        ->whereNotNull('Classes.Team');
 
-        $filteredData = $query->get();
+    $filteredData = $query->get();
 
-        return response()->json([
-            'classes' => $filteredData,
-        ]);
-    }
+    return response()->json([
+        'classes' => $filteredData,
+    ]);
+}
+
 
     public function getPayRateByLob($lobid)
     {
