@@ -59,6 +59,7 @@ class ClassesController extends Controller
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Lob as LobDetails', 'Classes.Lob', '=', 'LobDetails.Id')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PayRate as PayRateDetails', 'PayRateDetails.LobId', '=', 'LobDetails.Id')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PositionApplyingFor as PositionApplyingFor', 'PositionApplyingFor.Id', '=', 'JobDetails.PositionId')
+            ->where('LobDetails.IsActive',1)
             ->whereNotNull('Classes.Team');
 
         if ($request->has('filter_site')) {
@@ -97,10 +98,11 @@ class ClassesController extends Controller
     {
         try {
             $query = DB::connection('sqlsrv')
+                
                 ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails')
                 ->select(
                     'ApplicantDetails.Id as ApplicantId',
-                   // DB::raw("ISNULL(ApplicationDetails.HRID, 'TBA') as HRID"),
+                    //DB::raw("ISNULL(ApplicationDetails.HRID, 'TBA') as HRID"),
                     'ApplicantDetails.FirstName as FirstName',
                     'ApplicantDetails.LastName as LastName',
                     'ApplicantDetails.MiddleName as MiddleName',
@@ -124,6 +126,7 @@ class ClassesController extends Controller
                 ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Lob as LobDetails', 'Classes.Lob', '=', 'LobDetails.Id')
                 ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PayRate as PayRateDetails', 'PayRateDetails.LobId', '=', 'LobDetails.Id')
                 ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.PositionApplyingFor as PositionApplyingFor', 'PositionApplyingFor.Id', '=', 'JobDetails.PositionId')
+                ->where('LobDetails.IsActive',1)
                 ->whereNotNull('Classes.Team');
 
             if ($request->has('filter_site')) {
