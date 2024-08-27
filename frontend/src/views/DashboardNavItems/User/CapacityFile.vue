@@ -259,11 +259,12 @@ import Buttons from "datatables.net-buttons-bs5";
 import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
 // eslint-disable-next-line no-unused-vars
 import print from "datatables.net-buttons/js/buttons.print";
-//import pdfmake from "pdfmake";
+//import pdfmake from "pdfmake"; 
 // eslint-disable-next-line no-unused-vars
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
 // eslint-disable-next-line no-unused-vars
+import _ from 'lodash';
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -272,7 +273,10 @@ DataTable.use(DataTableLib);
 DataTable.use(ButtonsHtml5);
 
 export default {
-  components: { DataTable },
+  components: {
+  DataTable,
+},
+
   data() {
     return {
       classes: [],
@@ -327,23 +331,36 @@ export default {
     };
   },
   watch: {
-    sites_selected() {
-      this.checkClassExists();
-      this.getClassesAll();
-    },
-    programs_selected() {
-      this.checkClassExists();
-      this.getClassesAll();
-    },
-    month_selected() {
-      this.checkClassExists();
-      this.getClassesAll();
-    },
-    week_selected() {
-      this.checkClassExists();
-      this.getClassesAll();
-    },
-  },
+  sites_selected: _.debounce(function () {
+    
+    this.checkClassExists();
+    this.getClassesAll().finally(() => {
+    
+    });
+  }, 300),
+  programs_selected: _.debounce(function () {
+   
+    this.checkClassExists();
+    this.getClassesAll().finally(() => {
+     
+    });
+  }, 300),
+  month_selected: _.debounce(function () {
+    
+    this.checkClassExists();
+    this.getClassesAll().finally(() => {
+   
+    });
+  }, 300),
+  week_selected: _.debounce(function () {
+   
+    this.checkClassExists();
+    this.getClassesAll().finally(() => {
+     
+    });
+  }, 300),
+},
+
 
   computed: {
     isUser() {
