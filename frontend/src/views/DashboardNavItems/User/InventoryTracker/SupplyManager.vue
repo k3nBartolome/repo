@@ -55,6 +55,15 @@
             >
               <div class="col-span-1">
                 <label class="block">
+                  <input type="file" @change="handleFileChange" />
+                  <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                  <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                    {{ errors.file_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
                   Site
                   <select
                     v-model="sites_selected"

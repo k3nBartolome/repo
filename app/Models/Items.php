@@ -24,6 +24,8 @@ class Items extends Model
         'is_active',
         'created_by',
         'cost',
+        'file_name',
+        'path',
         'total_cost',
     ];
 

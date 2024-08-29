@@ -50,6 +50,8 @@ class Inventory extends Model
         'cancelled_by',
         'cancelled_date',
         'cancellation_reason',
+        'file_name',
+        'path',
     ];
 
     public function site()
@@ -101,7 +103,7 @@ class Inventory extends Model
     {
         return $this->belongsTo(User::class, 'transferred_by');
     }
-    
+
     public function transferredFrom()
     {
         return $this->belongsTo(Site::class, 'transferred_from');

@@ -29,6 +29,8 @@ class SiteInventory extends Model
         'transferred_quantity',
         'transferred_to',
         'transferred_date',
+        'file_name',
+        'path',
     ];
 
     public function site()
