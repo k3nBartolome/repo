@@ -64,6 +64,15 @@
                 </p>
               </label>
             </div>
+            <div class="col-span-1">
+              <label class="block">
+                <input type="file" @change="handleFileChange" />
+                <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                  {{ errors.file_name }}
+                </p>
+              </label>
+            </div>
 
             <div class="flex justify-end mt-4">
               <button
@@ -151,6 +160,8 @@ export default {
       errors: {},
       successMessage: "",
       siteRequestId: null,
+      selectedFile: null,
+      previewImage: null,
       columns: [
         {
           title: "No",
@@ -211,6 +222,9 @@ export default {
     };
   },
   computed: {
+    imageSource() {
+      return this.capturedImage ? this.capturedImage : this.selectedImage;
+    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -246,6 +260,106 @@ export default {
     this.getInventory();
   },
   methods: {
+    async handleFileChange(event) {
+      const selectedFile = event.target.files[0];
+
+      if (!selectedFile) {
+        return;
+      }
+
+      // Assign the selected file to this.selectedFile
+      this.selectedFile = selectedFile;
+
+      const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB threshold
+
+      if (selectedFile.size > maxSizeInBytes) {
+        try {
+          const image = new Image();
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            image.src = event.target.result;
+
+            image.onload = async () => {
+              const maxWidth = 800;
+              const quality = 0.8;
+
+              // Calculate new dimensions to fit within maxWidth
+              let width = image.width;
+              let height = image.height;
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+
+              const canvas = document.createElement("canvas");
+              canvas.width = width;
+              canvas.height = height;
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(image, 0, 0, width, height);
+
+              canvas.toBlob(
+                async (blob) => {
+                  this.selectedFile = blob; // Update this.selectedFile with the resized blob
+                  this.previewImage = URL.createObjectURL(blob);
+
+                  console.log("Preview Image URL:", this.previewImage);
+                },
+                "image/jpeg",
+                quality
+              );
+            };
+          };
+
+          reader.readAsDataURL(selectedFile);
+        } catch (error) {
+          console.error("Error resizing image:", error);
+        }
+      } else {
+        // No need to resize for smaller images
+        this.previewImage = URL.createObjectURL(selectedFile);
+
+        console.log("Preview Image URL:", this.previewImage);
+      }
+    },
+
+    async compressBlob(blob, maxSize) {
+      const image = new Image();
+      const reader = new FileReader();
+      const maxQuality = 0.8;
+
+      const compressedBlob = await new Promise((resolve) => {
+        reader.onload = (event) => {
+          image.src = event.target.result;
+
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            let newWidth = image.width;
+            let newHeight = image.height;
+
+            if (image.size > maxSize) {
+              const scaleFactor = Math.sqrt(image.size / maxSize);
+              newWidth = Math.floor(image.width / scaleFactor);
+              newHeight = Math.floor(image.height / scaleFactor);
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+            canvas.toBlob(resolve, "image/jpeg", maxQuality);
+          };
+        };
+
+        reader.readAsDataURL(blob);
+      });
+
+      return compressedBlob;
+    },
     openModalForReceived(id) {
       this.receivedId = id;
       this.showModal = true;
