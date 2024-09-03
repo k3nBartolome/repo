@@ -147,6 +147,7 @@ selectbutton
 Sheryll
 siteclasses
 sitemanagementedit
+SPARX
 speeddial
 splitbutton
 splitterpanel

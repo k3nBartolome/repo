@@ -17,6 +17,7 @@ capfile
 capfilems
 Centrale
 cfms
+CHARINDEX
 ckeep
 classesall
 classesallgua
@@ -65,6 +66,7 @@ Laravel
 lastname
 leftjoin
 lobid
+lobv
 Maatwebsite
 Makati
 mappedtotal
@@ -80,6 +82,7 @@ officedocument
 ooscclasses
 oosclasses
 openxmlformats
+PATINDEX
 percentageguatemala
 percentagejamaica
 perx

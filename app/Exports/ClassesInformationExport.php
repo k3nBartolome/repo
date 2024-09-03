@@ -15,38 +15,48 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
 
     public function __construct(array $data)
     {
-        $this->data = collect($data);
+        // Convert stdClass objects to associative arrays
+        $this->data = collect($data)->map(function ($item) {
+            return (array) $item;
+        });
     }
 
     public function collection()
     {
-        return $this->data;
+        // Format data for currency and percentage
+        return $this->data->map(function ($row, $index) {
+            $row['Monthly Salary'] = number_format($row['Monthly Salary'], 2); // Format as currency
+            $row['ND%-Training'] = $row['ND%-Training'] . '%';
+            $row['ND%-Production'] = $row['ND%-Production'] . '%';
+            $row['Mid-Shift%-Production'] = $row['Mid-Shift%-Production'] . '%';
+            return $row;
+        });
     }
 
     public function headings(): array
     {
         return [
-            'ApplicantId',
-            //'HRID',
-            'Last Name',
-            'First Name',
-            'Middle Name',
-            //'Date Hired',
-            'Account',
-            'Wave',
-            'Position',
-            'BLDG Assignment',
-            'Monthly Salary',
-            'ND%-Training',
-            'ND%-Production',
-            'Mid-Shift%-Production',
-            'Complexity Allowance',
+            'NO',
+            'HRID',
+            'LAST NAME',
+            'FIRST NAME',
+            'MIDDLE NAME',
+            'DATE HIRED',
+            'DEPT/LOB/ACCOUNT',
+            'TEAM/WAVE',
+            'POSITION',
+            'BLDG ASSIGNMENT',
+            'MONTHLY SALARY',
+            'ND%-TRAINING',
+            'ND%-PRODUCTION',
+            'MID-SHIFT%-PRODUCTION',
+            'COMPLEXITY ALLOWANCE(UPON START)',
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:H1')->applyFromArray([
+        $sheet->getStyle('A1:J1')->applyFromArray([
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'color' => ['argb' => 'FFADD8E6'],
@@ -55,7 +65,7 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
                 'color' => ['argb' => 'FFFFFFFF'],
             ],
         ]);
-        $sheet->getStyle('I1:M1')->applyFromArray([
+        $sheet->getStyle('K1:O1')->applyFromArray([
             'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'color' => ['argb' => 'FFFFFF00'],
@@ -64,6 +74,9 @@ class ClassesInformationExport implements FromCollection, WithHeadings, ShouldAu
                 'color' => ['argb' => 'FF000000'],
             ],
         ]);
+
+        // Apply currency format to the Monthly Salary column
+        $sheet->getStyle('K2:K' . ($sheet->getHighestRow()))->getNumberFormat()->setFormatCode('$#,##0.00');
 
         return $sheet;
     }

@@ -362,11 +362,11 @@ export default {
       if (Object.keys(this.errors).length > 0) {
         return;
       }
-      const form = {
-        received_by: this.$store.state.user_id,
-        received_quantity: this.received_quantity,
-        received_status: this.received_status,
-      };
+      const formData = new FormData();
+  formData.append("file_name", this.selectedFile);
+  formData.append("received_by", this.$store.state.user_id);
+  formData.append("received_quantity", this.received_quantity);
+  formData.append("received_status", this.received_status);
 
       const config = {
         headers: {
@@ -375,7 +375,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/inventory/received/${id}`, formData, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();

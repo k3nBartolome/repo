@@ -43,6 +43,9 @@ class ItemsController extends Controller
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -74,6 +77,9 @@ class ItemsController extends Controller
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -106,6 +112,9 @@ class ItemsController extends Controller
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -134,12 +143,15 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -183,9 +195,10 @@ class ItemsController extends Controller
                 'created_at' => $item->created_at,
                 'updated_at' => $item->updated_at,
                 'date_added' => $item->created_at,
-              
+                'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
             ];
-            
         });
 
         return response()->json(['items' => $items]);
@@ -193,7 +206,7 @@ class ItemsController extends Controller
 
     public function index3()
     {
-        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy', 'transferredFrom'])
             ->where('is_active', 1)
             ->where('category', 'Normal')
             ->where('quantity', '>', 0)
@@ -215,13 +228,15 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
-                    
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -230,7 +245,7 @@ class ItemsController extends Controller
 
     public function indexAllSite()
     {
-        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy', 'transferredFrom'])
             ->where('is_active', 1)
             ->where('quantity', '>', 0)
             ->get();
@@ -252,12 +267,15 @@ class ItemsController extends Controller
                     'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -266,7 +284,7 @@ class ItemsController extends Controller
 
     public function index4($siteId)
     {
-        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy', 'transferredFrom'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Normal')
@@ -289,12 +307,15 @@ class ItemsController extends Controller
                       'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -303,7 +324,7 @@ class ItemsController extends Controller
 
     public function index5($siteId)
     {
-        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
+        $items = $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy', 'transferredFrom'])
             ->where('site_id', $siteId)
             ->where('is_active', 1)
             ->where('category', 'Premium')
@@ -326,12 +347,15 @@ class ItemsController extends Controller
                       'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                    'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -340,7 +364,7 @@ class ItemsController extends Controller
 
     public function index2()
     {
-        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy','transferredFrom'])
+        $items = SiteInventory::with(['site', 'createdBy', 'receivedBy', 'transferredBy', 'transferredFrom'])
             ->where('is_active', 1)
             ->where('category', 'Premium')
             ->where('quantity', '>', 0)
@@ -362,12 +386,15 @@ class ItemsController extends Controller
                      'created_by' => $item->createdBy ? $item->createdBy->name : 'N/A',
                     'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
                     'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
-                    'transferred_from' => $item->transferredFrom? $item->transferredFrom ->name: 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
                     'site_id' => $item->site_id,
                     'site_name' => $item->site->name,
                     'created_at' => $item->created_at,
                     'updated_at' => $item->updated_at,
                     'date_added' => $item->created_at,
+                   'image_path' => $this->getImagePath($item),
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
                 ];
         });
 
@@ -400,15 +427,17 @@ class ItemsController extends Controller
             'date_expiry' => 'nullable',
             'is_active' => 'nullable|boolean',
             'created_by' => 'required',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+        $imagePath = $request->file('file_name')->store('storage', 'public');
         $items = new Items();
         $items->fill($request->all());
         $items->date_added = Carbon::now()->format('Y-m-d H:i');
+        $items->file_path = $imagePath;
         $items->save();
         $items->item_less_id = Str::uuid();
         $items->save();
@@ -433,14 +462,16 @@ class ItemsController extends Controller
             'date_expiry' => 'nullable',
             'is_active' => 'nullable|boolean',
             'created_by' => 'required',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+        $imagePath = $request->file('file_name')->store('storage', 'public');
         $items = new SiteInventory();
         $items->fill($request->all());
+        $items->file_path = $imagePath;
         $items->date_added = Carbon::now()->format('Y-m-d H:i');
         $items->save();
         $items->item_less_id = Str::uuid();
@@ -449,6 +480,11 @@ class ItemsController extends Controller
         return response()->json([
             'items' => $items,
         ]);
+    }
+
+    private function getImagePath($items)
+    {
+        return asset('storage/'.$items->file_path);
     }
 
     /*

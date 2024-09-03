@@ -159,6 +159,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('applicants/{id}', [ClassesController::class, 'ApplicantsID']);
     Route::get('applicants', [ClassesController::class, 'Applicants']);
     Route::get('applicantsDate', [ClassesController::class, 'ApplicantsDate']);
+
     Route::get('applicantsExport', [ClassesController::class, 'ApplicantsExport']);
     Route::get('leads_date', [ClassesController::class, 'leadsDate']);
     Route::get('leads', [ClassesController::class, 'leads']);
@@ -170,11 +171,11 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('no_srv2', [ClassesController::class, 'perxFilterNoSrv2']);
     Route::get('no_srv2_export', [ClassesController::class, 'perxFilterNoSrExportv2']);
     Route::get('get_payrate/{id}', [ClassesController::class, 'getPayRateByLob']);
+
     Route::get('classes_information', [ClassesController::class, 'classesInformation']);
     Route::get('classes_information_export', [ClassesController::class, 'classesInformationExport']);
     Route::get('sitev2', [ClassesController::class, 'siteV2']);
     Route::get('lobv2', [ClassesController::class, 'lobV2']);
-
     // chart
     Route::get('countstatus', [ClassesController::class, 'countStatus']);
     Route::get('class_exists', [ClassesController::class, 'classExists']);
@@ -260,3 +261,4 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('referralsDate', [ClassesController::class, 'referralsDate']);

@@ -259,7 +259,7 @@ import Buttons from "datatables.net-buttons-bs5";
 import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
 // eslint-disable-next-line no-unused-vars
 import print from "datatables.net-buttons/js/buttons.print";
-//import pdfmake from "pdfmake"; 
+//import pdfmake from "pdfmake";
 // eslint-disable-next-line no-unused-vars
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
@@ -332,31 +332,31 @@ export default {
   },
   watch: {
   sites_selected: _.debounce(function () {
-    
+
     this.checkClassExists();
     this.getClassesAll().finally(() => {
-    
+
     });
   }, 300),
   programs_selected: _.debounce(function () {
-   
+
     this.checkClassExists();
     this.getClassesAll().finally(() => {
-     
+
     });
   }, 300),
   month_selected: _.debounce(function () {
-    
+
     this.checkClassExists();
     this.getClassesAll().finally(() => {
-   
+
     });
   }, 300),
   week_selected: _.debounce(function () {
-   
+
     this.checkClassExists();
     this.getClassesAll().finally(() => {
-     
+
     });
   }, 300),
 },
@@ -404,7 +404,7 @@ export default {
       try {
         const token = this.$store.state.token; // Assuming you store the token in Vuex state
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/class_exists",
+          "http://127.0.0.1:8000/api/class_exists",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -454,7 +454,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classesall",
+          "http://127.0.0.1:8000/api/classesall",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -483,7 +483,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -507,7 +507,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -534,7 +534,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8081/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

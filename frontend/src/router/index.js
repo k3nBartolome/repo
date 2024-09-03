@@ -98,6 +98,8 @@ import programManagementEditGuatemala from "@/views/DashboardNavItems/Admin/Edit
 import siteManagementEditGuatemala from "@/views/DashboardNavItems/Admin/EditSiteGuatemala";
 import ProgramManagementJamaica from "@/views/Dashboard/AppProgramDashboardJamaica.vue";
 import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGuatemala.vue";
+import RemxSupplyManager from "@/views/DashboardNavItems/User/InventoryTracker/RemxSupplyManager.vue";
+import remxTransfer from "@/views/DashboardNavItems/User/InventoryTracker/RemxSiteTransferRequest.vue";
 
 const routes = [
   {
@@ -171,11 +173,7 @@ const routes = [
         name: "inventoryTracker",
         component: inventoryTracker,
         children: [
-          {
-            path: "supply_manager",
-            name: "supplyManager",
-            component: supplyManager,
-          },
+
           {
             path: "/dashboard_manager",
             name: "dashboardManager",
@@ -217,6 +215,23 @@ const routes = [
                 path: "transfer",
                 name: "siteTransfer",
                 component: siteTransfer,
+              },
+            ],
+          },
+          {
+            path: "/remx",
+            name: "RemxSupplyManager",
+            component: RemxSupplyManager,
+            children: [
+              {
+                path: "supply_manager",
+                name: "supplyManager",
+                component: supplyManager,
+              },
+              {
+                path: "transfer",
+                name: "remxTransfer",
+                component: remxTransfer,
               },
             ],
           },

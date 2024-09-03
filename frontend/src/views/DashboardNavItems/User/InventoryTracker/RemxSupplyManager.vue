@@ -3,11 +3,11 @@
     <div class="container">
       <div class="row">
         <div class="col-md-2 col-sm-2">
-          <router-link to="/supply_manager/stocks" class="link-button">
+          <router-link to="/remx/supply_manager" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/supply_manager/stocks'),
+                'selected-tab': isActiveTab('/remx/supply_manager'),
               }"
             >
               Remx Supply
@@ -15,11 +15,11 @@
           </router-link>
         </div>
         <div class="col-md-2 col-sm-2">
-          <router-link to="/supply_manager/transfer" class="link-button">
+          <router-link to="/remx/transfer" class="link-button">
             <button
               class="tab-button"
               :class="{
-                'selected-tab': isActiveTab('/supply_manager/transfer'),
+                'selected-tab': isActiveTab('/remx/transfer'),
               }"
             >
               Site Transfer

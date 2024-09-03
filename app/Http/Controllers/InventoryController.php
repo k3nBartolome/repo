@@ -26,15 +26,17 @@ class InventoryController extends Controller
             'site_id' => 'required',
             'quantity_approved' => 'required',
             'requested_by' => 'required',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+        $imagePath = $request->file('file_name')->store('storage', 'public');
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->status = 'Pending';
+        $inventory->file_path = $imagePath;
         $inventory->transaction_type = 'Site Request';
         $inventory->save();
 
@@ -74,7 +76,6 @@ class InventoryController extends Controller
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->transaction_type = 'Transfer Request';
-        
 
         $inventory->save();
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
@@ -93,6 +94,7 @@ class InventoryController extends Controller
             'Request' => $inventory,
         ]);
     }
+
     public function transferRemxItem(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -111,7 +113,6 @@ class InventoryController extends Controller
         $inventory = new Inventory();
         $inventory->fill($request->all());
         $inventory->transaction_type = 'Transfer Request';
-        
 
         $inventory->save();
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
@@ -130,6 +131,7 @@ class InventoryController extends Controller
             'Request' => $inventory,
         ]);
     }
+
     public function awardNormalItem(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -155,7 +157,7 @@ class InventoryController extends Controller
 
             $award = new Award();
             $award->fill($request->all());
-            $award->path = $imagePath;
+            $award->file_path = $imagePath;
             $award->award_status = 'Awarded';
             $award->date_released = Carbon::now()->format('Y-m-d H:i');
             $award->save();
@@ -237,17 +239,20 @@ class InventoryController extends Controller
             'received_by' => 'required',
             'received_status' => 'required',
             'received_quantity' => 'nullable',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
-
+        $imagePath = $request->file('file_name')->store('storage', 'public');
         if ($request->input('received_status') === 'partial') {
             $inventory->approved_status = null;
             $inventory->received_quantity = $request->input('received_quantity');
+            $inventory->file_path = $imagePath;
         } elseif ($request->input('received_status') === 'complete') {
             $inventory->approved_status = 'Received';
+            $inventory->file_path = $imagePath;
             $inventory->received_quantity = $inventory->quantity_approved;
         }
 
@@ -270,6 +275,8 @@ class InventoryController extends Controller
             $siteInventory->total_cost += $totalCost;
             $siteInventory->received_by = $inventory->received_by;
             $siteInventory->date_received = $inventory->date_received;
+            $siteInventory->file_name = $inventory->file_name;
+            $siteInventory->file_path = $inventory->file_path;
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
@@ -287,6 +294,8 @@ class InventoryController extends Controller
             $siteInventory->date_received = $inventory->date_received;
             $siteInventory->cost = $inventory->item->cost;
             $siteInventory->total_cost = $totalCost;
+            $siteInventory->file_name = $inventory->file_name;
+            $siteInventory->file_path = $inventory->file_path;
 
             $siteInventory->save();
         }
@@ -306,19 +315,22 @@ class InventoryController extends Controller
             'received_by' => 'required',
             'received_status' => 'required',
             'received_quantity' => 'nullable',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
         ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
         }
-
+        $imagePath = $request->file('file_name')->store('storage', 'public');
         if ($request->input('received_status') === 'partial') {
             $inventory->status = 'Transferred Partial';
             $inventory->approved_status = null;
+            $inventory->file_path = $imagePath;
             $inventory->received_quantity = $request->input('received_quantity');
         } elseif ($request->input('received_status') === 'complete') {
             $inventory->status = 'Transferred All';
             $inventory->approved_status = 'Received';
+            $inventory->file_path = $imagePath;
             $inventory->received_quantity = $inventory->quantity_approved;
         }
 
@@ -345,6 +357,8 @@ class InventoryController extends Controller
             $siteInventory->transferred_by = $inventory->transferred_by;
             $siteInventory->transferred_date = $inventory->transferred_date;
             $siteInventory->transferred_from = $inventory->transferred_from;
+            $siteInventory->file_name = $inventory->file_name;
+            $siteInventory->file_path = $inventory->file_path;
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
@@ -366,6 +380,8 @@ class InventoryController extends Controller
             $siteInventory->transferred_by = $inventory->transferred_by;
             $siteInventory->transferred_date = $inventory->transferred_date;
             $siteInventory->transferred_from = $inventory->transferred_from;
+            $siteInventory->file_name = $inventory->file_name;
+            $siteInventory->file_path = $inventory->file_path;
             $siteInventory->save();
         }
         $inventory->quantity_approved -= $inventory->received_quantity;
@@ -439,7 +455,7 @@ class InventoryController extends Controller
             'requestedBy',
             'transferredBy',
             'cancelledBy',
-            
+
             'siteInventory',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Pending')
@@ -462,7 +478,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -483,7 +499,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])
             ->get();
 
@@ -504,7 +520,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->get();
@@ -526,7 +542,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -550,7 +566,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -574,7 +590,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Denied')
             ->get();
@@ -596,7 +612,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
@@ -619,7 +635,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -640,7 +656,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Transfer Request')
 
             ->get();
@@ -662,7 +678,7 @@ class InventoryController extends Controller
             'transferredBy',
             'cancelledBy',
             'siteInventory',
-            'transferredFrom'
+            'transferredFrom',
         ])->where('transaction_type', 'Transfer Request')
             ->where('status', null)
             ->get();
@@ -670,10 +686,9 @@ class InventoryController extends Controller
         return response()->json(['inventory' => $inventory]);
     }
 
-    /**
+    /*
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
 }

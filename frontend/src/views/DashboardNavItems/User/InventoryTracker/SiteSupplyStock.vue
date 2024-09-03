@@ -524,6 +524,10 @@
       </div>
     </div>
   </div>
+  <div class="image-modal">
+    <button class="close-button" @click="closeImageModal">Close</button>
+    <img class="enlarged-image" @click.stop="" alt="Enlarged Image" />
+  </div>
   <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -618,17 +622,29 @@ export default {
           },
         },
         {
+          data: "image_path",
+          title: "Image",
+          render: (data, type) => {
+            if (type === "display" && data) {
+              return `<button onclick="window.vm.openImageModal('${data}')">
+                <img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>
+              </button>`;
+            }
+            return "";
+          },
+        },
+        {
           data: "id",
           title: "Actions",
           orderable: false,
           searchable: false,
           render: function (data) {
             const isUser = this.isUser;
-            const isRemx = this.isRemx;
+
             const isSourcing = this.isSourcing;
             return `
             ${
-              isUser || isRemx || isSourcing
+              isUser || isSourcing
                 ? `
                     <button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForTransfer(${data})">Transfer</button>`
                 : ""
@@ -727,6 +743,18 @@ export default {
     this.getItems();
   },
   methods: {
+    openImageModal(imageUrl) {
+      const modal = document.querySelector(".image-modal");
+      const enlargedImage = document.querySelector(".enlarged-image");
+
+      enlargedImage.src = imageUrl;
+      modal.style.display = "flex";
+    },
+    closeImageModal() {
+      const modal = document.querySelector(".image-modal");
+
+      modal.style.display = "none";
+    },
     async handleFileChange(event) {
       const selectedFile = event.target.files[0];
 
@@ -894,7 +922,7 @@ export default {
     },
     transferItems() {
       this.errors = {};
-      this.loading = true; // Set loading to true at the start
+      this.loading = true;
 
       if (!this.sites_selected) {
         this.errors.sites_selected = "Site is required.";
@@ -909,18 +937,19 @@ export default {
       }
 
       if (Object.keys(this.errors).length > 0) {
-        this.loading = false; // Stop loading if there are validation errors
+        this.loading = false;
         return;
       }
 
-      const formData = {
-        inventory_item_id: this.items_selected,
-        site_id: this.sites_selected,
-        quantity_approved: this.transferred_quantity,
-        transferred_by: this.$store.state.user_id,
-        transferred_to: this.sites_selected,
-        transferred_from: this.sites1_selected,
-      };
+      const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
+        formData.append("inventory_item_id", this.items_selected);
+        formData.append("site_id", this.sites_selected);
+        formData.append("quantity_approved", this.transferred_quantity);
+        formData.append("transferred_by", this.$store.state.user_id);
+        formData.append("transferred_to", this.sites_selected);
+        formData.append("transferred_from", this.sites1_selected);
+
 
       axios
         .post("http://127.0.0.1:8000/api/transfer", formData, {
@@ -948,7 +977,7 @@ export default {
           }
         })
         .finally(() => {
-          this.loading = false; // Set loading to false at the end
+          this.loading = false;
         });
     },
 
@@ -988,6 +1017,7 @@ export default {
       }
 
       const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
 formData.append("item_name", this.item_name);
 formData.append("quantity", this.quantity);
 formData.append("original_quantity", this.quantity);

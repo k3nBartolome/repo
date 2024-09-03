@@ -151,53 +151,57 @@ export default {
       sites: [],
       lobs: [],
       columns: [
-        { data: "ApplicantId", title: "ApplicantId" },
+        {
+          data: "No",
+          title: "No",
+        },
         {
           data: "HRID",
           title: "HRID",
           render: function (data) {
-            return data ? data : "TBA"; // If data is null or undefined, return 'TBA'
+            return data ? data : "TBA";
           },
         },
-
-        { data: "LastName", title: "Last Name" },
-        { data: "FirstName", title: "First Name" },
-        { data: "MiddleName", title: "Middle Name" },
-
+        { data: "LastName", title: " NAME" },
+        { data: "FirstName", title: "FIRST NAME" },
+        { data: "MiddleName", title: "MIDDLE NAME" },
         {
           data: "DateHired",
-          title: "DateHired",
+          title: "DATE HIRED",
           render: function (data) {
             return data ? data : ""; // If data is null or undefined, return 'TBA'
           },
         },
-        { data: "Lob", title: "Account" },
-        { data: "Wave", title: "Wave" },
-        { data: "Position", title: "Position" },
-        { data: "Sites", title: "BLDG Assignment" },
-        { data: "Salary", title: "Monthly Salary" },
+        { data: "Lob", title: "DEPT/LOB/ACCOUNT" },
+        { data: "Wave", title: "TEAM/WAVE" },
+        { data: "Position", title: "POSITION" },
+        { data: "Sites", title: "BLDG ASSIGNMENT" },
+        { data: "Salary", title: "MONTHLY SALARY" },
         {
           data: "ND_Training",
-          title: "ND%-Training",
+          title: "ND%-TRAINING",
           render: function (data) {
-            return `${(data * 100).toFixed(2)}%`;
+            return `${data}%`;
           },
         },
         {
           data: "ND_Production",
-          title: "ND%-Production",
+          title: "ND%-PRODUCTION",
           render: function (data) {
-            return `${(data * 100).toFixed(2)}%`;
+            return `${data}%`;
           },
         },
         {
           data: "MS_Production",
-          title: "Mid-Shift%-Production",
+          title: "MID-SHIFT%-PRODUCTION",
           render: function (data) {
-            return `${(data * 100).toFixed(2)}%`;
+            return `${data}%`;
           },
         },
-        { data: "ComplexityAllowance", title: "Complexity Allowance" },
+        {
+          data: "ComplexityAllowance",
+          title: "COMPLEXITY ALLOWANCE(UPON START)",
+        },
       ],
 
       filterLoading: false,
@@ -296,6 +300,29 @@ export default {
       this.exportLoading = true;
       try {
         const token = this.$store.state.token;
+
+        // Extract unique LOB and WAVE values from the classes data
+        const lobSet = new Set(
+          this.classes.map((item) => item.Lob).filter(Boolean)
+        );
+        const waveSet = new Set(
+          this.classes.map((item) => item.Wave).filter(Boolean)
+        );
+
+        let fileName = "SALARY PACKAGE";
+
+        // Set filename based on the number of unique LOB and WAVE values
+        if (lobSet.size === 1 && waveSet.size === 1) {
+          fileName += ` -${[...lobSet][0]} ${[...waveSet][0]}`;
+        } else if (lobSet.size > 1 || waveSet.size > 1) {
+          if (lobSet.size > 1) {
+            fileName += ``;
+          }
+          if (waveSet.size > 1) {
+            fileName += ``;
+          }
+        }
+
         const response = await axios.get(
           "http://127.0.0.1:8000/api/classes_information_export",
           {
@@ -320,7 +347,7 @@ export default {
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement("a");
         link.href = url;
-        link.download = "classes_data.xlsx"; // Name of the downloaded file
+        link.download = `${fileName}.xlsx`; // Name of the downloaded file
         link.click();
 
         // Clean up the URL object

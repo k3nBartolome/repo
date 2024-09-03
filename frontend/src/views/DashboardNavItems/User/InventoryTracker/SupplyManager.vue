@@ -15,6 +15,183 @@
       </h2>
     </div>
   </header>
+  <div class="py-0`">
+    <div class="px-0 py-1 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+      <div
+        class="fixed inset-0 z-50 flex items-center justify-center modal"
+        v-if="showModalTransfer"
+      >
+        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
+          <header class="px-4 py-2 border-b-2 border-gray-200">
+            <h2 class="text-lg font-semibold text-gray-800">Transfer Supply</h2>
+          </header>
+          <button
+            @click="showModalTransfer = false"
+            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <span v-if="successMessage" class="text-green-500">{{
+            successMessage
+          }}</span>
+          <div class="modal-scrollable-content">
+            <form
+              @submit.prevent="transferItems"
+              class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
+            >
+              <div class="col-span-1">
+                <label class="block">
+                  <input type="file" @change="handleFileChange" />
+                  <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                  <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                    {{ errors.file_name }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Site
+                  <select
+                    v-model="sites_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="site in sites"
+                      :key="site.id"
+                      :value="site.id"
+                    >
+                      {{ site.name }}
+                    </option>
+                  </select>
+                  <p
+                    v-if="errors.sites_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.sites_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="hidden col-span-1">
+                <label class="block">
+                  Site
+                  <select
+                    v-model="sites1_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="site in sites"
+                      :key="site.id"
+                      :value="site.id"
+                    >
+                      {{ site.name }}
+                    </option>
+                  </select>
+                  <p
+                    v-if="errors.sites_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.sites_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="hidden col-span-1">
+                <label class="block">
+                  Item Name
+                  <select
+                    @change="onItemSelected"
+                    v-model="items_selected"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  >
+                    <option disabled value="" selected>
+                      Please select one
+                    </option>
+                    <option
+                      v-for="item in items"
+                      :key="item.id"
+                      :value="item.id"
+                    >
+                      {{ item.item_name }}
+                    </option>
+                  </select>
+                  <p
+                    v-if="errors.items_selected"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.items_selected }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Quantity Available
+                  <input
+                    readonly
+                    type="number"
+                    v-model="quantity"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p v-if="errors.quantity" class="mt-1 text-xs text-red-500">
+                    {{ errors.quantity }}
+                  </p>
+                </label>
+              </div>
+              <div class="col-span-1">
+                <label class="block">
+                  Quantity to be Transfer
+                  <input
+                    type="number"
+                    v-model="transferred_quantity"
+                    class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  />
+                  <p
+                    v-if="errors.transferred_quantity"
+                    class="mt-1 text-xs text-red-500"
+                  >
+                    {{ errors.transferred_quantity }}
+                  </p>
+                </label>
+              </div>
+              <div class="flex justify-between mt-4">
+                <button
+                  @click="showModal = false"
+                  type="button"
+                  class="px-4 py-2 text-white bg-red-500 rounded hover:bg-red-600"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+      </div>
   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
@@ -258,6 +435,10 @@
       </div>
     </div>
   </div>
+  <div class="image-modal">
+    <button class="close-button" @click="closeImageModal">Close</button>
+    <img class="enlarged-image" @click.stop="" alt="Enlarged Image" />
+  </div>
   <div class="py-0">
     <div class="pl-8 pr-8">
       <div class="scroll">
@@ -335,6 +516,8 @@ export default {
       category: "Normal",
       date_expiry: "",
       showModal: false,
+      showModalTransfer:false,
+      transferred_quantity: "",
       successMessage: "",
       errors: {},
       selectedFile: null,
@@ -345,6 +528,37 @@ export default {
           render: function (data, type, row, meta) {
             return meta.row + 1;
           },
+        },
+        {
+          data: "image_path",
+          title: "Image",
+          render: (data, type) => {
+            if (type === "display" && data) {
+              return `<button onclick="window.vm.openImageModal('${data}')">
+                <img src="${data}" alt="Image" width="50" height="50" loading="lazy"/>
+              </button>`;
+            }
+            return "";
+          },
+        },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const isUser = this.isUser;
+            const isRemx = this.isRemx;
+
+            return `
+            ${
+              isUser || isRemx
+                ? `
+                    <button class="w-20 text-xs btn btn-primary" data-id="${data}" onclick="window.vm.openModalForTransfer(${data})">Transfer</button>`
+                : ""
+            }
+          `;
+          }.bind(this),
         },
         { data: "site_name", title: "Site" },
         { data: "item_name", title: "Item" },
@@ -400,6 +614,18 @@ export default {
     this.getItems();
   },
   methods: {
+    openImageModal(imageUrl) {
+      const modal = document.querySelector(".image-modal");
+      const enlargedImage = document.querySelector(".enlarged-image");
+
+      enlargedImage.src = imageUrl;
+      modal.style.display = "flex";
+    },
+    closeImageModal() {
+      const modal = document.querySelector(".image-modal");
+
+      modal.style.display = "none";
+    },
     async handleFileChange(event) {
       const selectedFile = event.target.files[0];
 
@@ -499,6 +725,76 @@ export default {
       });
 
       return compressedBlob;
+    },
+    openModalForTransfer(id) {
+      const clickedItem = this.items.find((item) => item.id === id);
+      if (clickedItem) {
+        this.quantity = clickedItem.quantity;
+        this.sites1_selected = clickedItem.site_id;
+        this.items_selected = clickedItem.id;
+      }
+      // Show the modal
+      this.showModalTransfer = true;
+    },
+    transferItems() {
+      this.errors = {};
+      this.loading = true;
+
+      if (!this.sites_selected) {
+        this.errors.sites_selected = "Site is required.";
+      }
+      if (!this.transferred_quantity) {
+        this.errors.transferred_quantity = "Quantity Request is required.";
+      } else if (
+        parseInt(this.transferred_quantity) > parseInt(this.quantity)
+      ) {
+        this.errors.transferred_quantity =
+          "Quantity Request cannot exceed available quantity.";
+      }
+
+      if (Object.keys(this.errors).length > 0) {
+        this.loading = false;
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
+        formData.append("inventory_item_id", this.items_selected);
+        formData.append("site_id", this.sites_selected);
+        formData.append("quantity_approved", this.transferred_quantity);
+        formData.append("transferred_by", this.$store.state.user_id);
+        formData.append("transferred_to", this.sites_selected);
+        formData.append("transferred_from", this.sites1_selected);
+
+
+      axios
+        .post("http://127.0.0.1:8000/api/transfer", formData, {
+          headers: {
+            Authorization: `Bearer ${this.$store.state.token}`,
+          },
+        })
+        .then((response) => {
+          if (response && response.data && response.data.Request) {
+            console.log(response.data.Request);
+            this.successMessage = "Transferred successfully!";
+            this.showModal = false;
+            window.location.reload();
+          } else {
+            console.error("Response or Request property is undefined.");
+          }
+        })
+        .catch((error) => {
+          if (error.response && error.response.data) {
+            console.log(error.response.data);
+          } else {
+            console.error(
+              "Error response or error.response.data is undefined."
+            );
+          }
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     validateBudgetCode() {
       this.errors.budget_code = "";
