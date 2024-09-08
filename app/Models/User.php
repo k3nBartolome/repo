@@ -24,6 +24,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'site_id',
+        'position'
+
     ];
 
     /**
@@ -59,5 +62,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Program');
     }
-
+    public function sites()
+    {
+        return $this->belongsTo(Site::class, 'id');
+    }
 }

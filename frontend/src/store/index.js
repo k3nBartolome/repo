@@ -13,17 +13,21 @@ export default createStore({
     user: null,
     role: null,
     token: null,
+    site_id:null,
+    position:null,
     user_id: null,
     name: null,
     permissions: [],
     persistedStateKey: persistedStateOptions.key,
   },
   mutations: {
-    setUser(state, { user, name, role, token, permissions }) {
+    setUser(state, { user, name, role, token,site_id,position, permissions }) {
       if (!state.token) {
         state.user = user;
         state.role = role;
         state.token = token;
+        state.position = position;
+        state.site_id = site_id;
         state.name = name;
         state.permissions = permissions;
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
