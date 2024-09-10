@@ -75,20 +75,21 @@ class InventoryController extends Controller
 
         $inventory = new Inventory();
         $inventory->fill($request->all());
-        $inventory->transaction_type = 'Transfer Request';
+        $inventory->transaction_type = 'Sourcing Transfer Request';
 
         $inventory->save();
-        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $requestedItem = SiteInventory::find($request->inventory_item_id);
+        $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->save();
 
-        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->item_id = $requestedItem->inventory_item_id;
         $inventory->original_request = $inventory->quantity_approved;
         $inventory->inventory_id = $inventory->id;
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
-
-        $requestedItem = SiteInventory::find($request->inventory_item_id);
-        $requestedItem->quantity -= $request->quantity_approved;
-        $requestedItem->save();
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->save();
 
         return response()->json([
             'Request' => $inventory,
@@ -98,7 +99,7 @@ class InventoryController extends Controller
     public function transferRemxItem(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'item_less_id' => 'required',
+            'item_id' => 'required',
             'site_id' => 'required',
             'quantity_approved' => 'required',
             'transferred_by' => 'required',
@@ -112,20 +113,21 @@ class InventoryController extends Controller
 
         $inventory = new Inventory();
         $inventory->fill($request->all());
-        $inventory->transaction_type = 'Transfer Request';
+        $inventory->transaction_type = 'REMX Transfer Request';
 
         $inventory->save();
-        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $requestedItem = Items::find($request->item_id);
+        $requestedItem->quantity -= $request->quantity_approved;
+        $requestedItem->save();
 
-        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->item_id = $requestedItem->inventory_item_id;
         $inventory->original_request = $inventory->quantity_approved;
         $inventory->inventory_id = $inventory->id;
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
         $inventory->save();
-
-        $requestedItem = Items::find($request->item_less_id);
-        $requestedItem->quantity -= $request->quantity_approved;
-        $requestedItem->save();
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->save();
 
         return response()->json([
             'Request' => $inventory,
@@ -165,7 +167,16 @@ class InventoryController extends Controller
             $requestedItem = SiteInventory::find($request->inventory_item_id);
             $requestedItem->quantity -= $request->awarded_quantity;
             $requestedItem->save();
+            $inventory = new Inventory();
 
+            $inventory->original_request = $inventory->quantity_approved;
+            $inventory->inventory_id = $inventory->id;
+            $inventory->item_id = $requestedItem->inventory_item_id;
+            $inventory->transaction_type = 'Award Sourcing Supply';
+            $inventory->save();
+            $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+            $inventory->transaction_no = $formattedTransactionNumber;
+            $inventory->save();
             DB::commit();
 
             return response()->json([
@@ -383,6 +394,91 @@ class InventoryController extends Controller
             $siteInventory->file_name = $inventory->file_name;
             $siteInventory->file_path = $inventory->file_path;
             $siteInventory->save();
+        }
+        $inventory->quantity_approved -= $inventory->received_quantity;
+        $inventory->save();
+
+        return response()->json([
+            'Request' => $inventory,
+        ]);
+    }
+
+    public function receivedRemxTransfer(Request $request, $id)
+    {
+        $inventory = Inventory::find($id);
+
+        $validator = Validator::make($request->all(), [
+            'received_by' => 'required',
+            'received_status' => 'required',
+            'received_quantity' => 'nullable',
+            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
+        }
+        $imagePath = $request->file('file_name')->store('storage', 'public');
+        if ($request->input('received_status') === 'partial') {
+            $inventory->status = 'Transferred Partial';
+            $inventory->approved_status = null;
+            $inventory->file_path = $imagePath;
+            $inventory->received_quantity = $request->input('received_quantity');
+        } elseif ($request->input('received_status') === 'complete') {
+            $inventory->status = 'Transferred All';
+            $inventory->approved_status = 'Received';
+            $inventory->file_path = $imagePath;
+            $inventory->received_quantity = $inventory->quantity_approved;
+        }
+
+        $inventory->fill([
+            'received_by' => $request->input('received_by'),
+            'received_status' => $request->input('received_status'),
+        ]);
+        $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
+        $inventory->save();
+
+        $totalCost = $inventory->items->cost * $inventory->received_quantity;
+
+        $items = Items::where('item_name', $inventory->items->item_name)
+            ->where('budget_code', $inventory->items->budget_code)
+            ->where('site_id', $inventory->transferred_to)
+            ->first();
+
+        if ($items) {
+            $items->site_id = $inventory->transferred_to;
+            $items->quantity += $inventory->received_quantity;
+            $items->original_quantity += $inventory->received_quantity;
+            $items->total_cost += $totalCost;
+            $items->received_by = $inventory->received_by;
+            $items->transferred_by = $inventory->transferred_by;
+            $items->transferred_date = $inventory->transferred_date;
+            $items->transferred_from = $inventory->transferred_from;
+            $items->file_name = $inventory->file_name;
+            $items->file_path = $inventory->file_path;
+            $items->save();
+        } else {
+            $items = new Items();
+            $items->site_id = $inventory->transferred_to;
+            $items->item_less_id = $inventory->items->item_less_id;
+            $items->item_name = $inventory->items->item_name;
+            $items->quantity = $inventory->received_quantity;
+            $items->original_quantity = $inventory->received_quantity;
+            $items->budget_code = $inventory->items->budget_code;
+            $items->type = $inventory->items->type;
+            $items->category = $inventory->items->category;
+            $items->date_expiry = $inventory->items->date_expiry;
+            $items->site_id = $inventory->site_id;
+            $items->is_active = $inventory->items->is_active;
+            $items->received_by = $inventory->received_by;
+            $items->date_received = $inventory->date_received;
+            $items->cost = $inventory->items->cost;
+            $items->total_cost = $totalCost;
+            $items->transferred_by = $inventory->transferred_by;
+            $items->transferred_date = $inventory->transferred_date;
+            $items->transferred_from = $inventory->transferred_from;
+            $items->file_name = $inventory->file_name;
+            $items->file_path = $inventory->file_path;
+            $items->save();
         }
         $inventory->quantity_approved -= $inventory->received_quantity;
         $inventory->save();
@@ -637,6 +733,48 @@ class InventoryController extends Controller
             'siteInventory',
             'transferredFrom',
         ])->where('transaction_type', 'Site Request')
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function remxForTransfer()
+    {
+        $inventory = Inventory::with([
+           'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+            'siteInventory',
+            'transferredFrom',
+        ])->where('transaction_type', 'REMX Transfer Request')
+            ->get();
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+    public function sourcingForTransfer()
+    {
+        $inventory = Inventory::with([
+           'site',
+            'item',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+            'siteInventory',
+            'transferredFrom',
+        ])->where('transaction_type', 'Sourcing Transfer Request')
             ->get();
 
         return response()->json(['inventory' => $inventory]);

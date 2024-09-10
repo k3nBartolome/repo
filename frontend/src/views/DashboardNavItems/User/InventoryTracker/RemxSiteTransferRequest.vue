@@ -58,9 +58,18 @@
                 />
                 <p
                   v-if="errors.received_quantity"
-                  class="text-red-500 text-xs mt-1"
+                  class="mt-1 text-xs text-red-500"
                 >
                   {{ errors.received_quantity }}
+                </p>
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                <input type="file" @change="handleFileChange" />
+                <img :src="previewImage" v-if="previewImage" alt="Preview" />
+                <p v-if="errors.file_name" class="mt-1 text-xs text-red-500">
+                  {{ errors.file_name }}
                 </p>
               </label>
             </div>
@@ -151,6 +160,8 @@ export default {
       errors: {},
       successMessage: "",
       siteRequestId: null,
+      selectedFile: null,
+      previewImage: null,
       columns: [
         {
           title: "No",
@@ -206,10 +217,14 @@ export default {
         },
         { data: "quantity_approved", title: "Quantity Requested" },
         { data: "transferred_by.name", title: "Transferred By" },
+        { data: "transferred_from.name", title: "Transferred From" },
       ],
     };
   },
   computed: {
+    imageSource() {
+      return this.capturedImage ? this.capturedImage : this.selectedImage;
+    },
     isUser() {
       const userRole = this.$store.state.role;
       return userRole === "user";
@@ -245,6 +260,106 @@ export default {
     this.getInventory();
   },
   methods: {
+    async handleFileChange(event) {
+      const selectedFile = event.target.files[0];
+
+      if (!selectedFile) {
+        return;
+      }
+
+      // Assign the selected file to this.selectedFile
+      this.selectedFile = selectedFile;
+
+      const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB threshold
+
+      if (selectedFile.size > maxSizeInBytes) {
+        try {
+          const image = new Image();
+          const reader = new FileReader();
+
+          reader.onload = (event) => {
+            image.src = event.target.result;
+
+            image.onload = async () => {
+              const maxWidth = 800;
+              const quality = 0.8;
+
+              // Calculate new dimensions to fit within maxWidth
+              let width = image.width;
+              let height = image.height;
+              if (width > maxWidth) {
+                height *= maxWidth / width;
+                width = maxWidth;
+              }
+
+              const canvas = document.createElement("canvas");
+              canvas.width = width;
+              canvas.height = height;
+
+              const ctx = canvas.getContext("2d");
+              ctx.drawImage(image, 0, 0, width, height);
+
+              canvas.toBlob(
+                async (blob) => {
+                  this.selectedFile = blob; // Update this.selectedFile with the resized blob
+                  this.previewImage = URL.createObjectURL(blob);
+
+                  console.log("Preview Image URL:", this.previewImage);
+                },
+                "image/jpeg",
+                quality
+              );
+            };
+          };
+
+          reader.readAsDataURL(selectedFile);
+        } catch (error) {
+          console.error("Error resizing image:", error);
+        }
+      } else {
+        // No need to resize for smaller images
+        this.previewImage = URL.createObjectURL(selectedFile);
+
+        console.log("Preview Image URL:", this.previewImage);
+      }
+    },
+
+    async compressBlob(blob, maxSize) {
+      const image = new Image();
+      const reader = new FileReader();
+      const maxQuality = 0.8;
+
+      const compressedBlob = await new Promise((resolve) => {
+        reader.onload = (event) => {
+          image.src = event.target.result;
+
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+
+            let newWidth = image.width;
+            let newHeight = image.height;
+
+            if (image.size > maxSize) {
+              const scaleFactor = Math.sqrt(image.size / maxSize);
+              newWidth = Math.floor(image.width / scaleFactor);
+              newHeight = Math.floor(image.height / scaleFactor);
+            }
+
+            canvas.width = newWidth;
+            canvas.height = newHeight;
+
+            ctx.drawImage(image, 0, 0, newWidth, newHeight);
+
+            canvas.toBlob(resolve, "image/jpeg", maxQuality);
+          };
+        };
+
+        reader.readAsDataURL(blob);
+      });
+
+      return compressedBlob;
+    },
     openModalForReceived(id) {
       this.receivedId = id;
       this.showModal = true;
@@ -267,11 +382,11 @@ export default {
       if (Object.keys(this.errors).length > 0) {
         return;
       }
-      const form = {
-        received_by: this.$store.state.user_id,
-        received_quantity: this.received_quantity,
-        received_status: this.received_status,
-      };
+      const formData = new FormData();
+      formData.append("file_name", this.selectedFile);
+      formData.append("received_by", this.$store.state.user_id);
+      formData.append("received_quantity", this.received_quantity);
+      formData.append("received_status", this.received_status);
 
       const config = {
         headers: {
@@ -280,23 +395,29 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, form, config)
+        .post(
+          `http://127.0.0.1:8000/api/inventory/transferremx/${id}`,
+          formData,
+          config
+        )
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
           this.successMessage = "Received successfully!";
           this.showModal = false;
+          console.log("Received by:", this.$store.state.user_id);
           window.location.reload();
         })
         .catch((error) => {
           console.log(error.response.data.data);
+          console.log("Received by:", this.$store.state.user_id);
         });
     },
     async getInventory() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/alltransfer",
+          "http://127.0.0.1:8000/api/inventory/remxForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

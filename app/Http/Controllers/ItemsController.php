@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Inventory;
 use App\Models\Items;
 use App\Models\SiteInventory;
 use Carbon\Carbon;
@@ -441,6 +442,16 @@ class ItemsController extends Controller
         $items->save();
         $items->item_less_id = Str::uuid();
         $items->save();
+        $inventory = new Inventory();
+
+        $inventory->original_request = $inventory->quantity_approved;
+        $inventory->inventory_id = $inventory->id;
+        $inventory->item_id = $items->id;
+        $inventory->transaction_type = 'Added REMX Supply';
+        $inventory->save();
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->save();
 
         return response()->json([
             'items' => $items,
@@ -476,6 +487,15 @@ class ItemsController extends Controller
         $items->save();
         $items->item_less_id = Str::uuid();
         $items->save();
+        $inventory = new Inventory();
+        $inventory->original_request = $inventory->quantity_approved;
+        $inventory->inventory_id = $inventory->id;
+        $inventory->item_id = $items->id;
+        $inventory->transaction_type = 'Added Sourcing Supply';
+        $inventory->save();
+        $formattedTransactionNumber = sprintf('%06d', $inventory->id);
+        $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->save();
 
         return response()->json([
             'items' => $items,

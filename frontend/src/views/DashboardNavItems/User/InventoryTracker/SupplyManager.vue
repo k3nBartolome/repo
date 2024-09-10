@@ -759,7 +759,7 @@ export default {
 
       const formData = new FormData();
       formData.append("file_name", this.selectedFile);
-        formData.append("inventory_item_id", this.items_selected);
+        formData.append("item_id", this.items_selected);
         formData.append("site_id", this.sites_selected);
         formData.append("quantity_approved", this.transferred_quantity);
         formData.append("transferred_by", this.$store.state.user_id);
@@ -768,7 +768,7 @@ export default {
 
 
       axios
-        .post("http://127.0.0.1:8000/api/transfer", formData, {
+        .post("http://127.0.0.1:8000/api/transferremx", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Award;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class AwardController extends Controller
 {
@@ -29,17 +26,19 @@ class AwardController extends Controller
                 'path' => $award->path,
                 'item_name' => $award->items->item_name,
                 'budget_code' => $award->items->budget_code,
-               'released_by' => $award->released_by?$award->releasedBy->name:'N/A',
+               'released_by' => $award->released_by ? $award->releasedBy->name : 'N/A',
                 'site_name' => $award->site->name,
-                'processed_by' => $award->processedBy?$award->processedBy->name:'N/A',
+                'processed_by' => $award->processedBy ? $award->processedBy->name : 'N/A',
                 'created_at' => $award->created_at,
                 'updated_at' => $award->updated_at,
                 'awarded_quantity' => $award->awarded_quantity,
                 'image_path' => $this->getImagePath($award),
             ];
         });
+
         return response()->json(['awarded' => $awarded]);
     }
+
     private function getAwardedItems()
     {
         $awarded = Award::with(['site', 'items', 'processedBy', 'releasedBy'])
@@ -60,15 +59,16 @@ class AwardController extends Controller
                 'path' => $award->path,
                 'item_name' => $award->items->item_name,
                 'budget_code' => $award->items->budget_code,
-                'released_by' => $award->released_by?$award->releasedBy->name:'N/A',
+                'released_by' => $award->released_by ? $award->releasedBy->name : 'N/A',
                 'site_name' => $award->site->name,
-                'processed_by' => $award->processedBy?$award->processedBy->name:'N/A',
+                'processed_by' => $award->processedBy ? $award->processedBy->name : 'N/A',
                 'created_at' => $award->created_at,
                 'updated_at' => $award->updated_at,
                 'awarded_quantity' => $award->awarded_quantity,
                 'image_path' => $this->getImagePath($award),
             ];
         });
+
         return response()->json(['awarded' => $awarded]);
     }
 
@@ -76,16 +76,19 @@ class AwardController extends Controller
     {
         return $this->getAwardedItemsByCategory('Normal');
     }
+
     public function awardedPremium()
     {
         return $this->getAwardedItemsByCategory('Premium');
     }
+
     public function awardedBoth()
     {
         return $this->getAwardedItems();
     }
+
     private function getImagePath($award)
     {
-        return asset('storage/' . $award->path);
+        return asset('storage/'.$award->path);
     }
 }
