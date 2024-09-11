@@ -27,6 +27,7 @@ class Items extends Model
         'file_name',
         'path',
         'total_cost',
+        'received_by'
     ];
 
     public function inventoryRecords()
@@ -42,5 +43,9 @@ class Items extends Model
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+    public function receivedBy()
+    {
+        return $this->belongsTo(User::class, 'received_by');
     }
 }

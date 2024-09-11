@@ -267,3 +267,5 @@ Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
 Route::get('referralsDate', [ClassesController::class, 'referralsDate']);
 Route::get('sourcing-item-history/{id}', [InventoryController::class, 'sourcingItemHistory']);
 Route::get('remx-item-history/{id}', [InventoryController::class, 'remxItemHistory']);
+Route::get('inventory/remxForTransfer', [InventoryController::class, 'remxForTransfer']);
+Route::post('inventory/transferremx/{id}', [InventoryController::class, 'receivedRemxTransfer']);

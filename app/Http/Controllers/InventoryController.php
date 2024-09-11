@@ -99,39 +99,49 @@ class InventoryController extends Controller
     public function transferRemxItem(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'item_id' => 'required',
-            'site_id' => 'required',
-            'quantity_approved' => 'required',
-            'transferred_by' => 'required',
-            'transferred_from' => 'required',
-            'transferred_to' => 'required',
-        ]);
+        'item_id' => 'required',
+        'site_id' => 'required',
+        'quantity_approved' => 'required',
+        'transferred_by' => 'required',
+        'transferred_from' => 'required',
+        'transferred_to' => 'required',
+    ]);
 
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
-        $inventory = new Inventory();
-        $inventory->fill($request->all());
-        $inventory->transaction_type = 'REMX Transfer Request';
-
-        $inventory->save();
+        // Find the requested item first
         $requestedItem = Items::find($request->item_id);
+        if (!$requestedItem) {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
+
+        // Reduce the quantity of the requested item
         $requestedItem->quantity -= $request->quantity_approved;
         $requestedItem->save();
 
-        $inventory->item_id = $requestedItem->inventory_item_id;
-        $inventory->original_request = $inventory->quantity_approved;
-        $inventory->inventory_id = $inventory->id;
+        // Create and fill the inventory object
+        $inventory = new Inventory();
+        $inventory->fill($request->all());
+        $inventory->item_id = $requestedItem->id;  // Use id, as 'item_id' may not exist
+        $inventory->transaction_type = 'REMX Transfer Request';
+        $inventory->original_request = $request->quantity_approved;
         $inventory->date_requested = Carbon::now()->format('Y-m-d H:i');
+
+        // Save inventory object
         $inventory->save();
+
+        // Generate the transaction number
         $formattedTransactionNumber = sprintf('%06d', $inventory->id);
         $inventory->transaction_no = $formattedTransactionNumber;
+        $inventory->inventory_id = $inventory->id;
+        // Save again with the updated transaction number
         $inventory->save();
 
         return response()->json([
-            'Request' => $inventory,
-        ]);
+        'Request' => $inventory,
+    ]);
     }
 
     public function awardNormalItem(Request $request)
@@ -320,7 +330,7 @@ class InventoryController extends Controller
 
     public function receivedTransfer(Request $request, $id)
     {
-        $inventory = Inventory::with('items')->find($id);
+        $inventory = Inventory::with('item', 'siteInventory')->find($id);
 
         $validator = Validator::make($request->all(), [
             'received_by' => 'required',
@@ -368,8 +378,8 @@ class InventoryController extends Controller
             $siteInventory->transferred_by = $inventory->transferred_by;
             $siteInventory->transferred_date = $inventory->transferred_date;
             $siteInventory->transferred_from = $inventory->transferred_from;
-            $siteInventory->file_name = $inventory->file_name;
-            $siteInventory->file_path = $inventory->file_path;
+            $siteInventory->file_name = $inventory->siteInventory->file_name;
+            $siteInventory->file_path = $inventory->siteInventory->file_path;
             $siteInventory->save();
         } else {
             $siteInventory = new SiteInventory();
@@ -391,8 +401,8 @@ class InventoryController extends Controller
             $siteInventory->transferred_by = $inventory->transferred_by;
             $siteInventory->transferred_date = $inventory->transferred_date;
             $siteInventory->transferred_from = $inventory->transferred_from;
-            $siteInventory->file_name = $inventory->file_name;
-            $siteInventory->file_path = $inventory->file_path;
+            $siteInventory->file_name = $inventory->siteInventory->file_name;
+            $siteInventory->file_path = $inventory->siteInventory->file_path;
             $siteInventory->save();
         }
         $inventory->quantity_approved -= $inventory->received_quantity;
@@ -403,27 +413,21 @@ class InventoryController extends Controller
         ]);
     }
 
-
-
     public function receivedRemxTransfer(Request $request, $id)
     {
         DB::beginTransaction();
 
         try {
-            // Load the inventory record with its related items
-            $inventory = Inventory::with('items')->find($id);
+            $inventory = Inventory::with('item', 'siteInventory')->find($id);
 
             if (!$inventory) {
-                DB::rollBack(); // Rollback the transaction
-                return response()->json(['error' => 'Inventory record not found.'], 404);
+                return response()->json(['error' => 'Inventory not found.'], 404);
             }
 
-            if (!$inventory->items) {
-                DB::rollBack(); // Rollback the transaction
-                return response()->json(['error' => 'Related item not found for this inventory.'], 404);
+            if (!$inventory->item) {
+                return response()->json(['error' => 'Items data not found.'], 404);
             }
 
-            // Validation and file upload
             $validator = Validator::make($request->all(), [
                 'received_by' => 'required',
                 'received_status' => 'required',
@@ -432,38 +436,45 @@ class InventoryController extends Controller
             ]);
 
             if ($validator->fails()) {
-                DB::rollBack(); // Rollback the transaction
                 return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
             }
 
             $imagePath = $request->file('file_name')->store('storage', 'public');
 
             if ($request->input('received_status') === 'partial') {
+                if (!$request->input('received_quantity') || $request->input('received_quantity') > $inventory->quantity_approved) {
+                    return response()->json(['error' => 'Invalid received quantity for partial status.'], 400);
+                }
+
                 $inventory->status = 'Transferred Partial';
                 $inventory->approved_status = null;
-                $inventory->file_path = $imagePath;
                 $inventory->received_quantity = $request->input('received_quantity');
             } elseif ($request->input('received_status') === 'complete') {
+                if ($inventory->quantity_approved <= 0) {
+                    return response()->json(['error' => 'No approved quantity available for complete transfer.'], 400);
+                }
+
                 $inventory->status = 'Transferred All';
                 $inventory->approved_status = 'Received';
-                $inventory->file_path = $imagePath;
                 $inventory->received_quantity = $inventory->quantity_approved;
+            } else {
+                return response()->json(['error' => 'Invalid received status provided.'], 400);
             }
 
             $inventory->fill([
                 'received_by' => $request->input('received_by'),
                 'received_status' => $request->input('received_status'),
+                'file_path' => $imagePath,
             ]);
             $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
             $inventory->save();
 
-            $totalCost = $inventory->items->cost * $inventory->received_quantity;
-
-            // Update or create item record
-            $items = Items::where('item_name', $inventory->items->item_name)
-                ->where('budget_code', $inventory->items->budget_code)
+            $items = Items::where('item_name', $inventory->item->item_name)
+                ->where('budget_code', $inventory->item->budget_code)
                 ->where('site_id', $inventory->transferred_to)
                 ->first();
+
+            $totalCost = $inventory->item->cost * $inventory->received_quantity;
 
             if ($items) {
                 $items->site_id = $inventory->transferred_to;
@@ -471,33 +482,28 @@ class InventoryController extends Controller
                 $items->original_quantity += $inventory->received_quantity;
                 $items->total_cost += $totalCost;
                 $items->received_by = $inventory->received_by;
-                $items->transferred_by = $inventory->transferred_by;
-                $items->transferred_date = $inventory->transferred_date;
-                $items->transferred_from = $inventory->transferred_from;
-                $items->file_name = $inventory->file_name;
-                $items->file_path = $inventory->file_path;
+                $items->file_name = $inventory->item->file_name;
+                $items->file_path = $inventory->item->file_path;
                 $items->save();
             } else {
                 $items = new Items();
                 $items->site_id = $inventory->transferred_to;
-                $items->item_id = $inventory->items->id; // Ensure this matches the item_id
-                $items->item_name = $inventory->items->item_name;
+                $items->item_less_id = $inventory->item->item_less_id;
+                $items->item_name = $inventory->item->item_name;
                 $items->quantity = $inventory->received_quantity;
                 $items->original_quantity = $inventory->received_quantity;
-                $items->budget_code = $inventory->items->budget_code;
-                $items->type = $inventory->items->type;
-                $items->category = $inventory->items->category;
-                $items->date_expiry = $inventory->items->date_expiry;
-                $items->is_active = $inventory->items->is_active;
+                $items->budget_code = $inventory->item->budget_code;
+                $items->type = $inventory->item->type;
+                $items->category = $inventory->item->category;
+                $items->date_expiry = $inventory->item->date_expiry;
+                $items->is_active = $inventory->item->is_active;
                 $items->received_by = $inventory->received_by;
+                $items->created_by = $inventory->received_by;
                 $items->date_received = $inventory->date_received;
-                $items->cost = $inventory->items->cost;
+                $items->cost = $inventory->item->cost;
                 $items->total_cost = $totalCost;
-                $items->transferred_by = $inventory->transferred_by;
-                $items->transferred_date = $inventory->transferred_date;
-                $items->transferred_from = $inventory->transferred_from;
-                $items->file_name = $inventory->file_name;
-                $items->file_path = $inventory->file_path;
+                $items->file_name = $inventory->item->file_name;
+                $items->file_path = $inventory->item->file_path;
                 $items->save();
             }
 
@@ -511,11 +517,10 @@ class InventoryController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(['error' => 'An error occurred.', 'message' => $e->getMessage()], 500);
+
+            return response()->json(['error' => 'Failed to process the request', 'message' => $e->getMessage()], 500);
         }
     }
-
-
 
     public function deniedItem(Request $request, $id)
     {
@@ -571,7 +576,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -593,7 +598,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -614,7 +619,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -635,7 +640,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -657,7 +662,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -681,7 +686,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -705,7 +710,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -727,7 +732,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -750,7 +755,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -771,7 +776,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -800,7 +805,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -827,10 +832,9 @@ class InventoryController extends Controller
 
     public function sourcingItemHistory($id)
     {
-
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -887,13 +891,14 @@ class InventoryController extends Controller
 
         return response()->json(['inventory' => $inventory]);
     }
+
     public function remxItemHistory(Request $request)
     {
         $id = $request->input('item_id');
 
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -951,14 +956,11 @@ class InventoryController extends Controller
         return response()->json(['inventory' => $inventory]);
     }
 
-
-
-
     public function allrequest()
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -980,7 +982,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'items',
+            'item',
             'releasedBy',
             'approvedBy',
             'deniedBy',

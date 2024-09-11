@@ -59,12 +59,10 @@ class Inventory extends Model
         return $this->belongsTo(Site::class, 'site_id');
     }
 
-    public function items()
+    public function item()
     {
-        return $this->belongsTo(Items::class, 'item_id'); // 'item_id' in Inventory points to 'id' in Items
+        return $this->belongsTo(Items::class, 'item_id');
     }
-
-
 
     public function siteInventory()
     {
@@ -110,7 +108,6 @@ class Inventory extends Model
     {
         return $this->belongsTo(Site::class, 'transferred_from');
     }
-
 
     public function cancelledBy()
     {

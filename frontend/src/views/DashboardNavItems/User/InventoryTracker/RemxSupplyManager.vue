@@ -82,7 +82,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/alltransfer",
+          "http://127.0.0.1:8000/api/inventory/remxForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -95,7 +95,7 @@ export default {
 
           const receivedItems = this.inventory.filter(
             (item) =>
-              item.transaction_type === "Transfer Request" &&
+              item.transaction_type === "REMX Transfer Request" &&
               item.received_status === null
           );
 

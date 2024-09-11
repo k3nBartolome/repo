@@ -267,7 +267,6 @@ export default {
         return;
       }
 
-      // Assign the selected file to this.selectedFile
       this.selectedFile = selectedFile;
 
       const maxSizeInBytes = 2 * 1024 * 1024; // 2 MB threshold
@@ -284,7 +283,7 @@ export default {
               const maxWidth = 800;
               const quality = 0.8;
 
-              // Calculate new dimensions to fit within maxWidth
+
               let width = image.width;
               let height = image.height;
               if (width > maxWidth) {
