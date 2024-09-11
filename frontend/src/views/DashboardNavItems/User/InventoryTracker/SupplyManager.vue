@@ -82,28 +82,28 @@
                   :key="inventory.id"
                   class="border-2 border-black"
                 >
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transaction_type }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.original_request }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_quantity }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_from.name }}
-                  </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transaction_type }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.original_request }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.received_quantity }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transferred_from }}
+                </th>
 
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_to.name }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.approved_status }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.received_status }}
-                  </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transferred_to }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.approved_status }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.received_status }}
+                </th>
                 </tr>
               </tbody>
             </table>
@@ -747,7 +747,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/remx-item-history/${itemId}`,
+          `http://10.109.2.112:8081/api/remx-item-history/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -775,7 +775,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/itemsboth3",
+          "http://10.109.2.112:8081/api/itemsboth3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -946,7 +946,7 @@ export default {
       formData.append("transferred_from", this.sites1_selected);
 
       axios
-        .post("http://127.0.0.1:8000/api/transferremx", formData, {
+        .post("http://10.109.2.112:8081/api/transferremx", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -993,7 +993,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8081/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1056,7 +1056,7 @@ export default {
       formData.append("created_by", this.$store.state.user_id);
 
       axios
-        .post("http://127.0.0.1:8000/api/items", formData, {
+        .post("http://10.109.2.112:8081/api/items", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

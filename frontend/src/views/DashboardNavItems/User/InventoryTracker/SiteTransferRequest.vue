@@ -396,7 +396,7 @@ export default {
       };
 
       axios
-        .post(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, formData, config)
+        .post(`http://10.109.2.112:8081/api/inventory/transfer/${id}`, formData, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -412,7 +412,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/sourcingForTransfer",
+          "http://10.109.2.112:8081/api/inventory/sourcingForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

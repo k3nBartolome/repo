@@ -281,7 +281,7 @@
         try {
           const token = this.$store.state.token;
 
-          const response = await axios.get("http://127.0.0.1:8000/api/no_srv2", {
+          const response = await axios.get("http://10.109.2.112:8081/api/no_srv2", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -308,7 +308,7 @@
         try {
           const token = this.$store.state.token;
           const response = await axios.get(
-            "http://127.0.0.1:8000/api/referralsDate",
+            "http://10.109.2.112:8081/api/referralsDate",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -358,7 +358,7 @@
         try {
           const token = this.$store.state.token;
           const response = await axios.get(
-            "http://127.0.0.1:8000/api/perx_sitev2",
+            "http://10.109.2.112:8081/api/perx_sitev2",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -384,7 +384,7 @@
         try {
           const token = this.$store.state.token;
           const response = await axios.get(
-            "http://127.0.0.1:8000/api/no_srv2_export",
+            "http://10.109.2.112:8081/api/no_srv2_export",
             {
               params: {
                 filter_lastname: this.filterLastName,

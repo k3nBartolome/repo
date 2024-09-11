@@ -609,6 +609,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -630,6 +631,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->get();
 
@@ -651,6 +653,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
             ->get();
@@ -673,6 +676,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -697,6 +701,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Approved')
@@ -721,6 +726,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Site Request')
             ->where('status', 'Denied')
             ->get();
@@ -743,6 +749,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->where('transaction_type', 'Site Request')
             ->where('status', 'Cancelled')
@@ -766,6 +773,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Site Request')
             ->get();
 
@@ -787,6 +795,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'REMX Transfer Request')
             ->where(function ($query) {
                 $query->whereNull('approved_status')
@@ -816,6 +825,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Sourcing Transfer Request')
             ->where(function ($query) {
                 $query->whereNull('approved_status')
@@ -832,6 +842,9 @@ class InventoryController extends Controller
 
     public function sourcingItemHistory($id)
     {
+        // Debugging: Check the value of $id
+        \Log::info('sourcingItemHistory called with id: ' . $id);
+    
         $inventory = Inventory::with([
             'site',
             'item',
@@ -845,6 +858,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->where('inventory_item_id', $id)
             ->get()
@@ -855,6 +869,10 @@ class InventoryController extends Controller
                     'transaction_type' => $item->transaction_type,
                     'date_requested' => $item->date_requested,
                     'quantity_approved' => $item->quantity_approved,
+                    'original_request' => $item->original_request,
+                    'approved_status' => $item->approved_status,
+                    'received_status' => $item->received_status,
+                    'received_quantity' => $item->received_quantity,
                     'cost' => $item->cost,
                     'file_name' => $item->file_name,
                     'file_path' => $item->file_path,
@@ -888,14 +906,21 @@ class InventoryController extends Controller
                     'transferred_to' => $item->transferredTo ? $item->transferredTo->name : 'N/A',
                 ];
             });
-
+    
         return response()->json(['inventory' => $inventory]);
     }
+    
 
     public function remxItemHistory(Request $request)
     {
         $id = $request->input('item_id');
-
+    
+        // Debugging: Check the value of $id
+        \Log::info('remxItemHistory called with item_id: ' . $id);
+    
+        // Ensure $id is an integer
+        $id = (int) $id;
+    
         $inventory = Inventory::with([
             'site',
             'item',
@@ -909,6 +934,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])
             ->where('item_id', $id)
             ->get()
@@ -919,6 +945,10 @@ class InventoryController extends Controller
                     'transaction_type' => $item->transaction_type,
                     'date_requested' => $item->date_requested,
                     'quantity_approved' => $item->quantity_approved,
+                    'original_request' => $item->original_request,
+                    'approved_status' => $item->approved_status,
+                    'received_status' => $item->received_status,
+                    'received_quantity' => $item->received_quantity,
                     'cost' => $item->cost,
                     'file_name' => $item->file_name,
                     'file_path' => $item->file_path,
@@ -952,9 +982,10 @@ class InventoryController extends Controller
                     'transferred_to' => $item->transferredTo ? $item->transferredTo->name : 'N/A',
                 ];
             });
-
+    
         return response()->json(['inventory' => $inventory]);
     }
+    
 
     public function allrequest()
     {
@@ -971,6 +1002,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Transfer Request')
 
             ->get();
@@ -993,6 +1025,7 @@ class InventoryController extends Controller
             'cancelledBy',
             'siteInventory',
             'transferredFrom',
+            'transferredTo',
         ])->where('transaction_type', 'Transfer Request')
             ->where('status', null)
             ->get();
