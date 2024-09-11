@@ -59,7 +59,7 @@ class ClassesController extends Controller
         ELSE ''
     END as Wave
 "),
-                DB::raw("'Account Associate' as Position"),
+DB::raw("'Account Associate' as Position"),
                 'SitesDetails.Name as Sites',
                 'PayRateDetails.BasicPayTraining as Salary',
                 'PayRateDetails.NightDifferentialTraining as ND_Training',
@@ -1116,15 +1116,15 @@ class ClassesController extends Controller
             }
         }
 
-        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-            $filterDateStart = $request->input('filter_date_start');
-            $filterDateEnd = $request->input('filter_date_end');
-            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+        $filterDateStart = $request->input('filter_date_start');
+        $filterDateEnd = $request->input('filter_date_end');
+        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+        $startDate = date('Y-m-d', strtotime($filterDateStart));
+        $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
-                $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
-            }
+        $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
+        }
         }
 
         if ($request->has('filter_type')) {
@@ -1208,10 +1208,10 @@ class ClassesController extends Controller
             $filterDateStart = $request->input('filter_date_start');
             $filterDateEnd = $request->input('filter_date_end');
             if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+            $startDate = date('Y-m-d', strtotime($filterDateStart));
+            $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
 
-                $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
+            $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
             }
         }
 
@@ -5927,7 +5927,7 @@ class ClassesController extends Controller
                     })
                     ->where('site_id', $programId)
                     ->where('within_sla', 'Outside SLA - Increase in Demand')
-                    /* ->orWhere('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)') */
+                /* ->orWhere('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)') */
                     ->where('status', 'Active')
                     ->get();
 
@@ -11511,12 +11511,12 @@ class ClassesController extends Controller
             $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2) . '%';
             $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
             $classNumber = intval($classTarget) % 15 > 1
-                ? floor(intval($classTarget) / 15) + 1
-                : floor(intval($classTarget) / 15);
+            ? floor(intval($classTarget) / 15) + 1
+            : floor(intval($classTarget) / 15);
             $open = max(0, intval($classNumber) - intval($filled));
             $capStart = intval($showUpsTotal) > intval($classTarget)
-                ? intval($classTarget)
-                : intval($showUpsTotal);
+            ? intval($classTarget)
+            : intval($showUpsTotal);
             $internalHires = ($showUpsInternal >= $classTarget && ($deficit === '' || $deficit === 0)) ? 1 : 0;
             $pipelineTarget = ($pipelineTotal > $classTarget) ? $classTarget : $pipelineTotal;
             $staffingModel->cap_starts = $capStart;

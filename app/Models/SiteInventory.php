@@ -29,6 +29,8 @@ class SiteInventory extends Model
         'transferred_quantity',
         'transferred_to',
         'transferred_date',
+        'received_by',
+        'date_received',
         'file_name',
         'path',
     ];

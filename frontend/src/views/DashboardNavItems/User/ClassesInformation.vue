@@ -2,7 +2,7 @@
   <div class="py-0">
     <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">Classes</h2>
+        <h2 class="text-3xl font-bold text-gray-900">Class Salary Package</h2>
       </div>
     </header>
     <div class="p-4 bg-gray-100">
@@ -151,58 +151,57 @@ export default {
       sites: [],
       lobs: [],
       columns: [
-        {
-          data: "No",
-          title: "No",
-        },
-        {
-          data: "HRID",
-          title: "HRID",
-          render: function (data) {
-            return data ? data : "TBA";
-          },
-        },
-        { data: "LastName", title: " NAME" },
-        { data: "FirstName", title: "FIRST NAME" },
-        { data: "MiddleName", title: "MIDDLE NAME" },
-        {
-          data: "DateHired",
-          title: "DATE HIRED",
-          render: function (data) {
-            return data ? data : ""; // If data is null or undefined, return 'TBA'
-          },
-        },
-        { data: "Lob", title: "DEPT/LOB/ACCOUNT" },
-        { data: "Wave", title: "TEAM/WAVE" },
-        { data: "Position", title: "POSITION" },
-        { data: "Sites", title: "BLDG ASSIGNMENT" },
-        { data: "Salary", title: "MONTHLY SALARY" },
-        {
-          data: "ND_Training",
-          title: "ND%-TRAINING",
-          render: function (data) {
-            return `${data}%`;
-          },
-        },
-        {
-          data: "ND_Production",
-          title: "ND%-PRODUCTION",
-          render: function (data) {
-            return `${data}%`;
-          },
-        },
-        {
-          data: "MS_Production",
-          title: "MID-SHIFT%-PRODUCTION",
-          render: function (data) {
-            return `${data}%`;
-          },
-        },
-        {
-          data: "ComplexityAllowance",
-          title: "COMPLEXITY ALLOWANCE(UPON START)",
-        },
-      ],
+  {
+    data: "No",
+    title: "No",
+
+  },
+  {
+    data: "HRID",
+    title: "HRID",
+    render: function (data) {
+      return data ? data : "TBA";
+    },
+  },
+  { data: "LastName", title: " NAME" },
+  { data: "FirstName", title: "FIRST NAME" },
+  { data: "MiddleName", title: "MIDDLE NAME" },
+  {
+    data: "DateHired",
+    title: "DATE HIRED",
+    render: function (data) {
+      return data ? data : ""; // If data is null or undefined, return 'TBA'
+    },
+  },
+  { data: "Lob", title: "DEPT/LOB/ACCOUNT" },
+  { data: "Wave", title: "TEAM/WAVE" },
+  { data: "Position", title: "POSITION" },
+  { data: "Sites", title: "BLDG ASSIGNMENT" },
+  { data: "Salary", title: "MONTHLY SALARY" },
+  {
+    data: "ND_Training",
+    title: "ND%-TRAINING",
+    render: function (data) {
+      return `${(data)}%`;
+    },
+  },
+  {
+    data: "ND_Production",
+    title: "ND%-PRODUCTION",
+    render: function (data) {
+      return `${(data)}%`;
+    },
+  },
+  {
+    data: "MS_Production",
+    title: "MID-SHIFT%-PRODUCTION",
+    render: function (data) {
+      return `${(data)}%`;
+    },
+  },
+  { data: "ComplexityAllowance", title: "COMPLEXITY ALLOWANCE(UPON START)" },
+],
+
 
       filterLoading: false,
       exportLoading: false,
@@ -218,7 +217,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/sitev2",
+          "http://10.109.2.112:8081/api/sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -240,7 +239,7 @@ export default {
     async getLob(filterSite = "") {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/lobv2", {
+        const response = await axios.get("http://10.109.2.112:8081/api/lobv2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -270,7 +269,7 @@ export default {
           filter_wave: this.filterWave,
         });
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classes_information",
+          "http://10.109.2.112:8081/api/classes_information",
           {
             params: {
               filter_site: this.filterSite,
@@ -297,68 +296,67 @@ export default {
     },
 
     async exportToExcel() {
-      this.exportLoading = true;
-      try {
-        const token = this.$store.state.token;
+  this.exportLoading = true;
+  try {
+    const token = this.$store.state.token;
 
-        // Extract unique LOB and WAVE values from the classes data
-        const lobSet = new Set(
-          this.classes.map((item) => item.Lob).filter(Boolean)
-        );
-        const waveSet = new Set(
-          this.classes.map((item) => item.Wave).filter(Boolean)
-        );
+    // Extract unique LOB and WAVE values from the classes data
+    const lobSet = new Set(this.classes.map(item => item.Lob).filter(Boolean));
+    const waveSet = new Set(this.classes.map(item => item.Wave).filter(Boolean));
 
-        let fileName = "SALARY PACKAGE";
+    let fileName = "SALARY PACKAGE";
 
-        // Set filename based on the number of unique LOB and WAVE values
-        if (lobSet.size === 1 && waveSet.size === 1) {
-          fileName += ` -${[...lobSet][0]} ${[...waveSet][0]}`;
-        } else if (lobSet.size > 1 || waveSet.size > 1) {
-          if (lobSet.size > 1) {
-            fileName += ``;
-          }
-          if (waveSet.size > 1) {
-            fileName += ``;
-          }
-        }
-
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/classes_information_export",
-          {
-            params: {
-              filter_site: this.filterSite,
-              filter_lob: this.filterLob,
-              filter_wave: this.filterWave,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob", // Ensures the response is treated as a binary Blob
-          }
-        );
-
-        // Create a Blob from the response data
-        const blob = new Blob([response.data], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-
-        // Create a link element to trigger the download
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        link.href = url;
-        link.download = `${fileName}.xlsx`; // Name of the downloaded file
-        link.click();
-
-        // Clean up the URL object
-        window.URL.revokeObjectURL(url);
-      } catch (error) {
-        console.error("Error exporting filtered data to Excel:", error);
-        // Optionally show an error message to the user here
-      } finally {
-        this.exportLoading = false; // Set export loading to false when the request completes
+    // Set filename based on the number of unique LOB and WAVE values
+    if (lobSet.size === 1 && waveSet.size === 1) {
+      fileName += ` -${[...lobSet][0]} ${[...waveSet][0]}`;
+    } else if (lobSet.size > 1 || waveSet.size > 1) {
+      if (lobSet.size > 1) {
+        fileName += ``;
       }
-    },
+      if (waveSet.size > 1) {
+        fileName += ``;
+      }
+    }
+
+    const response = await axios.get(
+      "http://10.109.2.112:8081/api/classes_information_export",
+      {
+        params: {
+          filter_site: this.filterSite,
+          filter_lob: this.filterLob,
+          filter_wave: this.filterWave,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        responseType: "blob", // Ensures the response is treated as a binary Blob
+      }
+    );
+
+    // Create a Blob from the response data
+    const blob = new Blob([response.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    // Create a link element to trigger the download
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${fileName}.xlsx`; // Name of the downloaded file
+    link.click();
+
+    // Clean up the URL object
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error("Error exporting filtered data to Excel:", error);
+    // Optionally show an error message to the user here
+  } finally {
+    this.exportLoading = false; // Set export loading to false when the request completes
+  }
+}
+
+
+
   },
 };
 </script>

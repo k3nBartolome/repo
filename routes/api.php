@@ -181,6 +181,11 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('class_exists', [ClassesController::class, 'classExists']);
     Route::get('class_exists2', [ClassesController::class, 'classExists2']);
 
+    Route::get('referralsDate', [ClassesController::class, 'referralsDate']);
+    Route::get('sourcing-item-history/{id}', [InventoryController::class, 'sourcingItemHistory']);
+    Route::get('remx-item-history/{id}', [InventoryController::class, 'remxItemHistory']);
+    Route::get('inventory/remxForTransfer', [InventoryController::class, 'remxForTransfer']);
+    Route::post('inventory/transferremx/{id}', [InventoryController::class, 'receivedRemxTransfer']);
     // Class Staffing
     Route::post('classesstaffing', [ClassStaffingController::class, 'store']);
     Route::get('classesstaffing/{id}', [ClassStaffingController::class, 'show']);
@@ -264,8 +269,3 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::get('referralsDate', [ClassesController::class, 'referralsDate']);
-Route::get('sourcing-item-history/{id}', [InventoryController::class, 'sourcingItemHistory']);
-Route::get('remx-item-history/{id}', [InventoryController::class, 'remxItemHistory']);
-Route::get('inventory/remxForTransfer', [InventoryController::class, 'remxForTransfer']);
-Route::post('inventory/transferremx/{id}', [InventoryController::class, 'receivedRemxTransfer']);
