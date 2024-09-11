@@ -191,6 +191,107 @@
         </div>
       </div>
     </div>
+    <div class="py-0 px-4">
+      <div class="px-4 py-0 bg-white">
+        <div
+          class="fixed inset-0 z-50 flex items-center justify-center modal mx-4"
+          v-if="showModalTransaction"
+        >
+          <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
+          <div
+            class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4"
+          >
+            <header class="px-4 py-2 border-b-2 border-gray-200">
+              <h2 class="text-lg font-semibold text-gray-800">
+                Item Transaction
+              </h2>
+            </header>
+            <button
+              @click="showModalTransaction = false"
+              class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
+              </svg>
+            </button>
+            <div class="modal-scrollable-content">
+              <table
+                class="min-w-full border-collapse border-2 border-gray-300"
+              >
+                <thead>
+                  <tr
+                    class="border-b-4 border-gray-300 bg-gray-100 text-center"
+                  >
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Transaction Type
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Quantity
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Transferred Quantity
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Transferred To
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Transferred From
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Status
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      Received Status
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="inventory in inventory"
+                    :key="inventory.id"
+                    class="border-2 border-black"
+                  >
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.transaction_type }}
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.quantity_approved }}
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.transferred_quantity }}
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.transferred_from }}
+                    </th>
+
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.transferred_to }}
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.approved_status }}
+                    </th>
+                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                      {{ inventory.received_status }}
+                    </th>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="py-0">
       <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
         <div
@@ -614,6 +715,7 @@ export default {
       loading: false,
       selectedFile: null,
       previewImage: null,
+      showModalTransaction: false,
       columns: [
         {
           title: "No",
@@ -650,6 +752,25 @@ export default {
                 : ""
             }
           `;
+          }.bind(this),
+        },
+        {
+          data: "id",
+          title: "Actions",
+          orderable: false,
+          searchable: false,
+          render: function (data) {
+            const isUser = this.isUser;
+            const isRemx = this.isRemx;
+
+            return `
+      ${
+        isUser || isRemx
+          ? `<button class="w-20 text-xs btn btn-primary" data-id="${data}"
+                onclick="window.vm.viewInventory(${data})">View</button>`
+          : ""
+      }
+    `;
           }.bind(this),
         },
         { data: "site_name", title: "Site" },
@@ -741,8 +862,46 @@ export default {
     window.vm = this;
     this.getSites();
     this.getItems();
+    this.getInventory();
   },
   methods: {
+    async viewInventory(itemId) {
+      try {
+        await this.getInventory(itemId); // Fetch inventory data
+        this.openModalTransaction(this.inventory); // Open modal with the fetched data
+      } catch (error) {
+        console.error("Error fetching inventory data:", error);
+      }
+    },
+
+    async getInventory(itemId) {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          `http://127.0.0.1:8000/api/sourcing-item-history/${itemId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          this.inventory = response.data.inventory;
+          console.log(this.inventory); // Keep this for debugging purposes
+        } else {
+          console.log("Error fetching inventory");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
+    openModalTransaction(inventoryData) {
+      // Logic to open the modal and display the inventory data
+      this.modalData = inventoryData; // Bind inventoryData to modal
+      this.showModalTransaction = true; // Show modal
+    },
     openImageModal(imageUrl) {
       const modal = document.querySelector(".image-modal");
       const enlargedImage = document.querySelector(".enlarged-image");
@@ -943,13 +1102,12 @@ export default {
 
       const formData = new FormData();
       formData.append("file_name", this.selectedFile);
-        formData.append("inventory_item_id", this.items_selected);
-        formData.append("site_id", this.sites_selected);
-        formData.append("quantity_approved", this.transferred_quantity);
-        formData.append("transferred_by", this.$store.state.user_id);
-        formData.append("transferred_to", this.sites_selected);
-        formData.append("transferred_from", this.sites1_selected);
-
+      formData.append("inventory_item_id", this.items_selected);
+      formData.append("site_id", this.sites_selected);
+      formData.append("quantity_approved", this.transferred_quantity);
+      formData.append("transferred_by", this.$store.state.user_id);
+      formData.append("transferred_to", this.sites_selected);
+      formData.append("transferred_from", this.sites1_selected);
 
       axios
         .post("http://127.0.0.1:8000/api/transfer", formData, {
@@ -1018,19 +1176,18 @@ export default {
 
       const formData = new FormData();
       formData.append("file_name", this.selectedFile);
-formData.append("item_name", this.item_name);
-formData.append("quantity", this.quantity);
-formData.append("original_quantity", this.quantity);
-formData.append("type", this.type);
-formData.append("cost", this.cost);
-formData.append("total_cost", this.total_cost);
-formData.append("category", this.category);
-formData.append("budget_code", this.budget_code);
-formData.append("date_expiry", this.date_expiry);
-formData.append("site_id", this.sites_selected);
-formData.append("is_active", 1);
-formData.append("created_by", this.$store.state.user_id);
-
+      formData.append("item_name", this.item_name);
+      formData.append("quantity", this.quantity);
+      formData.append("original_quantity", this.quantity);
+      formData.append("type", this.type);
+      formData.append("cost", this.cost);
+      formData.append("total_cost", this.total_cost);
+      formData.append("category", this.category);
+      formData.append("budget_code", this.budget_code);
+      formData.append("date_expiry", this.date_expiry);
+      formData.append("site_id", this.sites_selected);
+      formData.append("is_active", 1);
+      formData.append("created_by", this.$store.state.user_id);
 
       axios
         .post("http://127.0.0.1:8000/api/items_site_supply", formData, {

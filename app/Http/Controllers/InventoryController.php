@@ -320,7 +320,7 @@ class InventoryController extends Controller
 
     public function receivedTransfer(Request $request, $id)
     {
-        $inventory = Inventory::find($id);
+        $inventory = Inventory::with('items')->find($id);
 
         $validator = Validator::make($request->all(), [
             'received_by' => 'required',
@@ -403,90 +403,119 @@ class InventoryController extends Controller
         ]);
     }
 
+
+
     public function receivedRemxTransfer(Request $request, $id)
     {
-        $inventory = Inventory::find($id);
+        DB::beginTransaction();
 
-        $validator = Validator::make($request->all(), [
-            'received_by' => 'required',
-            'received_status' => 'required',
-            'received_quantity' => 'nullable',
-            'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
-        ]);
+        try {
+            // Load the inventory record with its related items
+            $inventory = Inventory::with('items')->find($id);
 
-        if ($validator->fails()) {
-            return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
+            if (!$inventory) {
+                DB::rollBack(); // Rollback the transaction
+                return response()->json(['error' => 'Inventory record not found.'], 404);
+            }
+
+            if (!$inventory->items) {
+                DB::rollBack(); // Rollback the transaction
+                return response()->json(['error' => 'Related item not found for this inventory.'], 404);
+            }
+
+            // Validation and file upload
+            $validator = Validator::make($request->all(), [
+                'received_by' => 'required',
+                'received_status' => 'required',
+                'received_quantity' => 'nullable',
+                'file_name' => 'required|image|mimes:jpeg,png,jpg,gif',
+            ]);
+
+            if ($validator->fails()) {
+                DB::rollBack(); // Rollback the transaction
+                return response()->json(['error' => 'Validation failed', 'messages' => $validator->errors()], 400);
+            }
+
+            $imagePath = $request->file('file_name')->store('storage', 'public');
+
+            if ($request->input('received_status') === 'partial') {
+                $inventory->status = 'Transferred Partial';
+                $inventory->approved_status = null;
+                $inventory->file_path = $imagePath;
+                $inventory->received_quantity = $request->input('received_quantity');
+            } elseif ($request->input('received_status') === 'complete') {
+                $inventory->status = 'Transferred All';
+                $inventory->approved_status = 'Received';
+                $inventory->file_path = $imagePath;
+                $inventory->received_quantity = $inventory->quantity_approved;
+            }
+
+            $inventory->fill([
+                'received_by' => $request->input('received_by'),
+                'received_status' => $request->input('received_status'),
+            ]);
+            $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
+            $inventory->save();
+
+            $totalCost = $inventory->items->cost * $inventory->received_quantity;
+
+            // Update or create item record
+            $items = Items::where('item_name', $inventory->items->item_name)
+                ->where('budget_code', $inventory->items->budget_code)
+                ->where('site_id', $inventory->transferred_to)
+                ->first();
+
+            if ($items) {
+                $items->site_id = $inventory->transferred_to;
+                $items->quantity += $inventory->received_quantity;
+                $items->original_quantity += $inventory->received_quantity;
+                $items->total_cost += $totalCost;
+                $items->received_by = $inventory->received_by;
+                $items->transferred_by = $inventory->transferred_by;
+                $items->transferred_date = $inventory->transferred_date;
+                $items->transferred_from = $inventory->transferred_from;
+                $items->file_name = $inventory->file_name;
+                $items->file_path = $inventory->file_path;
+                $items->save();
+            } else {
+                $items = new Items();
+                $items->site_id = $inventory->transferred_to;
+                $items->item_id = $inventory->items->id; // Ensure this matches the item_id
+                $items->item_name = $inventory->items->item_name;
+                $items->quantity = $inventory->received_quantity;
+                $items->original_quantity = $inventory->received_quantity;
+                $items->budget_code = $inventory->items->budget_code;
+                $items->type = $inventory->items->type;
+                $items->category = $inventory->items->category;
+                $items->date_expiry = $inventory->items->date_expiry;
+                $items->is_active = $inventory->items->is_active;
+                $items->received_by = $inventory->received_by;
+                $items->date_received = $inventory->date_received;
+                $items->cost = $inventory->items->cost;
+                $items->total_cost = $totalCost;
+                $items->transferred_by = $inventory->transferred_by;
+                $items->transferred_date = $inventory->transferred_date;
+                $items->transferred_from = $inventory->transferred_from;
+                $items->file_name = $inventory->file_name;
+                $items->file_path = $inventory->file_path;
+                $items->save();
+            }
+
+            $inventory->quantity_approved -= $inventory->received_quantity;
+            $inventory->save();
+
+            DB::commit();
+
+            return response()->json([
+                'Request' => $inventory,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => 'An error occurred.', 'message' => $e->getMessage()], 500);
         }
-        $imagePath = $request->file('file_name')->store('storage', 'public');
-        if ($request->input('received_status') === 'partial') {
-            $inventory->status = 'Transferred Partial';
-            $inventory->approved_status = null;
-            $inventory->file_path = $imagePath;
-            $inventory->received_quantity = $request->input('received_quantity');
-        } elseif ($request->input('received_status') === 'complete') {
-            $inventory->status = 'Transferred All';
-            $inventory->approved_status = 'Received';
-            $inventory->file_path = $imagePath;
-            $inventory->received_quantity = $inventory->quantity_approved;
-        }
-
-        $inventory->fill([
-            'received_by' => $request->input('received_by'),
-            'received_status' => $request->input('received_status'),
-        ]);
-        $inventory->date_received = Carbon::now()->format('Y-m-d H:i');
-        $inventory->save();
-
-        $totalCost = $inventory->items->cost * $inventory->received_quantity;
-
-        $items = Items::where('item_name', $inventory->items->item_name)
-            ->where('budget_code', $inventory->items->budget_code)
-            ->where('site_id', $inventory->transferred_to)
-            ->first();
-
-        if ($items) {
-            $items->site_id = $inventory->transferred_to;
-            $items->quantity += $inventory->received_quantity;
-            $items->original_quantity += $inventory->received_quantity;
-            $items->total_cost += $totalCost;
-            $items->received_by = $inventory->received_by;
-            $items->transferred_by = $inventory->transferred_by;
-            $items->transferred_date = $inventory->transferred_date;
-            $items->transferred_from = $inventory->transferred_from;
-            $items->file_name = $inventory->file_name;
-            $items->file_path = $inventory->file_path;
-            $items->save();
-        } else {
-            $items = new Items();
-            $items->site_id = $inventory->transferred_to;
-            $items->item_less_id = $inventory->items->item_less_id;
-            $items->item_name = $inventory->items->item_name;
-            $items->quantity = $inventory->received_quantity;
-            $items->original_quantity = $inventory->received_quantity;
-            $items->budget_code = $inventory->items->budget_code;
-            $items->type = $inventory->items->type;
-            $items->category = $inventory->items->category;
-            $items->date_expiry = $inventory->items->date_expiry;
-            $items->site_id = $inventory->site_id;
-            $items->is_active = $inventory->items->is_active;
-            $items->received_by = $inventory->received_by;
-            $items->date_received = $inventory->date_received;
-            $items->cost = $inventory->items->cost;
-            $items->total_cost = $totalCost;
-            $items->transferred_by = $inventory->transferred_by;
-            $items->transferred_date = $inventory->transferred_date;
-            $items->transferred_from = $inventory->transferred_from;
-            $items->file_name = $inventory->file_name;
-            $items->file_path = $inventory->file_path;
-            $items->save();
-        }
-        $inventory->quantity_approved -= $inventory->received_quantity;
-        $inventory->save();
-
-        return response()->json([
-            'Request' => $inventory,
-        ]);
     }
+
+
 
     public function deniedItem(Request $request, $id)
     {
@@ -542,7 +571,7 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::with([
             'site',
-            'item',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -563,8 +592,8 @@ class InventoryController extends Controller
     public function indexAll()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -584,8 +613,8 @@ class InventoryController extends Controller
     public function indexAllTransaction()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -605,8 +634,8 @@ class InventoryController extends Controller
     public function approved()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -627,8 +656,8 @@ class InventoryController extends Controller
     public function approvedReceived()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -651,8 +680,8 @@ class InventoryController extends Controller
     public function approvedPending()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -675,8 +704,8 @@ class InventoryController extends Controller
     public function denied()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -697,8 +726,8 @@ class InventoryController extends Controller
     public function cancelled()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -720,8 +749,8 @@ class InventoryController extends Controller
     public function allstatus()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -741,8 +770,8 @@ class InventoryController extends Controller
     public function remxForTransfer()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -754,6 +783,14 @@ class InventoryController extends Controller
             'siteInventory',
             'transferredFrom',
         ])->where('transaction_type', 'REMX Transfer Request')
+            ->where(function ($query) {
+                $query->whereNull('approved_status')
+                    ->orWhere('approved_status', 'Received');
+            })
+            ->where(function ($query) {
+                $query->whereNull('received_status')
+                    ->orWhere('received_status', 'partial');
+            })
             ->get();
 
         return response()->json(['inventory' => $inventory]);
@@ -762,8 +799,8 @@ class InventoryController extends Controller
     public function sourcingForTransfer()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -775,16 +812,153 @@ class InventoryController extends Controller
             'siteInventory',
             'transferredFrom',
         ])->where('transaction_type', 'Sourcing Transfer Request')
+            ->where(function ($query) {
+                $query->whereNull('approved_status')
+                    ->orWhere('approved_status', 'Received');
+            })
+            ->where(function ($query) {
+                $query->whereNull('received_status')
+                    ->orWhere('received_status', 'partial');
+            })
             ->get();
 
         return response()->json(['inventory' => $inventory]);
     }
 
+    public function sourcingItemHistory($id)
+    {
+
+        $inventory = Inventory::with([
+            'site',
+            'items',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+            'siteInventory',
+            'transferredFrom',
+        ])
+            ->where('inventory_item_id', $id)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'transaction_no' => $item->transaction_no,
+                    'transaction_type' => $item->transaction_type,
+                    'date_requested' => $item->date_requested,
+                    'quantity_approved' => $item->quantity_approved,
+                    'cost' => $item->cost,
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
+                    'date_added' => $item->created_at,
+                    'site' => $item->site ? [
+                        'id' => $item->site->id,
+                        'name' => $item->site->name,
+                        'description' => $item->site->description,
+                        'region' => $item->site->region,
+                    ] : null,
+                    'site_inventory' => $item->siteInventory ? [
+                        'id' => $item->siteInventory->id,
+                        'item_less_id' => $item->siteInventory->item_less_id,
+                        'item_name' => $item->siteInventory->item_name,
+                        'quantity' => $item->siteInventory->quantity,
+                        'original_quantity' => $item->siteInventory->original_quantity,
+                        'total_cost' => $item->siteInventory->total_cost,
+                        'item_id' => $item->siteInventory->item_id,
+                        'type' => $item->siteInventory->type,
+                        'category' => $item->siteInventory->category,
+                    ] : null,
+                    'released_by' => $item->releasedBy ? $item->releasedBy->name : 'N/A',
+                    'approved_by' => $item->approvedBy ? $item->approvedBy->name : 'N/A',
+                    'denied_by' => $item->deniedBy ? $item->deniedBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'processed_by' => $item->processedBy ? $item->processedBy->name : 'N/A',
+                    'requested_by' => $item->requestedBy ? $item->requestedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'cancelled_by' => $item->cancelledBy ? $item->cancelledBy->name : 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
+                    'transferred_to' => $item->transferredTo ? $item->transferredTo->name : 'N/A',
+                ];
+            });
+
+        return response()->json(['inventory' => $inventory]);
+    }
+    public function remxItemHistory(Request $request)
+    {
+        $id = $request->input('item_id');
+
+        $inventory = Inventory::with([
+            'site',
+            'items',
+            'releasedBy',
+            'approvedBy',
+            'deniedBy',
+            'receivedBy',
+            'processedBy',
+            'requestedBy',
+            'transferredBy',
+            'cancelledBy',
+            'siteInventory',
+            'transferredFrom',
+        ])
+            ->where('item_id', $id)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'id' => $item->id,
+                    'transaction_no' => $item->transaction_no,
+                    'transaction_type' => $item->transaction_type,
+                    'date_requested' => $item->date_requested,
+                    'quantity_approved' => $item->quantity_approved,
+                    'cost' => $item->cost,
+                    'file_name' => $item->file_name,
+                    'file_path' => $item->file_path,
+                    'date_added' => $item->created_at,
+                    'site' => $item->site ? [
+                        'id' => $item->site->id,
+                        'name' => $item->site->name,
+                        'description' => $item->site->description,
+                        'region' => $item->site->region,
+                    ] : null,
+                    'site_inventory' => $item->siteInventory ? [
+                        'id' => $item->siteInventory->id,
+                        'item_less_id' => $item->siteInventory->item_less_id,
+                        'item_name' => $item->siteInventory->item_name,
+                        'quantity' => $item->siteInventory->quantity,
+                        'original_quantity' => $item->siteInventory->original_quantity,
+                        'total_cost' => $item->siteInventory->total_cost,
+                        'item_id' => $item->siteInventory->item_id,
+                        'type' => $item->siteInventory->type,
+                        'category' => $item->siteInventory->category,
+                    ] : null,
+                    'released_by' => $item->releasedBy ? $item->releasedBy->name : 'N/A',
+                    'approved_by' => $item->approvedBy ? $item->approvedBy->name : 'N/A',
+                    'denied_by' => $item->deniedBy ? $item->deniedBy->name : 'N/A',
+                    'received_by' => $item->receivedBy ? $item->receivedBy->name : 'N/A',
+                    'processed_by' => $item->processedBy ? $item->processedBy->name : 'N/A',
+                    'requested_by' => $item->requestedBy ? $item->requestedBy->name : 'N/A',
+                    'transferred_by' => $item->transferredBy ? $item->transferredBy->name : 'N/A',
+                    'cancelled_by' => $item->cancelledBy ? $item->cancelledBy->name : 'N/A',
+                    'transferred_from' => $item->transferredFrom ? $item->transferredFrom->name : 'N/A',
+                    'transferred_to' => $item->transferredTo ? $item->transferredTo->name : 'N/A',
+                ];
+            });
+
+        return response()->json(['inventory' => $inventory]);
+    }
+
+
+
+
     public function allrequest()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',
@@ -805,8 +979,8 @@ class InventoryController extends Controller
     public function alltransfer()
     {
         $inventory = Inventory::with([
-           'site',
-            'item',
+            'site',
+            'items',
             'releasedBy',
             'approvedBy',
             'deniedBy',

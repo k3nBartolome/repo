@@ -59,10 +59,12 @@ class Inventory extends Model
         return $this->belongsTo(Site::class, 'site_id');
     }
 
-    public function item()
+    public function items()
     {
-        return $this->belongsTo(Items::class, 'item_id');
+        return $this->belongsTo(Items::class, 'item_id'); // 'item_id' in Inventory points to 'id' in Items
     }
+
+
 
     public function siteInventory()
     {

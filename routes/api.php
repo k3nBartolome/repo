@@ -265,3 +265,5 @@ Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
 Route::get('referralsDate', [ClassesController::class, 'referralsDate']);
+Route::get('sourcing-item-history/{id}', [InventoryController::class, 'sourcingItemHistory']);
+Route::get('remx-item-history/{id}', [InventoryController::class, 'remxItemHistory']);
