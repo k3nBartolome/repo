@@ -82,28 +82,28 @@
                   :key="inventory.id"
                   class="border-2 border-black"
                 >
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transaction_type }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.original_request }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_quantity }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_from.name }}
-                  </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transaction_type }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.original_request }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.received_quantity }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transferred_from }}
+                </th>
 
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.transferred_to.name }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.approved_status }}
-                  </th>
-                  <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                    {{ inventory.received_status }}
-                  </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.transferred_to }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.approved_status }}
+                </th>
+                <th class="px-2 py-2 truncate border-2 border-gray-300">
+                  {{ inventory.received_status }}
+                </th>
                 </tr>
               </tbody>
             </table>

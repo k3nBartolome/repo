@@ -191,15 +191,15 @@
         </div>
       </div>
     </div>
-    <div class="py-0 px-4">
+    <div class="px-4 py-0">
       <div class="px-4 py-0 bg-white">
         <div
-          class="fixed inset-0 z-50 flex items-center justify-center modal mx-4"
+          class="fixed inset-0 z-50 flex items-center justify-center mx-4 modal"
           v-if="showModalTransaction"
         >
           <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
           <div
-            class="min-w-full max-w-3xl w-auto p-4 bg-white rounded shadow-lg modal-content px-4"
+            class="w-auto max-w-3xl min-w-full p-4 px-4 bg-white rounded shadow-lg modal-content"
           >
             <header class="px-4 py-2 border-b-2 border-gray-200">
               <h2 class="text-lg font-semibold text-gray-800">
@@ -227,31 +227,31 @@
             </button>
             <div class="modal-scrollable-content">
               <table
-                class="min-w-full border-collapse border-2 border-gray-300"
+                class="min-w-full border-2 border-collapse border-gray-300"
               >
                 <thead>
                   <tr
-                    class="border-b-4 border-gray-300 bg-gray-100 text-center"
+                    class="text-center bg-gray-100 border-b-4 border-gray-300"
                   >
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Transaction Type
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Quantity
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Transferred Quantity
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Transferred To
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Transferred From
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Status
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       Received Status
                     </th>
                   </tr>
@@ -262,26 +262,26 @@
                     :key="inventory.id"
                     class="border-2 border-black"
                   >
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       {{ inventory.transaction_type }}
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                      {{ inventory.quantity_approved }}
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
+                      {{ inventory.original_request }}
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
-                      {{ inventory.transferred_quantity }}
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
+                      {{ inventory.received_quantity }}
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       {{ inventory.transferred_from }}
                     </th>
 
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       {{ inventory.transferred_to }}
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       {{ inventory.approved_status }}
                     </th>
-                    <th class="border-2 border-gray-300 px-2 py-2 truncate">
+                    <th class="px-2 py-2 truncate border-2 border-gray-300">
                       {{ inventory.received_status }}
                     </th>
                   </tr>

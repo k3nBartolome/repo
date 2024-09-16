@@ -217,7 +217,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/sitev2",
+          "http://127.0.0.1:8000/api/sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -239,7 +239,7 @@ export default {
     async getLob(filterSite = "") {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8081/api/lobv2", {
+        const response = await axios.get("http://127.0.0.1:8000/api/lobv2", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -269,7 +269,7 @@ export default {
           filter_wave: this.filterWave,
         });
         const response = await axios.get(
-          "http://10.109.2.112:8081/api/classes_information",
+          "http://127.0.0.1:8000/api/classes_information",
           {
             params: {
               filter_site: this.filterSite,
@@ -319,7 +319,7 @@ export default {
     }
 
     const response = await axios.get(
-      "http://10.109.2.112:8081/api/classes_information_export",
+      "http://127.0.0.1:8000/api/classes_information_export",
       {
         params: {
           filter_site: this.filterSite,

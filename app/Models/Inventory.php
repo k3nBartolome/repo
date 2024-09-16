@@ -108,6 +108,10 @@ class Inventory extends Model
     {
         return $this->belongsTo(Site::class, 'transferred_from');
     }
+    public function transferredTo()
+    {
+        return $this->belongsTo(Site::class, 'transferred_to');
+    }
 
     public function cancelledBy()
     {
