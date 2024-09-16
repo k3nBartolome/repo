@@ -11,7 +11,7 @@ class CreateApplicationInfoTable extends Migration
      *
      * @return void
      */
-   /*  public function up()
+    public function up()
     {
         Schema::create('application_info', function (Blueprint $table) {
             $table->id();
@@ -55,7 +55,7 @@ class CreateApplicationInfoTable extends Migration
             $table->foreign('apn_application_week_ending')->references('id')->on('date_ranges')->nullable();
         });
     }
- */
+
     /**
      * Reverse the migrations.
      *

@@ -11,7 +11,7 @@ class CreateScreeningTable extends Migration
      *
      * @return void
      */
-   /*  public function up()
+    public function up()
     {
         Schema::create('screening', function (Blueprint $table) {
             $table->id();
@@ -39,7 +39,7 @@ class CreateScreeningTable extends Migration
             $table->foreign('apn_id')->references('id')->on('application_info')->nullable();
             $table->foreign('sc_added_by')->references('id')->on('users')->nullable();
         });
-    } */
+    }
 
     /**
      * Reverse the migrations.
