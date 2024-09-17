@@ -169,7 +169,7 @@ class InventoryController extends Controller
 
             $award = new Award();
             $award->fill($request->all());
-            $award->file_path = $imagePath;
+            $award->path = $imagePath;
             $award->award_status = 'Awarded';
             $award->date_released = Carbon::now()->format('Y-m-d H:i');
             $award->save();
@@ -181,7 +181,7 @@ class InventoryController extends Controller
 
             $inventory->original_request = $inventory->quantity_approved;
             $inventory->inventory_id = $inventory->id;
-            $inventory->item_id = $requestedItem->inventory_item_id;
+            $inventory->inventory_item_id = $requestedItem->inventory_item_id;
             $inventory->transaction_type = 'Award Sourcing Supply';
             $inventory->save();
             $formattedTransactionNumber = sprintf('%06d', $inventory->id);
