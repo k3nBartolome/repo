@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,5 +39,6 @@ class ApplicationInfo extends Model
         'apn_application_week_ending',
         'apn_application_month',
         'apn_leads_added_date',
+        'apn_status',
     ];
 }

@@ -34,11 +34,19 @@ class AddAdditionalFieldsToItemsTable extends Migration
                 $table->datetime('date_received')->nullable();
             }
 
-            // Add foreign key constraints
-            $table->foreign('transferred_by')->references('id')->on('users');
-            $table->foreign('received_by')->references('id')->on('users');
-            $table->foreign('transferred_to')->references('id')->on('sites');  // Fixed to point to the correct table
-            $table->foreign('transferred_from')->references('id')->on('sites');  // Fixed to point to the correct table
+            // Add foreign key constraints only if they do not already exist
+            if (!Schema::hasColumn('items', 'transferred_by')) {
+                $table->foreign('transferred_by', 'fk_items_transferred_by')->references('id')->on('users');
+            }
+            if (!Schema::hasColumn('items', 'received_by')) {
+                $table->foreign('received_by', 'fk_items_received_by')->references('id')->on('users');
+            }
+            if (!Schema::hasColumn('items', 'transferred_to')) {
+                $table->foreign('transferred_to', 'fk_items_transferred_to')->references('id')->on('sites');
+            }
+            if (!Schema::hasColumn('items', 'transferred_from')) {
+                $table->foreign('transferred_from', 'fk_items_transferred_from')->references('id')->on('sites');
+            }
         });
     }
 
@@ -50,19 +58,39 @@ class AddAdditionalFieldsToItemsTable extends Migration
     public function down()
     {
         Schema::table('items', function (Blueprint $table) {
-            // Drop foreign key constraints
-            $table->dropForeign(['transferred_by']);
-            $table->dropForeign(['received_by']);
-            $table->dropForeign(['transferred_to']);
-            $table->dropForeign(['transferred_from']);
+            // Drop foreign key constraints only if they exist
+            if (Schema::hasColumn('items', 'transferred_by')) {
+                $table->dropForeign('fk_items_transferred_by');
+            }
+            if (Schema::hasColumn('items', 'received_by')) {
+                $table->dropForeign('fk_items_received_by');
+            }
+            if (Schema::hasColumn('items', 'transferred_to')) {
+                $table->dropForeign('fk_items_transferred_to');
+            }
+            if (Schema::hasColumn('items', 'transferred_from')) {
+                $table->dropForeign('fk_items_transferred_from');
+            }
 
-            // Drop the columns
-            $table->dropColumn('transferred_by');
-            $table->dropColumn('transferred_from');
-            $table->dropColumn('transferred_to');
-            $table->dropColumn('transferred_date');
-            $table->dropColumn('received_by');
-            $table->dropColumn('date_received');
+            // Drop the columns if they exist
+            if (Schema::hasColumn('items', 'transferred_by')) {
+                $table->dropColumn('transferred_by');
+            }
+            if (Schema::hasColumn('items', 'transferred_from')) {
+                $table->dropColumn('transferred_from');
+            }
+            if (Schema::hasColumn('items', 'transferred_to')) {
+                $table->dropColumn('transferred_to');
+            }
+            if (Schema::hasColumn('items', 'transferred_date')) {
+                $table->dropColumn('transferred_date');
+            }
+            if (Schema::hasColumn('items', 'received_by')) {
+                $table->dropColumn('received_by');
+            }
+            if (Schema::hasColumn('items', 'date_received')) {
+                $table->dropColumn('date_received');
+            }
         });
     }
 }
