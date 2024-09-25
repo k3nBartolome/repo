@@ -2,50 +2,52 @@
 
 namespace App\Imports;
 
-use App\Models\ApplicantInfo;
-use App\Models\ApplicationInfo;
+use App\Models\Lead;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
-use Illuminate\Support\Facades\Validator;
 
 class LeadsImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
         $validator = Validator::make($row, [
-            'ai_first_name' => 'required',
-            'ai_last_name' => 'required',
-            'ai_email_address' => 'required|email',
-            'ai_contact_number' => 'required',
-            'apn_gen_source' => 'required',
-            'apn_specific_source' => 'required',
-            'apn_site' => 'required',
-            'position_id'=>'required'
+            'lead_date' => 'nullable|date',
+            'lead_screener_name' => 'nullable|string',
+            'lead_source' => 'nullable|string',
+            'lead_type' => 'nullable|string',
+            'lead_application_date' => 'nullable|date',
+            'lead_released_date' => 'nullable|date',
+            'lead_srid' => 'nullable|string',
+            'lead_prism_status' => 'nullable|string',
+            'lead_site_id' => 'nullable|integer',
+            'lead_last_name' => 'nullable|string',
+            'lead_first_name' => 'nullable|string',
+            'lead_middle_name' => 'nullable|string',
+            'lead_contact_number' => 'nullable|string',
+            'lead_email_address' => 'nullable|email',
+            'lead_home_address' => 'nullable|string',
         ]);
-
         if ($validator->fails()) {
             return null;
         }
-        $applicantInfo = new ApplicantInfo([
-            'ai_first_name' => $row['ai_first_name'],
-            'ai_last_name' => $row['ai_last_name'],
-            'ai_middle_name' => $row['ai_middle_name'] ?? null,
-            'ai_suffix' => $row['ai_suffix'] ?? null,
-            'ai_email_address' => $row['ai_email_address'],
-            'ai_contact_number' => $row['ai_contact_number'],
-        ]);
-        $applicantInfo->save();
-        $applicationInfo = new ApplicationInfo([
-            'apn_gen_source' => $row['apn_gen_source'],
-            'apn_specific_source' => $row['apn_specific_source'],
-            'apn_site' => $row['apn_site'],
-            'position_id'=>$row['position_id'],
-            'status_id' => 1,
 
+        return new Lead([
+            'lead_date' => $row['lead_date'],
+            'lead_screener_name' => $row['lead_screener_name'],
+            'lead_source' => $row['lead_source'],
+            'lead_type' => $row['lead_type'],
+            'lead_application_date' => $row['lead_application_date'],
+            'lead_released_date' => $row['lead_released_date'],
+            'lead_srid' => $row['lead_srid'],
+            'lead_prism_status' => $row['lead_prism_status'],
+            'lead_site_id' => $row['lead_site_id'],
+            'lead_last_name' => $row['lead_last_name'],
+            'lead_first_name' => $row['lead_first_name'],
+            'lead_middle_name' => $row['lead_middle_name'],
+            'lead_contact_number' => $row['lead_contact_number'],
+            'lead_email_address' => $row['lead_email_address'],
+            'lead_home_address' => $row['lead_home_address'],
         ]);
-        $applicationInfo->save();
-
-        return $applicantInfo;
     }
 }
-

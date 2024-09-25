@@ -36,6 +36,7 @@ countstatus
 createdby
 cstat
 Cust
+datatables
 Datav
 daterange
 daterangeall
@@ -52,6 +53,7 @@ fakerphp
 fillrate
 Filterv
 firstname
+flowbite
 genstat
 guzzlehttp
 HRID
@@ -64,6 +66,7 @@ itemseparate
 laravel
 Laravel
 lastname
+leadinfo
 leftjoin
 lobid
 lobv
@@ -83,6 +86,7 @@ ooscclasses
 oosclasses
 openxmlformats
 PATINDEX
+pdfmake
 percentageguatemala
 percentagejamaica
 perx
@@ -123,9 +127,13 @@ storeother
 subquery
 subsubquery
 sumtotaltarget
+sweetalert
+tailwindcss
 transferremx
 updateclassesstaffing
 updateother
+vuejs
+vuex
 webclassesdashboard
 websiteb
 websiteclasses

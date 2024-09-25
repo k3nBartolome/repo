@@ -32,6 +32,7 @@ Classe
 classesall
 classessite
 colorpicker
+colreorder
 columngroup
 confirmationservice
 confirmdialog
@@ -44,6 +45,7 @@ dataloaded
 datatable
 datatables
 dataviewlayoutoptions
+datetime
 deferredcontent
 Dela
 dialogservice
@@ -64,6 +66,8 @@ filterclose
 filteropen
 Filtrados
 Firstname
+fixedcolumns
+fixedheader
 focustrap
 fontawesome
 Fonticons
@@ -80,6 +84,7 @@ inputnumber
 inputswitch
 inputtext
 jszip
+keytable
 laravel
 Lastname
 li
@@ -136,9 +141,12 @@ reportfilecancelled
 reportfileerror
 reportfileloaded
 resgistros
+rowgroup
+rowreorder
 rtlip
 runningquery
 sched
+scroller
 scrollpanel
 scrolltop
 searchbuilder
@@ -153,6 +161,7 @@ splitbutton
 splitterpanel
 spreadsheetml
 StaffingTrackerReport
+staterestore
 styleclass
 syncShowUps
 tabmenu
