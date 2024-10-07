@@ -13,21 +13,22 @@ class LeadController extends Controller
     public function storeLeads(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'lead_date' => 'required',
-            'lead_screener_name' => 'required',
-            'lead_source' => 'required',
-            'lead_type' => 'required',
-            'lead_application_date' => 'required',
-            'lead_released_date' => 'required',
-            'lead_srid' => 'required',
-            'lead_prism_status' => 'required',
-            'lead_site_id' => 'required',
-            'lead_last_name' => 'required',
-            'lead_first_name' => 'required',
-            'lead_middle_name' => 'required',
-            'lead_contact_number' => 'required',
-            'lead_email_address' => 'required',
-            'lead_home_address' => 'required',
+            'lead_date' => 'nullable|date',
+            'lead_source' => 'nullable|string',
+            'lead_type' => 'nullable|string',
+            'lead_application_date' => 'nullable|date',
+            'lead_released_date' => 'nullable|date',
+            'lead_srid' => 'nullable|string',
+            'lead_prism_status' => 'nullable|string',
+            'lead_site_id' => 'nullable|integer',
+            'lead_last_name' => 'nullable|string',
+            'lead_first_name' => 'nullable|string',
+            'lead_middle_name' => 'nullable|string',
+            'lead_contact_number' => 'nullable|string',
+            'lead_email_address' => 'nullable|email',
+            'lead_home_address' => 'nullable|string',
+            'lead_gen_source' => 'nullable|integer',
+            'lead_spec_source' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {

@@ -13,7 +13,6 @@ class LeadsImport implements ToModel, WithHeadingRow
     {
         $validator = Validator::make($row, [
             'lead_date' => 'nullable|date',
-            'lead_screener_name' => 'nullable|string',
             'lead_source' => 'nullable|string',
             'lead_type' => 'nullable|string',
             'lead_application_date' => 'nullable|date',
@@ -27,6 +26,8 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_contact_number' => 'nullable|string',
             'lead_email_address' => 'nullable|email',
             'lead_home_address' => 'nullable|string',
+            'lead_gen_source' => 'nullable|integer',
+            'lead_spec_source' => 'nullable|integer',
         ]);
         if ($validator->fails()) {
             return null;
@@ -34,7 +35,6 @@ class LeadsImport implements ToModel, WithHeadingRow
 
         return new Lead([
             'lead_date' => $row['lead_date'],
-            'lead_screener_name' => $row['lead_screener_name'],
             'lead_source' => $row['lead_source'],
             'lead_type' => $row['lead_type'],
             'lead_application_date' => $row['lead_application_date'],
@@ -48,6 +48,8 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_contact_number' => $row['lead_contact_number'],
             'lead_email_address' => $row['lead_email_address'],
             'lead_home_address' => $row['lead_home_address'],
+            'lead_gen_source' => $row['lead_gen_source'],
+            'lead_spec_source' => $row['lead_spec_source'],
         ]);
     }
 }

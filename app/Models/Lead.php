@@ -11,7 +11,6 @@ class Lead extends Model
     protected $table = 'leads';
     protected $fillable = [
         'lead_date',
-        'lead_screener_name',
         'lead_source',
         'lead_type',
         'lead_application_date',
@@ -25,5 +24,7 @@ class Lead extends Model
         'lead_contact_number',
         'lead_email_address',
         'lead_home_address',
+        'lead_gen_source',
+        'lead_spec_source',
     ];
 }
