@@ -20,7 +20,7 @@ class LeadController extends Controller
             'lead_released_date' => 'nullable|date',
             'lead_srid' => 'nullable|string',
             'lead_prism_status' => 'nullable|string',
-            'lead_site_id' => 'nullable|integer',
+            'lead_site' => 'nullable|integer',
             'lead_last_name' => 'nullable|string',
             'lead_first_name' => 'nullable|string',
             'lead_middle_name' => 'nullable|string',

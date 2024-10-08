@@ -515,7 +515,7 @@ main {
   height: 200px;
   padding: 20px;
   border-radius: 10px;
-  border: 2px dashed #555;
+  border: 2px dashed #fb8303;
   color: #444;
   cursor: pointer;
   transition: background .2s ease-in-out, border .2s ease-in-out;

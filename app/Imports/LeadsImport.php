@@ -19,15 +19,15 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_released_date' => 'nullable|date',
             'lead_srid' => 'nullable|string',
             'lead_prism_status' => 'nullable|string',
-            'lead_site_id' => 'nullable|integer',
+            'lead_site' => 'nullable|string',
             'lead_last_name' => 'nullable|string',
             'lead_first_name' => 'nullable|string',
             'lead_middle_name' => 'nullable|string',
             'lead_contact_number' => 'nullable|string',
             'lead_email_address' => 'nullable|email',
             'lead_home_address' => 'nullable|string',
-            'lead_gen_source' => 'nullable|integer',
-            'lead_spec_source' => 'nullable|integer',
+            'lead_gen_source' => 'nullable|string',
+            'lead_spec_source' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             return null;
@@ -41,7 +41,7 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_released_date' => $row['lead_released_date'],
             'lead_srid' => $row['lead_srid'],
             'lead_prism_status' => $row['lead_prism_status'],
-            'lead_site_id' => $row['lead_site_id'],
+            'lead_site' => $row['lead_site'],
             'lead_last_name' => $row['lead_last_name'],
             'lead_first_name' => $row['lead_first_name'],
             'lead_middle_name' => $row['lead_middle_name'],
