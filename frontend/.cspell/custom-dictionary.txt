@@ -162,6 +162,7 @@ speeddial
 splitbutton
 splitterpanel
 spreadsheetml
+srid
 StaffingTrackerReport
 staterestore
 styleclass

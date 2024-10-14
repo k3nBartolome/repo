@@ -9,9 +9,9 @@ use App\Http\Controllers\CapEmailController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
-use App\Http\Controllers\LeadController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
@@ -255,6 +255,9 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('awarded/both', [AwardController::class, 'awardedBoth']);
     Route::get('awarded/{id}', [AwardController::class, 'show']);
     Route::post('award/{id}', [AwardController::class, 'update']);
+    //HNS
+    Route::post('upload-leads-bulk', [LeadController::class, 'storeBulkLeads']);
+    Route::post('upload_leads', [LeadController::class, 'storeLeads']);
 });
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);
@@ -270,5 +273,3 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::post('upload-leads-bulk', [LeadController::class, 'storeBulkLeads']);
-Route::post('upload-leads', [LeadController::class, 'storeLeads']);

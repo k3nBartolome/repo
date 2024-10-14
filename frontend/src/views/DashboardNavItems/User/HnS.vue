@@ -561,6 +561,7 @@ export default {
       lead_home_address: "",
       lead_gen_source: "",
       lead_spec_source: "",
+      lead_position: "",
     };
   },
   mounted() {
@@ -596,19 +597,16 @@ export default {
         return;
       }
 
-      this.loading = true; // Show loading indicator
-      this.errorMessage = ""; // Reset error message
-      this.successMessage = ""; // Reset success message
+      this.loading = true;
+      this.errorMessage = "";
+      this.successMessage = "";
 
-      // Create FormData object to send file
+
       const formData = new FormData();
       formData.append("file", this.file);
 
       try {
-        // Get the token from Vuex store or wherever you store it
-        const token = this.$store.state.token;
-
-        // Send POST request to Laravel API
+        const token = this.$store.state.t
         const response = await axios.post(
           "http://127.0.0.1:8000/api/upload-leads-bulk",
           formData,
@@ -619,12 +617,9 @@ export default {
             },
           }
         );
-
-        // Handle successful response
         this.successMessage = response.data.success;
-        this.file = null; // Clear the selected file after successful upload
+        this.file = null;
       } catch (error) {
-        // Handle error response
         if (error.response && error.response.data) {
           this.errorMessage =
             error.response.data.error || "Error uploading file";
@@ -632,7 +627,7 @@ export default {
           this.errorMessage = "Error uploading file";
         }
       } finally {
-        this.loading = false; // Hide loading indicator
+        this.loading = false;
       }
     },
     addLeads() {
@@ -654,6 +649,7 @@ export default {
         lead_home_address: this.lead_home_address,
         lead_gen_source: this.lead_gen_source,
         lead_spec_source: this.lead_spec_source,
+        lead_position: this.lead_position,
       };
       const token = this.$store.state.token;
       const headers = {
@@ -661,7 +657,7 @@ export default {
       };
 
       axios
-        .post("http://127.0.0.1:8000/api/upload-leads", formData, { headers })
+        .post("http://127.0.0.1:8000/api/upload_leads", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.lead_date = "";
@@ -680,6 +676,7 @@ export default {
           this.lead_home_address = "";
           this.lead_gen_source = "";
           this.lead_spec_source = "";
+          this.lead_position = "";
         })
         .catch((error) => {
           console.log(error.response.data);

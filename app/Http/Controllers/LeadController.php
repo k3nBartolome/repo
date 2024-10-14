@@ -38,6 +38,7 @@ class LeadController extends Controller
 
         $leadinfo = new Lead();
         $leadinfo->fill($request->all());
+        $leadinfo->save();
 
         return response()->json([
             'leadinfo' => $leadinfo,
@@ -64,7 +65,7 @@ class LeadController extends Controller
             return response()->json(['success' => 'Leads imported successfully'], 200);
         } catch (\Exception $e) {
             // Handle import errors
-            return response()->json(['error' => 'Error importing leads: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Error importing leads: '.$e->getMessage()], 500);
         }
     }
 }
