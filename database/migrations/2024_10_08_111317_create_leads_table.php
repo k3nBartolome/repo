@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class LeadsTable extends Migration
+class CreateLeadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -31,6 +31,7 @@ class LeadsTable extends Migration
             $table->string('lead_home_address');
             $table->string('lead_gen_source');
             $table->string('lead_spec_source');
+            $table->string('lead_position');
             $table->timestamps();
         });
     }

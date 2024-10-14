@@ -11,7 +11,7 @@ class AddSpecSource extends Migration
      *
      * @return void
      */
-    public function up()
+    /*   public function up()
     {
         Schema::table('spec_source', function (Blueprint $table) {
             $table->id();
@@ -20,16 +20,16 @@ class AddSpecSource extends Migration
             $table->timestamps();
             $table->foreign('lead_gen_source')->references('id')->on('gen_source')->nullable();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    /*     public function down()
     {
         Schema::table('spec_source', function (Blueprint $table) {
         });
-    }
+    } */
 }

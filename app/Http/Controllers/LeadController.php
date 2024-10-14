@@ -20,15 +20,16 @@ class LeadController extends Controller
             'lead_released_date' => 'nullable|date',
             'lead_srid' => 'nullable|string',
             'lead_prism_status' => 'nullable|string',
-            'lead_site' => 'nullable|integer',
+            'lead_site' => 'nullable|string',
             'lead_last_name' => 'nullable|string',
             'lead_first_name' => 'nullable|string',
             'lead_middle_name' => 'nullable|string',
             'lead_contact_number' => 'nullable|string',
             'lead_email_address' => 'nullable|email',
             'lead_home_address' => 'nullable|string',
-            'lead_gen_source' => 'nullable|integer',
-            'lead_spec_source' => 'nullable|integer',
+            'lead_gen_source' => 'nullable|string',
+            'lead_spec_source' => 'nullable|string',
+            'lead_position' => 'nullable|string',
         ]);
 
         if ($validator->fails()) {
@@ -45,20 +46,25 @@ class LeadController extends Controller
 
     public function storeBulkLeads(Request $request)
     {
+        // Validate the uploaded file
         $validator = Validator::make($request->all(), [
-        'file' => 'required|mimes:xlsx,xls',
-    ]);
+            'file' => 'required|mimes:xlsx,xls', // Restrict to Excel formats
+        ]);
 
+        // Handle validation failure
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 400);
         }
 
         try {
+            // Use Excel import for bulk lead creation
             Excel::import(new LeadsImport(), $request->file('file'));
 
-            return response()->json(['success' => 'Leads imported successfully']);
+            // Return success response
+            return response()->json(['success' => 'Leads imported successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error importing leads: '.$e->getMessage()], 500);
+            // Handle import errors
+            return response()->json(['error' => 'Error importing leads: ' . $e->getMessage()], 500);
         }
     }
 }

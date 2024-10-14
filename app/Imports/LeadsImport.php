@@ -11,6 +11,7 @@ class LeadsImport implements ToModel, WithHeadingRow
 {
     public function model(array $row)
     {
+        // Validate each row in the Excel file
         $validator = Validator::make($row, [
             'lead_date' => 'nullable|date',
             'lead_source' => 'nullable|string',
@@ -28,11 +29,11 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_home_address' => 'nullable|string',
             'lead_gen_source' => 'nullable|string',
             'lead_spec_source' => 'nullable|string',
+            'lead_position' => 'nullable|string',
         ]);
         if ($validator->fails()) {
             return null;
         }
-
         return new Lead([
             'lead_date' => $row['lead_date'],
             'lead_source' => $row['lead_source'],
@@ -50,6 +51,7 @@ class LeadsImport implements ToModel, WithHeadingRow
             'lead_home_address' => $row['lead_home_address'],
             'lead_gen_source' => $row['lead_gen_source'],
             'lead_spec_source' => $row['lead_spec_source'],
+            'lead_position' => $row['lead_position'],
         ]);
     }
 }

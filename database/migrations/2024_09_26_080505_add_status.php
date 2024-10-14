@@ -11,7 +11,7 @@ class AddStatus extends Migration
      *
      * @return void
      */
-    public function up()
+    /*     public function up()
     {
         Schema::table('status', function (Blueprint $table) {
             $table->id();
@@ -19,17 +19,17 @@ class AddStatus extends Migration
             $table->string('status_remarks');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    /*     public function down()
     {
         Schema::table('status', function (Blueprint $table) {
             Schema::dropIfExists('status');
         });
-    }
+    } */
 }

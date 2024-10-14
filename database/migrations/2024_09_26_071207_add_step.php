@@ -11,24 +11,24 @@ class AddStep extends Migration
      *
      * @return void
      */
-    public function up()
+    /*     public function up()
     {
         Schema::table('step', function (Blueprint $table) {
             $table->id();
             $table->string('step_name');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    /*     public function down()
     {
         Schema::table('step', function (Blueprint $table) {
             Schema::dropIfExists('step');
         });
-    }
+    } */
 }

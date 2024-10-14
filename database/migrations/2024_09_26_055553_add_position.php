@@ -11,7 +11,7 @@ class AddPosition extends Migration
      *
      * @return void
      */
-    public function up()
+    /*     public function up()
     {
         Schema::table('position', function (Blueprint $table) {
             $table->id();
@@ -19,17 +19,17 @@ class AddPosition extends Migration
             $table->string('description');
             $table->timestamps();
         });
-    }
+    } */
 
     /**
      * Reverse the migrations.
      *
      * @return void
      */
-    public function down()
+    /* public function down()
     {
         Schema::table('position', function (Blueprint $table) {
             Schema::dropIfExists('position');
         });
-    }
+    } */
 }

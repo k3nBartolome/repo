@@ -17,7 +17,7 @@ class Lead extends Model
         'lead_released_date',
         'lead_srid',
         'lead_prism_status',
-        'lead_site_id',
+        'lead_site',
         'lead_last_name',
         'lead_first_name',
         'lead_middle_name',
@@ -26,5 +26,6 @@ class Lead extends Model
         'lead_home_address',
         'lead_gen_source',
         'lead_spec_source',
+        'lead_position',
     ];
 }

@@ -33,97 +33,96 @@
             @submit.prevent="addLeads"
             class="grid gap-2 px-4 py-2 grid-cols"
           >
-          <div class="col-span-1">
-            <label class="block">
-              First Name
-              <input
-                type="text"
-                v-model="first_name"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Middle Name
-              <input
-                type="text"
-                v-model="middle_name"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Last Name
-              <input
-                type="text"
-                v-model="last_name"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Position
-              <input
-                type="text"
-                v-model="last_name"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Email
-              <input
-                type="text"
-                v-model="email"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Contact
-              <input
-                type="text"
-                v-model="contact_number
-                "
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              General Source
-              <input
-                type="text"
-                v-model="gen_source"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Specific Source
-              <input
-                type="text"
-                v-model="spec_source"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
-          <div class="col-span-1">
-            <label class="block">
-              Site
-              <input
-                type="text"
-                v-model="site_selected"
-                class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-              />
-            </label>
-          </div>
+            <div class="col-span-1">
+              <label class="block">
+                First Name
+                <input
+                  type="text"
+                  v-model="lead_first_name"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Middle Name
+                <input
+                  type="text"
+                  v-model="lead_middle_name"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Last Name
+                <input
+                  type="text"
+                  v-model="lead_last_name"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Position
+                <input
+                  type="text"
+                  v-model="lead_position"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Email
+                <input
+                  type="text"
+                  v-model="lead_email_address"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Contact
+                <input
+                  type="text"
+                  v-model="lead_contact_number"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                General Source
+                <input
+                  type="text"
+                  v-model="lead_gen_source"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Specific Source
+                <input
+                  type="text"
+                  v-model="lead_spec_source"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Site
+                <input
+                  type="text"
+                  v-model="lead_site"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal leading-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
 
             <div class="flex justify-end mt-4">
               <button
@@ -172,13 +171,19 @@
             @submit.prevent="importLeads"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
-          <div>
-            <label for="images" class="drop-container" id="dropcontainer">
-              <span class="drop-title">Drop files here</span>
-              or
-             <input type="file" id="excel" accept=".xls,.xlsx" required @change="handleFileChange">
-            </label>
-          </div>
+            <div>
+              <label for="images" class="drop-container" id="dropcontainer">
+                <span class="drop-title">Drop files here</span>
+                or
+                <input
+                  type="file"
+                  id="excel"
+                  accept=".xls,.xlsx"
+                  required
+                  @change="handleFileChange"
+                />
+              </label>
+            </div>
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
@@ -193,16 +198,33 @@
     </div>
   </div>
   <div class="px-4 border border-solid border-1">
-    <div class="flex items-baseline space-x-2 " >
+    <div class="flex items-baseline space-x-2">
       <div class="">
         <router-link to="/h&s/screening" class="link-button">
-          <button class="font-sans font-semibold text-black text-2xs svg-button">
-            <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
+          <button
+            class="font-sans font-semibold text-black text-2xs svg-button"
+          >
+            <svg
+              viewBox="-8.16 -8.16 50.32 50.32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#f2740d"
+              stroke="#f2740d"
+            >
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke="#CCCCCC"
+                stroke-width="0.544"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g fill="none" fill-rule="evenodd">
                   <g>
-                    <path d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z" stroke="##f2740d" stroke-width="1.224"></path>
+                    <path
+                      d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z"
+                      stroke="##f2740d"
+                      stroke-width="1.224"
+                    ></path>
                     <g fill="#f2740d">
                       <path d="M8 12h12v1H8z"></path>
                       <path d="M6 12h1v1H6z"></path>
@@ -226,13 +248,30 @@
 
       <div class="">
         <router-link to="/h&s/interview" class="link-button">
-        <button class="font-sans font-semibold text-black text-2xs svg-button">
-            <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
+          <button
+            class="font-sans font-semibold text-black text-2xs svg-button"
+          >
+            <svg
+              viewBox="-8.16 -8.16 50.32 50.32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#f2740d"
+              stroke="#f2740d"
+            >
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke="#CCCCCC"
+                stroke-width="0.544"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g fill="none" fill-rule="evenodd">
                   <g>
-                    <path d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z" stroke="##f2740d" stroke-width="1.224"></path>
+                    <path
+                      d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z"
+                      stroke="##f2740d"
+                      stroke-width="1.224"
+                    ></path>
                     <g fill="#f2740d">
                       <path d="M8 12h12v1H8z"></path>
                       <path d="M6 12h1v1H6z"></path>
@@ -247,19 +286,37 @@
                     <path fill="##f2740d" d="M18 7h6v1h-6z"></path>
                   </g>
                 </g>
-              </g>
-            </svg>Interview</button>
+              </g></svg
+            >Interview
+          </button>
         </router-link>
       </div>
       <div class="">
         <router-link to="/h&s/ov" class="link-button">
-        <button class="font-sans font-semibold text-black text-2xs svg-button">
-            <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
+          <button
+            class="font-sans font-semibold text-black text-2xs svg-button"
+          >
+            <svg
+              viewBox="-8.16 -8.16 50.32 50.32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#f2740d"
+              stroke="#f2740d"
+            >
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke="#CCCCCC"
+                stroke-width="0.544"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g fill="none" fill-rule="evenodd">
                   <g>
-                    <path d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z" stroke="##f2740d" stroke-width="1.224"></path>
+                    <path
+                      d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z"
+                      stroke="##f2740d"
+                      stroke-width="1.224"
+                    ></path>
                     <g fill="#f2740d">
                       <path d="M8 12h12v1H8z"></path>
                       <path d="M6 12h1v1H6z"></path>
@@ -274,19 +331,37 @@
                     <path fill="##f2740d" d="M18 7h6v1h-6z"></path>
                   </g>
                 </g>
-              </g>
-            </svg>OV</button>
+              </g></svg
+            >OV
+          </button>
         </router-link>
       </div>
       <div class="">
         <router-link to="/h&s/prog_specs" class="link-button">
-          <button class="font-sans font-semibold text-black text-2xs svg-button">
-            <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
+          <button
+            class="font-sans font-semibold text-black text-2xs svg-button"
+          >
+            <svg
+              viewBox="-8.16 -8.16 50.32 50.32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#f2740d"
+              stroke="#f2740d"
+            >
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke="#CCCCCC"
+                stroke-width="0.544"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g fill="none" fill-rule="evenodd">
                   <g>
-                    <path d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z" stroke="##f2740d" stroke-width="1.224"></path>
+                    <path
+                      d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z"
+                      stroke="##f2740d"
+                      stroke-width="1.224"
+                    ></path>
                     <g fill="#f2740d">
                       <path d="M8 12h12v1H8z"></path>
                       <path d="M6 12h1v1H6z"></path>
@@ -302,18 +377,37 @@
                   </g>
                 </g>
               </g>
-            </svg> Prog Specs </button>
+            </svg>
+            Prog Specs
+          </button>
         </router-link>
       </div>
       <div class="">
         <router-link to="/h&s/job_offer" class="link-button">
-          <button class="font-sans font-semibold text-black text-2xs svg-button">
-            <svg viewBox="-8.16 -8.16 50.32 50.32" xmlns="http://www.w3.org/2000/svg" fill="#f2740d" stroke="#f2740d">
-              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.544"></g>
+          <button
+            class="font-sans font-semibold text-black text-2xs svg-button"
+          >
+            <svg
+              viewBox="-8.16 -8.16 50.32 50.32"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="#f2740d"
+              stroke="#f2740d"
+            >
+              <g
+                id="SVGRepo_tracerCarrier"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke="#CCCCCC"
+                stroke-width="0.544"
+              ></g>
               <g id="SVGRepo_iconCarrier">
                 <g fill="none" fill-rule="evenodd">
                   <g>
-                    <path d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z" stroke="##f2740d" stroke-width="1.224"></path>
+                    <path
+                      d="M1 1.993c0-.55.45-.993.995-.993h17.01c.55 0 1.34.275 1.776.625l3.44 2.75c.43.345.78 1.065.78 1.622v26.006c0 .55-.447.997-1 .997H2c-.552 0-1-.452-1-.993V1.993z"
+                      stroke="##f2740d"
+                      stroke-width="1.224"
+                    ></path>
                     <g fill="#f2740d">
                       <path d="M8 12h12v1H8z"></path>
                       <path d="M6 12h1v1H6z"></path>
@@ -329,25 +423,56 @@
                   </g>
                 </g>
               </g>
-            </svg> Job Offer</button>
+            </svg>
+            Job Offer
+          </button>
         </router-link>
       </div>
     </div>
   </div>
   <main class="flex flex-col h-screen border border-1">
     <div class="grid grid-cols-10 grid-rows-1 gap-2 px-4 py-2">
-      <button class="text-white bg-orange-500 rounded-full text-2xs svg-button2" @click="showModalAdd = true">
-        <svg width="143px" height="143px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff" stroke="#ffffff">
+      <button
+        class="text-white bg-orange-500 rounded-full text-2xs svg-button2"
+        @click="showModalAdd = true"
+      >
+        <svg
+          width="143px"
+          height="143px"
+          viewBox="0 -0.5 21 21"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          fill="#ffffff"
+          stroke="#ffffff"
+        >
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
           <g id="SVGRepo_iconCarrier">
             <title>plus_circle [#ffffff]</title>
             <desc>Created with Sketch.</desc>
             <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="Dribbble-Light-Preview" transform="translate(-419.000000, -520.000000)" fill="#ffffff">
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-419.000000, -520.000000)"
+                fill="#ffffff"
+              >
                 <g id="icons" transform="translate(56.000000, 160.000000)">
-                  <path d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z" id="plus_circle-[#ffffff]"> </path>
+                  <path
+                    d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                    id="plus_circle-[#ffffff]"
+                  ></path>
                 </g>
               </g>
             </g>
@@ -355,18 +480,47 @@
         </svg>
         Add Leads
       </button>
-      <button class="text-white bg-orange-500 rounded-full text-2xs svg-button2" @click="showModalImport = true">
-        <svg width="143px" height="143px" viewBox="0 -0.5 21 21" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#ffffff" stroke="#ffffff">
+      <button
+        class="text-white bg-orange-500 rounded-full text-2xs svg-button2"
+        @click="showModalImport = true"
+      >
+        <svg
+          width="143px"
+          height="143px"
+          viewBox="0 -0.5 21 21"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          fill="#ffffff"
+          stroke="#ffffff"
+        >
           <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g
+            id="SVGRepo_tracerCarrier"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          ></g>
           <g id="SVGRepo_iconCarrier">
             <title>plus_circle [#ffffff]</title>
             <desc>Created with Sketch.</desc>
             <defs></defs>
-            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-              <g id="Dribbble-Light-Preview" transform="translate(-419.000000, -520.000000)" fill="#ffffff">
+            <g
+              id="Page-1"
+              stroke="none"
+              stroke-width="1"
+              fill="none"
+              fill-rule="evenodd"
+            >
+              <g
+                id="Dribbble-Light-Preview"
+                transform="translate(-419.000000, -520.000000)"
+                fill="#ffffff"
+              >
                 <g id="icons" transform="translate(56.000000, 160.000000)">
-                  <path d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z" id="plus_circle-[#ffffff]"> </path>
+                  <path
+                    d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
+                    id="plus_circle-[#ffffff]"
+                  ></path>
                 </g>
               </g>
             </g>
@@ -374,10 +528,8 @@
         </svg>
         Import Leads
       </button>
-
     </div>
     <div class="flex flex-1 px-4 py-2 md:px-1">
-
       <div class="w-full py-6">
         <router-view />
       </div>
@@ -385,22 +537,30 @@
   </main>
 </template>
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
       errors: {},
       showModalAdd: false,
       showModalImport: false,
-      last_name:"",
-      first_name:"",
-      middle_name:"",
-      position:"",
-      email:"",
-      contact_number:"",
-      gen_source:"",
-      spec_source:"",
-      site_selected:"",
-
+      file: null,
+      lead_date: "",
+      lead_source: "",
+      lead_type: "",
+      lead_application_date: "",
+      lead_released_date: "",
+      lead_srid: "",
+      lead_prism_status: "",
+      lead_site: "",
+      lead_last_name: "",
+      lead_first_name: "",
+      lead_middle_name: "",
+      lead_contact_number: "",
+      lead_email_address: "",
+      lead_home_address: "",
+      lead_gen_source: "",
+      lead_spec_source: "",
     };
   },
   mounted() {
@@ -427,6 +587,108 @@ export default {
     },
   },
   methods: {
+    handleFileUpload(event) {
+      this.file = event.target.files[0]; // Get the selected file
+    },
+    async submitBulkLeads() {
+      if (!this.file) {
+        this.errorMessage = "Please select a file to upload.";
+        return;
+      }
+
+      this.loading = true; // Show loading indicator
+      this.errorMessage = ""; // Reset error message
+      this.successMessage = ""; // Reset success message
+
+      // Create FormData object to send file
+      const formData = new FormData();
+      formData.append("file", this.file);
+
+      try {
+        // Get the token from Vuex store or wherever you store it
+        const token = this.$store.state.token;
+
+        // Send POST request to Laravel API
+        const response = await axios.post(
+          "http://127.0.0.1:8000/api/upload-leads-bulk",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Handle successful response
+        this.successMessage = response.data.success;
+        this.file = null; // Clear the selected file after successful upload
+      } catch (error) {
+        // Handle error response
+        if (error.response && error.response.data) {
+          this.errorMessage =
+            error.response.data.error || "Error uploading file";
+        } else {
+          this.errorMessage = "Error uploading file";
+        }
+      } finally {
+        this.loading = false; // Hide loading indicator
+      }
+    },
+    addLeads() {
+      this.loading = true;
+      const formData = {
+        lead_date: this.lead_date,
+        lead_source: this.lead_source,
+        lead_type: this.lead_type,
+        lead_application_date: this.lead_application_date,
+        lead_released_date: this.lead_released_date,
+        lead_srid: this.lead_srid,
+        lead_prism_status: this.lead_prism_status,
+        lead_site: this.lead_site,
+        lead_last_name: this.lead_last_name,
+        lead_first_name: this.lead_first_name,
+        lead_middle_name: this.lead_middle_name,
+        lead_contact_number: this.lead_contact_number,
+        lead_email_address: this.lead_email_address,
+        lead_home_address: this.lead_home_address,
+        lead_gen_source: this.lead_gen_source,
+        lead_spec_source: this.lead_spec_source,
+      };
+      const token = this.$store.state.token;
+      const headers = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      axios
+        .post("http://127.0.0.1:8000/api/upload-leads", formData, { headers })
+        .then((response) => {
+          console.log(response.data);
+          this.lead_date = "";
+          this.lead_source = "";
+          this.lead_type = "";
+          this.lead_application_date = "";
+          this.lead_released_date = "";
+          this.lead_srid = "";
+          this.lead_prism_status = "";
+          this.lead_site = "";
+          this.lead_last_name = "";
+          this.lead_first_name = "";
+          this.lead_middle_name = "";
+          this.lead_contact_number = "";
+          this.lead_email_address = "";
+          this.lead_home_address = "";
+          this.lead_gen_source = "";
+          this.lead_spec_source = "";
+        })
+        .catch((error) => {
+          console.log(error.response.data);
+        })
+        .finally(() => {
+          this.loading = false;
+        });
+    },
+
     isActiveTab(route) {
       return this.$route.path === route;
     },
@@ -479,7 +741,6 @@ main {
   padding: 8px;
   height: 20px;
   width: auto;
-
 }
 .svg-button2 svg {
   width: 1em; /* This makes the SVG the same size as the surrounding text */
@@ -518,7 +779,7 @@ main {
   border: 2px dashed #fb8303;
   color: #444;
   cursor: pointer;
-  transition: background .2s ease-in-out, border .2s ease-in-out;
+  transition: background 0.2s ease-in-out, border 0.2s ease-in-out;
 }
 
 .drop-container:hover,
@@ -537,6 +798,6 @@ main {
   font-size: 20px;
   font-weight: bold;
   text-align: center;
-  transition: color .2s ease-in-out;
+  transition: color 0.2s ease-in-out;
 }
 </style>
