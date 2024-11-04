@@ -924,6 +924,95 @@ DB::raw("'Account Associate' as Position"),
         ]);
     }
 
+    public function referralsv1(Request $request)
+    {
+        $referrals = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
+            ->select([
+                'ReferredByHrid',
+                'ReferredByFirstName',
+                'ReferredByLastName',
+                'ReferredByEmailAddress',
+                'ReferredByLob',
+                'ReferredBySite',
+                'ReferralFirstName',
+                'ReferralLastName',
+                'ReferralIsWithEperience',
+                'ReferralLOB',
+                'ReferredDate',
+                'Position',
+                'PreferredSite'
+            ])
+            ->whereRaw("CONVERT(VARCHAR, ReferredDate, 120) LIKE '%2024%'");
+        if ($request->has('filter_pref_site')) {
+            $filterPrefSite = $request->input('filter_pref_site');
+            if (!empty($filterPrefSite)) {
+                $referrals->where('PreferredSite', 'LIKE', '%' . $filterPrefSite . '%');
+            }
+        }
+        if ($request->has('filter_ref_site')) {
+            $filterRefSite = $request->input('filter_ref_site');
+            if (!empty($filterRefSite)) {
+                $referrals->where('ReferredBySite', 'LIKE', '%' . $filterRefSite . '%');
+            }
+        }
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+
+                $referrals->whereBetween('ReferredDate', [$startDate, $endDate]);
+            }
+        }
+        $referralsData = $referrals->get();
+        return response()->json([
+            'ref_data' => $referralsData,
+        ]);
+    }
+
+    public function referralsDatev1()
+    {
+        $minDate = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')->min('ReferredDate');
+        $maxDate = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')->max('ReferredDate');
+
+        $minDate = Carbon::parse($minDate)->format('Y-m-d');
+        $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
+
+        return response()->json([
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+        ]);
+    }
+    public function refSitev1(Request $request)
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')
+            ->select('ReferredBySite');
+
+        $query->orderBy('ReferredBySite');
+        $sites = $query->distinct()->get();
+
+        return response()->json([
+            'sites' => $sites,
+        ]);
+    }
+    public function prefSitev1(Request $request)
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')
+            ->select('PreferredSite');
+
+        $query->orderBy('PreferredSite');
+        $sites = $query->distinct()->get();
+
+        return response()->json([
+            'sites' => $sites,
+        ]);
+    }
     public function referralsDate()
     {
         $minDate = DB::connection('sqlsrv')

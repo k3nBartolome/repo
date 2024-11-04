@@ -168,20 +168,15 @@
             </svg>
           </button>
           <form
-            @submit.prevent="importLeads"
+            @submit.prevent="submitBulkLeads"
             class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-1"
           >
             <div>
               <label for="images" class="drop-container" id="dropcontainer">
                 <span class="drop-title">Drop files here</span>
                 or
-                <input
-                  type="file"
-                  id="excel"
-                  accept=".xls,.xlsx"
-                  required
-                  @change="handleFileChange"
-                />
+                <input type="file" @change="handleFileChange" />
+
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -587,49 +582,54 @@ export default {
       return userRole === "sourcing";
     },
   },
-  methods: {
-    handleFileUpload(event) {
-      this.file = event.target.files[0]; // Get the selected file
-    },
-    async submitBulkLeads() {
-      if (!this.file) {
-        this.errorMessage = "Please select a file to upload.";
-        return;
-      }
 
-      this.loading = true;
-      this.errorMessage = "";
-      this.successMessage = "";
+methods: {
+  handleFileChange(event) {
+    const file = event.target.files[0];
+    console.log(file);
+    this.file = file;
+  },
 
+  async submitBulkLeads() {
+    if (!this.file) {
+      this.errorMessage = "Please select a file to upload.";
+      return;
+    }
 
-      const formData = new FormData();
-      formData.append("file", this.file);
+    this.loading = true;
+    this.errorMessage = "";
+    this.successMessage = "";
 
-      try {
-        const token = this.$store.state.t
-        const response = await axios.post(
-          "http://127.0.0.1:8000/api/upload-leads-bulk",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        this.successMessage = response.data.success;
-        this.file = null;
-      } catch (error) {
-        if (error.response && error.response.data) {
-          this.errorMessage =
-            error.response.data.error || "Error uploading file";
-        } else {
-          this.errorMessage = "Error uploading file";
+    const formData = new FormData();
+    formData.append("file", this.file);
+    formData.append("lead_added_by", this.$store.state.user_id);
+
+    try {
+      const token = this.$store.state.token;
+      const response = await axios.post(
+        "http://127.0.0.1:8000/api/upload-leads-bulk",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
-      } finally {
-        this.loading = false;
+      );
+      this.successMessage = response.data.success;
+      this.file = null;
+    } catch (error) {
+      if (error.response && error.response.data) {
+        this.errorMessage =
+          error.response.data.error || "Error uploading file";
+      } else {
+        this.errorMessage = "Error uploading file";
       }
-    },
+    } finally {
+      this.loading = false;
+    }
+  },
+
     addLeads() {
       this.loading = true;
       const formData = {
@@ -650,6 +650,7 @@ export default {
         lead_gen_source: this.lead_gen_source,
         lead_spec_source: this.lead_spec_source,
         lead_position: this.lead_position,
+        lead_added_by: this.$store.state.user_id,
       };
       const token = this.$store.state.token;
       const headers = {
@@ -677,6 +678,7 @@ export default {
           this.lead_gen_source = "";
           this.lead_spec_source = "";
           this.lead_position = "";
+          
         })
         .catch((error) => {
           console.log(error.response.data);
@@ -727,9 +729,9 @@ main {
 }
 
 .svg-button svg {
-  width: 1em; /* This makes the SVG the same size as the surrounding text */
-  height: 1em; /* This makes the SVG the same size as the surrounding text */
-  border: 1px solid #000; /* This adds a border to the SVG */
+  width: 1em;
+  height: 1em;
+  border: 1px solid #000;
 }
 .svg-button2 {
   display: flex;
@@ -740,9 +742,8 @@ main {
   width: auto;
 }
 .svg-button2 svg {
-  width: 1em; /* This makes the SVG the same size as the surrounding text */
-  height: 1em; /* This makes the SVG the same size as the surrounding text */
-  /* This adds a border to the SVG */
+  width: 1em;
+  height: 1em;
 }
 .modal {
   position: fixed;

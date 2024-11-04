@@ -2,22 +2,31 @@
   <div class="py-0">
     <header class="bg-white p-4 py-0">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">Referral Tool V1</h2>
+        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool</h2>
       </div>
     </header>
     <div class="bg-gray-100 p-4">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        <div class="w-full md:w-1/4">
-          <select
-            v-model="filterSite"
-            placeholder="Filter by Site"
+        <div class="w-full md:w-1/4 relative">
+          <input
+            v-model="filterLastName"
+            placeholder="Filter by Last Name"
             class="p-2 border rounded-lg w-full"
+            @input="validateLastName"
+          />
+          <div
+            v-if="filterLastNameError"
+            class="absolute top-full left-0 text-red-500 text-sm"
           >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in ref_sites" :key="site.Site" :value="site.Site">
-              {{ site.Site }}
-            </option>
-          </select>
+            {{ filterLastNameError }}
+          </div>
+        </div>
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterFirstName"
+            placeholder="Filter by First Name"
+            class="p-2 border rounded-lg w-full"
+          />
         </div>
         <div class="w-full md:w-1/4">
           <select
@@ -26,7 +35,7 @@
             class="p-2 border rounded-lg w-full"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in pref_sites" :key="site.Site" :value="site.Site">
+            <option v-for="site in sites" :key="site.Site" :value="site.Site">
               {{ site.Site }}
             </option>
           </select>
@@ -49,7 +58,20 @@
             @input="updateFilterEndDate"
           />
         </div>
-       
+        <div class="w-full md:w-1/4 relative">
+          <input
+            v-model="filterContact"
+            placeholder="Filter by Mobile No."
+            class="p-2 border rounded-lg w-full"
+            @input="validateContact"
+          />
+          <div
+            v-if="filterContactError"
+            class="absolute top-full left-0 text-red-500 text-sm"
+          >
+            {{ filterContactError }}
+          </div>
+        </div>
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
@@ -158,8 +180,7 @@ export default {
       filterReferredBySite: "",
       filterPreferredSite: "",
       perx: [],
-      pref_sites: [],
-      ref_sites: [],
+      prep_sites: [],
       sites: [],
       columns: [
         { data: "ReferredByHrid", title: "ReferredByHrid" },
@@ -256,7 +277,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/pref_site",
+          "http://127.0.0.1:8000/api/prep_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -265,7 +286,7 @@ export default {
         );
 
         if (response.status === 200) {
-          this.pref_sites = response.data.sites;
+          this.prep_sites = response.data.sites;
           console.log(response.data.data);
         } else {
           console.log("Error fetching sites");
@@ -283,7 +304,7 @@ export default {
           {
             params: {
               filter_ref_site: this.filterReferredBySite,
-              filter_pref_site: this.filterPreferredSite,
+              filter_prep_site: this.filterPreferredSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
 
@@ -309,7 +330,7 @@ export default {
         const response = await axios.get("http://127.0.0.1:8000/api/ref_v1_export", {
           params: {
             filter_ref_site: this.filterReferredBySite,
-              filter_pref_site: this.filterPreferredSite,
+              filter_prep_site: this.filterPreferredSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
           },

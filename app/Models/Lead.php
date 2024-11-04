@@ -27,5 +27,8 @@ class Lead extends Model
         'lead_gen_source',
         'lead_spec_source',
         'lead_position',
+        'lead_assigned_to',
+        'lead_added_by',
+        'lead_updated_by',
     ];
 }

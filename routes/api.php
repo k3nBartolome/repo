@@ -273,3 +273,8 @@ Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
 Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
 Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
 Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('ref_date', [ClassesController::class, 'referralsDatev1']);
+Route::get('ref_site', [ClassesController::class, 'refSitev1']);
+Route::get('prep_site', [ClassesController::class, 'prefSitev1']);
+Route::get('ref_v1', [ClassesController::class, 'referralsDatev1']);
+Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
