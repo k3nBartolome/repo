@@ -75,6 +75,7 @@ fontawesome
 Fonticons
 frtlip
 gtotal
+HDMF
 hoverable
 hrid
 HRID
@@ -119,6 +120,7 @@ pdfmake
 perx
 Perx
 perxv
+PHIC
 picklist
 primeflex
 primeicons
@@ -173,6 +175,7 @@ tailwindcss
 tieredmenu
 toastservice
 togglebutton
+toggleis
 Tomzer
 Toolsv
 tooltiptext

@@ -100,7 +100,8 @@ import ProgramManagementJamaica from "@/views/Dashboard/AppProgramDashboardJamai
 import ProgramManagementGuatemala from "@/views/Dashboard/AppProgramDashboardGuatemala.vue";
 import RemxSupplyManager from "@/views/DashboardNavItems/User/InventoryTracker/RemxSupplyManager.vue";
 import remxTransfer from "@/views/DashboardNavItems/User/InventoryTracker/RemxSiteTransferRequest.vue";
-
+import Onboarding from "@/views/DashboardNavItems/User/Onboarding/OnboardingMainPage.vue";
+import OnboardingForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingForm.vue";
 const routes = [
   {
     path: "/",
@@ -629,6 +630,22 @@ const routes = [
         path: "/admin_dashboard",
         name: "adminDashboard",
         component: AppAdminDashboard,
+      },
+
+    ],
+  },
+  {
+    path: "/",
+    component: Onboarding,
+    meta: {
+      requiresAuth: true,
+      requiresRoles: ["admin"],
+    },
+    children: [
+      {
+        path: "/onboarding_dashboard",
+        name: "OnboardingForm",
+        component: OnboardingForm,
       },
 
     ],
