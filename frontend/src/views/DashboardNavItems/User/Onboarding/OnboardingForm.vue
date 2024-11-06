@@ -172,303 +172,31 @@
             </button>
           </div>
           <div v-if="isNBIVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
+            <div class="grid grid-cols-4 gap-4">
               <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
+                <label class="block text-sm font-medium">NBI </label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Validity Date</label>
                 <input
-                  v-model="region"
-                  type="email"
+                  v-model="validity_date"
+                  type="date"
                   class="mt-1 p-2 border rounded"
                 />
               </div>
               <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
+                <label class="block text-sm font-medium">Printed Date</label>
                 <input
-                  v-model="site"
-                  type="email"
+                  v-model="printed_date"
+                  type="date"
                   class="mt-1 p-2 border rounded"
                 />
               </div>
               <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
+                <label class="block text-sm font-medium">Remarks</label>
                 <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg">PHIC</span>
-            <button @click="togglePHIC" class="text-blue-500 underline">
-              {{ isPHICVisible ? "Hide" : "Show" }}
-            </button>
-          </div>
-          <div v-if="isPHICVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
-                <input
-                  v-model="region"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
-                <input
-                  v-model="site"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
-                <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg">SSS</span>
-            <button @click="toggleSSS" class="text-blue-500 underline">
-              {{ isSSSVisible ? "Hide" : "Show" }}
-            </button>
-          </div>
-          <div v-if="isSSSVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
-                <input
-                  v-model="region"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
-                <input
-                  v-model="site"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
-                <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg">HDMF</span>
-            <button @click="toggleHDMF" class="text-blue-500 underline">
-              {{ isHDMFVisible ? "Hide" : "Show" }}
-            </button>
-          </div>
-          <div v-if="isHDMFVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
-                <input
-                  v-model="region"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
-                <input
-                  v-model="site"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
-                <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg">TIN</span>
-            <button @click="toggleTIN" class="text-blue-500 underline">
-              {{ isTINVisible ? "Hide" : "Show" }}
-            </button>
-          </div>
-          <div v-if="isTINVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
-                <input
-                  v-model="region"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
-                <input
-                  v-model="site"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
-                <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-semibold text-lg">BGC</span>
-            <button @click="toggleBGC" class="text-blue-500 underline">
-              {{ isBGCVisible ? "Hide" : "Show" }}
-            </button>
-          </div>
-          <div v-if="isBGCVisible" class="p-4 border rounded-lg bg-gray-50">
-            <div class="grid grid-cols-5 gap-5">
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Region</label>
-                <input
-                  v-model="region"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Site</label>
-                <input
-                  v-model="site"
-                  type="email"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Lob</label>
-                <input
-                  v-model="lob"
-                  type="tel"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Team Name</label>
-                <input
-                  v-model="team_name"
-                  type="text"
-                  class="mt-1 p-2 border rounded"
-                />
-              </div>
-              <div class="flex flex-col">
-                <label class="block text-sm font-medium">Project Code</label>
-                <input
-                  v-model="project_code"
+                  v-model="nbi_remarks"
                   type="text"
                   class="mt-1 p-2 border rounded"
                 />
@@ -484,6 +212,208 @@
             </button>
           </div>
           <div v-if="isDTVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">DT Proof</label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium"
+                  >Transaction Date</label
+                >
+                <input
+                  v-model="dt_transaction_date"
+                  type="date"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Result Date</label>
+                <input
+                  v-model="dt_result_date"
+                  type="date"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Result</label>
+                <input
+                  v-model="dt_result"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg">PHIC</span>
+            <button @click="togglePHIC" class="text-blue-500 underline">
+              {{ isPHICVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isPHICVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">PHIC Proof</label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">type of Proof</label>
+                <input
+                  v-model="type_of_proof"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">PHIC#</label>
+                <input
+                  v-model="phic_number"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">PHIC Remarks</label>
+                <input
+                  v-model="phic_remarks"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg">SSS</span>
+            <button @click="toggleSSS" class="text-blue-500 underline">
+              {{ isSSSVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isSSSVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">SSS Proof</label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">SSS #</label>
+                <input
+                  v-model="sss_number"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">SSS Remarks</label>
+                <input
+                  v-model="sss_remarks"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Proof type</label>
+                <input
+                  v-model="sss_proof_type"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg">HDMF</span>
+            <button @click="toggleHDMF" class="text-blue-500 underline">
+              {{ isHDMFVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isHDMFVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">HDMF Proof</label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">HDMF #</label>
+                <input
+                  v-model="hdmf_number"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">HDMF Remarks</label>
+                <input
+                  v-model="hdmf_remarks"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Proof type</label>
+                <input
+                  v-model="hdmf_proof_type"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg">TIN</span>
+            <button @click="toggleTIN" class="text-blue-500 underline">
+              {{ isTINVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isTINVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">TIN Proof</label>
+                <input type="file" class="mt-1 p-2 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">TIN #</label>
+                <input
+                  v-model="tin_number"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">TIN Remarks</label>
+                <input
+                  v-model="tin_remarks"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Proof type</label>
+                <input
+                  v-model="tin_proof_type"
+                  type="text"
+                  class="mt-1 p-2 border rounded"
+                />
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-lg">BGC</span>
+            <button @click="toggleBGC" class="text-blue-500 underline">
+              {{ isBGCVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isBGCVisible" class="p-4 border rounded-lg bg-gray-50">
             <div class="grid grid-cols-5 gap-5">
               <div class="flex flex-col">
                 <label class="block text-sm font-medium">Region</label>
@@ -540,7 +470,7 @@ export default {
       // Visibility states for each section
       isSection1Visible: true,
       isSection2Visible: false,
-      isSection3Visible: false,
+      isSection3Visible: true,
       isNBIVisible: false,
       isSSSVisible: false,
       isPHICVisible: false,
