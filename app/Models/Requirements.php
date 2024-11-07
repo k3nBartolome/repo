@@ -13,7 +13,7 @@ class Requirements extends Model
         'employee_tbl_id',
         'nbi',
         'nbi_remarks',
-        'nbi_validity',
+        'nbi_validity_date',
         'nbi_printed_date',
         'nbi_file_name',
         'nbi_file_path',

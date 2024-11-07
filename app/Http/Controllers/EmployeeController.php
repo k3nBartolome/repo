@@ -2,15 +2,66 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\EmployeeImport;
 use App\Models\Employee;
 use App\Models\Requirements;
-use App\Models\Lob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
+    public function storeEmployee(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'nullable',
+            'last_name' => 'nullable',
+            'first_name' => 'nullable',
+            'middle_name' => 'nullable',
+            'employee_status' => 'nullable',
+            'hired_date' => 'nullable',
+            'hired_month' => 'nullable',
+            'birthdate' => 'nullable',
+            'contact_number' => 'nullable',
+            'email' => 'nullable|email|unique:employees,email',
+            'account_associate' => 'nullable',
+            'employee_added_by' => 'nullable|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $employee_info = new Employee();
+        $employee_info->fill($request->all());
+        $employee_info->save();
+
+        return response()->json([
+            'employee' => $employee_info,
+        ]);
+    }
+
+    public function storeBulkEmployee(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls',
+            'employee_added_by' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        try {
+            Excel::import(new EmployeeImport($request->employee_added_by), $request->file('file'));
+
+            return response()->json(['success' => 'Employees imported successfully'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error importing Employee: '.$e->getMessage()], 500);
+        }
+    }
+
     public function update(Request $request, $id)
     {
         $requirement = Requirements::find($id);
@@ -21,7 +72,7 @@ class EmployeeController extends Controller
             'employee_tbl_id' => 'required|exists:employees,employee_id',
             'nbi' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'nbi_remarks' => 'nullable|string',
-            'nbi_validity' => 'nullable|date',
+            'nbi_validity_date' => 'nullable|date',
             'nbi_printed_date' => 'nullable|date',
             'dt_results' => 'nullable|string',
             'dt_transaction_date' => 'nullable|date',
@@ -58,8 +109,8 @@ class EmployeeController extends Controller
             'week_ending' => 'nullable|date',
             'fifteenth_day_deadline' => 'nullable|date',
             'end_of_product_training' => 'nullable|date',
-            'past_due' => 'nullable|boolean',
-            'on_track' => 'nullable|boolean',
+            'past_due' => 'nullable|string',
+            'on_track' => 'nullable|string',
             'nbi_dt' => 'nullable|string',
             'job_offer_letter' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'interview_form_compliance' => 'nullable|string',
@@ -92,26 +143,28 @@ class EmployeeController extends Controller
         $validatedData = $request->all();
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
-                if ($requirement->{$field . '_path'}) {
-                    Storage::disk('public')->delete($requirement->{$field . '_path'});
+                if ($requirement->{$field.'_path'}) {
+                    Storage::disk('public')->delete($requirement->{$field.'_path'});
                 }
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field . '_path'] = $imagePath;
-                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field.'_path'] = $imagePath;
+                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirement->update($validatedData);
+
         return response()->json([
             'requirements' => $requirement,
         ]);
     }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'employee_tbl_id' => 'required|exists:employees,employee_id',
             'nbi' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'nbi_remarks' => 'nullable|string',
-            'nbi_validity' => 'nullable|date',
+            'nbi_validity_date' => 'nullable|date',
             'nbi_printed_date' => 'nullable|date',
             'dt_results' => 'nullable|string',
             'dt_transaction_date' => 'nullable|date',
@@ -148,8 +201,8 @@ class EmployeeController extends Controller
             'week_ending' => 'nullable|date',
             'fifteenth_day_deadline' => 'nullable|date',
             'end_of_product_training' => 'nullable|date',
-            'past_due' => 'nullable|boolean',
-            'on_track' => 'nullable|boolean',
+            'past_due' => 'nullable|string',
+            'on_track' => 'nullable|string',
             'nbi_dt' => 'nullable|string',
             'job_offer_letter' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'interview_form_compliance' => 'nullable|string',
@@ -183,11 +236,12 @@ class EmployeeController extends Controller
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field . '_path'] = $imagePath;
-                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field.'_path'] = $imagePath;
+                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirements = Requirements::create($validatedData);
+
         return response()->json([
             'requirements' => $requirements,
         ]);

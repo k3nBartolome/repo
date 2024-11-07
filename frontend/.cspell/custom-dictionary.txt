@@ -28,6 +28,7 @@ chartjs
 chartkick
 Cheryll
 Christito
+cibi
 Classe
 classesall
 classessite
@@ -79,6 +80,7 @@ HDMF
 hoverable
 hrid
 HRID
+hris
 inlinemessage
 inplace
 Inplace
@@ -117,6 +119,7 @@ overlaypanel
 panelmenu
 Payrate
 pdfmake
+peme
 perx
 Perx
 perxv

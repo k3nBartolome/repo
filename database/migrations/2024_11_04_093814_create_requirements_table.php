@@ -18,7 +18,7 @@ class CreateRequirementsTable extends Migration
             $table->unsignedBigInteger('employee_tbl_id');
             $table->string('nbi')->nullable();
             $table->text('nbi_remarks')->nullable();
-            $table->date('nbi_validity')->nullable();
+            $table->date('nbi_validity_date')->nullable();
             $table->date('nbi_printed_date')->nullable();
             $table->string('nbi_file_name')->nullable();
             $table->string('nbi_file_path')->nullable();
@@ -96,8 +96,8 @@ class CreateRequirementsTable extends Migration
             $table->string('week_ending')->nullable();
             $table->date('fifteenth_day_deadline')->nullable();
             $table->date('end_of_product_training')->nullable();
-            $table->boolean('past_due')->default(false);
-            $table->boolean('on_track')->default(false);
+            $table->string('past_due')->nullable();
+            $table->string('on_track')->nullable();
             $table->string('nbi_dt')->nullable();
             $table->string('job_offer_letter')->nullable();
             $table->string('interview_form_compliance')->nullable();
@@ -119,7 +119,7 @@ class CreateRequirementsTable extends Migration
             $table->string('last_received_from_hs_with_findings')->nullable();
             $table->string('status_201')->nullable();
             $table->text('compliance_remarks')->nullable();
-            $table->boolean('with_findings')->default(false);
+            $table->string('with_findings')->nullable();
             $table->string('transmittal_to_act_hris_email_subject_sent')->nullable();
             $table->text('act_hris_remarks')->nullable();
             $table->timestamps();
