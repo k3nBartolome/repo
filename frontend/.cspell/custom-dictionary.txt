@@ -50,6 +50,8 @@ datetime
 deferredcontent
 Dela
 dialogservice
+dnso
+DNSO
 Dribbble
 dropcontainer
 dynamicdialog
@@ -76,6 +78,7 @@ fontawesome
 Fonticons
 frtlip
 gtotal
+handleform
 HDMF
 hoverable
 hrid
@@ -125,6 +128,7 @@ Perx
 perxv
 PHIC
 picklist
+previewform
 primeflex
 primeicons
 primevue

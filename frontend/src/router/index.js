@@ -102,6 +102,8 @@ import RemxSupplyManager from "@/views/DashboardNavItems/User/InventoryTracker/R
 import remxTransfer from "@/views/DashboardNavItems/User/InventoryTracker/RemxSiteTransferRequest.vue";
 import Onboarding from "@/views/DashboardNavItems/User/Onboarding/OnboardingMainPage.vue";
 import OnboardingForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingForm.vue";
+import OnboardingUpdateForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateForm.vue";
+
 const routes = [
   {
     path: "/",
@@ -646,6 +648,12 @@ const routes = [
         path: "/onboarding_dashboard",
         name: "OnboardingForm",
         component: OnboardingForm,
+      },
+      {
+        path: "onboarding_dashboard/update/:id",
+        name: "OnboardingUpdateForm",
+        component: OnboardingUpdateForm,
+        props: true, 
       },
 
     ],

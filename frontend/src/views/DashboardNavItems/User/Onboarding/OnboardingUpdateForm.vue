@@ -14,99 +14,112 @@
         </div>
 
         <div v-if="isSection1Visible" class="p-4 border rounded-lg bg-gray-50">
-          <div class="grid grid-cols-4 gap-4">
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">First Name</label>
-              <input
-                v-model="first_name"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
+         
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">First Name</label>
+                <input
+                  v-model="first_name"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Last Name</label>
+                <input
+                  v-model="last_name"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Middle Name</label>
+                <input
+                  v-model="middle_name"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Date of Birth</label>
+                <input
+                  v-model="birthdate"
+                  type="date"
+                  class="p-2 mt-1 border rounded"
+                 readonly
+                />
+              </div>
             </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Last Name</label>
-              <input
-                v-model="last_name"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
+    
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Email</label>
+                <input
+                  v-model="email"
+                  type="email"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Contact#</label>
+                <input
+                  v-model="contact_number"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Employee ID</label>
+                <input
+                  v-model="employee_id"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Hired Date</label>
+                <input
+                  v-model="hired_date"
+                  type="date"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
             </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Middle Name</label>
-              <input
-                v-model="middle_name"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Date of Birth</label>
-              <input
-                v-model="birthdate"
-                type="date"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-4 gap-4">
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Email</label>
-              <input
-                v-model="email"
-                type="email"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Contact#</label>
-              <input
-                v-model="contact_number"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Employee ID</label>
-              <input
-                v-model="employee_id"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Hired Date</label>
-              <input
-                v-model="hired_date"
-                type="date"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-          </div>
-          <div class="grid grid-cols-4 gap-4">
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Hired Month</label>
-              <input
-                v-model="hired_month"
-                type="email"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Employee Status</label>
-              <input
-                v-model="employee_status"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
-            <div class="flex flex-col">
-              <label class="block text-sm font-medium">Account Associate</label>
-              <input
-                v-model="account_associate"
-                type="text"
-                class="p-2 mt-1 border rounded"
-              />
-            </div>
+    
+            <div class="grid grid-cols-4 gap-4">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Hired Month</label>
+                <input
+                  v-model="hired_month"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  required
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Employee Status</label>
+                <input
+                  v-model="employee_status"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                  readonly
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">Account Associate</label>
+                <input
+                  v-model="account_associate"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                />
+              </div>
           </div>
         </div>
       </div>
@@ -203,7 +216,7 @@
                     :src="previewNBI"
                     v-if="previewNBI"
                     alt="Image Preview"
-                    class="w-20 h-20 object-cover rounded-lg border-2"
+                    class="object-cover w-20 h-20 border-2 rounded-lg"
                   />
                 </div> -->
                 <div class="flex flex-col">
@@ -872,10 +885,12 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   data() {
     return {
       //employee
+      employee: null,
       employee_id: "",
       last_name: "",
       first_name: "",
@@ -1060,7 +1075,48 @@ export default {
       previewMC: null,
     };
   },
+  mounted(){
+    this.getEmployee();
+  },
   methods: {
+    async getEmployee() {
+  try {
+    const token = this.$store.state.token;
+    const headers = {
+      Authorization: `Bearer ${token}`,
+    };
+
+    const response = await axios.get(
+      `http://127.0.0.1:8000/api/employees/${this.$route.params.id}`,
+      { headers }
+    );
+
+    if (response.status === 200) {
+      const EmpObj = response.data.employee; // Now accessing 'employee' from the response
+
+      // Update the data fields
+      this.employee_id = EmpObj.employee_id;
+      this.last_name = EmpObj.last_name;
+      this.first_name = EmpObj.first_name;
+      this.middle_name = EmpObj.middle_name;
+      this.employee_status = EmpObj.employee_status;
+      this.hired_date = EmpObj.hired_date;
+      this.hired_month = EmpObj.hired_month;
+      this.birthdate = EmpObj.birthdate;
+      this.contact_number = EmpObj.contact_number;
+      this.email = EmpObj.email;
+      this.account_associate = EmpObj.account_associate;
+
+      console.log(EmpObj); // Log to check the structure of the response
+    } else {
+      console.log("Error fetching employee data");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+},
+
+
     toggleSection1() {
       this.isSection1Visible = !this.isSection1Visible;
     },

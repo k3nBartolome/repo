@@ -43,6 +43,36 @@ class EmployeeController extends Controller
         ]);
     }
 
+    public function index(Request $request)
+    {
+        $employee_info = Employee::paginate(10);
+
+        return response()->json([
+            'employees' => $employee_info->items(),
+            'pagination' => [
+                'total' => $employee_info->total(),
+                'current_page' => $employee_info->currentPage(),
+                'first_page' => $employee_info->url(1),
+                'last_page' => $employee_info->url($employee_info->lastPage()),
+                'next_page' => $employee_info->nextPageUrl(),
+                'prev_page' => $employee_info->previousPageUrl(),
+                'per_page' => $employee_info->perPage(),
+                'total_pages' => $employee_info->lastPage(),
+            ],
+        ]);
+    }
+
+    public function show($id)
+    {
+        $employee = Employee::find($id);
+        if (!$employee) {
+            return response()->json(['message' => 'Employee not found'], 404);
+        }
+
+        // Return employee data as JSON
+        return response()->json(['employee' => $employee]);
+    }
+
     public function storeBulkEmployees(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -59,7 +89,7 @@ class EmployeeController extends Controller
 
             return response()->json(['success' => 'Employees imported successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error importing Employee: ' . $e->getMessage()], 500);
+            return response()->json(['error' => 'Error importing Employee: '.$e->getMessage()], 500);
         }
     }
 
@@ -144,12 +174,12 @@ class EmployeeController extends Controller
         $validatedData = $request->all();
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
-                if ($requirement->{$field . '_path'}) {
-                    Storage::disk('public')->delete($requirement->{$field . '_path'});
+                if ($requirement->{$field.'_path'}) {
+                    Storage::disk('public')->delete($requirement->{$field.'_path'});
                 }
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field . '_path'] = $imagePath;
-                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field.'_path'] = $imagePath;
+                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirement->update($validatedData);
@@ -237,8 +267,8 @@ class EmployeeController extends Controller
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field . '_path'] = $imagePath;
-                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field.'_path'] = $imagePath;
+                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirements = Requirements::create($validatedData);

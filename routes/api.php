@@ -9,10 +9,10 @@ use App\Http\Controllers\CapEmailController;
 use App\Http\Controllers\ClassesController;
 use App\Http\Controllers\ClassStaffingController;
 use App\Http\Controllers\DateRangeController;
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\InventoryController;
 use App\Http\Controllers\ItemsController;
 use App\Http\Controllers\LeadController;
-use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProgramController;
 use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
@@ -259,8 +259,10 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     //HNS
     Route::post('upload-leads-bulk', [LeadController::class, 'storeBulkLeads']);
     Route::post('upload_leads', [LeadController::class, 'storeLeads']);
-    Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployee']);
+    Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
     Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
+    Route::get('employees', [EmployeeController::class, 'index']);
+    Route::get('/employees/{id}', [EmployeeController::class, 'show']);
 });
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);

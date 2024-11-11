@@ -50,8 +50,8 @@ class EmployeeImport implements ToModel, WithHeadingRow
                 'contact_number' => $row['contact_number'],
                 'email' => $row['email'],
                 'account_associate' => $row['account_associate'],
-                'employee_added_by' => $this->employeeAddedBy,
                 'employment_status' => $row['employment_status'],
+            'employee_added_by' => $this->employeeAddedBy,
             ]);
         } catch (\Exception $e) {
             return null;
