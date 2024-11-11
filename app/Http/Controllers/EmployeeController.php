@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class EmployeeController extends Controller
 {
-    public function storeEmployee(Request $request)
+    public function storeEmployees(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'nullable',
@@ -26,6 +26,7 @@ class EmployeeController extends Controller
             'contact_number' => 'nullable',
             'email' => 'nullable|email|unique:employees,email',
             'account_associate' => 'nullable',
+            'employment_status' => 'nullable',
             'employee_added_by' => 'nullable|integer',
         ]);
 
@@ -42,7 +43,7 @@ class EmployeeController extends Controller
         ]);
     }
 
-    public function storeBulkEmployee(Request $request)
+    public function storeBulkEmployees(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'file' => 'required|mimes:xlsx,xls',
@@ -58,7 +59,7 @@ class EmployeeController extends Controller
 
             return response()->json(['success' => 'Employees imported successfully'], 200);
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Error importing Employee: '.$e->getMessage()], 500);
+            return response()->json(['error' => 'Error importing Employee: ' . $e->getMessage()], 500);
         }
     }
 
@@ -143,12 +144,12 @@ class EmployeeController extends Controller
         $validatedData = $request->all();
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
-                if ($requirement->{$field.'_path'}) {
-                    Storage::disk('public')->delete($requirement->{$field.'_path'});
+                if ($requirement->{$field . '_path'}) {
+                    Storage::disk('public')->delete($requirement->{$field . '_path'});
                 }
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field.'_path'] = $imagePath;
-                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field . '_path'] = $imagePath;
+                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirement->update($validatedData);
@@ -236,8 +237,8 @@ class EmployeeController extends Controller
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field.'_path'] = $imagePath;
-                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field . '_path'] = $imagePath;
+                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirements = Requirements::create($validatedData);

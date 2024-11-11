@@ -21,5 +21,6 @@ class Employee extends Model
         'contact_number',
         'email_address',
         'account_associate',
+        'employment_status',
     ];
 }

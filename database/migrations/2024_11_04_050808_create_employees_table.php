@@ -26,8 +26,9 @@ class CreateEmployeesTable extends Migration
             $table->string('contact_number')->nullable();
             $table->string('email_address')->nullable();
             $table->string('account_associate')->nullable();
+            $table->string('employment_status')->nullable();
             $table->unsignedBigInteger('employee_added_by')->nullable();
-            $table->unsignedBigInteger('updated_added_by')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();
             $table->foreign('employee_added_by')->references('id')->on('users');
             $table->foreign('updated_by')->references('id')->on('users');

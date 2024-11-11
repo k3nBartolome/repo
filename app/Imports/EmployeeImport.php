@@ -30,7 +30,8 @@ class EmployeeImport implements ToModel, WithHeadingRow
             'contact_number' => 'nullable',
             'email' => 'nullable|email|unique:employees,email',
             'account_associate' => 'nullable',
-    ]);
+            'employment_status' => 'nullable',
+        ]);
 
         if ($validator->fails()) {
             return null;
@@ -38,19 +39,20 @@ class EmployeeImport implements ToModel, WithHeadingRow
 
         try {
             return new Employee([
-            'employee_id' => $row['employee_id'],
-            'last_name' => $row['last_name'],
-            'first_name' => $row['first_name'],
-            'middle_name' => $row['middle_name'],
-            'employee_status' => $row['employee_status'],
-            'hired_date' => $row['hired_date'],
-            'hired_month' => $row['hired_month'],
-            'birthdate' => $row['birthdate'],
-            'contact_number' => $row['contact_number'],
-            'email' => $row['email'],
-            'account_associate' => $row['account_associate'],
-            'employee_added_by' => $this->employeeAddedBy,
-        ]);
+                'employee_id' => $row['employee_id'],
+                'last_name' => $row['last_name'],
+                'first_name' => $row['first_name'],
+                'middle_name' => $row['middle_name'],
+                'employee_status' => $row['employee_status'],
+                'hired_date' => $row['hired_date'],
+                'hired_month' => $row['hired_month'],
+                'birthdate' => $row['birthdate'],
+                'contact_number' => $row['contact_number'],
+                'email' => $row['email'],
+                'account_associate' => $row['account_associate'],
+                'employee_added_by' => $this->employeeAddedBy,
+                'employment_status' => $row['employment_status'],
+            ]);
         } catch (\Exception $e) {
             return null;
         }
