@@ -19,8 +19,9 @@ class Employee extends Model
         'hired_month',
         'birthdate',
         'contact_number',
-        'email_address',
+        'email',
         'account_associate',
         'employment_status',
+        'employee_added_by',
     ];
 }

@@ -24,7 +24,7 @@ class CreateEmployeesTable extends Migration
             $table->string('hired_month')->nullable();
             $table->date('birthdate')->nullable();
             $table->string('contact_number')->nullable();
-            $table->string('email_address')->nullable();
+            $table->string('email')->nullable();
             $table->string('account_associate')->nullable();
             $table->string('employment_status')->nullable();
             $table->unsignedBigInteger('employee_added_by')->nullable();
