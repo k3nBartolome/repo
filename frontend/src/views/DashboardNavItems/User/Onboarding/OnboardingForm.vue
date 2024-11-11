@@ -648,6 +648,58 @@
             </div>
           </div>
         </div>
+        <div class="mb-4">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-lg font-semibold">Picture and Valid IDs</span>
+            <button @click="togglePhoto" class="text-blue-500 underline">
+              {{ isPhotoVisible ? "Hide" : "Show" }}
+            </button>
+          </div>
+          <div v-if="isPhotoVisible" class="p-4 border rounded-lg bg-gray-50">
+            <div class="grid grid-cols-6 gap-6">
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">With 2x2 Photo</label>
+                <input
+                  v-model="vaccination_card"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">2x2 Photo</label>
+                <input type="file" class="p-2 mt-1 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">1st valid ID</label>
+                <input
+                  v-model="vaccination_card"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium"
+                  >1st Valid ID Proof</label
+                >
+                <input type="file" class="p-2 mt-1 border rounded" />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium">2nd valid ID</label>
+                <input
+                  v-model="vaccination_card"
+                  type="text"
+                  class="p-2 mt-1 border rounded"
+                />
+              </div>
+              <div class="flex flex-col">
+                <label class="block text-sm font-medium"
+                  >2nd Valid ID Proof</label
+                >
+                <input type="file" class="p-2 mt-1 border rounded" />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -798,6 +850,7 @@ export default {
       isBIRVisible: false,
       isNSOVisible: false,
       isVaccineVisible: false,
+      isPhotoVisible: false,
     };
   },
   methods: {
@@ -842,6 +895,9 @@ export default {
     },
     toggleVaccine() {
       this.isVaccineVisible = !this.isVaccineVisible;
+    },
+    togglePhoto() {
+      this.isPhotoVisible = !this.isPhotoVisible;
     },
   },
 };

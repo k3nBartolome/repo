@@ -1,7 +1,7 @@
 <template>
   <div class="px-4 border border-solid border-1">
     <div class="flex items-baseline space-x-2">
-      <div class="">
+      <!-- <div class="">
         <router-link to="/h&s/screening" class="link-button">
           <button
             class="font-sans font-semibold text-black text-2xs svg-button"
@@ -46,7 +46,7 @@
             Dashboard
           </button>
         </router-link>
-      </div>
+      </div> -->
 
       <div class="">
         <router-link to="/h&s/interview" class="link-button">
@@ -93,7 +93,7 @@
           </button>
         </router-link>
       </div>
-      <div class="">
+      <!-- <div class="">
         <router-link to="/h&s/prog_specs" class="link-button">
           <button
             class="font-sans font-semibold text-black text-2xs svg-button"
@@ -138,7 +138,7 @@
             To be Hired
           </button>
         </router-link>
-      </div>
+      </div> -->
     </div>
   </div>
   <main class="flex flex-col h-screen border border-1">
