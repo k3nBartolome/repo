@@ -310,7 +310,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -330,7 +330,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/itemsboth",
+          "https://10.236.103.168/api/itemsboth",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -263,7 +263,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesdashboard2",
+          "https://10.236.103.168/api/classesdashboard2",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -294,7 +294,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/history_export",
+          "https://10.236.103.168/api/history_export",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -338,7 +338,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -362,7 +362,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          `https://10.236.103.168/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -389,7 +389,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          `https://10.236.103.168/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

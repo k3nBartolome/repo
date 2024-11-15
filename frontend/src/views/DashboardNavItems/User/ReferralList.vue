@@ -14,7 +14,11 @@
             class="p-2 border rounded-lg w-full"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in ref_sites" :key="site.Site" :value="site.Site">
+            <option
+              v-for="site in ref_sites"
+              :key="site.Site"
+              :value="site.Site"
+            >
               {{ site.Site }}
             </option>
           </select>
@@ -26,7 +30,11 @@
             class="p-2 border rounded-lg w-full"
           >
             <option disabled value="" selected>Please select one</option>
-            <option v-for="site in pref_sites" :key="site.Site" :value="site.Site">
+            <option
+              v-for="site in pref_sites"
+              :key="site.Site"
+              :value="site.Site"
+            >
               {{ site.Site }}
             </option>
           </select>
@@ -49,7 +57,7 @@
             @input="updateFilterEndDate"
           />
         </div>
-       
+
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
@@ -198,7 +206,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/ref_date",
+          "https://10.236.103.168/api/ref_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -234,7 +242,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/ref_site",
+          "https://10.236.103.168/api/ref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -256,7 +264,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/pref_site",
+          "https://10.236.103.168/api/pref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -278,21 +286,17 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "http://127.0.0.1:8000/api/ref_v1",
-          {
-            params: {
-              filter_ref_site: this.filterReferredBySite,
-              filter_pref_site: this.filterPreferredSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
-
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("https://10.236.103.168/api/ref_v1", {
+          params: {
+            filter_ref_site: this.filterReferredBySite,
+            filter_pref_site: this.filterPreferredSite,
+            filter_date_start: this.filterStartDate,
+            filter_date_end: this.filterEndDate,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         this.ref_data = response.data.ref_data;
       } catch (error) {
@@ -306,18 +310,21 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/ref_v1_export", {
-          params: {
-            filter_ref_site: this.filterReferredBySite,
+        const response = await axios.get(
+          "https://10.236.103.168/api/ref_v1_export",
+          {
+            params: {
+              filter_ref_site: this.filterReferredBySite,
               filter_pref_site: this.filterPreferredSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

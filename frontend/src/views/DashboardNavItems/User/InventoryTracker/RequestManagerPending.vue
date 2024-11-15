@@ -269,7 +269,11 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/approved/${id}`, form, config)
+        .put(
+          `https://10.236.103.168/api/inventory/approved/${id}`,
+          form,
+          config
+        )
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -294,7 +298,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/denied/${id}`, form, config)
+        .put(`https://10.236.103.168/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -321,7 +325,7 @@ export default {
       };
 
       axios
-        .put(`http://127.0.0.1:8000/api/inventory/cancel/${id}`, form, config)
+        .put(`https://10.236.103.168/api/inventory/cancel/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -338,7 +342,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory",
+          "https://10.236.103.168/api/inventory",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -359,7 +363,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

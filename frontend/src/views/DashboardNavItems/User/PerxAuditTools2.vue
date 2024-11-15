@@ -245,7 +245,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_datev2",
+          "https://10.236.103.168/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -296,7 +296,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perx_sitev2",
+          "https://10.236.103.168/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -323,7 +323,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/perxfilterv2",
+          "https://10.236.103.168/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -353,21 +353,25 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/exportv2", {
-          params: {
-            filter_lastname: this.filterLastName,
-            filter_firstname: this.filterFirstName,
-            filter_site: this.filterSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,
-            filter_contact: this.filterContact,
-            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          responseType: "blob",
-        });
+        const response = await axios.get(
+          "https://10.236.103.168/api/exportv2",
+          {
+            params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterFirstName,
+              filter_site: this.filterSite,
+              filter_date_start: this.filterStartDate,
+              filter_date_end: this.filterEndDate,
+              filter_contact: this.filterContact,
+              filter_region:
+                this.filterRegion === "ALL" ? "" : this.filterRegion,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

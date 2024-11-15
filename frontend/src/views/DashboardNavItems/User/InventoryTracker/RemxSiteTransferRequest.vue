@@ -283,7 +283,6 @@ export default {
               const maxWidth = 800;
               const quality = 0.8;
 
-
               let width = image.width;
               let height = image.height;
               if (width > maxWidth) {
@@ -395,7 +394,7 @@ export default {
 
       axios
         .post(
-          `http://127.0.0.1:8000/api/inventory/transferremx/${id}`,
+          `https://10.236.103.168/api/inventory/transferremx/${id}`,
           formData,
           config
         )
@@ -416,7 +415,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/remxForTransfer",
+          "https://10.236.103.168/api/inventory/remxForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -264,7 +264,7 @@ import print from "datatables.net-buttons/js/buttons.print";
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "datatables.net-responsive-bs5";
 // eslint-disable-next-line no-unused-vars
-import _ from 'lodash';
+import _ from "lodash";
 
 import "bootstrap/dist/css/bootstrap.css";
 
@@ -274,8 +274,8 @@ DataTable.use(ButtonsHtml5);
 
 export default {
   components: {
-  DataTable,
-},
+    DataTable,
+  },
 
   data() {
     return {
@@ -331,36 +331,23 @@ export default {
     };
   },
   watch: {
-  sites_selected: _.debounce(function () {
-
-    this.checkClassExists();
-    this.getClassesAll().finally(() => {
-
-    });
-  }, 300),
-  programs_selected: _.debounce(function () {
-
-    this.checkClassExists();
-    this.getClassesAll().finally(() => {
-
-    });
-  }, 300),
-  month_selected: _.debounce(function () {
-
-    this.checkClassExists();
-    this.getClassesAll().finally(() => {
-
-    });
-  }, 300),
-  week_selected: _.debounce(function () {
-
-    this.checkClassExists();
-    this.getClassesAll().finally(() => {
-
-    });
-  }, 300),
-},
-
+    sites_selected: _.debounce(function () {
+      this.checkClassExists();
+      this.getClassesAll().finally(() => {});
+    }, 300),
+    programs_selected: _.debounce(function () {
+      this.checkClassExists();
+      this.getClassesAll().finally(() => {});
+    }, 300),
+    month_selected: _.debounce(function () {
+      this.checkClassExists();
+      this.getClassesAll().finally(() => {});
+    }, 300),
+    week_selected: _.debounce(function () {
+      this.checkClassExists();
+      this.getClassesAll().finally(() => {});
+    }, 300),
+  },
 
   computed: {
     isUser() {
@@ -404,7 +391,7 @@ export default {
       try {
         const token = this.$store.state.token; // Assuming you store the token in Vuex state
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/class_exists",
+          "https://10.236.103.168/api/class_exists",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -454,7 +441,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/classesall",
+          "https://10.236.103.168/api/classesall",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -483,7 +470,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -507,7 +494,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
+          `https://10.236.103.168/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -534,7 +521,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
+          `https://10.236.103.168/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

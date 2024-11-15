@@ -434,7 +434,6 @@
     </button>
   </div>
   <main class="flex flex-col h-screen border border-1">
-    
     <div class="flex flex-1 px-4 py-2 md:px-1">
       <div class="w-full py-6">
         <router-view />
@@ -514,7 +513,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.post(
-          "http://127.0.0.1:8000/api/upload_employees_bulk",
+          "https://10.236.103.168/api/upload_employees_bulk",
           formData,
           {
             headers: {
@@ -561,7 +560,7 @@ export default {
       };
 
       axios
-        .post("http://127.0.0.1:8000/api/upload_employees", formData, {
+        .post("https://10.236.103.168/api/upload_employees", formData, {
           headers,
         })
         .then((response) => {

@@ -383,11 +383,10 @@ export default {
         return;
       }
       const formData = new FormData();
-  formData.append("file_name", this.selectedFile);
-  formData.append("received_by", this.$store.state.user_id);
-  formData.append("received_quantity", this.received_quantity);
-  formData.append("received_status", this.received_status);
-
+      formData.append("file_name", this.selectedFile);
+      formData.append("received_by", this.$store.state.user_id);
+      formData.append("received_quantity", this.received_quantity);
+      formData.append("received_status", this.received_status);
 
       const config = {
         headers: {
@@ -396,7 +395,11 @@ export default {
       };
 
       axios
-        .post(`http://127.0.0.1:8000/api/inventory/transfer/${id}`, formData, config)
+        .post(
+          `https://10.236.103.168/api/inventory/transfer/${id}`,
+          formData,
+          config
+        )
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -412,7 +415,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/inventory/sourcingForTransfer",
+          "https://10.236.103.168/api/inventory/sourcingForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

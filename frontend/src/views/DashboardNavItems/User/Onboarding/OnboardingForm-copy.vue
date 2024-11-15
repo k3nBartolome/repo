@@ -235,8 +235,9 @@ export default {
     },
 
     navigateToUpdateForm(scannedValue) {
+      // Perform the navigation to the update form only after confirming the employee exists
       this.$router.push({
-        name: "OnboardingUpdateSelection",
+        name: "OnboardingUpdateForm",
         params: { id: scannedValue },
       });
     },

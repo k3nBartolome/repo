@@ -176,7 +176,6 @@
                 <span class="drop-title">Drop files here</span>
                 or
                 <input type="file" @change="handleFileChange" />
-
               </label>
             </div>
             <div class="flex justify-end mt-4">
@@ -583,52 +582,52 @@ export default {
     },
   },
 
-methods: {
-  handleFileChange(event) {
-    const file = event.target.files[0];
-    console.log(file);
-    this.file = file;
-  },
+  methods: {
+    handleFileChange(event) {
+      const file = event.target.files[0];
+      console.log(file);
+      this.file = file;
+    },
 
-  async submitBulkLeads() {
-    if (!this.file) {
-      this.errorMessage = "Please select a file to upload.";
-      return;
-    }
-
-    this.loading = true;
-    this.errorMessage = "";
-    this.successMessage = "";
-
-    const formData = new FormData();
-    formData.append("file", this.file);
-    formData.append("lead_added_by", this.$store.state.user_id);
-
-    try {
-      const token = this.$store.state.token;
-      const response = await axios.post(
-        "http://127.0.0.1:8000/api/upload-leads-bulk",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      this.successMessage = response.data.success;
-      this.file = null;
-    } catch (error) {
-      if (error.response && error.response.data) {
-        this.errorMessage =
-          error.response.data.error || "Error uploading file";
-      } else {
-        this.errorMessage = "Error uploading file";
+    async submitBulkLeads() {
+      if (!this.file) {
+        this.errorMessage = "Please select a file to upload.";
+        return;
       }
-    } finally {
-      this.loading = false;
-    }
-  },
+
+      this.loading = true;
+      this.errorMessage = "";
+      this.successMessage = "";
+
+      const formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("lead_added_by", this.$store.state.user_id);
+
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.post(
+          "https://10.236.103.168/api/upload-leads-bulk",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        this.successMessage = response.data.success;
+        this.file = null;
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.errorMessage =
+            error.response.data.error || "Error uploading file";
+        } else {
+          this.errorMessage = "Error uploading file";
+        }
+      } finally {
+        this.loading = false;
+      }
+    },
 
     addLeads() {
       this.loading = true;
@@ -658,7 +657,7 @@ methods: {
       };
 
       axios
-        .post("http://127.0.0.1:8000/api/upload_leads", formData, { headers })
+        .post("https://10.236.103.168/api/upload_leads", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.lead_date = "";
@@ -678,7 +677,6 @@ methods: {
           this.lead_gen_source = "";
           this.lead_spec_source = "";
           this.lead_position = "";
-          
         })
         .catch((error) => {
           console.log(error.response.data);

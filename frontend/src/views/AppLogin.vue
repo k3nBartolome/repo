@@ -89,7 +89,7 @@ export default {
       let isLogin;
 
       await axios
-        .post("http://127.0.0.1:8000/api/login", {
+        .post("https://10.236.103.168/api/login", {
           email: this.email,
           password: this.password,
         })
@@ -118,7 +118,7 @@ export default {
 
         if (role === "admin") {
           console.log("Redirecting to admin_dashboard");
-          this.$router.push({ path: "/admin_dashboard" });
+          this.$router.push({ path: "/onboarding_dashboard" });
         } else if (role === "user") {
           console.log("Redirecting to capfile");
           this.$router.push({ path: "/capfile" });

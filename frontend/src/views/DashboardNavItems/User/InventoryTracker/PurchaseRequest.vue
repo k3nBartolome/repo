@@ -228,11 +228,14 @@ export default {
     async getPurchase() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/purchase", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://10.236.103.168/api/purchase",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.purchase = response.data.purchase;
@@ -247,7 +250,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -273,7 +276,7 @@ export default {
         requested_by: this.$store.state.user_id,
       };
       axios
-        .post("http://127.0.0.1:8000/api/purchase", formData, {
+        .post("https://10.236.103.168/api/purchase", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

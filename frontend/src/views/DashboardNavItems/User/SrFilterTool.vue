@@ -173,7 +173,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sr_site", {
+        const response = await axios.get("https://10.236.103.168/api/sr_site", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -192,7 +192,7 @@ export default {
     async getDates() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sr_date", {
+        const response = await axios.get("https://10.236.103.168/api/sr_date", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -228,7 +228,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/sr_filter",
+          "https://10.236.103.168/api/sr_filter",
           {
             params: {
               filter_site: this.filterSite,
@@ -254,7 +254,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/sr_export",
+          "https://10.236.103.168/api/sr_export",
           {
             params: {
               filter_site: this.filterSite,

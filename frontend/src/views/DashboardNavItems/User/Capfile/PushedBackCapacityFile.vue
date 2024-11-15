@@ -1008,7 +1008,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/class_exists2",
+          "https://10.236.103.168/api/class_exists2",
           {
             params: {
               id: this.$route.params.id,
@@ -1044,7 +1044,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
+        const response = await axios.get("https://10.236.103.168/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1067,11 +1067,14 @@ export default {
     async getPrograms() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://127.0.0.1:8000/api/programs", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "https://10.236.103.168/api/programs",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (response.status === 200) {
           this.programs = response.data.data;
@@ -1091,7 +1094,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/daterange",
+          "https://10.236.103.168/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1149,7 +1152,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/get_payrate/${this.programs_selected}`,
+          `https://10.236.103.168/api/get_payrate/${this.programs_selected}`,
           { headers }
         );
 
@@ -1186,7 +1189,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://127.0.0.1:8000/api/classes/${this.$route.params.id}`,
+          `https://10.236.103.168/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -1255,7 +1258,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://127.0.0.1:8000/api/transaction/" + this.$route.params.id,
+          "https://10.236.103.168/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1345,7 +1348,7 @@ export default {
 
       axios
         .put(
-          `http://127.0.0.1:8000/api/classes/pushedback/${this.$route.params.id}`,
+          `https://10.236.103.168/api/classes/pushedback/${this.$route.params.id}`,
           formData,
           {
             headers: {

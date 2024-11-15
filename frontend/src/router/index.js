@@ -103,6 +103,8 @@ import remxTransfer from "@/views/DashboardNavItems/User/InventoryTracker/RemxSi
 import Onboarding from "@/views/DashboardNavItems/User/Onboarding/OnboardingMainPage.vue";
 import OnboardingForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingForm.vue";
 import OnboardingUpdateForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateForm.vue";
+import OnboardingNBI from "@/views/DashboardNavItems/User/Onboarding/OnboardingNBI.vue";
+import OnboardingUpdateSelection from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateSelection.vue";
 
 const routes = [
   {
@@ -653,7 +655,19 @@ const routes = [
         path: "onboarding_dashboard/update/:id",
         name: "OnboardingUpdateForm",
         component: OnboardingUpdateForm,
-        props: true, 
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/:id",
+        name: "OnboardingUpdateSelection",
+        component: OnboardingUpdateSelection,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/nbi/:id",
+        name: "OnboardingNBI",
+        component: OnboardingNBI,
+        props: true,
       },
 
     ],

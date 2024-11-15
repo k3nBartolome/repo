@@ -259,10 +259,6 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     //HNS
     Route::post('upload-leads-bulk', [LeadController::class, 'storeBulkLeads']);
     Route::post('upload_leads', [LeadController::class, 'storeLeads']);
-    Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
-    Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
-    Route::get('employees', [EmployeeController::class, 'index']);
-    Route::get('/employees/{id}', [EmployeeController::class, 'show']);
 });
 
 Route::get('out', [ClassesController::class, 'OutOfSla']);
@@ -283,3 +279,7 @@ Route::get('ref_site', [ClassesController::class, 'refSitev1']);
 Route::get('prep_site', [ClassesController::class, 'prefSitev1']);
 Route::get('ref_v1', [ClassesController::class, 'referralsDatev1']);
 Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
+Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
+Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
+Route::get('employees', [EmployeeController::class, 'index']);
+Route::get('/employees/{id}', [EmployeeController::class, 'show']);
