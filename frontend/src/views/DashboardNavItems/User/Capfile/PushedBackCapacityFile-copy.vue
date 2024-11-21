@@ -1494,7 +1494,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites", {
+        const response = await axios.get("https://10.236.102.139/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1519,7 +1519,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.168/api/programs",
+          "https://10.236.102.139/api/programs",
           {
             headers,
           }
@@ -1544,7 +1544,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.168/api/daterangeall",
+          "https://10.236.102.139/api/daterangeall",
           { headers }
         );
 
@@ -1577,7 +1577,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.168/api/classes/${this.$route.params.id}`,
+          `https://10.236.102.139/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -1635,7 +1635,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `https://10.236.103.168/api/classesstaffing/${id}`,
+          `https://10.236.102.139/api/classesstaffing/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1685,7 +1685,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/transaction/" + this.$route.params.id,
+          "https://10.236.102.139/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1795,7 +1795,7 @@ export default {
 
       axios
         .put(
-          "https://10.236.103.168/api/classes/pushedback/" +
+          "https://10.236.102.139/api/classes/pushedback/" +
             this.$route.params.id,
           formData,
           {

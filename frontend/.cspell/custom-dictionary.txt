@@ -80,6 +80,7 @@ frtlip
 gtotal
 handleform
 HDMF
+HEALTHCERTIFICATE
 hoverable
 hrid
 HRID
@@ -109,6 +110,8 @@ managementjamaica
 megamenu
 middlename
 Monstrando
+OCCUPATIONALPERMIT
+OFAC
 officedocument
 olapstructureerror
 olapstructureloaded
@@ -116,9 +119,11 @@ openingreportfile
 openxmlformats
 orderlist
 organizationchart
+ORUS
 outofsla
 Overhires
 overlaypanel
+PAGIBIG
 panelmenu
 Payrate
 pdfmake

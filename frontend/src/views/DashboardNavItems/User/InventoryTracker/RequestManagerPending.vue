@@ -270,7 +270,7 @@ export default {
 
       axios
         .put(
-          `https://10.236.103.168/api/inventory/approved/${id}`,
+          `https://10.236.102.139/api/inventory/approved/${id}`,
           form,
           config
         )
@@ -298,7 +298,7 @@ export default {
       };
 
       axios
-        .put(`https://10.236.103.168/api/inventory/denied/${id}`, form, config)
+        .put(`https://10.236.102.139/api/inventory/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -325,7 +325,7 @@ export default {
       };
 
       axios
-        .put(`https://10.236.103.168/api/inventory/cancel/${id}`, form, config)
+        .put(`https://10.236.102.139/api/inventory/cancel/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getInventory();
@@ -342,7 +342,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/inventory",
+          "https://10.236.102.139/api/inventory",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -363,7 +363,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites", {
+        const response = await axios.get("https://10.236.102.139/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

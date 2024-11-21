@@ -678,7 +678,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites7", {
+        const response = await axios.get("https://10.236.102.139/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -703,7 +703,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.168/api/programs7",
+          "https://10.236.102.139/api/programs7",
           {
             headers,
           }
@@ -728,7 +728,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.168/api/daterangeall",
+          "https://10.236.102.139/api/daterangeall",
           { headers }
         );
 
@@ -761,7 +761,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.168/api/classes/${this.$route.params.id}`,
+          `https://10.236.102.139/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -818,7 +818,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/transaction/" + this.$route.params.id,
+          "https://10.236.102.139/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -878,7 +878,7 @@ export default {
 
       axios
         .put(
-          "https://10.236.103.168/api/classes/pushedback/" +
+          "https://10.236.102.139/api/classes/pushedback/" +
             this.$route.params.id,
           formData,
           {

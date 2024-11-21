@@ -331,7 +331,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.103.168/api/itemseparate?category=${this.category}`,
+          `https://10.236.102.139/api/itemseparate?category=${this.category}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -354,7 +354,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/inventory",
+          "https://10.236.102.139/api/inventory",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -375,7 +375,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites", {
+        const response = await axios.get("https://10.236.102.139/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -416,7 +416,7 @@ export default {
         requested_by: this.$store.state.user_id,
       };
       axios
-        .post("https://10.236.103.168/api/inventory", formData, {
+        .post("https://10.236.102.139/api/inventory", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },

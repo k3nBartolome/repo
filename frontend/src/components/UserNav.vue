@@ -122,27 +122,26 @@
                   </div>
                 </div>
                 <div
-                class="dropdown"
-                @mouseover="openDropdown"
-                @mouseleave="closeDropdown"
-                @click="toggleDropdown"
-              >
-                <button
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
-                  v-if="isUser || isSourcing"
+                  class="dropdown"
+                  @mouseover="openDropdown"
+                  @mouseleave="closeDropdown"
+                  @click="toggleDropdown"
                 >
-                  H&S
-                </button>
-                <div v-show="dropdownOpen" class="dropdown-content">
-
-                  <router-link
-                    to="/classes_information"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                    >Classes</router-link
+                  <button
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
+                    v-if="isUser || isSourcing"
                   >
+                    H&S
+                  </button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link
+                      to="/classes_information"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Classes</router-link
+                    >
+                  </div>
                 </div>
-              </div>
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"

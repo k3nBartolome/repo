@@ -2,9 +2,21 @@
   <div class="container mx-auto p-4">
     <h2 class="text-xl font-semibold mb-4 text-center">NBI Upload</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      <!-- NBI Proof Image Upload -->
-
-      <!-- Validity Date -->
+      <div class="flex flex-col">
+        <label class="block text-sm font-medium">Final Status</label>
+        <select
+          v-model="nbi_final_status"
+          class="p-2 mt-1 border rounded w-full"
+        >
+          <option disabled>Please select one</option>
+          <option value="YES">Yes</option>
+          <option value="NO">No</option>
+          <option value="NO - APPOINTMENT ONLY">NO - APPOINTMENT ONLY</option>
+          <option value="NO - WITH HIT">NO - WITH HIT</option>
+          <option value="NO - INVALID">NO - INVALID</option>
+          <option value="QUALITY CONTROL">QUALITY CONTROL</option>
+        </select>
+      </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Validity Date</label>
         <input
@@ -13,7 +25,6 @@
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
-      <!-- Printed Date -->
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Printed Date</label>
         <input
@@ -22,7 +33,14 @@
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
-      <!-- Remarks -->
+      <div class="flex flex-col">
+        <label class="block text-sm font-medium">Submitted Date</label>
+        <input
+          v-model="nbi_submitted_date"
+          type="date"
+          class="p-2 mt-1 border rounded w-full"
+        />
+      </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
         <input
@@ -40,60 +58,22 @@
         class="p-2 mt-1 border rounded w-full"
       />
     </div>
-    <div class="flex flex-col sm:flex-row justify-between mt-4">
-      <button
-        @click="chooseUpload"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mb-2 sm:mb-0"
-      >
-        Upload Image
-      </button>
-      <button
-        @click="chooseCapture"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4"
-      >
-        Capture Image
-      </button>
-    </div>
-
-    <!-- Image Preview (For Both Upload and Capture) -->
-    <div v-if="nbi_proof" class="mt-4">
+    <div v-if="nbi_file_name" class="mt-4">
       <div class="flex flex-col items-center">
         <img
-          :src="nbi_proof"
+          :src="nbi_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
         />
       </div>
     </div>
-
-    <!-- Image Capture Section -->
     <div v-if="showCapture" class="mt-4">
-      <div class="flex flex-col items-center">
-        <video
-          ref="video"
-          class="w-full sm:w-3/4 lg:w-1/2 h-48 object-cover border rounded"
-          autoplay
-        ></video>
-        <button
-          @click="captureImage"
-          class="btn p-2 border rounded mt-2 w-full sm:w-1/2 lg:w-1/4"
-        >
-          Capture
-        </button>
-      </div>
-
       <div v-if="capturedImage" class="mt-4 flex flex-col items-center">
         <img
           :src="capturedImage"
           alt="Captured Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
         />
-        <button
-          @click="recaptureImage"
-          class="btn p-2 border rounded mt-2 w-full sm:w-1/2 lg:w-1/4"
-        >
-          Recapture
-        </button>
       </div>
     </div>
 
@@ -101,58 +81,45 @@
       <button
         @click="submitForm"
         class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
+        :disabled="isSubmitting"
       >
-        Submit
+        <span v-if="isSubmitting">Submitting...</span>
+        <span v-else>Submit</span>
       </button>
+    </div>
+
+    <div
+      v-if="isSubmitting"
+      class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <span>Loading...</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       showUpload: false,
       showCapture: false,
-      nbi_proof: null, // To store the uploaded or captured image
-      capturedImage: null, // Store captured image if camera is used
+      nbi_final_status: null,
       nbi_validity_date: "",
+      nbi_submitted_date: "",
       nbi_printed_date: "",
       nbi_remarks: "",
-      videoStream: null,
+      nbi_file_name: null, // Used to store file path (image preview)
+      capturedImage: null, // Used to store captured image
+      videoStream: null, // Store video stream for capture
+      nbi_proof: null, // Used for the proof file or image data
+      isSubmitting: false, // Tracks form submission status
     };
   },
   methods: {
-    // Handle file input upload
-    uploadImage(event) {
-      const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.nbi_proof = reader.result; // Set the uploaded file as the proof
-      };
-      if (file) {
-        reader.readAsDataURL(file);
-      }
-    },
-
-    // Show the upload form and hide capture
-    chooseUpload() {
-      this.showUpload = true;
-      this.showCapture = false;
-      this.nbi_proof = null; // Clear any previously captured image
-      this.capturedImage = null; // Clear captured image
-    },
-
-    // Show the capture form and hide upload
-    chooseCapture() {
-      this.showCapture = true;
-      this.showUpload = false;
-      this.nbi_proof = null; // Clear any previously uploaded image
-      this.capturedImage = null; // Clear captured image
-      this.startCamera();
-    },
-
-    // Start the camera for image capture
     async startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -164,8 +131,6 @@ export default {
         console.error("Error accessing camera:", error);
       }
     },
-
-    // Capture the image from the video feed
     captureImage() {
       const canvas = document.createElement("canvas");
       const context = canvas.getContext("2d");
@@ -175,31 +140,71 @@ export default {
       canvas.height = video.videoHeight;
 
       context.drawImage(video, 0, 0, canvas.width, canvas.height);
-      this.nbi_proof = canvas.toDataURL("image/png"); // Store captured image in nbi_proof
+      this.capturedImage = canvas.toDataURL("image/png");
+      this.nbi_proof = this.capturedImage; // Store the captured image data
     },
-
-    // Recapture the image
     recaptureImage() {
       this.capturedImage = null;
       this.nbi_proof = null;
     },
+    uploadImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.nbi_proof = file; // Store the file in nbi_proof
 
-    // Submit the form
-    submitForm() {
-      const formData = new FormData();
-      formData.append("nbi_validity_date", this.nbi_validity_date);
-      formData.append("nbi_printed_date", this.nbi_printed_date);
-      formData.append("nbi_remarks", this.nbi_remarks);
-
-      if (this.nbi_proof) {
-        const file = this.dataURLtoBlob(this.nbi_proof);
-        formData.append("nbi_image", file);
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.nbi_file_name = reader.result; // Preview the image
+        };
+        reader.readAsDataURL(file); // Preview file
       }
-
-      console.log("Form submitted", formData);
     },
 
-    // Convert base64 image to Blob
+    resizeImage(file) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const maxWidth = 1024;
+        const maxHeight = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.7); // Compress image to 70% quality
+        const compressedFile = this.dataURLtoBlob(dataUrl);
+
+        if (compressedFile.size > this.maxSize) {
+          alert("Image is still too large, please upload a smaller image.");
+          return;
+        }
+
+        this.nbi_proof = compressedFile;
+        this.nbi_file_name = dataUrl;
+      };
+    },
+
     dataURLtoBlob(dataURL) {
       const byteString = atob(dataURL.split(",")[1]);
       const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
@@ -211,8 +216,53 @@ export default {
       return new Blob([ab], { type: mimeString });
     },
 
+    async submitForm() {
+      this.isSubmitting = true;
+
+      // Check if 'nbi_final_status' is selected
+      if (!this.nbi_final_status) {
+        this.nbi_final_status = "NO STATUS"; // or any default string or null
+      }
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("nbi_final_status", this.nbi_final_status);
+      formData.append("nbi_validity_date", this.nbi_validity_date);
+      formData.append("nbi_printed_date", this.nbi_printed_date);
+      formData.append("nbi_submitted_date", this.nbi_submitted_date);
+      formData.append("nbi_remarks", this.nbi_remarks);
+
+      // Append the actual file (nbi_proof) for upload
+      if (this.nbi_proof) {
+        formData.append("nbi_proof", this.nbi_proof); // append file here
+      }
+
+      try {
+        const apiUrl = `https://10.236.102.139/api/update/requirement/${this.$route.params.id}`;
+
+        // Submit the form data to the API
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Handle success
+        console.log("Form submitted successfully", response.data);
+      } catch (error) {
+        // Handle error
+        console.error(
+          "Error submitting form",
+          error.response ? error.response.data : error.message
+        );
+        alert("An error occurred while submitting the form.");
+      } finally {
+        // Reset submitting state
+        this.isSubmitting = false;
+        alert("Form submitted successfully!");
+      }
+    },
     beforeUnmount() {
-      // Stop the camera if it was started
       if (this.videoStream) {
         const tracks = this.videoStream.getTracks();
         tracks.forEach((track) => track.stop());
@@ -241,5 +291,25 @@ export default {
 
 .object-cover {
   object-fit: cover;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.bg-gray-500 {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.rounded-lg {
+  border-radius: 0.5rem;
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 </style>

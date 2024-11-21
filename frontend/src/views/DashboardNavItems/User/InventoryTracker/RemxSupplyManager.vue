@@ -82,7 +82,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/inventory/remxForTransfer",
+          "https://10.236.102.139/api/inventory/remxForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

@@ -282,4 +282,7 @@ Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
 Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
 Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
 Route::get('employees', [EmployeeController::class, 'index']);
+Route::post('update/requirement/{id}', [EmployeeController::class, 'update']);
 Route::get('/employees/{id}', [EmployeeController::class, 'show']);
+Route::post('employees/{employeeId}/save-qr-code', [EmployeeController::class, 'saveQRCode']);
+Route::post('/employees/{employee_id}/generate-qr-code', [EmployeeController::class, 'generate']);

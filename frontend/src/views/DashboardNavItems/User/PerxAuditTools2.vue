@@ -245,7 +245,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/perx_datev2",
+          "https://10.236.102.139/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -296,7 +296,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/perx_sitev2",
+          "https://10.236.102.139/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -323,7 +323,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/perxfilterv2",
+          "https://10.236.102.139/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -354,7 +354,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/exportv2",
+          "https://10.236.102.139/api/exportv2",
           {
             params: {
               filter_lastname: this.filterLastName,

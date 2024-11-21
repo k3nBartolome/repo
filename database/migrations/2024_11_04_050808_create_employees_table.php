@@ -27,6 +27,7 @@ class CreateEmployeesTable extends Migration
             $table->string('email')->nullable();
             $table->string('account_associate')->nullable();
             $table->string('employment_status')->nullable();
+            $table->string('qr_code_path')->nullable(); // Column for QR code path
             $table->unsignedBigInteger('employee_added_by')->nullable();
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->timestamps();

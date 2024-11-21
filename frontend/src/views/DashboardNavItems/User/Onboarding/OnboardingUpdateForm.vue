@@ -280,7 +280,7 @@
                 <div class="flex flex-col">
                   <label class="block text-sm font-medium">Result Date</label>
                   <input
-                    v-model="dt_result_date"
+                    v-model="dt_results_date"
                     type="date"
                     class="p-2 mt-1 border rounded"
                   />
@@ -321,7 +321,7 @@
                 <div class="flex flex-col">
                   <label class="block text-sm font-medium">type of Proof</label>
                   <input
-                    v-model="phic_proof"
+                    v-model="phic_file_name"
                     type="text"
                     class="p-2 mt-1 border rounded"
                   />
@@ -435,7 +435,7 @@
                 <div class="flex flex-col">
                   <label class="block text-sm font-medium">Proof type</label>
                   <input
-                    v-model="hdmf_proof"
+                    v-model="hdmf_file_name"
                     type="text"
                     class="p-2 mt-1 border rounded"
                   />
@@ -484,7 +484,7 @@
                 <div class="flex flex-col">
                   <label class="block text-sm font-medium">Proof type</label>
                   <input
-                    v-model="tin_proof"
+                    v-model="tin_file_name"
                     type="text"
                     class="p-2 mt-1 border rounded"
                   />
@@ -916,7 +916,7 @@ export default {
       nbi_file_path: null,
       dt_results: "",
       dt_transaction_date: "",
-      dt_result_date: "",
+      dt_results_date: "",
       dt_file_name: "",
       dt_file_path: null,
       peme_status: "",
@@ -937,17 +937,14 @@ export default {
       sss_file_path: null,
       phic_number: "",
       phic_remarks: "",
-      phic_proof: "",
       phic_file_name: "",
       phic_file_path: null,
       hdmf_number: "",
       hdmf_remarks: "",
-      hdmf_proof: "",
       hdmf_file_name: "",
       hdmf_file_path: null,
       tin: "",
       tin_remarks: "",
-      tin_proof: "",
       tin_file_name: "",
       tin_file_path: null,
       form_1902: "",
@@ -1085,7 +1082,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.168/api/employees/${this.$route.params.id}`,
+          `https://10.236.102.139/api/employees/${this.$route.params.id}`,
           { headers }
         );
 

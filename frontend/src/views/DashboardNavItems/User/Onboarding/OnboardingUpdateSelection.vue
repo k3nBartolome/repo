@@ -1,16 +1,100 @@
 <template>
   <div class="container">
-    <h1 class="title">Select Update Option</h1>
+    <!-- Employee Details Section -->
+    <div class="employee-details">
+      <div class="employee-image">
+        <img :src="employeeImageUrl" alt="Employee Image" />
+      </div>
+      <div class="employee-info">
+        <div class="employee-info-row">
+          <p><strong>First Name:</strong> Kryss Renato Engel</p>
+          <p><strong>Middle Name:</strong> Padilla</p>
+        </div>
+        <div class="employee-info-row">
+          <p><strong>Last Name:</strong> Bartolome</p>
+          <p><strong>Contact Number:</strong> 09614551291</p>
+        </div>
+        <div class="employee-info-row">
+          <p><strong>Email:</strong> padillakryss@gmail.com</p>
+        </div>
+      </div>
+    </div>
 
+    <!-- Optional Buttons Section -->
+    <div
+      class="optional-buttons"
+      v-if="optionalButtons && optionalButtons.length > 0"
+    >
+      <div class="optional-buttons-header">
+        <h3>Optional Actions</h3>
+      </div>
+      <div
+        v-for="(buttonLabel, index) in optionalButtons"
+        :key="index"
+        class="optional-button-container"
+      >
+        <button
+          class="optional-button"
+          @click="handleOptionalButton(buttonLabel)"
+        >
+          {{ buttonLabel }}
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Button Container (Two or three buttons per row) -->
     <div class="button-container">
       <button class="update-button" @click="selectOption('OnboardingNBI')">
         NBI
       </button>
-      <button class="update-button" @click="selectOption('TIN')">TIN</button>
-      <button class="update-button" @click="selectOption('DT')">DT</button>
-      <button class="update-button" @click="selectOption('PEME')">PEME</button>
+      <button class="update-button" @click="selectOption('OnboardingDT')">
+        DT
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingPEME')">
+        PEME
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingSSS')">
+        SSS
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingPHIC')">
+        PHIC
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingPAGIBIG')">
+        PAGIBIG
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingTIN')">
+        TIN
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingHEALTHCERTIFICATE')"
+      >
+        HEALTH CERTIFICATE
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingOCCUPATIONALPERMIT')"
+      >
+        OCCUPATIONAL PERMIT
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingOFAC')">
+        OFAC
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingSAM')">
+        SAM
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingOIG')">
+        OIG
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingCIBI')">
+        CIBI
+      </button>
+      <button class="update-button" @click="selectOption('OnboardingBGC')">
+        BGC
+      </button>
     </div>
 
+    <!-- Selection Display -->
     <div v-if="selectedOption" class="selection-display">
       <p>
         You selected: <strong>{{ selectedOption }}</strong>
@@ -21,11 +105,20 @@
 
 <script>
 export default {
-  props: ["id"], // Receive the employee ID as a prop
+  props: [
+    "id",
+    "firstName",
+    "middleName",
+    "lastName",
+    "contactNumber",
+    "email",
+    "employeeImageUrl",
+    "optionalButtons",
+  ], // Receive employee details as props
 
   data() {
     return {
-      selectedOption: null,
+      selectedOption: null, // Default value for selected option
     };
   },
   methods: {
@@ -40,62 +133,181 @@ export default {
         params: { id: this.id }, // Pass the employee ID as a route parameter
       });
     },
+    handleOptionalButton(buttonLabel) {
+      console.log(`Optional button clicked: ${buttonLabel}`);
+      // Handle the action for optional buttons here, if needed
+    },
   },
 };
 </script>
-
 <style scoped>
+/* Container styling */
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 15px; /* Updated padding */
+  max-width: 1200px; /* Limit max width */
+  margin: 0 auto; /* Center content */
 }
 
+/* Title styling */
 .title {
-  font-size: 2rem;
+  font-size: 1.8rem; /* Reduced font size */
   margin-bottom: 20px;
+  text-align: center;
+  color: #333;
 }
 
-.button-container {
+/* Employee details section */
+.employee-details {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  margin-bottom: 10px;
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.employee-image img {
+  width: 60px; /* Reduced image size */
+  height: 60px; /* Reduced image size */
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #007bff;
+}
+
+.employee-info {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 15px;
-  width: 100%;
-  max-width: 400px;
+  justify-content: flex-start;
 }
 
+.employee-info-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+.employee-info p {
+  margin: 5px 0;
+  font-size: 0.9rem; /* Reduced font size */
+  color: #555;
+}
+
+.employee-info strong {
+  color: #333;
+}
+
+/* Optional buttons section */
+.optional-buttons {
+  margin-bottom: 30px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.optional-buttons-header {
+  margin-bottom: 15px;
+  font-size: 1.2rem; /* Reduced font size */
+  font-weight: bold;
+  color: #007bff;
+}
+
+.optional-button-container {
+  margin-bottom: 10px;
+}
+
+.optional-button,
 .update-button {
-  padding: 15px;
-  font-size: 1.5rem;
-  background-color: #28a745;
+  padding: 10px; /* Reduced padding */
+  font-size: 1rem; /* Reduced font size */
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: background-color 0.3s;
   width: 100%;
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflowed text */
+  text-overflow: ellipsis; /* Add ellipsis (...) if text is too long */
+  max-width: 100%; /* Ensure full width up to button size */
+}
+
+/* Hover effect */
+.optional-button:hover,
+.update-button:hover {
+  background-color: #0056b3;
+}
+
+/* Main button container (Two or three buttons per row) */
+.button-container {
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(180px, 1fr)
+  ); /* Smaller button width */
+  gap: 15px;
+  justify-content: center;
+  width: 100%;
+  max-width: 700px;
+}
+
+.update-button {
+  background-color: #28a745;
+  transition: background-color 0.3s;
 }
 
 .update-button:hover {
   background-color: #218838;
 }
 
+/* Selection display section */
 .selection-display {
-  margin-top: 20px;
-  font-size: 1.2rem;
+  margin-top: 30px;
+  font-size: 1rem; /* Reduced font size */
   color: #333;
 }
 
+/* Responsive Design */
 @media (max-width: 600px) {
-  .update-button {
-    font-size: 1.3rem;
-    padding: 20px;
-  }
   .title {
-    font-size: 1.8rem;
+    font-size: 1.6rem; /* Reduced font size on mobile */
+  }
+
+  .employee-details {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .employee-info {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .employee-image {
+    margin-bottom: 15px;
+  }
+
+  .button-container {
+    grid-template-columns: repeat(
+      auto-fill,
+      minmax(140px, 1fr)
+    ); /* Even smaller buttons */
+  }
+
+  .optional-button,
+  .update-button {
+    width: 100%;
+    font-size: 1rem; /* Reduced font size */
+    padding: 10px; /* Reduced padding */
   }
 }
 </style>

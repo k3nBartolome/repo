@@ -319,7 +319,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/oosclasses",
+          "https://10.236.102.139/api/oosclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -344,7 +344,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/ooscclasses",
+          "https://10.236.102.139/api/ooscclasses",
           {
             headers: {
               Authorization: `Bearer ${token}`,

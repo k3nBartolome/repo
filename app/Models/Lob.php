@@ -17,4 +17,8 @@ class Lob extends Model
         'team_name',
         'project_code',
     ];
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_tbl_id');
+    }
 }

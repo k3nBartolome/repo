@@ -211,7 +211,7 @@ export default {
       };
 
       axios
-        .put(`https://10.236.103.168/api/purchase/approved/${id}`, form, config)
+        .put(`https://10.236.102.139/api/purchase/approved/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -233,7 +233,7 @@ export default {
       };
 
       axios
-        .put(`https://10.236.103.168/api/purchase/denied/${id}`, form, config)
+        .put(`https://10.236.102.139/api/purchase/denied/${id}`, form, config)
         .then((response) => {
           console.log(response.data.data);
           this.getPurchase();
@@ -247,7 +247,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/purchase",
+          "https://10.236.102.139/api/purchase",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -268,7 +268,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites", {
+        const response = await axios.get("https://10.236.102.139/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

@@ -1080,7 +1080,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `https://10.236.103.168/api/classestransaction/${id}`,
+          `https://10.236.102.139/api/classestransaction/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1136,7 +1136,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "https://10.236.103.168/api/classesall",
+          "https://10.236.102.139/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1156,7 +1156,7 @@ export default {
         const id = this.$route.params.id;
 
         const response = await axios.get(
-          `https://10.236.103.168/api/classesstaffing/${id}`,
+          `https://10.236.102.139/api/classesstaffing/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1220,7 +1220,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("https://10.236.103.168/api/sites", {
+        const response = await axios.get("https://10.236.102.139/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1238,7 +1238,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "https://10.236.103.168/api/programs",
+          "https://10.236.102.139/api/programs",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1259,7 +1259,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "https://10.236.103.168/api/daterange",
+          "https://10.236.102.139/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1333,7 +1333,7 @@ export default {
 
       axios
         .put(
-          `https://10.236.103.168/api/updateclassesstaffing/${this.$route.params.id}`,
+          `https://10.236.102.139/api/updateclassesstaffing/${this.$route.params.id}`,
           formData,
           config
         )

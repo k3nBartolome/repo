@@ -1348,7 +1348,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/siteclassesguatemalacancelled",
+          "https://10.236.102.139/api/siteclassesguatemalacancelled",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1378,7 +1378,7 @@ export default {
 
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.168/api/classesdashboardguatemala3",
+          "https://10.236.102.139/api/classesdashboardguatemala3",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1421,7 +1421,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("https://10.236.103.168/api/export3", {
+        const response = await axios.get("https://10.236.102.139/api/export3", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1454,7 +1454,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.168/api/sites7", {
+        const response = await axios.get("https://10.236.102.139/api/sites7", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1479,7 +1479,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `https://10.236.103.168/api/programs_select/${siteId.join(
+        const url = `https://10.236.102.139/api/programs_select/${siteId.join(
           ","
         )}`;
 

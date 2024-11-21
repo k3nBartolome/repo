@@ -23,5 +23,6 @@ class Employee extends Model
         'account_associate',
         'employment_status',
         'employee_added_by',
+        'qr_code_path',
     ];
 }

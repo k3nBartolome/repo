@@ -441,7 +441,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("https://10.236.103.168/api/sites3")
+        .get("https://10.236.102.139/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -453,7 +453,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("https://10.236.103.168/api/programs3")
+        .get("https://10.236.102.139/api/programs3")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -464,7 +464,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("https://10.236.103.168/api/transaction/" + this.$route.params.id)
+        .get("https://10.236.102.139/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -476,7 +476,7 @@ export default {
     async getDateRange() {
       console.log(this.date_selected);
       await axios
-        .get("https://10.236.103.168/api/daterange")
+        .get("https://10.236.102.139/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -487,7 +487,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("https://10.236.103.168/api/classes/" + this.$route.params.id)
+        .get("https://10.236.102.139/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -533,7 +533,7 @@ export default {
       };
       axios
         .put(
-          "https://10.236.103.168/api/classes/cancel/" + this.$route.params.id,
+          "https://10.236.102.139/api/classes/cancel/" + this.$route.params.id,
           formData
         )
         .then((response) => {

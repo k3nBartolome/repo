@@ -104,6 +104,19 @@ import Onboarding from "@/views/DashboardNavItems/User/Onboarding/OnboardingMain
 import OnboardingForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingForm.vue";
 import OnboardingUpdateForm from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateForm.vue";
 import OnboardingNBI from "@/views/DashboardNavItems/User/Onboarding/OnboardingNBI.vue";
+import OnboardingDT from "@/views/DashboardNavItems/User/Onboarding/OnboardingDT.vue";
+import OnboardingPEME from "@/views/DashboardNavItems/User/Onboarding/OnboardingPEME.vue";
+import OnboardingSSS from "@/views/DashboardNavItems/User/Onboarding/OnboardingSSS.vue";
+import OnboardingPHIC from "@/views/DashboardNavItems/User/Onboarding/OnboardingPHIC.vue";
+import OnboardingPAGIBIG from "@/views/DashboardNavItems/User/Onboarding/OnboardingPAGIBIG.vue";
+import OnboardingTIN from "@/views/DashboardNavItems/User/Onboarding/OnboardingTIN.vue";
+import OnboardingHEALTHCERTIFICATE from "@/views/DashboardNavItems/User/Onboarding/OnboardingHEALTHCERTIFICATE.vue";
+import OnboardingOCCUPATIONALPERMIT from "@/views/DashboardNavItems/User/Onboarding/OnboardingOCCUPATIONALPERMIT.vue";
+import OnboardingOFAC from "@/views/DashboardNavItems/User/Onboarding/OnboardingOFAC.vue";
+import OnboardingSAM from "@/views/DashboardNavItems/User/Onboarding/OnboardingSAM.vue";
+import OnboardingOIG from "@/views/DashboardNavItems/User/Onboarding/OnboardingOIG.vue";
+import OnboardingCIBI from "@/views/DashboardNavItems/User/Onboarding/OnboardingCIBI.vue";
+import OnboardingBGC from "@/views/DashboardNavItems/User/Onboarding/OnboardingBGC.vue";
 import OnboardingUpdateSelection from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateSelection.vue";
 
 const routes = [
@@ -115,7 +128,6 @@ const routes = [
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
     children: [
-
       {
         path: "/profile",
         name: "userProfile",
@@ -178,7 +190,6 @@ const routes = [
         name: "inventoryTracker",
         component: inventoryTracker,
         children: [
-
           {
             path: "/dashboard_manager",
             name: "dashboardManager",
@@ -302,7 +313,6 @@ const routes = [
                 name: "EditAwardPremium",
                 component: EditAwardPremium,
               },
-
             ],
           },
         ],
@@ -467,38 +477,39 @@ const routes = [
       requiresAuth: true,
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
-    children: [{
-      path: "/capfile/guatemala",
-      name: "capacityFileReportGuatemala",
-      component: capacityFileReportGuatemala,
-      children: [
-        {
-          path: "history",
-          name: "CapFileClassHistoryGuatemala",
-          component: CapFileClassHistoryGuatemala,
-        },
-        {
-          path: "summary",
-          name: "CapFileHiringGuatemala",
-          component: CapFileHiringGuatemala,
-        },
-        {
-          path: "cancelled",
-          name: "CapFileCancelledGuatemala",
-          component: CapFileCancelledGuatemala,
-        },
-        {
-          path: "moved",
-          name: "CapFilePushedbackGuatemala",
-          component: CapFilePushedbackGuatemala,
-        },
-        {
-          path: "/capfileguatemala",
-          name: "capacityFileGuatemala",
-          component: capacityFileGuatemala,
-        },
-      ],
-    },
+    children: [
+      {
+        path: "/capfile/guatemala",
+        name: "capacityFileReportGuatemala",
+        component: capacityFileReportGuatemala,
+        children: [
+          {
+            path: "history",
+            name: "CapFileClassHistoryGuatemala",
+            component: CapFileClassHistoryGuatemala,
+          },
+          {
+            path: "summary",
+            name: "CapFileHiringGuatemala",
+            component: CapFileHiringGuatemala,
+          },
+          {
+            path: "cancelled",
+            name: "CapFileCancelledGuatemala",
+            component: CapFileCancelledGuatemala,
+          },
+          {
+            path: "moved",
+            name: "CapFilePushedbackGuatemala",
+            component: CapFilePushedbackGuatemala,
+          },
+          {
+            path: "/capfileguatemala",
+            name: "capacityFileGuatemala",
+            component: capacityFileGuatemala,
+          },
+        ],
+      },
       {
         path: "/pushbackcapfileguatemala/:id",
         name: "pushbackCapacityFileGuatemala",
@@ -548,38 +559,39 @@ const routes = [
       requiresAuth: true,
       requiresRoles: ["user", "remx", "sourcing", "budget"],
     },
-    children: [ {
-      path: "/capfile/jamaica",
-      name: "capacityFileReportJamaica",
-      component: capacityFileReportJamaica,
-      children: [
-        {
-          path: "history",
-          name: "CapFileClassHistoryJamaica",
-          component: CapFileClassHistoryJamaica,
-        },
-        {
-          path: "summary",
-          name: "CapFileHiringJamaica",
-          component: CapFileHiringJamaica,
-        },
-        {
-          path: "cancelled",
-          name: "CapFileCancelledJamaica",
-          component: CapFileCancelledJamaica,
-        },
-        {
-          path: "moved",
-          name: "CapFilePushedbackJamaica",
-          component: CapFilePushedbackJamaica,
-        },
-        {
-          path: "/capfilejamaica",
-          name: "capacityFileJamaica",
-          component: capacityFileJamaica,
-        },
-      ],
-    },
+    children: [
+      {
+        path: "/capfile/jamaica",
+        name: "capacityFileReportJamaica",
+        component: capacityFileReportJamaica,
+        children: [
+          {
+            path: "history",
+            name: "CapFileClassHistoryJamaica",
+            component: CapFileClassHistoryJamaica,
+          },
+          {
+            path: "summary",
+            name: "CapFileHiringJamaica",
+            component: CapFileHiringJamaica,
+          },
+          {
+            path: "cancelled",
+            name: "CapFileCancelledJamaica",
+            component: CapFileCancelledJamaica,
+          },
+          {
+            path: "moved",
+            name: "CapFilePushedbackJamaica",
+            component: CapFilePushedbackJamaica,
+          },
+          {
+            path: "/capfilejamaica",
+            name: "capacityFileJamaica",
+            component: capacityFileJamaica,
+          },
+        ],
+      },
       {
         path: "/pushbackcapfilejamaica/:id",
         name: "pushbackCapacityFileJamaica",
@@ -635,7 +647,6 @@ const routes = [
         name: "adminDashboard",
         component: AppAdminDashboard,
       },
-
     ],
   },
   {
@@ -669,7 +680,84 @@ const routes = [
         component: OnboardingNBI,
         props: true,
       },
-
+      {
+        path: "onboarding_dashboard/update/selection/dt/:id",
+        name: "OnboardingDT",
+        component: OnboardingDT,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/peme/:id",
+        name: "OnboardingPEME",
+        component: OnboardingPEME,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/sss/:id",
+        name: "OnboardingSSS",
+        component: OnboardingSSS,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/phic/:id",
+        name: "OnboardingPHIC",
+        component: OnboardingPHIC,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/pagibig/:id",
+        name: "OnboardingPAGIBIG",
+        component: OnboardingPAGIBIG,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/tin/:id",
+        name: "OnboardingTIN",
+        component: OnboardingTIN,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/health_certificate/:id",
+        name: "OnboardingHEALTHCERTIFICATE",
+        component: OnboardingHEALTHCERTIFICATE,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/occupational_permit/:id",
+        name: "OnboardingOCCUPATIONALPERMIT",
+        component: OnboardingOCCUPATIONALPERMIT,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/ofac/:id",
+        name: "OnboardingOFAC",
+        component: OnboardingOFAC,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/sam/:id",
+        name: "OnboardingSAM",
+        component: OnboardingSAM,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/oig/:id",
+        name: "OnboardingOIG",
+        component: OnboardingOIG,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/cibi/:id",
+        name: "OnboardingCIBI",
+        component: OnboardingCIBI,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/gcs/:id",
+        name: "OnboardingBGC",
+        component: OnboardingBGC,
+        props: true,
+      },
     ],
   },
 
