@@ -219,7 +219,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/ref_date",
+          "https://10.236.103.190/api/ref_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -255,7 +255,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/ref_site",
+          "https://10.236.103.190/api/ref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -277,7 +277,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/prep_site",
+          "https://10.236.103.190/api/prep_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -299,7 +299,7 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/ref_v1", {
+        const response = await axios.get("https://10.236.103.190/api/ref_v1", {
           params: {
             filter_ref_site: this.filterReferredBySite,
             filter_prep_site: this.filterPreferredSite,
@@ -324,7 +324,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/ref_v1_export",
+          "https://10.236.103.190/api/ref_v1_export",
           {
             params: {
               filter_ref_site: this.filterReferredBySite,

@@ -14,6 +14,7 @@
         <thead>
           <tr>
             <th>Action</th>
+            <th>Generate</th>
             <th>QR Code</th>
             <th>Employee ID</th>
             <th>Last Name</th>
@@ -32,6 +33,15 @@
         </thead>
         <tbody>
           <tr v-for="employee in employees" :key="employee.id">
+            <td class="truncate">
+              <button
+                class="truncate bg-blue-500 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"
+                @click="goToProfile(employee.id)"
+              >
+                View
+              </button>
+            </td>
+
             <td>
               <button
                 :disabled="employee.qr_code_url"
@@ -65,7 +75,7 @@
               </div>
             </td>
 
-            <td>{{ employee.id }}</td>
+            <td>{{ employee.employee_id }}</td>
             <td>{{ employee.last_name }}</td>
             <td>{{ employee.first_name }}</td>
             <td>{{ employee.middle_name }}</td>
@@ -77,7 +87,7 @@
             <td>{{ employee.employee_status }}</td>
             <td>{{ employee.employment_status }}</td>
             <td>{{ employee.account_associate }}</td>
-            <td>{{ employee.employee_added_by }}</td>
+            <td>{{ employee.user_added_by.name }}</td>
           </tr>
         </tbody>
       </table>
@@ -149,6 +159,12 @@ export default {
     this.qrReader = new BrowserMultiFormatReader();
   },
   methods: {
+    goToProfile(employeeId) {
+      this.$router.push({
+        name: "OnboardingEmployeeProfile",
+        params: { id: employeeId },
+      });
+    },
     async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
       try {
         // Validate inputs
@@ -204,7 +220,7 @@ export default {
         // Make API request
         const token = this.$store.state.token;
         const response = await axios.post(
-          `https://10.236.102.139/api/employees/${employeeId}/save-qr-code`,
+          `https://10.236.103.190/api/employees/${employeeId}/save-qr-code`,
           formData,
           {
             headers: {
@@ -229,7 +245,7 @@ export default {
     },
 
     // Fetch employees from the backend
-    async getEmployees(url = "https://10.236.102.139/api/employees") {
+    async getEmployees(url = "https://10.236.103.190/api/employees") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(url, {
@@ -310,7 +326,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/employees/${employeeId}`,
+          `https://10.236.103.190/api/employees/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -438,7 +454,7 @@ export default {
 /* QR code image styling */
 .qr-code {
   max-width: 50px; /* Ensure QR codes aren't too large */
-  height: auto;
+  height: 50px;
 }
 
 /* Base styling for the QR generate button */

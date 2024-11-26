@@ -231,14 +231,14 @@ export default {
       formData.append("nbi_printed_date", this.nbi_printed_date);
       formData.append("nbi_submitted_date", this.nbi_submitted_date);
       formData.append("nbi_remarks", this.nbi_remarks);
-
+      formData.append("nbi_updated_by", this.$store.state.user_id);
       // Append the actual file (nbi_proof) for upload
       if (this.nbi_proof) {
         formData.append("nbi_proof", this.nbi_proof); // append file here
       }
 
       try {
-        const apiUrl = `https://10.236.102.139/api/update/requirement/${this.$route.params.id}`;
+        const apiUrl = `https://10.236.103.190/api/update/nbi/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {
@@ -259,7 +259,19 @@ export default {
       } finally {
         // Reset submitting state
         this.isSubmitting = false;
+
+        // Show success alert and navigate with reload after form submission
         alert("Form submitted successfully!");
+
+        // Redirect to OnboardingUpdateSelection and reload the page
+        this.$router
+          .push({
+            name: "OnboardingUpdateSelection",
+            params: { id: this.$route.params.id },
+          })
+          .then(() => {
+            window.location.reload(); // Reloads the page after navigation
+          });
       }
     },
     beforeUnmount() {

@@ -520,7 +520,7 @@ export default {
     async getClassesAll() {
       try {
         const response = await axios.get(
-          "https://10.236.102.139/api/classesallindia"
+          "https://10.236.103.190/api/classesallindia"
         );
         const allClasses = response.data.classes;
         const currentId = this.$route.params.id;
@@ -535,7 +535,7 @@ export default {
     async getSites() {
       console.log(this.sites_selected);
       await axios
-        .get("https://10.236.102.139/api/sites3")
+        .get("https://10.236.103.190/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -546,7 +546,7 @@ export default {
     },
     async deleteClasses() {
       await axios
-        .delete("https://10.236.102.139/api/classes/" + this.$route.params.id)
+        .delete("https://10.236.103.190/api/classes/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.data;
           console.log(response.data.data);
@@ -561,7 +561,7 @@ export default {
     async getPrograms() {
       console.log(this.programs_selected);
       await axios
-        .get("https://10.236.102.139/api/programs3")
+        .get("https://10.236.103.190/api/programs3")
         .then((response) => {
           this.programs = response.data.data;
           console.log(response.data.data);
@@ -573,7 +573,7 @@ export default {
     async getDateRange() {
       console.log(this.agreed_start_date);
       await axios
-        .get("https://10.236.102.139/api/daterange")
+        .get("https://10.236.103.190/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -595,7 +595,7 @@ export default {
     },
     async getClasses() {
       await axios
-        .get("https://10.236.102.139/api/classes/" + this.$route.params.id)
+        .get("https://10.236.103.190/api/classes/" + this.$route.params.id)
         .then((response) => {
           const data = response.data;
           const classObj = data.class;
@@ -627,7 +627,7 @@ export default {
     },
     async getTransaction() {
       await axios
-        .get("https://10.236.102.139/api/transaction/" + this.$route.params.id)
+        .get("https://10.236.103.190/api/transaction/" + this.$route.params.id)
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.classes);
@@ -670,7 +670,7 @@ export default {
       };
       axios
         .put(
-          "https://10.236.102.139/api/classes/edit/" + this.$route.params.id,
+          "https://10.236.103.190/api/classes/edit/" + this.$route.params.id,
           formData
         )
         .then((response) => {

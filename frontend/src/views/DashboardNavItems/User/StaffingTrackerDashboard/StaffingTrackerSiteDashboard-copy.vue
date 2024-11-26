@@ -120,7 +120,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("https://10.236.102.139/api/mpssite", {
+        const response = await axios.get("https://10.236.103.190/api/mpssite", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -137,7 +137,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "https://10.236.102.139/api/classesall",
+          "https://10.236.103.190/api/classesall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -163,7 +163,7 @@ export default {
         const token = this.$store.state.token;
 
         const response = await axios.get(
-          "https://10.236.102.139/api/classesstaffing2",
+          "https://10.236.103.190/api/classesstaffing2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -181,7 +181,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -205,7 +205,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/programs_selected/${this.sites_selected}`,
+          `https://10.236.103.190/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -232,7 +232,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/daterange_selected/${this.month_selected}`,
+          `https://10.236.103.190/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

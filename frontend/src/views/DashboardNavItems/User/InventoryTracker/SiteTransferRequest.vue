@@ -396,7 +396,7 @@ export default {
 
       axios
         .post(
-          `https://10.236.102.139/api/inventory/transfer/${id}`,
+          `https://10.236.103.190/api/inventory/transfer/${id}`,
           formData,
           config
         )
@@ -415,7 +415,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/inventory/sourcingForTransfer",
+          "https://10.236.103.190/api/inventory/sourcingForTransfer",
           {
             headers: {
               Authorization: `Bearer ${token}`,

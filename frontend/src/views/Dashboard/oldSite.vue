@@ -208,7 +208,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("https://10.236.102.139/api/sites_activate/" + id, form)
+        .put("https://10.236.103.190/api/sites_activate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -225,7 +225,7 @@ export default {
         updated_by: this.$store.state.user_id,
       };
       axios
-        .put("https://10.236.102.139/api/sites_deactivate/" + id, form)
+        .put("https://10.236.103.190/api/sites_deactivate/" + id, form)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -238,7 +238,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("https://10.236.102.139/api/sites")
+        .get("https://10.236.103.190/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -249,7 +249,7 @@ export default {
     },
     async getSites2() {
       await axios
-        .get("https://10.236.102.139/api/sites2")
+        .get("https://10.236.103.190/api/sites2")
         .then((response) => {
           this.sites2 = response.data.data;
           console.log(response.data.data);
@@ -268,7 +268,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("https://10.236.102.139/api/sites", formData)
+        .post("https://10.236.103.190/api/sites", formData)
         .then((response) => {
           console.log(response.data);
           this.name = "";

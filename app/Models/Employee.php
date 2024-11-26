@@ -8,7 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     use HasFactory;
+
     protected $table = 'employees';
+
     protected $fillable = [
         'employee_id',
         'last_name',
@@ -22,7 +24,30 @@ class Employee extends Model
         'email',
         'account_associate',
         'employment_status',
-        'employee_added_by',
+        'employee_added_by', // This will reference the user who added the employee
         'qr_code_path',
     ];
+
+    // Relationship with the Requirement model (assuming employee_tbl_id is the foreign key)
+    public function requirements()
+    {
+        return $this->hasMany(Requirements::class, 'employee_tbl_id');
+    }
+
+    // Relationship with the Lob model (assuming employee_tbl_id is the foreign key)
+    public function lob()
+    {
+        return $this->hasMany(Lob::class, 'employee_tbl_id');
+    }
+
+    // Relationship with the User model (employee_added_by belongs to User)
+    public function userAddedBy()
+    {
+        return $this->belongsTo(User::class, 'employee_added_by'); // Assuming 'employee_added_by' is the foreign key column in the employees table
+    }
+    // Relationship with the User model (employee_added_by belongs to User)
+    public function userUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'updated_by'); // Assuming 'employee_added_by' is the foreign key column in the employees table
+    }
 }

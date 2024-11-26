@@ -325,7 +325,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get("https://10.236.102.139/api/mpsweek", {
+        const response = await axios.get("https://10.236.103.190/api/mpsweek", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -352,7 +352,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/months", {
+        const response = await axios.get("https://10.236.103.190/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -371,7 +371,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -395,7 +395,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `https://10.236.102.139/api/daterange_select/${monthId.join(
+        const url = `https://10.236.103.190/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -424,7 +424,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `https://10.236.102.139/api/programs_select/${siteId.join(
+        const url = `https://10.236.103.190/api/programs_select/${siteId.join(
           ","
         )}`;
 

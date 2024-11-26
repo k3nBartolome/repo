@@ -228,7 +228,7 @@ export default {
   methods: {
     async getClassesAll() {
       await axios
-        .get("https://10.236.102.139/api/classesallindia")
+        .get("https://10.236.103.190/api/classesallindia")
         .then((response) => {
           this.classes = response.data.classes;
           console.log(response.data.data);
@@ -239,7 +239,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("https://10.236.102.139/api/sites3")
+        .get("https://10.236.103.190/api/sites3")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -255,7 +255,7 @@ export default {
 
       await axios
         .get(
-          `https://10.236.102.139/api/programs_selected/${this.sites_selected}`
+          `https://10.236.103.190/api/programs_selected/${this.sites_selected}`
         )
         .then((response) => {
           this.programs = response.data.data;
@@ -273,7 +273,7 @@ export default {
 
       await axios
         .get(
-          `https://10.236.102.139/api/daterange_selected/${this.month_selected}`
+          `https://10.236.103.190/api/daterange_selected/${this.month_selected}`
         )
         .then((response) => {
           this.daterange = response.data.data;

@@ -597,7 +597,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/items_selected2/${this.sites_selected}`,
+          `https://10.236.103.190/api/items_selected2/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -619,7 +619,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -639,7 +639,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/awarded/premium",
+          "https://10.236.103.190/api/awarded/premium",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -698,7 +698,7 @@ export default {
 
       try {
         const response = await axios.post(
-          "https://10.236.102.139/api/award",
+          "https://10.236.103.190/api/award",
           formData,
           {
             headers: {

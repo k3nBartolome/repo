@@ -64,6 +64,15 @@ class Requirements extends Model
         'pagibig_file_name',
         'pagibig_last_updated_at',
         'pagibig_updated_by',
+        //Tin
+        'tin_submitted_date',
+        'tin_final_status',
+        'tin_proof_submitted_type',
+        'tin_remarks',
+        'tin_number',
+        'tin_file_name',
+        'tin_last_updated_at',
+        'tin_updated_by',
         // Health Certificate Section
         'health_certificate_validity_date',
         'health_certificate_submitted_date',

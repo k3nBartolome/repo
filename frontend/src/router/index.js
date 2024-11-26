@@ -117,7 +117,15 @@ import OnboardingSAM from "@/views/DashboardNavItems/User/Onboarding/OnboardingS
 import OnboardingOIG from "@/views/DashboardNavItems/User/Onboarding/OnboardingOIG.vue";
 import OnboardingCIBI from "@/views/DashboardNavItems/User/Onboarding/OnboardingCIBI.vue";
 import OnboardingBGC from "@/views/DashboardNavItems/User/Onboarding/OnboardingBGC.vue";
+import OnboardingBIRTHCERTIFICATE from "@/views/DashboardNavItems/User/Onboarding/OnboardingBIRTHCERTIFICATE.vue";
+import OnboardingMARRIAGECERTIFICATE from "@/views/DashboardNavItems/User/Onboarding/OnboardingMARRIAGECERTIFICATE.vue";
+import OnboardingDEPENDENTBIRTHCERTIFICATE from "@/views/DashboardNavItems/User/Onboarding/OnboardingDEPENDENTBIRTHCERTIFICATE.vue";
+import OnboardingSCHOLASTIC from "@/views/DashboardNavItems/User/Onboarding/OnboardingSCHOLASTIC.vue";
+import OnboardingPREVIOUSEMPLOYMENT from "@/views/DashboardNavItems/User/Onboarding/OnboardingPREVIOUSEMPLOYMENT.vue";
+import OnboardingSUPPORTINGDOCUMENT from "@/views/DashboardNavItems/User/Onboarding/OnboardingSUPPORTINGDOCUMENT.vue";
+import OnboardingLob from "@/views/DashboardNavItems/User/Onboarding/OnboardingLob.vue";
 import OnboardingUpdateSelection from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateSelection.vue";
+import OnboardingEmployeeProfile from "@/views/DashboardNavItems/User/Onboarding/OnboardingEmployeeProfile.vue";
 
 const routes = [
   {
@@ -662,10 +670,17 @@ const routes = [
         name: "OnboardingForm",
         component: OnboardingForm,
       },
+
       {
         path: "onboarding_dashboard/update/:id",
         name: "OnboardingUpdateForm",
         component: OnboardingUpdateForm,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/employee_details/:id",
+        name: "OnboardingEmployeeProfile",
+        component: OnboardingEmployeeProfile,
         props: true,
       },
       {
@@ -753,9 +768,51 @@ const routes = [
         props: true,
       },
       {
-        path: "onboarding_dashboard/update/selection/gcs/:id",
+        path: "onboarding_dashboard/update/selection/bgc/:id",
         name: "OnboardingBGC",
         component: OnboardingBGC,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/bc/:id",
+        name: "OnboardingBIRTHCERTIFICATE",
+        component: OnboardingBIRTHCERTIFICATE,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/mc/:id",
+        name: "OnboardingMARRIAGECERTIFICATE",
+        component: OnboardingMARRIAGECERTIFICATE,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/dbc/:id",
+        name: "OnboardingDEPENDENTBIRTHCERTIFICATE",
+        component: OnboardingDEPENDENTBIRTHCERTIFICATE,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/scholastic_record/:id",
+        name: "OnboardingSCHOLASTIC",
+        component: OnboardingSCHOLASTIC,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/previous_employment/:id",
+        name: "OnboardingPREVIOUSEMPLOYMENT",
+        component: OnboardingPREVIOUSEMPLOYMENT,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/supporting_document/:id",
+        name: "OnboardingSUPPORTINGDOCUMENT",
+        component: OnboardingSUPPORTINGDOCUMENT,
+        props: true,
+      },
+      {
+        path: "onboarding_dashboard/update/selection/lob/:id",
+        name: "OnboardingLob",
+        component: OnboardingLob,
         props: true,
       },
     ],

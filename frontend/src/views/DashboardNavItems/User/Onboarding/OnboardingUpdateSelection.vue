@@ -2,20 +2,16 @@
   <div class="container">
     <!-- Employee Details Section -->
     <div class="employee-details">
-      <div class="employee-image">
-        <img :src="employeeImageUrl" alt="Employee Image" />
-      </div>
       <div class="employee-info">
         <div class="employee-info-row">
-          <p><strong>First Name:</strong> Kryss Renato Engel</p>
-          <p><strong>Middle Name:</strong> Padilla</p>
+          <p>
+            <strong>Full Name:</strong> {{ employee.last_name }},
+            {{ employee.first_name }} {{ employee.middle_name }}
+          </p>
         </div>
         <div class="employee-info-row">
-          <p><strong>Last Name:</strong> Bartolome</p>
-          <p><strong>Contact Number:</strong> 09614551291</p>
-        </div>
-        <div class="employee-info-row">
-          <p><strong>Email:</strong> padillakryss@gmail.com</p>
+          <p><strong>Email:</strong> {{ employee.email }}</p>
+          <p><strong>Contact Number:</strong> {{ employee.contact_number }}</p>
         </div>
       </div>
     </div>
@@ -44,6 +40,9 @@
 
     <!-- Main Button Container (Two or three buttons per row) -->
     <div class="button-container">
+      <button class="update-button" @click="selectOption('OnboardingLob')">
+        Lob
+      </button>
       <button class="update-button" @click="selectOption('OnboardingNBI')">
         NBI
       </button>
@@ -92,50 +91,123 @@
       <button class="update-button" @click="selectOption('OnboardingBGC')">
         BGC
       </button>
-    </div>
-
-    <!-- Selection Display -->
-    <div v-if="selectedOption" class="selection-display">
-      <p>
-        You selected: <strong>{{ selectedOption }}</strong>
-      </p>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingBIRTHCERTIFICATE')"
+      >
+        BIRTH CERTIFICATE
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingMARRIAGECERTIFICATE')"
+      >
+        MARRIAGE CERTIFICATE
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingDEPENDENTBIRTHCERTIFICATE')"
+      >
+        DEPENDENT'S BIRTH CERTIFICATE
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingSCHOLASTIC')"
+      >
+        SCHOLASTIC RECORD
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingPREVIOUSEMPLOYMENT')"
+      >
+        PREVIOUS EMPLOYMENT
+      </button>
+      <button
+        class="update-button"
+        @click="selectOption('OnboardingSUPPORTINGDOCUMENT')"
+      >
+        SUPPORTING DOCUMENT
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 export default {
-  props: [
-    "id",
-    "firstName",
-    "middleName",
-    "lastName",
-    "contactNumber",
-    "email",
-    "employeeImageUrl",
-    "optionalButtons",
-  ], // Receive employee details as props
-
   data() {
     return {
-      selectedOption: null, // Default value for selected option
+      employee: {
+        first_name: "",
+        middle_name: "",
+        last_name: "",
+        contact_number: "",
+        email: "",
+        employee_image_url: "", // You can add an employee image field if you have it
+        employee_id: "",
+        employee_status: "",
+        hired_date: "",
+        hired_month: "",
+        birthdate: "",
+      },
+      selectedOption: null,
     };
   },
+  mounted() {
+    this.getEmployee(); // Fetch employee data when component is mounted
+  },
   methods: {
-    // The method that handles selection and navigates to the corresponding form
+    async getEmployee() {
+      try {
+        const token = this.$store.state.token;
+        const headers = {
+          Authorization: `Bearer ${token}`,
+        };
+
+        const response = await axios.get(
+          `https://10.236.103.190/api/employees/${this.$route.params.id}`,
+          { headers }
+        );
+
+        if (response.status === 200) {
+          const EmpObj = response.data.employee;
+
+          // Update the employee data fields dynamically
+          this.employee = {
+            first_name: EmpObj.first_name,
+            middle_name: EmpObj.middle_name,
+            last_name: EmpObj.last_name,
+            contact_number: EmpObj.contact_number,
+            email: EmpObj.email,
+            employee_image_url: EmpObj.employee_image_url,
+            employee_id: EmpObj.employee_id,
+            employee_status: EmpObj.employee_status,
+            hired_date: EmpObj.hired_date,
+            hired_month: EmpObj.hired_month,
+            birthdate: EmpObj.birthdate,
+          };
+
+          console.log(EmpObj); // Log to check the structure of the response
+        } else {
+          console.log("Error fetching employee data");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
+
     selectOption(option) {
       this.selectedOption = option;
       console.log(`Selected option: ${option}`);
 
       // Navigate to the corresponding form (e.g., OnboardingNBi, TIN, etc.) and pass the employee ID
       this.$router.push({
-        name: option, // The name of the form corresponds to the selected option
-        params: { id: this.id }, // Pass the employee ID as a route parameter
+        name: option,
+        params: { id: this.$route.params.id },
       });
     },
+
     handleOptionalButton(buttonLabel) {
       console.log(`Optional button clicked: ${buttonLabel}`);
-      // Handle the action for optional buttons here, if needed
     },
   },
 };
@@ -166,18 +238,18 @@ export default {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-  gap: 2px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 20px;
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   padding: 15px;
   background-color: #f4f4f4;
   border-radius: 8px;
 }
 
 .employee-image img {
-  width: 60px; /* Reduced image size */
-  height: 60px; /* Reduced image size */
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid #007bff;
@@ -193,12 +265,12 @@ export default {
 .employee-info-row {
   display: flex;
   flex-direction: column;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .employee-info p {
   margin: 5px 0;
-  font-size: 0.9rem; /* Reduced font size */
+  font-size: 0.9rem;
   color: #555;
 }
 

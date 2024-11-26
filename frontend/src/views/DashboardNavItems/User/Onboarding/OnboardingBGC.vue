@@ -113,6 +113,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -125,18 +126,122 @@ export default {
       bgc_remarks: "",
       bgc_file_name: null,
       videoStream: null,
+      bgc_proof: null, // Used for the proof file or image data
+      isSubmitting: false, // Tracks form submission status
     };
   },
   methods: {
+    async submitForm() {
+      this.isSubmitting = true;
+
+      if (!this.bgc_final_status) {
+        this.bgc_final_status = "NO STATUS"; // or any default string or null
+      }
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("bgc_final_status", this.bgc_final_status);
+      formData.append("bgc_results_date", this.bgc_results_date);
+      formData.append("bgc_endorsed_date", this.bgc_endorsed_date);
+      formData.append("bgc_remarks", this.bgc_remarks);
+      formData.append("bgc_updated_by", this.$store.state.user_id);
+      if (this.bgc_proof) {
+        formData.append("bgc_proof", this.bgc_proof); // append file here
+      }
+
+      try {
+        const apiUrl = `https://10.236.103.190/api/update/bgc/requirement/${this.$route.params.id}`;
+
+        // Submit the form data to the API
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Handle success
+        console.log("Form submitted successfully", response.data);
+      } catch (error) {
+        // Handle error
+        console.error(
+          "Error submitting form",
+          error.response ? error.response.data : error.message
+        );
+        alert("An error occurred while submitting the form.");
+      } finally {
+        // Reset submitting state
+        this.isSubmitting = false;
+
+        // Show success alert and navigate with reload after form submission
+        alert("Form submitted successfully!");
+
+        // Redirect to OnboardingUpdateSelection and reload the page
+        this.$router
+          .push({
+            name: "OnboardingUpdateSelection",
+            params: { id: this.$route.params.id },
+          })
+          .then(() => {
+            window.location.reload(); // Reloads the page after navigation
+          });
+      }
+    },
     uploadImage(event) {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.bgc_proof = reader.result;
-      };
       if (file) {
-        reader.readAsDataURL(file);
+        this.bgc_proof = file; // Store the file in bgc_proof
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.bgc_file_name = reader.result; // Preview the image
+        };
+        reader.readAsDataURL(file); // Preview file
       }
+    },
+
+    resizeImage(file) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const maxWidth = 1024;
+        const maxHeight = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.7); // Compress image to 70% quality
+        const compressedFile = this.dataURLtoBlob(dataUrl);
+
+        if (compressedFile.size > this.maxSize) {
+          alert("Image is still too large, please upload a smaller image.");
+          return;
+        }
+
+        this.bgc_proof = compressedFile;
+        this.bgc_file_name = dataUrl;
+      };
     },
     chooseUpload() {
       this.showUpload = true;
@@ -177,19 +282,7 @@ export default {
       this.capturedImage = null;
       this.bgc_proof = null;
     },
-    submitForm() {
-      const formData = new FormData();
-      formData.append("bgc_validity_date", this.bgc_validity_date);
-      formData.append("bgc_printed_date", this.bgc_printed_date);
-      formData.append("bgc_remarks", this.bgc_remarks);
 
-      if (this.bgc_proof) {
-        const file = this.dataURLtoBlob(this.bgc_proof);
-        formData.append("bgc_image", file);
-      }
-
-      console.log("Form submitted", formData);
-    },
     dataURLtoBlob(dataURL) {
       const byteString = atob(dataURL.split(",")[1]);
       const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];

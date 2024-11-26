@@ -146,7 +146,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/list_role",
+          "https://10.236.103.190/api/list_role",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -182,7 +182,7 @@ export default {
         };
 
         const response = await axios.post(
-          "https://10.236.102.139/api/create_user",
+          "https://10.236.103.190/api/create_user",
           postData,
           config
         );
@@ -202,7 +202,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/list_user",
+          "https://10.236.103.190/api/list_user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -225,7 +225,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.delete(
-          `https://10.236.102.139/api/delete_user/${user_id}`,
+          `https://10.236.103.190/api/delete_user/${user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

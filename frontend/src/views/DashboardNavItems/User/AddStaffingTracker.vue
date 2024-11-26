@@ -849,7 +849,7 @@ export default {
       try {
         if (this.class_selected) {
           const response = await axios.get(
-            "https://10.236.102.139/api/classes/" +
+            "https://10.236.103.190/api/classes/" +
               this.$route.query.class_selected
           );
           const classObj = response.data.class;
@@ -877,7 +877,7 @@ export default {
     },
     async getClassesAll() {
       await axios
-        .get("https://10.236.102.139/api/classesall")
+        .get("https://10.236.103.190/api/classesall")
         .then((response) => {
           this.classesall = response.data.classes;
           console.log(response.data.classes);
@@ -888,7 +888,7 @@ export default {
     },
     async getSites() {
       await axios
-        .get("https://10.236.102.139/api/sites")
+        .get("https://10.236.103.190/api/sites")
         .then((response) => {
           this.sites = response.data.data;
           console.log(response.data.data);
@@ -904,7 +904,7 @@ export default {
 
       await axios
         .get(
-          `https://10.236.102.139/api/programs_selected/${this.sites_selected}`
+          `https://10.236.103.190/api/programs_selected/${this.sites_selected}`
         )
         .then((response) => {
           this.programs = response.data.data;
@@ -916,7 +916,7 @@ export default {
     },
     async getDateRange() {
       await axios
-        .get("https://10.236.102.139/api/daterange")
+        .get("https://10.236.103.190/api/daterange")
         .then((response) => {
           this.daterange = response.data.data;
           console.log(response.data.data);
@@ -961,7 +961,7 @@ export default {
         created_by: this.$store.state.user_id,
       };
       axios
-        .post("https://10.236.102.139/api/classesstaffing", formData)
+        .post("https://10.236.103.190/api/classesstaffing", formData)
         .then((response) => {
           console.log(response.data);
           this.day_1 = "";
@@ -1006,7 +1006,7 @@ export default {
   },
   async getSites() {
     await axios
-      .get("https://10.236.102.139/api/sites")
+      .get("https://10.236.103.190/api/sites")
       .then((response) => {
         this.sites = response.data.data;
         console.log(response.data.data);
@@ -1022,7 +1022,7 @@ export default {
 
     await axios
       .get(
-        `https://10.236.102.139/api/programs_selected/${this.sites_selected}`
+        `https://10.236.103.190/api/programs_selected/${this.sites_selected}`
       )
       .then((response) => {
         this.programs = response.data.data;
@@ -1035,7 +1035,7 @@ export default {
 
   async getDateRange() {
     await axios
-      .get("https://10.236.102.139/api/daterange")
+      .get("https://10.236.103.190/api/daterange")
       .then((response) => {
         this.daterange = response.data.data;
         console.log(response.data.data);
@@ -1080,7 +1080,7 @@ export default {
       created_by: this.$store.state.user_id,
     };
     axios
-      .post("https://10.236.102.139/api/classesstaffing", formData)
+      .post("https://10.236.103.190/api/classesstaffing", formData)
       .then((response) => {
         console.log(response.data);
         this.day_1 = "";

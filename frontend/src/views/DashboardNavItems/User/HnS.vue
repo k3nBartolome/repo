@@ -606,7 +606,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.post(
-          "https://10.236.102.139/api/upload-leads-bulk",
+          "https://10.236.103.190/api/upload-leads-bulk",
           formData,
           {
             headers: {
@@ -657,7 +657,7 @@ export default {
       };
 
       axios
-        .post("https://10.236.102.139/api/upload_leads", formData, {
+        .post("https://10.236.103.190/api/upload_leads", formData, {
           headers,
         })
         .then((response) => {

@@ -129,7 +129,7 @@ export default {
     async getStaffing() {
       try {
         const token = this.$store.state.token;
-        let apiUrl = "https://10.236.102.139/api/mpsmonth";
+        let apiUrl = "https://10.236.103.190/api/mpsmonth";
 
         const response = await axios.get(apiUrl, {
           headers: {
@@ -145,7 +145,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -165,7 +165,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/programs`,
+          `https://10.236.103.190/api/programs`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

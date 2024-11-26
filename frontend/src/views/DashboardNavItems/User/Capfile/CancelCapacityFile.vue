@@ -712,7 +712,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -737,7 +737,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.102.139/api/programs",
+          "https://10.236.103.190/api/programs",
           {
             headers,
           }
@@ -758,7 +758,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/transaction/" + this.$route.params.id,
+          "https://10.236.103.190/api/transaction/" + this.$route.params.id,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -781,7 +781,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.102.139/api/daterange",
+          "https://10.236.103.190/api/daterange",
           { headers }
         );
 
@@ -803,7 +803,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.102.139/api/classes/${this.$route.params.id}`,
+          `https://10.236.103.190/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -872,7 +872,7 @@ export default {
 
       axios
         .put(
-          "https://10.236.102.139/api/classes/cancel/" + this.$route.params.id,
+          "https://10.236.103.190/api/classes/cancel/" + this.$route.params.id,
           formData,
           {
             headers: {

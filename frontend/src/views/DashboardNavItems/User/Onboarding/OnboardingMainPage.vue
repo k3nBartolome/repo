@@ -289,7 +289,7 @@
       </div> -->
 
       <div class="">
-        <router-link to="/h&s/interview" class="link-button">
+        <router-link to="/onboarding_dashboard" class="link-button">
           <button
             class="font-sans font-semibold text-black text-2xs svg-button"
           >
@@ -336,105 +336,25 @@
     </div>
   </div>
   <div class="grid grid-cols-10 grid-rows-1 gap-2 px-4 py-2">
-    <button
-      class="text-white bg-blue-500 rounded-full text-2xs svg-button2"
-      @click="showModalAdd = true"
-    >
-      <svg
-        width="143px"
-        height="143px"
-        viewBox="0 -0.5 21 21"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        fill="#ffffff"
-        stroke="#ffffff"
+    <div class="flex space-x-4">
+      <button
+        class="truncate flex items-center justify-center text-white bg-blue-500 rounded-lg md:rounded-full text-sm md:text-base px-8 py-1 md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        @click="showModalAdd = true"
       >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <title>plus_circle [#ffffff]</title>
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g
-            id="Page-1"
-            stroke="none"
-            stroke-width="1"
-            fill="none"
-            fill-rule="evenodd"
-          >
-            <g
-              id="Dribbble-Light-Preview"
-              transform="translate(-419.000000, -520.000000)"
-              fill="#ffffff"
-            >
-              <g id="icons" transform="translate(56.000000, 160.000000)">
-                <path
-                  d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
-                  id="plus_circle-[#ffffff]"
-                ></path>
-              </g>
-            </g>
-          </g>
-        </g>
-      </svg>
-      Add Employee
-    </button>
-    <button
-      class="py-2 text-white bg-blue-500 rounded-full text-2xs svg-button2"
-      @click="showModalImport = true"
-    >
-      <svg
-        width="143px"
-        height="143px"
-        viewBox="0 -0.5 21 21"
-        version="1.1"
-        xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink"
-        fill="#ffffff"
-        stroke="#ffffff"
+        Add
+      </button>
+
+      <button
+        class="truncate flex items-center justify-center text-white bg-blue-500 rounded-lg md:rounded-full text-sm md:text-base px-8 py-1 md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        @click="showModalImport = true"
       >
-        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-        <g
-          id="SVGRepo_tracerCarrier"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        ></g>
-        <g id="SVGRepo_iconCarrier">
-          <title>plus_circle [#ffffff]</title>
-          <desc>Created with Sketch.</desc>
-          <defs></defs>
-          <g
-            id="Page-1"
-            stroke="none"
-            stroke-width="1"
-            fill="none"
-            fill-rule="evenodd"
-          >
-            <g
-              id="Dribbble-Light-Preview"
-              transform="translate(-419.000000, -520.000000)"
-              fill="#ffffff"
-            >
-              <g id="icons" transform="translate(56.000000, 160.000000)">
-                <path
-                  d="M374.55,369 L377.7,369 L377.7,371 L374.55,371 L374.55,374 L372.45,374 L372.45,371 L369.3,371 L369.3,369 L372.45,369 L372.45,366 L374.55,366 L374.55,369 Z M373.5,378 C368.86845,378 365.1,374.411 365.1,370 C365.1,365.589 368.86845,362 373.5,362 C378.13155,362 381.9,365.589 381.9,370 C381.9,374.411 378.13155,378 373.5,378 L373.5,378 Z M373.5,360 C367.70085,360 363,364.477 363,370 C363,375.523 367.70085,380 373.5,380 C379.29915,380 384,375.523 384,370 C384,364.477 379.29915,360 373.5,360 L373.5,360 Z"
-                  id="plus_circle-[#ffffff]"
-                ></path>
-              </g>
-            </g>
-          </g>
-        </g>
-      </svg>
-      Import Employee
-    </button>
+        Bulk
+      </button>
+    </div>
   </div>
-  <main class="flex flex-col h-screen border border-1">
-    <div class="flex flex-1 px-4 py-2 md:px-6 md:py-4">
+  <main class="flex flex-col min-h-screen border border-gray-300">
+    <!-- Main Content -->
+    <div class="flex flex-1 px-4 py-2 md:px-6 md:py-4 overflow-y-auto">
       <div class="w-full py-6">
         <router-view />
       </div>
@@ -513,7 +433,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.post(
-          "https://10.236.102.139/api/upload_employees_bulk",
+          "https://10.236.103.190/api/upload_employees_bulk",
           formData,
           {
             headers: {
@@ -560,7 +480,7 @@ export default {
       };
 
       axios
-        .post("https://10.236.102.139/api/upload_employees", formData, {
+        .post("https://10.236.103.190/api/upload_employees", formData, {
           headers,
         })
         .then((response) => {
@@ -605,9 +525,9 @@ export default {
   background: transparent;
 }
 main {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling when content overflows */
+  border-left-width: 1px; /* Ensure left border is persistent */
+  border-color: #ccc; /* Define a consistent border color */
 }
 @media (min-width: 576px) {
   .tab-button {

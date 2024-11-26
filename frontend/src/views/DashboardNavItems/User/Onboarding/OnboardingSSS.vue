@@ -18,10 +18,17 @@
         <label class="block text-sm font-medium">SSS #</label>
         <input
           v-model="sss_number"
-          type="date"
+          type="text"
           class="p-2 mt-1 border rounded w-full"
+          @input="formatSSSNumber"
+          @blur="validateSSSNumber"
+          placeholder="01-2345678-9"
         />
+        <p v-if="sss_number_error" class="text-red-500 text-sm mt-1">
+          {{ sss_number_error }}
+        </p>
       </div>
+
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
         <input
@@ -120,6 +127,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     return {
@@ -133,18 +141,159 @@ export default {
       sss_number: "",
       sss_file_name: null,
       videoStream: null,
+      sss_proof: null, // Used for the proof file or image data
+      isSubmitting: false, // Tracks form submission status
+      sss_number_error: "",
     };
   },
   methods: {
+    formatSSSNumber() {
+      // Remove any non-numeric characters
+      let rawValue = this.sss_number.replace(/[^0-9]/g, "");
+
+      // Apply formatting: XX-XXXXXXX-X
+      if (rawValue.length <= 2) {
+        this.sss_number = rawValue; // First two digits
+      } else if (rawValue.length <= 9) {
+        this.sss_number = `${rawValue.slice(0, 2)}-${rawValue.slice(2)}`; // Add hyphen after 2 digits
+      } else {
+        this.sss_number = `${rawValue.slice(0, 2)}-${rawValue.slice(
+          2,
+          9
+        )}-${rawValue.slice(9, 10)}`; // Full format
+      }
+    },
+    validateSSSNumber() {
+      // Validation: Ensure the input matches the format XX-XXXXXXX-X
+      const isValid = /^\d{2}-\d{7}-\d{1}$/.test(this.sss_number);
+      if (!isValid) {
+        this.sss_number_error =
+          "SSS number must be in the format 01-2345678-9.";
+      } else {
+        this.sss_number_error = ""; // Clear the error if valid
+      }
+    },
+    async submitForm() {
+      this.isSubmitting = true;
+      this.validateSSSNumber(); // Check SSS format before submission
+      if (this.sss_number_error) {
+        alert("Please fix errors before submitting.");
+        return;
+      }
+      // Check if 'sss_final_status' is selected
+      if (!this.sss_final_status) {
+        this.sss_final_status = "NO STATUS"; // or any default string or null
+      }
+
+      // Prepare form data
+      const formData = new FormData();
+      formData.append("sss_final_status", this.sss_final_status);
+      formData.append("sss_submitted_date", this.sss_submitted_date);
+      formData.append("sss_number", this.sss_number);
+      formData.append(
+        "sss_proof_submitted_type",
+        this.sss_proof_submitted_type
+      );
+      formData.append("sss_remarks", this.sss_remarks);
+      formData.append("sss_updated_by", this.$store.state.user_id);
+      // Append the actual file (sss_proof) for upload
+      if (this.sss_proof) {
+        formData.append("sss_proof", this.sss_proof); // append file here
+      }
+
+      try {
+        const apiUrl = `https://10.236.103.190/api/update/sss/requirement/${this.$route.params.id}`;
+
+        // Submit the form data to the API
+        const response = await axios.post(apiUrl, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+
+        // Handle success
+        console.log("Form submitted successfully", response.data);
+      } catch (error) {
+        // Handle error
+        console.error(
+          "Error submitting form",
+          error.response ? error.response.data : error.message
+        );
+        alert("An error occurred while submitting the form.");
+      } finally {
+        // Reset submitting state
+        this.isSubmitting = false;
+
+        // Show success alert and navigate with reload after form submission
+        alert("Form submitted successfully!");
+
+        // Redirect to OnboardingUpdateSelection and reload the page
+        this.$router
+          .push({
+            name: "OnboardingUpdateSelection",
+            params: { id: this.$route.params.id },
+          })
+          .then(() => {
+            window.location.reload(); // Reloads the page after navigation
+          });
+      }
+    },
     uploadImage(event) {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.sss_proof = reader.result;
-      };
       if (file) {
-        reader.readAsDataURL(file);
+        this.sss_proof = file; // Store the file in sss_proof
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.sss_file_name = reader.result; // Preview the image
+        };
+        reader.readAsDataURL(file); // Preview file
       }
+    },
+
+    resizeImage(file) {
+      const img = new Image();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
+
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const maxWidth = 1024;
+        const maxHeight = 1024;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > maxWidth) {
+            height = (height * maxWidth) / width;
+            width = maxWidth;
+          }
+        } else {
+          if (height > maxHeight) {
+            width = (width * maxHeight) / height;
+            height = maxHeight;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.7); // Compress image to 70% quality
+        const compressedFile = this.dataURLtoBlob(dataUrl);
+
+        if (compressedFile.size > this.maxSize) {
+          alert("Image is still too large, please upload a smaller image.");
+          return;
+        }
+
+        this.sss_proof = compressedFile;
+        this.sss_file_name = dataUrl;
+      };
     },
     chooseUpload() {
       this.showUpload = true;
@@ -185,19 +334,7 @@ export default {
       this.capturedImage = null;
       this.sss_proof = null;
     },
-    submitForm() {
-      const formData = new FormData();
-      formData.append("sss_validity_date", this.sss_validity_date);
-      formData.append("sss_printed_date", this.sss_printed_date);
-      formData.append("sss_remarks", this.sss_remarks);
 
-      if (this.sss_proof) {
-        const file = this.dataURLtoBlob(this.sss_proof);
-        formData.append("sss_image", file);
-      }
-
-      console.log("Form submitted", formData);
-    },
     dataURLtoBlob(dataURL) {
       const byteString = atob(dataURL.split(",")[1]);
       const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];

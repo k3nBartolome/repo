@@ -47,7 +47,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/inventoryall",
+          "https://10.236.103.190/api/inventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,

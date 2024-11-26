@@ -1082,7 +1082,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.102.139/api/employees/${this.$route.params.id}`,
+          `https://10.236.103.190/api/employees/${this.$route.params.id}`,
           { headers }
         );
 

@@ -13,11 +13,13 @@ badgedirective
 beforegriddraw
 beforetoolbarcreated
 Bfrtip
+BIRTHCERTIFICATE
 Bkgrnd
 blockui
 cancelcapfile
 cancelcapfileguatemala
 cancelcapfilejamaica
+capfileguatemala
 capfileindia
 capfilejamaica
 capstart
@@ -49,6 +51,7 @@ dataviewlayoutoptions
 datetime
 deferredcontent
 Dela
+DEPENDENTBIRTHCERTIFICATE
 dialogservice
 dnso
 DNSO
@@ -107,6 +110,7 @@ managementguatamela
 managementguatemala
 managementindia
 managementjamaica
+MARRIAGECERTIFICATE
 megamenu
 middlename
 Monstrando
@@ -134,6 +138,7 @@ perxv
 PHIC
 picklist
 previewform
+PREVIOUSEMPLOYMENT
 primeflex
 primeicons
 primevue
@@ -180,6 +185,7 @@ srid
 StaffingTrackerReport
 staterestore
 styleclass
+SUPPORTINGDOCUMENT
 syncShowUps
 tabmenu
 tabview

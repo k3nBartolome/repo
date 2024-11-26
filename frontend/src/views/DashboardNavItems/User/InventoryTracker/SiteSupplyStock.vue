@@ -878,7 +878,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.102.139/api/sourcing-item-history/${itemId}`,
+          `https://10.236.103.190/api/sourcing-item-history/${itemId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1042,7 +1042,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.102.139/api/siteinventoryall",
+          "https://10.236.103.190/api/siteinventoryall",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1063,7 +1063,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.102.139/api/sites", {
+        const response = await axios.get("https://10.236.103.190/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1110,7 +1110,7 @@ export default {
       formData.append("transferred_from", this.sites1_selected);
 
       axios
-        .post("https://10.236.102.139/api/transfer", formData, {
+        .post("https://10.236.103.190/api/transfer", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -1190,7 +1190,7 @@ export default {
       formData.append("created_by", this.$store.state.user_id);
 
       axios
-        .post("https://10.236.102.139/api/items_site_supply", formData, {
+        .post("https://10.236.103.190/api/items_site_supply", formData, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
