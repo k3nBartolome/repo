@@ -205,12 +205,13 @@ export default {
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
         { data: "MobileName", title: "MobileNo" },
-        { data: "Email", title: "Region" },
+        { data: "Email", title: "Email" },
+        { data: "Region", title: "Region" },
         { data: "Site", title: "Site" },
         { data: "GeneralSource", title: "GenSource" },
+        { data: "SpecSource", title: "SpecSource" },
         { data: "GeneralStatus", title: "GenStatus" },
         { data: "SpecificStatus", title: "SpecStatus" },
-        { data: "JobTitle", title: "JobTitle" },
       ],
       filterLoading: false,
       exportLoading: false,
@@ -233,7 +234,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/leads_date",
+          "http://10.109.2.112:8081/api/leads_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -284,7 +285,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -310,7 +311,7 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/leads", {
+        const response = await axios.get("http://10.109.2.112:8081/api/leads", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
@@ -338,7 +339,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/leadsexport",
+          "http://10.109.2.112:8081/api/leadsexport",
           {
             params: {
               filter_lastname: this.filterLastName,

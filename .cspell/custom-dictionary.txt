@@ -89,6 +89,8 @@ officedocument
 ooscclasses
 oosclasses
 openxmlformats
+pagibig
+Pagibig
 PATINDEX
 pdfmake
 peme

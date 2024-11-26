@@ -126,6 +126,7 @@ import OnboardingSUPPORTINGDOCUMENT from "@/views/DashboardNavItems/User/Onboard
 import OnboardingLob from "@/views/DashboardNavItems/User/Onboarding/OnboardingLob.vue";
 import OnboardingUpdateSelection from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateSelection.vue";
 import OnboardingEmployeeProfile from "@/views/DashboardNavItems/User/Onboarding/OnboardingEmployeeProfile.vue";
+import ReferralListv1 from "@/views/DashboardNavItems/User/ReferralListV1.vue";
 
 const routes = [
   {
@@ -170,6 +171,11 @@ const routes = [
         path: "/referrals",
         name: "ReferralList",
         component: ReferralList,
+      },
+      {
+        path: "/referralsv1",
+        name: "ReferralListv1",
+        component: ReferralListv1,
       },
       {
         path: "/user_management",

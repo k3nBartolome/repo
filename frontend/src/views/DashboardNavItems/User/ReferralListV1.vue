@@ -1,42 +1,33 @@
 <template>
   <div class="py-0">
-    <header class="bg-white p-4 py-0">
+    <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">PERX Audit Tool</h2>
+        <h2 class="text-3xl font-bold text-gray-900">OSS Referrals</h2>
       </div>
     </header>
-    <div class="bg-gray-100 p-4">
+    <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        <div class="w-full md:w-1/4 relative">
-          <input
-            v-model="filterLastName"
-            placeholder="Filter by Last Name"
-            class="p-2 border rounded-lg w-full"
-            @input="validateLastName"
-          />
-          <div
-            v-if="filterLastNameError"
-            class="absolute top-full left-0 text-red-500 text-sm"
-          >
-            {{ filterLastNameError }}
-          </div>
-        </div>
         <div class="w-full md:w-1/4">
-          <input
-            v-model="filterFirstName"
-            placeholder="Filter by First Name"
-            class="p-2 border rounded-lg w-full"
-          />
+          <select
+            v-model="filterReferredBySite"
+            placeholder="Filter by Site"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select ReferredBySite</option>
+            <option v-for="site in ref_sites" :key="site.ReferredBySite" :value="site.ReferredBySite">
+              {{ site.ReferredBySite }}
+            </option>
+          </select>
         </div>
         <div class="w-full md:w-1/4">
           <select
-            v-model="filterSite"
+            v-model="filterPreferredSite"
             placeholder="Filter by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
           >
-            <option disabled value="" selected>Please select one</option>
-            <option v-for="site in sites" :key="site.Site" :value="site.Site">
-              {{ site.Site }}
+            <option disabled value="" selected>Please select PreferredSi</option>
+            <option v-for="site in pref_sites" :key="site.PreferredSite" :value="site.PreferredSite">
+              {{ site.PreferredSite }}
             </option>
           </select>
         </div>
@@ -45,7 +36,7 @@
             v-model="filterStartDate"
             type="date"
             placeholder="Start"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterStartDate"
           />
         </div>
@@ -54,28 +45,15 @@
             v-model="filterEndDate"
             type="date"
             placeholder="End by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterEndDate"
           />
         </div>
-        <div class="w-full md:w-1/4 relative">
-          <input
-            v-model="filterContact"
-            placeholder="Filter by Mobile No."
-            class="p-2 border rounded-lg w-full"
-            @input="validateContact"
-          />
-          <div
-            v-if="filterContactError"
-            class="absolute top-full left-0 text-red-500 text-sm"
-          >
-            {{ filterContactError }}
-          </div>
-        </div>
+
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Filter
           </button>
@@ -83,7 +61,7 @@
         <div class="w-full md:w-1/4">
           <button
             @click="exportToExcel"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Export
           </button>
@@ -91,12 +69,12 @@
       </div>
       <div
         v-if="filterLoading || exportLoading"
-        class="text-center text-blue-500 font-bold"
+        class="font-bold text-center text-blue-500"
       >
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>
       <DataTable
-        :data="perx"
+        :data="ref_data"
         :columns="columns"
         class="table divide-y divide-gray-200 table-auto table-striped"
         :options="{
@@ -127,7 +105,7 @@
           </tr>
         </thead>
         <tbody class="truncate">
-          <tr v-for="item in perx" :key="item.id">
+          <tr v-for="item in ref_data" :key="item.id">
             <!-- Add your table row data here -->
           </tr>
         </tbody>
@@ -179,8 +157,9 @@ export default {
       filterEndDate: "",
       filterReferredBySite: "",
       filterPreferredSite: "",
-      perx: [],
-      prep_sites: [],
+      ref_data: [],
+      pref_sites: [],
+      ref_sites: [],
       sites: [],
       columns: [
         { data: "ReferredByHrid", title: "ReferredByHrid" },
@@ -192,7 +171,7 @@ export default {
         { data: "ReferralFirstName", title: "ReferralFirstName" },
         { data: "ReferralLastName", title: "ReferralLastName" },
         { data: "ReferralIsWithEperience", title: "ReferralIsWithExperience" },
-        { data: "ReferralLOB", title: "ReferralLOB" },
+        { data: "ReferralLOB", title: "ReferralContact" },
         { data: "ReferredDate", title: "ReferredDate" },
         { data: "Position", title: "Position" },
         { data: "PreferredSite", title: "PreferredSite" },
@@ -219,7 +198,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/ref_date",
+          "http://10.109.2.112:8081/api/ref_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -255,7 +234,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/ref_site",
+          "http://10.109.2.112:8081/api/ref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -277,7 +256,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/prep_site",
+          "http://10.109.2.112:8081/api/pref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -286,7 +265,7 @@ export default {
         );
 
         if (response.status === 200) {
-          this.prep_sites = response.data.sites;
+          this.pref_sites = response.data.sites;
           console.log(response.data.data);
         } else {
           console.log("Error fetching sites");
@@ -299,17 +278,21 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/ref_v1", {
-          params: {
-            filter_ref_site: this.filterReferredBySite,
-            filter_prep_site: this.filterPreferredSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://10.109.2.112:8081/api/ref_v1",
+          {
+            params: {
+              filter_ref_site: this.filterReferredBySite,
+              filter_pref_site: this.filterPreferredSite,
+              filter_date_start: this.filterStartDate,
+              filter_date_end: this.filterEndDate,
+
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         this.ref_data = response.data.ref_data;
       } catch (error) {
@@ -323,21 +306,18 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "https://10.236.103.190/api/ref_v1_export",
-          {
-            params: {
-              filter_ref_site: this.filterReferredBySite,
-              filter_prep_site: this.filterPreferredSite,
+        const response = await axios.get("http://10.109.2.112:8081/api/ref_v1_export", {
+          params: {
+            filter_ref_site: this.filterReferredBySite,
+              filter_pref_site: this.filterPreferredSite,
               filter_date_start: this.filterStartDate,
               filter_date_end: this.filterEndDate,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob",
-          }
-        );
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        });
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

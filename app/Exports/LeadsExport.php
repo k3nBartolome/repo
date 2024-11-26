@@ -31,11 +31,12 @@ class LeadsExport implements FromCollection, WithHeadings, ShouldAutoSize
 'MiddleName',
 'MobileName',
 'Email',
+'Region',
 'Site',
 'GeneralSource',
+'SpecSource',
 'GeneralStatus',
 'SpecificStatus',
-'JobTitle',
         ];
     }
 }

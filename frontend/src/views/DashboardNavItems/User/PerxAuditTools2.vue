@@ -209,6 +209,7 @@ export default {
         { data: "FirstName", title: "FirstName" },
         { data: "MiddleName", title: "MiddleName" },
         { data: "MobileNumber", title: "MobileNo" },
+        { data: "Email", title: "Email" },
         { data: "Region", title: "Region" },
         { data: "Site", title: "Site" },
         { data: "GeneralSource", title: "GenSource" },
@@ -216,10 +217,11 @@ export default {
         { data: "Step", title: "Step" },
         { data: "AppStep1", title: "GenStatus" },
         { data: "AppStep2", title: "SpecStatus" },
+
+        { data: "ReferrerFirstName", title: " ReferredFirstName" },
+        { data: "ReferrerMiddleName", title: "ReferredMiddleName" },
+        { data: "ReferrerLastName", title: "ReferredLastName" },
         { data: "ReferrerHRID", title: " ReferrerHRID" },
-        { data: "ReferrerFirstName", title: " ReferrerFirstName" },
-        { data: "ReferrerMiddleName", title: "ReferrerMiddleName" },
-        { data: "ReferrerLastName", title: "ReferrerLastName" },
         { data: "ReferrerName", title: "ReferrerName" },
         { data: "DeclaredReferrerName", title: "DeclaredReferrerName" },
         { data: "DeclaredReferrerId", title: "DeclaredReferrerId" },
@@ -245,7 +247,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/perx_datev2",
+          "http://10.109.2.112:8081/api/perx_datev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -296,7 +298,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/perx_sitev2",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -323,7 +325,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/perxfilterv2",
+          "http://10.109.2.112:8081/api/perxfilterv2",
           {
             params: {
               filter_lastname: this.filterLastName,
@@ -353,25 +355,21 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(
-          "https://10.236.103.190/api/exportv2",
-          {
-            params: {
-              filter_lastname: this.filterLastName,
-              filter_firstname: this.filterFirstName,
-              filter_site: this.filterSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
-              filter_contact: this.filterContact,
-              filter_region:
-                this.filterRegion === "ALL" ? "" : this.filterRegion,
-            },
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            responseType: "blob",
-          }
-        );
+        const response = await axios.get("http://10.109.2.112:8081/api/exportv2", {
+          params: {
+            filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_site: this.filterSite,
+            filter_date_start: this.filterStartDate,
+            filter_date_end: this.filterEndDate,
+            filter_contact: this.filterContact,
+            filter_region: this.filterRegion === "ALL" ? "" : this.filterRegion,
+          },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        });
 
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

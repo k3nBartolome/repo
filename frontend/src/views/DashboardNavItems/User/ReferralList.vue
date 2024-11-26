@@ -1,50 +1,71 @@
 <template>
   <div class="py-0">
-    <header class="bg-white p-4 py-0">
+    <header class="p-4 py-0 bg-white">
       <div class="max-w-screen-xl mx-auto">
-        <h2 class="text-3xl font-bold text-gray-900">Referral Tool V1</h2>
+        <h2 class="text-3xl font-bold text-gray-900">Referrals SRv2</h2>
       </div>
     </header>
-    <div class="bg-gray-100 p-4">
+    <div v-if="errorMessage" class="text-red-500">
+      {{ errorMessage }}
+    </div>
+
+    <div class="p-4 bg-gray-100">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
+        <div class="relative w-full md:w-1/4">
+          <input
+            v-model="filterLastName"
+            placeholder="Filter by Last Name"
+            class="w-full p-2 border rounded-lg"
+            @input="validateLastName"
+          />
+          <div
+            v-if="filterLastNameError"
+            class="absolute left-0 text-sm text-red-500 top-full"
+          >
+            {{ filterLastNameError }}
+          </div>
+        </div>
+        <div class="w-full md:w-1/4">
+          <input
+            v-model="filterFirstName"
+            placeholder="Filter by First Name"
+            class="w-full p-2 border rounded-lg"
+          />
+        </div>
         <div class="w-full md:w-1/4">
           <select
-            v-model="filterSite"
-            placeholder="Filter by Site"
-            class="p-2 border rounded-lg w-full"
+            v-model="filterRegion"
+            placeholder="Filter by Region"
+            class="w-full p-2 border rounded-lg"
+            @change="getSites(filterRegion)"
           >
-            <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="site in ref_sites"
-              :key="site.Site"
-              :value="site.Site"
-            >
-              {{ site.Site }}
-            </option>
+            <option disabled value="" selected>Please select Region</option>
+            <option value="ALL">All</option>
+            <option value="CLARK">CLARK</option>
+            <option value="DAVAO">DAVAO</option>
+            <option value="L2">L2</option>
+            <option value="QC">QC</option>
           </select>
         </div>
         <div class="w-full md:w-1/4">
           <select
             v-model="filterSite"
             placeholder="Filter by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
           >
-            <option disabled value="" selected>Please select one</option>
-            <option
-              v-for="site in pref_sites"
-              :key="site.Site"
-              :value="site.Site"
-            >
-              {{ site.Site }}
+            <option disabled value="" selected>Please select Site</option>
+            <option v-for="site in sites" :key="site.Id" :value="site.Name">
+              {{ site.Name }}
             </option>
           </select>
         </div>
-        <div class="w-full md:w-1/4">
+
+           <div class="w-full md:w-1/4">
           <input
             v-model="filterStartDate"
             type="date"
             placeholder="Start"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterStartDate"
           />
         </div>
@@ -53,15 +74,36 @@
             v-model="filterEndDate"
             type="date"
             placeholder="End by Site"
-            class="p-2 border rounded-lg w-full"
+            class="w-full p-2 border rounded-lg"
             @input="updateFilterEndDate"
           />
         </div>
+        <div class="relative w-full md:w-1/4">
+          <select
+            v-model="filterType"
+            placeholder="Referral Type"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option disabled value="" selected>Please select Type</option>
+            <option value="SPARX">SPARX</option>
+            <option value="PERX">PERX</option>
+          </select>
+        </div>
+        <div class="relative w-full md:w-1/4">
+          <select
+              v-model="filterStatus"
+              class="w-full p-2 border rounded-lg"
+          >
+              <option disabled value="" selected>Please select Status</option>
+              <option value="Registered">Registered</option>
+              <option value="NotyetRegistered">Not yet Registered</option>
+          </select>
+      </div>
 
         <div class="w-full md:w-1/4">
           <button
             @click="fetchData"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Filter
           </button>
@@ -69,7 +111,7 @@
         <div class="w-full md:w-1/4">
           <button
             @click="exportToExcel"
-            class="px-4 py-2 bg-blue-500 text-white rounded-lg w-full"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
             Export
           </button>
@@ -77,7 +119,7 @@
       </div>
       <div
         v-if="filterLoading || exportLoading"
-        class="text-center text-blue-500 font-bold"
+        class="font-bold text-center text-blue-500"
       >
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>
@@ -161,52 +203,150 @@ export default {
   components: { DataTable },
   data() {
     return {
+      filterLastName: "",
+      filterFirstName: "",
+      filterSite: "",
       filterStartDate: "",
       filterEndDate: "",
-      filterReferredBySite: "",
-      filterPreferredSite: "",
+      filterType: "",
+      filterRegion: "",
+      filterLastNameError: "",
+      filterTypeError: "",
+      filterStatus: "",
+      showModalWorkExp: false,
+      errorMessage:"",
+      WorkExpId: null,
+      workExpData: {
+        ImmediateSupervisorHRID: "",
+        ImmediateSupervisorName: "",
+        WorkSetup: "",
+        CompanyName: "",
+        WorkExpType: "",
+        LastWorkingDate: "",
+        AdapterIndustry: "",
+        Position: "",
+        Salary: "",
+        WorkTenureMonths: "",
+        ReasonForLeaving: "",
+        AccountType: "",
+        ExperienceType: "",
+        WorkType: "",
+        TotalWorkExp: "",
+        TotalWorkExpBPO: "",
+        TotalWorkExpNonBPO: "",
+        Segment: "",
+      },
       perx: [],
-      pref_sites: [],
-      ref_sites: [],
+
       sites: [],
       columns: [
-        { data: "ReferredByHrid", title: "ReferredByHrid" },
-        { data: "ReferredByFirstName", title: "ReferredByFirstName" },
-        { data: "ReferredByLastName", title: "ReferredByLastName" },
-        { data: "ReferredByEmailAddress", title: "ReferredByEmailAddress" },
-        { data: "ReferredByLob", title: "ReferredByLob" },
-        { data: "ReferredBySite", title: "ReferredBySite" },
-        { data: "ReferralFirstName", title: "ReferralFirstName" },
-        { data: "ReferralLastName", title: "ReferralLastName" },
-        { data: "ReferralIsWithEperience", title: "ReferralIsWithExperience" },
-        { data: "ReferralLOB", title: "ReferralLOB" },
-        { data: "ReferredDate", title: "ReferredDate" },
-        { data: "Position", title: "Position" },
-        { data: "PreferredSite", title: "PreferredSite" },
+        { data: "FirstName", title: "FirstName" },
+        { data: "MiddleName", title: "MiddleName" },
+        { data: "LastName", title: "LastName" },
+        { data: "EmailAddress", title: "EmailAddress" },
+        { data: "ContactNo", title: "ContactNo" },
+        { data: "TypeOfReferral", title: "TypeOfReferral" },
+        { data: "Region", title: "Region" },
+        { data: "Site", title: "Site" },
+        { data: "ReferrerHRID", title: "ReferrerHRID" },
+        { data: "ReferrerName", title: "ReferrerName" },
+        { data: "ReferrerSite", title: "ReferrerSite" },
+        { data: "ReferrerProgram", title: "ReferrerProgram" },
+        /* { data: "CreatedBy", title: "CreatedBy" }, */
+        { data: "DateCreated", title: "DateCreated" },
+        /* { data: "UpdatedBy", title: "UpdatedBy" }, */
+        { data: "DateUpdated", title: "DateUpdated" },
+        { data: "Status", title: "Status" },
       ],
       filterLoading: false,
       exportLoading: false,
     };
   },
+
   mounted() {
+    window.vm = this;
     this.getDates();
-    this.getRefSites();
-    this.getPrepSites();
+    this.getSites();
+    /*  this.fetchData(); */
   },
   computed: {
-    formattedfilterReferredDate() {
-      return this.filterReferredDate
-        ? new Date(this.filterReferredDate).toLocaleDateString("en-CA")
+    formattedFilterDate() {
+      return this.filterDate
+        ? new Date(this.filterDate).toLocaleDateString("en-CA")
         : "";
+    },
+    isUser() {
+      const userRole = this.$store.state.role;
+      return userRole === "user";
+    },
+    isRemx() {
+      const userRole = this.$store.state.role;
+      return userRole === "remx";
+    },
+    isBudget() {
+      const userRole = this.$store.state.role;
+      return userRole === "budget";
+    },
+    isSourcing() {
+      const userRole = this.$store.state.role;
+      return userRole === "sourcing";
     },
   },
 
   methods: {
+    async fetchData() {
+  this.filterLoading = true;
+  try {
+      const token = this.$store.state.token;
+      console.log("Fetching data with filters:", {
+          filter_lastname: this.filterLastName,
+          filter_firstname: this.filterFirstName,
+          filter_site: this.filterSite,
+          filter_date_start: this.filterStartDate,
+          filter_date_end: this.filterEndDate,
+          filter_type: this.filterType,
+          filter_region: this.filterRegion,
+          filter_status: this.filterStatus,
+      }); // Add this line
+
+      const response = await axios.get("http://10.109.2.112:8081/api/no_srv2", {
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+          params: {
+              filter_lastname: this.filterLastName,
+              filter_firstname: this.filterFirstName,
+              filter_site: this.filterSite,
+              filter_date_start: this.filterStartDate,
+              filter_date_end: this.filterEndDate,
+              filter_type: this.filterType,
+              filter_region: this.filterRegion,
+              filter_status: this.filterStatus,
+          },
+      });
+
+      console.log("Response received:", response.data); // Log the response for debugging
+      this.perx = response.data.perx;
+
+  } catch (error) {
+      // Log error response if available
+      if (error.response) {
+          console.error("Error fetching filtered data:", error.response.data);
+          console.error("Status code:", error.response.status);
+      } else {
+          console.error("Error fetching filtered data:", error.message);
+      }
+  } finally {
+      this.filterLoading = false;
+  }
+},
+
+
     async getDates() {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/ref_date",
+          "http://10.109.2.112:8081/api/referralsDate",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -238,21 +378,38 @@ export default {
       const formattedDate = new Date(date).toISOString().split("T")[0];
       return formattedDate;
     },
-    async getRefSites() {
+
+    validateLastName() {
+      this.filterLastNameError = "";
+      if (this.filterLastName && this.filterLastName.length < 2) {
+        this.filterLastNameError =
+          "Last Name must be at least 2 characters long.";
+      }
+    },
+    validateContact() {
+      this.filterTypeError = "";
+      if (this.filterType && this.filterType.length < 4) {
+        this.filterTypeError = "Mobile No must be at least 4 characters long.";
+      }
+    },
+    async getSites(filterRegion = "") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/ref_site",
+          "http://10.109.2.112:8081/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
+            },
+            params: {
+              filter_region: filterRegion === "ALL" ? "" : filterRegion,
             },
           }
         );
 
         if (response.status === 200) {
-          this.ref_sites = response.data.sites;
-          console.log(response.data.data);
+          this.sites = response.data.sites;
+          console.log(response.data.sites);
         } else {
           console.log("Error fetching sites");
         }
@@ -260,64 +417,22 @@ export default {
         console.log(error);
       }
     },
-    async getPrepSites() {
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get(
-          "https://10.236.103.190/api/pref_site",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.status === 200) {
-          this.pref_sites = response.data.sites;
-          console.log(response.data.data);
-        } else {
-          console.log("Error fetching sites");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async fetchData() {
-      this.filterLoading = true;
-      try {
-        const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/ref_v1", {
-          params: {
-            filter_ref_site: this.filterReferredBySite,
-            filter_pref_site: this.filterPreferredSite,
-            filter_date_start: this.filterStartDate,
-            filter_date_end: this.filterEndDate,
-          },
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        this.ref_data = response.data.ref_data;
-      } catch (error) {
-        console.error("Error fetching filtered data", error);
-      } finally {
-        this.filterLoading = false;
-      }
-    },
-
     async exportToExcel() {
-      this.exportLoading = true; // Set export loading to true before making the request
+      this.exportLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/ref_v1_export",
+          "http://10.109.2.112:8081/api/no_srv2_export",
           {
             params: {
-              filter_ref_site: this.filterReferredBySite,
-              filter_pref_site: this.filterPreferredSite,
-              filter_date_start: this.filterStartDate,
-              filter_date_end: this.filterEndDate,
+              filter_lastname: this.filterLastName,
+            filter_firstname: this.filterFirstName,
+            filter_site: this.filterSite,
+            filter_date_start: this.filterStartDate,
+            filter_date_end: this.filterEndDate,
+            filter_type: this.filterType,
+            filter_region: this.filterRegion,
+            filter_status: this.filterStatus,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -333,7 +448,7 @@ export default {
 
         const link = document.createElement("a");
         link.href = url;
-        link.download = "referrals_v1.xlsx";
+        link.download = "perx_data.xlsx";
         link.click();
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
@@ -344,3 +459,11 @@ export default {
   },
 };
 </script>
+<style scoped>
+.modal-content {
+  width: 50vw;
+  height: 50vh;
+  max-width: 80vw;
+  max-height: 80vh;
+}
+</style>

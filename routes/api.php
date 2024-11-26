@@ -18,17 +18,6 @@ use App\Http\Controllers\PurchaseRequestController;
 use App\Http\Controllers\SiteController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
- */
-
 // Auth
 Route::post('login', [AuthController::class, 'login']);
 Route::post('/logout/{id}', [AuthController::class, 'logout']);
@@ -163,7 +152,7 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     Route::get('applicantsDate', [ClassesController::class, 'ApplicantsDate']);
 
     Route::get('applicantsExport', [ClassesController::class, 'ApplicantsExport']);
-    Route::get('leads_date', [ClassesController::class, 'leadsDate']);
+    Route::get('leads_date', [ClassesController::class, 'leadsDatev2']);
     Route::get('leads', [ClassesController::class, 'leads']);
     Route::get('leadsexport', [ClassesController::class, 'exportLeadsData']);
     Route::post('render', [CapEmailController::class, 'sendEmail']);

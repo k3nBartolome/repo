@@ -33,6 +33,7 @@ class ReferralsExport implements FromCollection, WithHeadings, ShouldAutoSize
             'EmailAddress',
             'ContactNo',
             'TypeOfReferral',
+            'Region',
             'Site',
             'ReferrerHRID',
             'ReferrerName',
@@ -42,6 +43,7 @@ class ReferralsExport implements FromCollection, WithHeadings, ShouldAutoSize
             'DateCreated',
          /*    'UpdatedBy', */
             'DateUpdated',
+            'Status',
         ];
     }
 }

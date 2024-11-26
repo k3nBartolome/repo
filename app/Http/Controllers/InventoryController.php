@@ -177,16 +177,7 @@ class InventoryController extends Controller
             $requestedItem = SiteInventory::find($request->inventory_item_id);
             $requestedItem->quantity -= $request->awarded_quantity;
             $requestedItem->save();
-            $inventory = new Inventory();
 
-            $inventory->original_request = $inventory->quantity_approved;
-            $inventory->inventory_id = $inventory->id;
-            $inventory->inventory_item_id = $requestedItem->inventory_item_id;
-            $inventory->transaction_type = 'Award Sourcing Supply';
-            $inventory->save();
-            $formattedTransactionNumber = sprintf('%06d', $inventory->id);
-            $inventory->transaction_no = $formattedTransactionNumber;
-            $inventory->save();
             DB::commit();
 
             return response()->json([
