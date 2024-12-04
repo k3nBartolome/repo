@@ -88,7 +88,7 @@ export default {
   methods: {
     async getPrograms() {
       await axios
-        .get("https://10.236.103.190/api/programs/" + this.$route.params.id)
+        .get("http://10.109.2.112:8000/api/programs/" + this.$route.params.id)
         .then((response) => {
           this.programs = response.data.data;
           const programObj = this.programs;
@@ -106,7 +106,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

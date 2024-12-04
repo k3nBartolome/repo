@@ -123,7 +123,7 @@ export default {
     this.qrReader = new BrowserMultiFormatReader();
   },
   methods: {
-    async getEmployees(url = "https://10.236.103.190/api/employees") {
+    async getEmployees(url = "http://10.109.2.112:8000/api/employees") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(url, {
@@ -209,7 +209,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.103.190/api/employees/${scannedId}`,
+          `http://10.109.2.112:8000/api/employees/${scannedId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

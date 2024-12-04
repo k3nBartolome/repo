@@ -1322,7 +1322,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/siteclassesjamaicamoved",
+          "http://10.109.2.112:8000/api/siteclassesjamaicamoved",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1380,7 +1380,7 @@ export default {
         this.isLoading = true;
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/classesdashboardjamaica4",
+          "http://10.109.2.112:8000/api/classesdashboardjamaica4",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -1419,7 +1419,7 @@ export default {
     async getMonth() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/months", {
+        const response = await axios.get("http://10.109.2.112:8000/api/months", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1442,7 +1442,7 @@ export default {
         const token = this.$store.state.token;
 
         // Make an API request to trigger the Excel export
-        const response = await axios.get("https://10.236.103.190/api/export4", {
+        const response = await axios.get("http://10.109.2.112:8000/api/export4", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1475,7 +1475,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/sites5", {
+        const response = await axios.get("http://10.109.2.112:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -1499,7 +1499,7 @@ export default {
         const token = this.$store.state.token;
         const monthId = this.month_selected.map((month) => month.month_num);
 
-        const url = `https://10.236.103.190/api/daterange_select/${monthId.join(
+        const url = `http://10.109.2.112:8000/api/daterange_select/${monthId.join(
           ","
         )}`;
 
@@ -1528,7 +1528,7 @@ export default {
         const token = this.$store.state.token;
         const siteId = this.sites_selected.map((site) => site.site_id);
 
-        const url = `https://10.236.103.190/api/programs_select/${siteId.join(
+        const url = `http://10.109.2.112:8000/api/programs_select/${siteId.join(
           ","
         )}`;
 

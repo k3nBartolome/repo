@@ -1,4 +1,4 @@
-const fs = require("fs");
+/* const fs = require("fs");
 const path = require("path");
 const { defineConfig } = require("@vue/cli-service");
 
@@ -15,3 +15,8 @@ module.exports = defineConfig({
     // Remove the 'public' property and adjust other settings if necessary
   },
 });
+ */
+const { defineConfig } = require('@vue/cli-service')
+module.exports = defineConfig({
+  transpileDependencies: true
+})

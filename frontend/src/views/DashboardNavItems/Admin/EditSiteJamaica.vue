@@ -78,7 +78,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("https://10.236.103.190/api/sites/" + this.$route.params.id, {
+        .get("http://10.109.2.112:8000/api/sites/" + this.$route.params.id, {
           headers: {
             Authorization: `Bearer ${this.$store.state.token}`,
           },
@@ -108,7 +108,7 @@ export default {
       };
       axios
         .put(
-          "https://10.236.103.190/api/sites/" + this.$route.params.id,
+          "http://10.109.2.112:8000/api/sites/" + this.$route.params.id,
           formData,
           {
             headers: {

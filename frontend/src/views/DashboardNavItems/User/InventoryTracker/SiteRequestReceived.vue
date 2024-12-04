@@ -376,7 +376,7 @@ export default {
 
       axios
         .put(
-          `https://10.236.103.190/api/inventory/received/${id}`,
+          `http://10.109.2.112:8000/api/inventory/received/${id}`,
           formData,
           config
         )
@@ -396,7 +396,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.236.103.190/api/inventory/approved/pending",
+          "http://10.109.2.112:8000/api/inventory/approved/pending",
           {
             headers: {
               Authorization: `Bearer ${token}`,

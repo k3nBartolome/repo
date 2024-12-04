@@ -757,7 +757,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.236.103.190/api/sites", {
+        const response = await axios.get("http://10.109.2.112:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -780,7 +780,7 @@ export default {
       };
 
       await axios
-        .delete(`https://10.236.103.190/api/classes/${this.$route.params.id}`, {
+        .delete(`http://10.109.2.112:8000/api/classes/${this.$route.params.id}`, {
           headers,
         })
         .then((response) => {
@@ -803,7 +803,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.190/api/programs",
+          "http://10.109.2.112:8000/api/programs",
           {
             headers,
           }
@@ -828,7 +828,7 @@ export default {
         };
 
         const response = await axios.get(
-          "https://10.236.103.190/api/daterangeall",
+          "http://10.109.2.112:8000/api/daterangeall",
           { headers }
         );
 
@@ -861,7 +861,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.190/api/classes/${this.$route.params.id}`,
+          `http://10.109.2.112:8000/api/classes/${this.$route.params.id}`,
           { headers }
         );
 
@@ -922,7 +922,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.190/api/transaction/${this.$route.params.id}`,
+          `http://10.109.2.112:8000/api/transaction/${this.$route.params.id}`,
           { headers }
         );
 
@@ -976,7 +976,7 @@ export default {
 
       axios
         .put(
-          `https://10.236.103.190/api/classes/edit/${this.$route.params.id}`,
+          `http://10.109.2.112:8000/api/classes/edit/${this.$route.params.id}`,
           formData,
           { headers }
         )

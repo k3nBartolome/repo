@@ -100,7 +100,7 @@ export default {
       this.isSubmitting = true;
 
       try {
-        const apiUrl = `https://10.236.103.190/api/update/lob/${this.$route.params.id}`;
+        const apiUrl = `http://10.109.2.112:8000/api/update/lob/${this.$route.params.id}`;
         const { data } = await axios.post(apiUrl, this.form);
 
         // Use the response data here (e.g., display success message)

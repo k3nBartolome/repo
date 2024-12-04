@@ -220,7 +220,7 @@ export default {
         // Make API request
         const token = this.$store.state.token;
         const response = await axios.post(
-          `https://10.236.103.190/api/employees/${employeeId}/save-qr-code`,
+          `http://10.109.2.112:8000/api/employees/${employeeId}/save-qr-code`,
           formData,
           {
             headers: {
@@ -245,7 +245,7 @@ export default {
     },
 
     // Fetch employees from the backend
-    async getEmployees(url = "https://10.236.103.190/api/employees") {
+    async getEmployees(url = "http://10.109.2.112:8000/api/employees") {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(url, {
@@ -326,7 +326,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.236.103.190/api/employees/${employeeId}`,
+          `http://10.109.2.112:8000/api/employees/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

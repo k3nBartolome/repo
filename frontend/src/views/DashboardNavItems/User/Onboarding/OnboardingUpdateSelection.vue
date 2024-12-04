@@ -164,7 +164,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.236.103.190/api/employees/${this.$route.params.id}`,
+          `http://10.109.2.112:8000/api/employees/${this.$route.params.id}`,
           { headers }
         );
 

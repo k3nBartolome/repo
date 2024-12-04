@@ -169,7 +169,7 @@ export default {
       }
 
       try {
-        const apiUrl = `https://10.236.103.190/api/update/occupational_permit/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://10.109.2.112:8000/api/update/occupational_permit/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

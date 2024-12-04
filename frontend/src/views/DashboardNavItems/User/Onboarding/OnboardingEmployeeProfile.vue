@@ -1802,7 +1802,7 @@ export default {
     async fetchEmployeeData() {
       try {
         const response = await axios.get(
-          `https://10.236.103.190/api/show/employees/${this.$route.params.id}`
+          `http://10.109.2.112:8000/api/show/employees/${this.$route.params.id}`
         );
         if (response.status === 200) {
           this.employee_data = response.data.employee_data || {};
