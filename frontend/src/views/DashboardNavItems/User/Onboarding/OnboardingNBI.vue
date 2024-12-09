@@ -11,9 +11,7 @@
           <option disabled>Please select one</option>
           <option value="YES">Yes</option>
           <option value="NO">No</option>
-          <option value="NO - APPOINTMENT ONLY">NO - APPOINTMENT ONLY</option>
-          <option value="NO - WITH HIT">NO - WITH HIT</option>
-          <option value="NO - INVALID">NO - INVALID</option>
+          <option value="NO - HIT RECEIPT">NO - HIT RECEIPT</option>
           <option value="QUALITY CONTROL">QUALITY CONTROL</option>
         </select>
       </div>

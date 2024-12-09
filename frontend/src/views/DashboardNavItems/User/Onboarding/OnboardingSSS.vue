@@ -4,10 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select
-          v-model="sss_final_status"
-          class="p-2 mt-1 border rounded w-full"
-        >
+        <select v-model="sss_final_status" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -31,11 +28,22 @@
 
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
-        <input
+        <select
           v-model="sss_proof_submitted_type"
-          type="text"
+         
           class="p-2 mt-1 border rounded w-full"
-        />
+        ><option disabled>Please select one</option>
+          <option value="E-FORM">E-FORM</option>
+          <option value="NUMBER SLIP">NUMBER SLIP</option>
+          <option value="PERSONAL RECORD">PERSONAL RECORD</option>
+          <option value="VERIFICATION SLIP">VERIFICATION SLIP</option>
+          <option value="ONLINE STATIC INFO">ONLINE STATIC INFO</option>
+          <option value="ID">ID</option>
+          <option value="MEMBER DATE CHANGE REQUEST">MEMBER DATE CHANGE REQUEST</option>
+          <option value="R1A">R1A</option>
+          <option value="TRANSACTION RECEIPT">TRANSACTION RECEIPT</option>
+          <option value="SOA">SOA</option>
+        </select>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
@@ -47,20 +55,12 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <input
-          v-model="sss_remarks"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <input v-model="sss_remarks" type="text" class="p-2 mt-1 border rounded w-full" />
       </div>
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">SSS PROOF</label>
-      <input
-        type="file"
-        @change="uploadImage"
-        class="p-2 mt-1 border rounded w-full"
-      />
+      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button
@@ -167,8 +167,7 @@ export default {
       // Validation: Ensure the input matches the format XX-XXXXXXX-X
       const isValid = /^\d{2}-\d{7}-\d{1}$/.test(this.sss_number);
       if (!isValid) {
-        this.sss_number_error =
-          "SSS number must be in the format 01-2345678-9.";
+        this.sss_number_error = "SSS number must be in the format 01-2345678-9.";
       } else {
         this.sss_number_error = ""; // Clear the error if valid
       }
@@ -190,10 +189,7 @@ export default {
       formData.append("sss_final_status", this.sss_final_status);
       formData.append("sss_submitted_date", this.sss_submitted_date);
       formData.append("sss_number", this.sss_number);
-      formData.append(
-        "sss_proof_submitted_type",
-        this.sss_proof_submitted_type
-      );
+      formData.append("sss_proof_submitted_type", this.sss_proof_submitted_type);
       formData.append("sss_remarks", this.sss_remarks);
       formData.append("sss_updated_by", this.$store.state.user_id);
       // Append the actual file (sss_proof) for upload

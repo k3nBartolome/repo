@@ -4,10 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select
-          v-model="tin_final_status"
-          class="p-2 mt-1 border rounded w-full"
-        >
+        <select v-model="tin_final_status" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -32,11 +29,17 @@
 
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
-        <input
-          v-model="tin_proof_submitted_type"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <select v-model="tin_proof_submitted_type" class="p-2 mt-1 border rounded w-full">
+          <option disabled>Please select one</option>
+          <option value="ID">ID</option>
+          <option value="STAMPED VERIFICATION SLIP">STAMPED VERIFICATION SLIP</option>
+          <option value="BIR FORM 2316">BIR FORM 2316</option>
+          <option value="BIR FORM 1701">BIR FORM 1701</option>
+          <option value="PROCESSED BIR FORM">PROCESSED BIR FORM</option>
+          <option value="E-TIN CONFIRMATION">E-TIN CONFIRMATION</option>
+          <option value="ORUS VERIFICATION">ORUS VERIFICATION</option>
+          <option value="ORUS CONFIRMATION">ORUS CONFIRMATION</option>
+        </select>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
@@ -48,20 +51,12 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <input
-          v-model="tin_remarks"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <input v-model="tin_remarks" type="text" class="p-2 mt-1 border rounded w-full" />
       </div>
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">TIN PROOF</label>
-      <input
-        type="file"
-        @change="uploadImage"
-        class="p-2 mt-1 border rounded w-full"
-      />
+      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button
@@ -187,10 +182,7 @@ export default {
       formData.append("tin_final_status", this.tin_final_status);
       formData.append("tin_submitted_date", this.tin_submitted_date);
       formData.append("tin_number", this.tin_number);
-      formData.append(
-        "tin_proof_submitted_type",
-        this.tin_proof_submitted_type
-      );
+      formData.append("tin_proof_submitted_type", this.tin_proof_submitted_type);
       formData.append("tin_remarks", this.tin_remarks);
       formData.append("tin_updated_by", this.$store.state.user_id);
       // Append the actual file (tin_proof) for upload

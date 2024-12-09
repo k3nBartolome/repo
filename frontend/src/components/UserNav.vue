@@ -11,23 +11,23 @@
               <div class="flex items-baseline justify-center space-x-4">
                 <router-link
                   to="/capfile"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
                   v-if="isUser || isSourcing"
                   >Capacity File</router-link
                 >
                 <router-link
                   to="/staffing"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
                   >Staffing Tracker</router-link
                 >
                 <!-- <router-link
                   to="/sr_compliance"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
                   >SR Pending Movements</router-link
                 > -->
                 <router-link
                   to="/h&s"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
@@ -149,6 +149,28 @@
                   >
                 </div>
               </div>
+              <div
+                class="dropdown"
+                @mouseover="openDropdown"
+                @mouseleave="closeDropdown"
+                @click="toggleDropdown"
+              >
+                <button
+                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
+                  v-if="isUser || isOnboarding"
+                >
+                  Onboarding
+                </button>
+                <div v-show="dropdownOpen" class="dropdown-content">
+
+                  <router-link
+                    to="/onboarding_dashboard"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                    role="menuitem"
+                    >Onboarding</router-link
+                  >
+                </div>
+              </div>
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"
@@ -236,13 +258,13 @@
             </div>
             <router-link
               to="/profile"
-              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
               >{{ userName }}</router-link
             >
             <router-link
               to="/login"
               @click="logout"
-              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button"
+              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
               >Logout</router-link
             >
           </div>
@@ -311,6 +333,10 @@ export default {
       const userRole = this.$store.state.role;
       return userRole === "sourcing";
     },
+    isOnboarding() {
+      const userRole = this.$store.state.role;
+      return userRole === "onboarding";
+    },
   },
 
   methods: {
@@ -376,7 +402,7 @@ export default {
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
-.link-button {
+.link-button truncate {
   text-decoration: none;
 }
 </style>

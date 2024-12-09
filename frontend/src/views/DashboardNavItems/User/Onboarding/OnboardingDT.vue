@@ -13,7 +13,7 @@
           <option value="POSITIVE - FOR CONFIRMATORY">
             POSITIVE - FOR CONFIRMATORY
           </option>
-          <option value="NO">NO</option>
+          <option value="(BLANK)">(BLANK)</option>
         </select>
       </div>
       <div class="flex flex-col">

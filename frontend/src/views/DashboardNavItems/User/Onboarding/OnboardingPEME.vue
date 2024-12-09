@@ -4,16 +4,11 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select
-          v-model="peme_final_status"
-          class="p-2 mt-1 border rounded w-full"
-        >
+        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="COMPLETE">COMPLETE</option>
           <option value="INCOMPLETE">INCOMPLETE</option>
-          <option value="FOR CLEARANCE">FOR CLEARANCE</option>
-          <option value="UNFIT TO WORK">UNFIT TO WORK</option>
-          <option value="NO PEME">NO PEME</option>
+          <option value="BLANK">BLANK</option>
         </select>
       </div>
       <div class="flex flex-col">
@@ -42,20 +37,29 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <input
-          v-model="peme_remarks"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <select v-model="peme_remarks" class="p-2 mt-1 border rounded w-full">
+          <option disabled>Please select one</option>
+          <option value="FIT TO WORK/UNFIT TO WORK">FIT TO WORK/UNFIT TO WORK</option>
+          <option value="INCOMPLETE - PENDING DT">INCOMPLETE - PENDING DT</option>
+          <option value="INCOMPLETE - PENDING CHEST XRAY">
+            INCOMPLETE - PENDING CHEST XRAY
+          </option>
+          <option value="FOR OB CLEARANCE/ PENDING SPUTUM TEST">
+            FOR OB CLEARANCE/ PENDING SPUTUM TEST
+          </option>
+          <option value="FOR CARDIO CLEARANCE">FOR CARDIO CLEARANCE</option>
+          <option value="FOR PULMO CLEARANCE">FOR PULMO CLEARANCE</option>
+          <option value="FOR ORTHO CLEARANCE">FOR ORTHO CLEARANCE</option>
+          <option value="FOR OPTHA CLEARANCE">FOR OPTHA CLEARANCE</option>
+          <option value="FOR ENDO CLEARANCE">FOR ENDO CLEARANCE</option>
+          <option value="FOR CLINIC'S VALIDATION">FOR CLINIC'S VALIDATION</option>
+          <option value="FOR MEDICAL LEAVE">FOR MEDICAL LEAVE</option>
+        </select>
       </div>
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">PEME PROOF</label>
-      <input
-        type="file"
-        @change="uploadImage"
-        class="p-2 mt-1 border rounded w-full"
-      />
+      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button

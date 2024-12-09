@@ -4,10 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select
-          v-model="pagibig_final_status"
-          class="p-2 mt-1 border rounded w-full"
-        >
+        <select v-model="pagibig_final_status" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -31,11 +28,20 @@
 
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
-        <input
+        <select
           v-model="pagibig_proof_submitted_type"
-          type="text"
           class="p-2 mt-1 border rounded w-full"
-        />
+        >
+          <option disabled>Please select one</option>
+          <option value="ID">ID</option>
+          <option value="MDF">MDF</option>
+          <option value="PROCESSED MCIF">PROCESSED MCIF</option>
+          <option value="SOA">SOA</option>
+          <option value="MP2">MP2</option>
+          <option value="TRANSACTION RECEIPT">TRANSACTION RECEIPT</option>
+          <option value="MID VALIDATION SLIP">MID VALIDATION SLIP</option>
+          <option value="ONLINE STATIC INFO">ONLINE STATIC INFO</option>
+        </select>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
@@ -56,11 +62,7 @@
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">PAGIBIG PROOF</label>
-      <input
-        type="file"
-        @change="uploadImage"
-        class="p-2 mt-1 border rounded w-full"
-      />
+      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button
@@ -186,10 +188,7 @@ export default {
       formData.append("pagibig_final_status", this.pagibig_final_status);
       formData.append("pagibig_submitted_date", this.pagibig_submitted_date);
       formData.append("pagibig_number", this.pagibig_number);
-      formData.append(
-        "pagibig_proof_submitted_type",
-        this.pagibig_proof_submitted_type
-      );
+      formData.append("pagibig_proof_submitted_type", this.pagibig_proof_submitted_type);
       formData.append("pagibig_remarks", this.pagibig_remarks);
       formData.append("pagibig_updated_by", this.$store.state.user_id);
       // Append the actual file (pagibig_proof) for upload

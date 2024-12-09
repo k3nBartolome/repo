@@ -4,10 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select
-          v-model="phic_final_status"
-          class="p-2 mt-1 border rounded w-full"
-        >
+        <select v-model="phic_final_status" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -22,17 +19,22 @@
           class="p-2 mt-1 border rounded w-full"
           @input="formatPhicNumber"
         />
-        <small class="text-sm text-gray-500 mt-1">
-          Format: 01-23456789-01
-        </small>
+        <small class="text-sm text-gray-500 mt-1"> Format: 01-23456789-01 </small>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
-        <input
+        <select
           v-model="phic_proof_submitted_type"
-          type="text"
           class="p-2 mt-1 border rounded w-full"
-        />
+        ><option disabled>Please select one</option>
+          <option value="ID">ID</option>
+          <option value="MDR">MDR</option>
+          <option value="PIN SLIP">PIN SLIP</option>
+          <option value="ONLINE STATIC INFO">ONLINE STATIC INFO</option>
+          <option value="STAMPED PMRF">STAMPED PMRF</option>
+          <option value="TRANSACTION RECEIPT">TRANSACTION RECEIPT</option>
+          <option value="SOA">SOA</option>
+        </select>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
@@ -53,11 +55,7 @@
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">PHIC PROOF</label>
-      <input
-        type="file"
-        @change="uploadImage"
-        class="p-2 mt-1 border rounded w-full"
-      />
+      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button
@@ -162,8 +160,7 @@ export default {
       // Regular expression for PHIC #
       const phicPattern = /^\d{2}-\d{8}-\d{2}$/;
       if (!phicPattern.test(this.phic_number)) {
-        this.phic_number_error =
-          "PHIC # must follow the format 01-23456789-01.";
+        this.phic_number_error = "PHIC # must follow the format 01-23456789-01.";
       } else {
         this.phic_number_error = "";
       }
@@ -185,10 +182,7 @@ export default {
       formData.append("phic_final_status", this.phic_final_status);
       formData.append("phic_submitted_date", this.phic_submitted_date);
       formData.append("phic_number", this.phic_number);
-      formData.append(
-        "phic_proof_submitted_type",
-        this.phic_proof_submitted_type
-      );
+      formData.append("phic_proof_submitted_type", this.phic_proof_submitted_type);
       formData.append("phic_remarks", this.phic_remarks);
       formData.append("phic_updated_by", this.$store.state.user_id);
       // Append the actual file (phic_proof) for upload
