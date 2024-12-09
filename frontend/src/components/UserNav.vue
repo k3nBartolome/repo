@@ -120,57 +120,55 @@
                       >Referrals</router-link
                     >
                     <router-link
-                    to="/referralsv1"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                    >OSS Referr</router-link
-                  >
+                      to="/referralsv1"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >OSS Referr</router-link
+                    >
                   </div>
                 </div>
                 <div
-                class="dropdown"
-                @mouseover="openDropdown"
-                @mouseleave="closeDropdown"
-                @click="toggleDropdown"
-              >
-                <button
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
-                  v-if="isUser || isSourcing"
+                  class="dropdown"
+                  @mouseover="openDropdown"
+                  @mouseleave="closeDropdown"
+                  @click="toggleDropdown"
                 >
-                  H&S
-                </button>
-                <div v-show="dropdownOpen" class="dropdown-content">
-
-                  <router-link
-                    to="/classes_information"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                    >Classes</router-link
+                  <button
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
+                    v-if="isUser || isSourcing"
                   >
+                    H&S
+                  </button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link
+                      to="/classes_information"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Classes</router-link
+                    >
+                  </div>
                 </div>
-              </div>
-              <div
-                class="dropdown"
-                @mouseover="openDropdown"
-                @mouseleave="closeDropdown"
-                @click="toggleDropdown"
-              >
-                <button
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
-                  v-if="isUser || isOnboarding"
+                <div
+                  class="dropdown"
+                  @mouseover="openDropdown"
+                  @mouseleave="closeDropdown"
+                  @click="toggleDropdown"
                 >
-                  Onboarding
-                </button>
-                <div v-show="dropdownOpen" class="dropdown-content">
-
-                  <router-link
-                    to="/onboarding_dashboard"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-                    role="menuitem"
-                    >Onboarding</router-link
+                  <button
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
+                    v-if="isUser || isOnboarding"
                   >
+                    Onboarding
+                  </button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link
+                      to="/onboarding_dashboard"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Onboarding</router-link
+                    >
+                  </div>
                 </div>
-              </div>
                 <div
                   class="dropdown"
                   @mouseover="openDropdown"
@@ -224,7 +222,7 @@
             </div>
           </div>
           <div class="flex items-center justify-end">
-            <div
+            <!-- <div
               class="dropdown"
               @mouseover="openDropdown"
               @mouseleave="closeDropdown"
@@ -255,7 +253,7 @@
                   >Jamaica</router-link
                 >
               </div>
-            </div>
+            </div> -->
             <router-link
               to="/profile"
               class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
@@ -270,10 +268,7 @@
           </div>
         </div>
       </div>
-      <div
-        :class="{ block: mobileMenuOpen, hidden: !mobileMenuOpen }"
-        class="md:hidden"
-      >
+      <div :class="{ block: mobileMenuOpen, hidden: !mobileMenuOpen }" class="md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           <router-link
             to="/"
@@ -402,7 +397,7 @@ export default {
 .dropdown:hover .dropbtn {
   background-color: #3e8e41;
 }
-.link-button truncate {
+.link-button {
   text-decoration: none;
 }
 </style>
