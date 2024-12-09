@@ -10,7 +10,6 @@ use App\Exports\LeadsExport;
 use App\Exports\MyExport;
 use App\Exports\MyExportv2;
 use App\Exports\ReferralsExport;
-use App\Exports\ReferralsExportV1;
 use App\Exports\SrExport;
 use App\Http\Resources\ClassesResource;
 use App\Models\Applicant;
@@ -24,153 +23,12 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class ClassesController extends Controller
 {
-    public function referralsv1(Request $request)
-    {
-        $referrals = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-            ->select([
-                'ReferredByHrid', 'ReferredByFirstName', 'ReferredByLastName',
-                'ReferredByEmailAddress', 'ReferredByLob', 'ReferredBySite',
-                'ReferralFirstName', 'ReferralLastName', 'ReferralIsWithEperience',
-                'ReferralLOB', 'ReferredDate', 'Position', 'PreferredSite'
-            ])
-            ->whereRaw("CONVERT(VARCHAR, ReferredDate, 120) LIKE '%2024%'");
-
-        // Apply filters if present
-        if ($request->has('filter_pref_site')) {
-            $filterPrefSite = $request->input('filter_pref_site');
-            if (!empty($filterPrefSite)) {
-                $referrals->where('PreferredSite', 'LIKE', '%'.$filterPrefSite.'%');
-            }
-        }
-        if ($request->has('filter_ref_site')) {
-            $filterRefSite = $request->input('filter_ref_site');
-            if (!empty($filterRefSite)) {
-                $referrals->where('ReferredBySite', 'LIKE', '%'.$filterRefSite.'%');
-            }
-        }
-        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-            $filterDateStart = $request->input('filter_date_start');
-            $filterDateEnd = $request->input('filter_date_end');
-            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-                $startDate = date('Y-m-d', strtotime($filterDateStart));
-                $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
-
-                $referrals->whereBetween('ReferredDate', [$startDate, $endDate]);
-            }
-        }
-
-        $referrals = $referrals->get();
-
-        return response()->json(['ref_data' => $referrals]);
-    }
-
-     public function referralsv1Export(Request $request)
-    {
-        $referrals = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-        ->select([
-            'ReferredByHrid', 'ReferredByFirstName', 'ReferredByLastName',
-            'ReferredByEmailAddress', 'ReferredByLob', 'ReferredBySite',
-            'ReferralFirstName', 'ReferralLastName', 'ReferralIsWithEperience',
-            'ReferralLOB', 'ReferredDate', 'Position', 'PreferredSite'
-        ])
-        ->whereRaw("CONVERT(VARCHAR, ReferredDate, 120) LIKE '%2024%'");
-
-    // Apply filters if present
-    if ($request->has('filter_pref_site')) {
-        $filterPrefSite = $request->input('filter_pref_site');
-        if (!empty($filterPrefSite)) {
-            $referrals->where('PreferredSite', 'LIKE', '%'.$filterPrefSite.'%');
-        }
-    }
-    if ($request->has('filter_ref_site')) {
-        $filterRefSite = $request->input('filter_ref_site');
-        if (!empty($filterRefSite)) {
-            $referrals->where('ReferredBySite', 'LIKE', '%'.$filterRefSite.'%');
-        }
-    }
-    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-        $filterDateStart = $request->input('filter_date_start');
-        $filterDateEnd = $request->input('filter_date_end');
-        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-            $startDate = date('Y-m-d', strtotime($filterDateStart));
-            $endDate = date('Y-m-d', strtotime($filterDateEnd.' +1 day'));
-
-            $referrals->whereBetween('ReferredDate', [$startDate, $endDate]);
-        }
-    }
-
-    $referrals = $referrals->get();
-
-    $filteredDataArray = $referrals->toArray();
-
-    return Excel::download(new ReferralsExportV1($filteredDataArray), 'referrals_v1.xlsx');
-    }
-    public function referralsDatev1()
-    {
-        // Fetch the minimum and maximum dates for the year 2024
-        $minDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-            ->whereYear('ReferredDate', 2024)
-            ->min('ReferredDate');
-
-        $maxDate = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-            ->whereYear('ReferredDate', 2024)
-            ->max('ReferredDate');
-
-        // If no records for 2024, return null or a default response
-        if (!$minDate || !$maxDate) {
-            return response()->json([
-                'minDate' => null,
-                'maxDate' => null,
-            ]);
-        }
-
-        // Format the dates
-        $minDate = Carbon::parse($minDate)->format('Y-m-d');
-        $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
-
-        // Return the filtered results
-        return response()->json([
-            'minDate' => $minDate,
-            'maxDate' => $maxDate,
-        ]);
-    }
-
-    public function refSitev1(Request $request)
-    {
-        $query = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-            ->select('ReferredBySite');
-
-        $query->orderBy('ReferredBySite');
-        $sites = $query->whereNOTNULL('ReferredBySite')->distinct()->get();
-
-        return response()->json([
-            'sites' => $sites,
-        ]);
-    }
-    public function prefSitev1(Request $request)
-    {
-        $query = DB::connection('sqlsrv')
-            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
-            ->select('PreferredSite');
-
-        $query->orderBy('PreferredSite');
-        $sites = $query->whereNOTNULL('PreferredSite')->distinct()->get();
-
-        return response()->json([
-            'sites' => $sites,
-        ]);
-    }
     public function classesInformation(Request $request)
     {
         $query = DB::connection('sqlsrv')
@@ -181,9 +39,9 @@ class ClassesController extends Controller
                 'ApplicantDetails.LastName as LastName',
                 'ApplicantDetails.FirstName as FirstName',
                 'ApplicantDetails.MiddleName as MiddleName',
-                DB::raw("
+                DB::raw('
                 CONVERT(VARCHAR(10), Classes.StartDate, 120) as DateHired
-            "),
+            '),
                 'LobDetails.Name as Lob',
                 DB::raw("
     CASE
@@ -201,7 +59,7 @@ class ClassesController extends Controller
         ELSE ''
     END as Wave
 "),
-DB::raw("'Account Associate' as Position"),
+                DB::raw("'Account Associate' as Position"),
                 'SitesDetails.Name as Sites',
                 'PayRateDetails.BasicPayTraining as Salary',
                 'PayRateDetails.NightDifferentialTraining as ND_Training',
@@ -225,7 +83,7 @@ DB::raw("'Account Associate' as Position"),
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
-                \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
                 $query->where('SitesDetails.Id', $filterSite);
             }
         }
@@ -233,7 +91,7 @@ DB::raw("'Account Associate' as Position"),
         if ($request->has('filter_lob')) {
             $filterLob = $request->input('filter_lob');
             if (!empty($filterLob)) {
-                \Log::info('Applying Lob Filter: ', ['filterLob' => $filterLob]);
+                Log::info('Applying Lob Filter: ', ['filterLob' => $filterLob]);
                 $query->where('LobDetails.Id', $filterLob);
             }
         }
@@ -241,7 +99,7 @@ DB::raw("'Account Associate' as Position"),
         if ($request->has('filter_wave')) {
             $filterWave = $request->input('filter_wave');
             if (!empty($filterWave)) {
-                \Log::info('Applying Wave Filter: ', ['filterWave' => $filterWave]);
+                Log::info('Applying Wave Filter: ', ['filterWave' => $filterWave]);
 
                 $query->where(DB::raw("
                     CASE
@@ -261,13 +119,13 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-
         $filteredData = $query->get();
 
         return response()->json([
             'classes' => $filteredData,
         ]);
     }
+
     public function classesInformationExport(Request $request)
     {
         try {
@@ -279,9 +137,9 @@ DB::raw("'Account Associate' as Position"),
                     'ApplicantDetails.LastName as LastName',
                     'ApplicantDetails.FirstName as FirstName',
                     'ApplicantDetails.MiddleName as MiddleName',
-                    DB::raw("
+                    DB::raw('
                     CONVERT(VARCHAR(10), Classes.StartDate, 120) as DateHired
-                "),
+                '),
                     'LobDetails.Name as Lob',
                     DB::raw("
                         CASE
@@ -324,7 +182,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_site')) {
                 $filterSite = $request->input('filter_site');
                 if (!empty($filterSite)) {
-                    \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                    Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
                     $query->where('SitesDetails.Id', $filterSite);
                 }
             }
@@ -332,7 +190,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_lob')) {
                 $filterLob = $request->input('filter_lob');
                 if (!empty($filterLob)) {
-                    \Log::info('Applying Lob Filter: ', ['filterLob' => $filterLob]);
+                    Log::info('Applying Lob Filter: ', ['filterLob' => $filterLob]);
                     $query->where('LobDetails.Id', $filterLob);
                 }
             }
@@ -340,7 +198,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_wave')) {
                 $filterWave = $request->input('filter_wave');
                 if (!empty($filterWave)) {
-                    \Log::info('Applying Wave Filter: ', ['filterWave' => $filterWave]);
+                    Log::info('Applying Wave Filter: ', ['filterWave' => $filterWave]);
 
                     $query->where(DB::raw("
                         CASE
@@ -365,11 +223,11 @@ DB::raw("'Account Associate' as Position"),
 
             return Excel::download(new ClassesInformationExport($filteredDataArray), 'SalaryPackage.xlsx');
         } catch (Exception $e) {
-            \Log::error('Error exporting classes data: ', ['error' => $e->getMessage()]);
+            Log::error('Error exporting classes data: ', ['error' => $e->getMessage()]);
+
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
 
     public function getPayRateByLob($lobid)
     {
@@ -444,12 +302,12 @@ DB::raw("'Account Associate' as Position"),
             $query = Applicant::query();
 
             // Log request data
-            \Log::info('Request Data: ', $request->all());
+            Log::info('Request Data: ', $request->all());
 
             if ($request->has('filter_lastname')) {
                 $filterLastName = $request->input('filter_lastname');
                 if (!empty($filterLastName)) {
-                    \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
+                    Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
                     $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
                 }
             }
@@ -457,7 +315,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_firstname')) {
                 $filterFirstName = $request->input('filter_firstname');
                 if (!empty($filterFirstName)) {
-                    \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
+                    Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
                     $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
                 }
             }
@@ -465,7 +323,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_site')) {
                 $filterSite = $request->input('filter_site');
                 if (!empty($filterSite)) {
-                    \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                    Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
                     $query->where('SiteApplied', 'LIKE', '%' . $filterSite . '%');
                 }
             }
@@ -479,7 +337,7 @@ DB::raw("'Account Associate' as Position"),
                     $startDate = date('Y-m-d', strtotime($filterDateStart));
                     $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
 
-                    \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
+                    Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
 
                     $query->whereBetween(DB::raw('CONVERT(date, ApplicationDate, 101)'), [$startDate, $endDate]);
                 }
@@ -488,7 +346,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_contact')) {
                 $filterContact = $request->input('filter_contact');
                 if (!empty($filterContact)) {
-                    \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
+                    Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
                     $query->where('CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
                 }
             }
@@ -497,7 +355,7 @@ DB::raw("'Account Associate' as Position"),
                 $filterRegion = $request->input('filter_region');
                 if (!empty($filterRegion) && isset($regions[$filterRegion])) {
                     $siteIds = $regions[$filterRegion];
-                    \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
+                    Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
                     $query->where(function ($q) use ($siteIds) {
                         foreach ($siteIds as $site) {
                             $q->orWhere('SiteApplied', 'LIKE', '%' . $site . '%');
@@ -507,7 +365,7 @@ DB::raw("'Account Associate' as Position"),
             }
 
             // Log the final query for debugging
-            \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+            Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
             $applicants = $query->get();
 
@@ -531,12 +389,12 @@ DB::raw("'Account Associate' as Position"),
 
             $query = Applicant::query();
 
-            \Log::info('Request Data: ', $request->all());
+            Log::info('Request Data: ', $request->all());
 
             if ($request->has('filter_lastname')) {
                 $filterLastName = $request->input('filter_lastname');
                 if (!empty($filterLastName)) {
-                    \Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
+                    Log::info('Applying LastName Filter: ', ['filterLastName' => $filterLastName]);
                     $query->where('LastName', 'LIKE', '%' . $filterLastName . '%');
                 }
             }
@@ -544,7 +402,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_firstname')) {
                 $filterFirstName = $request->input('filter_firstname');
                 if (!empty($filterFirstName)) {
-                    \Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
+                    Log::info('Applying FirstName Filter: ', ['filterFirstName' => $filterFirstName]);
                     $query->where('FirstName', 'LIKE', '%' . $filterFirstName . '%');
                 }
             }
@@ -552,7 +410,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_site')) {
                 $filterSite = $request->input('filter_site');
                 if (!empty($filterSite)) {
-                    \Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
+                    Log::info('Applying Site Filter: ', ['filterSite' => $filterSite]);
                     $query->where('SiteApplied', 'LIKE', '%' . $filterSite . '%');
                 }
             }
@@ -566,7 +424,7 @@ DB::raw("'Account Associate' as Position"),
                     $startDate = date('Y-m-d', strtotime($filterDateStart));
                     $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
 
-                    \Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
+                    Log::info('Converted Dates:', ['startDate' => $startDate, 'endDate' => $endDate]);
 
                     $query->whereBetween(DB::raw('CONVERT(date, ApplicationDate, 101)'), [$startDate, $endDate]);
                 }
@@ -575,7 +433,7 @@ DB::raw("'Account Associate' as Position"),
             if ($request->has('filter_contact')) {
                 $filterContact = $request->input('filter_contact');
                 if (!empty($filterContact)) {
-                    \Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
+                    Log::info('Applying Contact Filter: ', ['filterContact' => $filterContact]);
                     $query->where('CellphoneNumber', 'LIKE', '%' . $filterContact . '%');
                 }
             }
@@ -584,7 +442,7 @@ DB::raw("'Account Associate' as Position"),
                 $filterRegion = $request->input('filter_region');
                 if (!empty($filterRegion) && isset($regions[$filterRegion])) {
                     $siteIds = $regions[$filterRegion];
-                    \Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
+                    Log::info('Applying Region Filter: ', ['filterRegion' => $filterRegion, 'siteIds' => $siteIds]);
                     $query->where(function ($q) use ($siteIds) {
                         foreach ($siteIds as $site) {
                             $q->orWhere('SiteApplied', 'LIKE', '%' . $site . '%');
@@ -594,7 +452,7 @@ DB::raw("'Account Associate' as Position"),
             }
 
             // Log the final query for debugging
-            \Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
+            Log::info('Final Query: ', ['query' => $query->toSql(), 'bindings' => $query->getBindings()]);
 
             $applicants = $query->get();
 
@@ -1065,6 +923,96 @@ DB::raw("'Account Associate' as Position"),
             'maxDate' => $maxDate,
         ]);
     }
+
+    public function referralsv1(Request $request)
+    {
+        $referrals = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_PERX.dbo.StgReferralList')
+            ->select([
+                'ReferredByHrid',
+                'ReferredByFirstName',
+                'ReferredByLastName',
+                'ReferredByEmailAddress',
+                'ReferredByLob',
+                'ReferredBySite',
+                'ReferralFirstName',
+                'ReferralLastName',
+                'ReferralIsWithEperience',
+                'ReferralLOB',
+                'ReferredDate',
+                'Position',
+                'PreferredSite'
+            ])
+            ->whereRaw("CONVERT(VARCHAR, ReferredDate, 120) LIKE '%2024%'");
+        if ($request->has('filter_pref_site')) {
+            $filterPrefSite = $request->input('filter_pref_site');
+            if (!empty($filterPrefSite)) {
+                $referrals->where('PreferredSite', 'LIKE', '%' . $filterPrefSite . '%');
+            }
+        }
+        if ($request->has('filter_ref_site')) {
+            $filterRefSite = $request->input('filter_ref_site');
+            if (!empty($filterRefSite)) {
+                $referrals->where('ReferredBySite', 'LIKE', '%' . $filterRefSite . '%');
+            }
+        }
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+
+                $referrals->whereBetween('ReferredDate', [$startDate, $endDate]);
+            }
+        }
+        $referralsData = $referrals->get();
+        return response()->json([
+            'ref_data' => $referralsData,
+        ]);
+    }
+
+    public function referralsDatev1()
+    {
+        $minDate = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')->min('ReferredDate');
+        $maxDate = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')->max('ReferredDate');
+
+        $minDate = Carbon::parse($minDate)->format('Y-m-d');
+        $maxDate = Carbon::parse($maxDate)->format('Y-m-d');
+
+        return response()->json([
+            'minDate' => $minDate,
+            'maxDate' => $maxDate,
+        ]);
+    }
+    public function refSitev1(Request $request)
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')
+            ->select('ReferredBySite');
+
+        $query->orderBy('ReferredBySite');
+        $sites = $query->distinct()->get();
+
+        return response()->json([
+            'sites' => $sites,
+        ]);
+    }
+    public function prefSitev1(Request $request)
+    {
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH.dbo.StgReferralList')
+            ->select('PreferredSite');
+
+        $query->orderBy('PreferredSite');
+        $sites = $query->distinct()->get();
+
+        return response()->json([
+            'sites' => $sites,
+        ]);
+    }
     public function referralsDate()
     {
         $minDate = DB::connection('sqlsrv')
@@ -1115,7 +1063,6 @@ DB::raw("'Account Associate' as Position"),
                 'ApplicantDetails.LastName as LastName',
                 'ApplicantDetails.MiddleName as MiddleName',
                 'ApplicantDetails.CellphoneNumber as MobileNumber',
-                'ApplicantDetails.Email as Email',
                 DB::raw("
                     CASE
                         WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
@@ -1207,118 +1154,83 @@ DB::raw("'Account Associate' as Position"),
     public function perxFilterNoSrv2(Request $request)
     {
         $regions = [
-        'QC' => [1, 2, 3, 4, 21],
-        'L2' => [5, 6, 16, 19, 20],
-        'CLARK' => [11, 12, 17],
-        'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
-    ];
-     $statusName = [
-        'Registered' => 1,
-        'NotyetRegistered' => NULL,
+            'QC' => [1, 2, 3, 4, 21],
+            'L2' => [5, 6, 16, 19, 20],
+            'CLARK' => [11, 12, 17],
+            'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
+        ];
+        $query = DB::connection('sqlsrv')
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
 
-    ];
+            ->whereNull('a.referralid')
+            ->select( /* 'r.Id', */
+                /*  'r.JobId',
+            'r.UserId', */
+                'r.FirstName',
+                'r.MiddleName',
+                'r.LastName',
+                'r.EmailAddress',
+                'r.ContactNo',
+                'r.TypeOfReferral',
+                's.Name as Site',
+                'r.ReferrerHRID',
+                'r.ReferrerName',
+                'r.ReferrerSite',
+                'r.ReferrerProgram',
+                /* 'r.CreatedBy', */
+                'r.DateCreated',
+                /* 'r.UpdatedBy', */
+                'r.DateUpdated',
+            );
 
-    $query = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
-        ->select(
-            'r.FirstName',
-            'r.MiddleName',
-            'r.LastName',
-            'r.EmailAddress',
-            'r.ContactNo',
-            'r.TypeOfReferral',
-            DB::raw("
-                CASE
-                    WHEN s.Id IN (1, 2, 3, 4, 21) THEN 'QC'
-                    WHEN s.Id IN (5, 6, 16, 19, 20) THEN 'L2'
-                    WHEN s.Id IN (11, 12, 17) THEN 'CLARK'
-                    WHEN s.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
-                    ELSE 'UNKNOWN'
-                END as Region
-            "),
-            's.Name as Site',
-            'r.ReferrerHRID',
-            'r.ReferrerName',
-            'r.ReferrerSite',
-            'r.ReferrerProgram',
-            'r.DateCreated',
-            'r.DateUpdated',
-            DB::raw("CASE
-                        WHEN a.isCompletedProfile IS NULL THEN 'Not Registered'
-                        ELSE 'Registered'
-                     END as Status")
-        );
-
-    // Filter by Last Name
-    if ($request->has('filter_lastname')) {
-        $filterLastName = $request->input('filter_lastname');
-        if (!empty($filterLastName)) {
-            $query->where('r.LastName', 'LIKE', '%' . $filterLastName . '%');
+        if ($request->has('filter_lastname')) {
+            $filterLastName = $request->input('filter_lastname');
+            if (!empty($filterLastName)) {
+                $query->where('r.LastName', 'LIKE', '%' . $filterLastName . '%');
+            }
         }
-    }
 
-    // Filter by First Name
-    if ($request->has('filter_firstname')) {
-        $filterFirstName = $request->input('filter_firstname');
-        if (!empty($filterFirstName)) {
-            $query->where('r.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+        if ($request->has('filter_firstname')) {
+            $filterFirstName = $request->input('filter_firstname');
+            if (!empty($filterFirstName)) {
+                $query->where('r.FirstName', 'LIKE', '%' . $filterFirstName . '%');
+            }
         }
-    }
 
-    // Filter by Site
-    if ($request->has('filter_site')) {
-        $filterSite = $request->input('filter_site');
-        if (!empty($filterSite)) {
-            $query->where('s.Name', 'LIKE', '%' . $filterSite . '%');
+        if ($request->has('filter_site')) {
+            $filterSite = $request->input('filter_site');
+            if (!empty($filterSite)) {
+                $query->where('s.Name', 'LIKE', '%' . $filterSite . '%');
+            }
         }
-    }
 
-    // Filter by Date Range
-    if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
-        $filterDateStart = $request->input('filter_date_start');
-        $filterDateEnd = $request->input('filter_date_end');
-        if (!empty($filterDateStart) && !empty($filterDateEnd)) {
-            $startDate = date('Y-m-d', strtotime($filterDateStart));
-            $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
+        if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
+            $filterDateStart = $request->input('filter_date_start');
+            $filterDateEnd = $request->input('filter_date_end');
+            if (!empty($filterDateStart) && !empty($filterDateEnd)) {
+                $startDate = date('Y-m-d', strtotime($filterDateStart));
+                $endDate = date('Y-m-d', strtotime($filterDateEnd . ' +1 day'));
 
-            $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
+                $query->whereBetween('r.DateCreated', [$startDate, $endDate]);
+            }
         }
-    }
 
-    // Filter by Type of Referral
-    if ($request->has('filter_type')) {
-        $filterType = $request->input('filter_type');
-        if (!empty($filterType)) {
-            $query->where('r.TypeOfReferral', 'LIKE', '%' . $filterType . '%');
+        if ($request->has('filter_type')) {
+            $filterType = $request->input('filter_type');
+            if (!empty($filterType)) {
+                $query->where('r.TypeOfReferral', 'LIKE', '%' . $filterType . '%');
+            }
         }
-    }
 
-    // Filter by Region
-    if ($request->has('filter_region')) {
-        $filterRegion = $request->input('filter_region');
-        if (!empty($filterRegion) && isset($regions[$filterRegion])) {
-            $siteIds = $regions[$filterRegion];
-            $query->whereIn('r.Site', $siteIds);
+        if ($request->has('filter_region')) {
+            $filterRegion = $request->input('filter_region');
+            if (!empty($filterRegion) && isset($regions[$filterRegion])) {
+                $siteIds = $regions[$filterRegion];
+                $query->whereIn('r.Site', $siteIds);
+            }
         }
-    }
-    if ($request->has('filter_status')) {
-        $filterStatus = $request->input('filter_status');
-
-        if ($filterStatus === 'Registered') {
-            $query->where('a.isCompletedProfile', '=', 1);
-        } elseif ($filterStatus === 'NotyetRegistered') {
-            // Use 'where' for '!= 1' and 'orWhere' for 'is null'
-            $query->where(function ($q) {
-                $q->where('a.isCompletedProfile', '!=', 1)
-                  ->orWhereNull('a.isCompletedProfile');
-            });
-        }
-    }
-
-
-
 
         $filteredData = $query->get();
 
@@ -1335,42 +1247,32 @@ DB::raw("'Account Associate' as Position"),
             'CLARK' => [11, 12, 17],
             'DAVAO' => [7, 8, 9, 10, 13, 14, 15, 18],
         ];
-
         $query = DB::connection('sqlsrv')
             ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Referrals as r')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as a', 'r.id', '=', 'a.referralid')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as s', 'r.Site', '=', 's.id')
 
-            ->select(
+            ->whereNull('a.referralid')
+            ->select( /* 'r.Id', */
+                /*  'r.JobId',
+            'r.UserId', */
                 'r.FirstName',
                 'r.MiddleName',
                 'r.LastName',
                 'r.EmailAddress',
                 'r.ContactNo',
                 'r.TypeOfReferral',
-                DB::raw("
-                    CASE
-                        WHEN s.Id IN (1, 2, 3, 4, 21) THEN 'QC'
-                        WHEN s.Id IN (5, 6, 16, 19, 20) THEN 'L2'
-                        WHEN s.Id IN (11, 12, 17) THEN 'CLARK'
-                        WHEN s.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
-                        ELSE 'UNKNOWN'
-                    END as Region
-                "),
                 's.Name as Site',
                 'r.ReferrerHRID',
                 'r.ReferrerName',
                 'r.ReferrerSite',
                 'r.ReferrerProgram',
+                /* 'r.CreatedBy', */
                 'r.DateCreated',
+                /* 'r.UpdatedBy', */
                 'r.DateUpdated',
-                DB::raw("CASE
-                            WHEN a.isCompletedProfile IS NULL THEN 'Not Registered'
-                            ELSE 'Registered'
-                         END as Status")
             );
 
-        // Filter by Last Name
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
             if (!empty($filterLastName)) {
@@ -1378,7 +1280,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        // Filter by First Name
         if ($request->has('filter_firstname')) {
             $filterFirstName = $request->input('filter_firstname');
             if (!empty($filterFirstName)) {
@@ -1386,7 +1287,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        // Filter by Site
         if ($request->has('filter_site')) {
             $filterSite = $request->input('filter_site');
             if (!empty($filterSite)) {
@@ -1394,7 +1294,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        // Filter by Date Range
         if ($request->has('filter_date_start') && $request->has('filter_date_end')) {
             $filterDateStart = $request->input('filter_date_start');
             $filterDateEnd = $request->input('filter_date_end');
@@ -1406,7 +1305,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        // Filter by Type of Referral
         if ($request->has('filter_type')) {
             $filterType = $request->input('filter_type');
             if (!empty($filterType)) {
@@ -1414,7 +1312,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        // Filter by Region
         if ($request->has('filter_region')) {
             $filterRegion = $request->input('filter_region');
             if (!empty($filterRegion) && isset($regions[$filterRegion])) {
@@ -1423,19 +1320,6 @@ DB::raw("'Account Associate' as Position"),
             }
         }
 
-        if ($request->has('filter_status')) {
-            $filterStatus = $request->input('filter_status');
-
-            if ($filterStatus === 'Registered') {
-                $query->where('a.isCompletedProfile', '=', 1);
-            } elseif ($filterStatus === 'NotyetRegistered') {
-                // Use 'where' for '!= 1' and 'orWhere' for 'is null'
-                $query->where(function ($q) {
-                    $q->where('a.isCompletedProfile', '!=', 1)
-                      ->orWhereNull('a.isCompletedProfile');
-                });
-            }
-        }
         $filteredData = $query->get();
 
         $filteredDataArray = $filteredData->toArray();
@@ -1462,7 +1346,6 @@ DB::raw("'Account Associate' as Position"),
                 'ApplicantDetails.FirstName as FirstName',
                 'ApplicantDetails.MiddleName as MiddleName',
                 'ApplicantDetails.CellphoneNumber as MobileNumber',
-                'ApplicantDetails.Email as Email',
                 DB::raw("
                     CASE
                         WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
@@ -1478,9 +1361,9 @@ DB::raw("'Account Associate' as Position"),
                 'Step.Description as Step',
                 'Status.GeneralStatus as AppStep1',
                 'Status.SpecificStatus as AppStep2',
-                'Referrals.LastName as ReferrerLastName',
                 'Referrals.FirstName as ReferrerFirstName',
                 'Referrals.MiddleName as ReferrerMiddleName',
+                'Referrals.LastName as ReferrerLastName',
                 'Referrals.ReferrerHRID as ReferrerHRID',
                 'Referrals.ReferrerName as ReferrerName',
                 'ApplicationInformation.ReferrerName as DeclaredReferrerName',
@@ -1628,27 +1511,17 @@ DB::raw("'Account Associate' as Position"),
                 'UploadLeads.MiddleName as MiddleName',
                 'UploadLeads.ContactNo as MobileName',
                 'UploadLeads.EmailAddress as Email',
-                DB::raw("
-                    CASE
-                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
-                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
-                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
-                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
-                        ELSE 'UNKNOWN'
-                    END as Region
-                "),
                 'SitesDetails.Name as Site',
                 'GeneralSource.Name as GeneralSource',
-                'SourceOfApplication.Name as SpecSource',
                 'Status.GeneralStatus as GeneralStatus',
                 'Status.SpecificStatus as SpecificStatus',
+                'JobDetails.Title as JobTitle'
             )
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
-            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
             ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
 
@@ -1716,38 +1589,28 @@ DB::raw("'Account Associate' as Position"),
         ];
 
         $query = DB::connection('sqlsrv')
-        ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
-        ->select(
-            'ApplicantDetails.Id as ApplicantId',
-            'ApplicationDetails.AppliedDate as DateOfApplication',
-            'UploadLeads.FirstName as FirstName',
-            'UploadLeads.LastName as LastName',
-            'UploadLeads.MiddleName as MiddleName',
-            'UploadLeads.ContactNo as MobileName',
-            'UploadLeads.EmailAddress as Email',
-            DB::raw("
-                    CASE
-                        WHEN SitesDetails.Id IN (1, 2, 3, 4, 21) THEN 'QC'
-                        WHEN SitesDetails.Id IN (5, 6, 16, 19, 20) THEN 'L2'
-                        WHEN SitesDetails.Id IN (11, 12, 17) THEN 'CLARK'
-                        WHEN SitesDetails.Id IN (7, 8, 9, 10, 13, 14, 15, 18) THEN 'DAVAO'
-                        ELSE 'UNKNOWN'
-                    END as Region
-                "),
-            'SitesDetails.Name as Site',
-            'GeneralSource.Name as GeneralSource',
-            'SourceOfApplication.Name as SpecSource',
-            'Status.GeneralStatus as GeneralStatus',
-            'Status.SpecificStatus as SpecificStatus',
-        )
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.SourceOfApplication as SourceOfApplication', 'GeneralSource.Id', '=', 'SourceOfApplication.GeneralSourceId')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
-        ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
+            ->table('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.UploadLeads as UploadLeads')
+            ->select(
+                'ApplicantDetails.Id as ApplicantId',
+                'ApplicationDetails.AppliedDate as DateOfApplication',
+                'UploadLeads.FirstName as FirstName',
+                'UploadLeads.LastName as LastName',
+                'UploadLeads.MiddleName as MiddleName',
+                'UploadLeads.ContactNo as MobileName',
+                'UploadLeads.EmailAddress as Email',
+                'SitesDetails.Name as Site',
+                'GeneralSource.Name as GeneralSource',
+                'Status.GeneralStatus as GeneralStatus',
+                'Status.SpecificStatus as SpecificStatus',
+                'JobDetails.Title as JobTitle'
+            )
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Applicant as ApplicantDetails', 'UploadLeads.Id', '=', 'ApplicantDetails.UploadLeadsID')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.ApplicantApplications as ApplicationDetails', 'ApplicantDetails.Id', '=', 'ApplicationDetails.ApplicantId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Status as Status', 'ApplicationDetails.Status', '=', 'Status.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.job as JobDetails', 'ApplicationDetails.JobId', '=', 'JobDetails.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.GeneralSource as GeneralSource', 'UploadLeads.GeneralSouceId', '=', 'GeneralSource.Id')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Step as Step', 'Step.Id', '=', 'Status.StepId')
+            ->leftJoin('SMART_RECRUIT.VXI_SMART_RECRUIT_PH_V2_PROD.dbo.Sites as SitesDetails', 'UploadLeads.SiteId', '=', 'SitesDetails.Id');
 
         if ($request->has('filter_lastname')) {
             $filterLastName = $request->input('filter_lastname');
@@ -6154,7 +6017,7 @@ DB::raw("'Account Associate' as Position"),
                     })
                     ->where('site_id', $programId)
                     ->where('within_sla', 'Outside SLA - Increase in Demand')
-                /* ->orWhere('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)') */
+                    /* ->orWhere('within_sla', 'Outside SLA - Decrease in Demand (Cancellation)') */
                     ->where('status', 'Active')
                     ->get();
 
@@ -11738,12 +11601,12 @@ DB::raw("'Account Associate' as Position"),
             $percentage = intval($classTarget) === 0 ? '0%' : number_format((intval($showUpsTotal) / intval($classTarget)) * 100, 2) . '%';
             $overHires = max(0, intval($showUpsTotal) - intval($classTarget));
             $classNumber = intval($classTarget) % 15 > 1
-            ? floor(intval($classTarget) / 15) + 1
-            : floor(intval($classTarget) / 15);
+                ? floor(intval($classTarget) / 15) + 1
+                : floor(intval($classTarget) / 15);
             $open = max(0, intval($classNumber) - intval($filled));
             $capStart = intval($showUpsTotal) > intval($classTarget)
-            ? intval($classTarget)
-            : intval($showUpsTotal);
+                ? intval($classTarget)
+                : intval($showUpsTotal);
             $internalHires = ($showUpsInternal >= $classTarget && ($deficit === '' || $deficit === 0)) ? 1 : 0;
             $pipelineTarget = ($pipelineTotal > $classTarget) ? $classTarget : $pipelineTotal;
             $staffingModel->cap_starts = $capStart;
@@ -11850,12 +11713,10 @@ DB::raw("'Account Associate' as Position"),
         $class = Classes::find($id);
         $newClass = $class->replicate();
         $newClass->cancelled_by = json_encode($cancelled_by);
-
+        $newClass->changes = 'Cancellation';
         $newClass->cancelled_date = $request->input('cancelled_date');
         $newClass->status = 'Cancelled';
-        $newClass->changes = 'Cancellation';
         $newClass->save();
-
         $class->status = 'Cancelled Class';
         $class->cancelled_date = $request->input('cancelled_date');
         $class->save();

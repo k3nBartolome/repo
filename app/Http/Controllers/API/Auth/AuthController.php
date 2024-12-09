@@ -7,39 +7,46 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 class AuthController extends Controller
 {
     public function login(Request $request)
     {
+        // Validate the incoming request
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'password' => 'required|min:8',
         ]);
-
-        $credentials = $request->only(['email', 'password']);
-
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-            $token = $user->createToken('Personal Token')->plainTextToken;
-            $role = $user->roles->first()->name;
-            $permissions = $user->getAllPermissions()->pluck('name');
-            $user_id = Auth::user()->id;
-
+    
+        // Attempt to find the user by email
+        $user = User::where('email', $request->email)->first();
+    
+        // Check if user exists and password is correct
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'status' => 'success',
-                'user' => $user,
-                'token' => $token,
-                'role' => $role,
-                'permissions' => $permissions,
-                'user_id' => $user_id,
-            ], 200);
+                'status' => 'error',
+                'message' => 'Invalid Credentials',
+            ], 401);
         }
-
+    
+        // Generate the Sanctum token
+        $token = $user->createToken('Personal Token')->plainTextToken;
+    
+        // Get user's role and permissions
+        $role = $user->roles->first()->name ?? null; // Role may not exist
+        $permissions = $user->getAllPermissions()->pluck('name');
+        $user_id = $user->id;
+    
+        // Return response with token and user details
         return response()->json([
-            'status' => 'error',
-            'message' => 'Invalid Credentials',
-        ], 401);
+            'status' => 'success',
+            'user' => $user,
+            'token' => $token,
+            'role' => $role,
+            'permissions' => $permissions,
+            'user_id' => $user_id,
+        ], 200);
     }
 
     public function logout($id)

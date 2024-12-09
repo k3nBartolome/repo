@@ -62,14 +62,13 @@
 <script>
 import axios from "axios";
 import { mapMutations } from "vuex";
+
 export default {
-  data: () => {
-    return {
-      email: "",
-      password: "",
-      successMessage: "",
-    };
-  },
+  data: () => ({
+    email: "",
+    password: "",
+    successMessage: "",
+  }),
   methods: {
     ...mapMutations([
       "setUser",
@@ -79,64 +78,68 @@ export default {
       "setPermissions",
       "setUserName",
     ]),
-    async login(e) {
-      e.preventDefault();
-      let user;
-      let role;
-      let token;
-      let user_id;
-      let permissions;
-      let isLogin;
+   async login(e) {
+  e.preventDefault();
 
-      await axios
-        .post("http://10.109.2.112:8000/api/login", {
-          email: this.email,
-          password: this.password,
-        })
-        .then(function (response) {
-          isLogin = true;
-          user = response.data.user;
-          token = response.data.token;
-          role = response.data.role;
-          user_id = response.data.user_id;
-          permissions = response.data.permissions;
-          console.log(response.data);
-        })
-        .catch(function (error) {
-          console.error("API Error:", error);
-          isLogin = false;
-        });
+  try {
+    // Step 1: Fetch CSRF token
+    await axios.get("https://10.109.2.112/sanctum/csrf-cookie", {
+      withCredentials: true,
+    });
 
-      if (isLogin) {
-        this.setUser(user);
-        this.setToken(token);
-        this.setRole(role);
-        this.setUserId(user_id);
-        this.setPermissions(permissions);
+    // Step 2: Send login request
+    const response = await axios.post(
+      "https://10.109.2.112/api/login",
+      {
+        email: this.email,
+        password: this.password,
+      },
+      { withCredentials: true }
+    );
 
-        console.log("Logged in with role:", role);
+    // Step 3: Extract response data
+    const { user, token, role, user_id, permissions } = response.data;
 
-        if (role === "admin") {
-          console.log("Redirecting to admin_dashboard");
-          this.$router.push({ path: "/onboarding_dashboard" });
-        } else if (role === "user") {
-          console.log("Redirecting to capfile");
-          this.$router.push({ path: "/capfile" });
-        } else if (
-          role === "remx" ||
-          role === "sourcing" ||
-          role === "budget"
-        ) {
-          console.log("Redirecting to dashboard_manager");
-          this.$router.push({ path: "/dashboard_manager/request" });
-        } else {
-          console.log("Redirecting to perx_manager");
-          this.$router.push({ path: "/perx_manager" });
-        }
-      } else {
-        this.successMessage = "Invalid Credentials!";
-      }
-    },
+    // Log the token for debugging
+    console.log("Token:", token);
+
+    // Step 4: Save user info to Vuex store
+    this.setUser(user);
+    this.setToken(token);
+    this.setRole(role);
+    this.setUserId(user_id);
+    this.setPermissions(permissions);
+
+    // Step 5: Store token in localStorage
+    localStorage.setItem("token", token);
+
+    // Step 6: Set global Axios header
+    axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+    console.log("Logged in successfully with role:", role);
+
+    // Step 7: Log role for debugging
+    console.log("User role:", role);
+
+    // Step 8: Redirect based on role
+    if (role === "admin") {
+      console.log("Redirecting to /onboarding_dashboard");
+      await this.$router.push({ path: "/onboarding_dashboard" });
+    } else if (role === "user") {
+      console.log("Redirecting to /capfile");
+      await this.$router.push({ path: "/capfile" });
+    } else if (["remx", "sourcing", "budget"].includes(role)) {
+      console.log("Redirecting to /dashboard_manager/request");
+      await this.$router.push({ path: "/dashboard_manager/request" });
+    }
+  } catch (error) {
+    console.error("Login Error:", error.response?.data || error.message);
+    this.successMessage =
+      error.response?.data?.message || "Invalid Credentials!";
+  }
+}
+
+
   },
 };
 </script>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
+use Illuminate\Support\Facades\Log;
 class SiteController extends Controller {
     /**
     * Display a listing of the resource.
@@ -14,14 +15,21 @@ class SiteController extends Controller {
     * @return \Illuminate\Http\Response
     */
 
-    public function index() {
-        $sites = Site::with( [ 'createdBy', 'updatedBy' ] )
-        ->where( 'is_active', 1 )
-        ->where( 'country', 'Philippines' )
-        ->get();
 
-        return response()->json( [ 'data' => $sites ] );
+    public function index(Request $request) {
+       
+    
+        // Retrieve active sites in the Philippines
+        $sites = Site::with(['createdBy', 'updatedBy'])
+            ->where('is_active', 1)
+            ->where('country', 'Philippines')
+            ->get();
+    
+        Log::info('Sites retrieved successfully:', ['count' => $sites->count()]);
+    
+        return response()->json(['data' => $sites], 200);
     }
+    
 
     public function index2() {
         $sites = Site::with( [ 'createdBy', 'updatedBy' ] )

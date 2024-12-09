@@ -1,7 +1,7 @@
-/* const fs = require("fs");
+const fs = require("fs");
 const path = require("path");
 const { defineConfig } = require("@vue/cli-service");
-
+/* 
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
@@ -16,7 +16,19 @@ module.exports = defineConfig({
   },
 });
  */
-const { defineConfig } = require('@vue/cli-service')
+/* const { defineConfig } = require('@vue/cli-service')
 module.exports = defineConfig({
   transpileDependencies: true
-})
+}) */module.exports = {
+    devServer: {
+      server: {
+          type: 'https',
+          options: {
+              key: 'C:/inetpub/wwwroot/cfms/frontend/ssl/private.key',
+              cert: 'C:/inetpub/wwwroot/cfms/frontend/ssl/certificate.crt',
+          },
+      },
+      host: '10.109.2.112',
+      port: 8081,
+  },
+};

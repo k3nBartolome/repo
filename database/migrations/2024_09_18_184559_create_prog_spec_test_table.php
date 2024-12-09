@@ -14,7 +14,7 @@ class CreateProgSpecTestTable extends Migration
     public function up()
     {
         Schema::create('prog_spec_test', function (Blueprint $table) {
-            $table->id();
+            /* $table->id();
             $table->dateTime('pst_date')->nullable();
             $table->string('pst_score')->nullable();
             $table->string('pst_type')->nullable();
@@ -30,7 +30,7 @@ class CreateProgSpecTestTable extends Migration
             // Foreign key constraints
             $table->foreign('pst_updated_by')->references('id')->on('users')->nullable();
             $table->foreign('apn_id')->references('id')->on('application_info')->nullable();
-            $table->foreign('pst_added_by')->references('id')->on('users')->nullable();
+            $table->foreign('pst_added_by')->references('id')->on('users')->nullable(); */
         });
     }
 

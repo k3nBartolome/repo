@@ -611,7 +611,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/cancelled_export",
+          "https://10.109.2.112/api/cancelled_export",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -659,7 +659,7 @@ export default {
         };
 
         const response = await axios.get(
-          `http://10.109.2.112:8000/api/classes/${id}`,
+          `https://10.109.2.112/api/classes/${id}`,
           { headers }
         );
 
@@ -691,7 +691,7 @@ export default {
 
       axios
         .put(
-          `http://10.109.2.112:8000/api/classes/cancelled/edit/${id}`,
+          `https://10.109.2.112/api/classes/cancelled/edit/${id}`,
           formData,
           {
             headers,
@@ -715,7 +715,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8000/api/transaction/${id}`,
+          `https://10.109.2.112/api/transaction/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -737,7 +737,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/classescancelled",
+          "https://10.109.2.112/api/classescancelled",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -766,7 +766,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8000/api/sites", {
+        const response = await axios.get("https://10.109.2.112/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -790,7 +790,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8000/api/programs_selected/${this.sites_selected}`,
+          `https://10.109.2.112/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -817,7 +817,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8000/api/daterange_selected/${this.month_selected}`,
+          `https://10.109.2.112/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

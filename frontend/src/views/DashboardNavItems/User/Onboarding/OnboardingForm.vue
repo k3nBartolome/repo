@@ -10,6 +10,93 @@
     </div>
 
     <div class="table-wrapper">
+      <div class="mb-4 md:flex md:space-x-2 md:items-center">
+        <!-- Employee Status -->
+        <div class="relative w-full md:w-1/4">
+          <label
+            for="employee_status"
+            class="block text-sm font-medium text-gray-700 truncate"
+            >Employee Status</label
+          >
+          <select
+            v-model="employee_status"
+            id="employee_status"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option value="" disabled selected>Select Employee Status</option>
+            <option value="Active">Active</option>
+            <option value="Inactive">Inactive</option>
+            <option value="Separated">Separated</option>
+          </select>
+        </div>
+
+        <!-- Employment Status -->
+        <div class="w-full md:w-1/4">
+          <label
+            for="employment_status"
+            class="block text-sm font-medium text-gray-700 truncate"
+            >Employment Status</label
+          >
+          <select
+            v-model="employment_status"
+            id="employment_status"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option value="" disabled selected>Select Employment Status</option>
+            <option value="Hired">Hired</option>
+            <option value="To be Hired">To be Hired</option>
+          </select>
+        </div>
+
+        <!-- Hired Date From -->
+        <div class="w-full md:w-1/4 relative">
+          <label
+            for="hired_date_from"
+            class="block text-sm font-medium text-gray-700 truncate"
+            >Hired Date From</label
+          >
+          <input
+            v-model="hired_date_from"
+            type="date"
+            id="hired_date_from"
+            class="w-full p-2 border rounded-lg"
+            @input="updatehired_date_from"
+          />
+        </div>
+
+        <!-- Hired Date To -->
+        <div class="w-full md:w-1/4 relative">
+          <label
+            for="hired_date_to"
+            class="block text-sm font-medium text-gray-700 truncate"
+            >Hired Date To</label
+          >
+          <input
+            v-model="hired_date_to"
+            type="date"
+            id="hired_date_to"
+            class="w-full p-2 border rounded-lg truncate"
+            @input="updateFilterEndDate"
+          />
+        </div>
+
+        <div class="w-full md:w-1/4">
+          <button
+            @click="getEmployees"
+            class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
+          >
+            Filter
+          </button>
+        </div>
+        <div class="w-full md:w-1/4">
+          <button
+            @click="exportToExcel"
+            class="w-full px-4 py-2 text-white bg-green-600 rounded-lg truncate"
+          >
+            Export Data
+          </button>
+        </div>
+      </div>
       <table class="employee-table">
         <thead>
           <tr>
@@ -136,6 +223,14 @@ export default {
       employees: [],
       scannedValue: "",
       extractedId: "",
+      employee_status: "",
+      employment_status: "",
+      filterSite: "",
+      hired_date_from: "",
+      hired_date_to: "",
+      filterContact: "",
+      employee_statusError: "",
+      filterContactError: "",
       pagination: {
         current_page: 1,
         total: 0,
@@ -154,6 +249,13 @@ export default {
       selectedEmployee: null,
     };
   },
+  computed: {
+    formattedFilterDate() {
+      return this.filterDate
+        ? new Date(this.filterDate).toLocaleDateString("en-CA")
+        : "";
+    },
+  },
   mounted() {
     this.getEmployees();
     this.qrReader = new BrowserMultiFormatReader();
@@ -165,62 +267,52 @@ export default {
         params: { id: employeeId },
       });
     },
-    async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
-      try {
-        // Validate inputs
-        if (
-          !employeeId ||
-          (typeof employeeId !== "string" && typeof employeeId !== "number")
-        ) {
-          console.error("Invalid employee ID:", employeeId);
-          return;
-        }
-        if (!employeeEmail || typeof employeeEmail !== "string") {
-          console.error("Invalid employee email:", employeeEmail);
-          return;
-        }
-        if (
-          !employeeContactNumber ||
-          typeof employeeContactNumber !== "string"
-        ) {
-          console.error(
-            "Invalid employee contact number:",
-            employeeContactNumber
-          );
-          return;
-        }
+async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
+  try {
+    // Validate inputs
+    if (
+      !employeeId ||
+      (typeof employeeId !== "string" && typeof employeeId !== "number")
+    ) {
+      console.error("Invalid employee ID:", employeeId);
+      return;
+    }
+    if (!employeeEmail || typeof employeeEmail !== "string") {
+      console.error("Invalid employee email:", employeeEmail);
+      return;
+    }
+    if (
+      !employeeContactNumber ||
+      typeof employeeContactNumber !== "string"
+    ) {
+      console.error(
+        "Invalid employee contact number:",
+        employeeContactNumber
+      );
+      return;
+    }
 
-        // Format QR code data without the word "id"
-        const qrData = `${employeeId},${employeeEmail},${employeeContactNumber}`;
+    // Format QR code data
+    const qrData = `${employeeId},${employeeEmail},${employeeContactNumber}`;
 
-        // Generate QR code
-        const qrCodeCanvas = await QRCode.toCanvas(qrData);
-        const qrCodeDataUrl = qrCodeCanvas.toDataURL("image/png");
+    // Generate QR code
+    const qrCodeCanvas = await QRCode.toCanvas(qrData);
 
-        // Convert to Blob and File
-        const byteCharacters = atob(qrCodeDataUrl.split(",")[1]);
-        const byteArrays = [];
-        for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
-          const byteArray = new Uint8Array(1024);
-          for (let i = 0; i < 1024 && offset + i < byteCharacters.length; i++) {
-            byteArray[i] = byteCharacters[offset + i].charCodeAt(0);
-          }
-          byteArrays.push(byteArray);
-        }
-        const blob = new Blob(byteArrays, { type: "image/png" });
-        const file = new File([blob], `qr_code_${employeeId}.png`, {
-          type: "image/png",
-        });
+    // Convert canvas to Blob directly
+    qrCodeCanvas.toBlob((blob) => {
+      const file = new File([blob], `qr_code_${employeeId}.png`, {
+        type: "image/png",
+      });
 
-        // Prepare FormData for upload
-        const formData = new FormData();
-        formData.append("qr_code", file);
-        formData.append("employee_id", employeeId);
+      // Prepare FormData for upload
+      const formData = new FormData();
+      formData.append("qr_code", file);
 
-        // Make API request
-        const token = this.$store.state.token;
-        const response = await axios.post(
-          `http://10.109.2.112:8000/api/employees/${employeeId}/save-qr-code`,
+      // Make API request
+      const token = this.$store.state.token;
+      axios
+        .post(
+          `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
           formData,
           {
             headers: {
@@ -228,39 +320,76 @@ export default {
               Authorization: `Bearer ${token}`,
             },
           }
-        );
+        )
+        .then((response) => {
+          if (response.status === 200) {
+            console.log("QR code saved successfully:", response.data);
 
-        if (response.status === 200) {
-          console.log("QR code saved successfully:", response.data);
-
-          // Update employee object with the QR code path
-          const employee = this.employees.find((emp) => emp.id === employeeId);
-          if (employee) {
-            employee.qr_code_path = response.data.qr_code_path;
+            // Update employee object with the QR code path
+            const employee = this.employees.find((emp) => emp.id === employeeId);
+            if (employee) {
+              employee.qr_code_path = response.data.qr_code_path;
+              this.$router.push("/onboarding_dashboard", () => {
+                location.reload();
+              });
+            }
           }
-        }
-      } catch (error) {
-        console.error("Error generating and saving QR code:", error);
+        })
+        .catch((error) => {
+          console.error("Error generating and saving QR code:", error);
+        });
+    });
+  } catch (error) {
+    console.error("Error generating QR code:", error);
+  }
+},
+
+    goToPage(page) {
+      if (!page || page < 1 || page > this.pagination.total_pages) {
+        console.warn("Invalid page navigation:", page);
+        return;
       }
+      this.pagination.current_page = page; // Update the current page
+      this.getEmployees(); // Fetch data for the new page with filters
     },
 
-    // Fetch employees from the backend
-    async getEmployees(url = "http://10.109.2.112:8000/api/employees") {
+    async getEmployees() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get(url, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+
+        const params = {
+          employee_status: this.employee_status,
+          employment_status: this.employment_status,
+          hired_date_from: this.hired_date_from,
+          hired_date_to: this.hired_date_to,
+          page: this.pagination.current_page, // Include the current page
+        };
+
+        console.log("Fetching employees with params:", params);
+
+        const response = await axios.get(
+          "https://10.109.2.112/api/employees",
+          {
+            params,
+            headers: { Authorization: `Bearer ${token}` },
+          }
+        );
 
         if (response.status === 200) {
           this.employees = response.data.employees;
           this.pagination = response.data.pagination;
+          console.log(
+            "Updated employees and pagination:",
+            this.employees,
+            this.pagination
+          );
+        } else {
+          console.error("Failed to fetch employees:", response.statusText);
         }
       } catch (error) {
         console.error("Error fetching employees:", error);
       }
     },
-
     async startScanning() {
       try {
         this.scanning = true;
@@ -326,7 +455,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `http://10.109.2.112:8000/api/employees/${employeeId}`,
+          `https://10.109.2.112/api/employees/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -357,6 +486,48 @@ export default {
         params: { id: employeeId },
       });
     },
+    updatehired_date_from(event) {
+      this.hired_date_from = event.target.value;
+    },
+
+    updateFilterEndDate(event) {
+      this.hired_date_to = event.target.value;
+    },
+    async exportToExcel() {
+      //this.exportLoading = true; // Set export loading to true before making the request
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "https://10.109.2.112/api/employees_export",
+          {
+            params: {
+              employee_status: this.employee_status,
+              employment_status: this.employment_status,
+              hired_date_from: this.hired_date_from,
+              hired_date_to: this.hired_date_to,
+            },
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            responseType: "blob",
+          }
+        );
+
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "employees_data.xlsx";
+        link.click();
+      } catch (error) {
+        console.error("Error exporting filtered data to Excel", error);
+      } finally {
+        this.exportLoading = false; // Set export loading to false when the request completes
+      }
+    },
   },
 };
 </script>
@@ -366,7 +537,39 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 2px;
+}
+.data-controls {
+  border: 1px solid #ddd;
   padding: 20px;
+  border-radius: 5px;
+}
+
+.filters {
+  margin-bottom: 20px;
+}
+
+.filters label {
+  margin-right: 10px;
+}
+
+.filter-button {
+  padding: 5px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.export-button {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: #10c328;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 /* Scanner button */

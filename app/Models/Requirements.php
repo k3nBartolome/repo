@@ -210,7 +210,10 @@ class Requirements extends Model
     {
         return $this->belongsTo(User::class, 'pagibig_updated_by');
     }
-
+    public function tinUpdatedBy()
+    {
+        return $this->belongsTo(User::class, 'tin_updated_by');
+    }
     public function healthCertificateUpdatedBy()
     {
         return $this->belongsTo(User::class, 'health_certificate_updated_by');

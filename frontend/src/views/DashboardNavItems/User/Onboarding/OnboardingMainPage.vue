@@ -39,7 +39,7 @@
                 <input
                   type="text"
                   v-model="employee_id"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -49,7 +49,7 @@
                 <input
                   type="text"
                   v-model="first_name"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -59,7 +59,7 @@
                 <input
                   type="text"
                   v-model="middle_name"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -69,7 +69,7 @@
                 <input
                   type="text"
                   v-model="last_name"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -80,7 +80,7 @@
                 <input
                   type="text"
                   v-model="email"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -90,7 +90,7 @@
                 <input
                   type="text"
                   v-model="contact_number"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -100,18 +100,22 @@
                 <input
                   type="date"
                   v-model="birthdate"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
             <div class="col-span-1">
               <label class="block">
                 Employee Status
-                <input
-                  type="text"
+                <select
                   v-model="employee_status"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
-                />
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option>Select one</option>
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                  <option value="Separated">Separated</option>
+                </select>
               </label>
             </div>
             <div class="col-span-1">
@@ -120,7 +124,7 @@
                 <input
                   type="date"
                   v-model="hired_date"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -128,8 +132,9 @@
               <label class="block">
                 Hired Month
                 <select
+                  disabled
                   v-model="hired_month"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-neutral-500 bg-neutral-100 cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                 >
                   <option>Select one</option>
                   <option value="JAN">JAN</option>
@@ -147,13 +152,14 @@
                 </select>
               </label>
             </div>
+
             <div class="col-span-1">
               <label class="block">
-                Account Associate
+                Position
                 <input
                   type="text"
                   v-model="account_associate"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
             </div>
@@ -162,7 +168,7 @@
                 Employment Status
                 <select
                   v-model="employment_status"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-neutral-700 dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option>Select one</option>
                   <option value="Hired">Hired</option>
@@ -338,14 +344,14 @@
   <div class="grid grid-cols-10 grid-rows-1 gap-2 px-4 py-2">
     <div class="flex space-x-4">
       <button
-        class="truncate flex items-center justify-center text-white bg-blue-500 rounded-lg md:rounded-full text-sm md:text-base px-8 py-1 md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        class="flex items-center justify-center px-8 py-1 text-sm text-white truncate bg-blue-500 rounded-lg md:rounded-full md:text-base md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
         @click="showModalAdd = true"
       >
         Add
       </button>
 
       <button
-        class="truncate flex items-center justify-center text-white bg-blue-500 rounded-lg md:rounded-full text-sm md:text-base px-8 py-1 md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+        class="flex items-center justify-center px-8 py-1 text-sm text-white truncate bg-blue-500 rounded-lg md:rounded-full md:text-base md:px-10 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
         @click="showModalImport = true"
       >
         Bulk
@@ -354,7 +360,7 @@
   </div>
   <main class="flex flex-col min-h-screen border border-gray-300">
     <!-- Main Content -->
-    <div class="flex flex-1 px-4 py-2 md:px-6 md:py-4 overflow-y-auto">
+    <div class="flex flex-1 px-4 py-2 overflow-y-auto md:px-6 md:py-4">
       <div class="w-full py-6">
         <router-view />
       </div>
@@ -362,6 +368,8 @@
   </main>
 </template>
 <script>
+import QRCode from "qrcode"; // Import the QRCode library
+import { BrowserMultiFormatReader } from "@zxing/library";
 import axios from "axios";
 export default {
   data() {
@@ -370,7 +378,7 @@ export default {
       showModalAdd: false,
       showModalImport: false,
       file: null,
-      employee_id: "",
+      employee_id: "TBA",
       last_name: "",
       first_name: "",
       middle_name: "",
@@ -380,7 +388,7 @@ export default {
       birthdate: "",
       contact_number: "",
       email: "",
-      account_associate: "",
+      account_associate: "Account Associate",
       employee_added_by: "",
       employment_status: "",
     };
@@ -389,7 +397,9 @@ export default {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+    this.qrReader = new BrowserMultiFormatReader();
   },
+
   computed: {
     isUser() {
       const userRole = this.$store.state.role;
@@ -408,8 +418,114 @@ export default {
       return userRole === "sourcing";
     },
   },
-
+  watch: {
+    hired_date(newValue) {
+      if (newValue) {
+        // Convert the date string to a Date object
+        const date = new Date(newValue);
+        // Extract the month and map it to the corresponding short name
+        const months = [
+          "JAN",
+          "FEB",
+          "MAR",
+          "APR",
+          "MAY",
+          "JUN",
+          "JUL",
+          "AUG",
+          "SEP",
+          "OCT",
+          "NOV",
+          "DEC",
+        ];
+        this.hired_month = months[date.getMonth()];
+      } else {
+        this.hired_month = "Select one"; // Reset if no date is selected
+      }
+    },
+  },
   methods: {
+    async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
+      try {
+        // Validate inputs
+        if (
+          !employeeId ||
+          (typeof employeeId !== "string" && typeof employeeId !== "number")
+        ) {
+          console.error("Invalid employee ID:", employeeId);
+          return;
+        }
+        if (!employeeEmail || typeof employeeEmail !== "string") {
+          console.error("Invalid employee email:", employeeEmail);
+          return;
+        }
+        if (
+          !employeeContactNumber ||
+          typeof employeeContactNumber !== "string"
+        ) {
+          console.error(
+            "Invalid employee contact number:",
+            employeeContactNumber
+          );
+          return;
+        }
+
+        // Format QR code data without the word "id"
+        const qrData = `${employeeId},${employeeEmail},${employeeContactNumber}`;
+
+        // Generate QR code
+        const qrCodeCanvas = await QRCode.toCanvas(qrData);
+        const qrCodeDataUrl = qrCodeCanvas.toDataURL("image/png");
+
+        // Convert to Blob and File
+        const byteCharacters = atob(qrCodeDataUrl.split(",")[1]);
+        const byteArrays = [];
+        for (let offset = 0; offset < byteCharacters.length; offset += 1024) {
+          const byteArray = new Uint8Array(1024);
+          for (let i = 0; i < 1024 && offset + i < byteCharacters.length; i++) {
+            byteArray[i] = byteCharacters[offset + i].charCodeAt(0);
+          }
+          byteArrays.push(byteArray);
+        }
+        const blob = new Blob(byteArrays, { type: "image/png" });
+        const file = new File([blob], `qr_code_${employeeId}.png`, {
+          type: "image/png",
+        });
+
+        // Prepare FormData for upload
+        const formData = new FormData();
+        formData.append("qr_code", file);
+        formData.append("employee_id", employeeId);
+
+        // Make API request
+        const token = this.$store.state.token;
+        const response = await axios.post(
+          `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          console.log("QR code saved successfully:", response.data);
+
+          // Update employee object with the QR code path
+          const employee = this.employees.find((emp) => emp.id === employeeId);
+          if (employee) {
+            employee.qr_code_path = response.data.qr_code_path;
+            this.$router.push("/onboarding_dashboard", () => {
+              location.reload();
+            });
+          }
+        }
+      } catch (error) {
+        console.error("Error generating and saving QR code:", error);
+      }
+    },
     handleFileChange(event) {
       const file = event.target.files[0];
       console.log(file);
@@ -433,7 +549,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.post(
-          "http://10.109.2.112:8000/api/upload_employees_bulk",
+          "https://10.109.2.112/api/upload_employees_bulk",
           formData,
           {
             headers: {
@@ -480,7 +596,7 @@ export default {
       };
 
       axios
-        .post("http://10.109.2.112:8000/api/upload_employees", formData, {
+        .post("https://10.109.2.112/api/upload_employees", formData, {
           headers,
         })
         .then((response) => {
@@ -498,9 +614,12 @@ export default {
           this.account_associate = "";
           this.employee_added_by = "";
           this.employment_status = "";
+          this.$router.push("/onboarding_dashboard", () => {
+            location.reload();
+          });
         })
         .catch((error) => {
-          console.log(error.response.data);
+          console.log(error.response.data.employee);
         })
         .finally(() => {
           this.loading = false;

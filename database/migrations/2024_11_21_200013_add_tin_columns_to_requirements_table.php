@@ -20,7 +20,7 @@ class AddTinColumnsToRequirementsTable extends Migration
             $table->unsignedBigInteger('tin_updated_by')->nullable();
 
             // Add foreign key constraint to tin_updated_by
-            $table->foreign('tin_updated_by')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('tin_updated_by')->references('id')->on('users');
         });
     }
 

@@ -198,7 +198,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/ref_date",
+          "https://10.109.2.112/api/ref_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -234,7 +234,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/ref_site",
+          "https://10.109.2.112/api/ref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -256,7 +256,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/pref_site",
+          "https://10.109.2.112/api/pref_site",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -279,7 +279,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/ref_v1",
+          "https://10.109.2.112/api/ref_v1",
           {
             params: {
               filter_ref_site: this.filterReferredBySite,
@@ -306,7 +306,7 @@ export default {
       this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8000/api/ref_v1_export", {
+        const response = await axios.get("https://10.109.2.112/api/ref_v1_export", {
           params: {
             filter_ref_site: this.filterReferredBySite,
               filter_pref_site: this.filterPreferredSite,

@@ -197,7 +197,7 @@ export default {
       }
 
       try {
-        const apiUrl = `http://10.109.2.112:8000/api/update/phic/requirement/${this.$route.params.id}`;
+        const apiUrl = `https://10.109.2.112/api/update/phic/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

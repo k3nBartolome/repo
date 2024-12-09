@@ -1,12 +1,12 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4 text-center">Lob</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="container p-4 mx-auto">
+    <h2 class="mb-4 text-xl font-semibold text-center">Drug Test</h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
         <select
           v-model="dt_final_status"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         >
           <option disabled>Please select one</option>
           <option value="NEGATIVE">NEGATIVE</option>
@@ -21,7 +21,7 @@
         <input
           v-model="dt_transaction_date"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -29,7 +29,7 @@
         <input
           v-model="dt_results_date"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -37,7 +37,7 @@
         <input
           v-model="dt_endorsed_date"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -45,7 +45,33 @@
         <input
           v-model="dt_remarks"
           type="text"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
+        />
+      </div>
+    </div>
+    <div class="flex flex-col">
+      <label class="block text-sm font-medium">DT Proof</label>
+      <input
+        type="file"
+        @change="uploadImage"
+        class="w-full p-2 mt-1 border rounded"
+      />
+    </div>
+    <div v-if="dt_file_name" class="mt-4">
+      <div class="flex flex-col items-center">
+        <img
+          :src="dt_file_name"
+          alt="Preview Image"
+          class="object-cover w-full h-48 border rounded-lg sm:w-3/4 lg:w-1/2"
+        />
+      </div>
+    </div>
+    <div v-if="showCapture" class="mt-4">
+      <div v-if="capturedImage" class="flex flex-col items-center mt-4">
+        <img
+          :src="capturedImage"
+          alt="Captured Image"
+          class="object-cover w-full h-48 border rounded-lg sm:w-3/4 lg:w-1/2"
         />
       </div>
     </div>
@@ -53,7 +79,7 @@
     <div class="mt-4">
       <button
         @click="submitForm"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
+        class="w-full p-2 mx-auto border rounded btn sm:w-1/2 lg:w-1/4"
       >
         Submit
       </button>
@@ -103,7 +129,7 @@ export default {
       }
 
       try {
-        const apiUrl = `http://10.109.2.112:8000/api/update/dt/requirement/${this.$route.params.id}`;
+        const apiUrl = `https://10.109.2.112/api/update/dt/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

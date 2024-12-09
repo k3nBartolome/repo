@@ -309,7 +309,7 @@ export default {
           filter_status: this.filterStatus,
       }); // Add this line
 
-      const response = await axios.get("http://10.109.2.112:8000/api/no_srv2", {
+      const response = await axios.get("https://10.109.2.112/api/no_srv2", {
           headers: {
               Authorization: `Bearer ${token}`,
           },
@@ -346,7 +346,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/referralsDate",
+          "https://10.109.2.112/api/referralsDate",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -396,7 +396,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/perx_sitev2",
+          "https://10.109.2.112/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -422,7 +422,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/no_srv2_export",
+          "https://10.109.2.112/api/no_srv2_export",
           {
             params: {
               filter_lastname: this.filterLastName,

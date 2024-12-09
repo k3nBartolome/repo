@@ -181,7 +181,7 @@ export default {
       };
 
       axios
-        .put(`/sites_activate/${id}`, form, config)
+        .put(`https://10.109.2.112/api//sites_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -206,7 +206,7 @@ export default {
       };
 
       axios
-        .put(`/sites_deactivate/${id}`, form, config)
+        .put(`https://10.109.2.112/api/sites_deactivate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -217,7 +217,7 @@ export default {
           console.log(error.response.data);
         });
     },
-    async getSites() {
+async getSites() {
       try {
         const token = this.$store.state.token;
         const config = {
@@ -227,7 +227,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8000/api/sites", config)
+          .get("https://10.109.2.112/api/sites", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -241,6 +241,9 @@ export default {
       }
     },
 
+
+
+
     async getSites2() {
       try {
         const token = this.$store.state.token;
@@ -251,7 +254,7 @@ export default {
         };
 
         await axios
-          .get("http://10.109.2.112:8000/api/sites2", config)
+          .get("https://10.109.2.112/api/sites2", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites2 = response.data.data;
@@ -283,7 +286,7 @@ export default {
       };
 
       axios
-        .post("http://10.109.2.112:8000/api/sites", formData, config)
+        .post("https://10.109.2.112/api/sites", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

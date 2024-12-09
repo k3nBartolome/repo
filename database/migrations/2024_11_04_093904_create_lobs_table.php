@@ -23,7 +23,7 @@ class CreateLobsTable extends Migration
             $table->string('project_code')->nullable();
             $table->timestamps();
 
-            $table->foreign('employee_tbl_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('employee_tbl_id')->references('id')->on('employees');
         });
     }
 

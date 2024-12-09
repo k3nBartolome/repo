@@ -22,7 +22,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('login', [AuthController::class, 'login']);
 Route::post('/logout/{id}', [AuthController::class, 'logout']);
 
-Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,remx'])->group(function () {
+ Route::middleware(['auth:sanctum'])->group(function () {
+   
     // User Routes
     Route::post('/create_user', [UserController::class, 'store']);
     Route::put('/update_user/{id}', [UserController::class, 'update']);
@@ -248,30 +249,10 @@ Route::middleware(['auth:sanctum', 'role_permission:admin,user,budget,sourcing,r
     //HNS
     Route::post('upload-leads-bulk', [LeadController::class, 'storeBulkLeads']);
     Route::post('upload_leads', [LeadController::class, 'storeLeads']);
-});
-
-Route::get('out', [ClassesController::class, 'OutOfSla']);
-Route::get('cancel', [ClassesController::class, 'Cancelled']);
-Route::get('out/month', [ClassesController::class, 'OutOfSlaMonth']);
-Route::get('cancel/month', [ClassesController::class, 'CancelledMonth']);
-Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
-Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);
-Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
-Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
-Route::get('classes/{id}', [ClassesController::class, 'show']);
-Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
-Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
-Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
-Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
-Route::get('ref_date', [ClassesController::class, 'referralsDatev1']);
-Route::get('ref_site', [ClassesController::class, 'refSitev1']);
-Route::get('prep_site', [ClassesController::class, 'prefSitev1']);
-Route::get('ref_v1', [ClassesController::class, 'referralsDatev1']);
-Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
-Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
+    Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
 Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
 Route::get('employees', [EmployeeController::class, 'index']);
-Route::get('employees/all/', [EmployeeController::class, 'indexEmployees']);
+Route::get('employees/all', [EmployeeController::class, 'indexEmployees']);
 Route::post('update/nbi/requirement/{id}', [EmployeeController::class, 'updateNbi']);
 Route::post('update/dt/requirement/{id}', [EmployeeController::class, 'updateDT']);
 Route::post('update/peme/requirement/{id}', [EmployeeController::class, 'updatePEME']);
@@ -293,8 +274,28 @@ Route::post('update/scholastic_record/requirement/{id}', [EmployeeController::cl
 Route::post('update/previous_employment/requirement/{id}', [EmployeeController::class, 'updatePreviousEmployment']);
 Route::post('update/supporting_documents/requirement/{id}', [EmployeeController::class, 'updateSupportingDocuments']);
 Route::post('/update/lob/{id}', [EmployeeController::class, 'updateLob']);
-
 Route::get('/employees/{id}', [EmployeeController::class, 'show']);
 Route::get('/show/employees/{id}', [EmployeeController::class, 'showEmployee']);
 Route::post('employees/{employeeId}/save-qr-code', [EmployeeController::class, 'saveQRCode']);
 Route::post('/employees/{employee_id}/generate-qr-code', [EmployeeController::class, 'generate']);
+Route::get('employees_export', [EmployeeController::class, 'exportTest']);
+ });
+Route::get('out', [ClassesController::class, 'OutOfSla']);
+Route::get('cancel', [ClassesController::class, 'Cancelled']);
+Route::get('out/month', [ClassesController::class, 'OutOfSlaMonth']);
+Route::get('cancel/month', [ClassesController::class, 'CancelledMonth']);
+Route::get('data', [ClassesController::class, 'retrieveB2DataForEmail']);
+Route::get('sr_compliance_export', [ClassesController::class, 'srComplianceExport']);
+Route::get('mpsmonth', [ClassStaffingController::class, 'mpsMonth']);
+Route::get('mpsweek', [ClassStaffingController::class, 'mpsWeek']);
+Route::get('classes/{id}', [ClassesController::class, 'show']);
+Route::get('programs_select/{siteIds}', [ProgramController::class, 'perSite']);
+Route::get('oosclasses', [ClassesController::class, 'dashboardSiteOos']);
+Route::get('ooscclasses', [ClassesController::class, 'dashboardSiteCancelledOos']);
+Route::get('classesdashboard', [ClassesController::class, 'dashboardClasses']);
+Route::get('ref_date', [ClassesController::class, 'referralsDatev1']);
+Route::get('ref_site', [ClassesController::class, 'refSitev1']);
+Route::get('prep_site', [ClassesController::class, 'prefSitev1']);
+Route::get('ref_v1', [ClassesController::class, 'referralsDatev1']);
+Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
+

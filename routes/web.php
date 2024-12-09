@@ -15,6 +15,10 @@ use Illuminate\Support\Facades\Route;
 | contains the 'web' middleware group. Now create something great!
 |
 */
+Route::get('sanctum/csrf-cookie', function () {
+    return response()->json(['message' => 'CSRF token set']);
+});
+
 
 Route::get('/webclassesdashboard', [ClassesController::class, 'WebDashboardClasses']);
 Route::get('/websiteclasses', [ClassesController::class, 'WebDashboardSiteClasses']);

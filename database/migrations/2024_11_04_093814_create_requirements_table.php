@@ -168,27 +168,27 @@ class CreateRequirementsTable extends Migration
 
             $table->timestamps();
             $table->unsignedBigInteger('updated_by')->nullable();
-            $table->foreign('nbi_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('dt_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('peme_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('sss_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('phic_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('pagibig_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('health_certificate_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('occupational_permit_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('ofac_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('sam_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('oig_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('cibi_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('bgc_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('birth_certificate_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('dependent_birth_certificate_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('marriage_certificate_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('scholastic_record_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('previous_employment_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('supporting_documents_updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
-            $table->foreign('employee_tbl_id')->references('id')->on('employees')->onDelete('set null');
+            $table->foreign('nbi_updated_by')->references('id')->on('users');
+            $table->foreign('dt_updated_by')->references('id')->on('users');
+            $table->foreign('peme_updated_by')->references('id')->on('users');
+            $table->foreign('sss_updated_by')->references('id')->on('users');
+            $table->foreign('phic_updated_by')->references('id')->on('users');
+            $table->foreign('pagibig_updated_by')->references('id')->on('users');
+            $table->foreign('health_certificate_updated_by')->references('id')->on('users');
+            $table->foreign('occupational_permit_updated_by')->references('id')->on('users');
+            $table->foreign('ofac_updated_by')->references('id')->on('users');
+            $table->foreign('sam_updated_by')->references('id')->on('users');
+            $table->foreign('oig_updated_by')->references('id')->on('users');
+            $table->foreign('cibi_updated_by')->references('id')->on('users');
+            $table->foreign('bgc_updated_by')->references('id')->on('users');
+            $table->foreign('birth_certificate_updated_by')->references('id')->on('users');
+            $table->foreign('dependent_birth_certificate_updated_by')->references('id')->on('users');
+            $table->foreign('marriage_certificate_updated_by')->references('id')->on('users');
+            $table->foreign('scholastic_record_updated_by')->references('id')->on('users');
+            $table->foreign('previous_employment_updated_by')->references('id')->on('users');
+            $table->foreign('supporting_documents_updated_by')->references('id')->on('users');
+            $table->foreign('updated_by')->references('id')->on('users');
+            $table->foreign('employee_tbl_id')->references('id')->on('employees');
         });
     }
 

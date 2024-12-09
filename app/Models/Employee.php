@@ -24,7 +24,8 @@ class Employee extends Model
         'email',
         'account_associate',
         'employment_status',
-        'employee_added_by', // This will reference the user who added the employee
+        'employee_added_by',
+        'updated_by',
         'qr_code_path',
     ];
 
@@ -33,8 +34,6 @@ class Employee extends Model
     {
         return $this->hasMany(Requirements::class, 'employee_tbl_id');
     }
-
-    // Relationship with the Lob model (assuming employee_tbl_id is the foreign key)
     public function lob()
     {
         return $this->hasMany(Lob::class, 'employee_tbl_id');

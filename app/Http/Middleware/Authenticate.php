@@ -7,15 +7,31 @@ use Illuminate\Auth\Middleware\Authenticate as Middleware;
 class Authenticate extends Middleware
 {
     /**
-     * Get the path the user should be redirected to when they are not authenticated.
+     * Handle an incoming request.
+     *
+     * @param  mixed  $request
+     * @param  \Closure  $next
+     * @param  array  ...$guards
+     * @return mixed
+     */
+    public function handle($request, \Closure $next, ...$guards)
+    {
+        // Log user info for debugging
+        \Log::info('Authenticated User in Middleware:', ['user' => auth()->user()]);
+
+        // Call parent to apply default behavior
+        return parent::handle($request, $next, ...$guards);
+    }
+
+    /**
+     * Handle an unauthenticated user.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return string|null
+     * @param  array  $guards
+     * @return \Illuminate\Http\JsonResponse
      */
-    protected function redirectTo($request)
+    protected function unauthenticated($request, array $guards)
     {
-        if (! $request->expectsJson()) {
-            return route('login');
-        }
+        return response()->json(['message' => 'Unauthenticated'], 401);
     }
 }

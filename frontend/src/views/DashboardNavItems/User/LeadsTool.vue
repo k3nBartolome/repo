@@ -234,7 +234,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/leads_date",
+          "https://10.109.2.112/api/leads_date",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -285,7 +285,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/perx_sitev2",
+          "https://10.109.2.112/api/perx_sitev2",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -311,7 +311,7 @@ export default {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("http://10.109.2.112:8000/api/leads", {
+        const response = await axios.get("https://10.109.2.112/api/leads", {
           params: {
             filter_lastname: this.filterLastName,
             filter_firstname: this.filterFirstName,
@@ -339,7 +339,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "http://10.109.2.112:8000/api/leadsexport",
+          "https://10.109.2.112/api/leadsexport",
           {
             params: {
               filter_lastname: this.filterLastName,

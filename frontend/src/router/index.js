@@ -668,7 +668,7 @@ const routes = [
     component: Onboarding,
     meta: {
       requiresAuth: true,
-      requiresRoles: ["admin"],
+      requiresRoles: ["onboarding","user"],
     },
     children: [
       {
