@@ -1,7 +1,8 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 import AppLogin from "@/views/AppLogin";
-import ContactUs from "@/views/ContactUs";
+import ApplicantChecker from "@/views/ApplicantQr";
+import ApplicantAttendanceForm from "@/views/ApplicantAttendanceForm";
 import AppUserLayout from "@/components/AppUserLayout";
 import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
@@ -839,9 +840,14 @@ const routes = [
         component: AppLogin,
       },
       {
-        path: "/contact",
-        name: "contact",
-        component: ContactUs,
+        path: "/applicant_checker",
+        name: "ApplicantChecker",
+        component: ApplicantChecker,
+      },
+      {
+        path: "/applicant_attendance/:id",
+        name: "ApplicantAttendanceForm",
+        component: ApplicantAttendanceForm,
       },
     ],
   },

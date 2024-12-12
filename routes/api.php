@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\ApplicantSiteController;
+use App\Http\Controllers\ApplicantDataController;
 use App\Http\Controllers\API\Auth\AuthController;
 use App\Http\Controllers\API\User\PermissionController;
 use App\Http\Controllers\API\User\RoleController;
@@ -298,4 +300,6 @@ Route::get('ref_site', [ClassesController::class, 'refSitev1']);
 Route::get('prep_site', [ClassesController::class, 'prefSitev1']);
 Route::get('ref_v1', [ClassesController::class, 'referralsDatev1']);
 Route::get('ref_v1_export', [ClassesController::class, 'referralsDatev1']);
-
+Route::get('/applicant-sites', [ApplicantSiteController::class, 'index']);
+Route::get('/applicant-sites/{id}', [ApplicantSiteController::class, 'show']);
+Route::post('/applicant/create', [ApplicantDataController::class, 'store']);
