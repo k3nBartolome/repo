@@ -37,6 +37,7 @@ class AuthController extends Controller
         $role = $user->roles->first()->name ?? null; // Role may not exist
         $permissions = $user->getAllPermissions()->pluck('name');
         $user_id = $user->id;
+        $user_site = $user->site_id;
     
         // Return response with token and user details
         return response()->json([
@@ -46,6 +47,7 @@ class AuthController extends Controller
             'role' => $role,
             'permissions' => $permissions,
             'user_id' => $user_id,
+            'site_id' => $user_site,
         ], 200);
     }
 

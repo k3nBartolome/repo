@@ -79,6 +79,7 @@ export default {
       "setUserId",
       "setPermissions",
       "setUserName",
+       "setSite",
     ]),
     async login() {
       try {
@@ -98,7 +99,7 @@ export default {
         );
 
         // Step 3: Extract response data
-        const { user, token, role, user_id, permissions } = response.data;
+        const { user, token, role, user_id, permissions,site_id } = response.data;
 
         // Step 4: Save user info to Vuex store
         this.setUser(user);
@@ -106,6 +107,7 @@ export default {
         this.setRole(role);
         this.setUserId(user_id);
         this.setPermissions(permissions);
+        this.setSite(site_id);
 
         // Step 5: Store token in localStorage
         localStorage.setItem("token", token);

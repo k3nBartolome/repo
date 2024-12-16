@@ -6,7 +6,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ClassStaffingExports implements FromCollection, WithHeadings, ShouldAutoSize
+class ClassStaffingExports implements FromCollection, WithHeadings
 {
     protected $data;
 

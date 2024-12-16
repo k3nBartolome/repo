@@ -13,15 +13,14 @@ export default createStore({
     user: null,
     role: null,
     token: null,
-    site_id:null,
     position:null,
     user_id: null,
     name: null,
-    permissions: [],
+    site_id:null,
     persistedStateKey: persistedStateOptions.key,
   },
   mutations: {
-    setUser(state, { user, name, role, token,site_id,position, permissions }) {
+    setUser(state, { user, name, role, token,site_id,position }) {
       if (!state.token) {
         state.user = user;
         state.role = role;
@@ -29,7 +28,6 @@ export default createStore({
         state.position = position;
         state.site_id = site_id;
         state.name = name;
-        state.permissions = permissions;
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       } else {
         alert("Another user is already logged in. Please log out first.");
@@ -45,6 +43,9 @@ export default createStore({
 
     setRole(state, role) {
       state.role = role;
+    },
+    setSite(state, site_id) {
+      state.site_id = site_id;
     },
     setToken(state, token) {
       state.token = token;

@@ -17,27 +17,7 @@
     </div>
 
     <!-- Optional Buttons Section -->
-    <div
-      class="optional-buttons"
-      v-if="optionalButtons && optionalButtons.length > 0"
-    >
-      <div class="optional-buttons-header">
-        <h3>Optional Actions</h3>
-      </div>
-      <div
-        v-for="(buttonLabel, index) in optionalButtons"
-        :key="index"
-        class="optional-button-container"
-      >
-        <button
-          class="optional-button"
-          @click="handleOptionalButton(buttonLabel)"
-        >
-          {{ buttonLabel }}
-        </button>
-      </div>
-    </div>
-
+    
     <!-- Main Button Container (Two or three buttons per row) -->
     <div class="button-container">
       <button class="update-button" @click="selectOption('OnboardingLob')">
