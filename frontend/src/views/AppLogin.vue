@@ -116,12 +116,14 @@ export default {
         axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
 
         // Step 7: Redirect based on role
-        if (role === "admin") {
+        if (role === "onboarding") {
           await this.$router.push({ path: "/onboarding_dashboard" });
         } else if (role === "user") {
           await this.$router.push({ path: "/capfile" });
         } else if (["remx", "sourcing", "budget"].includes(role)) {
           await this.$router.push({ path: "/dashboard_manager/request" });
+        } else if (role === "frontdesk") {
+          await this.$router.push({ path: "/applicant_attendance_list" });
         }
       } catch (error) {
         this.successMessage =

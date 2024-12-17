@@ -86,7 +86,7 @@ export default createStore({
           commit('logout');
 
           console.log("Authentication Token:", state.token);
-          await axios.post(`http://i/logout/${id}`);
+          await axios.post(`https://10.109.2.112/api/logout/${id}`);
 
           // Remove specific item from local storage
           localStorage.removeItem(state.persistedStateKey);

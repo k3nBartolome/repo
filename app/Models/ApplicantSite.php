@@ -14,8 +14,5 @@ class ApplicantSite extends Model
 
     // Define fillable fields
     protected $fillable = ['name', 'description'];
-    public function applicants()
-    {
-        return $this->hasMany(ApplicantData::class, 'site_id');
-    }
+   
 }

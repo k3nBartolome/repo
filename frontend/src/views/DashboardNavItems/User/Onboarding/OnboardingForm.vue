@@ -174,7 +174,8 @@
             <td>{{ employee.employee_status }}</td>
             <td>{{ employee.employment_status }}</td>
             <td>{{ employee.account_associate }}</td>
-            <td>{{ employee.user_added_by.name }}</td>
+           <td>{{ employee.user_added_by ? employee.user_added_by.name : 'N/A' }}</td>
+
           </tr>
         </tbody>
       </table>
@@ -220,7 +221,7 @@ import QRCode from "qrcode"; // Import the QRCode library
 export default {
   data() {
     return {
-      employees: [],
+      employees: {},
       scannedValue: "",
       extractedId: "",
       employee_status: "",
@@ -368,7 +369,7 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
         console.log("Fetching employees with params:", params);
 
         const response = await axios.get(
-          "https://10.109.2.112/api/employees",
+        `https://10.109.2.112/api/employees_data/${this.$store.state.site_id}`,
           {
             params,
             headers: { Authorization: `Bearer ${token}` },
@@ -376,8 +377,8 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
         );
 
         if (response.status === 200) {
-          this.employees = response.data.employees;
-          this.pagination = response.data.pagination;
+          this.employees = response.data.employees|| {};
+          this.pagination = response.data.pagination|| {};
           console.log(
             "Updated employees and pagination:",
             this.employees,

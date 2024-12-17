@@ -254,7 +254,7 @@ Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::post('upload_employees_bulk', [EmployeeController::class, 'storeBulkEmployees']);
 Route::post('upload_employees', [EmployeeController::class, 'storeEmployees']);
 Route::get('employees', [EmployeeController::class, 'index']);
-Route::get('employees/all', [EmployeeController::class, 'indexEmployees']);
+Route::get('employees_data/{site_id?}', [EmployeeController::class, 'indexEmployees']);
 Route::post('update/nbi/requirement/{id}', [EmployeeController::class, 'updateNbi']);
 Route::post('update/dt/requirement/{id}', [EmployeeController::class, 'updateDT']);
 Route::post('update/peme/requirement/{id}', [EmployeeController::class, 'updatePEME']);
@@ -280,7 +280,7 @@ Route::get('/employees/{id}', [EmployeeController::class, 'show']);
 Route::get('/show/employees/{id}', [EmployeeController::class, 'showEmployee']);
 Route::post('employees/{employeeId}/save-qr-code', [EmployeeController::class, 'saveQRCode']);
 Route::post('/employees/{employee_id}/generate-qr-code', [EmployeeController::class, 'generate']);
-Route::get('employees_export', [EmployeeController::class, 'exportTest']);
+Route::get('employees_export/{site_id?}', [EmployeeController::class, 'exportTest']);
 Route::get('applicants_data/{site_id?}', [ApplicantDataController::class, 'index']);
 Route::get('applicants_export_data/{site_id?}', [ApplicantDataController::class, 'ExportAttendance']);
 

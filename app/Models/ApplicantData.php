@@ -21,6 +21,6 @@ class ApplicantData extends Model
 
     public function site()
     {
-        return $this->belongsTo(ApplicantSite::class, 'site_id');
+        return $this->belongsTo(Site::class, 'site_id');
     }
 }

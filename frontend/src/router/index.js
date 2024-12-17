@@ -136,7 +136,7 @@ const routes = [
     component: AppUserLayout,
     meta: {
       requiresAuth: true,
-      requiresRoles: ["user", "remx", "sourcing", "budget"],
+      requiresRoles: ["user", "remx", "sourcing", "budget","onboarding","frontdesk"],
     },
     children: [
       {
@@ -145,7 +145,7 @@ const routes = [
         component: userProfile,
       },
       {
-        path: "/list",
+        path: "/applicant_attendance_list",
         name: "ApplicantAttendanceList",
         component: ApplicantAttendanceList,
       },

@@ -61,19 +61,16 @@
           </tr>
         </tbody>
       </DataTable>
-   
   </div>
   </div>
   </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
 import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
-
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
@@ -82,7 +79,6 @@ import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
 import "datatables.net-responsive-bs5";
 import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
 import "bootstrap/dist/js/bootstrap.bundle"; // Make sure to include Bootstrap JavaScript
-
 // Import DataTables extensions
 import Buttons from "datatables.net-buttons-bs5";
 import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
@@ -93,16 +89,13 @@ import pdfMake from "pdfmake/build/pdfmake";
 // eslint-disable-next-line no-unused-vars
 import pdfFonts from "pdfmake/build/vfs_fonts";
 import "bootstrap/dist/css/bootstrap.css";
-
 // eslint-disable-next-line no-unused-vars
 import { format } from "date-fns";
-
 DataTable.use(DataTableLib);
 DataTable.use(jszip);
 DataTable.use(Buttons);
 DataTable.use(ButtonsHtml5);
 DataTable.use(print);
-
 export default {
   components: { DataTable },
   data() {
@@ -116,7 +109,6 @@ export default {
         { data: "email", title: "Email Address" },
         { data: "contact_number", title: "Mobile Number" },
         { data: "created_at", title: "In" },
-      
       ],
       filterLoading: false,
       exportLoading: false,
@@ -124,10 +116,7 @@ export default {
   },
   mounted() {
   this.fetchData()
-    
   },
-  
-
   methods: {
     async fetchData() {
       this.filterLoading = true;
@@ -150,8 +139,6 @@ export default {
         this.filterLoading = false;
       }
     },
-
-
     async exportToExcel() {
   this.exportLoading = true;
   try {
@@ -163,7 +150,6 @@ export default {
         responseType: "blob",
       }
     );
-
     const blob = new Blob([response.data], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
@@ -180,7 +166,6 @@ export default {
     this.exportLoading = false;
   }
 }
-
   },
 };
 </script>

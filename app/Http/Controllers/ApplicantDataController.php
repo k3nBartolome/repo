@@ -27,14 +27,15 @@ class ApplicantDataController extends Controller
     }
 
     public function index($site_id = null)
-{
-    $site_id = is_numeric($site_id) ? (int) $site_id : null;
-
-    $applicants = ApplicantData::with('site')
-        ->when(!is_null($site_id), function ($query) use ($site_id) {
-            return $query->where('site_id', $site_id);
-        })
-        ->get();
+    {
+        $site_id = is_numeric($site_id) ? (int) $site_id : null;
+    
+        $applicants = ApplicantData::with('site')
+            ->when($site_id, function ($query) use ($site_id) {
+                return $query->where('site_id', $site_id);
+            })
+            ->get();
+    
         $formattedApplicants = $applicants->map(function ($applicant) {
             return [
                 'site' => $applicant->site->name ?? 'N/A',
@@ -46,11 +47,13 @@ class ApplicantDataController extends Controller
                 'created_at' => $applicant->created_at->format('Y-m-d H:i:s'),
             ];
         });
-    return response()->json([
-        'applicant' => $formattedApplicants,
-        'message' => $applicants->isEmpty() ? 'No applicants found.' : 'Applicants retrieved successfully.',
-    ], 200);
-}
+    
+        return response()->json([
+            'applicant' => $formattedApplicants,
+            'message' => $applicants->isEmpty() ? 'No applicants found.' : 'Applicants retrieved successfully.',
+        ], 200);
+    }
+    
 public function ExportAttendance($site_id = null)
 {
     $site_id = is_numeric($site_id) ? (int) $site_id : null;

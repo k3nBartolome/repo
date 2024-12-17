@@ -28,12 +28,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
+            'site_id' => 'sometimes|integer|exists:sites,id',
             'role' => 'sometimes|string|exists:roles,name',
         ]);
 
         $user = User::create([
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
+            'site_id' => $validatedData['site_id'],
             'password' => bcrypt($validatedData['password']),
         ]);
 

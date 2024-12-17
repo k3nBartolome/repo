@@ -15,7 +15,7 @@
                   v-if="isUser || isSourcing"
                   >Capacity File</router-link
                 >
-                <router-link
+                <router-link v-if="isUser || isBudget || isRemx || isSourcing"
                   to="/staffing"
                   class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
                   >Staffing Tracker</router-link
@@ -38,7 +38,7 @@
                   @mouseleave="closeDropdown"
                   @click="toggleDropdown"
                 >
-                  <button
+                  <button v-if="isUser || isBudget || isRemx || isSourcing"
                     class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Inventory Tracker
@@ -177,6 +177,27 @@
                 >
                   <button
                     class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
+                    v-if="isUser || isFrontdesk"
+                  >
+                    Frontdesk
+                  </button>
+                  <div v-show="dropdownOpen" class="dropdown-content">
+                    <router-link
+                      to="/applicant_attendance_list"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Applicant Checker</router-link
+                    >
+                  </div>
+                </div>
+                <div
+                  class="dropdown"
+                  @mouseover="openDropdown"
+                  @mouseleave="closeDropdown"
+                  @click="toggleDropdown"
+                >
+                  <button v-if="isUser || isBudget || isRemx || isSourcing"
+                    class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
                   >
                     Admin
                   </button>
@@ -270,28 +291,146 @@
       </div>
       <div :class="{ block: mobileMenuOpen, hidden: !mobileMenuOpen }" class="md:hidden">
         <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+          <!-- Capacity File -->
           <router-link
-            to="/"
-            class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white"
-            >Home</router-link
+            to="/capfile"
+            class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-700 hover:text-white link-button"
+            v-if="isUser || isSourcing"
           >
-          <div class="relative" @click="toggleDropdown">
-            <button
-              class="block px-3 py-2 text-base font-medium text-gray-300 rounded-md hover:bg-gray-700 hover:text-white focus:outline-none"
+            Capacity File
+          </router-link>
+          <!-- Staffing Tracker -->
+          <router-link
+            to="/staffing"
+            class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-700 hover:text-white link-button"
+          >
+            Staffing Tracker
+          </router-link>
+          <!-- H&S Tool -->
+          <router-link
+            to="/h&s"
+            class="block px-3 py-2 text-base font-medium text-gray-700 hover:bg-gray-700 hover:text-white link-button"
+            v-if="isUser"
+          >
+            H&S Tool
+          </router-link>
+          <!-- Inventory Tracker Dropdown -->
+          <div class="pt-2 " v-if="isUser || isBudget || isRemx || isSourcing">
+            <span class="block px-3 py-2 text-base font-medium text-gray-600"
+              >Inventory Tracker</span
             >
-              Dropdown
-            </button>
-            <div
-              v-show="dropdownOpen"
-              class="absolute right-0 w-48 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+            <router-link
+              to="/dashboard_manager/request"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Dashboard</router-link
             >
-              <div
-                class="py-1"
-                role="menu"
-                aria-orientation="vertical"
-                aria-labelledby="options-menu"
-              ></div>
-            </div>
+            <router-link
+              to="/remx/supply_manager"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >REMX Supply</router-link
+            >
+            <router-link
+              to="/site_supply_manager/stocks"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Sourcing Supply</router-link
+            >
+            <router-link
+              to="/site_request_manager/request"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Request Manager</router-link
+            >
+            <router-link
+              to="/award_manager/normal"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Release Item</router-link
+            >
+          </div>
+          <!-- Sourcing Dropdown -->
+          <div class="pt-2" v-if="isUser || isBudget || isRemx || isSourcing">
+            <span class="block px-3 py-2 text-base font-medium text-gray-600"
+              >Sourcing</span
+            >
+            <router-link
+              to="/perx"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >PERX Tool</router-link
+            >
+            <router-link
+              to="/perxv2"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >PERX Tool SRv2</router-link
+            >
+            <router-link
+              to="/leads"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Leads</router-link
+            >
+            <router-link
+              to="/applicants"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Applicant Tool</router-link
+            >
+            <router-link
+              to="/referrals"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Referrals</router-link
+            >
+            <router-link
+              to="/referralsv1"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >OSS Referr</router-link
+            >
+          </div>
+         
+          <div class="pt-2" v-if="isUser || isOnboarding">
+            <span class="block px-3 py-2 text-base font-medium text-gray-600 link-button"
+              >Onboarding</span
+            >
+            <router-link
+              to="/onboarding_dashboard"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+              role="menuitem"
+              >Onboarding</router-link
+            >
+          </div>
+          <div class="pt-2" v-if="isUser || isFrontdesk">
+            <span class="block px-3 py-2 text-base font-medium text-gray-600 link-button"
+              >Frontdesk</span
+            >
+            <router-link
+              to="/applicant_attendance_list"
+              class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              role="menuitem"
+              >Applicant Checker</router-link
+            >
+          </div>
+
+          <!-- Admin Dropdown -->
+          <div class="pt-2 " v-if="isUser || isBudget || isRemx || isSourcing">
+            <span class="block px-3 py-2 text-base font-medium text-gray-600">Admin</span>
+            <router-link
+              to="/site_management"
+              class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+            >
+              Sites
+            </router-link>
+            <router-link
+              to="/program_management"
+              class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
+            >
+              Programs
+            </router-link>
           </div>
         </div>
       </div>
@@ -331,6 +470,10 @@ export default {
     isOnboarding() {
       const userRole = this.$store.state.role;
       return userRole === "onboarding";
+    },
+    isFrontdesk() {
+      const userRole = this.$store.state.role;
+      return userRole === "frontdesk";
     },
   },
 

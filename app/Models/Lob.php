@@ -21,4 +21,8 @@ class Lob extends Model
     {
         return $this->belongsTo(Employee::class, 'employee_tbl_id');
     }
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site');
+    }
 }

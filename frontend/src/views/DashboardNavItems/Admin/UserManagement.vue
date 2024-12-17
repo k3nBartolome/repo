@@ -33,6 +33,20 @@
           />
         </label>
         <label class="block">
+          Sites
+          <select
+            v-model="sites_selected"
+            class="block w-full mt-1 border rounded-md focus:border-orange-600 focus:ring focus:ring-orange-600 focus:ring-opacity-100"
+            required
+            @change="getSites"
+          >
+            <option disabled value="" selected>Please select one</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </label>
+        <label class="block">
           Roles
           <select
             v-model="roles_selected"
@@ -130,8 +144,10 @@ export default {
     return {
       users: false,
       roles_selected: "",
+       sites_selected: "",
       name: "",
       roles: [],
+      sites: [],
       email: "",
       password: "",
     };
@@ -140,8 +156,33 @@ export default {
     console.log("Component mounted.");
     this.getUsers();
     this.getRoles();
+      this.getSites();
   },
   methods: {
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const config = {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+
+        await axios
+          .get("https://10.109.2.112/api/sites", config)
+          .then((response) => {
+            console.log("Response received:", response.data);
+            this.sites = response.data.data;
+            console.log("Sites data:", this.sites);
+          })
+          .catch((error) => {
+            console.log("Error:", error);
+          });
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    },
+
     async getRoles() {
       try {
         const token = this.$store.state.token;
@@ -178,6 +219,7 @@ export default {
           name: this.name,
           role: this.roles_selected,
           email: this.email,
+          site_id: this.sites_selected,
           password: this.password,
         };
 

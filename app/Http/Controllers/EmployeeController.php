@@ -19,8 +19,9 @@ use App\Exports\EmployeeExport;
 class EmployeeController extends Controller
 {
 
-    public function exportTest(Request $request)
+    public function exportTest(Request $request ,$site = null)
     {
+        $site = is_numeric($site) ? (int) $site: null;
         $employeeQuery  = Employee::with(
             'userAddedBy',
             'userUpdatedBy',
@@ -45,7 +46,8 @@ class EmployeeController extends Controller
             'requirements.scholasticRecordUpdatedBy',
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
-            'lob'
+            'lob',
+            'lob.site'
         );
         if ($request->filled('employee_status')) {
             $employeeQuery->where('employee_status', $request->employee_status);
@@ -61,7 +63,11 @@ class EmployeeController extends Controller
                 $request->hired_date_to
             ]);
         }
-
+        if ($site) {
+            $employeeQuery->whereHas('lob.site', function ($query) use ($site) {
+                $query->where('id', $site);
+            });
+        }
 
 
         // Get the filtered data
@@ -89,7 +95,7 @@ class EmployeeController extends Controller
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
                 'region' => optional($employee->lob->first())->region ?? 'N/A',
-                'site' => optional($employee->lob->first())->site ?? 'N/A',
+                'site' => optional(optional($employee->lob->first())->site)->name ?? 'N/A',
                 'lob' => optional($employee->lob->first())->lob ?? 'N/A',
                 'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
                 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
@@ -471,8 +477,9 @@ class EmployeeController extends Controller
     }
 
 
-    public function indexEmployees(Request $request)
+    public function indexEmployees(Request $request ,$site = null)
     {
+        $site = is_numeric($site) ? (int) $site: null;
         $employeeQuery = Employee::with(
             'userAddedBy',
             'userUpdatedBy',
@@ -497,7 +504,8 @@ class EmployeeController extends Controller
             'requirements.scholasticRecordUpdatedBy',
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
-            'lob'
+            'lob',
+            'lob.site'
         );
 
         // Apply filters based on the request
@@ -515,6 +523,11 @@ class EmployeeController extends Controller
                 $request->hired_date_to
             ]);
         }
+        if ($site) {
+            $employeeQuery->whereHas('lob.site', function ($query) use ($site) {
+                $query->where('id', $site);
+            });
+        }
         $employee_info = $employeeQuery->paginate(10);
         $mappedEmployees = collect($employee_info->items())->map(function ($employee) {
 
@@ -530,7 +543,7 @@ class EmployeeController extends Controller
                 'employee_position' => $employee->account_associate ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => $employee->email ?? 'employee_added_by',
+                'employee_added_by' => $employee->employee_added_by ?? 'employee_added_by',
                 'employee_created_at' => $employee->created_at
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
@@ -539,7 +552,7 @@ class EmployeeController extends Controller
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
                 'region' => optional($employee->lob->first())->region ?? 'N/A',
-                'site' => optional($employee->lob->first())->site ?? 'N/A',
+                'site' => optional(optional($employee->lob->first())->site)->name ?? 'N/A',
                 'lob' => optional($employee->lob->first())->lob ?? 'N/A',
                 'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
                 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
@@ -687,18 +700,22 @@ class EmployeeController extends Controller
             ];
         });
         return response()->json([
-            'data' => [
+          
                 'employees' => $mappedEmployees,
                 'pagination' => [
                     'total' => $employee_info->total(),
                     'current_page' => $employee_info->currentPage(),
-                    'first_page' => $employee_info->url(1),
-                    'last_page' => $employee_info->url($employee_info->lastPage()),
-                    'next_page' => $employee_info->nextPageUrl(),
-                    'prev_page' => $employee_info->previousPageUrl(),
+                    'first_page' => 1, // First page is always 1
+                    'last_page' => $employee_info->lastPage(),
+                    'next_page' => $employee_info->currentPage() < $employee_info->lastPage()
+                        ? $employee_info->currentPage() + 1
+                        : null,
+                    'prev_page' => $employee_info->currentPage() > 1
+                        ? $employee_info->currentPage() - 1
+                        : null,
                     'per_page' => $employee_info->perPage(),
                     'total_pages' => $employee_info->lastPage(),
-                ],
+               
             ],
         ]);
     }
@@ -728,8 +745,9 @@ class EmployeeController extends Controller
                 'team_name' => $lobEntry->team_name ?? 'N/A',
                 'project_code' => $lobEntry->project_code ?? 'N/A',
             ];
-        });
+        })->toArray(); // Convert the collection to an array
     }
+    
     private function mapEmployeeData($employee)
     {
         return [

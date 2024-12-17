@@ -19,7 +19,14 @@ class Site extends Model
         'updated_by',
         'is_active',
     ];
-
+    public function applicants()
+    {
+        return $this->hasMany(ApplicantData::class);
+    }
+    public function lob()
+    {
+        return $this->hasMany(Lob::class );
+    }
     public function users()
     {
         return $this->hasMany(User::class);
