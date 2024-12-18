@@ -19,10 +19,11 @@ class Lob extends Model
     ];
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_tbl_id');
+        return $this->belongsTo(Employee::class, 'employee_tbl_id','id');
     }
-    public function site()
+    public function siteName()
     {
-        return $this->belongsTo(Site::class, 'site');
+        return $this->belongsTo(Site::class, 'site', 'id');
     }
+    
 }

@@ -29,10 +29,7 @@
               ></path>
             </svg>
           </button>
-          <form
-            @submit.prevent="addEmployees"
-            class="grid gap-2 px-4 py-2 grid-cols"
-          >
+          <form @submit.prevent="addEmployees" class="grid gap-2 px-4 py-2 grid-cols">
             <div class="col-span-1">
               <label class="block">
                 Employee ID
@@ -176,6 +173,22 @@
                 </select>
               </label>
             </div>
+            <div class="col-span-1">
+              <label class="block">
+                Site
+                <select
+                  v-model="sites_selected"
+                  disabled
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option disabled value="">Please select Site</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
+              </label>
+            </div>
+
             <div class="flex justify-end mt-4">
               <button
                 type="submit"
@@ -198,9 +211,7 @@
         <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
         <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
           <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">
-              Import Employees
-            </h2>
+            <h2 class="text-lg font-semibold text-gray-800">Import Employees</h2>
           </header>
           <button
             @click="showModalImport = false"
@@ -296,9 +307,7 @@
 
       <div class="">
         <router-link to="/onboarding_dashboard" class="link-button">
-          <button
-            class="font-sans font-semibold text-black text-2xs svg-button"
-          >
+          <button class="font-sans font-semibold text-black text-2xs svg-button">
             <svg
               viewBox="-8.16 -8.16 50.32 50.32"
               xmlns="http://www.w3.org/2000/svg"
@@ -375,6 +384,7 @@ export default {
   data() {
     return {
       errors: {},
+      sites: [],
       showModalAdd: false,
       showModalImport: false,
       file: null,
@@ -385,6 +395,7 @@ export default {
       employee_status: "",
       hired_date: "",
       hired_month: "",
+      sites_selected: this.$store.state.site || "",
       birthdate: "",
       contact_number: "",
       email: "",
@@ -397,6 +408,7 @@ export default {
     this.$router.afterEach(() => {
       window.location.reload();
     });
+    this.getSites();
     this.qrReader = new BrowserMultiFormatReader();
   },
 
@@ -444,7 +456,33 @@ export default {
       }
     },
   },
+  async created() {
+    // Initialize the selected site based on Vuex state
+    this.sites_selected = this.$store.state.site_id || ""; // Default to an empty string if site_id is not set
+
+    // Fetch sites from the API
+    await this.getSites();
+  },
   methods: {
+    async getSites() {
+      try {
+        const token = this.$store.state.token; // Retrieve the token from Vuex store
+        const response = await axios.get("https://10.109.2.112/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data; // Populate sites with API response data
+          console.log("Sites loaded:", response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.error("Error while fetching sites:", error);
+      }
+    },
     async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
       try {
         // Validate inputs
@@ -459,14 +497,8 @@ export default {
           console.error("Invalid employee email:", employeeEmail);
           return;
         }
-        if (
-          !employeeContactNumber ||
-          typeof employeeContactNumber !== "string"
-        ) {
-          console.error(
-            "Invalid employee contact number:",
-            employeeContactNumber
-          );
+        if (!employeeContactNumber || typeof employeeContactNumber !== "string") {
+          console.error("Invalid employee contact number:", employeeContactNumber);
           return;
         }
 
@@ -562,8 +594,7 @@ export default {
         this.file = null;
       } catch (error) {
         if (error.response && error.response.data) {
-          this.errorMessage =
-            error.response.data.error || "Error uploading file";
+          this.errorMessage = error.response.data.error || "Error uploading file";
         } else {
           this.errorMessage = "Error uploading file";
         }
@@ -589,6 +620,7 @@ export default {
         account_associate: this.account_associate,
         employment_status: this.employment_status,
         employee_added_by: this.$store.state.user_id,
+        site_id: this.sites_selected,
       };
       const token = this.$store.state.token;
       const headers = {

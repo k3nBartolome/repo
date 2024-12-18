@@ -131,29 +131,29 @@
 
             <td>
               <button
-                :disabled="employee.qr_code_url"
+                :disabled="employee.employee_qr_code_url"
                 @click="
                   generateQRCode(
                     employee.id,
-                    employee.email,
-                    employee.contact_number
+                    employee.employee_email,
+                    employee.employee_contact_number
                   )
                 "
                 class="generate-qr-button"
               >
-                {{ employee.qr_code_url ? "QR Generated" : "Generate QR" }}
+                {{ employee.employee_qr_code_url ? "QR Generated" : "Generate QR" }}
               </button>
             </td>
 
             <td>
-              <div v-if="employee.qr_code_url">
+              <div v-if="employee.employee_qr_code_url">
                 <img
-                  :src="employee.qr_code_url"
+                  :src="employee.employee_qr_code_url"
                   alt="QR Code"
                   class="qr-code"
                 />
                 <a
-                  :href="employee.qr_code_url"
+                  :href="employee.employee_qr_code_url"
                   :download="'qr_code_' + employee.id + '.png'"
                   class="download-link"
                 >
@@ -163,18 +163,18 @@
             </td>
 
             <td>{{ employee.employee_id }}</td>
-            <td>{{ employee.last_name }}</td>
-            <td>{{ employee.first_name }}</td>
-            <td>{{ employee.middle_name }}</td>
-            <td>{{ employee.birthdate }}</td>
-            <td>{{ employee.contact_number }}</td>
-            <td>{{ employee.email }}</td>
-            <td>{{ employee.hired_date }}</td>
-            <td>{{ employee.hired_month }}</td>
-            <td>{{ employee.employee_status }}</td>
-            <td>{{ employee.employment_status }}</td>
-            <td>{{ employee.account_associate }}</td>
-           <td>{{ employee.user_added_by ? employee.user_added_by.name : 'N/A' }}</td>
+            <td>{{ employee.employee_last_name }}</td>
+            <td>{{ employee.employee_first_name }}</td>
+            <td>{{ employee.employee_middle_name }}</td>
+            <td>{{ employee.employee_birth_date }}</td>
+            <td>{{ employee.employee_contact_number }}</td>
+            <td>{{ employee.employee_email }}</td>
+            <td>{{ employee.employee_hired_date }}</td>
+            <td>{{ employee.employee_hired_month }}</td>
+            <td>{{ employee.employee_employee_status }}</td>
+            <td>{{ employee.employee_employment_status }}</td>
+            <td>{{ employee.employee_position }}</td>
+           <td>{{ employee.employee_added_by ? employee.employee_added_by : 'N/A' }}</td>
 
           </tr>
         </tbody>
@@ -499,7 +499,7 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/employees_export",
+         `https://10.109.2.112/api/employees_export/${this.$store.state.site_id}`,
           {
             params: {
               employee_status: this.employee_status,

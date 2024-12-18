@@ -47,7 +47,7 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.site'
+            'lob.siteName'
         );
         if ($request->filled('employee_status')) {
             $employeeQuery->where('employee_status', $request->employee_status);
@@ -64,7 +64,7 @@ class EmployeeController extends Controller
             ]);
         }
         if ($site) {
-            $employeeQuery->whereHas('lob.site', function ($query) use ($site) {
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($site) {
                 $query->where('id', $site);
             });
         }
@@ -81,12 +81,13 @@ class EmployeeController extends Controller
                 'employee_middle_name' => $employee->middle_name ?? 'N/A',
                 'employee_email' => $employee->email ?? 'N/A',
                 'employee_contact_number' => $employee->contact_number ?? 'N/A',
-                'employee_birth_date' => $employee->birth_date ?? 'N/A',
+                'employee_birth_date' => $employee->birthdate ?? 'N/A',
+                'employee_hired_month' => $employee->hired_month ?? 'N/A',
                 'employee_hired_date' => $employee->hired_date ?? 'N/A',
                 'employee_position' => $employee->account_associate ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => $employee->email ?? 'employee_added_by',
+                'employee_added_by' => optional(optional($employee->first())->userAddedBy)->name ?? 'N/A',
                 'employee_created_at' => $employee->created_at
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
@@ -95,7 +96,7 @@ class EmployeeController extends Controller
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
                 'region' => optional($employee->lob->first())->region ?? 'N/A',
-                'site' => optional(optional($employee->lob->first())->site)->name ?? 'N/A',
+                'site' => optional(optional($employee->lob->first())->siteName)->name ?? 'N/A',
                 'lob' => optional($employee->lob->first())->lob ?? 'N/A',
                 'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
                 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
@@ -387,6 +388,7 @@ class EmployeeController extends Controller
             'employment_status' => 'nullable',
             'employee_added_by' => 'nullable|integer',
             'lob_id' => 'nullable|integer',
+            'site_id' => 'nullable|integer',
         ]);
 
         if ($validator->fails()) {
@@ -399,16 +401,17 @@ class EmployeeController extends Controller
         $employee_info->save();
 
         // Get the employee ID
-        $employee_id = $employee_info->id;
+        $employee_info_id = $employee_info->id;
 
         // Create the requirement and associate with the employee
         $requirement = new Requirements();
-        $requirement->employee_tbl_id = $employee_id;  // Assign employee ID to the requirement
+        $requirement->employee_tbl_id = $employee_info_id;  // Assign employee ID to the requirement
         $requirement->save();
 
         // Create the lob and associate with the employee
         $lob = new Lob();
-        $lob->employee_tbl_id = $employee_id;  // Assign employee ID to the lob
+        $lob->employee_tbl_id = $employee_info_id;
+        $lob->site = $request->site_id;
         $lob->save();
 
         return response()->json([
@@ -505,7 +508,7 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.site'
+            'lob.siteName'
         );
 
         // Apply filters based on the request
@@ -524,7 +527,7 @@ class EmployeeController extends Controller
             ]);
         }
         if ($site) {
-            $employeeQuery->whereHas('lob.site', function ($query) use ($site) {
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($site) {
                 $query->where('id', $site);
             });
         }
@@ -532,18 +535,21 @@ class EmployeeController extends Controller
         $mappedEmployees = collect($employee_info->items())->map(function ($employee) {
 
             return [
+                'id' => $employee->id ?? 'TBA',
                 'employee_id' => $employee->employee_id ?? 'TBA',
+                'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
                 'employee_middle_name' => $employee->middle_name ?? 'N/A',
                 'employee_email' => $employee->email ?? 'N/A',
                 'employee_contact_number' => $employee->contact_number ?? 'N/A',
-                'employee_birth_date' => $employee->birth_date ?? 'N/A',
+                'employee_birth_date' => $employee->birthdate ?? 'N/A',
+                'employee_hired_month' => $employee->hired_month ?? 'N/A',
                 'employee_hired_date' => $employee->hired_date ?? 'N/A',
                 'employee_position' => $employee->account_associate ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => $employee->employee_added_by ?? 'employee_added_by',
+                'employee_added_by' => optional(optional($employee->first())->userAddedBy)->name ?? 'N/A',
                 'employee_created_at' => $employee->created_at
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
@@ -552,7 +558,7 @@ class EmployeeController extends Controller
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
                 'region' => optional($employee->lob->first())->region ?? 'N/A',
-                'site' => optional(optional($employee->lob->first())->site)->name ?? 'N/A',
+                'site' => optional(optional($employee->lob->first())->siteName)->name ?? 'N/A',
                 'lob' => optional($employee->lob->first())->lob ?? 'N/A',
                 'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
                 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
@@ -740,14 +746,13 @@ class EmployeeController extends Controller
         return $lob->map(function ($lobEntry) {
             return [
                 'region' => $lobEntry->region ?? 'N/A',
-                'site' => $lobEntry->site ?? 'N/A',
+                'site' => optional($lobEntry->siteName)->name ?? 'N/A',  // Safely access site name
                 'lob' => $lobEntry->lob ?? 'N/A',
                 'team_name' => $lobEntry->team_name ?? 'N/A',
                 'project_code' => $lobEntry->project_code ?? 'N/A',
             ];
         })->toArray(); // Convert the collection to an array
     }
-    
     private function mapEmployeeData($employee)
     {
         return [
@@ -955,6 +960,8 @@ class EmployeeController extends Controller
             'requirements.scholasticRecordUpdatedBy',
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
+            'lob',
+            'lob.siteName'
         ])->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
@@ -989,6 +996,8 @@ class EmployeeController extends Controller
             'requirements.scholasticRecordUpdatedBy',
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
+            'lob',
+            'lob.siteName'
         ])->find($id);
 
         // Check if the employee exists

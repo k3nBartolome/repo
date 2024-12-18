@@ -25,7 +25,7 @@ class Site extends Model
     }
     public function lob()
     {
-        return $this->hasMany(Lob::class );
+        return $this->hasMany(Lob::class, 'site', 'id');
     }
     public function users()
     {

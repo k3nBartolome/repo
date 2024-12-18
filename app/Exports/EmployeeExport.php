@@ -31,6 +31,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize
             "EMAIL ADDRESS",
             "CONTACT NUMBER",
             "DATE OF BIRTH",
+            "HIRE MONTH",
             "HIRE DATE",
             "POSITION",
             "EMPLOYEE STATUS",
