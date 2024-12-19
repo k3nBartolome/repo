@@ -87,7 +87,7 @@ class EmployeeController extends Controller
                 'employee_position' => $employee->account_associate ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => optional(optional($employee->first())->userAddedBy)->name ?? 'N/A',
+                'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
                 'employee_created_at' => $employee->created_at
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',
@@ -549,7 +549,7 @@ class EmployeeController extends Controller
                 'employee_position' => $employee->account_associate ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => optional(optional($employee->first())->userAddedBy)->name ?? 'N/A',
+                'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
                 'employee_created_at' => $employee->created_at
                     ? $employee->created_at->format('Y-m-d')
                     : 'N/A',

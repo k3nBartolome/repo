@@ -17,12 +17,16 @@
       <!-- Site -->
       <div class="flex flex-col">
         <label for="site" class="block text-sm font-medium">Site</label>
-        <input
-          id="site"
-          v-model="form.site"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <select
+                  v-model="site"
+                  disabled
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option disabled value="">Please select Site</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
       </div>
 
       <!-- LOB -->
@@ -82,9 +86,12 @@ import axios from "axios";
 export default {
   data() {
     return {
+      sites: [],
+       
+        site: "",
       form: {
         region: "",
-        site: "",
+       
         lob: "",
         team_name: "",
         project_code: "",
@@ -92,8 +99,33 @@ export default {
       },
       isSubmitting: false,
     };
+  },async created() {
+    // Initialize the selected site based on Vuex state
+    this.site = this.$store.state.site_id || ""; // Default to an empty string if site_id is not set
+
+    // Fetch sites from the API
+    await this.getSites();
   },
   methods: {
+    async getSites() {
+      try {
+        const token = this.$store.state.token; // Retrieve the token from Vuex store
+        const response = await axios.get("https://10.109.2.112/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data; // Populate sites with API response data
+          console.log("Sites loaded:", response.data.data);
+        } else {
+          console.log("Error fetching sites");
+        }
+      } catch (error) {
+        console.error("Error while fetching sites:", error);
+      }
+    },
     async submitForm() {
       if (this.isSubmitting) return;
 
@@ -108,7 +140,7 @@ export default {
 
         // Redirect to LOB details page or perform another action as needed
         this.$router.push({
-          name: "LobDetails",
+          name: "OnboardingUpdateSelection",
           params: { id: this.$route.params.id },
         });
       } catch (error) {

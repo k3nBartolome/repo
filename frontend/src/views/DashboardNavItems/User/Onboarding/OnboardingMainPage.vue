@@ -395,7 +395,7 @@ export default {
       employee_status: "",
       hired_date: "",
       hired_month: "",
-      sites_selected: this.$store.state.site || "",
+      sites_selected: "",
       birthdate: "",
       contact_number: "",
       email: "",

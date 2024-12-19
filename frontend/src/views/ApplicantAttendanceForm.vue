@@ -96,8 +96,8 @@ export default {
           },
         };
 
-        const response = await axios.get("https://10.109.2.112/api/applicant-sites", config);
-        this.sites = response.data;
+        const response = await axios.get("https://10.109.2.112/api/sites", config);
+        this.sites = response.data.data;
       } catch (error) {
         alert("Failed to load sites. Please try again.");
       }
@@ -137,6 +137,9 @@ export default {
     await axios.post("https://10.109.2.112/api/applicant/create", this.form, config);
     alert("Applicant details submitted successfully!");
     this.resetForm();
+     this.$router.push({ name: "ApplicantChecker" }); // Replace 'SuccessPage' with the route name or path
+
+    window.location.reload();
   } catch (error) {
     alert("Failed to submit the applicant details.");
   }

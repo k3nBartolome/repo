@@ -177,7 +177,7 @@
                 >
                   <button
                     class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white"
-                    v-if="isUser || isFrontdesk"
+                    v-if="isUser || isFrontdesk || isOnboarding"
                   >
                     Frontdesk
                   </button>
@@ -404,7 +404,7 @@
               >Onboarding</router-link
             >
           </div>
-          <div class="pt-2" v-if="isUser || isFrontdesk">
+          <div class="pt-2" v-if="isUser || isFrontdesk || isOnboarding">
             <span class="block px-3 py-2 text-base font-medium text-gray-600 link-button"
               >Frontdesk</span
             >
