@@ -101,7 +101,8 @@ export default {
       } catch (error) {
         alert("Failed to load sites. Please try again.");
       }
-    },async submitForm() {
+    },
+async submitForm() {
   this.errors = {}; // Clear previous errors
 
   // Simple client-side validation
@@ -135,15 +136,22 @@ export default {
     };
 
     await axios.post("https://10.109.2.112/api/applicant/create", this.form, config);
+
     alert("Applicant details submitted successfully!");
     this.resetForm();
-     this.$router.push({ name: "ApplicantChecker" }); // Replace 'SuccessPage' with the route name or path
-
+    this.$router.push({ name: "ApplicantChecker" }); // Replace 'SuccessPage' with the route name or path
     window.location.reload();
   } catch (error) {
-    alert("Failed to submit the applicant details.");
+    if (error.response && error.response.data) {
+      // Display custom error message from backend
+      alert(error.response.data.message || "Failed to submit the applicant details. Please try again.");
+    } else {
+      alert("Failed to submit the applicant details. Please try again.");
+    }
   }
 },
+
+
 
     resetForm() {
       this.form = {

@@ -281,8 +281,9 @@ Route::get('/show/employees/{id}', [EmployeeController::class, 'showEmployee']);
 Route::post('employees/{employeeId}/save-qr-code', [EmployeeController::class, 'saveQRCode']);
 Route::post('/employees/{employee_id}/generate-qr-code', [EmployeeController::class, 'generate']);
 Route::get('employees_export/{site_id?}', [EmployeeController::class, 'exportTest']);
-Route::get('applicants_data/{site_id?}', [ApplicantDataController::class, 'index']);
-Route::get('applicants_export_data/{site_id?}', [ApplicantDataController::class, 'ExportAttendance']);
+Route::get('applicants_data', [ApplicantDataController::class, 'index']);
+Route::get('applicants_export_data', [ApplicantDataController::class, 'ExportAttendance']);
+Route::get('/getCreatedAtRange', [ApplicantDataController::class, 'getCreatedAtRange']);
 
  });
 Route::get('out', [ClassesController::class, 'OutOfSla']);

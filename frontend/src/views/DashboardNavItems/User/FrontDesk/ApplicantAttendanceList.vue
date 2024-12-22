@@ -6,101 +6,122 @@
       </div>
     </header>
     <div class="p-6 py-8 bg-gray-100">
+      <!-- Filters Section -->
       <div class="mb-4 md:flex md:space-x-2 md:items-center py-6">
+        <!-- Site Filter -->
+        <div class="w-full md:w-1/4 mb-4 md:mb-0">
+          <label for="site" class="block text-sm font-medium">Site</label>
+          <select
+            v-model="site"
+            class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-black"
+          >
+            <option disabled value="">Please select Site</option>
+            <option v-for="site in sites" :key="site.id" :value="site.id">
+              {{ site.name }}
+            </option>
+          </select>
+        </div>
+
+        <!-- Min Date Filter -->
+        <div class="w-full md:w-1/4 mb-4 md:mb-0">
+          <label for="minDate" class="block text-sm font-medium">Min Date</label>
+          <input
+            type="date"
+            v-model="minDate"
+            class="block w-full border border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-black"
+          />
+        </div>
+
+        <!-- Max Date Filter -->
+        <div class="w-full md:w-1/4 mb-4 md:mb-0">
+          <label for="maxDate" class="block text-sm font-medium">Max Date</label>
+          <input
+            type="date"
+            v-model="maxDate"
+            class="block w-full border border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-black"
+          />
+        </div>
+
+        <!-- Apply Filter Button -->
         <div class="w-full md:w-1/4 mb-4 md:mb-0">
           <button
-            @click="exportToExcel"
+            @click="applyFilter"
             class="w-full px-4 py-2 text-white bg-blue-500 rounded-lg"
           >
-            Export
+            Apply Filter
           </button>
         </div>
-        <div>
-         </div>
-         </div>
-      <div  v-if="filterLoading || exportLoading"
+      </div>
+
+      <!-- Loading Indicator -->
+      <div
+        v-if="filterLoading || exportLoading"
         class="font-bold text-center text-blue-500"
       >
         {{ filterLoading ? "Rendering..." : "Exporting..." }}
       </div>
+
+      <!-- Export Button -->
+      <div class="mb-4">
+        <button
+          @click="exportToExcel"
+          class="px-4 py-2 text-white bg-green-500 rounded-lg"
+        >
+          Export
+        </button>
+      </div>
+
+      <!-- DataTable -->
       <div class="overflow-x-auto">
         <div class="min-w-full">
-      <DataTable
-        :data="applicant"
-        :columns="columns"
-        class="table divide-y divide-gray-200 table-auto table-striped"
-        :options="{
-          responsive: false,
-          autoWidth: false,
-          pageLength: 10,
-          lengthChange: true,
-          ordering: true,
-          scrollX: true,
-          dom: 'rtlip',
-          language: {
-            search: 'Search',
-            zeroRecords: 'No data available',
-            info: 'Showing from _START_ to _END_ of _TOTAL_ records',
-            infoFiltered: '(Filtered from MAX records)',
-            paginate: {
-              first: 'First',
-              previous: 'Prev',
-              next: 'Next',
-              last: 'Last',
-            },
-          },
-        }"
-      >
-        <thead class="truncate">
-          <tr>
-          </tr>
-        </thead>
-        <tbody class="truncate">
-          <tr v-for="item in applicant" :key="item.id">
-            <!-- Add your table row data here -->
-          </tr>
-        </tbody>
-      </DataTable>
-  </div>
-  </div>
-  </div>
+          <DataTable
+            :data="applicant"
+            :columns="columns"
+            class="table divide-y divide-gray-200 table-auto table-striped"
+            :options="{
+              responsive: false,
+              autoWidth: false,
+              pageLength: 10,
+              lengthChange: true,
+              ordering: true,
+              scrollX: true,
+              dom: 'rtlip',
+              language: {
+                search: 'Search',
+                zeroRecords: 'No data available',
+                info: 'Showing from _START_ to _END_ of _TOTAL_ records',
+                infoFiltered: '(Filtered from MAX records)',
+                paginate: {
+                  first: 'First',
+                  previous: 'Prev',
+                  next: 'Next',
+                  last: 'Last',
+                },
+              },
+            }"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 import axios from "axios";
-import "datatables.net-bs5/css/dataTables.bootstrap5.css";
-import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
-import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
 import DataTable from "datatables.net-vue3";
 import DataTableLib from "datatables.net-bs5";
 import "datatables.net-bs5/css/dataTables.bootstrap5.css";
-import "datatables.net-buttons-bs5";
-import "datatables.net-buttons-bs5/css/buttons.bootstrap5.css";
-import "datatables.net-responsive-bs5";
-import "datatables.net-responsive-bs5/css/responsive.bootstrap5.css";
-import "bootstrap/dist/js/bootstrap.bundle"; // Make sure to include Bootstrap JavaScript
-// Import DataTables extensions
-import Buttons from "datatables.net-buttons-bs5";
-import ButtonsHtml5 from "datatables.net-buttons/js/buttons.html5";
-import print from "datatables.net-buttons/js/buttons.print";
-import jszip from "jszip";
-// eslint-disable-next-line no-unused-vars
-import pdfMake from "pdfmake/build/pdfmake";
-// eslint-disable-next-line no-unused-vars
-import pdfFonts from "pdfmake/build/vfs_fonts";
-import "bootstrap/dist/css/bootstrap.css";
-// eslint-disable-next-line no-unused-vars
-import { format } from "date-fns";
+
 DataTable.use(DataTableLib);
-DataTable.use(jszip);
-DataTable.use(Buttons);
-DataTable.use(ButtonsHtml5);
-DataTable.use(print);
+
 export default {
   components: { DataTable },
   data() {
     return {
       applicant: [],
+      sites: [],
+       site: null,  // Assuming you are storing the site value
+    minDate: null,  // Will hold the min date from backend
+    maxDate: null, 
       columns: [
         { data: "site", title: "Site" },
         { data: "last_name", title: "Last Name" },
@@ -115,57 +136,101 @@ export default {
     };
   },
   mounted() {
-  this.fetchData()
+    this.fetchData();
+    this.getSites();
+     this.fetchDateRange();
   },
   methods: {
+     async fetchDateRange() {
+    try {
+      const token = this.$store.state.token;  // Assuming the token is in Vuex
+      const response = await axios.get("https://10.109.2.112/api/getCreatedAtRange", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Set the min and max date to the state variables
+      if (response.data.min_date && response.data.max_date) {
+        this.minDate = response.data.min_date;
+        this.maxDate = response.data.max_date;
+      }
+    } catch (error) {
+      console.error("Error fetching date range:", error);
+    }
+  },
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("https://10.109.2.112/api/sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        this.sites = response.data.data || [];
+      } catch (error) {
+        console.error("Error fetching sites:", error);
+      }
+    },
     async fetchData() {
       this.filterLoading = true;
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-        `https://10.109.2.112/api/applicants_data/${this.$store.state.site_id}`,
+          "https://10.109.2.112/api/applicants_data",
           {
-           
+            params: {
+              site_id: this.site || null,
+              min_date: this.minDate || null,
+              max_date: this.maxDate || null,
+            },
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }
         );
-
-        this.applicant = response.data.applicant;
+        this.applicant = response.data.applicant || [];
       } catch (error) {
-        console.error("Error fetching filtered data", error);
+        console.error("Error fetching filtered data:", error);
       } finally {
         this.filterLoading = false;
       }
     },
+    applyFilter() {
+      this.fetchData();
+    },
     async exportToExcel() {
-  this.exportLoading = true;
-  try {
-    const token = this.$store.state.token;
-    const response = await axios.get(
-      `https://10.109.2.112/api/applicants_export_data/${this.$store.state.site_id}`,
-      {
-        headers: { Authorization: `Bearer ${token}` },
-        responseType: "blob",
+      this.exportLoading = true;
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get(
+          "https://10.109.2.112/api/applicants_export_data",
+          {
+            params: {
+              site_id: this.site || null,
+              min_date: this.minDate || null,
+              max_date: this.maxDate || null,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+            responseType: "blob",
+          }
+        );
+        const blob = new Blob([response.data], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = "applicantAttendance.xlsx";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error exporting to Excel:", error);
+      } finally {
+        this.exportLoading = false;
       }
-    );
-    const blob = new Blob([response.data], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = "applicantAttendance.xlsx";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  } catch (error) {
-    console.error("Error exporting to Excel:", error);
-  } finally {
-    this.exportLoading = false;
-  }
-}
+    },
   },
 };
 </script>
