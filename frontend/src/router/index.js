@@ -127,6 +127,7 @@ import OnboardingSUPPORTINGDOCUMENT from "@/views/DashboardNavItems/User/Onboard
 import OnboardingLob from "@/views/DashboardNavItems/User/Onboarding/OnboardingLob.vue";
 import OnboardingUpdateSelection from "@/views/DashboardNavItems/User/Onboarding/OnboardingUpdateSelection.vue";
 import OnboardingEmployeeProfile from "@/views/DashboardNavItems/User/Onboarding/OnboardingEmployeeProfile.vue";
+import OnboardingEmployeeInformation from "@/views/DashboardNavItems/User/Onboarding/OnboardingEmployeeInformation.vue";
 import ApplicantAttendanceList from "@/views/DashboardNavItems/User/FrontDesk/ApplicantAttendanceList.vue";
 import ReferralListv1 from "@/views/DashboardNavItems/User/ReferralListV1.vue";
 
@@ -645,6 +646,12 @@ const routes = [
             path: "onboarding_dashboard/update/selection/lob/:id",
             name: "OnboardingLob",
             component: OnboardingLob,
+            props: true,
+          },
+          {
+            path: "onboarding_dashboard/update/selection/employee_info/:id",
+            name: "OnboardingEmployeeInformation",
+            component: OnboardingEmployeeInformation,
             props: true,
           },
         ],

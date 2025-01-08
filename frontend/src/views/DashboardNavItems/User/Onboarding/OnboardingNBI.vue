@@ -6,6 +6,7 @@
         <label class="block text-sm font-medium">Final Status</label>
         <select
           v-model="nbi_final_status"
+          @change="updateNBIData"
           class="p-2 mt-1 border rounded w-full"
         >
           <option disabled>Please select one</option>
@@ -20,6 +21,7 @@
         <input
           v-model="nbi_validity_date"
           type="date"
+          @change="updateNBIData"
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
@@ -28,6 +30,7 @@
         <input
           v-model="nbi_printed_date"
           type="date"
+          @change="updateNBIData"
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
@@ -36,6 +39,7 @@
         <input
           v-model="nbi_submitted_date"
           type="date"
+          @change="updateNBIData"
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
@@ -44,6 +48,7 @@
         <input
           v-model="nbi_remarks"
           type="text"
+          @input="updateNBIData"
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
@@ -62,38 +67,17 @@
           :src="nbi_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          @load="updateNBIData"
         />
       </div>
     </div>
-    <div v-if="showCapture" class="mt-4">
-      <div v-if="capturedImage" class="mt-4 flex flex-col items-center">
-        <img
-          :src="capturedImage"
-          alt="Captured Image"
-          class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
-        />
-      </div>
-    </div>
-
-    <div class="mt-4">
-      <button
-        @click="submitForm"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
-        :disabled="isSubmitting"
-      >
-        <span v-if="isSubmitting">Submitting...</span>
-        <span v-else>Submit</span>
-      </button>
-    </div>
-
-    <div
-      v-if="isSubmitting"
-      class="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center"
+    <button
+      :disabled="isSubmitting"
+      @click="submitForm"
+      class="mt-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-600"
     >
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
-        <span>Loading...</span>
-      </div>
-    </div>
+      {{ isSubmitting ? "Submitting..." : "Submit NBI" }}
+    </button>
   </div>
 </template>
 
@@ -117,7 +101,37 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+    mounted() {
+   
+    this.fetchNBIData();
+  },
   methods: {
+     async fetchNBIData() {
+      try {
+        const response = await axios.get(`https://10.109.2.112/api/get/nbi/requirement/${this.$route.params.id}`);
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.nbi_final_status = data.nbi_final_status;
+        this.nbi_validity_date = data.nbi_validity_date;
+        this.nbi_submitted_date = data.nbi_submitted_date;
+        this.nbi_printed_date = data.nbi_printed_date;
+        this.nbi_remarks = data.nbi_remarks;
+        this.nbi_file_name = data.nbi_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updateNBIData() {
+      console.log("Updating NBI Data...");
+      console.log({
+        nbi_final_status: this.nbi_final_status,
+        nbi_validity_date: this.nbi_validity_date,
+        nbi_submitted_date: this.nbi_submitted_date,
+        nbi_printed_date: this.nbi_printed_date,
+        nbi_remarks: this.nbi_remarks,
+      });
+    },
     async startCamera() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -145,16 +159,15 @@ export default {
       this.capturedImage = null;
       this.nbi_proof = null;
     },
-    uploadImage(event) {
+   uploadImage(event) {
       const file = event.target.files[0];
       if (file) {
-        this.nbi_proof = file; // Store the file in nbi_proof
-
+        this.nbi_proof = file;
         const reader = new FileReader();
         reader.onload = () => {
           this.nbi_file_name = reader.result; // Preview the image
         };
-        reader.readAsDataURL(file); // Preview file
+        reader.readAsDataURL(file);
       }
     },
 

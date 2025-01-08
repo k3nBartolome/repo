@@ -149,7 +149,19 @@
                 </select>
               </label>
             </div>
-
+            <div class="col-span-1">
+              <label class="block">
+               Account Type
+                <select
+                  v-model="account_type"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                >
+                  <option>Select one</option>
+                  <option value="Agent">Agent</option>
+                  <option value="Non-Agent">Non-Agent</option>
+                </select>
+              </label>
+            </div>
             <div class="col-span-1">
               <label class="block">
                 Position
@@ -178,7 +190,7 @@
                 Site
                 <select
                   v-model="sites_selected"
-                  disabled
+                  
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option disabled value="">Please select Site</option>
@@ -400,6 +412,7 @@ export default {
       contact_number: "",
       email: "",
       account_associate: "Account Associate",
+      account_type: "",
       employee_added_by: "",
       employment_status: "",
     };
@@ -617,6 +630,7 @@ export default {
         birthdate: this.birthdate,
         contact_number: this.contact_number,
         email: this.email,
+          account_type: this.account_type,
         account_associate: this.account_associate,
         employment_status: this.employment_status,
         employee_added_by: this.$store.state.user_id,
@@ -643,6 +657,7 @@ export default {
           this.birthdate = "";
           this.contact_number = "";
           this.email = "";
+            this.account_type = "";
           this.account_associate = "";
           this.employee_added_by = "";
           this.employment_status = "";

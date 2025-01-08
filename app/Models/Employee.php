@@ -23,6 +23,7 @@ class Employee extends Model
         'contact_number',
         'email',
         'account_associate',
+        'account_type',
         'employment_status',
         'employee_added_by',
         'updated_by',

@@ -6,6 +6,7 @@
         <label class="block text-sm font-medium">Final Status</label>
         <select
           v-model="dt_final_status"
+           @change="updateDTData"
           class="w-full p-2 mt-1 border rounded"
         >
           <option disabled>Please select one</option>
@@ -20,6 +21,7 @@
         <label class="block text-sm font-medium">Transaction Date</label>
         <input
           v-model="dt_transaction_date"
+           @change="updateDTData"
           type="date"
           class="w-full p-2 mt-1 border rounded"
         />
@@ -28,6 +30,7 @@
         <label class="block text-sm font-medium">Result Date</label>
         <input
           v-model="dt_results_date"
+           @change="updateDTData"
           type="date"
           class="w-full p-2 mt-1 border rounded"
         />
@@ -36,6 +39,7 @@
         <label class="block text-sm font-medium">Endorsed Date</label>
         <input
           v-model="dt_endorsed_date"
+           @change="updateDTData"
           type="date"
           class="w-full p-2 mt-1 border rounded"
         />
@@ -45,6 +49,7 @@
         <input
           v-model="dt_remarks"
           type="text"
+           @input="updateDTData"
           class="w-full p-2 mt-1 border rounded"
         />
       </div>
@@ -63,6 +68,7 @@
           :src="dt_file_name"
           alt="Preview Image"
           class="object-cover w-full h-48 border rounded-lg sm:w-3/4 lg:w-1/2"
+           @load="updateDTData"
         />
       </div>
     </div>
@@ -106,7 +112,39 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+   mounted() {
+    this.getDT(); // Fetch data on component load
+  },
   methods: {
+    
+     async getDT() {
+      try {
+        const apiUrl = `https://10.109.2.112/api/get/dt/requirement/${this.$route.params.id}`;
+        const response = await axios.get(apiUrl);
+        const data = response.data.data;
+
+        this.dt_final_status = data.dt_final_status || "";
+        this.dt_results_date = data.dt_results_date || "";
+        this.dt_transaction_date = data.dt_transaction_date || "";
+        this.dt_endorsed_date = data.dt_endorsed_date || "";
+        this.dt_remarks = data.dt_remarks || "";
+        this.dt_file_name = data.dt_file_name || null; // Assuming proof_url is provided
+      } catch (error) {
+        console.error("Error fetching DT data:", error.response || error.message);
+        alert("Failed to load drug test information.");
+      }
+    },
+    updateDTData() {
+    console.log("Updating Drug Test Data...");
+    console.log({
+      dt_final_status: this.dt_final_status,
+      dt_transaction_date: this.dt_transaction_date,
+      dt_results_date: this.dt_results_date,
+      dt_endorsed_date: this.dt_endorsed_date,
+      dt_remarks: this.dt_remarks,
+      dt_file_name: this.dt_file_name, // Image filename or data if uploaded
+    });
+  },
     async submitForm() {
       this.isSubmitting = true;
 

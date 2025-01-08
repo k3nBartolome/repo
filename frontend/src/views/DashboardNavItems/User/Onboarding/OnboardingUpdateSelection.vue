@@ -20,6 +20,9 @@
     
     <!-- Main Button Container (Two or three buttons per row) -->
     <div class="button-container">
+       <button class="update-button" @click="selectOption('OnboardingEmployeeInformation')">
+        Employee Info
+      </button>
       <button class="update-button" @click="selectOption('OnboardingLob')">
         Lob
       </button>

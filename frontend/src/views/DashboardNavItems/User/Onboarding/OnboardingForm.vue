@@ -100,9 +100,10 @@
       <table class="employee-table">
         <thead>
           <tr>
-            <th>Action</th>
+            <th colspan="2" class="text-center">Action</th>
             <th>Generate</th>
             <th>QR Code</th>
+            <th>Site</th>
             <th>Employee ID</th>
             <th>Last Name</th>
             <th>First Name</th>
@@ -128,7 +129,14 @@
                 View
               </button>
             </td>
-
+            <td class="truncate">
+              <button
+                class="truncate bg-blue-500 text-white px-4 py-2 text-sm rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"
+                @click="goToUpdate(employee.id)"
+              >
+                Update
+              </button>
+            </td>
             <td>
               <button
                 :disabled="employee.employee_qr_code_url"
@@ -161,7 +169,7 @@
                 </a>
               </div>
             </td>
-
+             <td>{{ employee.site }}</td>
             <td>{{ employee.employee_id }}</td>
             <td>{{ employee.employee_last_name }}</td>
             <td>{{ employee.employee_first_name }}</td>
@@ -268,6 +276,12 @@ export default {
         params: { id: employeeId },
       });
     },
+     goToUpdate(employeeId) {
+      this.$router.push({
+        name: "OnboardingUpdateSelection",
+        params: { id: employeeId },
+      });
+    },
 async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
   try {
     // Validate inputs
@@ -363,7 +377,7 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
           employment_status: this.employment_status,
           hired_date_from: this.hired_date_from,
           hired_date_to: this.hired_date_to,
-          page: this.pagination.current_page, // Include the current page
+          page: this.pagination.current_page,
         };
 
         console.log("Fetching employees with params:", params);

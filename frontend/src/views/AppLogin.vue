@@ -60,7 +60,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
 import { mapMutations } from "vuex";
@@ -79,10 +78,13 @@ export default {
       "setUserId",
       "setPermissions",
       "setUserName",
-       "setSite",
+      "setSite",
     ]),
     async login() {
       try {
+        // Convert email to lowercase
+        this.email = this.email.trim().toLowerCase();
+
         // Step 1: Fetch CSRF token
         await axios.get("https://10.109.2.112/sanctum/csrf-cookie", {
           withCredentials: true,
@@ -99,7 +101,7 @@ export default {
         );
 
         // Step 3: Extract response data
-        const { user, token, role, user_id, permissions,site_id } = response.data;
+        const { user, token, role, user_id, permissions, site_id } = response.data;
 
         // Step 4: Save user info to Vuex store
         this.setUser(user);
@@ -133,6 +135,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 /* Custom CSS for the login page */

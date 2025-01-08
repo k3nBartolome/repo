@@ -33,6 +33,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             'contact_number' => 'nullable',
             'email' => 'nullable|email|unique:employees,email',
             'account_associate' => 'nullable',
+            'account_type' => 'nullable',
             'employment_status' => 'nullable',
         ]);
 
@@ -58,6 +59,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
                 'contact_number' => $row['contact_number'],
                 'email' => $row['email'],
                 'account_associate' => $row['account_associate'],
+                'account_type' => $row['account_type'],
                 'employment_status' => $row['employment_status'],
                 'employee_added_by' => $this->employeeAddedBy,
             ]);

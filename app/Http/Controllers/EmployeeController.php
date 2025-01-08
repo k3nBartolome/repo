@@ -18,6 +18,112 @@ use App\Exports\EmployeeExport;
 
 class EmployeeController extends Controller
 {
+    public function getEmployee($id)
+{
+    $employee = Employee::findOrFail($id);
+
+    return response()->json([
+        'employee_id' => $employee->employee_id,
+        'first_name' => $employee->first_name,
+        'middle_name' => $employee->middle_name,
+        'last_name' => $employee->last_name,
+        'employee_status' => $employee->employee_status,
+        'hired_date' => $employee->hired_date,
+        'hired_month' => $employee->hired_month,
+        'birthdate' => $employee->birthdate,
+        'contact_number' => $employee->contact_number,
+        'email' => $employee->email,
+        'employment_status' => $employee->employment_status,
+        'position' => $employee->account_associate,
+    ]);
+}
+public function getLob($id)
+{
+    $employee = Lob::where('employee_tbl_id', $id)->first();
+
+    if (!$employee) {
+        return response()->json([
+            'message' => 'Employee not found.',
+        ], 404);
+    }
+
+    return response()->json([
+        'data' => $employee,
+    ]);
+}
+public function getNbi($id)
+{
+    Log::info('Get NBI Request Received', ['id' => $id]);
+    $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+    if (!$requirement) {
+        Log::error('Requirement not found', ['id' => $id]);
+        return response()->json(['error' => 'Requirement not found'], 404);
+    }
+    $data = [
+        'nbi_final_status' => $requirement->nbi_final_status,
+        'nbi_validity_date' => $requirement->nbi_validity_date,
+        'nbi_submitted_date' => $requirement->nbi_submitted_date,
+        'nbi_printed_date' => $requirement->nbi_printed_date,
+        'nbi_remarks' => $requirement->nbi_remarks,
+        'nbi_updated_by' => $requirement->nbi_updated_by,
+        'nbi_last_updated_at' => $requirement->nbi_last_updated_at,
+        'nbi_file_name' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
+    ];
+
+    Log::info('NBI Data Retrieved Successfully', ['data' => $data]);
+
+    return response()->json(['data' => $data]);
+}
+
+public function getDT($id)
+{
+    Log::info('Get DT Request Received', ['id' => $id]);
+    $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+    if (!$requirement) {
+        Log::error('Requirement not found', ['id' => $id]);
+        return response()->json(['error' => 'Requirement not found'], 404);
+    }
+    $data = [
+        'dt_final_status' => $requirement->dt_final_status,
+        'dt_results_date' => $requirement->dt_results_date,
+        'dt_transaction_date' => $requirement->dt_transaction_date,
+        'dt_endorsed_date' => $requirement->dt_endorsed_date,
+        'dt_remarks' => $requirement->dt_remarks,
+        'dt_updated_by' => $requirement->dt_updated_by,
+        'dt_last_updated_at' => $requirement->dt_last_updated_at,
+        'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
+    ];
+
+    Log::info('DT Data Retrieved Successfully', ['data' => $data]);
+
+    return response()->json(['data' => $data]);
+}
+public function getPeme($id)
+{
+    Log::info('Get DT Request Received', ['id' => $id]);
+    $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+    if (!$requirement) {
+        Log::error('Requirement not found', ['id' => $id]);
+        return response()->json(['error' => 'Requirement not found'], 404);
+    }
+    $data = [
+        'dt_final_status' => $requirement->dt_final_status,
+        'dt_results_date' => $requirement->dt_results_date,
+        'dt_transaction_date' => $requirement->dt_transaction_date,
+        'dt_endorsed_date' => $requirement->dt_endorsed_date,
+        'dt_remarks' => $requirement->dt_remarks,
+        'dt_updated_by' => $requirement->dt_updated_by,
+        'dt_last_updated_at' => $requirement->dt_last_updated_at,
+        'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
+    ];
+
+    Log::info('DT Data Retrieved Successfully', ['data' => $data]);
+
+    return response()->json(['data' => $data]);
+}
 
     public function exportTest(Request $request ,$site = null)
     {
@@ -385,6 +491,7 @@ class EmployeeController extends Controller
             'contact_number' => 'nullable',
             'email' => 'nullable|email|unique:employees,email',
             'account_associate' => 'nullable',
+            'account_type' => 'nullable',
             'employment_status' => 'nullable',
             'employee_added_by' => 'nullable|integer',
             'lob_id' => 'nullable|integer',
@@ -765,6 +872,8 @@ class EmployeeController extends Controller
             'email' => $employee->email,
             'account_associate' => $employee->account_associate,
             'employment_status' => $employee->employment_status,
+            'updated_by' => $employee->userUpdatedBy ? $employee->userUpdatedBy->name : 'N/A',
+            'updated_at' => $employee->updated_at->format('Y-m-d H:i'),
             'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
         ];
     }
@@ -780,7 +889,7 @@ class EmployeeController extends Controller
                 'nbi_printed_date' => $requirement->nbi_printed_date,
                 'nbi_remarks' => $requirement->nbi_remarks,
                 'nbi_file_url' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
-                'nbi_last_updated_at' => $requirement->nbi_last_updated_at,
+                'nbi_last_updated_at' => \Carbon\Carbon::parse($requirement->nbi_last_updated_at)->format('Y-m-d H:i'),
                 'nbi_updated_by' => $requirement->nbiUpdatedBy ? $requirement->nbiUpdatedBy->name : 'N/A',
 
                 'dt_final_status' => $requirement->dt_final_status,
@@ -789,7 +898,7 @@ class EmployeeController extends Controller
                 'dt_endorsed_date' => $requirement->dt_endorsed_date,
                 'dt_remarks' => $requirement->dt_remarks,
                 'dt_file_url' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
-                'dt_last_updated_at' => $requirement->dt_last_updated_at,
+                'dt_last_updated_at' => \Carbon\Carbon::parse($requirement->dt_last_updated_at)->format('Y-m-d H:i'),
                 'dt_updated_by' => $requirement->dtUpdatedBy ? $requirement->dtUpdatedBy->name : 'N/A',
 
                 'peme_file_url' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
@@ -798,7 +907,7 @@ class EmployeeController extends Controller
                 'peme_results_date' => $requirement->peme_results_date,
                 'peme_transaction_date' => $requirement->peme_transaction_date,
                 'peme_final_status' => $requirement->peme_final_status,
-                'peme_last_updated_at' => $requirement->peme_last_updated_at,
+                'peme_last_updated_at' => \Carbon\Carbon::parse($requirement->peme_last_updated_at)->format('Y-m-d H:i'),
                 'peme_updated_by' => $requirement->pemeUpdatedBy ? $requirement->pemeUpdatedBy->name : 'N/A',
 
                 'sss_proof_submitted_type' => $requirement->sss_proof_submitted_type,
@@ -807,7 +916,7 @@ class EmployeeController extends Controller
                 'sss_remarks' => $requirement->sss_remarks,
                 'sss_number' => $requirement->sss_number,
                 'sss_file_url' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
-                'sss_last_updated_at' => $requirement->sss_last_updated_at,
+                'sss_last_updated_at' => \Carbon\Carbon::parse($requirement->sss_last_updated_at)->format('Y-m-d H:i'),
                 'sss_updated_by' => $requirement->sssUpdatedBy ? $requirement->sssUpdatedBy->name : 'N/A',
 
                 'phic_submitted_date' => $requirement->phic_submitted_date,
@@ -816,7 +925,7 @@ class EmployeeController extends Controller
                 'phic_remarks' => $requirement->phic_remarks,
                 'phic_number' => $requirement->phic_number,
                 'phic_file_url' => $requirement->phic_file_name ? asset('storage/phic_files/' . $requirement->phic_file_name) : null,
-                'phic_last_updated_at' => $requirement->phic_last_updated_at,
+                'phic_last_updated_at' => \Carbon\Carbon::parse($requirement->phic_last_updated_at)->format('Y-m-d H:i'),
                 'phic_updated_by' => $requirement->phicUpdatedBy ? $requirement->phicUpdatedBy->name : 'N/A',
 
                 'pagibig_submitted_date' => $requirement->pagibig_submitted_date,
@@ -825,7 +934,7 @@ class EmployeeController extends Controller
                 'pagibig_remarks' => $requirement->pagibig_remarks,
                 'pagibig_number' => $requirement->pagibig_number,
                 'pagibig_file_url' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/' . $requirement->pagibig_file_name) : null,
-                'pagibig_last_updated_at' => $requirement->pagibig_last_updated_at,
+                'pagibig_last_updated_at' => \Carbon\Carbon::parse($requirement->pagibig_last_updated_at)->format('Y-m-d H:i'),
                 'pagibig_updated_by' => $requirement->pagibigUpdatedBy ? $requirement->pagibigUpdatedBy->name : 'N/A',
 
                 'tin_submitted_date' => $requirement->tin_submitted_date,
@@ -834,7 +943,7 @@ class EmployeeController extends Controller
                 'tin_remarks' => $requirement->tin_remarks,
                 'tin_number' => $requirement->tin_number,
                 'tin_file_url' => $requirement->tin_file_name ? asset('storage/tin_files/' . $requirement->tin_file_name) : null,
-                'tin_last_updated_at' => $requirement->tin_last_updated_at,
+                'tin_last_updated_at' => \Carbon\Carbon::parse($requirement->tin_last_updated_at)->format('Y-m-d H:i'),
                 'tin_updated_by' => $requirement->tinUpdatedBy ? $requirement->tinUpdatedBy->name : 'N/A',
 
                 'health_certificate_validity_date' => $requirement->health_certificate_validity_date,
@@ -842,7 +951,7 @@ class EmployeeController extends Controller
                 'health_certificate_remarks' => $requirement->health_certificate_remarks,
                 'health_certificate_file_url' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/' . $requirement->health_certificate_file_name) : null,
                 'health_certificate_final_status' => $requirement->health_certificate_final_status,
-                'health_certificate_last_updated_at' => $requirement->health_certificate_last_updated_at,
+                'health_certificate_last_updated_at' => \Carbon\Carbon::parse($requirement->health_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'health_certificate_updated_by' => $requirement->healthCertificateUpdatedBy ? $requirement->healthCertificateUpdatedBy->name : 'N/A',
 
                 'occupational_permit_validity_date' => $requirement->occupational_permit_validity_date,
@@ -850,35 +959,35 @@ class EmployeeController extends Controller
                 'occupational_permit_remarks' => $requirement->occupational_permit_remarks,
                 'occupational_permit_file_url' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/' . $requirement->occupational_permit_file_name) : null,
                 'occupational_permit_final_status' => $requirement->occupational_permit_final_status,
-                'occupational_permit_last_updated_at' => $requirement->occupational_permit_last_updated_at,
+                'occupational_permit_last_updated_at' => \Carbon\Carbon::parse($requirement->occupational_permit_last_updated_at)->format('Y-m-d H:i'),
                 'occupational_permit_updated_by' => $requirement->occupationalPermitUpdatedBy ? $requirement->occupationalPermitUpdatedBy->name : 'N/A',
 
                 'ofac_checked_date' => $requirement->ofac_checked_date,
                 'ofac_final_status' => $requirement->ofac_final_status,
                 'ofac_remarks' => $requirement->ofac_remarks,
                 'ofac_file_url' => $requirement->ofac_file_name ? asset('storage/ofac_files/' . $requirement->ofac_file_name) : null,
-                'ofac_last_updated_at' => $requirement->ofac_last_updated_at,
+                'ofac_last_updated_at' => \Carbon\Carbon::parse($requirement->ofac_last_updated_at)->format('Y-m-d H:i'),
                 'ofac_updated_by' => $requirement->ofacUpdatedBy ? $requirement->ofacUpdatedBy->name : 'N/A',
 
                 'sam_checked_date' => $requirement->sam_checked_date,
                 'sam_final_status' => $requirement->sam_final_status,
                 'sam_remarks' => $requirement->sam_remarks,
                 'sam_file_url' => $requirement->sam_file_name ? asset('storage/sam_files/' . $requirement->sam_file_name) : null,
-                'sam_last_updated_at' => $requirement->sam_last_updated_at,
+                'sam_last_updated_at' => \Carbon\Carbon::parse($requirement->sam_last_updated_at)->format('Y-m-d H:i'),
                 'sam_updated_by' => $requirement->samUpdatedBy ? $requirement->samUpdatedBy->name : 'N/A',
 
                 'oig_checked_date' => $requirement->oig_checked_date,
                 'oig_final_status' => $requirement->oig_final_status,
                 'oig_remarks' => $requirement->oig_remarks,
                 'oig_file_url' => $requirement->oig_file_name ? asset('storage/oig_files/' . $requirement->oig_file_name) : null,
-                'oig_last_updated_at' => $requirement->oig_last_updated_at,
+                'oig_last_updated_at' => \Carbon\Carbon::parse($requirement->oig_last_updated_at)->format('Y-m-d H:i'),
                 'oig_updated_by' => $requirement->oigUpdatedBy ? $requirement->oigUpdatedBy->name : 'N/A',
 
                 'cibi_checked_date' => $requirement->cibi_checked_date,
                 'cibi_final_status' => $requirement->cibi_final_status,
                 'cibi_remarks' => $requirement->cibi_remarks,
                 'cibi_file_url' => $requirement->cibi_file_name ? asset('storage/cibi_files/' . $requirement->cibi_file_name) : null,
-                'cibi_last_updated_at' => $requirement->cibi_last_updated_at,
+                'cibi_last_updated_at' => \Carbon\Carbon::parse($requirement->cibi_last_updated_at)->format('Y-m-d H:i'),
                 'cibi_updated_by' => $requirement->cibiUpdatedBy ? $requirement->cibiUpdatedBy->name : 'N/A',
 
                 'bgc_endorsed_date' => $requirement->bgc_endorsed_date,
@@ -886,49 +995,49 @@ class EmployeeController extends Controller
                 'bgc_final_status' => $requirement->bgc_final_status,
                 'bgc_remarks' => $requirement->bgc_remarks,
                 'bgc_file_url' => $requirement->bgc_file_name ? asset('storage/bgc_files/' . $requirement->bgc_file_name) : null,
-                'bgc_last_updated_at' => $requirement->bgc_last_updated_at,
+                'bgc_last_updated_at' => \Carbon\Carbon::parse($requirement->bgc_last_updated_at)->format('Y-m-d H:i'),
                 'bgc_updated_by' => $requirement->bgcUpdatedBy ? $requirement->bgcUpdatedBy->name : 'N/A',
 
                 'bc_file_url' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/' . $requirement->birth_certificate_file_name) : null,
                 'bc_submitted_date' => $requirement->birth_certificate_submitted_date,
                 'bc_proof_type' => $requirement->birth_certificate_proof_type,
                 'bc_remarks' => $requirement->birth_certificate_remarks,
-                'bc_last_updated_at' => $requirement->birth_certificate_last_updated_at,
+                'bc_last_updated_at' => \Carbon\Carbon::parse($requirement->birth_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'bc_updated_by' => $requirement->birthCertificateUpdatedBy ? $requirement->birthCertificateUpdatedBy->name : 'N/A',
 
                 'dbc_file_url' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/' . $requirement->dependent_birth_certificate_file_name) : null,
                 'dbc_submitted_date' => $requirement->dependent_birth_certificate_submitted_date,
                 'dbc_proof_type' => $requirement->dependent_birth_certificate_proof_type,
                 'dbc_remarks' => $requirement->dependent_birth_certificate_remarks,
-                'dbc_last_updated_at' => $requirement->dependent_birth_certificate_last_updated_at,
+                'dbc_last_updated_at' => \Carbon\Carbon::parse($requirement->dependent_birth_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'dbc_updated_by' => $requirement->dependentBirthCertificateUpdatedBy ? $requirement->dependentBirthCertificateUpdatedBy->name : 'N/A',
 
                 'mc_file_url' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/' . $requirement->marriage_certificate_file_name) : null,
                 'mc_submitted_date' => $requirement->marriage_certificate_submitted_date,
                 'mc_proof_type' => $requirement->marriage_certificate_proof_type,
                 'mc_remarks' => $requirement->marriage_certificate_remarks,
-                'mc_last_updated_at' => $requirement->marriage_certificate_last_updated_at,
+                'mc_last_updated_at' => \Carbon\Carbon::parse($requirement->marriage_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'mc_updated_by' => $requirement->marriageCertificateUpdatedBy ? $requirement->marriageCertificateUpdatedBy->name : 'N/A',
 
                 'sr_file_url' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/' . $requirement->scholastic_record_file_name) : null,
                 'sr_submitted_date' => $requirement->scholastic_record_submitted_date,
                 'sr_proof_type' => $requirement->scholastic_record_proof_type,
                 'sr_remarks' => $requirement->scholastic_record_remarks,
-                'sr_last_updated_at' => $requirement->scholastic_record_last_updated_at,
+                'sr_last_updated_at' => \Carbon\Carbon::parse($requirement->scholastic_record_last_updated_at)->format('Y-m-d H:i'),
                 'sr_updated_by' => $requirement->scholasticRecordUpdatedBy ? $requirement->scholasticRecordUpdatedBy->name : 'N/A',
 
                 'pe_file_url' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/' . $requirement->previous_employment_file_name) : null,
                 'pe_submitted_date' => $requirement->previous_employment_submitted_date,
                 'pe_proof_type' => $requirement->previous_employment_proof_type,
                 'pe_remarks' => $requirement->previous_employment_remarks,
-                'pe_last_updated_at' => $requirement->previous_employment_last_updated_at,
+                'pe_last_updated_at' => \Carbon\Carbon::parse($requirement->previous_employment_last_updated_at)->format('Y-m-d H:i'),
                 'pe_updated_by' => $requirement->previousEmploymentUpdatedBy ? $requirement->previousEmploymentUpdatedBy->name : 'N/A',
 
                 'sd_file_url' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/' . $requirement->supporting_documents_file_name) : null,
                 'sd_submitted_date' => $requirement->supporting_documents_submitted_date,
                 'sd_proof_type' => $requirement->supporting_documents_proof_type,
                 'sd_remarks' => $requirement->supporting_documents_remarks,
-                'sd_last_updated_at' => $requirement->supporting_documents_last_updated_at,
+                'sd_last_updated_at' => \Carbon\Carbon::parse($requirement->supporting_documents_last_updated_at)->format('Y-m-d H:i'),
                 'sd_updated_by' => $requirement->supportingDocumentsUpdatedBy ? $requirement->supportingDocumentsUpdatedBy->name : 'N/A',
 
             ];
@@ -1749,6 +1858,60 @@ class EmployeeController extends Controller
 
         return response()->json(['success' => 'Requirement updated successfully']);
     } */
+    public function updateEmployeeInfo(Request $request, $id)
+{
+    try {
+        // Find the employee record by ID
+        $employee = Employee::findOrFail($id);
+
+        // Validate the incoming data
+        $validatedData = $request->validate([
+            'employee_info_first_name' => 'nullable|string|max:255',
+            'employee_info_middle_name' => 'nullable|string|max:255',
+            'employee_info_last_name' => 'nullable|string|max:255',
+            'employee_info_position' => 'nullable|string|max:255',
+            'employee_info_employee_id' => 'required|string|max:255',
+            'employee_info_contact_number' => 'nullable|string|max:15',
+            'employee_info_email_address' => 'nullable|email|max:255',
+            'employee_info_birth_date' => 'nullable|date',
+            'employee_info_hired_date' => 'nullable|date',
+            'employee_info_employee_status' => 'nullable|string|max:255',
+            'employee_info_employement_status' => 'nullable|string|max:255',
+            'employee_info_hired_month' => 'nullable|string|max:50', 
+            'employee_info_updated_by' => 'nullable|string|max:50', 
+        ]);
+
+        // Update the employee information
+        $employee->first_name = $validatedData['employee_info_first_name'];
+        $employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
+        $employee->last_name = $validatedData['employee_info_last_name'];
+        $employee->account_associate = $validatedData['employee_info_position'] ?? null;
+        $employee->employee_id = $validatedData['employee_info_employee_id'];
+        $employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
+        $employee->email = $validatedData['employee_info_email_address'] ?? null;
+        $employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
+        $employee->hired_date = $validatedData['employee_info_hired_date'] ?? null;
+        $employee->employee_status = $validatedData['employee_info_employee_status'] ?? null;
+        $employee->employment_status = $validatedData['employee_info_employement_status'] ?? null;
+        $employee->hired_month = $validatedData['employee_info_hired_month'] ?? null;
+        $employee->updated_at = now();
+        $employee->updated_by = $validatedData['employee_info_updated_by'] ?? null;
+
+        // Save the changes
+        $employee->save();
+
+        return response()->json([
+            'message' => 'Employee information updated successfully!',
+            'data' => $employee,
+        ], 200);
+    } catch (\Exception $e) {
+        return response()->json([
+            'message' => 'Failed to update employee information.',
+            'error' => $e->getMessage(),
+        ], 500);
+    }
+}
+
     public function updateNBI(Request $request, $id)
     {
         Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
