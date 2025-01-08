@@ -100,7 +100,7 @@ public function getDT($id)
 
     return response()->json(['data' => $data]);
 }
-public function getPeme($id)
+public function getPEME($id)
 {
     Log::info('Get DT Request Received', ['id' => $id]);
     $requirement = Requirements::where('employee_tbl_id', $id)->first();
@@ -110,17 +110,41 @@ public function getPeme($id)
         return response()->json(['error' => 'Requirement not found'], 404);
     }
     $data = [
-        'dt_final_status' => $requirement->dt_final_status,
-        'dt_results_date' => $requirement->dt_results_date,
-        'dt_transaction_date' => $requirement->dt_transaction_date,
-        'dt_endorsed_date' => $requirement->dt_endorsed_date,
-        'dt_remarks' => $requirement->dt_remarks,
-        'dt_updated_by' => $requirement->dt_updated_by,
-        'dt_last_updated_at' => $requirement->dt_last_updated_at,
-        'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
+        'peme_final_status' => $requirement->peme_final_status,
+        'peme_results_date' => $requirement->peme_results_date,
+        'peme_transaction_date' => $requirement->peme_transaction_date,
+        'peme_endorsed_date' => $requirement->peme_endorsed_date,
+        'peme_remarks' => $requirement->peme_remarks,
+        'peme_updated_by' => $requirement->peme_updated_by,
+        'peme_last_updated_at' => $requirement->peme_last_updated_at,
+        'peme_file_name' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
     ];
 
-    Log::info('DT Data Retrieved Successfully', ['data' => $data]);
+    Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
+
+    return response()->json(['data' => $data]);
+}
+public function getSSS($id)
+{
+    Log::info('Get DT Request Received', ['id' => $id]);
+    $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+    if (!$requirement) {
+        Log::error('Requirement not found', ['id' => $id]);
+        return response()->json(['error' => 'Requirement not found'], 404);
+    }
+    $data = [
+        'sss_final_status' => $requirement->sss_final_status,
+        'sss_submitted_date' => $requirement->sss_submitted_date,
+        'sss_remarks' => $requirement->sss_remarks,
+        'sss_number' => $requirement->sss_number,
+        'sss_proof_submitted_type' => $requirement->sss_proof_submitted_type,
+        'sss_updated_by' => $requirement->sss_updated_by,
+        'sss_last_updated_at' => $requirement->sss_last_updated_at,
+        'sss_file_name' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
+    ];
+
+    Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
 
     return response()->json(['data' => $data]);
 }
