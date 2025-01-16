@@ -25,14 +25,25 @@ Route::post('login', [AuthController::class, 'login']);
 Route::post('/logout/{id}', [AuthController::class, 'logout']);
 
  Route::middleware(['auth:sanctum'])->group(function () {
-   
+    Route::get('/download-template', function () {
+        $filePath = public_path('storage/template/template.xlsx'); // Path to the file
+        if (file_exists($filePath)) {
+            return response()->download($filePath); // Download the file
+        } else {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+    });
     // User Routes
     Route::post('/create_user', [UserController::class, 'store']);
     Route::put('/update_user/{id}', [UserController::class, 'update']);
     Route::delete('/delete_user/{id}', [UserController::class, 'destroy']);
     Route::get('/show_user/{id}', [UserController::class, 'show']);
     Route::get('/list_user', [UserController::class, 'index']);
+    Route::get('/list_users', [UserController::class, 'indexUser']);
+    Route::get('/added_users', [UserController::class, 'indexAdded']);
     Route::put('/update_user/profile/{id}/', [UserController::class, 'update_profile']);
+    Route::post('users/{user}/sites', [UserController::class, 'assignSites']);
+    Route::put('user/{user}/assign-sites', [UserController::class, 'assignSites']);
 
     // Role Routes
     Route::get('/list_role', [RoleController::class, 'index']);
@@ -49,6 +60,9 @@ Route::post('/logout/{id}', [AuthController::class, 'logout']);
     Route::get('/show_permission/{id}', [PermissionController::class, 'show']);
 
     // Site Routes
+    Route::get('sites', [SiteController::class, 'index']);
+    Route::get('index_sites', [SiteController::class, 'indexSite']);
+    Route::get('regions', [SiteController::class, 'getRegions']);
     Route::get('sites', [SiteController::class, 'index']);
     Route::get('sites2', [SiteController::class, 'index2']);
     Route::get('sites3', [SiteController::class, 'index3']);

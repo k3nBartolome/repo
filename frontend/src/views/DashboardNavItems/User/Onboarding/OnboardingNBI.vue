@@ -159,17 +159,29 @@ export default {
       this.capturedImage = null;
       this.nbi_proof = null;
     },
-   uploadImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.nbi_proof = file;
-        const reader = new FileReader();
-        reader.onload = () => {
-          this.nbi_file_name = reader.result; // Preview the image
-        };
-        reader.readAsDataURL(file);
-      }
+     uploadImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Validate file type and size (max 2MB)
+            if (!file.type.match(/image\/(jpeg|png)|application\/pdf/)) {
+                alert("Please upload a valid file (JPG, PNG, or PDF).");
+                return;
+            }
+
+            if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                alert("File size exceeds 2MB limit.");
+                return;
+            }
+
+            this.nbi_proof = file;
+            const reader = new FileReader();
+            reader.onload = () => {
+                this.nbi_file_name = reader.result; // For preview purposes
+            };
+            reader.readAsDataURL(file);
+        }
     },
+    
 
     resizeImage(file) {
       const img = new Image();
@@ -228,62 +240,46 @@ export default {
     },
 
     async submitForm() {
-      this.isSubmitting = true;
+        this.isSubmitting = true;
 
-      // Check if 'nbi_final_status' is selected
-      if (!this.nbi_final_status) {
-        this.nbi_final_status = "NO STATUS"; // or any default string or null
-      }
+        if (!this.nbi_final_status) {
+            this.nbi_final_status = "NO STATUS"; // Default status
+        }
 
-      // Prepare form data
-      const formData = new FormData();
-      formData.append("nbi_final_status", this.nbi_final_status);
-      formData.append("nbi_validity_date", this.nbi_validity_date);
-      formData.append("nbi_printed_date", this.nbi_printed_date);
-      formData.append("nbi_submitted_date", this.nbi_submitted_date);
-      formData.append("nbi_remarks", this.nbi_remarks);
-      formData.append("nbi_updated_by", this.$store.state.user_id);
-      // Append the actual file (nbi_proof) for upload
-      if (this.nbi_proof) {
-        formData.append("nbi_proof", this.nbi_proof); // append file here
-      }
+        const formData = new FormData();
+        formData.append("nbi_final_status", this.nbi_final_status);
+        formData.append("nbi_validity_date", this.nbi_validity_date || "");
+        formData.append("nbi_printed_date", this.nbi_printed_date || "");
+        formData.append("nbi_submitted_date", this.nbi_submitted_date || "");
+        formData.append("nbi_remarks", this.nbi_remarks || "");
+        formData.append("nbi_updated_by", this.$store.state.user_id);
 
-      try {
-        const apiUrl = `https://10.109.2.112/api/update/nbi/requirement/${this.$route.params.id}`;
+        if (this.nbi_proof instanceof File) {
+            formData.append("nbi_proof", this.nbi_proof);
+        }
 
-        // Submit the form data to the API
-        const response = await axios.post(apiUrl, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
-
-        // Handle success
-        console.log("Form submitted successfully", response.data);
-      } catch (error) {
-        // Handle error
-        console.error(
-          "Error submitting form",
-          error.response ? error.response.data : error.message
-        );
-        alert("An error occurred while submitting the form.");
-      } finally {
-        // Reset submitting state
-        this.isSubmitting = false;
-
-        // Show success alert and navigate with reload after form submission
-        alert("Form submitted successfully!");
-
-        // Redirect to OnboardingUpdateSelection and reload the page
-        this.$router
-          .push({
-            name: "OnboardingUpdateSelection",
-            params: { id: this.$route.params.id },
-          })
-          .then(() => {
-            window.location.reload(); // Reloads the page after navigation
-          });
-      }
+        try {
+            const apiUrl = `https://10.109.2.112/api/update/nbi/requirement/${this.$route.params.id}`;
+            const response = await axios.post(apiUrl, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            });
+            console.log("Form submitted successfully", response.data);
+            alert("Form submitted successfully!");
+            this.$router.push({
+                name: "OnboardingUpdateSelection",
+                params: { id: this.$route.params.id },
+            });
+        } catch (error) {
+            console.error(
+                "Error submitting form",
+                error.response ? error.response.data : error.message
+            );
+            alert("An error occurred while submitting the form.");
+        } finally {
+            this.isSubmitting = false;
+        }
     },
     beforeUnmount() {
       if (this.videoStream) {

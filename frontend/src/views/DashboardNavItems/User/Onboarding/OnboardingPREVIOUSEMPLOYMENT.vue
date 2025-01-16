@@ -124,7 +124,28 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+
+mounted() {
+    this.fetchPeData();
+  },
   methods: {
+    async fetchPeData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/previous_employment/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.previous_employment_proof_type = data.previous_employment_proof_type;
+        this.previous_employment_submitted_date = data.previous_employment_submitted_date;
+        this.previous_employment_final_status = data.previous_employment_final_status;
+        this.previous_employment_remarks = data.previous_employment_remarks;
+        this.previous_employment_file_name = data.previous_employment_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

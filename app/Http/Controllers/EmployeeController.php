@@ -19,140 +19,500 @@ use App\Exports\EmployeeExport;
 class EmployeeController extends Controller
 {
     public function getEmployee($id)
-{
-    $employee = Employee::findOrFail($id);
-
-    return response()->json([
-        'employee_id' => $employee->employee_id,
-        'first_name' => $employee->first_name,
-        'middle_name' => $employee->middle_name,
-        'last_name' => $employee->last_name,
-        'employee_status' => $employee->employee_status,
-        'hired_date' => $employee->hired_date,
-        'hired_month' => $employee->hired_month,
-        'birthdate' => $employee->birthdate,
-        'contact_number' => $employee->contact_number,
-        'email' => $employee->email,
-        'employment_status' => $employee->employment_status,
-        'position' => $employee->account_associate,
-    ]);
-}
-public function getLob($id)
-{
-    $employee = Lob::where('employee_tbl_id', $id)->first();
-
-    if (!$employee) {
-        return response()->json([
-            'message' => 'Employee not found.',
-        ], 404);
-    }
-
-    return response()->json([
-        'data' => $employee,
-    ]);
-}
-public function getNbi($id)
-{
-    Log::info('Get NBI Request Received', ['id' => $id]);
-    $requirement = Requirements::where('employee_tbl_id', $id)->first();
-
-    if (!$requirement) {
-        Log::error('Requirement not found', ['id' => $id]);
-        return response()->json(['error' => 'Requirement not found'], 404);
-    }
-    $data = [
-        'nbi_final_status' => $requirement->nbi_final_status,
-        'nbi_validity_date' => $requirement->nbi_validity_date,
-        'nbi_submitted_date' => $requirement->nbi_submitted_date,
-        'nbi_printed_date' => $requirement->nbi_printed_date,
-        'nbi_remarks' => $requirement->nbi_remarks,
-        'nbi_updated_by' => $requirement->nbi_updated_by,
-        'nbi_last_updated_at' => $requirement->nbi_last_updated_at,
-        'nbi_file_name' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
-    ];
-
-    Log::info('NBI Data Retrieved Successfully', ['data' => $data]);
-
-    return response()->json(['data' => $data]);
-}
-
-public function getDT($id)
-{
-    Log::info('Get DT Request Received', ['id' => $id]);
-    $requirement = Requirements::where('employee_tbl_id', $id)->first();
-
-    if (!$requirement) {
-        Log::error('Requirement not found', ['id' => $id]);
-        return response()->json(['error' => 'Requirement not found'], 404);
-    }
-    $data = [
-        'dt_final_status' => $requirement->dt_final_status,
-        'dt_results_date' => $requirement->dt_results_date,
-        'dt_transaction_date' => $requirement->dt_transaction_date,
-        'dt_endorsed_date' => $requirement->dt_endorsed_date,
-        'dt_remarks' => $requirement->dt_remarks,
-        'dt_updated_by' => $requirement->dt_updated_by,
-        'dt_last_updated_at' => $requirement->dt_last_updated_at,
-        'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
-    ];
-
-    Log::info('DT Data Retrieved Successfully', ['data' => $data]);
-
-    return response()->json(['data' => $data]);
-}
-public function getPEME($id)
-{
-    Log::info('Get DT Request Received', ['id' => $id]);
-    $requirement = Requirements::where('employee_tbl_id', $id)->first();
-
-    if (!$requirement) {
-        Log::error('Requirement not found', ['id' => $id]);
-        return response()->json(['error' => 'Requirement not found'], 404);
-    }
-    $data = [
-        'peme_final_status' => $requirement->peme_final_status,
-        'peme_results_date' => $requirement->peme_results_date,
-        'peme_transaction_date' => $requirement->peme_transaction_date,
-        'peme_endorsed_date' => $requirement->peme_endorsed_date,
-        'peme_remarks' => $requirement->peme_remarks,
-        'peme_updated_by' => $requirement->peme_updated_by,
-        'peme_last_updated_at' => $requirement->peme_last_updated_at,
-        'peme_file_name' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
-    ];
-
-    Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
-
-    return response()->json(['data' => $data]);
-}
-public function getSSS($id)
-{
-    Log::info('Get DT Request Received', ['id' => $id]);
-    $requirement = Requirements::where('employee_tbl_id', $id)->first();
-
-    if (!$requirement) {
-        Log::error('Requirement not found', ['id' => $id]);
-        return response()->json(['error' => 'Requirement not found'], 404);
-    }
-    $data = [
-        'sss_final_status' => $requirement->sss_final_status,
-        'sss_submitted_date' => $requirement->sss_submitted_date,
-        'sss_remarks' => $requirement->sss_remarks,
-        'sss_number' => $requirement->sss_number,
-        'sss_proof_submitted_type' => $requirement->sss_proof_submitted_type,
-        'sss_updated_by' => $requirement->sss_updated_by,
-        'sss_last_updated_at' => $requirement->sss_last_updated_at,
-        'sss_file_name' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
-    ];
-
-    Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
-
-    return response()->json(['data' => $data]);
-}
-
-    public function exportTest(Request $request ,$site = null)
     {
-        $site = is_numeric($site) ? (int) $site: null;
-        $employeeQuery  = Employee::with(
+        $employee = Employee::findOrFail($id);
+
+        return response()->json([
+            'employee_id' => $employee->employee_id,
+            'first_name' => $employee->first_name,
+            'middle_name' => $employee->middle_name,
+            'last_name' => $employee->last_name,
+            'employee_status' => $employee->employee_status,
+            'hired_date' => $employee->hired_date,
+            'hired_month' => $employee->hired_month,
+            'birthdate' => $employee->birthdate,
+            'contact_number' => $employee->contact_number,
+            'email' => $employee->email,
+            'employment_status' => $employee->employment_status,
+            'position' => $employee->account_associate,
+        ]);
+    }
+    public function getLob($id)
+    {
+        $employee = Lob::where('employee_tbl_id', $id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                'message' => 'Employee not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $employee,
+        ]);
+    }
+    public function getNbi($id)
+    {
+        Log::info('Get NBI Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'nbi_final_status' => $requirement->nbi_final_status,
+            'nbi_validity_date' => $requirement->nbi_validity_date,
+            'nbi_submitted_date' => $requirement->nbi_submitted_date,
+            'nbi_printed_date' => $requirement->nbi_printed_date,
+            'nbi_remarks' => $requirement->nbi_remarks,
+            'nbi_updated_by' => $requirement->nbi_updated_by,
+            'nbi_last_updated_at' => $requirement->nbi_last_updated_at,
+            'nbi_file_name' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
+        ];
+
+        Log::info('NBI Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+
+    public function getDT($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'dt_final_status' => $requirement->dt_final_status,
+            'dt_results_date' => $requirement->dt_results_date,
+            'dt_transaction_date' => $requirement->dt_transaction_date,
+            'dt_endorsed_date' => $requirement->dt_endorsed_date,
+            'dt_remarks' => $requirement->dt_remarks,
+            'dt_updated_by' => $requirement->dt_updated_by,
+            'dt_last_updated_at' => $requirement->dt_last_updated_at,
+            'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
+        ];
+
+        Log::info('DT Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getPEME($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'peme_final_status' => $requirement->peme_final_status,
+            'peme_results_date' => $requirement->peme_results_date,
+            'peme_transaction_date' => $requirement->peme_transaction_date,
+            'peme_endorsed_date' => $requirement->peme_endorsed_date,
+            'peme_remarks' => $requirement->peme_remarks,
+            'peme_updated_by' => $requirement->peme_updated_by,
+            'peme_last_updated_at' => $requirement->peme_last_updated_at,
+            'peme_file_name' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
+        ];
+
+        Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getSSS($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'sss_final_status' => $requirement->sss_final_status,
+            'sss_submitted_date' => $requirement->sss_submitted_date,
+            'sss_remarks' => $requirement->sss_remarks,
+            'sss_number' => $requirement->sss_number,
+            'sss_proof_submitted_type' => $requirement->sss_proof_submitted_type,
+            'sss_updated_by' => $requirement->sss_updated_by,
+            'sss_last_updated_at' => $requirement->sss_last_updated_at,
+            'sss_file_name' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
+        ];
+
+        Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getPHIC($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'phic_final_status' => $requirement->phic_final_status,
+            'phic_submitted_date' => $requirement->phic_submitted_date,
+            'phic_remarks' => $requirement->phic_remarks,
+            'phic_number' => $requirement->phic_number,
+            'phic_proof_submitted_type' => $requirement->phic_proof_submitted_type,
+            'phic_updated_by' => $requirement->phic_updated_by,
+            'phic_last_updated_at' => $requirement->phic_last_updated_at,
+            'phic_file_name' => $requirement->phic_file_name ? asset('storage/phic_files/' . $requirement->phic_file_name) : null,
+        ];
+
+        Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getPagibig($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'pagibig_final_status' => $requirement->pagibig_final_status,
+            'pagibig_submitted_date' => $requirement->pagibig_submitted_date,
+            'pagibig_remarks' => $requirement->pagibig_remarks,
+            'pagibig_number' => $requirement->pagibig_number,
+            'pagibig_proof_submitted_type' => $requirement->pagibig_proof_submitted_type,
+            'pagibig_updated_by' => $requirement->pagibig_updated_by,
+            'pagibig_last_updated_at' => $requirement->pagibig_last_updated_at,
+            'pagibig_file_name' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/' . $requirement->pagibig_file_name) : null,
+        ];
+
+        Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getTin($id)
+    {
+        Log::info('Get DT Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'tin_final_status' => $requirement->tin_final_status,
+            'tin_submitted_date' => $requirement->tin_submitted_date,
+            'tin_remarks' => $requirement->tin_remarks,
+            'tin_number' => $requirement->tin_number,
+            'tin_proof_submitted_type' => $requirement->tin_proof_submitted_type,
+            'tin_updated_by' => $requirement->tin_updated_by,
+            'tin_last_updated_at' => $requirement->tin_last_updated_at,
+            'tin_file_name' => $requirement->tin_file_name ? asset('storage/tin_files/' . $requirement->tin_file_name) : null,
+        ];
+
+        Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getHealthCertificate($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'health_certificate_validity_date' => $requirement->health_certificate_validity_date,
+            'health_certificate_final_status' => $requirement->health_certificate_final_status,
+            'health_certificate_submitted_date' => $requirement->health_certificate_submitted_date,
+            'health_certificate_remarks' => $requirement->health_certificate_remarks,
+            'health_certificate_updated_by' => $requirement->health_certificate_updated_by,
+            'health_certificate_last_updated_at' => $requirement->health_certificate_last_updated_at,
+            'health_certificate_file_name' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/' . $requirement->health_certificate_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getOccupationalPermit($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'occupational_permit_validity_date' => $requirement->occupational_permit_validity_date,
+            'occupational_permit_final_status' => $requirement->occupational_permit_final_status,
+            'occupational_permit_submitted_date' => $requirement->occupational_permit_submitted_date,
+            'occupational_permit_remarks' => $requirement->occupational_permit_remarks,
+            'occupational_permit_updated_by' => $requirement->occupational_permit_updated_by,
+            'occupational_permit_last_updated_at' => $requirement->occupational_permit_last_updated_at,
+            'occupational_permit_file_name' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/' . $requirement->occupational_permit_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getOFAC($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'ofac_checked_date' => $requirement->ofac_checked_date,
+            'ofac_final_status' => $requirement->ofac_final_status,
+            'ofac_remarks' => $requirement->ofac_remarks,
+            'ofac_updated_by' => $requirement->ofac_updated_by,
+            'ofac_last_updated_at' => $requirement->ofac_last_updated_at,
+            'ofac_file_name' => $requirement->ofac_file_name ? asset('storage/ofac_files/' . $requirement->ofac_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getSAM($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'sam_checked_date' => $requirement->sam_checked_date,
+            'sam_final_status' => $requirement->sam_final_status,
+            'sam_remarks' => $requirement->sam_remarks,
+            'sam_updated_by' => $requirement->sam_updated_by,
+            'sam_last_updated_at' => $requirement->sam_last_updated_at,
+            'sam_file_name' => $requirement->sam_file_name ? asset('storage/sam_files/' . $requirement->sam_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getOIG($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'oig_checked_date' => $requirement->oig_checked_date,
+            'oig_final_status' => $requirement->oig_final_status,
+            'oig_remarks' => $requirement->oig_remarks,
+            'oig_updated_by' => $requirement->oig_updated_by,
+            'oig_last_updated_at' => $requirement->oig_last_updated_at,
+            'oig_file_name' => $requirement->oig_file_name ? asset('storage/oig_files/' . $requirement->oig_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getCIBI($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'cibi_checked_date' => $requirement->cibi_checked_date,
+            'cibi_final_status' => $requirement->cibi_final_status,
+            'cibi_remarks' => $requirement->cibi_remarks,
+            'cibi_updated_by' => $requirement->cibi_updated_by,
+            'cibi_last_updated_at' => $requirement->cibi_last_updated_at,
+            'cibi_file_name' => $requirement->cibi_file_name ? asset('storage/cibi_files/' . $requirement->cibi_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getBGC($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'bgc_endorsed_date' => $requirement->bgc_endorsed_date,
+            'bgc_results_date' => $requirement->bgc_results_date,
+            'bgc_final_status' => $requirement->bgc_final_status,
+            'bgc_remarks' => $requirement->bgc_remarks,
+            'bgc_updated_by' => $requirement->bgc_updated_by,
+            'bgc_last_updated_at' => $requirement->bgc_last_updated_at,
+            'bgc_file_name' => $requirement->bgc_file_name ? asset('storage/bgc_files/' . $requirement->bgc_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getBirthCertificate($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'birth_certificate_submitted_date' => $requirement->birth_certificate_submitted_date,
+            'birth_certificate_proof_type' => $requirement->birth_certificate_proof_type,
+            'birth_certificate_remarks' => $requirement->birth_certificate_remarks,
+            'birth_certificate_updated_by' => $requirement->birth_certificate_updated_by,
+            'birth_certificate_last_updated_at' => $requirement->birth_certificate_last_updated_at,
+            'birth_certificate_file_name' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/' . $requirement->birth_certificate_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getDependentBirthCertificate($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'dependent_birth_certificate_submitted_date' => $requirement->dependent_birth_certificate_submitted_date,
+            'dependent_birth_certificate_proof_type' => $requirement->dependent_birth_certificate_proof_type,
+            'dependent_birth_certificate_remarks' => $requirement->dependent_birth_certificate_remarks,
+            'dependent_birth_certificate_updated_by' => $requirement->dependent_birth_certificate_updated_by,
+            'dependent_birth_certificate_last_updated_at' => $requirement->dependent_birth_certificate_last_updated_at,
+            'dependent_birth_certificate_file_name' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/' . $requirement->dependent_birth_certificate_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getMarriageCertificate($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'marriage_certificate_submitted_date' => $requirement->marriage_certificate_submitted_date,
+            'marriage_certificate_proof_type' => $requirement->marriage_certificate_proof_type,
+            'marriage_certificate_remarks' => $requirement->marriage_certificate_remarks,
+            'marriage_certificate_updated_by' => $requirement->marriage_certificate_updated_by,
+            'marriage_certificate_last_updated_at' => $requirement->marriage_certificate_last_updated_at,
+            'marriage_certificate_file_name' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/' . $requirement->marriage_certificate_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getScholasticRecord($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'scholastic_record_submitted_date' => $requirement->scholastic_record_submitted_date,
+            'scholastic_record_proof_type' => $requirement->scholastic_record_proof_type,
+            'scholastic_record_remarks' => $requirement->scholastic_record_remarks,
+            'scholastic_record_updated_by' => $requirement->scholastic_record_updated_by,
+            'scholastic_record_last_updated_at' => $requirement->scholastic_record_last_updated_at,
+            'scholastic_record_file_name' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/' . $requirement->scholastic_record_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getPreviousEmployment($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'previous_employment_submitted_date' => $requirement->previous_employment_submitted_date,
+            'previous_employment_proof_type' => $requirement->previous_employment_proof_type,
+            'previous_employment_remarks' => $requirement->previous_employment_remarks,
+            'previous_employment_updated_by' => $requirement->previous_employment_updated_by,
+            'previous_employment_last_updated_at' => $requirement->previous_employment_last_updated_at,
+            'previous_employment_file_name' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/' . $requirement->previous_employment_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function getSupportingDocuments($id)
+    {
+        Log::info('Get HC Request Received', ['id' => $id]);
+        $requirement = Requirements::where('employee_tbl_id', $id)->first();
+
+        if (!$requirement) {
+            Log::error('Requirement not found', ['id' => $id]);
+            return response()->json(['error' => 'Requirement not found'], 404);
+        }
+        $data = [
+            'supporting_documents_submitted_date' => $requirement->supporting_documents_submitted_date,
+            'supporting_documents_proof_type' => $requirement->supporting_documents_proof_type,
+            'supporting_documents_remarks' => $requirement->supporting_documents_remarks,
+            'supporting_documents_updated_by' => $requirement->supporting_documents_updated_by,
+            'supporting_documents_last_updated_at' => $requirement->supporting_documents_last_updated_at,
+            'supporting_documents_file_name' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/' . $requirement->supporting_documents_file_name) : null,
+        ];
+
+        Log::info('HC Data Retrieved Successfully', ['data' => $data]);
+
+        return response()->json(['data' => $data]);
+    }
+    public function exportTest(Request $request, $siteIds = null)
+    {
+        $siteIds = $siteIds ? explode(',', $siteIds) : null;
+        $employeeQuery = Employee::with(
             'userAddedBy',
             'userUpdatedBy',
             'requirements',
@@ -179,6 +539,8 @@ public function getSSS($id)
             'lob',
             'lob.siteName'
         );
+
+        // Apply filters based on the request
         if ($request->filled('employee_status')) {
             $employeeQuery->where('employee_status', $request->employee_status);
         }
@@ -186,22 +548,54 @@ public function getSSS($id)
         if ($request->filled('employment_status')) {
             $employeeQuery->where('employment_status', $request->employment_status);
         }
-
+        if ($request->filled('employee_added_by')) {
+            $employeeQuery->where('employee_added_by', $request->employee_added_by);
+        }
         if ($request->filled('hired_date_from') && $request->filled('hired_date_to')) {
             $employeeQuery->whereBetween('hired_date', [
                 $request->hired_date_from,
                 $request->hired_date_to
             ]);
         }
-        if ($site) {
-            $employeeQuery->whereHas('lob.siteName', function ($query) use ($site) {
-                $query->where('id', $site);
+        if ($request->has('search_term') && !empty($request->search_term)) {
+            $searchTerm = $request->search_term;
+            $employeeQuery->where(function ($query) use ($searchTerm) {
+                $query->where('first_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('contact_number', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('employee_id', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('middle_name', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+        if ($request->filled('region')) {
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
+                $query->where('region', $request->region);
+            });
+        }
+        // Apply only site filter
+        if ($request->filled('site')) {
+            \Log::info('Site filter applied: ' . $request->site); // Debugging line
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
+                $query->where('id', $request->site);
             });
         }
 
 
-        // Get the filtered data
+
+        if ($siteIds && is_array($siteIds)) {
+            // If it's an array of site_ids
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
+                $query->whereIn('id', $siteIds); // Handle array of site_id values
+            });
+        } elseif ($siteIds) {
+            // If it's a single site_id
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
+                $query->where('id', $siteIds); // Handle single site_id
+            });
+        }
         $employee_info = $employeeQuery->get();
+
         $mappedEmployees = $employee_info->map(function ($employee) {
 
             return [
@@ -459,7 +853,7 @@ public function getSSS($id)
         $validator = Validator::make($request->all(), [
             'qr_code' => 'required|image|mimes:png,jpg,jpeg,gif|max:2048', // Limit size to 2MB
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'status' => 'error',
@@ -467,40 +861,40 @@ public function getSSS($id)
                 'errors' => $validator->errors(),
             ], 400);
         }
-    
+
         $employee = Employee::find($employeeId);
-    
+
         if (!$employee) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Employee not found.',
             ], 404);
         }
-    
+
         try {
             // Store the uploaded QR code image in the 'public/qr_codes' directory
             $path = $request->file('qr_code')->store('qr_codes', 'public');
-    
+
             // Save the file path in the `qr_code_path` column
             $employee->qr_code_path = $path;
             $employee->save();
-    
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'QR code saved successfully.',
                 'qr_code_path' => Storage::url($path), // Return the URL to access the file
             ], 200);
         } catch (\Exception $e) {
-            \Log::error('QR Code save error: ' . $e->getMessage());
-    
+            Log::error('QR Code save error: ' . $e->getMessage());
+
             return response()->json([
                 'status' => 'error',
                 'message' => 'An error occurred while saving the QR code.',
             ], 500);
         }
     }
-    
-    
+
+
     public function storeEmployees(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -611,9 +1005,9 @@ public function getSSS($id)
     }
 
 
-    public function indexEmployees(Request $request ,$site = null)
+    public function indexEmployees(Request $request, $siteIds = null)
     {
-        $site = is_numeric($site) ? (int) $site: null;
+        $siteIds = $siteIds ? explode(',', $siteIds) : null;
         $employeeQuery = Employee::with(
             'userAddedBy',
             'userUpdatedBy',
@@ -650,6 +1044,11 @@ public function getSSS($id)
         if ($request->filled('employment_status')) {
             $employeeQuery->where('employment_status', $request->employment_status);
         }
+        if ($request->filled('employee_added_by')) {
+            $employeeQuery->where('employee_added_by', $request->employee_added_by);
+        }
+
+
 
         if ($request->filled('hired_date_from') && $request->filled('hired_date_to')) {
             $employeeQuery->whereBetween('hired_date', [
@@ -657,9 +1056,41 @@ public function getSSS($id)
                 $request->hired_date_to
             ]);
         }
-        if ($site) {
-            $employeeQuery->whereHas('lob.siteName', function ($query) use ($site) {
-                $query->where('id', $site);
+        if ($request->has('search_term') && !empty($request->search_term)) {
+            $searchTerm = $request->search_term;
+            $employeeQuery->where(function ($query) use ($searchTerm) {
+                $query->where('first_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('contact_number', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('employee_id', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('middle_name', 'LIKE', '%' . $searchTerm . '%');
+            });
+        }
+        if ($request->filled('region')) {
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
+                $query->where('region', $request->region);
+            });
+        }
+        // Apply only site filter
+        if ($request->filled('site')) {
+            \Log::info('Site filter applied: ' . $request->site); // Debugging line
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
+                $query->where('id', $request->site);
+            });
+        }
+
+
+
+        if ($siteIds && is_array($siteIds)) {
+            // If it's an array of site_ids
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
+                $query->whereIn('id', $siteIds); // Handle array of site_id values
+            });
+        } elseif ($siteIds) {
+            // If it's a single site_id
+            $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
+                $query->where('id', $siteIds); // Handle single site_id
             });
         }
         $employee_info = $employeeQuery->paginate(10);
@@ -837,22 +1268,22 @@ public function getSSS($id)
             ];
         });
         return response()->json([
-          
-                'employees' => $mappedEmployees,
-                'pagination' => [
-                    'total' => $employee_info->total(),
-                    'current_page' => $employee_info->currentPage(),
-                    'first_page' => 1, // First page is always 1
-                    'last_page' => $employee_info->lastPage(),
-                    'next_page' => $employee_info->currentPage() < $employee_info->lastPage()
-                        ? $employee_info->currentPage() + 1
-                        : null,
-                    'prev_page' => $employee_info->currentPage() > 1
-                        ? $employee_info->currentPage() - 1
-                        : null,
-                    'per_page' => $employee_info->perPage(),
-                    'total_pages' => $employee_info->lastPage(),
-               
+
+            'employees' => $mappedEmployees,
+            'pagination' => [
+                'total' => $employee_info->total(),
+                'current_page' => $employee_info->currentPage(),
+                'first_page' => 1, // First page is always 1
+                'last_page' => $employee_info->lastPage(),
+                'next_page' => $employee_info->currentPage() < $employee_info->lastPage()
+                    ? $employee_info->currentPage() + 1
+                    : null,
+                'prev_page' => $employee_info->currentPage() > 1
+                    ? $employee_info->currentPage() - 1
+                    : null,
+                'per_page' => $employee_info->perPage(),
+                'total_pages' => $employee_info->lastPage(),
+
             ],
         ]);
     }
@@ -887,7 +1318,7 @@ public function getSSS($id)
     private function mapEmployeeData($employee)
     {
         return [
-            'employee_id' => $employee->employee_id  ?? 'TBA',
+            'employee_id' => $employee->employee_id ?? 'TBA',
             'full_name' => $employee->last_name . ',' . $employee->first_name . ' ' . $employee->middle_name,
             'status' => $employee->employee_status,
             'hired_date' => $employee->hired_date,
@@ -1158,23 +1589,36 @@ public function getSSS($id)
 
     public function storeBulkEmployees(Request $request)
     {
+        // Validate the incoming request
         $validator = Validator::make($request->all(), [
-            'file' => 'required|mimes:xlsx,xls',
-            'employee_added_by' => 'required|integer',
+            'file' => 'required|mimes:xlsx,xls',  // Ensure the file is an Excel file
+            'employee_added_by' => 'required|integer',  // Ensure employee added by is provided
         ]);
 
         if ($validator->fails()) {
+            // Return validation errors if validation fails
             return response()->json(['error' => $validator->errors()], 400);
         }
 
         try {
+            // Log the start of the import process
+            Log::info('Starting employee import process', ['user' => $request->employee_added_by]);
+
+            // Perform the import using the Excel import handler
             Excel::import(new EmployeeImport($request->employee_added_by), $request->file('file'));
 
+            // Log the success and return success response
+            Log::info('Employee import completed successfully', ['user' => $request->employee_added_by]);
             return response()->json(['success' => 'Employees imported successfully'], 200);
         } catch (\Exception $e) {
+            // Log any errors during the import process
+            Log::error('Error importing employee', ['error' => $e->getMessage()]);
             return response()->json(['error' => 'Error importing Employee: ' . $e->getMessage()], 500);
         }
     }
+
+
+
 
     /*  public function update(Request $request, $id)
     {
@@ -1883,63 +2327,63 @@ public function getSSS($id)
         return response()->json(['success' => 'Requirement updated successfully']);
     } */
     public function updateEmployeeInfo(Request $request, $id)
-{
-    try {
-        // Find the employee record by ID
-        $employee = Employee::findOrFail($id);
+    {
+        try {
+            // Find the employee record by ID
+            $employee = Employee::findOrFail($id);
 
-        // Validate the incoming data
-        $validatedData = $request->validate([
-            'employee_info_first_name' => 'nullable|string|max:255',
-            'employee_info_middle_name' => 'nullable|string|max:255',
-            'employee_info_last_name' => 'nullable|string|max:255',
-            'employee_info_position' => 'nullable|string|max:255',
-            'employee_info_employee_id' => 'required|string|max:255',
-            'employee_info_contact_number' => 'nullable|string|max:15',
-            'employee_info_email_address' => 'nullable|email|max:255',
-            'employee_info_birth_date' => 'nullable|date',
-            'employee_info_hired_date' => 'nullable|date',
-            'employee_info_employee_status' => 'nullable|string|max:255',
-            'employee_info_employement_status' => 'nullable|string|max:255',
-            'employee_info_hired_month' => 'nullable|string|max:50', 
-            'employee_info_updated_by' => 'nullable|string|max:50', 
-        ]);
+            // Validate the incoming data
+            $validatedData = $request->validate([
+                'employee_info_first_name' => 'nullable|string|max:255',
+                'employee_info_middle_name' => 'nullable|string|max:255',
+                'employee_info_last_name' => 'nullable|string|max:255',
+                'employee_info_position' => 'nullable|string|max:255',
+                'employee_info_employee_id' => 'required|string|max:255',
+                'employee_info_contact_number' => 'nullable|string|max:15',
+                'employee_info_email_address' => 'nullable|email|max:255',
+                'employee_info_birth_date' => 'nullable|date',
+                'employee_info_hired_date' => 'nullable|date',
+                'employee_info_employee_status' => 'nullable|string|max:255',
+                'employee_info_employement_status' => 'nullable|string|max:255',
+                'employee_info_hired_month' => 'nullable|string|max:50',
+                'employee_info_updated_by' => 'nullable|string|max:50',
+            ]);
 
-        // Update the employee information
-        $employee->first_name = $validatedData['employee_info_first_name'];
-        $employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
-        $employee->last_name = $validatedData['employee_info_last_name'];
-        $employee->account_associate = $validatedData['employee_info_position'] ?? null;
-        $employee->employee_id = $validatedData['employee_info_employee_id'];
-        $employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
-        $employee->email = $validatedData['employee_info_email_address'] ?? null;
-        $employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
-        $employee->hired_date = $validatedData['employee_info_hired_date'] ?? null;
-        $employee->employee_status = $validatedData['employee_info_employee_status'] ?? null;
-        $employee->employment_status = $validatedData['employee_info_employement_status'] ?? null;
-        $employee->hired_month = $validatedData['employee_info_hired_month'] ?? null;
-        $employee->updated_at = now();
-        $employee->updated_by = $validatedData['employee_info_updated_by'] ?? null;
+            // Update the employee information
+            $employee->first_name = $validatedData['employee_info_first_name'];
+            $employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
+            $employee->last_name = $validatedData['employee_info_last_name'];
+            $employee->account_associate = $validatedData['employee_info_position'] ?? null;
+            $employee->employee_id = $validatedData['employee_info_employee_id'];
+            $employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
+            $employee->email = $validatedData['employee_info_email_address'] ?? null;
+            $employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
+            $employee->hired_date = $validatedData['employee_info_hired_date'] ?? null;
+            $employee->employee_status = $validatedData['employee_info_employee_status'] ?? null;
+            $employee->employment_status = $validatedData['employee_info_employement_status'] ?? null;
+            $employee->hired_month = $validatedData['employee_info_hired_month'] ?? null;
+            $employee->updated_at = now();
+            $employee->updated_by = $validatedData['employee_info_updated_by'] ?? null;
 
-        // Save the changes
-        $employee->save();
+            // Save the changes
+            $employee->save();
 
-        return response()->json([
-            'message' => 'Employee information updated successfully!',
-            'data' => $employee,
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'message' => 'Failed to update employee information.',
-            'error' => $e->getMessage(),
-        ], 500);
+            return response()->json([
+                'message' => 'Employee information updated successfully!',
+                'data' => $employee,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update employee information.',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
-}
 
     public function updateNBI(Request $request, $id)
     {
         Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
-
+    
         // Validate input data
         $validatedData = Validator::make($request->all(), [
             'nbi_final_status' => 'nullable|string',
@@ -1948,38 +2392,37 @@ public function getSSS($id)
             'nbi_printed_date' => 'nullable|date',
             'nbi_remarks' => 'nullable|string',
             'nbi_updated_by' => 'nullable|integer',
-            'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+            'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Max file size: 2MB
         ])->validate();
-
+    
         // Find the requirements record by employee_tbl_id
         $requirement = Requirements::where('employee_tbl_id', $id)->first();
-
+    
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
             return response()->json(['error' => 'Requirement not found'], 404);
         }
-
+    
         // Process the file upload for 'nbi_proof'
         if ($request->hasFile('nbi_proof')) {
             $file = $request->file('nbi_proof');
-
-            // Ensure the file is valid
+    
             if ($file->isValid()) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('nbi_files', $fileName, 'public'); // Store in 'public' disk
-
+    
                 Log::info('File Uploaded', [
                     'file' => $fileName,
                     'path' => $filePath
                 ]);
-
-                // Save the file name (or path) to the database
+    
                 $requirement->nbi_file_name = $fileName; // Save the file name to the database
             } else {
-                Log::error('File is not valid', ['file' => $file]);
+                Log::error('Invalid file uploaded', ['file' => $file]);
+                return response()->json(['error' => 'Invalid file uploaded'], 422);
             }
         }
-
+    
         // Update other fields
         $requirement->nbi_final_status = $request->input('nbi_final_status');
         $requirement->nbi_validity_date = $request->input('nbi_validity_date');
@@ -1988,8 +2431,8 @@ public function getSSS($id)
         $requirement->nbi_remarks = $request->input('nbi_remarks');
         $requirement->nbi_updated_by = $request->input('nbi_updated_by');
         $requirement->nbi_last_updated_at = now();
-
-        // Save the requirement model after processing all fields
+    
+        // Save and return response
         if ($requirement->save()) {
             Log::info('Requirement updated successfully', ['id' => $id]);
             return response()->json(['success' => 'Requirement updated successfully']);
@@ -1998,6 +2441,7 @@ public function getSSS($id)
             return response()->json(['error' => 'Failed to update requirement'], 500);
         }
     }
+    
     public function updateDT(Request $request, $id)
     {
         Log::info('Update DT Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2940,7 +3384,7 @@ public function getSSS($id)
 
         $validatedData = Validator::make($request->all(), [
             'region' => 'nullable|string',
-            'site' => 'nullable|string',
+            'site' => 'nullable|integer',
             'lob' => 'nullable|string',
             'team_name' => 'nullable|string',
             'project_code' => 'nullable|string',

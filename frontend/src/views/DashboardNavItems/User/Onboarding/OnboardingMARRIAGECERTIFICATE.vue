@@ -124,7 +124,27 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchMcData();
+  },
   methods: {
+    async fetchMcData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/marriage_certificate/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.marriage_certificate_proof_type = data.marriage_certificate_proof_type;
+        this.marriage_certificate_submitted_date = data.marriage_certificate_submitted_date;
+        this.marriage_certificate_final_status = data.marriage_certificate_final_status;
+        this.marriage_certificate_remarks = data.marriage_certificate_remarks;
+        this.marriage_certificate_file_name = data.marriage_certificate_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

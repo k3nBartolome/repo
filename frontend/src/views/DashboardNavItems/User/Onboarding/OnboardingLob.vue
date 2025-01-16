@@ -5,22 +5,26 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Region -->
       <div class="flex flex-col">
-        <label for="region" class="block text-sm font-medium">Region</label>
-        <input
-          id="region"
-          v-model="form.region"
-          type="text"
-          class="p-2 mt-1 border rounded w-full"
-        />
+        <label for="site" class="block text-sm font-medium">Region</label>
+        <select
+                  v-model="form.region"
+                  
+                   class="p-2 mt-1 border rounded w-full"
+                >
+                  <option disabled value="">Please select Site</option>
+                  <option v-for="regions in regions" :key="regions" :value="regions">
+                    {{ regions }}
+                  </option>
+                </select>
       </div>
 
       <!-- Site -->
       <div class="flex flex-col">
         <label for="site" class="block text-sm font-medium">Site</label>
         <select
-                  v-model="site"
-                  disabled
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                  v-model="form.site"
+                  
+                   class="p-2 mt-1 border rounded w-full"
                 >
                   <option disabled value="">Please select Site</option>
                   <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -87,11 +91,11 @@ export default {
   data() {
     return {
       sites: [],
+      regions:[],
        
-        site: "",
       form: {
+         site: "",
         region: "",
-       
         lob: "",
         team_name: "",
         project_code: "",
@@ -105,6 +109,8 @@ export default {
 
     // Fetch sites from the API
     await this.getSites();
+    this.getRegion();
+   this.getLob(); 
   },
   methods: {
     async getSites() {
@@ -124,6 +130,38 @@ export default {
         }
       } catch (error) {
         console.error("Error while fetching sites:", error);
+      }
+    },
+    async getRegion() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("https://10.109.2.112/api/regions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.regions = response.data.data;
+        }
+      } catch (error) {
+        console.error("Error fetching regions:", error);
+      }
+    },
+    async getLob() {
+      try {
+        const apiUrl = `https://10.109.2.112/api/get/lob/${this.$route.params.id}`;
+        const response = await axios.get(apiUrl);
+        const data = response.data.data;
+
+        this.form.region = data.region || "";
+        this.form.lob = data.lob || "";
+        this.form.team_name = data.team_name || "";
+        this.form.project_code = data.project_code || "";
+        this.form.site = data.site || "";
+      } catch (error) {
+        console.error("Error fetching DT data:", error.response || error.message);
+        alert("Failed to load drug test information.");
       }
     },
     async submitForm() {

@@ -125,7 +125,27 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+  mounted(){
+ this.fetchDbcData();
+  },
   methods: {
+    async fetchDbcData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/dependent_birth_certificate/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.dependent_birth_certificate_proof_type = data.dependent_birth_certificate_proof_type;
+        this.dependent_birth_certificate_submitted_date = data.dependent_birth_certificate_submitted_date;
+        this.dependent_birth_certificate_final_status = data.dependent_birth_certificate_final_status;
+        this.dependent_birth_certificate_remarks = data.dependent_birth_certificate_remarks;
+        this.dependent_birth_certificate_file_name = data.dependent_birth_certificate_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

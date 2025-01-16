@@ -14,6 +14,48 @@ class SiteController extends Controller {
     *
     * @return \Illuminate\Http\Response
     */
+    public function getRegions(Request $request)
+    {
+        $regions = Site::where('is_active', 1)
+            ->where('country', 'Philippines')
+            ->distinct()
+            ->orderBy('region')
+            ->pluck('region');
+    
+        if ($regions->isEmpty()) {
+            return response()->json(['message' => 'No regions found.'], 404);
+        }
+    
+        return response()->json(['data' => $regions], 200);
+    }
+    
+
+    public function indexSite(Request $request)
+{
+    $query = Site::with(['createdBy', 'updatedBy'])
+        ->where('is_active', 1)
+        ->where('country', 'Philippines');
+
+    // Filter by region if provided
+    if ($request->has('region') && $request->region !== '') {
+        $query->where('region', $request->region);
+    }
+
+    // Filter by site IDs if provided
+    if ($request->has('siteIds') && $request->siteIds !== '') {
+        $siteIds = explode(',', $request->siteIds);
+        $query->whereIn('id', $siteIds);
+    }
+
+    // Retrieve filtered sites
+    $sites = $query->get();
+
+    if ($sites->isEmpty()) {
+        return response()->json(['message' => 'No sites found for the given filters.'], 404);
+    }
+
+    return response()->json(['data' => $sites], 200);
+}
 
 
     public function index(Request $request) {

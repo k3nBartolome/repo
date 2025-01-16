@@ -4,7 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="sss_final_status" class="p-2 mt-1 border rounded w-full">
+        <select v-model="sss_final_status" @change="updateSssData" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -17,6 +17,7 @@
           v-model="sss_number"
           type="text"
           class="p-2 mt-1 border rounded w-full"
+          @change="updateSssData"
           @input="formatSSSNumber"
           @blur="validateSSSNumber"
           placeholder="01-2345678-9"
@@ -30,7 +31,7 @@
         <label class="block text-sm font-medium">Proof Submitted Type</label>
         <select
           v-model="sss_proof_submitted_type"
-         
+         @change="updateSssData"
           class="p-2 mt-1 border rounded w-full"
         ><option disabled>Please select one</option>
           <option value="E-FORM">E-FORM</option>
@@ -48,6 +49,7 @@
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
         <input
+         @change="updateSssData"
           v-model="sss_submitted_date"
           type="date"
           class="p-2 mt-1 border rounded w-full"
@@ -55,7 +57,8 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <input v-model="sss_remarks" type="text" class="p-2 mt-1 border rounded w-full" />
+        
+        <input v-model="sss_remarks" @change="updateSssData" type="text" class="p-2 mt-1 border rounded w-full" />
       </div>
     </div>
     <div class="flex flex-col">
@@ -82,6 +85,7 @@
           :src="sss_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+           @load="updateSssData"
         />
       </div>
     </div>
@@ -146,7 +150,38 @@ export default {
       sss_number_error: "",
     };
   },
+mounted() {
+    this.fetchSssData();
+  },
   methods: {
+    async fetchSssData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/sss/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.sss_proof_submitted_type = data.sss_proof_submitted_type;
+        this.sss_final_status = data.sss_final_status;
+        this.sss_submitted_date = data.sss_submitted_date;
+        this.sss_number = data.sss_number;
+        this.sss_remarks = data.sss_remarks;
+        this.sss_file_name = data.sss_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+       sss_proof_submitted_type:this.sss_proof_submitted_type,
+       sss_final_status:this.sss_final_status,
+       sss_submitted_date:this.sss_submitted_date,
+       sss_remarks:this.sss_remarks,
+       sss_number:this.sss_number,
+      });
+    },
     formatSSSNumber() {
       // Remove any non-numeric characters
       let rawValue = this.sss_number.replace(/[^0-9]/g, "");

@@ -22,8 +22,9 @@ class Lob extends Model
         return $this->belongsTo(Employee::class, 'employee_tbl_id','id');
     }
     public function siteName()
-    {
-        return $this->belongsTo(Site::class, 'site', 'id');
-    }
+{
+    return $this->belongsTo(Site::class, 'site'); // Replace 'site_id' with the correct foreign key
+}
+
     
 }

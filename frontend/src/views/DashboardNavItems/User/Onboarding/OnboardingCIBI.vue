@@ -121,7 +121,26 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchCibiData();
+  },
   methods: {
+    async fetchCibiData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/cibi/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.cibi_checked_date = data.cibi_checked_date;
+        this.cibi_final_status = data.cibi_final_status;
+        this.cibi_remarks = data.cibi_remarks;
+        this.cibi_file_name = data.cibi_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

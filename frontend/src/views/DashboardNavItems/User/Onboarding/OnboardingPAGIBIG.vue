@@ -4,7 +4,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="pagibig_final_status" class="p-2 mt-1 border rounded w-full">
+        <select v-model="pagibig_final_status" class="p-2 mt-1 border rounded w-full"
+        @change="updatePagibigData">
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -13,7 +14,7 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Pag-IBIG Number</label>
-        <input
+        <input @change="updatePagibigData"
           v-model="pagibig_number"
           type="text"
           class="p-2 mt-1 border rounded w-full"
@@ -28,7 +29,7 @@
 
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
-        <select
+        <select @change="updatePagibigData"
           v-model="pagibig_proof_submitted_type"
           class="p-2 mt-1 border rounded w-full"
         >
@@ -45,7 +46,7 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
-        <input
+        <input @change="updatePagibigData"
           v-model="pagibig_submitted_date"
           type="date"
           class="p-2 mt-1 border rounded w-full"
@@ -53,7 +54,7 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <input
+        <input @change="updatePagibigData"
           v-model="pagibig_remarks"
           type="text"
           class="p-2 mt-1 border rounded w-full"
@@ -80,10 +81,11 @@
     </div> -->
     <div v-if="pagibig_file_name" class="mt-4">
       <div class="flex flex-col items-center">
-        <img
+        <img 
           :src="pagibig_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          @load="updatePagibigData"
         />
       </div>
     </div>
@@ -148,7 +150,39 @@ export default {
       pagibig_number_error: "",
     };
   },
+  
+mounted() {
+    this.fetchPagibigData();
+  },
   methods: {
+    async fetchPagibigData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/pagibig/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.pagibig_proof_submitted_type = data.pagibig_proof_submitted_type;
+        this.pagibig_final_status = data.pagibig_final_status;
+        this.pagibig_submitted_date = data.pagibig_submitted_date;
+        this.pagibig_number = data.pagibig_number;
+        this.pagibig_remarks = data.pagibig_remarks;
+        this.pagibig_file_name = data.pagibig_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+       pagibig_proof_submitted_type:this.pagibig_proof_submitted_type,
+       pagibig_final_status:this.pagibig_final_status,
+       pagibig_submitted_date:this.pagibig_submitted_date,
+       pagibig_remarks:this.pagibig_remarks,
+       pagibig_number:this.pagibig_number,
+      });
+    },
     formatPagibigNumber() {
       // Remove any non-numeric characters
       let rawValue = this.pagibig_number.replace(/[^0-9]/g, "");

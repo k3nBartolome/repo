@@ -99,7 +99,7 @@
             </div>
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600"
-                >Updated_at:</span
+                >>Last Updated Date:</span
               >
               <span class="text-sm text-gray-800">{{
                 employee_data.updated_at

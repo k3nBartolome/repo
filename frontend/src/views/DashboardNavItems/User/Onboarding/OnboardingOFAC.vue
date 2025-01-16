@@ -121,7 +121,26 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchOfacData();
+  },
   methods: {
+    async fetchOfacData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/ofac/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.ofac_checked_date = data.ofac_checked_date;
+        this.ofac_final_status = data.ofac_final_status;
+        this.ofac_remarks = data.ofac_remarks;
+        this.ofac_file_name = data.ofac_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

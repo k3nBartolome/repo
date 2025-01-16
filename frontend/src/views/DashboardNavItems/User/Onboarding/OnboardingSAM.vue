@@ -121,7 +121,26 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchSamData();
+  },
   methods: {
+    async fetchSamData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/sam/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.sam_checked_date = data.sam_checked_date;
+        this.sam_final_status = data.sam_final_status;
+        this.sam_remarks = data.sam_remarks;
+        this.sam_file_name = data.sam_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

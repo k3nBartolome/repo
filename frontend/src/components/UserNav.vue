@@ -165,7 +165,13 @@
                       to="/onboarding_dashboard"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
-                      >Onboarding</router-link
+                      >Onboarding Tool</router-link
+                    >
+                    <router-link
+                      to="/onboarding_user_management"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >User Management</router-link
                     >
                   </div>
                 </div>
@@ -401,8 +407,14 @@
               to="/onboarding_dashboard"
               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 link-button"
               role="menuitem"
-              >Onboarding</router-link
+              >Onboarding Tool</router-link
             >
+            <router-link
+                      to="/onboarding_user_management"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >User Management</router-link
+                    >
           </div>
           <div class="pt-2" v-if="isUser || isFrontdesk || isOnboarding">
             <span class="block px-3 py-2 text-base font-medium text-gray-600 link-button"

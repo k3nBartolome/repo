@@ -129,7 +129,27 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchOPData();
+  },
   methods: {
+    async fetchOPData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/occupational_permit/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.occupational_permit_submitted_date = data.occupational_permit_submitted_date;
+        this.occupational_permit_final_status = data.occupational_permit_final_status;
+        this.occupational_permit_validity_date = data.occupational_permit_validity_date;
+        this.occupational_permit_remarks = data.occupational_permit_remarks;
+        this.occupational_permit_file_name = data.occupational_permit_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

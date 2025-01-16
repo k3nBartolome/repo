@@ -130,7 +130,27 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+mounted() {
+    this.fetchBgcData();
+  },
   methods: {
+    async fetchBgcData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/bgc/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.bgc_results_date = data.bgc_results_date;
+        this.bgc_endorsed_date = data.bgc_endorsed_date;
+        this.bgc_final_status = data.bgc_final_status;
+        this.bgc_remarks = data.bgc_remarks;
+        this.bgc_file_name = data.bgc_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

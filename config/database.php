@@ -131,15 +131,16 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_HOST', '10.109.2.112'),
             'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'VXI_CAP_FILE'),
+            'username' => env('DB_USERNAME', 'vxi_ta'),
+            'password' => env('DB_PASSWORD', 'capfilems'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
+            'options' => [
+                /* PDO::SQLSRV_ATTR_DIRECT_QUERY => true, */],
         ],
     ],
 

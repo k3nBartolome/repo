@@ -1,8 +1,6 @@
 <template>
   <div class="container">
-    <button @click="startScanning" class="scanner-button">
-      Start Scanning
-    </button>
+    <button @click="startScanning" class="scanner-button">Start Scanning</button>
     <div v-if="scanning" class="scanner-overlay">
       <button @click="closeScanner" class="close-scanner-button">Close</button>
       <video ref="video" class="scanner-video"></video>
@@ -11,7 +9,6 @@
 
     <div class="table-wrapper">
       <div class="mb-4 md:flex md:space-x-2 md:items-center">
-        <!-- Employee Status -->
         <div class="relative w-full md:w-1/4">
           <label
             for="employee_status"
@@ -29,8 +26,6 @@
             <option value="Separated">Separated</option>
           </select>
         </div>
-
-        <!-- Employment Status -->
         <div class="w-full md:w-1/4">
           <label
             for="employment_status"
@@ -47,8 +42,6 @@
             <option value="To be Hired">To be Hired</option>
           </select>
         </div>
-
-        <!-- Hired Date From -->
         <div class="w-full md:w-1/4 relative">
           <label
             for="hired_date_from"
@@ -63,8 +56,6 @@
             @input="updatehired_date_from"
           />
         </div>
-
-        <!-- Hired Date To -->
         <div class="w-full md:w-1/4 relative">
           <label
             for="hired_date_to"
@@ -78,6 +69,58 @@
             class="w-full p-2 border rounded-lg truncate"
             @input="updateFilterEndDate"
           />
+        </div>
+        <div class="w-full md:w-1/4">
+          <label for="region" class="block text-sm font-medium text-gray-700 truncate"
+            >Region</label
+          >
+          <select
+            v-model="selectedRegion"
+            id="region"
+            class="w-full p-2 border rounded-lg"
+            @change="filterSitesByRegion"
+          >
+            <option value="" disabled selected>Select Region</option>
+            <option
+              v-for="regionOption in regions"
+              :key="regionOption"
+              :value="regionOption"
+            >
+              {{ regionOption }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
+          <label for="sites" class="block text-sm font-medium text-gray-700 truncate"
+            >Site</label
+          >
+          <select v-model="selectedSites" id="site" class="w-full p-2 border rounded-lg">
+            <option value="" disabled selected>Select Site</option>
+            <option
+              v-for="siteOption in sites"
+              :key="siteOption.id"
+              :value="siteOption.id"
+            >
+              {{ siteOption.name }}
+            </option>
+          </select>
+        </div>
+        <div class="w-full md:w-1/4">
+          <label
+            for="employee_added_by"
+            class="block text-sm font-medium text-gray-700 truncate"
+            >Added By</label
+          >
+          <select
+            v-model="employee_added_by"
+            id="employee_added_by"
+            class="w-full p-2 border rounded-lg"
+          >
+            <option value="" disabled selected>Added By</option>
+            <option v-for="added in users" :key="added.user_id" :value="added.user_id">
+              {{ added.name }}
+            </option>
+          </select>
         </div>
 
         <div class="w-full md:w-1/4">
@@ -96,6 +139,32 @@
             Export Data
           </button>
         </div>
+      </div>
+      <div class="flex justify-end mb-4 space-x-4">
+        <input
+          v-model="searchTerm"
+          type="text"
+          class="px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 w-full max-w-sm transition duration-300 ease-in-out hover:shadow-md"
+          placeholder="Search Employees"
+          @input="getEmployees"
+        />
+      </div>
+      <div v-if="loading" class="flex items-center justify-center space-x-2">
+        <svg
+          class="animate-spin h-5 w-5 text-blue-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 4V2m0 20v-2m8-8h2M4 12H2m16.24-7.76l-1.42-1.42M5.18 18.36l-1.42 1.42M18.36 18.36l1.42-1.42M5.18 5.18L3.76 3.76"
+          />
+        </svg>
+        <span class="text-blue-500">Loading...</span>
       </div>
       <table class="employee-table">
         <thead>
@@ -155,11 +224,7 @@
 
             <td>
               <div v-if="employee.employee_qr_code_url">
-                <img
-                  :src="employee.employee_qr_code_url"
-                  alt="QR Code"
-                  class="qr-code"
-                />
+                <img :src="employee.employee_qr_code_url" alt="QR Code" class="qr-code" />
                 <a
                   :href="employee.employee_qr_code_url"
                   :download="'qr_code_' + employee.id + '.png'"
@@ -169,7 +234,7 @@
                 </a>
               </div>
             </td>
-             <td>{{ employee.site }}</td>
+            <td>{{ employee.site }}</td>
             <td>{{ employee.employee_id }}</td>
             <td>{{ employee.employee_last_name }}</td>
             <td>{{ employee.employee_first_name }}</td>
@@ -182,39 +247,24 @@
             <td>{{ employee.employee_employee_status }}</td>
             <td>{{ employee.employee_employment_status }}</td>
             <td>{{ employee.employee_position }}</td>
-           <td>{{ employee.employee_added_by ? employee.employee_added_by : 'N/A' }}</td>
-
+            <td>{{ employee.employee_added_by ? employee.employee_added_by : "N/A" }}</td>
           </tr>
         </tbody>
       </table>
     </div>
 
     <div v-if="!scanning" class="pagination">
-      <button
-        @click="goToPage(pagination.first_page)"
-        :disabled="!pagination.prev_page"
-      >
+      <button @click="goToPage(pagination.first_page)" :disabled="!pagination.prev_page">
         First
       </button>
-      <button
-        @click="goToPage(pagination.prev_page)"
-        :disabled="!pagination.prev_page"
-      >
+      <button @click="goToPage(pagination.prev_page)" :disabled="!pagination.prev_page">
         Previous
       </button>
-      <span>
-        Page {{ pagination.current_page }} of {{ pagination.total_pages }}
-      </span>
-      <button
-        @click="goToPage(pagination.next_page)"
-        :disabled="!pagination.next_page"
-      >
+      <span> Page {{ pagination.current_page }} of {{ pagination.total_pages }} </span>
+      <button @click="goToPage(pagination.next_page)" :disabled="!pagination.next_page">
         Next
       </button>
-      <button
-        @click="goToPage(pagination.last_page)"
-        :disabled="!pagination.next_page"
-      >
+      <button @click="goToPage(pagination.last_page)" :disabled="!pagination.next_page">
         Last
       </button>
     </div>
@@ -224,12 +274,19 @@
 <script>
 import { BrowserMultiFormatReader } from "@zxing/library";
 import axios from "axios";
-import QRCode from "qrcode"; // Import the QRCode library
+import QRCode from "qrcode";
 
 export default {
   data() {
     return {
-      employees: {},
+      searchTerm: "",
+      employees: [],
+      selectedRegion: "", // Stores the selected region
+      selectedSites: [], // Stores the selected sites
+      regions: [], // All regions fetched from the API
+      sites: [], // All sites fetched from the API
+      filteredSites: [], // Sites filtered based on the selected region
+      loading: false,
       scannedValue: "",
       extractedId: "",
       employee_status: "",
@@ -238,8 +295,12 @@ export default {
       hired_date_from: "",
       hired_date_to: "",
       filterContact: "",
+      employee_added_by: "",
+      users: [],
       employee_statusError: "",
       filterContactError: "",
+      earchQuery: "",
+      debounceTimeout: null,
       pagination: {
         current_page: 1,
         total: 0,
@@ -258,16 +319,23 @@ export default {
       selectedEmployee: null,
     };
   },
+  watch: {
+    employee_added_by(newValue) {
+      console.log("Selected employee_added_by:", newValue);
+    },
+  },
+
   computed: {
     formattedFilterDate() {
-      return this.filterDate
-        ? new Date(this.filterDate).toLocaleDateString("en-CA")
-        : "";
+      return this.filterDate ? new Date(this.filterDate).toLocaleDateString("en-CA") : "";
     },
   },
   mounted() {
     this.getEmployees();
     this.qrReader = new BrowserMultiFormatReader();
+    this.getSites(); // Fetch sites when the component mounts
+    this.getRegion();
+    this.getUsers();
   },
   methods: {
     goToProfile(employeeId) {
@@ -276,147 +344,194 @@ export default {
         params: { id: employeeId },
       });
     },
-     goToUpdate(employeeId) {
+    goToUpdate(employeeId) {
       this.$router.push({
         name: "OnboardingUpdateSelection",
         params: { id: employeeId },
       });
     },
-async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
-  try {
-    // Validate inputs
-    if (
-      !employeeId ||
-      (typeof employeeId !== "string" && typeof employeeId !== "number")
-    ) {
-      console.error("Invalid employee ID:", employeeId);
-      return;
-    }
-    if (!employeeEmail || typeof employeeEmail !== "string") {
-      console.error("Invalid employee email:", employeeEmail);
-      return;
-    }
-    if (
-      !employeeContactNumber ||
-      typeof employeeContactNumber !== "string"
-    ) {
-      console.error(
-        "Invalid employee contact number:",
-        employeeContactNumber
-      );
-      return;
-    }
+    async getUsers() {
+      this.loading = true; // Set loading to true
+      try {
+        const token = this.$store.state.token;
 
-    // Format QR code data
-    const qrData = `${employeeId},${employeeEmail},${employeeContactNumber}`;
-
-    // Generate QR code
-    const qrCodeCanvas = await QRCode.toCanvas(qrData);
-
-    // Convert canvas to Blob directly
-    qrCodeCanvas.toBlob((blob) => {
-      const file = new File([blob], `qr_code_${employeeId}.png`, {
-        type: "image/png",
-      });
-
-      // Prepare FormData for upload
-      const formData = new FormData();
-      formData.append("qr_code", file);
-
-      // Make API request
-      const token = this.$store.state.token;
-      axios
-        .post(
-          `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        )
-        .then((response) => {
-          if (response.status === 200) {
-            console.log("QR code saved successfully:", response.data);
-
-            // Update employee object with the QR code path
-            const employee = this.employees.find((emp) => emp.id === employeeId);
-            if (employee) {
-              employee.qr_code_path = response.data.qr_code_path;
-              this.$router.push("/onboarding_dashboard", () => {
-                location.reload();
-              });
-            }
-          }
-        })
-        .catch((error) => {
-          console.error("Error generating and saving QR code:", error);
+        const response = await axios.get(`https://10.109.2.112/api/added_users`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
-    });
-  } catch (error) {
-    console.error("Error generating QR code:", error);
-  }
-},
 
+        if (response.status === 200) {
+          this.users = response.data.data;
+        } else {
+          console.error("Error fetching users");
+        }
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      } finally {
+        this.loading = false; // Set loading to false when done
+      }
+    },
+    async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
+      try {
+        if (
+          !employeeId ||
+          (typeof employeeId !== "string" && typeof employeeId !== "number")
+        ) {
+          console.error("Invalid employee ID:", employeeId);
+          return;
+        }
+        if (!employeeEmail || typeof employeeEmail !== "string") {
+          console.error("Invalid employee email:", employeeEmail);
+          return;
+        }
+        if (!employeeContactNumber || typeof employeeContactNumber !== "string") {
+          console.error("Invalid employee contact number:", employeeContactNumber);
+          return;
+        }
+        const qrData = `${employeeId},${employeeEmail},${employeeContactNumber}`;
+        const qrCodeCanvas = await QRCode.toCanvas(qrData);
+        qrCodeCanvas.toBlob((blob) => {
+          const file = new File([blob], `qr_code_${employeeId}.png`, {
+            type: "image/png",
+          });
+          const formData = new FormData();
+          formData.append("qr_code", file);
+          const token = this.$store.state.token;
+          axios
+            .post(
+              `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            )
+            .then((response) => {
+              if (response.status === 200) {
+                console.log("QR code saved successfully:", response.data);
+                const employee = this.employees.find((emp) => emp.id === employeeId);
+                if (employee) {
+                  employee.qr_code_path = response.data.qr_code_path;
+                  this.$router.push("/onboarding_dashboard", () => {
+                    location.reload();
+                  });
+                }
+              }
+            })
+            .catch((error) => {
+              console.error("Error generating and saving QR code:", error);
+            });
+        });
+      } catch (error) {
+        console.error("Error generating QR code:", error);
+      }
+    },
     goToPage(page) {
       if (!page || page < 1 || page > this.pagination.total_pages) {
         console.warn("Invalid page navigation:", page);
         return;
       }
-      this.pagination.current_page = page; // Update the current page
-      this.getEmployees(); // Fetch data for the new page with filters
+      this.pagination.current_page = page;
+      this.getEmployees();
     },
-
-    async getEmployees() {
+    async getRegion() {
       try {
         const token = this.$store.state.token;
-
-        const params = {
-          employee_status: this.employee_status,
-          employment_status: this.employment_status,
-          hired_date_from: this.hired_date_from,
-          hired_date_to: this.hired_date_to,
-          page: this.pagination.current_page,
-        };
-
-        console.log("Fetching employees with params:", params);
-
-        const response = await axios.get(
-        `https://10.109.2.112/api/employees_data/${this.$store.state.site_id}`,
-          {
-            params,
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        const response = await axios.get("https://10.109.2.112/api/regions", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
         if (response.status === 200) {
-          this.employees = response.data.employees|| {};
-          this.pagination = response.data.pagination|| {};
-          console.log(
-            "Updated employees and pagination:",
-            this.employees,
-            this.pagination
-          );
-        } else {
-          console.error("Failed to fetch employees:", response.statusText);
+          this.regions = response.data.data;
         }
       } catch (error) {
-        console.error("Error fetching employees:", error);
+        console.error("Error fetching regions:", error);
       }
+    },
+    async getSites() {
+      try {
+        const token = this.$store.state.token;
+        const response = await axios.get("https://10.109.2.112/api/index_sites", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.status === 200) {
+          this.sites = response.data.data;
+          // Initialize filteredSites
+        }
+      } catch (error) {
+        console.error("Error fetching sites:", error);
+      }
+    },
+    filterSitesByRegion() {
+      if (this.selectedRegion) {
+        // Filter sites based on the selected region
+        this.filteredSites = this.sites.filter(
+          (site) => site.region_id === this.selectedRegion
+        );
+      } else {
+        // If no region is selected, show all sites
+        this.filteredSites = this.sites;
+      }
+
+      // Clear selected sites when the region changes
+      this.selectedSites = [];
+    },
+    async getEmployees() {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        this.loading = true;
+        try {
+          const token = this.$store.state.token;
+          const params = {
+            region: this.selectedRegion,
+            site: this.selectedSites,
+            search_term: this.searchTerm,
+            employee_status: this.employee_status,
+            employment_status: this.employment_status,
+            hired_date_from: this.hired_date_from,
+            hired_date_to: this.hired_date_to,
+            employee_added_by: this.employee_added_by, // Make sure this is added
+            page: this.pagination.current_page,
+          };
+
+          const siteIds = this.$store.state.site_id.join(",");
+
+          const response = await axios.get(
+            `https://10.109.2.112/api/employees_data/${siteIds}`,
+            {
+              params,
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          if (response.status === 200) {
+            this.employees = response.data.employees || [];
+            this.pagination = response.data.pagination || {};
+          } else {
+            console.error("Failed to fetch employees:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching employees:", error);
+        } finally {
+          this.loading = false;
+        }
+      }, 500);
     },
     async startScanning() {
       try {
         this.scanning = true;
-
-        // Request camera devices and select the back camera
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput"
-        );
-
+        const videoDevices = devices.filter((device) => device.kind === "videoinput");
         if (videoDevices.length > 1) {
-          this.cameraId = videoDevices[1].deviceId; // Default to the second camera (typically the rear one)
+          this.cameraId = videoDevices[1].deviceId;
         } else if (videoDevices.length === 1) {
           this.cameraId = videoDevices[0].deviceId;
         } else {
@@ -424,14 +539,12 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
           this.closeScanner();
           return;
         }
-
-        // Initialize scanner with the selected camera
         await this.qrReader.decodeFromVideoDevice(
           this.cameraId,
           this.$refs.video,
           (result, err) => {
             if (result) {
-              this.performScan(result.text); // Pass the scanned QR code data
+              this.performScan(result.text);
               this.closeScanner();
             } else if (err) {
               console.error("QR code scanning error:", err);
@@ -443,14 +556,10 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
         this.closeScanner();
       }
     },
-
     async performScan(scannedData) {
       if (this.qrReader) {
         try {
-          // Extract the employeeId from the scanned data
-          const employeeId = scannedData.split(",")[0].trim(); // Get the first part of the QR data
-
-          // Call checkEmployeeExists with the extracted employeeId
+          const employeeId = scannedData.split(",")[0].trim();
           await this.checkEmployeeExists(employeeId);
         } catch (error) {
           console.error("Error during scanning:", error);
@@ -458,14 +567,12 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
         }
       }
     },
-
     closeScanner() {
       this.scanning = false;
       if (this.qrReader) {
         this.qrReader.reset();
       }
     },
-
     async checkEmployeeExists(employeeId) {
       try {
         const token = this.$store.state.token;
@@ -475,26 +582,20 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-
         if (response.status === 200 && response.data.employee) {
-          // If the employee exists, navigate to the update form
           this.navigateToUpdateForm(employeeId);
         } else {
-          // If the employee doesn't exist, show an error message
           alert("Employee not found.");
         }
       } catch (error) {
         if (error.response && error.response.status === 404) {
-          // Handle the case where employee is not found
           alert("Employee not found.");
         } else {
-          // Generic error handling
           console.error("Error fetching employee:", error);
           alert("An error occurred. Please try again.");
         }
       }
     },
-
     navigateToUpdateForm(employeeId) {
       this.$router.push({
         name: "OnboardingUpdateSelection",
@@ -509,17 +610,26 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
       this.hired_date_to = event.target.value;
     },
     async exportToExcel() {
-      //this.exportLoading = true; // Set export loading to true before making the request
       try {
         const token = this.$store.state.token;
+        const siteIds = Array.isArray(this.$store.state.site_id)
+          ? this.$store.state.site_id.join(",")
+          : "";
+
+        console.log("Exporting data for site IDs:", siteIds);
         const response = await axios.get(
-         `https://10.109.2.112/api/employees_export/${this.$store.state.site_id}`,
+          `https://10.109.2.112/api/employees_export/${siteIds}`,
           {
             params: {
+              region: this.selectedRegion,
+              site: this.selectedSites,
+              search_term: this.searchTerm,
               employee_status: this.employee_status,
               employment_status: this.employment_status,
               hired_date_from: this.hired_date_from,
               hired_date_to: this.hired_date_to,
+              employee_added_by: this.employee_added_by,
+              page: this.pagination.current_page,
             },
             headers: {
               Authorization: `Bearer ${token}`,
@@ -527,12 +637,10 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
             responseType: "blob",
           }
         );
-
         const blob = new Blob([response.data], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
         const url = window.URL.createObjectURL(blob);
-
         const link = document.createElement("a");
         link.href = url;
         link.download = "employees_data.xlsx";
@@ -540,14 +648,13 @@ async generateQRCode(employeeId, employeeEmail, employeeContactNumber) {
       } catch (error) {
         console.error("Error exporting filtered data to Excel", error);
       } finally {
-        this.exportLoading = false; // Set export loading to false when the request completes
+        this.exportLoading = false;
       }
     },
   },
 };
 </script>
 <style scoped>
-/* General container styling */
 .container {
   display: flex;
   flex-direction: column;

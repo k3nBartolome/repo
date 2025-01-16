@@ -10,12 +10,53 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
+   // In UserController.php
+
+   public function assignSites(Request $request, User $user)
+   {
+       // Validate the incoming data
+       $request->validate([
+           'site_ids' => 'required|array',
+           'site_ids.*' => 'exists:sites,id',
+       ]);
+
+       // Sync the sites for the user (assign or remove as necessary)
+       $user->sites()->sync($request->site_ids);
+
+       // Return a success response
+       return response()->json(['message' => 'Sites successfully assigned to user.']);
+   }
+   
+
     public function index()
     {
-        $users = User::paginate(100);
-
+        $users = User::with('sites')->paginate(10); // Paginate 10 users per page
+    
         return UserResource::collection($users);
     }
+    public function indexUser(Request $request)
+{
+    $query = User::with('sites');
+    $query->whereHas('roles', function ($q) {
+        $q->where('name', 'Onboarding');
+    });
+    if ($request->has('search') && !empty($request->search)) {
+        $query->where('name', 'LIKE', '%' . $request->search . '%');
+    }
+    $users = $query->paginate(10);
+    return UserResource::collection($users);
+}
+
+public function indexAdded(Request $request)
+{
+    $query = User::with('sites')
+        ->whereHas('roles', function ($q) {
+            $q->where('name', 'Onboarding');
+        })
+        ->get(); // Execute the query to retrieve the collection
+    
+    return UserResource::collection($query);
+}
 
     /**
      * Display a listing of the resource.

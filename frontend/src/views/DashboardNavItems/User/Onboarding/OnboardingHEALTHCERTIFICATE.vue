@@ -130,7 +130,38 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+
+mounted() {
+    this.fetchHCData();
+  },
   methods: {
+    async fetchHCData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/health_certificate/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.health_certificate_submitted_date = data.health_certificate_submitted_date;
+        this.health_certificate_final_status = data.health_certificate_final_status;
+        this.health_certificate_validity_date = data.health_certificate_validity_date;
+        this.health_certificate_remarks = data.health_certificate_remarks;
+        this.health_certificate_file_name = data.health_certificate_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+       health_certificate_proof_submitted_type:this.health_certificate_proof_submitted_type,
+       health_certificate_final_status:this.health_certificate_final_status,
+       health_certificate_submitted_date:this.health_certificate_submitted_date,
+       health_certificate_remarks:this.health_certificate_remarks,
+       health_certificate_number:this.health_certificate_number,
+      });
+    },
     async submitForm() {
       this.isSubmitting = true;
 

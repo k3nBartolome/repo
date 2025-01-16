@@ -4,7 +4,11 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="phic_final_status" class="p-2 mt-1 border rounded w-full">
+        <select
+          v-model="phic_final_status"
+          class="p-2 mt-1 border rounded w-full"
+          @change="updatePhicData"
+        >
           <option disabled>Please select one</option>
           <option value="YES">YES</option>
           <option value="NO">NO</option>
@@ -18,20 +22,24 @@
           type="text"
           class="p-2 mt-1 border rounded w-full"
           @input="formatPhicNumber"
+          @change="updatePhicData"
         />
         <small class="text-sm text-gray-500 mt-1"> Format: 01-23456789-01 </small>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
         <select
+          @change="updatePhicData"
           v-model="phic_proof_submitted_type"
           class="p-2 mt-1 border rounded w-full"
-        ><option disabled>Please select one</option>
+        >
+          <option disabled>Please select one</option>
           <option value="ID">ID</option>
           <option value="MDR">MDR</option>
           <option value="PIN SLIP">PIN SLIP</option>
           <option value="ONLINE STATIC INFO">ONLINE STATIC INFO</option>
           <option value="STAMPED PMRF">STAMPED PMRF</option>
+          <option value="PERSONAL RECORD">PERSONAL RECORD</option>
           <option value="TRANSACTION RECEIPT">TRANSACTION RECEIPT</option>
           <option value="SOA">SOA</option>
         </select>
@@ -39,6 +47,7 @@
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Submitted Date</label>
         <input
+          @change="updatePhicData"
           v-model="phic_submitted_date"
           type="date"
           class="p-2 mt-1 border rounded w-full"
@@ -47,6 +56,7 @@
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
         <input
+          @change="updatePhicData"
           v-model="phic_remarks"
           type="text"
           class="p-2 mt-1 border rounded w-full"
@@ -77,6 +87,7 @@
           :src="phic_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          @load="updatePhicData"
         />
       </div>
     </div>
@@ -141,7 +152,38 @@ export default {
       phic_number_error: "",
     };
   },
+  mounted() {
+    this.fetchPhicData();
+  },
   methods: {
+    async fetchPhicData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/phic/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.phic_proof_submitted_type = data.phic_proof_submitted_type;
+        this.phic_final_status = data.phic_final_status;
+        this.phic_submitted_date = data.phic_submitted_date;
+        this.phic_number = data.phic_number;
+        this.phic_remarks = data.phic_remarks;
+        this.phic_file_name = data.phic_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+        phic_proof_submitted_type: this.phic_proof_submitted_type,
+        phic_final_status: this.phic_final_status,
+        phic_submitted_date: this.phic_submitted_date,
+        phic_remarks: this.phic_remarks,
+        phic_number: this.phic_number,
+      });
+    },
     formatPhicNumber() {
       let numericValue = this.phic_number.replace(/\D/g, ""); // Remove all non-numeric characters
       if (numericValue.length > 12) {

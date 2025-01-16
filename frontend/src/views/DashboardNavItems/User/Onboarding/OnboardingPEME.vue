@@ -4,7 +4,8 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full">
+        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full" 
+        @change="updatePemeData">
           <option disabled>Please select one</option>
           <option value="COMPLETE">COMPLETE</option>
           <option value="INCOMPLETE">INCOMPLETE</option>
@@ -15,6 +16,7 @@
         <label class="block text-sm font-medium">Transaction Date</label>
         <input
           v-model="peme_transaction_date"
+          @change="updatePemeData"
           type="date"
           class="p-2 mt-1 border rounded w-full"
         />
@@ -23,6 +25,7 @@
         <label class="block text-sm font-medium">Result Date</label>
         <input
           v-model="peme_results_date"
+          @change="updatePemeData"
           type="date"
           class="p-2 mt-1 border rounded w-full"
         />
@@ -31,6 +34,7 @@
         <label class="block text-sm font-medium">Endorsed Date</label>
         <input
           v-model="peme_endorsed_date"
+          @change="updatePemeData"
           type="date"
           class="p-2 mt-1 border rounded w-full"
         />
@@ -39,7 +43,8 @@
         <label class="block text-sm font-medium">Remarks</label>
         <select v-model="peme_remarks" class="p-2 mt-1 border rounded w-full">
           <option disabled>Please select one</option>
-          <option value="FIT TO WORK/UNFIT TO WORK">FIT TO WORK/UNFIT TO WORK</option>
+          <option value="FIT TO WORK">FIT TO WORK</option>
+            <option value="UNFIT TO WORK">UNFIT TO WORK</option>
           <option value="INCOMPLETE - PENDING DT">INCOMPLETE - PENDING DT</option>
           <option value="INCOMPLETE - PENDING CHEST XRAY">
             INCOMPLETE - PENDING CHEST XRAY
@@ -81,6 +86,7 @@
           :src="peme_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          @load="updatePemeData"
         />
       </div>
     </div>
@@ -144,7 +150,38 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+  mounted() {
+    this.fetchPemeData();
+  },
   methods: {
+    async fetchPemeData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/peme/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.peme_final_status = data.peme_final_status;
+        this.peme_transaction_date = data.peme_transaction_date;
+        this.peme_results_date = data.peme_results_date;
+        this.peme_endorsed_date = data.peme_endorsed_date;
+        this.peme_remarks = data.peme_remarks;
+        this.peme_file_name = data.peme_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+        peme_final_status: this.peme_final_status,
+        peme_validity_date: this.peme_validity_date,
+        peme_submitted_date: this.peme_submitted_date,
+        peme_printed_date: this.peme_printed_date,
+        peme_remarks: this.peme_remarks,
+      });
+    },
     async submitForm() {
       this.isSubmitting = true;
 

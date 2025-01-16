@@ -121,7 +121,26 @@ export default {
       isSubmitting: false, // Tracks form submission status
     };
   },
+ mounted() {
+    this.fetchOigData();
+  },
   methods: {
+    async fetchOigData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/oig/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.oig_checked_date = data.oig_checked_date;
+        this.oig_final_status = data.oig_final_status;
+        this.oig_remarks = data.oig_remarks;
+        this.oig_file_name = data.oig_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
     async submitForm() {
       this.isSubmitting = true;
 

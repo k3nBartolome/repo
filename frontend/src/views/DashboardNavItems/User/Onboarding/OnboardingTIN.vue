@@ -142,7 +142,39 @@ export default {
       tin_number_error: "",
     };
   },
+ 
+mounted() {
+    this.fetchTinData();
+  },
   methods: {
+    async fetchTinData() {
+      try {
+        const response = await axios.get(
+          `https://10.109.2.112/api/get/tin/requirement/${this.$route.params.id}`
+        );
+        const data = response.data.data;
+
+        // Populate the form fields with API response data
+        this.tin_proof_submitted_type = data.tin_proof_submitted_type;
+        this.tin_final_status = data.tin_final_status;
+        this.tin_submitted_date = data.tin_submitted_date;
+        this.tin_number = data.tin_number;
+        this.tin_remarks = data.tin_remarks;
+        this.tin_file_name = data.tin_file_name;
+      } catch (error) {
+        console.error("Error fetching NBI data:", error);
+      }
+    },
+    updatePemeData() {
+      console.log("Updating NBI Data...");
+      console.log({
+       tin_proof_submitted_type:this.tin_proof_submitted_type,
+       tin_final_status:this.tin_final_status,
+       tin_submitted_date:this.tin_submitted_date,
+       tin_remarks:this.tin_remarks,
+       tin_number:this.tin_number,
+      });
+    },
     formatTinNumber() {
       // Remove any non-numeric characters
       let rawValue = this.tin_number.replace(/[^0-9]/g, "");

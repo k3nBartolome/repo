@@ -8,6 +8,7 @@ import AppAdminLayout from "@/components/AppAdminLayout";
 import AuthLayout from "@/components/AuthLayout";
 import AppAdminDashboard from "@/views/Dashboard/AppAdminDashboard";
 import UserManagement from "@/views/DashboardNavItems/Admin/UserManagement";
+import UserSiteManagement from "@/views/DashboardNavItems/Admin/UserSiteManagement";
 import userProfile from "@/views/DashboardNavItems/Admin/UserProfile.vue";
 import programManagementEdit from "@/views/DashboardNavItems/Admin/EditProgram";
 import siteManagementEdit from "@/views/DashboardNavItems/Admin/EditSite";
@@ -190,6 +191,7 @@ const routes = [
         name: "usermanagement",
         component: UserManagement,
       },
+     
       {
         path: "/",
         name: "SrManager",
@@ -498,6 +500,11 @@ const routes = [
           requiresRoles: ["onboarding","user"],
         },
         children: [
+          {
+            path: "/onboarding_user_management",
+            name: "UserSiteManagement",
+            component: UserSiteManagement,
+          },
           {
             path: "/onboarding_dashboard",
             name: "OnboardingForm",

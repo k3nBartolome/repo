@@ -62,8 +62,13 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\Program');
     }
-    public function sites()
-    {
-        return $this->belongsTo(Site::class, 'id');
-    }
+   // app/Models/User.php
+   public function sites()
+   {
+       return $this->belongsToMany(Site::class, 'user_site', 'user_id', 'site_id');
+   }
+   
+
+    
+
 }

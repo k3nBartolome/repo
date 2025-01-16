@@ -151,7 +151,7 @@
             </div>
             <div class="col-span-1">
               <label class="block">
-               Account Type
+                Account Type
                 <select
                   v-model="account_type"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
@@ -190,7 +190,6 @@
                 Site
                 <select
                   v-model="sites_selected"
-                  
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 >
                   <option disabled value="">Please select Site</option>
@@ -214,7 +213,7 @@
       </div>
     </div>
   </div>
-  <div class="py-0">
+   <div class="py-0">
     <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
       <div
         class="fixed inset-0 z-50 flex items-center justify-center modal"
@@ -264,6 +263,16 @@
               </button>
             </div>
           </form>
+
+          <!-- Download Template Button -->
+          <div class="flex justify-center mt-4">
+            <button
+              @click="downloadTemplate"
+              class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600"
+            >
+              Download Excel Template
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -477,6 +486,41 @@ export default {
     await this.getSites();
   },
   methods: {
+ async downloadTemplate() {
+  try {
+    const token = this.$store.state.token; // Retrieve the token from Vuex store
+    
+    // Send the GET request to the download endpoint
+    const response = await axios.get('https://10.109.2.112/api/download-template', {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include token in the header for authentication
+      },
+      responseType: 'blob', // Important to handle file download (binary data)
+    });
+
+    if (response.status === 200) {
+      // Create a URL for the blob data
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      
+      // Create a temporary link to trigger the download
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'template.xlsx'); // The filename for the downloaded file
+      document.body.appendChild(link);
+      link.click(); // Trigger the download
+
+      // Clean up the URL object after the download
+      window.URL.revokeObjectURL(url);
+
+      console.log('Template downloaded successfully');
+    } else {
+      console.log('Error downloading the template');
+    }
+  } catch (error) {
+    console.error('Error while downloading the template:', error);
+  }
+},
+    
     async getSites() {
       try {
         const token = this.$store.state.token; // Retrieve the token from Vuex store
@@ -572,9 +616,7 @@ export default {
       }
     },
     handleFileChange(event) {
-      const file = event.target.files[0];
-      console.log(file);
-      this.file = file;
+      this.file = event.target.files[0]; // Set the file from the input
     },
 
     async submitBulkEmployees() {
@@ -604,16 +646,17 @@ export default {
           }
         );
         this.successMessage = response.data.success;
-        this.file = null;
+        this.file = null; // Clear the file after successful upload
       } catch (error) {
         if (error.response && error.response.data) {
           this.errorMessage = error.response.data.error || "Error uploading file";
         } else {
           this.errorMessage = "Error uploading file";
         }
+        console.error("Upload error:", error); // Log error for debugging
       } finally {
         this.loading = false;
-        this.showModalAdd = false;
+        this.showModalImport = false;
       }
     },
 
@@ -630,7 +673,7 @@ export default {
         birthdate: this.birthdate,
         contact_number: this.contact_number,
         email: this.email,
-          account_type: this.account_type,
+        account_type: this.account_type,
         account_associate: this.account_associate,
         employment_status: this.employment_status,
         employee_added_by: this.$store.state.user_id,
@@ -657,7 +700,7 @@ export default {
           this.birthdate = "";
           this.contact_number = "";
           this.email = "";
-            this.account_type = "";
+          this.account_type = "";
           this.account_associate = "";
           this.employee_added_by = "";
           this.employment_status = "";

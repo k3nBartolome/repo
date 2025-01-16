@@ -27,10 +27,14 @@ class Site extends Model
     {
         return $this->hasMany(Lob::class, 'site', 'id');
     }
-    public function users()
-    {
-        return $this->hasMany(User::class);
-    }
+    // In Site.php model
+// app/Models/Site.php
+public function users()
+{
+    return $this->belongsToMany(User::class, 'user_site', 'site_id', 'user_id');
+}
+
+
 
     public function items()
     {
