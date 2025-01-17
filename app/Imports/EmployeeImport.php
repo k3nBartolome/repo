@@ -41,6 +41,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Validate row data after conversion
             $validator = Validator::make($row, [
                 'employee_id' => 'nullable',
+                'wd_id' => 'nullable',
                 'last_name' => 'nullable',
                 'first_name' => 'nullable',
                 'middle_name' => 'nullable',
@@ -65,6 +66,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Create employee record
             $employee = Employee::create([
                 'employee_id' => $row['employee_id'],
+                'wd_id' => $row['wd_id'],
                 'last_name' => $row['last_name'],
                 'first_name' => $row['first_name'],
                 'middle_name' => $row['middle_name'],

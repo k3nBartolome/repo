@@ -1,18 +1,19 @@
 <template>
   <div class="py-0">
-    <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+  <div class="px-1 py-0 mx-auto bg-white max-w-7xl sm:px-6 lg:px-8">
+    <div
+      class="fixed inset-0 z-50 flex items-center justify-center modal"
+      v-if="showModalAdd"
+    >
+      <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
       <div
-        class="fixed inset-0 z-50 flex items-center justify-center modal"
-        v-if="showModalAdd"
+        class="w-full max-w-lg p-4 bg-white rounded shadow-lg modal-content sm:max-w-3xl sm:p-6"
       >
-        <div class="absolute inset-0 bg-black opacity-50 modal-overlay"></div>
-        <div class="max-w-sm p-4 bg-white rounded shadow-lg modal-content">
-          <header class="px-4 py-2 border-b-2 border-gray-200">
-            <h2 class="text-lg font-semibold text-gray-800">Add Employee</h2>
-          </header>
+        <header class="flex items-center justify-between px-4 py-2 border-b-2 border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-800">Add Employee</h2>
           <button
             @click="showModalAdd = false"
-            class="absolute top-0 right-0 m-4 text-gray-600 hover:text-gray-800"
+            class="text-gray-600 hover:text-gray-800"
           >
             <svg
               class="w-6 h-6"
@@ -29,13 +30,27 @@
               ></path>
             </svg>
           </button>
-          <form @submit.prevent="addEmployees" class="grid gap-2 px-4 py-2 grid-cols">
+        </header>
+        <form
+          @submit.prevent="addEmployees"
+          class="grid gap-4 px-4 py-2 sm:grid-cols-2 grid-cols-1"
+        >
             <div class="col-span-1">
               <label class="block">
                 Employee ID
                 <input
                   type="text"
                   v-model="employee_id"
+                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
+                />
+              </label>
+            </div>
+            <div class="col-span-1">
+              <label class="block">
+                Workday ID
+                <input
+                  type="text"
+                  v-model="wd_id"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
@@ -131,7 +146,7 @@
                 <select
                   disabled
                   v-model="hired_month"
-                  class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-neutral-500 bg-neutral-100 cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
+                  class="block w-full whitespace-nowrap display:none rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal text-neutral-500 bg-neutral-100 cursor-not-allowed dark:border-neutral-600 dark:bg-neutral-700 dark:text-neutral-400"
                 >
                   <option>Select one</option>
                   <option value="JAN">JAN</option>
@@ -410,6 +425,7 @@ export default {
       showModalImport: false,
       file: null,
       employee_id: "TBA",
+      wd_id: "TBA",
       last_name: "",
       first_name: "",
       middle_name: "",
@@ -664,6 +680,7 @@ export default {
       this.loading = true;
       const formData = {
         employee_id: this.employee_id,
+        wd_id: this.wd_id,
         last_name: this.last_name,
         first_name: this.first_name,
         middle_name: this.middle_name,
@@ -786,27 +803,29 @@ main {
   justify-content: center;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ 
+  overflow: auto; /* Allow scrolling if the content exceeds screen height */
+}
+
 .modal-content {
   background-color: #fff;
   padding: 20px;
   border-radius: 8px;
-  max-width: 400px;
-}
-
-.drop-container {
-  position: relative;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 200px;
-  padding: 20px;
-  border-radius: 10px;
-  border: 2px dashed #fb8303;
-  color: #444;
-  cursor: pointer;
-  transition: background 0.2s ease-in-out, border 0.2s ease-in-out;
+  width: 90%; /* Take 90% of the screen width on smaller screens */
+  max-width: 600px; /* Limit the width on larger screens */
+  max-height: 90vh; /* Prevent the modal from exceeding the viewport height */
+  overflow-y: auto; /* Add vertical scroll if content overflows */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for better contrast */
 }
 
 .drop-container:hover,

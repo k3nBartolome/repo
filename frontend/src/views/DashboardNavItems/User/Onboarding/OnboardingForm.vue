@@ -174,6 +174,7 @@
             <th>QR Code</th>
             <th>Site</th>
             <th>Employee ID</th>
+            <th>Workday ID</th>
             <th>Last Name</th>
             <th>First Name</th>
             <th>Middle Name</th>
@@ -184,7 +185,8 @@
             <th>Hired Month</th>
             <th>Employee Status</th>
             <th>Employment Status</th>
-            <th>Account Associate</th>
+            <th>Position</th>
+             <th>Account Type</th>
             <th>Added By</th>
           </tr>
         </thead>
@@ -236,6 +238,7 @@
             </td>
             <td>{{ employee.site }}</td>
             <td>{{ employee.employee_id }}</td>
+             <td>{{ employee.wd_id }}</td>
             <td>{{ employee.employee_last_name }}</td>
             <td>{{ employee.employee_first_name }}</td>
             <td>{{ employee.employee_middle_name }}</td>
@@ -247,6 +250,7 @@
             <td>{{ employee.employee_employee_status }}</td>
             <td>{{ employee.employee_employment_status }}</td>
             <td>{{ employee.employee_position }}</td>
+            <td>{{ employee.employee_account_type }}</td>
             <td>{{ employee.employee_added_by ? employee.employee_added_by : "N/A" }}</td>
           </tr>
         </tbody>

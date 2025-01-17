@@ -36,74 +36,52 @@
           </h3>
           <div class="mt-2 space-y-2">
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Employee ID:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.employee_id
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Employee ID:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.employee_id }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Contact Number:</span
-              >
+              <span class="text-sm font-medium text-gray-600">Workday ID:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.wd_id }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Contact Number:</span>
               <span class="text-sm text-gray-800">{{
                 employee_data.contact_number
               }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Email Address:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.email
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Email Address:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.email }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Date of Birth:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.birthdate
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Date of Birth:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.birthdate }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Hired Date:</span>
-              <span class="text-sm text-gray-800">{{
-                employee_data.hired_date
-              }}</span>
+              <span class="text-sm text-gray-800">{{ employee_data.hired_date }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Employee Status:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.status
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Account Type:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.account_type }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Employment Status:</span
-              >
+              <span class="text-sm font-medium text-gray-600">Employee Status:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.status }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Employment Status:</span>
               <span class="text-sm text-gray-800">{{
                 employee_data.employment_status
               }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Updated By:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.updated_by
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Updated By:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.updated_by }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >>Last Updated Date:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                employee_data.updated_at
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
+              <span class="text-sm text-gray-800">{{ employee_data.updated_at }}</span>
             </div>
           </div>
         </div>
@@ -114,9 +92,7 @@
           <div class="mt-2 space-y-2" v-if="lob_data && lob_data.length > 0">
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Region:</span>
-              <span class="text-sm text-gray-800">{{
-                lob_data[0].region
-              }}</span>
+              <span class="text-sm text-gray-800">{{ lob_data[0].region }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Site:</span>
@@ -128,17 +104,11 @@
             </div>
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Team Name:</span>
-              <span class="text-sm text-gray-800">{{
-                lob_data[0].team_name
-              }}</span>
+              <span class="text-sm text-gray-800">{{ lob_data[0].team_name }}</span>
             </div>
             <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600"
-                >Project Code:</span
-              >
-              <span class="text-sm text-gray-800">{{
-                lob_data[0].project_code
-              }}</span>
+              <span class="text-sm font-medium text-gray-600">Project Code:</span>
+              <span class="text-sm text-gray-800">{{ lob_data[0].project_code }}</span>
             </div>
           </div>
           <div v-else>
@@ -183,25 +153,19 @@
               </div>
 
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Validity Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Validity Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.nbi_validity_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Printed Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Printed Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.nbi_printed_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.nbi_submitted_date
                 }}</span>
@@ -213,17 +177,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.nbi_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.nbi_updated_by
                 }}</span>
@@ -233,9 +193,7 @@
         </div>
         <div>
           <div class="flex items-center justify-between border-b pb-2">
-            <h3 class="text-lg font-semibold text-gray-700">
-              Drug Test Details
-            </h3>
+            <h3 class="text-lg font-semibold text-gray-700">Drug Test Details</h3>
             <button
               @click="toggleDtDetails"
               class="text-sm font-medium text-blue-600 hover:underline focus:outline-none"
@@ -268,25 +226,19 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Results Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Results Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dt_results_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Transaction Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Transaction Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dt_transaction_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Endorsed Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Endorsed Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dt_endorsed_date
                 }}</span>
@@ -298,17 +250,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dt_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dt_updated_by
                 }}</span>
@@ -351,49 +299,37 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Endorsed Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Endorsed Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_endorsed_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Results Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Results Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_results_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Transaction Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Transaction Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_transaction_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.peme_updated_by
                 }}</span>
@@ -430,9 +366,7 @@
                 <span v-else>No SSS File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >SSS Number:</span
-                >
+                <span class="text-sm font-medium text-gray-600">SSS Number:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sss_number
                 }}</span>
@@ -452,33 +386,25 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sss_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sss_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sss_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sss_updated_by
                 }}</span>
@@ -516,9 +442,7 @@
                 <span v-else>No PHIC File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >PHIC Number:</span
-                >
+                <span class="text-sm font-medium text-gray-600">PHIC Number:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.phic_number
                 }}</span>
@@ -538,33 +462,25 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.phic_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.phic_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.phic_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.phic_updated_by
                 }}</span>
@@ -576,9 +492,7 @@
         <!-- Pag-IBIG Details -->
         <div>
           <div class="flex items-center justify-between border-b pb-2">
-            <h3 class="text-lg font-semibold text-gray-700">
-              Pag-IBIG Details
-            </h3>
+            <h3 class="text-lg font-semibold text-gray-700">Pag-IBIG Details</h3>
             <button
               @click="togglePagibigDetails"
               class="text-sm font-medium text-blue-600 hover:underline focus:outline-none"
@@ -589,9 +503,7 @@
           <transition name="fade">
             <div v-if="showPagibigDetails" class="mt-2 space-y-2">
               <div>
-                <h4 class="text-sm font-medium text-gray-600">
-                  Pag-IBIG File:
-                </h4>
+                <h4 class="text-sm font-medium text-gray-600">Pag-IBIG File:</h4>
                 <a
                   v-if="requirements_data[0]?.pagibig_file_url"
                   :href="requirements_data[0]?.pagibig_file_url"
@@ -606,9 +518,7 @@
                 <span v-else>No Pag-IBIG File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Pag-IBIG Number:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Pag-IBIG Number:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pagibig_number
                 }}</span>
@@ -628,33 +538,25 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pagibig_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pagibig_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pagibig_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pagibig_updated_by
                 }}</span>
@@ -692,9 +594,7 @@
                 <span v-else>No TIN File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >TIN Number:</span
-                >
+                <span class="text-sm font-medium text-gray-600">TIN Number:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.tin_number
                 }}</span>
@@ -714,33 +614,25 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.tin_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.tin_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.tin_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.tin_updated_by
                 }}</span>
@@ -781,25 +673,19 @@
                 <span v-else>No Health Certificate File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.health_certificate_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.health_certificate_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Validity Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Validity Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.health_certificate_validity_date
                 }}</span>
@@ -811,17 +697,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.health_certificate_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.health_certificate_updated_by
                 }}</span>
@@ -863,25 +745,19 @@
                 <span v-else>No Occupational Permit File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.occupational_permit_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.occupational_permit_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Validity Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Validity Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.occupational_permit_validity_date
                 }}</span>
@@ -893,17 +769,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.occupational_permit_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.occupational_permit_updated_by
                 }}</span>
@@ -941,17 +813,13 @@
                 <span v-else>No OFAC File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.ofac_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Checked Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Checked Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.ofac_checked_date
                 }}</span>
@@ -963,17 +831,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.ofac_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.ofac_updated_by
                 }}</span>
@@ -1011,17 +875,13 @@
                 <span v-else>No SAM File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sam_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Checked Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Checked Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sam_checked_date
                 }}</span>
@@ -1033,17 +893,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sam_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sam_updated_by
                 }}</span>
@@ -1081,17 +937,13 @@
                 <span v-else>No OIG File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.oig_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Checked Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Checked Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.oig_checked_date
                 }}</span>
@@ -1103,17 +955,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.oig_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.oig_updated_by
                 }}</span>
@@ -1151,17 +999,13 @@
                 <span v-else>No CIBI File Available</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.cibi_final_status
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Checked Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Checked Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.cibi_checked_date
                 }}</span>
@@ -1173,17 +1017,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.cibi_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between flex-wrap">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.cibi_updated_by
                 }}</span>
@@ -1219,25 +1059,19 @@
                 <span v-else>No BGC File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Endorsed Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Endorsed Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bgc_endorsed_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Results Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Results Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bgc_results_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Final Status:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Final Status:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bgc_final_status
                 }}</span>
@@ -1249,17 +1083,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bgc_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bgc_updated_by
                 }}</span>
@@ -1269,9 +1099,7 @@
         </div>
         <div>
           <div class="flex items-center justify-between border-b pb-2">
-            <h3 class="text-lg font-semibold text-gray-700">
-              Birth Certificate Details
-            </h3>
+            <h3 class="text-lg font-semibold text-gray-700">Birth Certificate Details</h3>
             <button
               @click="toggleBCDetails"
               class="text-sm font-medium text-blue-600 hover:underline focus:outline-none"
@@ -1282,9 +1110,7 @@
           <transition name="fade">
             <div v-if="showBCDetails" class="mt-2 space-y-2">
               <div>
-                <h4 class="text-sm font-medium text-gray-600">
-                  Birth Certificate File:
-                </h4>
+                <h4 class="text-sm font-medium text-gray-600">Birth Certificate File:</h4>
                 <a
                   v-if="requirements_data[0]?.bc_file_url"
                   :href="requirements_data[0]?.bc_file_url"
@@ -1299,17 +1125,13 @@
                 <span v-else>No Birth Certificate File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bc_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bc_proof_type
                 }}</span>
@@ -1321,17 +1143,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bc_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.bc_updated_by
                 }}</span>
@@ -1368,22 +1186,16 @@
                     alt="Dependent Birth Certificate File"
                   />
                 </a>
-                <span v-else
-                  >No Dependent Birth Certificate File Available</span
-                >
+                <span v-else>No Dependent Birth Certificate File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_proof_type
                 }}</span>
@@ -1395,17 +1207,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_updated_by
                 }}</span>
@@ -1442,22 +1250,16 @@
                     alt="Dependent Birth Certificate File"
                   />
                 </a>
-                <span v-else
-                  >No Dependent Birth Certificate File Available</span
-                >
+                <span v-else>No Dependent Birth Certificate File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_proof_type
                 }}</span>
@@ -1469,17 +1271,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.dbc_updated_by
                 }}</span>
@@ -1519,17 +1317,13 @@
                 <span v-else>No Marriage Certificate File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.mc_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.mc_proof_type
                 }}</span>
@@ -1541,17 +1335,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.mc_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.mc_updated_by
                 }}</span>
@@ -1561,9 +1351,7 @@
         </div>
         <div>
           <div class="flex items-center justify-between border-b pb-2">
-            <h3 class="text-lg font-semibold text-gray-700">
-              Scholastic Record Details
-            </h3>
+            <h3 class="text-lg font-semibold text-gray-700">Scholastic Record Details</h3>
             <button
               @click="toggleSRDetails"
               class="text-sm font-medium text-blue-600 hover:underline focus:outline-none"
@@ -1574,9 +1362,7 @@
           <transition name="fade">
             <div v-if="showSRDetails" class="mt-2 space-y-2">
               <div>
-                <h4 class="text-sm font-medium text-gray-600">
-                  Scholastic Record File:
-                </h4>
+                <h4 class="text-sm font-medium text-gray-600">Scholastic Record File:</h4>
                 <a
                   v-if="requirements_data[0]?.sr_file_url"
                   :href="requirements_data[0]?.sr_file_url"
@@ -1591,17 +1377,13 @@
                 <span v-else>No Scholastic Record File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sr_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sr_proof_type
                 }}</span>
@@ -1613,17 +1395,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sr_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sr_updated_by
                 }}</span>
@@ -1663,17 +1441,13 @@
                 <span v-else>No Previous Employment File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pe_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pe_proof_type
                 }}</span>
@@ -1685,17 +1459,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pe_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.pe_updated_by
                 }}</span>
@@ -1735,17 +1505,13 @@
                 <span v-else>No Supporting Documents File Available</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Submitted Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Submitted Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sd_submitted_date
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Proof Type:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Proof Type:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sd_proof_type
                 }}</span>
@@ -1757,17 +1523,13 @@
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Last Updated Date:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Last Updated Date:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sd_last_updated_at
                 }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-sm font-medium text-gray-600"
-                  >Updated By:</span
-                >
+                <span class="text-sm font-medium text-gray-600">Updated By:</span>
                 <span class="text-sm text-gray-800">{{
                   requirements_data[0]?.sd_updated_by
                 }}</span>

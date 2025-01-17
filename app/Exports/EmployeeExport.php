@@ -25,6 +25,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize
     {
         return [
             "EMPLOYEE ID",
+            "WORKDAY ID",
             "LAST NAME",
             "FIRST NAME",
             "MIDDLE NAME",
@@ -34,6 +35,7 @@ class EmployeeExport implements FromCollection, WithHeadings, ShouldAutoSize
             "HIRE MONTH",
             "HIRE DATE",
             "POSITION",
+            "ACCOUNT TYPE",
             "EMPLOYEE STATUS",
             "JO STATUS",
             "EMPLOYEE ADDED BY",

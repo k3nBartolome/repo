@@ -35,10 +35,26 @@
         />
       </div>
       <div class="flex flex-col">
+        <label class="block text-sm font-medium">Account Type</label>
+        <input
+          type="text"
+          v-model="employee_info_account_type"
+          class="p-1 mt-1 border rounded w-full"
+        />
+      </div>
+      <div class="flex flex-col">
         <label class="block text-sm font-medium">Employee ID</label>
         <input
           type="text"
           v-model="employee_info_employee_id"
+          class="p-1 mt-1 border rounded w-full"
+        />
+      </div>
+       <div class="flex flex-col">
+        <label class="block text-sm font-medium">Workday ID</label>
+        <input
+          type="text"
+          v-model="employee_info_wd_id"
           class="p-1 mt-1 border rounded w-full"
         />
       </div>
@@ -138,6 +154,7 @@ export default {
       employee_info_last_name: "",
       employee_info_position: "",
       employee_info_employee_id: "",
+       employee_info_wd_id: "",
       employee_info_contact_number: "",
       employee_info_email_address: "",
       employee_info_birth_date: "",
@@ -145,6 +162,7 @@ export default {
       employee_info_employee_status: "",
       employee_info_employement_status: "",
       employee_info_hired_month:"",
+            employee_info_account_type:"",
     };
   },
    watch: {
@@ -181,7 +199,9 @@ export default {
         this.employee_info_middle_name = data.middle_name;
         this.employee_info_last_name = data.last_name;
         this.employee_info_position = data.position;
-        this.employee_info_employee_id = data.employee_id;
+        this.employee_info_account_type = data.account_type;
+        this.employee_info_wd_id = data.wd_id;
+         this.employee_info_employee_id = data.employee_id;
         this.employee_info_contact_number = data.contact_number;
         this.employee_info_email_address = data.email;
         this.employee_info_birth_date = data.birthdate;
@@ -201,7 +221,9 @@ export default {
      formData.append("employee_info_middle_name" ,this.employee_info_middle_name);
      formData.append("employee_info_last_name" ,this.employee_info_last_name);
      formData.append("employee_info_position" ,this.employee_info_position);
+     formData.append("employee_info_account_type" ,this.employee_info_account_type);
      formData.append("employee_info_employee_id" ,this.employee_info_employee_id);
+     formData.append("employee_info_wd_id" ,this.employee_info_wd_id);
      formData.append("employee_info_contact_number" ,this.employee_info_contact_number);
      formData.append("employee_info_email_address" ,this.employee_info_email_address);
      formData.append("employee_info_birth_date" ,this.employee_info_birth_date);

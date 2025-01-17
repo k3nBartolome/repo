@@ -24,6 +24,7 @@ class EmployeeController extends Controller
 
         return response()->json([
             'employee_id' => $employee->employee_id,
+            'wd_id' => $employee->wd_id,
             'first_name' => $employee->first_name,
             'middle_name' => $employee->middle_name,
             'last_name' => $employee->last_name,
@@ -35,6 +36,7 @@ class EmployeeController extends Controller
             'email' => $employee->email,
             'employment_status' => $employee->employment_status,
             'position' => $employee->account_associate,
+            'account_type'=> $employee->account_type,
         ]);
     }
     public function getLob($id)
@@ -600,6 +602,7 @@ class EmployeeController extends Controller
 
             return [
                 'employee_id' => $employee->employee_id ?? 'TBA',
+                'wd_id' => $employee->wd_id ?? 'TBA',
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
                 'employee_middle_name' => $employee->middle_name ?? 'N/A',
@@ -609,6 +612,7 @@ class EmployeeController extends Controller
                 'employee_hired_month' => $employee->hired_month ?? 'N/A',
                 'employee_hired_date' => $employee->hired_date ?? 'N/A',
                 'employee_position' => $employee->account_associate ?? 'N/A',
+                'employee_account_type' => $employee->account_type ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
                 'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
@@ -899,6 +903,7 @@ class EmployeeController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'nullable',
+            'wd_id' => 'nullable',
             'last_name' => 'nullable',
             'first_name' => 'nullable',
             'middle_name' => 'nullable',
@@ -1099,6 +1104,7 @@ class EmployeeController extends Controller
             return [
                 'id' => $employee->id ?? 'TBA',
                 'employee_id' => $employee->employee_id ?? 'TBA',
+                'wd_id' => $employee->wd_id ?? 'TBA',
                 'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
@@ -1109,6 +1115,7 @@ class EmployeeController extends Controller
                 'employee_hired_month' => $employee->hired_month ?? 'N/A',
                 'employee_hired_date' => $employee->hired_date ?? 'N/A',
                 'employee_position' => $employee->account_associate ?? 'N/A',
+                'employee_account_type' => $employee->account_type ?? 'N/A',
                 'employee_employee_status' => $employee->employee_status ?? 'N/A',
                 'employee_employment_status' => $employee->employment_status ?? 'N/A',
                 'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
@@ -1319,6 +1326,7 @@ class EmployeeController extends Controller
     {
         return [
             'employee_id' => $employee->employee_id ?? 'TBA',
+            'wd_id' => $employee->employee_id ?? 'TBA',
             'full_name' => $employee->last_name . ',' . $employee->first_name . ' ' . $employee->middle_name,
             'status' => $employee->employee_status,
             'hired_date' => $employee->hired_date,
@@ -1326,6 +1334,7 @@ class EmployeeController extends Controller
             'contact_number' => $employee->contact_number,
             'email' => $employee->email,
             'account_associate' => $employee->account_associate,
+            'account_type' => $employee->account_type,
             'employment_status' => $employee->employment_status,
             'updated_by' => $employee->userUpdatedBy ? $employee->userUpdatedBy->name : 'N/A',
             'updated_at' => $employee->updated_at->format('Y-m-d H:i'),
@@ -2338,7 +2347,9 @@ class EmployeeController extends Controller
                 'employee_info_middle_name' => 'nullable|string|max:255',
                 'employee_info_last_name' => 'nullable|string|max:255',
                 'employee_info_position' => 'nullable|string|max:255',
+                 'employee_info_account_type' => 'nullable|string|max:255',
                 'employee_info_employee_id' => 'required|string|max:255',
+                'employee_info_wd_id' => 'required|string|max:255',
                 'employee_info_contact_number' => 'nullable|string|max:15',
                 'employee_info_email_address' => 'nullable|email|max:255',
                 'employee_info_birth_date' => 'nullable|date',
@@ -2350,11 +2361,14 @@ class EmployeeController extends Controller
             ]);
 
             // Update the employee information
+           
             $employee->first_name = $validatedData['employee_info_first_name'];
             $employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
             $employee->last_name = $validatedData['employee_info_last_name'];
             $employee->account_associate = $validatedData['employee_info_position'] ?? null;
+            $employee->account_type = $validatedData['employee_info_account_type'] ?? null;
             $employee->employee_id = $validatedData['employee_info_employee_id'];
+            $employee->wd_id = $validatedData['employee_info_wd_id'];
             $employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
             $employee->email = $validatedData['employee_info_email_address'] ?? null;
             $employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
