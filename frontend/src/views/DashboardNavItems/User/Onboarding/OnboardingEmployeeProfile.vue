@@ -39,10 +39,7 @@
               <span class="text-sm font-medium text-gray-600">Employee ID:</span>
               <span class="text-sm text-gray-800">{{ employee_data.employee_id }}</span>
             </div>
-            <div class="flex justify-between flex-wrap">
-              <span class="text-sm font-medium text-gray-600">Workday ID:</span>
-              <span class="text-sm text-gray-800">{{ employee_data.wd_id }}</span>
-            </div>
+
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Contact Number:</span>
               <span class="text-sm text-gray-800">{{
@@ -87,6 +84,52 @@
         </div>
         <div>
           <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">
+            Workday Information
+          </h3>
+          <div class="mt-2 space-y-2" v-if="lob_data && lob_data.length > 0">
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Workday ID:</span>
+              <span class="text-sm text-gray-800">{{ workday_data[0].workday_id }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Contract Status:</span>
+              <span class="text-sm text-gray-800">{{
+                workday_data[0].contract_status
+              }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Contract Remarks:</span>
+              <span class="text-sm text-gray-800">{{
+                workday_data[0].contract_remarks
+              }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Contract Findings:</span>
+              <span class="text-sm text-gray-800">{{
+                workday_data[0].contract_findings
+              }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Per Findings:</span>
+              <span class="text-sm text-gray-800">{{
+                workday_data[0].per_findings
+              }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">201 Completion:</span>
+              <span class="text-sm text-gray-800">{{ workday_data[0].completion }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">RO Feedback:</span>
+              <span class="text-sm text-gray-800">{{ workday_data[0].ro_feedback }}</span>
+            </div>
+          </div>
+          <div v-else>
+            <p class="text-gray-500">No data available.</p>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700 border-b pb-2">
             Lob Information
           </h3>
           <div class="mt-2 space-y-2" v-if="lob_data && lob_data.length > 0">
@@ -109,6 +152,10 @@
             <div class="flex justify-between flex-wrap">
               <span class="text-sm font-medium text-gray-600">Project Code:</span>
               <span class="text-sm text-gray-800">{{ lob_data[0].project_code }}</span>
+            </div>
+            <div class="flex justify-between flex-wrap">
+              <span class="text-sm font-medium text-gray-600">Compliance POC</span>
+              <span class="text-sm text-gray-800">{{ lob_data[0].compliance_poc }}</span>
             </div>
           </div>
           <div v-else>
@@ -1551,6 +1598,7 @@ export default {
       employee_data: {},
       lob_data: {},
       requirements_data: {},
+      workday_data: {},
       showNbiDetails: false,
       showDtDetails: false,
       showPemeDetails: false,
@@ -1586,6 +1634,7 @@ export default {
           this.employee_data = response.data.employee_data || {};
           this.requirements_data = response.data.requirements_data || {};
           this.lob_data = response.data.lob_data || {};
+          this.workday_data = response.data.workday_data || {};
         } else {
           console.error(
             "Error: Employee data fetch failed with status:",

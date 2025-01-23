@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeeExport;
 use App\Imports\EmployeeImport;
 use App\Models\Employee;
-use App\Models\Requirements;
 use App\Models\Lob;
+use App\Models\Requirements;
+use App\Models\Workday;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Log;
 use Intervention\Image\Facades\Image;
-use App\Exports\EmployeeExport;
-
+use Maatwebsite\Excel\Facades\Excel;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class EmployeeController extends Controller
 {
@@ -24,7 +25,6 @@ class EmployeeController extends Controller
 
         return response()->json([
             'employee_id' => $employee->employee_id,
-            'wd_id' => $employee->wd_id,
             'first_name' => $employee->first_name,
             'middle_name' => $employee->middle_name,
             'last_name' => $employee->last_name,
@@ -36,9 +36,10 @@ class EmployeeController extends Controller
             'email' => $employee->email,
             'employment_status' => $employee->employment_status,
             'position' => $employee->account_associate,
-            'account_type'=> $employee->account_type,
+            'account_type' => $employee->account_type,
         ]);
     }
+
     public function getLob($id)
     {
         $employee = Lob::where('employee_tbl_id', $id)->first();
@@ -53,6 +54,22 @@ class EmployeeController extends Controller
             'data' => $employee,
         ]);
     }
+
+    public function getWorkday($id)
+    {
+        $employee = Workday::where('employee_tbl_id', $id)->first();
+
+        if (!$employee) {
+            return response()->json([
+                'message' => 'Employee not found.',
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $employee,
+        ]);
+    }
+
     public function getNbi($id)
     {
         Log::info('Get NBI Request Received', ['id' => $id]);
@@ -60,6 +77,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -85,6 +103,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -102,6 +121,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getPEME($id)
     {
         Log::info('Get DT Request Received', ['id' => $id]);
@@ -109,6 +129,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -126,6 +147,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getSSS($id)
     {
         Log::info('Get DT Request Received', ['id' => $id]);
@@ -133,6 +155,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -150,6 +173,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getPHIC($id)
     {
         Log::info('Get DT Request Received', ['id' => $id]);
@@ -157,6 +181,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -174,6 +199,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getPagibig($id)
     {
         Log::info('Get DT Request Received', ['id' => $id]);
@@ -181,6 +207,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -198,6 +225,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getTin($id)
     {
         Log::info('Get DT Request Received', ['id' => $id]);
@@ -205,6 +233,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -222,6 +251,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getHealthCertificate($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -229,6 +259,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -245,6 +276,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getOccupationalPermit($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -252,6 +284,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -268,6 +301,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getOFAC($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -275,6 +309,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -290,6 +325,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getSAM($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -297,6 +333,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -312,6 +349,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getOIG($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -319,6 +357,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -334,6 +373,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getCIBI($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -341,6 +381,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -356,6 +397,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getBGC($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -363,6 +405,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -379,6 +422,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getBirthCertificate($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -386,6 +430,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -401,6 +446,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getDependentBirthCertificate($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -408,6 +454,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -423,6 +470,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getMarriageCertificate($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -430,6 +478,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -445,6 +494,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getScholasticRecord($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -452,6 +502,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -467,6 +518,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getPreviousEmployment($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -474,6 +526,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -489,6 +542,7 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
     public function getSupportingDocuments($id)
     {
         Log::info('Get HC Request Received', ['id' => $id]);
@@ -496,6 +550,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
         $data = [
@@ -511,6 +566,74 @@ class EmployeeController extends Controller
 
         return response()->json(['data' => $data]);
     }
+
+    private function get15thWorkingDay($startDate)
+    {
+        if (!$startDate) {
+            return null;
+        }
+
+        $date = Carbon::parse($startDate);
+        $workdays = 0;
+
+        while ($workdays < 15) {
+            $date->addDay();
+            if (!$date->isSaturday() && !$date->isSunday()) {
+                $workdays++;
+            }
+        }
+
+        return $date;
+    }
+    private function get5thWorkingDay($startDate)
+    {
+        if (!$startDate) {
+            return null;
+        }
+
+        $date = Carbon::parse($startDate);
+        $workdays = 0;
+
+        while ($workdays < 5) {
+            $date->addDay();
+            if (!$date->isSaturday() && !$date->isSunday()) {
+                $workdays++;
+            }
+        }
+
+        return $date;
+    }
+    private function get10thWorkingDay($startDate)
+    {
+        if (!$startDate) {
+            return null;
+        }
+
+        $date = Carbon::parse($startDate);
+        $workdays = 0;
+
+        while ($workdays < 10) {
+            $date->addDay();
+            if (!$date->isSaturday() && !$date->isSunday()) {
+                $workdays++;
+            }
+        }
+
+        return $date;
+    }
+
+    // Helper function to get the Saturday after a given date
+    private function getSaturdayAfter($date)
+    {
+        if (!$date) {
+            return null;
+        }
+
+        $carbonDate = Carbon::parse($date);
+        return $carbonDate->next(Carbon::SATURDAY);
+    }
+
+    // Export function
     public function exportTest(Request $request, $siteIds = null)
     {
         $siteIds = $siteIds ? explode(',', $siteIds) : null;
@@ -539,7 +662,8 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.siteName'
+            'lob.siteName',
+            'workday'
         );
 
         // Apply filters based on the request
@@ -556,7 +680,7 @@ class EmployeeController extends Controller
         if ($request->filled('hired_date_from') && $request->filled('hired_date_to')) {
             $employeeQuery->whereBetween('hired_date', [
                 $request->hired_date_from,
-                $request->hired_date_to
+                $request->hired_date_to,
             ]);
         }
         if ($request->has('search_term') && !empty($request->search_term)) {
@@ -583,8 +707,6 @@ class EmployeeController extends Controller
             });
         }
 
-
-
         if ($siteIds && is_array($siteIds)) {
             // If it's an array of site_ids
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
@@ -596,41 +718,70 @@ class EmployeeController extends Controller
                 $query->where('id', $siteIds); // Handle single site_id
             });
         }
+
         $employee_info = $employeeQuery->get();
 
         $mappedEmployees = $employee_info->map(function ($employee) {
+            $hasTin = optional($employee->requirements->first())->tin_file_name ? 'Yes' : 'No';
+            $hasSss = optional($employee->requirements->first())->sss_file_name ? 'Yes' : 'No';
+            $hasPhic = optional($employee->requirements->first())->phic_file_name ? 'Yes' : 'No';
+            $hasPagibig = optional($employee->requirements->first())->pagibig_file_name ? 'Yes' : 'No';
+
+            $isComplete = $hasTin === 'Yes' &&
+                $hasSss === 'Yes' &&
+                $hasPhic === 'Yes' &&
+                $hasPagibig === 'Yes';
+
+            $nbiFinalStatus = optional($employee->requirements->first())->nbi_final_status ?? 'N/A';
+            $dtFinalStatus = optional($employee->requirements->first())->dt_final_status ?? 'N/A';
+            $pemeFinalStatus = optional($employee->requirements->first())->peme_final_status ?? 'N/A';
+
+            $finalStatusComplete = $nbiFinalStatus === 'Complete' &&
+                $dtFinalStatus === 'Complete' &&
+                $pemeFinalStatus === 'Complete';
+
+            // Get 15th working day
+            $day15Deadline = $employee->hired_date ? $this->get15thWorkingDay($employee->hired_date) : null;
+            // Get 5th working day
+            $day5Deadline = $employee->hired_date ? $this->get5thWorkingDay($employee->hired_date) : null;
+              // Get 10th working day
+            $day10Deadline = $employee->hired_date ? $this->get10thWorkingDay($employee->hired_date) : null;
+                      // Get Saturday after the day deadline
+            $saturdayAfterDeadline = $day15Deadline ? $this->getSaturdayAfter($day15Deadline) : null;
 
             return [
+                'month_milestone' => $day15Deadline instanceof Carbon ? $day15Deadline->format('F') : 'N/A',
+                'saturday_after_deadline' => $saturdayAfterDeadline instanceof Carbon ? $saturdayAfterDeadline->format('Y-m-d') : 'N/A',
+                'day_5deadline' => $day5Deadline instanceof Carbon ? $day5Deadline->format('Y-m-d') : 'N/A',
+                'day_10deadline' => $day10Deadline instanceof Carbon ? $day10Deadline->format('Y-m-d') : 'N/A',
+                'day_15deadline' => $day15Deadline instanceof Carbon ? $day15Deadline->format('Y-m-d') : 'N/A',
+                'compliance_poc' => optional($employee->lob->first())->compliance_poc ?? 'N/A',
+                'critical_reqs' => $finalStatusComplete ? 'Complete' : 'Incomplete',
+                'government_numbers' => $isComplete ? 'Complete' : 'Incomplete',
+                'contract_status' => optional($employee->workday->first())->contract_status ?? 'N/A',
+                'contract_remarks' => optional($employee->workday->first())->contract_remarks ?? 'N/A',
+                'contract_findings' => optional($employee->workday->first())->contract_findings ?? 'N/A',
+                'completion' => optional($employee->workday->first())->completion ?? 'N/A',
+                'per_findings' => optional($employee->workday->first())->per_findings ?? 'N/A',
+                'ro_feedback' => optional($employee->workday->first())->ro_feedback ?? 'N/A',
+                'workday_id' => optional($employee->workday->first())->workday_id ?? 'N/A',
+                'employee_employee_status' => $employee->employee_status ?? 'N/A',
+                'region' => optional($employee->lob->first())->region ?? 'N/A',
+                'site' => optional(optional($employee->lob->first())->siteName)->name ?? 'N/A',
+                'lob' => optional($employee->lob->first())->lob ?? 'N/A',
+                'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
+                'employee_hired_month' => $employee->hired_month ?? 'N/A',
+                'employee_hired_date' => $employee->hired_date ?? 'N/A',
+                'employee_position' => $employee->account_associate ?? 'N/A',
+                'employee_account_type' => $employee->account_type ?? 'N/A',
+                'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
                 'employee_id' => $employee->employee_id ?? 'TBA',
-                'wd_id' => $employee->wd_id ?? 'TBA',
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
                 'employee_middle_name' => $employee->middle_name ?? 'N/A',
                 'employee_email' => $employee->email ?? 'N/A',
                 'employee_contact_number' => $employee->contact_number ?? 'N/A',
                 'employee_birth_date' => $employee->birthdate ?? 'N/A',
-                'employee_hired_month' => $employee->hired_month ?? 'N/A',
-                'employee_hired_date' => $employee->hired_date ?? 'N/A',
-                'employee_position' => $employee->account_associate ?? 'N/A',
-                'employee_account_type' => $employee->account_type ?? 'N/A',
-                'employee_employee_status' => $employee->employee_status ?? 'N/A',
-                'employee_employment_status' => $employee->employment_status ?? 'N/A',
-                'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
-                'employee_created_at' => $employee->created_at
-                    ? $employee->created_at->format('Y-m-d')
-                    : 'N/A',
-                'employee_updated_by' => $employee->updated_by ?? 'N/A',
-                'employee_updated_at' => $employee->updated_at
-                    ? $employee->created_at->format('Y-m-d')
-                    : 'N/A',
-                'region' => optional($employee->lob->first())->region ?? 'N/A',
-                'site' => optional(optional($employee->lob->first())->siteName)->name ?? 'N/A',
-                'lob' => optional($employee->lob->first())->lob ?? 'N/A',
-                'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
-                'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
-                'updated_at' => $employee->created_at
-                    ? $employee->updated_at->format('Y-m-d')
-                    : 'N/A',
                 'nbi_final_status' => optional($employee->requirements->first())->nbi_final_status ?? 'N/A',
                 'nbi_validity_date' => optional($employee->requirements->first())->nbi_validity_date ?? 'N/A',
                 'nbi_submitted_date' => optional($employee->requirements->first())->nbi_submitted_date ?? 'N/A',
@@ -768,10 +919,21 @@ class EmployeeController extends Controller
                 'sd_remarks' => optional($employee->requirements->first())->sd_remarks ?? 'N/A',
                 'sd_last_updated_at' => optional($employee->requirements->first())->sd_last_updated_at ?? 'N/A',
                 'sd_updated_by' => optional(optional($employee->requirements->first())->supportingDocumentsUpdatedBy)->name ?? 'N/A',
+                'employee_employment_status' => $employee->employment_status ?? 'N/A',
+                'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
+                'employee_created_at' => $employee->created_at
+                    ? $employee->created_at->format('Y-m-d')
+                    : 'N/A',
+                'employee_updated_by' => $employee->updated_by ?? 'N/A',
+                'employee_updated_at' => $employee->updated_at
+                    ? $employee->created_at->format('Y-m-d')
+                    : 'N/A',
 
+                'updated_at' => $employee->created_at
+                    ? $employee->updated_at->format('Y-m-d')
+                    : 'N/A',
             ];
         });
-
 
         return Excel::download(new EmployeeExport($mappedEmployees->toArray()), 'employee_report.xlsx');
         /*  return response()->json([
@@ -852,6 +1014,7 @@ class EmployeeController extends Controller
             'file_path' => Storage::url($fileName),
         ], 201);
     }
+
     public function saveQRCode(Request $request, $employeeId)
     {
         $validator = Validator::make($request->all(), [
@@ -898,12 +1061,11 @@ class EmployeeController extends Controller
         }
     }
 
-
     public function storeEmployees(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'employee_id' => 'nullable',
-            'wd_id' => 'nullable',
+            'workday_id' => 'nullable',
             'last_name' => 'nullable',
             'first_name' => 'nullable',
             'middle_name' => 'nullable',
@@ -944,12 +1106,19 @@ class EmployeeController extends Controller
         $lob->site = $request->site_id;
         $lob->save();
 
+        $workday = new Workday();
+        $workday->employee_tbl_id = $employee_info_id;
+        $workday->workday_id = $request->workday_id;
+        $workday->save();
+
         return response()->json([
             'employee' => $employee_info,
             'requirement' => $requirement,
             'lob' => $lob,
+            'workday' => $workday,
         ]);
     }
+
     public function index(Request $request)
     {
         // Initialize the query with relationships
@@ -967,7 +1136,7 @@ class EmployeeController extends Controller
         if ($request->filled('hired_date_from') && $request->filled('hired_date_to')) {
             $employeeQuery->whereBetween('hired_date', [
                 $request->hired_date_from,
-                $request->hired_date_to
+                $request->hired_date_to,
             ]);
         }
 
@@ -1009,7 +1178,6 @@ class EmployeeController extends Controller
         ]);
     }
 
-
     public function indexEmployees(Request $request, $siteIds = null)
     {
         $siteIds = $siteIds ? explode(',', $siteIds) : null;
@@ -1038,7 +1206,8 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.siteName'
+            'lob.siteName',
+            'workday'
         );
 
         // Apply filters based on the request
@@ -1053,12 +1222,10 @@ class EmployeeController extends Controller
             $employeeQuery->where('employee_added_by', $request->employee_added_by);
         }
 
-
-
         if ($request->filled('hired_date_from') && $request->filled('hired_date_to')) {
             $employeeQuery->whereBetween('hired_date', [
                 $request->hired_date_from,
-                $request->hired_date_to
+                $request->hired_date_to,
             ]);
         }
         if ($request->has('search_term') && !empty($request->search_term)) {
@@ -1085,8 +1252,6 @@ class EmployeeController extends Controller
             });
         }
 
-
-
         if ($siteIds && is_array($siteIds)) {
             // If it's an array of site_ids
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($siteIds) {
@@ -1100,11 +1265,16 @@ class EmployeeController extends Controller
         }
         $employee_info = $employeeQuery->paginate(10);
         $mappedEmployees = collect($employee_info->items())->map(function ($employee) {
-
             return [
                 'id' => $employee->id ?? 'TBA',
                 'employee_id' => $employee->employee_id ?? 'TBA',
-                'wd_id' => $employee->wd_id ?? 'TBA',
+                'workday_id' => optional($employee->workday->first())->workday_id ?? 'TBA',
+                'ro_feedback' => optional($employee->workday->first())->ro_feedback ?? 'N/A',
+                'per_findings' => optional($employee->workday->first())->per_findings ?? 'N/A',
+                'completion' => optional($employee->workday->first())->completion ?? 'N/A',
+                'contract_findings' => optional($employee->workday->first())->contract_findings ?? 'N/A',
+                'contract_remarks' => optional($employee->workday->first())->contract_remarks ?? 'N/A',
+                'contract_status' => optional($employee->workday->first())->contract_status ?? 'N/A',
                 'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
@@ -1131,6 +1301,7 @@ class EmployeeController extends Controller
                 'lob' => optional($employee->lob->first())->lob ?? 'N/A',
                 'team_name' => optional($employee->lob->first())->team_name ?? 'N/A',
                 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
+                'compliance_poc' => optional($employee->lob->first())->compliance_poc ?? 'N/A',
                 'updated_at' => $employee->created_at
                     ? $employee->updated_at->format('Y-m-d')
                     : 'N/A',
@@ -1271,11 +1442,10 @@ class EmployeeController extends Controller
                 'sd_remarks' => optional($employee->requirements->first())->sd_remarks ?? 'N/A',
                 'sd_last_updated_at' => optional($employee->requirements->first())->sd_last_updated_at ?? 'N/A',
                 'sd_updated_by' => optional(optional($employee->requirements->first())->supportingDocumentsUpdatedBy)->name ?? 'N/A',
-
             ];
         });
-        return response()->json([
 
+        return response()->json([
             'employees' => $mappedEmployees,
             'pagination' => [
                 'total' => $employee_info->total(),
@@ -1290,24 +1460,21 @@ class EmployeeController extends Controller
                     : null,
                 'per_page' => $employee_info->perPage(),
                 'total_pages' => $employee_info->lastPage(),
-
             ],
         ]);
     }
 
-
     /**
-     * Map the requirements data for each employee
+     * Map the requirements data for each employee.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection $requirements
      * @return array
      */
 
-
     /**
-     * Map the LOB data for each employee
+     * Map the LOB data for each employee.
      *
-     * @param  \Illuminate\Database\Eloquent\Collection $lob
+     * @param \Illuminate\Database\Eloquent\Collection $lob
+     *
      * @return array
      */
     private function mapLobData($lob)
@@ -1319,14 +1486,15 @@ class EmployeeController extends Controller
                 'lob' => $lobEntry->lob ?? 'N/A',
                 'team_name' => $lobEntry->team_name ?? 'N/A',
                 'project_code' => $lobEntry->project_code ?? 'N/A',
+                'compliance_poc' => $lobEntry->compliance_poc ?? 'N/A',
             ];
         })->toArray(); // Convert the collection to an array
     }
+
     private function mapEmployeeData($employee)
     {
         return [
             'employee_id' => $employee->employee_id ?? 'TBA',
-            'wd_id' => $employee->employee_id ?? 'TBA',
             'full_name' => $employee->last_name . ',' . $employee->first_name . ' ' . $employee->middle_name,
             'status' => $employee->employee_status,
             'hired_date' => $employee->hired_date,
@@ -1340,6 +1508,20 @@ class EmployeeController extends Controller
             'updated_at' => $employee->updated_at->format('Y-m-d H:i'),
             'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
         ];
+    }
+    private function mapWorkdayData($wd)
+    {
+        return $wd->map(function ($workday) {
+            return [
+                'workday_id' => $workday->workday_id ?? 'TBA',
+                'ro_feedback' => $workday->ro_feedback ?? 'N/A',
+                'per_findings' => $workday->per_findings ?? 'N/A',
+                'completion' => $workday->completion ?? 'N/A',
+                'contract_findings' => $workday->contract_findings ?? 'N/A',
+                'contract_remarks' => $workday->contract_remarks ?? 'N/A',
+                'contract_status' => $workday->contract_status ?? 'N/A',
+            ];
+        })->toArray(); // Convert the collection to an array
     }
 
     private function mapRequirementsData($requirements)
@@ -1503,7 +1685,6 @@ class EmployeeController extends Controller
                 'sd_remarks' => $requirement->supporting_documents_remarks,
                 'sd_last_updated_at' => \Carbon\Carbon::parse($requirement->supporting_documents_last_updated_at)->format('Y-m-d H:i'),
                 'sd_updated_by' => $requirement->supportingDocumentsUpdatedBy ? $requirement->supportingDocumentsUpdatedBy->name : 'N/A',
-
             ];
         });
     }
@@ -1511,7 +1692,6 @@ class EmployeeController extends Controller
     public function show($id)
     {
         $employee = Employee::with([
-
             'requirements',
             'requirements.nbiUpdatedBy',
             'requirements.updatedBy',
@@ -1534,7 +1714,7 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.siteName'
+            'lob.siteName',
         ])->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
@@ -1543,11 +1723,11 @@ class EmployeeController extends Controller
         // Return employee data as JSON
         return response()->json(['employee' => $employee]);
     }
+
     public function showEmployee($id)
     {
         // Fetch the employee with related data using eager loading
         $employee = Employee::with([
-
             'requirements',
             'requirements.nbiUpdatedBy',
             'requirements.updatedBy',
@@ -1570,7 +1750,8 @@ class EmployeeController extends Controller
             'requirements.previousEmploymentUpdatedBy',
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
-            'lob.siteName'
+            'lob.siteName',
+            'workday'
         ])->find($id);
 
         // Check if the employee exists
@@ -1584,17 +1765,15 @@ class EmployeeController extends Controller
         // Check if related data exists before mapping
         $requirements_data = $employee->requirements ? $this->mapRequirementsData($employee->requirements) : null;
         $lob_data = $employee->lob ? $this->mapLobData($employee->lob) : null;
-
+        $workday_data = $employee->workday ? $this->mapWorkdayData($employee->workday) : null;
         // Return the mapped data in the response
         return response()->json([
             'employee_data' => $employee_data,
             'requirements_data' => $requirements_data,
             'lob_data' => $lob_data,
+            'workday_data' => $workday_data,
         ]);
     }
-
-
-
 
     public function storeBulkEmployees(Request $request)
     {
@@ -1618,16 +1797,15 @@ class EmployeeController extends Controller
 
             // Log the success and return success response
             Log::info('Employee import completed successfully', ['user' => $request->employee_added_by]);
+
             return response()->json(['success' => 'Employees imported successfully'], 200);
         } catch (\Exception $e) {
             // Log any errors during the import process
             Log::error('Error importing employee', ['error' => $e->getMessage()]);
+
             return response()->json(['error' => 'Error importing Employee: ' . $e->getMessage()], 500);
         }
     }
-
-
-
 
     /*  public function update(Request $request, $id)
     {
@@ -2049,7 +2227,6 @@ class EmployeeController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'employee_tbl_id' => 'required|exists:employees,employee_id',
             'nbi' => 'nullable|image|mimes:jpeg,png,jpg,gif',
@@ -2136,6 +2313,7 @@ class EmployeeController extends Controller
             'requirements' => $requirements,
         ]);
     }
+
     /*  public function update(Request $request, $id)
     {
         Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2347,9 +2525,8 @@ class EmployeeController extends Controller
                 'employee_info_middle_name' => 'nullable|string|max:255',
                 'employee_info_last_name' => 'nullable|string|max:255',
                 'employee_info_position' => 'nullable|string|max:255',
-                 'employee_info_account_type' => 'nullable|string|max:255',
+                'employee_info_account_type' => 'nullable|string|max:255',
                 'employee_info_employee_id' => 'required|string|max:255',
-                'employee_info_wd_id' => 'required|string|max:255',
                 'employee_info_contact_number' => 'nullable|string|max:15',
                 'employee_info_email_address' => 'nullable|email|max:255',
                 'employee_info_birth_date' => 'nullable|date',
@@ -2361,14 +2538,13 @@ class EmployeeController extends Controller
             ]);
 
             // Update the employee information
-           
+
             $employee->first_name = $validatedData['employee_info_first_name'];
             $employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
             $employee->last_name = $validatedData['employee_info_last_name'];
             $employee->account_associate = $validatedData['employee_info_position'] ?? null;
             $employee->account_type = $validatedData['employee_info_account_type'] ?? null;
             $employee->employee_id = $validatedData['employee_info_employee_id'];
-            $employee->wd_id = $validatedData['employee_info_wd_id'];
             $employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
             $employee->email = $validatedData['employee_info_email_address'] ?? null;
             $employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
@@ -2397,7 +2573,7 @@ class EmployeeController extends Controller
     public function updateNBI(Request $request, $id)
     {
         Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
-    
+
         // Validate input data
         $validatedData = Validator::make($request->all(), [
             'nbi_final_status' => 'nullable|string',
@@ -2408,35 +2584,37 @@ class EmployeeController extends Controller
             'nbi_updated_by' => 'nullable|integer',
             'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Max file size: 2MB
         ])->validate();
-    
+
         // Find the requirements record by employee_tbl_id
         $requirement = Requirements::where('employee_tbl_id', $id)->first();
-    
+
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
-    
+
         // Process the file upload for 'nbi_proof'
         if ($request->hasFile('nbi_proof')) {
             $file = $request->file('nbi_proof');
-    
+
             if ($file->isValid()) {
                 $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('nbi_files', $fileName, 'public'); // Store in 'public' disk
-    
+
                 Log::info('File Uploaded', [
                     'file' => $fileName,
-                    'path' => $filePath
+                    'path' => $filePath,
                 ]);
-    
+
                 $requirement->nbi_file_name = $fileName; // Save the file name to the database
             } else {
                 Log::error('Invalid file uploaded', ['file' => $file]);
+
                 return response()->json(['error' => 'Invalid file uploaded'], 422);
             }
         }
-    
+
         // Update other fields
         $requirement->nbi_final_status = $request->input('nbi_final_status');
         $requirement->nbi_validity_date = $request->input('nbi_validity_date');
@@ -2445,17 +2623,19 @@ class EmployeeController extends Controller
         $requirement->nbi_remarks = $request->input('nbi_remarks');
         $requirement->nbi_updated_by = $request->input('nbi_updated_by');
         $requirement->nbi_last_updated_at = now();
-    
+
         // Save and return response
         if ($requirement->save()) {
             Log::info('Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Requirement updated successfully']);
         } else {
             Log::error('Failed to update requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update requirement'], 500);
         }
     }
-    
+
     public function updateDT(Request $request, $id)
     {
         Log::info('Update DT Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2476,6 +2656,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2490,7 +2671,7 @@ class EmployeeController extends Controller
 
                 Log::info('File Uploaded', [
                     'file' => $fileName,
-                    'path' => $filePath
+                    'path' => $filePath,
                 ]);
 
                 // Save the file name (or path) to the database
@@ -2512,12 +2693,15 @@ class EmployeeController extends Controller
         // Save the requirement model after processing all fields
         if ($requirement->save()) {
             Log::info('DT Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'DT Requirement updated successfully']);
         } else {
             Log::error('Failed to update DT requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update DT requirement'], 500);
         }
     }
+
     public function updatePEME(Request $request, $id)
     {
         Log::info('Update PEME Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2538,6 +2722,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2551,7 +2736,7 @@ class EmployeeController extends Controller
 
                 Log::info('File Uploaded', [
                     'file' => $fileName,
-                    'path' => $filePath
+                    'path' => $filePath,
                 ]);
 
                 $requirement->peme_file_name = $fileName;
@@ -2572,12 +2757,15 @@ class EmployeeController extends Controller
         // Save the requirement model after processing all fields
         if ($requirement->save()) {
             Log::info('PEME Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'PEME Requirement updated successfully']);
         } else {
             Log::error('Failed to update PEME requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update PEME requirement'], 500);
         }
     }
+
     public function updateSSS(Request $request, $id)
     {
         Log::info('Update SSS Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2598,6 +2786,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2611,7 +2800,7 @@ class EmployeeController extends Controller
 
                 Log::info('File Uploaded', [
                     'file' => $fileName,
-                    'path' => $filePath
+                    'path' => $filePath,
                 ]);
 
                 $requirement->sss_file_name = $fileName;
@@ -2632,12 +2821,15 @@ class EmployeeController extends Controller
         // Save the requirement model after processing all fields
         if ($requirement->save()) {
             Log::info('SSS Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'SSS Requirement updated successfully']);
         } else {
             Log::error('Failed to update SSS requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update SSS requirement'], 500);
         }
     }
+
     public function updatePHIC(Request $request, $id)
     {
         Log::info('Update PHIC Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2656,6 +2848,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2682,12 +2875,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('PHIC Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'PHIC Requirement updated successfully']);
         } else {
             Log::error('Failed to update PHIC requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update PHIC requirement'], 500);
         }
     }
+
     public function updatePagibig(Request $request, $id)
     {
         Log::info('Update Pagibig Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2706,6 +2902,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2732,12 +2929,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Pagibig Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Pagibig Requirement updated successfully']);
         } else {
             Log::error('Failed to update Pagibig requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Pagibig requirement'], 500);
         }
     }
+
     public function updateTin(Request $request, $id)
     {
         Log::info('Update TIN Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2756,6 +2956,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2782,9 +2983,11 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('TIN Requirement updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'TIN Requirement updated successfully']);
         } else {
             Log::error('Failed to update TIN requirement', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update TIN requirement'], 500);
         }
     }
@@ -2806,6 +3009,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2830,12 +3034,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Health Certificate updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Health Certificate updated successfully']);
         } else {
             Log::error('Failed to update Health Certificate', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Health Certificate'], 500);
         }
     }
+
     public function updateOccupationalPermit(Request $request, $id)
     {
         Log::info('Update Occupational Permit Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2853,6 +3060,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2878,12 +3086,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Occupational Permit updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Occupational Permit updated successfully']);
         } else {
             Log::error('Failed to update Occupational Permit', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Occupational Permit'], 500);
         }
     }
+
     public function updateOFAC(Request $request, $id)
     {
         Log::info('Update OFAC Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2900,6 +3111,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2924,12 +3136,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('OFAC updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'OFAC updated successfully']);
         } else {
             Log::error('Failed to update OFAC', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update OFAC'], 500);
         }
     }
+
     public function updateSAM(Request $request, $id)
     {
         Log::info('Update SAM Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2946,6 +3161,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -2970,12 +3186,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('SAM updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'SAM updated successfully']);
         } else {
             Log::error('Failed to update SAM', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update SAM'], 500);
         }
     }
+
     public function updateOIG(Request $request, $id)
     {
         Log::info('Update OIG Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -2992,6 +3211,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3016,12 +3236,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('OIG updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'OIG updated successfully']);
         } else {
             Log::error('Failed to update OIG', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update OIG'], 500);
         }
     }
+
     public function updateCIBI(Request $request, $id)
     {
         Log::info('Update CIBI Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3038,6 +3261,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3062,12 +3286,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('CIBI updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'CIBI updated successfully']);
         } else {
             Log::error('Failed to update CIBI', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update CIBI'], 500);
         }
     }
+
     public function updateBGC(Request $request, $id)
     {
         Log::info('Update BGC Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3085,6 +3312,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3110,12 +3338,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('BGC updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'BGC updated successfully']);
         } else {
             Log::error('Failed to update BGC', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update BGC'], 500);
         }
     }
+
     public function updateBirthCertificate(Request $request, $id)
     {
         Log::info('Update Birth Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3132,6 +3363,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3156,12 +3388,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Birth Certificate updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Birth Certificate updated successfully']);
         } else {
             Log::error('Failed to update Birth Certificate', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Birth Certificate'], 500);
         }
     }
+
     public function updateDependentBirthCertificate(Request $request, $id)
     {
         Log::info('Update Dependent Birth Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3178,6 +3413,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3202,12 +3438,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Dependent Birth Certificate updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Dependent Birth Certificate updated successfully']);
         } else {
             Log::error('Failed to update Dependent Birth Certificate', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Dependent Birth Certificate'], 500);
         }
     }
+
     public function updateMarriageCertificate(Request $request, $id)
     {
         Log::info('Update Marriage Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3224,6 +3463,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3248,12 +3488,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Marriage Certificate updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Marriage Certificate updated successfully']);
         } else {
             Log::error('Failed to update Marriage Certificate', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Marriage Certificate'], 500);
         }
     }
+
     public function updateScholasticRecord(Request $request, $id)
     {
         Log::info('Update Scholastic Record Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3270,6 +3513,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3294,12 +3538,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Scholastic Record updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Scholastic Record updated successfully']);
         } else {
             Log::error('Failed to update Scholastic Record', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Scholastic Record'], 500);
         }
     }
+
     public function updatePreviousEmployment(Request $request, $id)
     {
         Log::info('Update Previous Employment Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3316,6 +3563,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3340,12 +3588,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Previous Employment updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Previous Employment updated successfully']);
         } else {
             Log::error('Failed to update Previous Employment', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Previous Employment'], 500);
         }
     }
+
     public function updateSupportingDocuments(Request $request, $id)
     {
         Log::info('Update Supporting Documents Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3362,6 +3613,7 @@ class EmployeeController extends Controller
 
         if (!$requirement) {
             Log::error('Requirement not found', ['id' => $id]);
+
             return response()->json(['error' => 'Requirement not found'], 404);
         }
 
@@ -3386,12 +3638,15 @@ class EmployeeController extends Controller
 
         if ($requirement->save()) {
             Log::info('Supporting Documents updated successfully', ['id' => $id]);
+
             return response()->json(['success' => 'Supporting Documents updated successfully']);
         } else {
             Log::error('Failed to update Supporting Documents', ['id' => $id]);
+
             return response()->json(['error' => 'Failed to update Supporting Documents'], 500);
         }
     }
+
     public function updateLob(Request $request, $id)
     {
         Log::info('Update Lob Request Received', ['id' => $id, 'data' => $request->all()]);
@@ -3402,6 +3657,7 @@ class EmployeeController extends Controller
             'lob' => 'nullable|string',
             'team_name' => 'nullable|string',
             'project_code' => 'nullable|string',
+            'compliance_poc' => 'nullable|string',
             'updated_by' => 'required|integer', // Ensure `updated_by` is passed and is an integer
         ])->validate();
 
@@ -3409,6 +3665,7 @@ class EmployeeController extends Controller
 
         if (!$lob) {
             Log::error('Lob not found', ['id' => $id]);
+
             return response()->json(['error' => 'Lob not found'], 404);
         }
 
@@ -3420,15 +3677,67 @@ class EmployeeController extends Controller
                 'lob' => $validatedData['lob'] ?? $lob->lob,
                 'team_name' => $validatedData['team_name'] ?? $lob->team_name,
                 'project_code' => $validatedData['project_code'] ?? $lob->project_code,
+                'compliance_poc' => $validatedData['project_code'] ?? $lob->compliance_poc,
                 'updated_by' => $validatedData['updated_by'],
                 'lob_updated_at' => now(),
             ]);
 
             Log::info('Lob successfully updated', ['id' => $id]);
+
             return response()->json(['message' => 'Lob updated successfully'], 200);
         } catch (\Exception $e) {
             Log::error('Error updating Lob', ['id' => $id, 'error' => $e->getMessage()]);
+
             return response()->json(['error' => 'Failed to update Lob'], 500);
+        }
+    }
+
+    public function updateWorkday(Request $request, $id)
+    {
+        Log::info('Update Workday Request Received', ['id' => $id, 'data' => $request->all()]);
+
+        $validatedData = Validator::make($request->all(), [
+            'employee_tbl_id' => 'nullable|integer',
+            'workday_id' => 'nullable|string',
+            'ro_feedback' => 'nullable|string',
+            'per_findings' => 'nullable|string',
+            'completion' => 'nullable|string',
+            'contract_findings' => 'nullable|string',
+            'contract_remarks' => 'nullable|string',
+            'contract_status' => 'nullable|string',
+            'updated_by' => 'required|integer',
+        ])->validate();
+
+        $workday = Workday::where('employee_tbl_id', $id)->first();
+
+        if (!$workday) {
+            Log::error('Workday not found', ['id' => $id]);
+
+            return response()->json(['error' => 'Workday not found'], 404);
+        }
+
+        try {
+            // Update the Workday with new data and metadata
+            $workday->update([
+                'workday_id' => $validatedData['workday_id'] ?? $workday->workday_id,
+                'ro_feedback' => $validatedData['ro_feedback'] ?? $workday->ro_feedback,
+                'per_findings' => $validatedData['per_findings'] ?? $workday->per_findings,
+                'completion' => $validatedData['completion'] ?? $workday->completion,
+                'contract_findings' => $validatedData['contract_findings'] ?? $workday->contract_findings,
+                'contract_remarks' => $validatedData['contract_remarks'] ?? $workday->contract_remarks,
+                'contract_status' => $validatedData['contract_status'] ?? $workday->contract_status,
+                'updated_by' => $validatedData['updated_by'],
+                'workday_updated_at' => now(),
+            ]);
+
+
+            Log::info('Workday successfully updated', ['id' => $id]);
+
+            return response()->json(['message' => 'Workday updated successfully'], 200);
+        } catch (\Exception $e) {
+            Log::error('Error updating Workday', ['id' => $id, 'error' => $e->getMessage()]);
+
+            return response()->json(['error' => 'Failed to update Workday'], 500);
         }
     }
 }

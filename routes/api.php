@@ -290,6 +290,7 @@ Route::post('update/scholastic_record/requirement/{id}', [EmployeeController::cl
 Route::post('update/previous_employment/requirement/{id}', [EmployeeController::class, 'updatePreviousEmployment']);
 Route::post('update/supporting_documents/requirement/{id}', [EmployeeController::class, 'updateSupportingDocuments']);
 Route::post('update/employee_info/requirement/{id}', [EmployeeController::class, 'updateEmployeeInfo']);
+Route::post('update/workday/{id}', [EmployeeController::class, 'updateWorkday']);
 Route::post('/update/lob/{id}', [EmployeeController::class, 'updateLob']);
 Route::get('get/nbi/requirement/{id}', [EmployeeController::class, 'getNbi']);
 Route::get('get/dt/requirement/{id}', [EmployeeController::class, 'getDT']);
@@ -311,6 +312,7 @@ Route::get('get/marriage_certificate/requirement/{id}', [EmployeeController::cla
 Route::get('get/scholastic_record/requirement/{id}', [EmployeeController::class, 'getScholasticRecord']);
 Route::get('get/previous_employment/requirement/{id}', [EmployeeController::class, 'getPreviousEmployment']);
 Route::get('get/supporting_documents/requirement/{id}', [EmployeeController::class, 'getSupportingDocuments']);
+Route::get('get/workday/{id}', [EmployeeController::class, 'getWorkday']);
 Route::get('get/employee_info/requirement/{id}', [EmployeeController::class, 'getEmployeeInfo']);
 Route::get('get/lob/{id}', [EmployeeController::class, 'getLob']);
 Route::get('/employees/{id}', [EmployeeController::class, 'show']);

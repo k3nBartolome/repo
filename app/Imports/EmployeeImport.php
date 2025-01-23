@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Employee;
 use App\Models\Requirements;
 use App\Models\Lob;
+use App\Models\Workday;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -41,7 +42,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Validate row data after conversion
             $validator = Validator::make($row, [
                 'employee_id' => 'nullable',
-                'wd_id' => 'nullable',
+                'workday_id' => 'nullable',
                 'last_name' => 'nullable',
                 'first_name' => 'nullable',
                 'middle_name' => 'nullable',
@@ -66,7 +67,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Create employee record
             $employee = Employee::create([
                 'employee_id' => $row['employee_id'],
-                'wd_id' => $row['wd_id'],
+               
                 'last_name' => $row['last_name'],
                 'first_name' => $row['first_name'],
                 'middle_name' => $row['middle_name'],
@@ -89,13 +90,17 @@ class EmployeeImport implements ToModel, WithHeadingRow
     
             // Safely handle missing 'site' field by checking if it's set
             $site = isset($row['site']) ? $row['site'] : null;
+            $workday_id = isset($row['workday_id']) ? $row['workday_id'] : null;
     
             // Create related LOB record with the site value
             Lob::create([
                 'employee_tbl_id' => $employee->id,
                 'site' => $site,
             ]);
-    
+            Workday::create([
+                'employee_tbl_id' => $employee->id,
+                'workday_id' => $site,
+            ]);
             // Commit the transaction after successful inserts
             DB::commit();
             return $employee; // Return employee model for further processing if needed

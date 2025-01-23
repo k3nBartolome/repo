@@ -69,6 +69,17 @@
           class="p-2 mt-1 border rounded w-full"
         />
       </div>
+      <div class="flex flex-col">
+        <label for="compliance_poc" class="block text-sm font-medium"
+          >Compliance POC</label
+        >
+        <input
+          id="compliance_poc"
+          v-model="form.compliance_poc"
+          type="text"
+          class="p-2 mt-1 border rounded w-full"
+        />
+      </div>
     </div>
 
     <!-- Submit Button -->
@@ -99,6 +110,7 @@ export default {
         lob: "",
         team_name: "",
         project_code: "",
+        compliance_poc:"",
         updated_by: this.$store.state.user_id,
       },
       isSubmitting: false,
@@ -159,6 +171,7 @@ export default {
         this.form.team_name = data.team_name || "";
         this.form.project_code = data.project_code || "";
         this.form.site = data.site || "";
+         this.form.compliance_poc = data.compliance_poc || "";
       } catch (error) {
         console.error("Error fetching DT data:", error.response || error.message);
         alert("Failed to load drug test information.");

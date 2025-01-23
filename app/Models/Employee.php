@@ -40,7 +40,10 @@ class Employee extends Model
     {
         return $this->hasMany(Lob::class, 'employee_tbl_id');
     }
-
+    public function workday()
+    {
+        return $this->hasMany(Workday::class, 'employee_tbl_id');
+    }
     // Relationship with the User model (employee_added_by belongs to User)
     public function userAddedBy()
     {

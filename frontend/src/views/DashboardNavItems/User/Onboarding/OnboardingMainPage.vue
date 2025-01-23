@@ -50,7 +50,7 @@
                 Workday ID
                 <input
                   type="text"
-                  v-model="wd_id"
+                  v-model="workday_id"
                   class="block w-full whitespace-nowrap rounded-l border border-r-0 border-solid border-neutral-300 px-2 py-[0.17rem] text-center text-sm font-normal employeeing-[1.5] text-black dark:border-neutral-600 dark:text-neutral-200 dark:placeholder:text-neutral-200"
                 />
               </label>
@@ -425,7 +425,7 @@ export default {
       showModalImport: false,
       file: null,
       employee_id: "TBA",
-      wd_id: "TBA",
+      workday_id: "TBA",
       last_name: "",
       first_name: "",
       middle_name: "",
@@ -680,7 +680,7 @@ export default {
       this.loading = true;
       const formData = {
         employee_id: this.employee_id,
-        wd_id: this.wd_id,
+        workday_id: this.workday_id,
         last_name: this.last_name,
         first_name: this.first_name,
         middle_name: this.middle_name,

@@ -26,6 +26,9 @@
       <button class="update-button" @click="selectOption('OnboardingLob')">
         Lob
       </button>
+      <button class="update-button" @click="selectOption('OnboardingWorkday')">
+        Workday
+      </button>
       <button class="update-button" @click="selectOption('OnboardingNBI')">
         NBI
       </button>

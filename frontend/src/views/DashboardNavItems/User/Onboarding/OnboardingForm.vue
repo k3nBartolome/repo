@@ -238,7 +238,7 @@
             </td>
             <td>{{ employee.site }}</td>
             <td>{{ employee.employee_id }}</td>
-             <td>{{ employee.wd_id }}</td>
+             <td>{{ employee.workday_id }}</td>
             <td>{{ employee.employee_last_name }}</td>
             <td>{{ employee.employee_first_name }}</td>
             <td>{{ employee.employee_middle_name }}</td>
