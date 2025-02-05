@@ -27,47 +27,45 @@ class EmployeeImport implements ToModel, WithHeadingRow
     {
         // Start a database transaction to ensure atomic operations
         DB::beginTransaction();
-    
+
         try {
             // Skip the row if the email already exists in the database
-            if (isset($row['email']) && Employee::where('email', $row['email'])->exists()) {
+            if (!empty($row['email']) && Employee::where('email', $row['email'])->exists()) {
                 Log::info('Skipping row due to existing email:', ['email' => $row['email']]);
-                return null; // Skip this row
+                return null;
             }
-    
-            // Convert Excel serial date values to Y-m-d format if they exist
-            $row['hired_date'] = $this->excelDateToDateString($row['hired_date']);
-            $row['birthdate'] = $this->excelDateToDateString($row['birthdate']);
-    
-            // Validate row data after conversion
+
+            // Convert Excel serial date values to Y-m-d format
+            $row['hired_date'] = $this->excelDateToDateString($row['hired_date'] ?? null);
+            $row['birthdate'] = $this->excelDateToDateString($row['birthdate'] ?? null);
+
+            // Validate the row data
             $validator = Validator::make($row, [
-                'employee_id' => 'nullable',
-                'workday_id' => 'nullable',
-                'last_name' => 'nullable',
-                'first_name' => 'nullable',
-                'middle_name' => 'nullable',
-                'employee_status' => 'nullable',
-                'hired_date' => 'nullable|date_format:Y-m-d', // Adjusted to match Y-m-d format
-                'hired_month' => 'nullable|string',
-                'birthdate' => 'nullable|date_format:Y-m-d', // Adjusted to match Y-m-d format
-                'contact_number' => 'nullable',
-                'email' => 'nullable|email', // Removed unique rule as we handle it manually
-                'account_associate' => 'nullable',
-                'account_type' => 'nullable',
-                'employment_status' => 'nullable',
-                'site' => 'nullable',
+                'employee_id' => 'nullable|max:50',
+                'workday_id' => 'nullable|string|max:50',
+                'last_name' => 'nullable|string|max:255',
+                'first_name' => 'nullable|string|max:255',
+                'middle_name' => 'nullable|string|max:255',
+                'employee_status' => 'nullable|string|max:100',
+                'hired_date' => 'nullable|date_format:Y-m-d',
+                'hired_month' => 'nullable|string|max:50',
+                'birthdate' => 'nullable|date_format:Y-m-d',
+                'contact_number' => 'nullable|max:20',
+                'email' => 'nullable|email|max:255',
+                'account_associate' => 'nullable|string|max:255',
+                'account_type' => 'nullable|string|max:100',
+                'employment_status' => 'nullable|string|max:100',
+                'site' => 'nullable|integer|max:100',
             ]);
-    
+
             if ($validator->fails()) {
-                Log::error('Validation failed for row:', $row);
-                Log::error('Validation errors:', $validator->errors()->all());
+                Log::error('Validation failed for row:', ['row' => $row, 'errors' => $validator->errors()->all()]);
                 return null; // Skip the invalid row
             }
-    
-            // Create employee record
+
+            // Create the employee record
             $employee = Employee::create([
                 'employee_id' => $row['employee_id'],
-               
                 'last_name' => $row['last_name'],
                 'first_name' => $row['first_name'],
                 'middle_name' => $row['middle_name'],
@@ -82,52 +80,53 @@ class EmployeeImport implements ToModel, WithHeadingRow
                 'employment_status' => $row['employment_status'],
                 'employee_added_by' => $this->employeeAddedBy,
             ]);
-    
-            // Create related Requirements record
+
+            // Create related records in Requirements, Lob, and Workday tables
             Requirements::create([
                 'employee_tbl_id' => $employee->id,
             ]);
-    
-            // Safely handle missing 'site' field by checking if it's set
-            $site = isset($row['site']) ? $row['site'] : null;
-            $workday_id = isset($row['workday_id']) ? $row['workday_id'] : null;
-    
-            // Create related LOB record with the site value
+
             Lob::create([
                 'employee_tbl_id' => $employee->id,
-                'site' => $site,
+                'site' => $row['site'] ?? null,
             ]);
+
             Workday::create([
                 'employee_tbl_id' => $employee->id,
-                'workday_id' => $site,
+                'workday_id' => $row['workday_id'] ?? null,
             ]);
-            // Commit the transaction after successful inserts
+
+            // Commit the transaction
             DB::commit();
-            return $employee; // Return employee model for further processing if needed
+
+            return $employee; // Return the employee model
         } catch (\Exception $e) {
-            // Rollback transaction on error and log the exception
+            // Rollback transaction on error
             DB::rollBack();
             Log::error('Error occurred while saving employee:', ['error' => $e->getMessage()]);
             return null;
         }
     }
-    
-    // Helper function to convert Excel date serial number to a string date in Y-m-d format
+
+    /**
+     * Convert Excel date serial number to a string date in Y-m-d format
+     *
+     * @param mixed $excelDate
+     * @return string|null
+     */
     private function excelDateToDateString($excelDate)
     {
         if (is_numeric($excelDate)) {
-            // Convert Excel serial date number to a date string (Y-m-d format)
+            // Convert Excel serial date to DateTime object
             $excelDate = Date::excelToDateTimeObject($excelDate);
-            return $excelDate->format('Y-m-d'); // Return date in the desired format (Y-m-d)
+            return $excelDate->format('Y-m-d');
         }
-    
-        // If it's already in a string format (like Y-m-d or m/d/Y), just return it
-        if (Carbon::hasFormat($excelDate, 'Y-m-d') || Carbon::hasFormat($excelDate, 'm/d/Y')) {
-            return Carbon::createFromFormat('m/d/Y', $excelDate)->format('Y-m-d');
+
+        // If already in string format, parse it to Y-m-d
+        if ($excelDate && (Carbon::hasFormat($excelDate, 'm/d/Y') || Carbon::hasFormat($excelDate, 'Y-m-d'))) {
+            return Carbon::parse($excelDate)->format('Y-m-d');
         }
-    
-        // Return the input date in the same format as received if it's already a string
-        return $excelDate;
+
+        return null;
     }
-    
 }

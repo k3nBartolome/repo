@@ -160,26 +160,16 @@ export default {
       this.nbi_proof = null;
     },
      uploadImage(event) {
-        const file = event.target.files[0];
-        if (file) {
-            // Validate file type and size (max 2MB)
-            if (!file.type.match(/image\/(jpeg|png)|application\/pdf/)) {
-                alert("Please upload a valid file (JPG, PNG, or PDF).");
-                return;
-            }
+      const file = event.target.files[0];
+      if (file) {
+        this.nbi_proof = file; // Store the file in dt_proof
 
-            if (file.size > 2 * 1024 * 1024) { // 2MB limit
-                alert("File size exceeds 2MB limit.");
-                return;
-            }
-
-            this.nbi_proof = file;
-            const reader = new FileReader();
-            reader.onload = () => {
-                this.nbi_file_name = reader.result; // For preview purposes
-            };
-            reader.readAsDataURL(file);
-        }
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.nbi_file_name = reader.result; // Preview the image
+        };
+        reader.readAsDataURL(file); // Preview file
+      }
     },
     
 

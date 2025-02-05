@@ -16,9 +16,95 @@ use Illuminate\Support\Facades\Validator;
 use Intervention\Image\Facades\Image;
 use Maatwebsite\Excel\Facades\Excel;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-
+use ZipArchive;
+use File;
 class EmployeeController extends Controller
 {
+
+
+
+    public function downloadEmployeeImages($employeeId)
+    {
+        $employee = Employee::with('requirements')->find($employeeId);
+    
+        if (!$employee) {
+            return response()->json(['error' => 'Employee not found'], 404);
+        }
+    
+        // Create a filename using last name, first name, and middle name
+        $lastName = preg_replace('/[^A-Za-z0-9]/', '', $employee->last_name);
+        $firstName = preg_replace('/[^A-Za-z0-9]/', '', $employee->first_name);
+        $middleName = $employee->middle_name ? preg_replace('/[^A-Za-z0-9]/', '', $employee->middle_name) : '';
+    
+        $zipFileName = "{$lastName}_{$firstName}" . ($middleName ? "_{$middleName}" : '') . "_Requirements.zip";
+        $zipFilePath = storage_path("app/public/$zipFileName");
+    
+        // Define the file mappings
+        $fileMappings = [
+            'nbi_file_name' => ['folder' => 'nbi_files', 'name' => 'NBI.jpg'],
+            'tin_file_name' => ['folder' => 'tin_files', 'name' => 'TIN.jpg'],
+            'dt_file_name' => ['folder' => 'dt_files', 'name' => 'DT.jpg'],
+            'peme_file_name' => ['folder' => 'peme_files', 'name' => 'PEME.jpg'],
+            'sss_file_name' => ['folder' => 'sss_files', 'name' => 'SSS.jpg'],
+            'phic_file_name' => ['folder' => 'phic_files', 'name' => 'PHIC.jpg'],
+            'pagibig_file_name' => ['folder' => 'pagibig_files', 'name' => 'PAGIBIG.jpg'],
+            'health_certificate_file_name' => ['folder' => 'health_certificate_files', 'name' => 'Health_Certificate.jpg'],
+            'occupational_permit_file_name' => ['folder' => 'occupational_permit_files', 'name' => 'Occupational_Permit.jpg'],
+            'ofac_file_name' => ['folder' => 'ofac_files', 'name' => 'OFAC.jpg'],
+            'sam_file_name' => ['folder' => 'sam_files', 'name' => 'SAM.jpg'],
+            'oig_file_name' => ['folder' => 'oig_files', 'name' => 'OIG.jpg'],
+            'cibi_file_name' => ['folder' => 'cibi_files', 'name' => 'CIBI.jpg'],
+            'bgc_file_name' => ['folder' => 'bgc_files', 'name' => 'BGC.jpg'],
+            'birth_certificate_file_name' => ['folder' => 'birth_certificate_files', 'name' => 'Birth_Certificate.jpg'],
+            'dependent_birth_certificate_file_name' => ['folder' => 'dependent_birth_certificate_files', 'name' => 'Dependent_Birth_Certificate.jpg'],
+            'marriage_certificate_file_name' => ['folder' => 'marriage_certificate_files', 'name' => 'Marriage_Certificate.jpg'],
+            'scholastic_record_file_name' => ['folder' => 'scholastic_record_files', 'name' => 'Scholastic_Record.jpg'],
+            'previous_employment_file_name' => ['folder' => 'previous_employment_files', 'name' => 'Previous_Employment.jpg'],
+            'supporting_documents_file_name' => ['folder' => 'supporting_documents_files', 'name' => 'Supporting_Documents.jpg']
+        ];
+    
+        $files = [];
+        foreach ($employee->requirements as $requirement) {
+            foreach ($fileMappings as $columnName => $details) {
+                $storageFolder = $details['folder'];
+                $newFileName = $details['name'];
+    
+                if (!empty($requirement->$columnName) && Storage::exists("public/{$storageFolder}/{$requirement->$columnName}")) {
+                    $originalFilePath = storage_path("app/public/{$storageFolder}/{$requirement->$columnName}");
+                    $files[$originalFilePath] = $newFileName;
+                }
+            }
+        }
+    
+        if (empty($files)) {
+            return response()->json(['error' => 'No image files found'], 404);
+        }
+    
+        // Create ZIP
+        $zip = new ZipArchive;
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            foreach ($files as $originalPath => $newFileName) {
+                $zip->addFile($originalPath, $newFileName);
+            }
+            $zip->close();
+        } else {
+            return response()->json(['error' => 'Unable to create ZIP file'], 500);
+        }
+    
+        // ✅ Check if ZIP file is valid before returning
+        if (!file_exists($zipFilePath) || filesize($zipFilePath) == 0) {
+            return response()->json(['error' => 'Failed to create a valid ZIP file'], 500);
+        }
+    
+        // ✅ Return ZIP as a download response
+        return response()->download($zipFilePath, $zipFileName, [
+            'Content-Disposition' => "attachment; filename=\"$zipFileName\""
+        ])->deleteFileAfterSend(true);
+        
+    }
+    
+
+
     public function getEmployee($id)
     {
         $employee = Employee::findOrFail($id);
@@ -744,9 +830,9 @@ class EmployeeController extends Controller
             $day15Deadline = $employee->hired_date ? $this->get15thWorkingDay($employee->hired_date) : null;
             // Get 5th working day
             $day5Deadline = $employee->hired_date ? $this->get5thWorkingDay($employee->hired_date) : null;
-              // Get 10th working day
+            // Get 10th working day
             $day10Deadline = $employee->hired_date ? $this->get10thWorkingDay($employee->hired_date) : null;
-                      // Get Saturday after the day deadline
+            // Get Saturday after the day deadline
             $saturdayAfterDeadline = $day15Deadline ? $this->getSaturdayAfter($day15Deadline) : null;
 
             return [

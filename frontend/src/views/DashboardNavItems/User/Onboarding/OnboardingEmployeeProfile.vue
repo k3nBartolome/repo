@@ -1,5 +1,15 @@
 <template>
   <div class="flex flex-col items-center p-4 bg-gray-100 min-h-screen">
+    <div class="flex justify-center p-4">
+      <button
+        @click="downloadEmployeeImages"
+        :disabled="isLoading"
+        class="px-6 py-2 text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 transition-all sm:px-4 sm:py-2 md:px-5 md:py-2.5 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {{ isLoading ? "Downloading..." : "Download Requirements" }}
+      </button>
+    </div>
+
     <!-- Profile Card -->
     <div
       class="bg-white rounded-lg shadow-lg p-6 w-full max-w-md sm:max-w-xl lg:max-w-3xl"
@@ -1595,6 +1605,7 @@ import axios from "axios";
 export default {
   data() {
     return {
+      isLoading: false,
       employee_data: {},
       lob_data: {},
       requirements_data: {},
@@ -1625,6 +1636,40 @@ export default {
     this.fetchEmployeeData();
   },
   methods: {
+    async downloadEmployeeImages() {
+      this.isLoading = true; // Show loading state
+      try {
+        const employeeResponse = await axios.get(
+          `https://10.109.2.112/api/employees/${this.$route.params.id}`
+        );
+
+        console.log("Employee Response:", employeeResponse.data);
+
+        const fileName = employeeResponse.data.fileName || "default.zip";
+        console.log("File Name from API:", fileName);
+
+        const response = await axios.get(
+          `https://10.109.2.112/api/employees/${this.$route.params.id}/download-images`,
+          {
+            responseType: "blob", // Important for handling file downloads
+          }
+        );
+
+        // Create a download link for the ZIP file
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute("download", fileName); // Set correct filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (error) {
+        console.error("Error downloading employee images:", error);
+      } finally {
+        this.isLoading = false; // Hide loading state
+      }
+    },
+
     async fetchEmployeeData() {
       try {
         const response = await axios.get(

@@ -325,6 +325,8 @@ Route::get('applicants_data', [ApplicantDataController::class, 'index']);
 Route::get('applicants_export_data', [ApplicantDataController::class, 'ExportAttendance']);
 Route::get('/getCreatedAtRange', [ApplicantDataController::class, 'getCreatedAtRange']);
 
+Route::get('/employees/{id}/download-images', [EmployeeController::class, 'downloadEmployeeImages']);
+
  });
 Route::get('out', [ClassesController::class, 'OutOfSla']);
 Route::get('cancel', [ClassesController::class, 'Cancelled']);
