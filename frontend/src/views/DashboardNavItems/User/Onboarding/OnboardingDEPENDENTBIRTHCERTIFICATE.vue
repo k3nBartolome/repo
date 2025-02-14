@@ -132,7 +132,7 @@ export default {
     async fetchDbcData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/get/dependent_birth_certificate/requirement/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/get/dependent_birth_certificate/requirement/${this.$route.params.id}`
         );
         const data = response.data.data;
 
@@ -179,7 +179,7 @@ export default {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/dependent_birth_certificate/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/dependent_birth_certificate/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

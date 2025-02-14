@@ -11,23 +11,23 @@
               <div class="flex items-baseline justify-center space-x-4">
                 <router-link
                   to="/capfile"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+                  class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
                   v-if="isUser || isSourcing"
                   >Capacity File</router-link
                 >
                 <router-link v-if="isUser || isBudget || isRemx || isSourcing"
                   to="/staffing"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+                  class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >Staffing Tracker</router-link
                 >
                 <!-- <router-link
                   to="/sr_compliance"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+                  class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
                   >SR Pending Movements</router-link
                 > -->
                 <router-link
                   to="/h&s"
-                  class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+                  class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
                   v-if="isUser"
                   >H&S Tool</router-link
                 >
@@ -168,6 +168,12 @@
                       >Onboarding Tool</router-link
                     >
                     <router-link
+                      to="/onboarding_list"
+                      class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                      role="menuitem"
+                      >Employee List</router-link
+                    >
+                    <router-link
                       to="/onboarding_user_management"
                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       role="menuitem"
@@ -283,13 +289,13 @@
             </div> -->
             <router-link
               to="/profile"
-              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+              class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
               >{{ userName }}</router-link
             >
             <router-link
               to="/login"
               @click="logout"
-              class="px-3 py-2 text-sm font-medium rounded-md hover:bg-gray-700 hover:text-white link-button truncate"
+              class="px-3 py-2 text-sm font-medium truncate rounded-md hover:bg-gray-700 hover:text-white link-button"
               >Logout</router-link
             >
           </div>

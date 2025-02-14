@@ -227,7 +227,7 @@ export default {
         };
 
         await axios
-          .get("https://10.109.2.112/api/sites5", config)
+          .get("http://127.0.0.1:8000/api/sites5", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -251,7 +251,7 @@ export default {
         };
 
         await axios
-          .get("https://10.109.2.112/api/sites6", config)
+          .get("http://127.0.0.1:8000/api/sites6", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites2 = response.data.data;
@@ -283,7 +283,7 @@ export default {
       };
 
       axios
-        .post("https://10.109.2.112/api/sites3", formData, config)
+        .post("http://127.0.0.1:8000/api/sites3", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

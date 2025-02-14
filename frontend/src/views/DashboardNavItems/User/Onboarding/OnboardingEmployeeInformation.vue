@@ -50,7 +50,7 @@
           class="p-1 mt-1 border rounded w-full"
         />
       </div>
-      
+
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Contact Number</label>
         <input
@@ -184,7 +184,7 @@ export default {
   methods: {
     async fetchEmployeeData() {
       try {
-        const apiUrl = `https://10.109.2.112/api/employee_info/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/employee_info/${this.$route.params.id}`;
         const response = await axios.get(apiUrl);
         const data = response.data;
         this.employee_info_first_name = data.first_name;
@@ -224,7 +224,7 @@ export default {
      formData.append("employee_info_updated_by" ,this.$store.state.user_id);
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/employee_info/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/employee_info/requirement/${this.$route.params.id}`;
         const response = await axios.post(apiUrl, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });

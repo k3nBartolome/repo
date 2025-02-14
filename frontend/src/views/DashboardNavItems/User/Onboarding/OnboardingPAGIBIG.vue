@@ -81,7 +81,7 @@
     </div> -->
     <div v-if="pagibig_file_name" class="mt-4">
       <div class="flex flex-col items-center">
-        <img 
+        <img
           :src="pagibig_file_name"
           alt="Preview Image"
           class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
@@ -150,7 +150,7 @@ export default {
       pagibig_number_error: "",
     };
   },
-  
+
 mounted() {
     this.fetchPagibigData();
   },
@@ -158,7 +158,7 @@ mounted() {
     async fetchPagibigData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/get/pagibig/requirement/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/get/pagibig/requirement/${this.$route.params.id}`
         );
         const data = response.data.data;
 
@@ -231,7 +231,7 @@ mounted() {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/pagibig/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/pagibig/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

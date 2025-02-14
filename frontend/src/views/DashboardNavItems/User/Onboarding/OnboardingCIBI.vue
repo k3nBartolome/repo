@@ -128,7 +128,7 @@ mounted() {
     async fetchCibiData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/get/cibi/requirement/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/get/cibi/requirement/${this.$route.params.id}`
         );
         const data = response.data.data;
 
@@ -159,7 +159,7 @@ mounted() {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/cibi/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/cibi/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

@@ -169,7 +169,7 @@ export default {
         };
 
         await axios
-          .get("https://10.109.2.112/api/sites", config)
+          .get("http://127.0.0.1:8000/api/sites", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -187,7 +187,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/list_role",
+          "http://127.0.0.1:8000/api/list_role",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -224,7 +224,7 @@ export default {
         };
 
         const response = await axios.post(
-          "https://10.109.2.112/api/create_user",
+          "http://127.0.0.1:8000/api/create_user",
           postData,
           config
         );
@@ -244,7 +244,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/list_user",
+          "http://127.0.0.1:8000/api/list_user",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -267,7 +267,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.delete(
-          `https://10.109.2.112/api/delete_user/${user_id}`,
+          `http://127.0.0.1:8000/api/delete_user/${user_id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

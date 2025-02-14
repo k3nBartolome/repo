@@ -102,13 +102,13 @@ export default {
     };
   },
     mounted() {
-   
+
     this.fetchNBIData();
   },
   methods: {
      async fetchNBIData() {
       try {
-        const response = await axios.get(`https://10.109.2.112/api/get/nbi/requirement/${this.$route.params.id}`);
+        const response = await axios.get(`http://127.0.0.1:8000/api/get/nbi/requirement/${this.$route.params.id}`);
         const data = response.data.data;
 
         // Populate the form fields with API response data
@@ -171,7 +171,7 @@ export default {
         reader.readAsDataURL(file); // Preview file
       }
     },
-    
+
 
     resizeImage(file) {
       const img = new Image();
@@ -249,7 +249,7 @@ export default {
         }
 
         try {
-            const apiUrl = `https://10.109.2.112/api/update/nbi/requirement/${this.$route.params.id}`;
+            const apiUrl = `http://127.0.0.1:8000/api/update/nbi/requirement/${this.$route.params.id}`;
             const response = await axios.post(apiUrl, formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",

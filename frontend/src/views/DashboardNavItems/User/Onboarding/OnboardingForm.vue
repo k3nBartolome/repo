@@ -359,7 +359,7 @@ export default {
       try {
         const token = this.$store.state.token;
 
-        const response = await axios.get(`https://10.109.2.112/api/added_users`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/added_users`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -404,7 +404,7 @@ export default {
           const token = this.$store.state.token;
           axios
             .post(
-              `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
+              `http://127.0.0.1:8000/api/employees/${employeeId}/save-qr-code`,
               formData,
               {
                 headers: {
@@ -444,7 +444,7 @@ export default {
     async getRegion() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/regions", {
+        const response = await axios.get("http://127.0.0.1:8000/api/regions", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -460,7 +460,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/index_sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/index_sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -509,7 +509,7 @@ export default {
           const siteIds = this.$store.state.site_id.join(",");
 
           const response = await axios.get(
-            `https://10.109.2.112/api/employees_data/${siteIds}`,
+            `http://127.0.0.1:8000/api/employees_data/${siteIds}`,
             {
               params,
               headers: { Authorization: `Bearer ${token}` },
@@ -581,7 +581,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.109.2.112/api/employees/${employeeId}`,
+          `http://127.0.0.1:8000/api/employees/${employeeId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
@@ -622,7 +622,7 @@ export default {
 
         console.log("Exporting data for site IDs:", siteIds);
         const response = await axios.get(
-          `https://10.109.2.112/api/employees_export/${siteIds}`,
+          `http://127.0.0.1:8000/api/employees_export/${siteIds}`,
           {
             params: {
               region: this.selectedRegion,

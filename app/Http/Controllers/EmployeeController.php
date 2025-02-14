@@ -1227,7 +1227,7 @@ class EmployeeController extends Controller
         }
 
         // Fetch employee information with pagination
-        $employee_info = $employeeQuery->paginate(10);
+        $employee_info = $employeeQuery->paginate(25);
 
         // Add the QR code URL to each employee
         $employees = $employee_info->items();
@@ -1349,7 +1349,7 @@ class EmployeeController extends Controller
                 $query->where('id', $siteIds); // Handle single site_id
             });
         }
-        $employee_info = $employeeQuery->paginate(10);
+        $employee_info = $employeeQuery->paginate(25);
         $mappedEmployees = collect($employee_info->items())->map(function ($employee) {
             return [
                 'id' => $employee->id ?? 'TBA',
@@ -1583,7 +1583,11 @@ class EmployeeController extends Controller
             'employee_id' => $employee->employee_id ?? 'TBA',
             'full_name' => $employee->last_name . ',' . $employee->first_name . ' ' . $employee->middle_name,
             'status' => $employee->employee_status,
+            'first_name' => $employee->first_name,
+            'middle_name' => $employee->middle_name,
+            'last_name' => $employee->last_name,
             'hired_date' => $employee->hired_date,
+            'hired_month' => $employee->hired_month,
             'birthdate' => $employee->birthdate,
             'contact_number' => $employee->contact_number,
             'email' => $employee->email,
@@ -1801,6 +1805,7 @@ class EmployeeController extends Controller
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
             'lob.siteName',
+             'workday'
         ])->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);

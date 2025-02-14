@@ -121,7 +121,7 @@ export default {
       sites: [],
        site: null,  // Assuming you are storing the site value
     minDate: null,  // Will hold the min date from backend
-    maxDate: null, 
+    maxDate: null,
       columns: [
         { data: "site", title: "Site" },
         { data: "last_name", title: "Last Name" },
@@ -144,7 +144,7 @@ export default {
      async fetchDateRange() {
     try {
       const token = this.$store.state.token;  // Assuming the token is in Vuex
-      const response = await axios.get("https://10.109.2.112/api/getCreatedAtRange", {
+      const response = await axios.get("http://127.0.0.1:8000/api/getCreatedAtRange", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -162,7 +162,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -177,7 +177,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/applicants_data",
+          "http://127.0.0.1:8000/api/applicants_data",
           {
             params: {
               site_id: this.site || null,
@@ -204,7 +204,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/applicants_export_data",
+          "http://127.0.0.1:8000/api/applicants_export_data",
           {
             params: {
               site_id: this.site || null,

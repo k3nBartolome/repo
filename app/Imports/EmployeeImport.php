@@ -3,16 +3,16 @@
 namespace App\Imports;
 
 use App\Models\Employee;
-use App\Models\Requirements;
 use App\Models\Lob;
+use App\Models\Requirements;
 use App\Models\Workday;
-use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
-use Carbon\Carbon;
 
 class EmployeeImport implements ToModel, WithHeadingRow
 {
@@ -32,6 +32,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Skip the row if the email already exists in the database
             if (!empty($row['email']) && Employee::where('email', $row['email'])->exists()) {
                 Log::info('Skipping row due to existing email:', ['email' => $row['email']]);
+
                 return null;
             }
 
@@ -42,7 +43,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Validate the row data
             $validator = Validator::make($row, [
                 'employee_id' => 'nullable|max:50',
-                'workday_id' => 'nullable|string|max:50',
+                'workday_id' => 'nullable|max:50',
                 'last_name' => 'nullable|string|max:255',
                 'first_name' => 'nullable|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
@@ -60,6 +61,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
 
             if ($validator->fails()) {
                 Log::error('Validation failed for row:', ['row' => $row, 'errors' => $validator->errors()->all()]);
+
                 return null; // Skip the invalid row
             }
 
@@ -104,14 +106,16 @@ class EmployeeImport implements ToModel, WithHeadingRow
             // Rollback transaction on error
             DB::rollBack();
             Log::error('Error occurred while saving employee:', ['error' => $e->getMessage()]);
+
             return null;
         }
     }
 
     /**
-     * Convert Excel date serial number to a string date in Y-m-d format
+     * Convert Excel date serial number to a string date in Y-m-d format.
      *
      * @param mixed $excelDate
+     *
      * @return string|null
      */
     private function excelDateToDateString($excelDate)
@@ -119,6 +123,7 @@ class EmployeeImport implements ToModel, WithHeadingRow
         if (is_numeric($excelDate)) {
             // Convert Excel serial date to DateTime object
             $excelDate = Date::excelToDateTimeObject($excelDate);
+
             return $excelDate->format('Y-m-d');
         }
 

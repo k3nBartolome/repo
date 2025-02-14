@@ -33,7 +33,7 @@
         </header>
         <form
           @submit.prevent="addEmployees"
-          class="grid gap-4 px-4 py-2 sm:grid-cols-2 grid-cols-1"
+          class="grid grid-cols-1 gap-4 px-4 py-2 sm:grid-cols-2"
         >
             <div class="col-span-1">
               <label class="block">
@@ -505,9 +505,9 @@ export default {
  async downloadTemplate() {
   try {
     const token = this.$store.state.token; // Retrieve the token from Vuex store
-    
+
     // Send the GET request to the download endpoint
-    const response = await axios.get('https://10.109.2.112/api/download-template', {
+    const response = await axios.get('http://127.0.0.1:8000/api/download-template', {
       headers: {
         Authorization: `Bearer ${token}`, // Include token in the header for authentication
       },
@@ -517,7 +517,7 @@ export default {
     if (response.status === 200) {
       // Create a URL for the blob data
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      
+
       // Create a temporary link to trigger the download
       const link = document.createElement('a');
       link.href = url;
@@ -536,11 +536,11 @@ export default {
     console.error('Error while downloading the template:', error);
   }
 },
-    
+
     async getSites() {
       try {
         const token = this.$store.state.token; // Retrieve the token from Vuex store
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -605,7 +605,7 @@ export default {
         // Make API request
         const token = this.$store.state.token;
         const response = await axios.post(
-          `https://10.109.2.112/api/employees/${employeeId}/save-qr-code`,
+          `http://127.0.0.1:8000/api/employees/${employeeId}/save-qr-code`,
           formData,
           {
             headers: {
@@ -652,7 +652,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.post(
-          "https://10.109.2.112/api/upload_employees_bulk",
+          "http://127.0.0.1:8000/api/upload_employees_bulk",
           formData,
           {
             headers: {
@@ -702,7 +702,7 @@ export default {
       };
 
       axios
-        .post("https://10.109.2.112/api/upload_employees", formData, {
+        .post("http://127.0.0.1:8000/api/upload_employees", formData, {
           headers,
         })
         .then((response) => {
@@ -813,7 +813,7 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
- 
+
   overflow: auto; /* Allow scrolling if the content exceeds screen height */
 }
 

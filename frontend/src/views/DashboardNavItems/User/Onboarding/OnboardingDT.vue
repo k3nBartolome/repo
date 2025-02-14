@@ -116,10 +116,10 @@ export default {
     this.getDT(); // Fetch data on component load
   },
   methods: {
-    
+
      async getDT() {
       try {
-        const apiUrl = `https://10.109.2.112/api/get/dt/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/get/dt/requirement/${this.$route.params.id}`;
         const response = await axios.get(apiUrl);
         const data = response.data.data;
 
@@ -167,7 +167,7 @@ export default {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/dt/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/dt/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

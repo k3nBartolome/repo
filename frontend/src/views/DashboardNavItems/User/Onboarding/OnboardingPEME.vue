@@ -4,7 +4,7 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full" 
+        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full"
         @change="updatePemeData">
           <option disabled>Please select one</option>
           <option value="COMPLETE">COMPLETE</option>
@@ -157,7 +157,7 @@ export default {
     async fetchPemeData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/get/peme/requirement/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/get/peme/requirement/${this.$route.params.id}`
         );
         const data = response.data.data;
 
@@ -204,7 +204,7 @@ export default {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/peme/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/peme/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

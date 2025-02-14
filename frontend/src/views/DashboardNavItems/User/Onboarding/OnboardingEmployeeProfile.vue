@@ -1640,7 +1640,7 @@ export default {
       this.isLoading = true; // Show loading state
       try {
         const employeeResponse = await axios.get(
-          `https://10.109.2.112/api/employees/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/employees/${this.$route.params.id}`
         );
 
         console.log("Employee Response:", employeeResponse.data);
@@ -1649,7 +1649,7 @@ export default {
         console.log("File Name from API:", fileName);
 
         const response = await axios.get(
-          `https://10.109.2.112/api/employees/${this.$route.params.id}/download-images`,
+          `http://127.0.0.1:8000/api/employees/${this.$route.params.id}/download-images`,
           {
             responseType: "blob", // Important for handling file downloads
           }
@@ -1673,7 +1673,7 @@ export default {
     async fetchEmployeeData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/show/employees/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/show/employees/${this.$route.params.id}`
         );
         if (response.status === 200) {
           this.employee_data = response.data.employee_data || {};

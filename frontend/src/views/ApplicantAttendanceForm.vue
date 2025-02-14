@@ -1,58 +1,58 @@
 <template>
-  <div class="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-    <div class="w-full max-w-lg bg-white p-6 rounded-lg shadow-lg">
-      <h1 class="text-2xl font-semibold text-center mb-6">Fill in the Details</h1>
+  <div class="flex items-center justify-center min-h-screen p-4 bg-gray-100">
+    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-lg">
+      <h1 class="mb-6 text-2xl font-semibold text-center">Fill in the Details</h1>
       <form @submit.prevent="submitForm" class="space-y-4">
         <!-- Site -->
         <div>
           <label for="site" class="block text-sm font-medium text-gray-700">Site:</label>
-          <select id="site" disabled v-model="form.site_id" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.site_id}">
+          <select id="site" disabled v-model="form.site_id" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.site_id}">
             <option value="" disabled>Select a site</option>
             <option v-for="site in sites" :key="site.id" :value="site.id">
               {{ site.name }}
             </option>
           </select>
-          <p v-if="errors.site_id" class="text-red-500 text-xs mt-1">{{ errors.site_id }}</p>
+          <p v-if="errors.site_id" class="mt-1 text-xs text-red-500">{{ errors.site_id }}</p>
         </div>
 
         <!-- First Name -->
         <div>
           <label for="first_name" class="block text-sm font-medium text-gray-700">First Name:</label>
-          <input id="first_name" type="text" v-model="form.first_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.first_name}" />
-          <p v-if="errors.first_name" class="text-red-500 text-xs mt-1">{{ errors.first_name }}</p>
+          <input id="first_name" type="text" v-model="form.first_name" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.first_name}" />
+          <p v-if="errors.first_name" class="mt-1 text-xs text-red-500">{{ errors.first_name }}</p>
         </div>
 
         <!-- Middle Name -->
         <div>
           <label for="middle_name" class="block text-sm font-medium text-gray-700">Middle Name:</label>
-          <input id="middle_name" type="text" v-model="form.middle_name" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.middle_name}" />
-          <p v-if="errors.middle_name" class="text-red-500 text-xs mt-1">{{ errors.middle_name }}</p>
+          <input id="middle_name" type="text" v-model="form.middle_name" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.middle_name}" />
+          <p v-if="errors.middle_name" class="mt-1 text-xs text-red-500">{{ errors.middle_name }}</p>
         </div>
 
         <!-- Last Name -->
         <div>
           <label for="last_name" class="block text-sm font-medium text-gray-700">Last Name:</label>
-          <input id="last_name" type="text" v-model="form.last_name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.last_name}" />
-          <p v-if="errors.last_name" class="text-red-500 text-xs mt-1">{{ errors.last_name }}</p>
+          <input id="last_name" type="text" v-model="form.last_name" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.last_name}" />
+          <p v-if="errors.last_name" class="mt-1 text-xs text-red-500">{{ errors.last_name }}</p>
         </div>
 
         <!-- Email -->
         <div>
           <label for="email" class="block text-sm font-medium text-gray-700">Email:</label>
-          <input id="email" type="email" v-model="form.email" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.email}" />
-          <p v-if="errors.email" class="text-red-500 text-xs mt-1">{{ errors.email }}</p>
+          <input id="email" type="email" v-model="form.email" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.email}" />
+          <p v-if="errors.email" class="mt-1 text-xs text-red-500">{{ errors.email }}</p>
         </div>
 
         <!-- Contact Number -->
         <div>
           <label for="contact_number" class="block text-sm font-medium text-gray-700">Contact Number:</label>
-          <input id="contact_number" type="text" v-model="form.contact_number" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.contact_number}" />
-          <p v-if="errors.contact_number" class="text-red-500 text-xs mt-1">{{ errors.contact_number }}</p>
+          <input id="contact_number" type="text" v-model="form.contact_number" required class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" :class="{'border-red-500': errors.contact_number}" />
+          <p v-if="errors.contact_number" class="mt-1 text-xs text-red-500">{{ errors.contact_number }}</p>
         </div>
 
         <!-- Submit Button -->
         <div>
-          <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Submit</button>
+          <button type="submit" class="w-full px-4 py-2 text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500">Submit</button>
         </div>
       </form>
     </div>
@@ -96,7 +96,7 @@ export default {
           },
         };
 
-        const response = await axios.get("https://10.109.2.112/api/sites", config);
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", config);
         this.sites = response.data.data;
       } catch (error) {
         alert("Failed to load sites. Please try again.");
@@ -135,7 +135,7 @@ async submitForm() {
       },
     };
 
-    await axios.post("https://10.109.2.112/api/applicant/create", this.form, config);
+    await axios.post("http://127.0.0.1:8000/api/applicant/create", this.form, config);
 
     alert("Applicant details submitted successfully!");
     this.resetForm();

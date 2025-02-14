@@ -181,7 +181,7 @@ export default {
       };
 
       axios
-        .put(`https://10.109.2.112/api//sites_activate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api//sites_activate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -206,7 +206,7 @@ export default {
       };
 
       axios
-        .put(`https://10.109.2.112/api/sites_deactivate/${id}`, form, config)
+        .put(`http://127.0.0.1:8000/api/sites_deactivate/${id}`, form, config)
         .then((response) => {
           console.log(response.data);
           this.is_active = "";
@@ -227,7 +227,7 @@ async getSites() {
         };
 
         await axios
-          .get("https://10.109.2.112/api/sites", config)
+          .get("http://127.0.0.1:8000/api/sites", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites = response.data.data;
@@ -254,7 +254,7 @@ async getSites() {
         };
 
         await axios
-          .get("https://10.109.2.112/api/sites2", config)
+          .get("http://127.0.0.1:8000/api/sites2", config)
           .then((response) => {
             console.log("Response received:", response.data);
             this.sites2 = response.data.data;
@@ -286,7 +286,7 @@ async getSites() {
       };
 
       axios
-        .post("https://10.109.2.112/api/sites", formData, config)
+        .post("http://127.0.0.1:8000/api/sites", formData, config)
         .then((response) => {
           console.log(response.data);
           this.name = "";

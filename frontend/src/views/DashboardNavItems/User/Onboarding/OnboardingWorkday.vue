@@ -2,7 +2,7 @@
   <div class="container mx-auto p-4">
     <h2 class="text-xl font-semibold mb-4 text-center">Update Workday Details</h2>
 
-   
+
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
      <div class="flex flex-col">
       <label for="workday_id" class="block text-sm font-medium">WORKDAY ID </label>
@@ -94,7 +94,7 @@ import axios from "axios";
 export default {
   data() {
     return {
-     
+
 
       form: {
         workday_id: "",
@@ -115,13 +115,13 @@ export default {
     this.site = this.$store.state.site_id || ""; // Default to an empty string if site_id is not set
 
     // Fetch sites from the API
- 
+
     this.getWorkday();
   },
   methods: {
    async getWorkday() {
   try {
-    const apiUrl = `https://10.109.2.112/api/get/workday/${this.$route.params.id}`;
+    const apiUrl = `http://127.0.0.1:8000/api/get/workday/${this.$route.params.id}`;
     const response = await axios.get(apiUrl);
     const data = response.data.data;
 
@@ -145,7 +145,7 @@ export default {
       this.isSubmitting = true;
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/workday/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/workday/${this.$route.params.id}`;
         const { data } = await axios.post(apiUrl, this.form);
 
         // Use the response data here (e.g., display success message)

@@ -57,7 +57,7 @@
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        
+
         <input v-model="sss_remarks" @change="updateSssData" type="text" class="p-2 mt-1 border rounded w-full" />
       </div>
     </div>
@@ -157,7 +157,7 @@ mounted() {
     async fetchSssData() {
       try {
         const response = await axios.get(
-          `https://10.109.2.112/api/get/sss/requirement/${this.$route.params.id}`
+          `http://127.0.0.1:8000/api/get/sss/requirement/${this.$route.params.id}`
         );
         const data = response.data.data;
 
@@ -233,7 +233,7 @@ mounted() {
       }
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/sss/requirement/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/sss/requirement/${this.$route.params.id}`;
 
         // Submit the form data to the API
         const response = await axios.post(apiUrl, formData, {

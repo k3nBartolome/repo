@@ -8,7 +8,7 @@
         <label for="site" class="block text-sm font-medium">Region</label>
         <select
                   v-model="form.region"
-                  
+
                    class="p-2 mt-1 border rounded w-full"
                 >
                   <option disabled value="">Please select Site</option>
@@ -23,7 +23,7 @@
         <label for="site" class="block text-sm font-medium">Site</label>
         <select
                   v-model="form.site"
-                  
+
                    class="p-2 mt-1 border rounded w-full"
                 >
                   <option disabled value="">Please select Site</option>
@@ -103,7 +103,7 @@ export default {
     return {
       sites: [],
       regions:[],
-       
+
       form: {
          site: "",
         region: "",
@@ -122,13 +122,13 @@ export default {
     // Fetch sites from the API
     await this.getSites();
     this.getRegion();
-   this.getLob(); 
+   this.getLob();
   },
   methods: {
     async getSites() {
       try {
         const token = this.$store.state.token; // Retrieve the token from Vuex store
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -147,7 +147,7 @@ export default {
     async getRegion() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/regions", {
+        const response = await axios.get("http://127.0.0.1:8000/api/regions", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -162,7 +162,7 @@ export default {
     },
     async getLob() {
       try {
-        const apiUrl = `https://10.109.2.112/api/get/lob/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/get/lob/${this.$route.params.id}`;
         const response = await axios.get(apiUrl);
         const data = response.data.data;
 
@@ -183,7 +183,7 @@ export default {
       this.isSubmitting = true;
 
       try {
-        const apiUrl = `https://10.109.2.112/api/update/lob/${this.$route.params.id}`;
+        const apiUrl = `http://127.0.0.1:8000/api/update/lob/${this.$route.params.id}`;
         const { data } = await axios.post(apiUrl, this.form);
 
         // Use the response data here (e.g., display success message)

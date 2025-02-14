@@ -79,7 +79,7 @@ export default {
   methods: {
     async getSites() {
       await axios
-        .get("https://10.109.2.112/api/sites/" + this.$route.params.id)
+        .get("http://127.0.0.1:8000/api/sites/" + this.$route.params.id)
         .then((response) => {
           this.sites = response.data.data;
           const siteObj = this.sites;
@@ -104,7 +104,7 @@ export default {
       };
       axios
         .put(
-          "https://10.109.2.112/api/sites/" + this.$route.params.id,
+          "http://127.0.0.1:8000/api/sites/" + this.$route.params.id,
           formData
         )
         .then((response) => {

@@ -1,6 +1,6 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen bg-gray-100 px-4 sm:px-6 lg:px-8">
-    <div class="w-full max-w-md space-y-8 bg-white p-10 rounded-lg shadow-lg">
+  <div class="flex items-center justify-center min-h-screen px-4 bg-gray-100 sm:px-6 lg:px-8">
+    <div class="w-full max-w-md p-10 space-y-8 bg-white rounded-lg shadow-lg">
       <div class="flex justify-center">
         <img
           class="w-auto h-12 mx-auto"
@@ -40,17 +40,17 @@
               placeholder="Password"
             />
           </div>
-          
+
           <!-- Error Message -->
-          <div v-if="successMessage" class="text-red-500 text-center text-sm">
+          <div v-if="successMessage" class="text-sm text-center text-red-500">
             {{ successMessage }}
           </div>
-          
+
           <!-- Submit Button -->
           <div class="flex items-center justify-center">
             <button
               type="submit"
-              class="w-full px-4 py-3 text-lg font-semibold text-white bg-orange-500 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 transition duration-200 ease-in-out"
+              class="w-full px-4 py-3 text-lg font-semibold text-white transition duration-200 ease-in-out bg-orange-500 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500"
             >
               Sign in
             </button>
@@ -86,13 +86,13 @@ export default {
         this.email = this.email.trim().toLowerCase();
 
         // Step 1: Fetch CSRF token
-        await axios.get("https://10.109.2.112/sanctum/csrf-cookie", {
+        await axios.get("http://127.0.0.1:8000/sanctum/csrf-cookie", {
           withCredentials: true,
         });
 
         // Step 2: Send login request
         const response = await axios.post(
-          "https://10.109.2.112/api/login",
+          "http://127.0.0.1:8000/api/login",
           {
             email: this.email,
             password: this.password,

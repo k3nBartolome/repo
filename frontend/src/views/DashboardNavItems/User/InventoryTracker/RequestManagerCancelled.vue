@@ -171,7 +171,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/inventory/cancelled",
+          "http://127.0.0.1:8000/api/inventory/cancelled",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -192,7 +192,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

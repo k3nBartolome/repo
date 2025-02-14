@@ -139,7 +139,7 @@ export default {
           search: this.searchQuery, // Include search query
         };
 
-        const response = await axios.get(`https://10.109.2.112/api/list_users`, {
+        const response = await axios.get(`http://127.0.0.1:8000/api/list_users`, {
           params,
           headers: {
             Authorization: `Bearer ${token}`,
@@ -177,7 +177,7 @@ export default {
       this.loading = true; // Set loading to true
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -201,7 +201,7 @@ export default {
       this.selectedUser = user;
 
       console.log("All Sites:", this.sites);
-      
+
       // Ensure sites are already loaded
       if (this.sites.length === 0) {
         console.error("Sites data is not loaded.");
@@ -227,7 +227,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.put(
-          `https://10.109.2.112/api/user/${this.selectedUser.user_id}/assign-sites`,
+          `http://127.0.0.1:8000/api/user/${this.selectedUser.user_id}/assign-sites`,
           { site_ids: this.selectedSites }, // Send the selected sites' IDs as an array
           {
             headers: {

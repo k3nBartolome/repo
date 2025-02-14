@@ -58,6 +58,7 @@ DNSO
 Dribbble
 dropcontainer
 dynamicdialog
+earch
 editcapfile
 editcapfileguatemala
 editcapfileindia
@@ -79,6 +80,7 @@ fixedheader
 focustrap
 fontawesome
 Fonticons
+frontdesk
 frtlip
 gtotal
 handleform
@@ -100,6 +102,7 @@ keytable
 laravel
 Lastname
 li
+Listv
 loadingdata
 loadinglocalization
 loadingolapstructure
@@ -201,6 +204,7 @@ totaltarget
 treeselect
 treetable
 tristatecheckbox
+updatehired
 Villaprudente
 virtualscroller
 webdatarocks

@@ -682,7 +682,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.109.2.112/api/get_payrate/${this.$route.query.program}`,
+          `http://127.0.0.1:8000/api/get_payrate/${this.$route.query.program}`,
           { headers }
         );
 
@@ -724,7 +724,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/sites", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -748,7 +748,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/programs",
+          "http://127.0.0.1:8000/api/programs",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -774,7 +774,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/daterange",
+          "http://127.0.0.1:8000/api/daterange",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -854,7 +854,7 @@ export default {
         Authorization: `Bearer ${token}`,
       };
       axios
-        .post("https://10.109.2.112/api/classes/", formData, { headers })
+        .post("http://127.0.0.1:8000/api/classes/", formData, { headers })
         .then((response) => {
           console.log(response.data);
           this.site_id = "";

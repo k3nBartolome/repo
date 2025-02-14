@@ -17,7 +17,7 @@
     </div>
 
     <!-- Optional Buttons Section -->
-    
+
     <!-- Main Button Container (Two or three buttons per row) -->
     <div class="button-container">
        <button class="update-button" @click="selectOption('OnboardingEmployeeInformation')">
@@ -150,7 +150,7 @@ export default {
         };
 
         const response = await axios.get(
-          `https://10.109.2.112/api/employees/${this.$route.params.id}`,
+          `http://127.0.0.1:8000/api/employees/${this.$route.params.id}`,
           { headers }
         );
 

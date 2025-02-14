@@ -283,7 +283,7 @@ export default {
       try {
         const token = this.$store.state.token; // Assuming you store the token in Vuex state
         const response = await axios.get(
-          "https://10.109.2.112/api/class_exists",
+          "http://127.0.0.1:8000/api/class_exists",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -332,7 +332,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          "https://10.109.2.112/api/classesalljam",
+          "http://127.0.0.1:8000/api/classesalljam",
           {
             params: {
               sites_selected: this.sites_selected,
@@ -359,7 +359,7 @@ export default {
     async getSites() {
       try {
         const token = this.$store.state.token;
-        const response = await axios.get("https://10.109.2.112/api/sites5", {
+        const response = await axios.get("http://127.0.0.1:8000/api/sites5", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -383,7 +383,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.109.2.112/api/programs_selected/${this.sites_selected}`,
+          `http://127.0.0.1:8000/api/programs_selected/${this.sites_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -410,7 +410,7 @@ export default {
       try {
         const token = this.$store.state.token;
         const response = await axios.get(
-          `https://10.109.2.112/api/daterange_selected/${this.month_selected}`,
+          `http://127.0.0.1:8000/api/daterange_selected/${this.month_selected}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
