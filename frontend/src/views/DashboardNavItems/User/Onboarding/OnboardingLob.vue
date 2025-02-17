@@ -1,15 +1,15 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4 text-center">Update LOB Details</h2>
+  <div class="container p-4 mx-auto">
+    <h2 class="mb-4 text-xl font-semibold text-center">Update LOB Details</h2>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <!-- Region -->
       <div class="flex flex-col">
         <label for="site" class="block text-sm font-medium">Region</label>
         <select
                   v-model="form.region"
 
-                   class="p-2 mt-1 border rounded w-full"
+                   class="w-full p-2 mt-1 border rounded"
                 >
                   <option disabled value="">Please select Site</option>
                   <option v-for="regions in regions" :key="regions" :value="regions">
@@ -24,7 +24,7 @@
         <select
                   v-model="form.site"
 
-                   class="p-2 mt-1 border rounded w-full"
+                   class="w-full p-2 mt-1 border rounded"
                 >
                   <option disabled value="">Please select Site</option>
                   <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -40,7 +40,7 @@
           id="lob"
           v-model="form.lob"
           type="text"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
 
@@ -53,7 +53,7 @@
           id="team_name"
           v-model="form.team_name"
           type="text"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
 
@@ -66,7 +66,7 @@
           id="project_code"
           v-model="form.project_code"
           type="text"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -77,7 +77,7 @@
           id="compliance_poc"
           v-model="form.compliance_poc"
           type="text"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
     </div>
@@ -87,7 +87,7 @@
       <button
         @click="submitForm"
         :disabled="isSubmitting"
-        class="btn p-2 bg-blue-600 text-white font-semibold rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
+        class="w-full p-2 mx-auto font-semibold text-white bg-blue-600 rounded btn sm:w-1/2 lg:w-1/4"
       >
         {{ isSubmitting ? "Submitting..." : "Submit" }}
       </button>
@@ -105,7 +105,7 @@ export default {
       regions:[],
 
       form: {
-         site: "",
+        site: "",
         region: "",
         lob: "",
         team_name: "",

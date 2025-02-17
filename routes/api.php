@@ -318,6 +318,7 @@ Route::get('get/lob/{id}', [EmployeeController::class, 'getLob']);
 Route::get('/employees/{id}', [EmployeeController::class, 'show']);
 Route::get('/employee_info/{id}', [EmployeeController::class, 'getEmployee']);
 Route::get('/show/employees/{id}', [EmployeeController::class, 'showEmployee']);
+Route::get('/get/employees/{id}', [EmployeeController::class, 'showUpdate']);
 Route::post('employees/{employeeId}/save-qr-code', [EmployeeController::class, 'saveQRCode']);
 Route::post('/employees/{employee_id}/generate-qr-code', [EmployeeController::class, 'generate']);
 Route::get('employees_export/{site_id?}', [EmployeeController::class, 'exportTest']);
