@@ -841,6 +841,580 @@
           </div>
         </div>
       </div>
+      <div class="mb-4">
+        <!-- Header with Toggle Button -->
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-lg font-semibold text-gray-800">PEME Details</span>
+          <button
+            type="button"
+            @click="togglePemeInfo"
+            class="p-1 text-blue-500 rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <svg
+              v-if="isPemeInfo"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- PEME Info Section -->
+        <div v-if="isPemeInfo" class="p-4 border rounded-lg bg-gray-50">
+          <!-- Flex Container for Form and Image -->
+          <div class="flex flex-col gap-4 lg:flex-row">
+            <!-- Form Section on the Left -->
+            <div class="w-full lg:w-1/3">
+              <!-- Grid for Input Fields -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <!-- Final Status -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Final Status</label
+                  >
+                  <select
+                    v-model="peme_final_status"
+                    @change="updatePEMEData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="NEGATIVE">NEGATIVE</option>
+                    <option value="POSITIVE - FOR CONFIRMATORY">
+                      POSITIVE - FOR CONFIRMATORY
+                    </option>
+                    <option value="(BLANK)">(BLANK)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Transaction Date</label
+                  >
+                  <input
+                    v-model="peme_transaction_date"
+                    @change="updatePEMEData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Result Date</label
+                  >
+                  <input
+                    v-model="peme_results_date"
+                    @change="updatePEMEData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Endorsed Date</label
+                  >
+                  <input
+                    v-model="peme_endorsed_date"
+                    @change="updatePEMEData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Remarks</label
+                  >
+                  <input
+                    v-model="peme_remarks"
+                    type="text"
+                    @input="updatePEMEData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >PEME Proof</label
+                  >
+                  <input
+                    type="file"
+                    @change="uploadImage"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="peme_file_name"
+              class="flex items-center justify-center w-full lg:w-2/3"
+            >
+              <img
+                :src="peme_file_name"
+                alt="Preview Image"
+                class="object-contain w-full h-full max-h-[230px] border rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <!-- Header with Toggle Button -->
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-lg font-semibold text-gray-800">SSS Details</span>
+          <button
+            type="button"
+            @click="toggleSssInfo"
+            class="p-1 text-blue-500 rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <svg
+              v-if="isSssInfo"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- SSS Info Section -->
+        <div v-if="isSssInfo" class="p-4 border rounded-lg bg-gray-50">
+          <!-- Flex Container for Form and Image -->
+          <div class="flex flex-col gap-4 lg:flex-row">
+            <!-- Form Section on the Left -->
+            <div class="w-full lg:w-1/3">
+              <!-- Grid for Input Fields -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <!-- Final Status -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Final Status</label
+                  >
+                  <select
+                    v-model="sss_final_status"
+                    @change="updateSSSData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="NEGATIVE">NEGATIVE</option>
+                    <option value="POSITIVE - FOR CONFIRMATORY">
+                      POSITIVE - FOR CONFIRMATORY
+                    </option>
+                    <option value="(BLANK)">(BLANK)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Transaction Date</label
+                  >
+                  <input
+                    v-model="sss_transaction_date"
+                    @change="updateSSSData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Result Date</label
+                  >
+                  <input
+                    v-model="sss_results_date"
+                    @change="updateSSSData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Endorsed Date</label
+                  >
+                  <input
+                    v-model="sss_endorsed_date"
+                    @change="updateSSSData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Remarks</label
+                  >
+                  <input
+                    v-model="sss_remarks"
+                    type="text"
+                    @input="updateSSSData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >SSS Proof</label
+                  >
+                  <input
+                    type="file"
+                    @change="uploadImage"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="sss_file_name"
+              class="flex items-center justify-center w-full lg:w-2/3"
+            >
+              <img
+                :src="sss_file_name"
+                alt="Preview Image"
+                class="object-contain w-full h-full max-h-[230px] border rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <!-- Header with Toggle Button -->
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-lg font-semibold text-gray-800">PHIC Details</span>
+          <button
+            type="button"
+            @click="togglePhicInfo"
+            class="p-1 text-blue-500 rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <svg
+              v-if="isPhicInfo"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- PHIC Info Section -->
+        <div v-if="isPhicInfo" class="p-4 border rounded-lg bg-gray-50">
+          <!-- Flex Container for Form and Image -->
+          <div class="flex flex-col gap-4 lg:flex-row">
+            <!-- Form Section on the Left -->
+            <div class="w-full lg:w-1/3">
+              <!-- Grid for Input Fields -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <!-- Final Status -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Final Status</label
+                  >
+                  <select
+                    v-model="phic_final_status"
+                    @change="updatePHICData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="NEGATIVE">NEGATIVE</option>
+                    <option value="POSITIVE - FOR CONFIRMATORY">
+                      POSITIVE - FOR CONFIRMATORY
+                    </option>
+                    <option value="(BLANK)">(BLANK)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Transaction Date</label
+                  >
+                  <input
+                    v-model="phic_transaction_date"
+                    @change="updatePHICData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Result Date</label
+                  >
+                  <input
+                    v-model="phic_results_date"
+                    @change="updatePHICData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Endorsed Date</label
+                  >
+                  <input
+                    v-model="phic_endorsed_date"
+                    @change="updatePHICData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Remarks</label
+                  >
+                  <input
+                    v-model="phic_remarks"
+                    type="text"
+                    @input="updatePHICData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >PHIC Proof</label
+                  >
+                  <input
+                    type="file"
+                    @change="uploadImage"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="phic_file_name"
+              class="flex items-center justify-center w-full lg:w-2/3"
+            >
+              <img
+                :src="phic_file_name"
+                alt="Preview Image"
+                class="object-contain w-full h-full max-h-[230px] border rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mb-4">
+        <!-- Header with Toggle Button -->
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-lg font-semibold text-gray-800"
+            >PAGIBIG Details</span
+          >
+          <button
+            type="button"
+            @click="togglePagIbigInfo"
+            class="p-1 text-blue-500 rounded-full hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            <svg
+              v-if="isPagIbigInfo"
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 9l-7 7-7-7"
+              />
+            </svg>
+            <svg
+              v-else
+              xmlns="http://www.w3.org/2000/svg"
+              class="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 15l7-7 7 7"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <!-- PAGIBIG Info Section -->
+        <div v-if="isPagIbigInfo" class="p-4 border rounded-lg bg-gray-50">
+          <!-- Flex Container for Form and Image -->
+          <div class="flex flex-col gap-4 lg:flex-row">
+            <!-- Form Section on the Left -->
+            <div class="w-full lg:w-1/3">
+              <!-- Grid for Input Fields -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <!-- Final Status -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Final Status</label
+                  >
+                  <select
+                    v-model="pagibig_final_status"
+                    @change="updatePAGIBIGData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="NEGATIVE">NEGATIVE</option>
+                    <option value="POSITIVE - FOR CONFIRMATORY">
+                      POSITIVE - FOR CONFIRMATORY
+                    </option>
+                    <option value="(BLANK)">(BLANK)</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Transaction Date</label
+                  >
+                  <input
+                    v-model="pagibig_transaction_date"
+                    @change="updatePAGIBIGData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Result Date</label
+                  >
+                  <input
+                    v-model="pagibig_results_date"
+                    @change="updatePAGIBIGData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Endorsed Date</label
+                  >
+                  <input
+                    v-model="pagibig_endorsed_date"
+                    @change="updatePAGIBIGData"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Remarks</label
+                  >
+                  <input
+                    v-model="pagibig_remarks"
+                    type="text"
+                    @input="updatePAGIBIGData"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >PAGIBIG Proof</label
+                  >
+                  <input
+                    type="file"
+                    @change="uploadImage"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </div>
+            <div
+              v-if="pagibig_file_name"
+              class="flex items-center justify-center w-full lg:w-2/3"
+            >
+              <img
+                :src="pagibig_file_name"
+                alt="Preview Image"
+                class="object-contain w-full h-full max-h-[230px] border rounded-lg shadow-md"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
     </form>
 
     <!-- Sticky Save Button -->
@@ -910,6 +1484,24 @@ export default {
       isProgramInfo: false,
       isNbiInfo: true,
       isDtInfo: true,
+      isPemeInfo: true,
+      isSssInfo: true,
+      isPhicInfo: true,
+      isPagIbigInfo: true,
+      isTinInfo: true,
+      isHcInfo: true,
+      isOpInfo: true,
+      isOfacInfo: true,
+      isSamInfo: true,
+      isOigInfo: true,
+      isCibiInfo: true,
+      isBgcInfo: true,
+      isBcInfo: true,
+      isDbcInfo: true,
+      isMcInfo: true,
+      isSrInfo: true,
+      isPeInfo: true,
+      isSdInfo: true,
       isEditable: false,
     };
   },
@@ -1072,6 +1664,60 @@ export default {
     },
     toggleDtInfo() {
       this.isDtInfo = !this.isDtInfo;
+    },
+    togglePemeInfo() {
+      this.isPemeInfo = !this.isPemeInfo;
+    },
+    toggleSssInfo() {
+      this.isSssInfo = !this.isSssInfo;
+    },
+    togglePhicInfo() {
+      this.isPhicInfo = !this.isPhicInfo;
+    },
+    togglePagIbigInfo() {
+      this.isPagIbigInfo = !this.isPagIbigInfo;
+    },
+    toggleTinInfo() {
+      this.isTinInfo = !this.isTinInfo;
+    },
+    toggleHcInfo() {
+      this.isHcInfo = !this.isHcInfo;
+    },
+    toggleOpInfo() {
+      this.isOpInfo = !this.isOpInfo;
+    },
+    toggleOfacInfo() {
+      this.isOfacInfo = !this.isOfacInfo;
+    },
+    toggleSamInfo() {
+      this.isSamInfo = !this.isSamInfo;
+    },
+    toggleOigInfo() {
+      this.isOigInfo = !this.isOigInfo;
+    },
+    toggleCibiInfo() {
+      this.isCibiInfo = !this.isCibiInfo;
+    },
+    toggleBgcInfo() {
+      this.isBgcInfo = !this.isBgcInfo;
+    },
+    toggleBcInfo() {
+      this.isBcInfo = !this.isBcInfo;
+    },
+    toggleDbcInfo() {
+      this.isDbcInfo = !this.isDbcInfo;
+    },
+    toggleMcInfo() {
+      this.isMcInfo = !this.isMcInfo;
+    },
+    toggleSrInfo() {
+      this.isSrInfo = !this.isSrInfo;
+    },
+    togglePeInfo() {
+      this.isPeInfo = !this.isPeInfo;
+    },
+    toggleSdInfo() {
+      this.isSdInfo = !this.isSdInfo;
     },
 
     toggleEdit() {

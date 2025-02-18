@@ -1,5 +1,7 @@
 <template>
-  <div class="flex items-center justify-center min-h-screen px-4 bg-gray-100 sm:px-6 lg:px-8">
+  <div
+    class="flex items-center justify-center min-h-screen px-4 bg-gray-100 sm:px-6 lg:px-8"
+  >
     <div class="w-full max-w-md p-10 space-y-8 bg-white rounded-lg shadow-lg">
       <div class="flex justify-center">
         <img
@@ -8,7 +10,9 @@
           alt="Your Company"
         />
       </div>
-      <h2 class="mt-6 text-3xl font-bold tracking-tight text-center text-gray-900">
+      <h2
+        class="mt-6 text-3xl font-bold tracking-tight text-center text-gray-900"
+      >
         Sign in
       </h2>
       <form class="mt-8 space-y-6" @submit.prevent="login">
@@ -101,7 +105,8 @@ export default {
         );
 
         // Step 3: Extract response data
-        const { user, token, role, user_id, permissions, site_id } = response.data;
+        const { user, token, role, user_id, permissions, site_id } =
+          response.data;
 
         // Step 4: Save user info to Vuex store
         this.setUser(user);
@@ -135,7 +140,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 /* Custom CSS for the login page */
