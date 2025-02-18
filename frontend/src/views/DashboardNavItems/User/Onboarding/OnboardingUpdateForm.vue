@@ -1234,49 +1234,64 @@
                   >
                   <select
                     v-model="phic_final_status"
-                    @change="updatePHICData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    @change="updatePhicData"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="PENDING PROOF">PENDING PROOF</option>
                   </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >PHIC #</label
                   >
                   <input
-                    v-model="phic_transaction_date"
-                    @change="updatePHICData"
-                    type="date"
+                    v-model="phic_number"
+                    type="text"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    @input="formatPhicNumber"
+                    @change="updatePhicData"
                   />
+                  <small class="text-sm text-gray-500 mt-1">
+                    Format: 01-23456789-01
+                  </small>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
+                    >Proof Submitted Type</label
                   >
-                  <input
-                    v-model="phic_results_date"
-                    @change="updatePHICData"
-                    type="date"
+                  <select
+                    @change="updatePhicData"
+                    v-model="phic_proof_submitted_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="ID">ID</option>
+                    <option value="MDR">MDR</option>
+                    <option value="PIN SLIP">PIN SLIP</option>
+                    <option value="ONLINE STATIC INFO">
+                      ONLINE STATIC INFO
+                    </option>
+                    <option value="STAMPED PMRF">STAMPED PMRF</option>
+                    <option value="PERSONAL RECORD">PERSONAL RECORD</option>
+                    <option value="TRANSACTION RECEIPT">
+                      TRANSACTION RECEIPT
+                    </option>
+                    <option value="SOA">SOA</option>
+                  </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
+                    >Submitted Date</label
                   >
                   <input
-                    v-model="phic_endorsed_date"
-                    @change="updatePHICData"
+                    @change="updatePhicData"
+                    v-model="phic_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1287,9 +1302,9 @@
                     >Remarks</label
                   >
                   <input
+                    @change="updatePhicData"
                     v-model="phic_remarks"
                     type="text"
-                    @input="updatePHICData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1379,49 +1394,71 @@
                   >
                   <select
                     v-model="pagibig_final_status"
-                    @change="updatePAGIBIGData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    @change="updatePagibigData"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="PENDING PROOF">PENDING PROOF</option>
                   </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Pag-IBIG Number</label
                   >
                   <input
-                    v-model="pagibig_transaction_date"
-                    @change="updatePAGIBIGData"
-                    type="date"
+                    @change="updatePagibigData"
+                    v-model="pagibig_number"
+                    type="text"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    @input="formatPagibigNumber"
+                    placeholder="0123-4567-8901"
                   />
+                  <p
+                    v-if="pagibig_number_error"
+                    class="text-red-500 text-sm mt-1"
+                  >
+                    {{ pagibig_number_error }}
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Proof Submitted Type</label
+                  >
+                  <select
+                    @change="updatePagibigData"
+                    v-model="pagibig_proof_submitted_type"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="ID">ID</option>
+                    <option value="MDF">MDF</option>
+                    <option value="PROCESSED MCIF">PROCESSED MCIF</option>
+                    <option value="SOA">SOA</option>
+                    <option value="MP2">MP2</option>
+                    <option value="TRANSACTION RECEIPT">
+                      TRANSACTION RECEIPT
+                    </option>
+                    <option value="MID VALIDATION SLIP">
+                      MID VALIDATION SLIP
+                    </option>
+                    <option value="ONLINE STATIC INFO">
+                      ONLINE STATIC INFO
+                    </option>
+                  </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
+                    >Submitted Date</label
                   >
                   <input
-                    v-model="pagibig_results_date"
-                    @change="updatePAGIBIGData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="pagibig_endorsed_date"
-                    @change="updatePAGIBIGData"
+                    @change="updatePagibigData"
+                    v-model="pagibig_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1432,9 +1469,9 @@
                     >Remarks</label
                   >
                   <input
+                    @change="updatePagibigData"
                     v-model="pagibig_remarks"
                     type="text"
-                    @input="updatePAGIBIGData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1522,49 +1559,65 @@
                   >
                   <select
                     v-model="tin_final_status"
-                    @change="updateTINData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
+                    <option value="NO - FOR ORUS">NO - FOR ORUS</option>
+                    <option value="PENDING PROOF">PENDING PROOF</option>
                   </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >TIN Number</label
                   >
                   <input
-                    v-model="tin_transaction_date"
-                    @change="updateTINData"
-                    type="date"
+                    v-model="tin_number"
+                    type="text"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    @input="formatTinNumber"
+                    placeholder="012-345-678"
                   />
+                  <p v-if="tin_number_error" class="text-red-500 text-sm mt-1">
+                    {{ tin_number_error }}
+                  </p>
+                </div>
+
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Proof Submitted Type</label
+                  >
+                  <select
+                    v-model="tin_proof_submitted_type"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="ID">ID</option>
+                    <option value="STAMPED VERIFICATION SLIP">
+                      STAMPED VERIFICATION SLIP
+                    </option>
+                    <option value="BIR FORM 2316">BIR FORM 2316</option>
+                    <option value="BIR FORM 1701">BIR FORM 1701</option>
+                    <option value="PROCESSED BIR FORM">
+                      PROCESSED BIR FORM
+                    </option>
+                    <option value="E-TIN CONFIRMATION">
+                      E-TIN CONFIRMATION
+                    </option>
+                    <option value="ORUS VERIFICATION">ORUS VERIFICATION</option>
+                    <option value="ORUS CONFIRMATION">ORUS CONFIRMATION</option>
+                  </select>
                 </div>
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
+                    >Submitted Date</label
                   >
                   <input
-                    v-model="tin_results_date"
-                    @change="updateTINData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="tin_endorsed_date"
-                    @change="updateTINData"
+                    v-model="tin_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1577,7 +1630,6 @@
                   <input
                     v-model="tin_remarks"
                     type="text"
-                    @input="updateTINData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1667,25 +1719,21 @@
                   >
                   <select
                     v-model="health_certificate_final_status"
-                    @change="updateHcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Validity Date</label
                   >
                   <input
-                    v-model="health_certificate_transaction_date"
-                    @change="updateHcData"
+                    v-model="health_certificate_validity_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1693,23 +1741,10 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
+                    >Submitted Date</label
                   >
                   <input
-                    v-model="health_certificate_results_date"
-                    @change="updateHcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="health_certificate_endorsed_date"
-                    @change="updateHcData"
+                    v-model="health_certificate_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1722,7 +1757,6 @@
                   <input
                     v-model="health_certificate_remarks"
                     type="text"
-                    @input="updateHcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1812,25 +1846,21 @@
                   >
                   <select
                     v-model="occupational_permit_final_status"
-                    @change="updateOpData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="YES">YES</option>
+                    <option value="NO">NO</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Validity Date</label
                   >
                   <input
-                    v-model="occupational_permit_transaction_date"
-                    @change="updateOpData"
+                    v-model="occupational_permit_validity_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1838,23 +1868,10 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
+                    >Submitted Date</label
                   >
                   <input
-                    v-model="occupational_permit_results_date"
-                    @change="updateOpData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="occupational_permit_endorsed_date"
-                    @change="updateOpData"
+                    v-model="occupational_permit_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -1867,7 +1884,6 @@
                   <input
                     v-model="occupational_permit_remarks"
                     type="text"
-                    @input="updateOpData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1955,49 +1971,26 @@
                   >
                   <select
                     v-model="ofac_final_status"
-                    @change="updateOfacData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="CLEARED BEFORE DAY 1">
+                      CLEARED BEFORE DAY 1
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="CLEARED BEYOND DAY 1">
+                      CLEARED BEYOND DAY 1
+                    </option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Checked</label
                   >
                   <input
-                    v-model="ofac_transaction_date"
-                    @change="updateOfacData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="ofac_results_date"
-                    @change="updateOfacData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="ofac_endorsed_date"
-                    @change="updateOfacData"
+                    v-model="ofac_checked_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2010,7 +2003,6 @@
                   <input
                     v-model="ofac_remarks"
                     type="text"
-                    @input="updateOfacData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2098,49 +2090,26 @@
                   >
                   <select
                     v-model="sam_final_status"
-                    @change="updateSamData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="CLEARED BEFORE DAY 1">
+                      CLEARED BEFORE DAY 1
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="CLEARED BEYOND DAY 1">
+                      CLEARED BEYOND DAY 1
+                    </option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Checked</label
                   >
                   <input
-                    v-model="sam_transaction_date"
-                    @change="updateSamData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="sam_results_date"
-                    @change="updateSamData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="sam_endorsed_date"
-                    @change="updateSamData"
+                    v-model="sam_checked_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2153,7 +2122,6 @@
                   <input
                     v-model="sam_remarks"
                     type="text"
-                    @input="updateSamData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2241,49 +2209,26 @@
                   >
                   <select
                     v-model="oig_final_status"
-                    @change="updateOigData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="CLEARED BEFORE DAY 1">
+                      CLEARED BEFORE DAY 1
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="CLEARED BEYOND DAY 1">
+                      CLEARED BEYOND DAY 1
+                    </option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Checked</label
                   >
                   <input
-                    v-model="oig_transaction_date"
-                    @change="updateOigData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="oig_results_date"
-                    @change="updateOigData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="oig_endorsed_date"
-                    @change="updateOigData"
+                    v-model="oig_checked_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2296,7 +2241,6 @@
                   <input
                     v-model="oig_remarks"
                     type="text"
-                    @input="updateOigData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2383,26 +2327,27 @@
                     >Final Status</label
                   >
                   <select
-                    v-model="cibi_final_status"
-                    @change="updateCibiData"
+                    v-model="bgc_final_status"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="CLEARED BEFORE DAY 1">
+                      CLEARED BEFORE DAY 1
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="CLEARED BEYOND DAY 1">
+                      CLEARED BEYOND DAY 1
+                    </option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Endorsed</label
                   >
                   <input
-                    v-model="cibi_transaction_date"
-                    @change="updateCibiData"
+                    v-model="bgc_endorsed_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2413,20 +2358,7 @@
                     >Result Date</label
                   >
                   <input
-                    v-model="cibi_results_date"
-                    @change="updateCibiData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="cibi_endorsed_date"
-                    @change="updateCibiData"
+                    v-model="bgc_results_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2437,9 +2369,8 @@
                     >Remarks</label
                   >
                   <input
-                    v-model="cibi_remarks"
+                    v-model="bgc_remarks"
                     type="text"
-                    @input="updateCibiData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2527,25 +2458,26 @@
                   >
                   <select
                     v-model="bgc_final_status"
-                    @change="updateBgcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="CLEARED BEFORE DAY 1">
+                      CLEARED BEFORE DAY 1
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="CLEARED BEYOND DAY 1">
+                      CLEARED BEYOND DAY 1
+                    </option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Endorsed</label
                   >
                   <input
-                    v-model="bgc_transaction_date"
-                    @change="updateBgcData"
+                    v-model="bgc_endorsed_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2557,19 +2489,6 @@
                   >
                   <input
                     v-model="bgc_results_date"
-                    @change="updateBgcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="bgc_endorsed_date"
-                    @change="updateBgcData"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2582,7 +2501,6 @@
                   <input
                     v-model="bgc_remarks"
                     type="text"
-                    @input="updateBgcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2668,53 +2586,28 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="birth_certificate_final_status"
-                    @change="updateBcData"
+                    v-model="birth_certificate_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="PSA">PSA</option>
+                    <option value="NSO">NSO</option>
+                    <option value="Certified true copy">
+                      Certified true copy
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="birth_certificate_transaction_date"
-                    @change="updateBcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="birth_certificate_results_date"
-                    @change="updateBcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="birth_certificate_endorsed_date"
-                    @change="updateBcData"
+                    v-model="birth_certificate_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2727,7 +2620,6 @@
                   <input
                     v-model="birth_certificate_remarks"
                     type="text"
-                    @input="updateBcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2813,53 +2705,28 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="marriage_certificate_final_status"
-                    @change="updateMcData"
+                    v-model="marriage_certificate_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="PSA">PSA</option>
+                    <option value="NSO">NSO</option>
+                    <option value="Certified true copy">
+                      Certified true copy
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="marriage_certificate_transaction_date"
-                    @change="updateMcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="marriage_certificate_results_date"
-                    @change="updateMcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="marriage_certificate_endorsed_date"
-                    @change="updateMcData"
+                    v-model="marriage_certificate_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2872,7 +2739,6 @@
                   <input
                     v-model="marriage_certificate_remarks"
                     type="text"
-                    @input="updateMcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2958,53 +2824,28 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="dependent_birth_certificate_final_status"
-                    @change="updateDbcData"
+                    v-model="dependent_birth_certificate_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="PSA">PSA</option>
+                    <option value="NSO">NSO</option>
+                    <option value="Certified true copy">
+                      Certified true copy
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="dependent_birth_certificate_transaction_date"
-                    @change="updateDbcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="dependent_birth_certificate_results_date"
-                    @change="updateDbcData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="dependent_birth_certificate_endorsed_date"
-                    @change="updateDbcData"
+                    v-model="dependent_birth_certificate_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -3017,7 +2858,6 @@
                   <input
                     v-model="dependent_birth_certificate_remarks"
                     type="text"
-                    @input="updateDbcData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3103,53 +2943,29 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="scholastic_record_final_status"
-                    @change="updateSrData"
+                    v-model="scholastic_record_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
-                    </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="School Id">School Id</option>
+                    <option value="Diploma">Diploma</option>
+                    <option value="TOR">TOR</option>
+                    <option value="Copy of Grades">Copy of Grades</option>
+                    <option value="Certification">Certification</option>
+                    <option value="Others">Others</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="scholastic_record_transaction_date"
-                    @change="updateSrData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="scholastic_record_results_date"
-                    @change="updateSrData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="scholastic_record_endorsed_date"
-                    @change="updateSrData"
+                    v-model="scholastic_record_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -3162,7 +2978,6 @@
                   <input
                     v-model="scholastic_record_remarks"
                     type="text"
-                    @input="updateSrData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3248,53 +3063,31 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="previous_employment_final_status"
-                    @change="updatePeData"
+                    v-model="previous_employment_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="Resignation Letter">
+                      Resignation Letter
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="Acceptance Letter">Acceptance Letter</option>
+                    <option value="Exit Clearance">Exit Clearance</option>
+                    <option value="COE">COE</option>
+                    <option value="Payslip">Payslip</option>
+                    <option value="Others">Others</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="previous_employment_transaction_date"
-                    @change="updatePeData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="previous_employment_results_date"
-                    @change="updatePeData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="previous_employment_endorsed_date"
-                    @change="updatePeData"
+                    v-model="previous_employment_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -3307,7 +3100,6 @@
                   <input
                     v-model="previous_employment_remarks"
                     type="text"
-                    @input="updatePeData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3393,53 +3185,27 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >Proof Submitted</label
                   >
                   <select
-                    v-model="supporting_documents_final_status"
-                    @change="updateSdData"
+                    v-model="supporting_documents_proof_type"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
-                    <option value="NEGATIVE">NEGATIVE</option>
-                    <option value="POSITIVE - FOR CONFIRMATORY">
-                      POSITIVE - FOR CONFIRMATORY
+                    <option value="Affidavit of same person">
+                      Affidavit of same person
                     </option>
-                    <option value="(BLANK)">(BLANK)</option>
+                    <option value="Others">Others</option>
                   </select>
                 </div>
+
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Transaction Date</label
+                    >Date Submitted</label
                   >
                   <input
-                    v-model="supporting_documents_transaction_date"
-                    @change="updateSdData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="supporting_documents_results_date"
-                    @change="updateSdData"
-                    type="date"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Endorsed Date</label
-                  >
-                  <input
-                    v-model="supporting_documents_endorsed_date"
-                    @change="updateSdData"
+                    v-model="supporting_documents_submitted_date"
                     type="date"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -3452,7 +3218,6 @@
                   <input
                     v-model="supporting_documents_remarks"
                     type="text"
-                    @input="updateSdData"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3669,9 +3434,9 @@ export default {
       isBcInfo: false,
       isDbcInfo: false,
       isMcInfo: false,
-      isSrInfo: false,
-      isPeInfo: false,
-      isSdInfo: false,
+      isSrInfo: true,
+      isPeInfo: true,
+      isSdInfo: true,
       isEditable: false,
     };
   },
@@ -4242,13 +4007,42 @@ export default {
         )}-${rawValue.slice(9, 10)}`;
       }
     },
-    validateSSSNumber() {
-      const isValid = /^\d{2}-\d{7}-\d{1}$/.test(this.sss_number);
-      if (!isValid) {
-        this.sss_number_error =
-          "SSS number must be in the format 01-2345678-9.";
+    formatPhicNumber() {
+      let numericValue = this.phic_number.replace(/\D/g, "");
+      if (numericValue.length > 12) {
+        numericValue = numericValue.slice(0, 12);
+      }
+      const parts = [
+        numericValue.slice(0, 2),
+        numericValue.slice(2, 10),
+        numericValue.slice(10, 12),
+      ];
+      this.phic_number = parts.filter((part) => part).join("-");
+    },
+    formatPagibigNumber() {
+      let rawValue = this.pagibig_number.replace(/[^0-9]/g, "");
+      if (rawValue.length <= 4) {
+        this.pagibig_number = rawValue;
+      } else if (rawValue.length <= 8) {
+        this.pagibig_number = `${rawValue.slice(0, 4)}-${rawValue.slice(4)}`;
       } else {
-        this.sss_number_error = "";
+        this.pagibig_number = `${rawValue.slice(0, 4)}-${rawValue.slice(
+          4,
+          8
+        )}-${rawValue.slice(8, 12)}`;
+      }
+    },
+    formatTinNumber() {
+      let rawValue = this.tin_number.replace(/[^0-9]/g, "");
+      if (rawValue.length <= 3) {
+        this.tin_number = rawValue;
+      } else if (rawValue.length <= 6) {
+        this.tin_number = `${rawValue.slice(0, 3)}-${rawValue.slice(3)}`;
+      } else {
+        this.tin_number = `${rawValue.slice(0, 3)}-${rawValue.slice(
+          3,
+          6
+        )}-${rawValue.slice(6, 9)}`;
       }
     },
     async updateEmployee() {
@@ -4259,7 +4053,6 @@ export default {
         };
 
         const payload = {
-          // Employee Details
           employee_id: this.employee_id,
           last_name: this.last_name,
           first_name: this.first_name,

@@ -24,7 +24,9 @@
           @input="formatPhicNumber"
           @change="updatePhicData"
         />
-        <small class="text-sm text-gray-500 mt-1"> Format: 01-23456789-01 </small>
+        <small class="text-sm text-gray-500 mt-1">
+          Format: 01-23456789-01
+        </small>
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Proof Submitted Type</label>
@@ -65,7 +67,11 @@
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">PHIC PROOF</label>
-      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
+      <input
+        type="file"
+        @change="uploadImage"
+        class="p-2 mt-1 border rounded w-full"
+      />
     </div>
     <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
       <button
@@ -201,7 +207,8 @@ export default {
       // Regular expression for PHIC #
       const phicPattern = /^\d{2}-\d{8}-\d{2}$/;
       if (!phicPattern.test(this.phic_number)) {
-        this.phic_number_error = "PHIC # must follow the format 01-23456789-01.";
+        this.phic_number_error =
+          "PHIC # must follow the format 01-23456789-01.";
       } else {
         this.phic_number_error = "";
       }
@@ -223,7 +230,10 @@ export default {
       formData.append("phic_final_status", this.phic_final_status);
       formData.append("phic_submitted_date", this.phic_submitted_date);
       formData.append("phic_number", this.phic_number);
-      formData.append("phic_proof_submitted_type", this.phic_proof_submitted_type);
+      formData.append(
+        "phic_proof_submitted_type",
+        this.phic_proof_submitted_type
+      );
       formData.append("phic_remarks", this.phic_remarks);
       formData.append("phic_updated_by", this.$store.state.user_id);
       // Append the actual file (phic_proof) for upload
