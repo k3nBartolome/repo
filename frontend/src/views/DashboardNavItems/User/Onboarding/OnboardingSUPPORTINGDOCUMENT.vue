@@ -119,7 +119,6 @@ export default {
       supporting_documents_submitted_date: "",
       supporting_documents_proof_type: "",
       supporting_documents_remarks: "",
-      videoStream: null,
       supporting_documents_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

@@ -146,7 +146,6 @@ export default {
       phic_remarks: "",
       phic_number: "",
       phic_file_name: null,
-      videoStream: null,
       phic_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
       phic_number_error: "",

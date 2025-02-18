@@ -116,7 +116,6 @@ export default {
       cibi_final_status: "",
       cibi_remarks: "",
       cibi_file_name: null,
-      videoStream: null,
       cibi_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

@@ -119,7 +119,6 @@ export default {
       showUpload: false,
       showCapture: false,
       capturedImage: null,
-      videoStream: null,
       occupational_permit_validity_date: "",
       occupational_permit_submitted_date: "",
       occupational_permit_remarks: "",

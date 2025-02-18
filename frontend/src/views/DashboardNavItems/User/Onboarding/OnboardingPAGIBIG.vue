@@ -144,7 +144,6 @@ export default {
       pagibig_remarks: "",
       pagibig_number: "",
       pagibig_file_name: null,
-      videoStream: null,
       pagibig_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
       pagibig_number_error: "",

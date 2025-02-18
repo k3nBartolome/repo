@@ -144,7 +144,6 @@ export default {
       sss_remarks: "",
       sss_number: "",
       sss_file_name: null,
-      videoStream: null,
       sss_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
       sss_number_error: "",

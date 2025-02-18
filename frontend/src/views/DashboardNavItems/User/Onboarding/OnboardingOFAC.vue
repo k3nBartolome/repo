@@ -116,7 +116,6 @@ export default {
       ofac_final_status: "",
       ofac_remarks: "",
       ofac_file_name: null,
-      videoStream: null,
       ofac_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

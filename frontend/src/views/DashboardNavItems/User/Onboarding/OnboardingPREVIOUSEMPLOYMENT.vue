@@ -119,7 +119,6 @@ export default {
       previous_employment_submitted_date: "",
       previous_employment_proof_type: "",
       previous_employment_remarks: "",
-      videoStream: null,
       previous_employment_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

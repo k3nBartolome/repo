@@ -136,7 +136,6 @@ export default {
       tin_remarks: "",
       tin_number: "",
       tin_file_name: null,
-      videoStream: null,
       tin_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
       tin_number_error: "",

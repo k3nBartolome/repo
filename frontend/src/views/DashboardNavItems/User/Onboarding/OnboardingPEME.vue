@@ -1,10 +1,10 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4 text-center">OVERALL PEME RESULT</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+  <div class="container p-4 mx-auto">
+    <h2 class="mb-4 text-xl font-semibold text-center">OVERALL PEME RESULT</h2>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Final Status</label>
-        <select v-model="peme_final_status" class="p-2 mt-1 border rounded w-full"
+        <select v-model="peme_final_status" class="w-full p-2 mt-1 border rounded"
         @change="updatePemeData">
           <option disabled>Please select one</option>
           <option value="COMPLETE">COMPLETE</option>
@@ -18,7 +18,7 @@
           v-model="peme_transaction_date"
           @change="updatePemeData"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -27,7 +27,7 @@
           v-model="peme_results_date"
           @change="updatePemeData"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -36,12 +36,12 @@
           v-model="peme_endorsed_date"
           @change="updatePemeData"
           type="date"
-          class="p-2 mt-1 border rounded w-full"
+          class="w-full p-2 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Remarks</label>
-        <select v-model="peme_remarks" class="p-2 mt-1 border rounded w-full">
+        <select v-model="peme_remarks" class="w-full p-2 mt-1 border rounded">
           <option disabled>Please select one</option>
           <option value="FIT TO WORK">FIT TO WORK</option>
             <option value="UNFIT TO WORK">UNFIT TO WORK</option>
@@ -64,18 +64,18 @@
     </div>
     <div class="flex flex-col">
       <label class="block text-sm font-medium">PEME PROOF</label>
-      <input type="file" @change="uploadImage" class="p-2 mt-1 border rounded w-full" />
+      <input type="file" @change="uploadImage" class="w-full p-2 mt-1 border rounded" />
     </div>
-    <!-- <div class="flex flex-col sm:flex-row justify-between mt-4">
+    <!-- <div class="flex flex-col justify-between mt-4 sm:flex-row">
       <button
         @click="chooseUpload"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mb-2 sm:mb-0"
+        class="w-full p-2 mb-2 border rounded btn sm:w-1/2 lg:w-1/4 sm:mb-0"
       >
         Upload Image
       </button>
       <button
         @click="chooseCapture"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4"
+        class="w-full p-2 border rounded btn sm:w-1/2 lg:w-1/4"
       >
         Capture Image
       </button>
@@ -85,7 +85,7 @@
         <img
           :src="peme_file_name"
           alt="Preview Image"
-          class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          class="object-cover w-full h-48 border rounded-lg sm:w-3/4 lg:w-1/2"
           @load="updatePemeData"
         />
       </div>
@@ -94,26 +94,26 @@
       <!-- <div class="flex flex-col items-center">
         <video
           ref="video"
-          class="w-full sm:w-3/4 lg:w-1/2 h-48 object-cover border rounded"
+          class="object-cover w-full h-48 border rounded sm:w-3/4 lg:w-1/2"
           autoplay
         ></video>
         <button
           @click="captureImage"
-          class="btn p-2 border rounded mt-2 w-full sm:w-1/2 lg:w-1/4"
+          class="w-full p-2 mt-2 border rounded btn sm:w-1/2 lg:w-1/4"
         >
           Capture
         </button>
       </div> -->
 
-      <div v-if="capturedImage" class="mt-4 flex flex-col items-center">
+      <div v-if="capturedImage" class="flex flex-col items-center mt-4">
         <img
           :src="capturedImage"
           alt="Captured Image"
-          class="object-cover w-full sm:w-3/4 lg:w-1/2 h-48 border rounded-lg"
+          class="object-cover w-full h-48 border rounded-lg sm:w-3/4 lg:w-1/2"
         />
         <!-- <button
           @click="recaptureImage"
-          class="btn p-2 border rounded mt-2 w-full sm:w-1/2 lg:w-1/4"
+          class="w-full p-2 mt-2 border rounded btn sm:w-1/2 lg:w-1/4"
         >
           Recapture
         </button> -->
@@ -123,7 +123,7 @@
     <div class="mt-4">
       <button
         @click="submitForm"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
+        class="w-full p-2 mx-auto border rounded btn sm:w-1/2 lg:w-1/4"
       >
         Submit
       </button>
@@ -145,7 +145,6 @@ export default {
       peme_results_date: "",
       peme_transaction_date: "",
       peme_final_status: "",
-      videoStream: null,
       peme_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

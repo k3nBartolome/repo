@@ -107,7 +107,6 @@ export default {
       dt_endorsed_date: "",
       dt_remarks: "",
       dt_file_name: null,
-      videoStream: null,
       dt_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

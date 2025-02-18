@@ -116,7 +116,6 @@ export default {
       birth_certificate_submitted_date: "",
       birth_certificate_proof_type: "",
       birth_certificate_remarks: "",
-      videoStream: null,
       birth_certificate_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

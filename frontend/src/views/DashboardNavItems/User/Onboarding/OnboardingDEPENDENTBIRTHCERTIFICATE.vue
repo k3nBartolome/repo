@@ -120,7 +120,6 @@ export default {
       dependent_birth_certificate_submitted_date: "",
       dependent_birth_certificate_proof_type: "",
       dependent_birth_certificate_remarks: "",
-      videoStream: null,
       dependent_birth_certificate_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

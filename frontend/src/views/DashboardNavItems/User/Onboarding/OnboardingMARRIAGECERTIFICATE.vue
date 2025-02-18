@@ -119,7 +119,6 @@ export default {
       marriage_certificate_submitted_date: "",
       marriage_certificate_proof_type: "",
       marriage_certificate_remarks: "",
-      videoStream: null,
       marriage_certificate_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

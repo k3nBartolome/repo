@@ -116,7 +116,6 @@ export default {
       oig_final_status: "",
       oig_remarks: "",
       oig_file_name: null,
-      videoStream: null,
       oig_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

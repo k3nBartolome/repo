@@ -119,7 +119,6 @@ export default {
       scholastic_record_submitted_date: "",
       scholastic_record_proof_type: "",
       scholastic_record_remarks: "",
-      videoStream: null,
       scholastic_record_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

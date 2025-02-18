@@ -125,7 +125,6 @@ export default {
       health_certificate_remarks: "",
       health_certificate_file_name: null,
       health_certificate_final_status: "",
-      videoStream: null,
       health_certificate_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

@@ -67,6 +67,7 @@ Edsa
 EDSA
 emps
 Emps
+ENDO
 fieldslistclose
 fieldslistopen
 fileupload
@@ -124,6 +125,7 @@ olapstructureerror
 olapstructureloaded
 openingreportfile
 openxmlformats
+OPTHA
 orderlist
 organizationchart
 ORUS
@@ -147,6 +149,7 @@ primeicons
 primevue
 programmanagementedit
 progressspinner
+PULMO
 Punzalan
 pushbackcapfile
 pushbackcapfileguatemala
@@ -204,6 +207,7 @@ totaltarget
 treeselect
 treetable
 tristatecheckbox
+truncae
 updatehired
 Villaprudente
 virtualscroller

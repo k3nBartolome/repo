@@ -116,7 +116,6 @@ export default {
       sam_final_status: "",
       sam_remarks: "",
       sam_file_name: null,
-      videoStream: null,
       sam_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

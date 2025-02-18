@@ -95,8 +95,7 @@ export default {
       nbi_printed_date: "",
       nbi_remarks: "",
       nbi_file_name: null, // Used to store file path (image preview)
-      capturedImage: null, // Used to store captured image
-      videoStream: null, // Store video stream for capture
+      capturedImage: null, // Used to store captured image // Store video stream for capture
       nbi_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

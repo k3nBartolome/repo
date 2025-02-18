@@ -125,7 +125,6 @@ export default {
       bgc_final_status: "",
       bgc_remarks: "",
       bgc_file_name: null,
-      videoStream: null,
       bgc_proof: null, // Used for the proof file or image data
       isSubmitting: false, // Tracks form submission status
     };

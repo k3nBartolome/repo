@@ -1,13 +1,13 @@
 <template>
-  <div class="container mx-auto p-4">
-    <h2 class="text-xl font-semibold mb-4 text-center">Employee Information</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2">
+  <div class="container p-4 mx-auto">
+    <h2 class="mb-4 text-xl font-semibold text-center">Employee Information</h2>
+    <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4">
       <div class="flex flex-col">
         <label class="block text-sm font-medium">First Name</label>
         <input
           type="text"
           v-model="employee_info_first_name"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -15,7 +15,7 @@
         <input
           type="text"
           v-model="employee_info_middle_name"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -23,7 +23,7 @@
         <input
           type="text"
           v-model="employee_info_last_name"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -31,7 +31,7 @@
         <input
           type="text"
           v-model="employee_info_position"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -39,7 +39,7 @@
         <input
           type="text"
           v-model="employee_info_account_type"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -47,7 +47,7 @@
         <input
           type="text"
           v-model="employee_info_employee_id"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
 
@@ -56,7 +56,7 @@
         <input
           type="text"
           v-model="employee_info_contact_number"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -64,7 +64,7 @@
         <input
           type="text"
           v-model="employee_info_email_address"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -72,7 +72,7 @@
         <input
           type="date"
           v-model="employee_info_birth_date"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
@@ -80,7 +80,7 @@
         <input
           type="date"
           v-model="employee_info_hired_date"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
         <div class="flex flex-col">
@@ -88,7 +88,7 @@
         <select
                   disabled
                   v-model="employee_info_hired_month"
-                   class="p-1 mt-1 border rounded w-full"
+                   class="w-full p-1 mt-1 border rounded"
                 >
                   <option>Select one</option>
                   <option value="JAN">JAN</option>
@@ -110,15 +110,15 @@
         <input
           type="text"
           v-model="employee_info_employee_status"
-          class="p-1 mt-1 border rounded w-full"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
       <div class="flex flex-col">
         <label class="block text-sm font-medium">Employment Status</label>
         <input
           type="text"
-          v-model="employee_info_employement_status"
-          class="p-1 mt-1 border rounded w-full"
+          v-model="employee_info_employment_status"
+          class="w-full p-1 mt-1 border rounded"
         />
       </div>
     </div>
@@ -127,7 +127,7 @@
       <button
         @click="submitForm"
         :disabled="isSubmitting"
-        class="btn p-2 border rounded w-full sm:w-1/2 lg:w-1/4 mx-auto"
+        class="w-full p-2 mx-auto border rounded btn sm:w-1/2 lg:w-1/4"
       >
         {{ isSubmitting ? "Submitting..." : "Submit" }}
       </button>
@@ -152,7 +152,7 @@ export default {
       employee_info_birth_date: "",
       employee_info_hired_date: "",
       employee_info_employee_status: "",
-      employee_info_employement_status: "",
+      employee_info_employment_status: "",
       employee_info_hired_month:"",
             employee_info_account_type:"",
     };
@@ -198,7 +198,7 @@ export default {
         this.employee_info_birth_date = data.birthdate;
         this.employee_info_hired_date = data.hired_date;
         this.employee_info_employee_status = data.employee_status;
-        this.employee_info_employement_status = data.employment_status;
+        this.employee_info_employment_status = data.employment_status;
         this.employee_info_hired_month = data.hired_month;
       } catch (error) {
         console.error("Error fetching employee data:", error);
@@ -219,7 +219,7 @@ export default {
      formData.append("employee_info_birth_date" ,this.employee_info_birth_date);
      formData.append("employee_info_hired_date" ,this.employee_info_hired_date);
      formData.append("employee_info_employee_status" ,this.employee_info_employee_status);
-     formData.append("employee_info_employement_status" ,this.employee_info_employement_status);
+     formData.append("employee_info_employment_status" ,this.employee_info_employment_status);
      formData.append("employee_info_hired_month" ,this.employee_info_hired_month);
      formData.append("employee_info_updated_by" ,this.$store.state.user_id);
 
