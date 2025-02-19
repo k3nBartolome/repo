@@ -1,6 +1,8 @@
 <template>
-  <div class="px-4 py-4">
-    <form @submit.prevent="updateEmployee">
+  <!-- Sticky Header -->
+
+  <form @submit.prevent="updateEmployee">
+    <div class="px-4 py-4">
       <!-- Employee Details Section -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
@@ -41,13 +43,6 @@
                   d="M5 15l7-7 7 7"
                 />
               </svg>
-            </button>
-            <button
-              type="button"
-              @click="toggleEdit"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            >
-              {{ isEditable ? "Cancel" : "Edit" }}
             </button>
           </div>
         </div>
@@ -312,7 +307,7 @@
           class="px-4 py-4 border rounded-lg bg-gray-50"
         >
           <div
-            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-6"
+            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-7"
           >
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -405,7 +400,6 @@
           </div>
         </div>
       </div>
-
       <!-- Programs Section -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
@@ -591,9 +585,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -603,6 +597,7 @@
                   <select
                     v-model="nbi_final_status"
                     @change="updateNBIData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -623,6 +618,7 @@
                     v-model="nbi_validity_date"
                     type="date"
                     @change="updateNBIData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -637,6 +633,7 @@
                     v-model="nbi_printed_date"
                     type="date"
                     @change="updateNBIData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -651,6 +648,7 @@
                     v-model="nbi_submitted_date"
                     type="date"
                     @change="updateNBIData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -665,6 +663,7 @@
                     v-model="nbi_remarks"
                     type="text"
                     @input="updateNBIData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -678,6 +677,7 @@
                   <input
                     type="file"
                     @change="uploadNbiImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -687,7 +687,7 @@
             <!-- Image Preview on the Right -->
             <div
               v-if="nbi_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="nbi_file_name"
@@ -745,9 +745,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -757,6 +757,7 @@
                   <select
                     v-model="dt_final_status"
                     @change="updateDTData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -776,6 +777,7 @@
                     v-model="dt_transaction_date"
                     @change="updateDTData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -788,6 +790,7 @@
                     v-model="dt_results_date"
                     @change="updateDTData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -800,6 +803,7 @@
                     v-model="dt_endorsed_date"
                     @change="updateDTData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -812,6 +816,7 @@
                     v-model="dt_remarks"
                     type="text"
                     @input="updateDTData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -823,6 +828,7 @@
                   <input
                     type="file"
                     @change="uploadDtImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -830,7 +836,7 @@
             </div>
             <div
               v-if="dt_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="dt_file_name"
@@ -888,9 +894,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -899,6 +905,7 @@
                   >
                   <select
                     v-model="peme_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @change="updatePemeData"
                   >
@@ -916,6 +923,7 @@
                     v-model="peme_transaction_date"
                     @change="updatePemeData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -928,6 +936,7 @@
                     v-model="peme_results_date"
                     @change="updatePemeData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -940,6 +949,7 @@
                     v-model="peme_endorsed_date"
                     @change="updatePemeData"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -950,6 +960,7 @@
                   >
                   <select
                     v-model="peme_remarks"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -993,6 +1004,7 @@
                   <input
                     type="file"
                     @change="uploadPemeImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1000,7 +1012,7 @@
             </div>
             <div
               v-if="peme_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="peme_file_name"
@@ -1058,9 +1070,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1070,6 +1082,7 @@
                   <select
                     v-model="sss_final_status"
                     @change="updateSssData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1086,14 +1099,12 @@
                   <input
                     v-model="sss_number"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @change="updateSssData"
                     @input="formatSSSNumber"
                     placeholder="01-2345678-9"
                   />
-                  <p v-if="sss_number_error" class="mt-1 text-sm text-red-500">
-                    {{ sss_number_error }}
-                  </p>
                 </div>
 
                 <div>
@@ -1104,6 +1115,7 @@
                   <select
                     v-model="sss_proof_submitted_type"
                     @change="updateSssData"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1134,6 +1146,7 @@
                     @change="updateSssData"
                     v-model="sss_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1147,6 +1160,7 @@
                     v-model="sss_remarks"
                     @change="updateSssData"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1158,6 +1172,7 @@
                   <input
                     type="file"
                     @change="uploadSssImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1165,7 +1180,7 @@
             </div>
             <div
               v-if="sss_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="sss_file_name"
@@ -1223,9 +1238,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1234,6 +1249,7 @@
                   >
                   <select
                     v-model="phic_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @change="updatePhicData"
                   >
@@ -1251,13 +1267,12 @@
                   <input
                     v-model="phic_number"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @input="formatPhicNumber"
                     @change="updatePhicData"
                   />
-                  <small class="text-sm text-gray-500 mt-1">
-                    Format: 01-23456789-01
-                  </small>
+                 
                 </div>
                 <div>
                   <label
@@ -1267,6 +1282,7 @@
                   <select
                     @change="updatePhicData"
                     v-model="phic_proof_submitted_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1293,6 +1309,7 @@
                     @change="updatePhicData"
                     v-model="phic_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1305,6 +1322,7 @@
                     @change="updatePhicData"
                     v-model="phic_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1316,6 +1334,7 @@
                   <input
                     type="file"
                     @change="uploadPhicImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1323,7 +1342,7 @@
             </div>
             <div
               v-if="phic_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="phic_file_name"
@@ -1383,9 +1402,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1394,6 +1413,7 @@
                   >
                   <select
                     v-model="pagibig_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @change="updatePagibigData"
                   >
@@ -1412,16 +1432,11 @@
                     @change="updatePagibigData"
                     v-model="pagibig_number"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @input="formatPagibigNumber"
                     placeholder="0123-4567-8901"
                   />
-                  <p
-                    v-if="pagibig_number_error"
-                    class="text-red-500 text-sm mt-1"
-                  >
-                    {{ pagibig_number_error }}
-                  </p>
                 </div>
 
                 <div>
@@ -1432,6 +1447,7 @@
                   <select
                     @change="updatePagibigData"
                     v-model="pagibig_proof_submitted_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1460,6 +1476,7 @@
                     @change="updatePagibigData"
                     v-model="pagibig_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1472,6 +1489,7 @@
                     @change="updatePagibigData"
                     v-model="pagibig_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1483,6 +1501,7 @@
                   <input
                     type="file"
                     @change="uploadPagIbigImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1490,7 +1509,7 @@
             </div>
             <div
               v-if="pagibig_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="pagibig_file_name"
@@ -1548,9 +1567,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1559,6 +1578,7 @@
                   >
                   <select
                     v-model="tin_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1576,13 +1596,11 @@
                   <input
                     v-model="tin_number"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     @input="formatTinNumber"
                     placeholder="012-345-678"
                   />
-                  <p v-if="tin_number_error" class="text-red-500 text-sm mt-1">
-                    {{ tin_number_error }}
-                  </p>
                 </div>
 
                 <div>
@@ -1592,6 +1610,7 @@
                   >
                   <select
                     v-model="tin_proof_submitted_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1619,6 +1638,7 @@
                   <input
                     v-model="tin_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1630,6 +1650,7 @@
                   <input
                     v-model="tin_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1641,6 +1662,7 @@
                   <input
                     type="file"
                     @change="uploadTinImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1648,7 +1670,7 @@
             </div>
             <div
               v-if="tin_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="tin_file_name"
@@ -1708,9 +1730,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1719,6 +1741,7 @@
                   >
                   <select
                     v-model="health_certificate_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1735,6 +1758,7 @@
                   <input
                     v-model="health_certificate_validity_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1746,6 +1770,7 @@
                   <input
                     v-model="health_certificate_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1757,6 +1782,7 @@
                   <input
                     v-model="health_certificate_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1768,6 +1794,7 @@
                   <input
                     type="file"
                     @change="uploadHcImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1775,7 +1802,7 @@
             </div>
             <div
               v-if="health_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="health_certificate_file_name"
@@ -1835,9 +1862,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1846,6 +1873,7 @@
                   >
                   <select
                     v-model="occupational_permit_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1862,6 +1890,7 @@
                   <input
                     v-model="occupational_permit_validity_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1873,6 +1902,7 @@
                   <input
                     v-model="occupational_permit_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1884,6 +1914,7 @@
                   <input
                     v-model="occupational_permit_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1895,6 +1926,7 @@
                   <input
                     type="file"
                     @change="uploadOpImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -1902,7 +1934,7 @@
             </div>
             <div
               v-if="occupational_permit_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="occupational_permit_file_name"
@@ -1960,9 +1992,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -1971,6 +2003,7 @@
                   >
                   <select
                     v-model="ofac_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -1992,6 +2025,7 @@
                   <input
                     v-model="ofac_checked_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2003,6 +2037,7 @@
                   <input
                     v-model="ofac_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2014,6 +2049,7 @@
                   <input
                     type="file"
                     @change="uploadOfacImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2021,7 +2057,7 @@
             </div>
             <div
               v-if="ofac_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="ofac_file_name"
@@ -2079,9 +2115,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2090,6 +2126,7 @@
                   >
                   <select
                     v-model="sam_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2111,6 +2148,7 @@
                   <input
                     v-model="sam_checked_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2122,6 +2160,7 @@
                   <input
                     v-model="sam_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2133,6 +2172,7 @@
                   <input
                     type="file"
                     @change="uploadSamImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2140,7 +2180,7 @@
             </div>
             <div
               v-if="sam_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="sam_file_name"
@@ -2198,9 +2238,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2209,6 +2249,7 @@
                   >
                   <select
                     v-model="oig_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2230,6 +2271,7 @@
                   <input
                     v-model="oig_checked_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2241,6 +2283,7 @@
                   <input
                     v-model="oig_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2252,6 +2295,7 @@
                   <input
                     type="file"
                     @change="uploadOigImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2259,7 +2303,7 @@
             </div>
             <div
               v-if="oig_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="oig_file_name"
@@ -2317,9 +2361,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2328,6 +2372,7 @@
                   >
                   <select
                     v-model="bgc_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2349,6 +2394,7 @@
                   <input
                     v-model="bgc_endorsed_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2360,6 +2406,7 @@
                   <input
                     v-model="bgc_results_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2371,6 +2418,7 @@
                   <input
                     v-model="bgc_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2382,6 +2430,7 @@
                   <input
                     type="file"
                     @change="uploadCibiImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2389,7 +2438,7 @@
             </div>
             <div
               v-if="cibi_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="cibi_file_name"
@@ -2447,9 +2496,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2458,6 +2507,7 @@
                   >
                   <select
                     v-model="bgc_final_status"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2479,6 +2529,7 @@
                   <input
                     v-model="bgc_endorsed_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2490,6 +2541,7 @@
                   <input
                     v-model="bgc_results_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2501,6 +2553,7 @@
                   <input
                     v-model="bgc_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2512,6 +2565,7 @@
                   <input
                     type="file"
                     @change="uploadBgcImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2519,7 +2573,7 @@
             </div>
             <div
               v-if="bgc_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="bgc_file_name"
@@ -2579,9 +2633,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2590,6 +2644,7 @@
                   >
                   <select
                     v-model="birth_certificate_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2609,6 +2664,7 @@
                   <input
                     v-model="birth_certificate_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2620,6 +2676,7 @@
                   <input
                     v-model="birth_certificate_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2631,6 +2688,7 @@
                   <input
                     type="file"
                     @change="uploadBcImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2638,7 +2696,7 @@
             </div>
             <div
               v-if="birth_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="birth_certificate_file_name"
@@ -2698,9 +2756,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2709,6 +2767,7 @@
                   >
                   <select
                     v-model="marriage_certificate_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2728,6 +2787,7 @@
                   <input
                     v-model="marriage_certificate_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2739,6 +2799,7 @@
                   <input
                     v-model="marriage_certificate_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2750,6 +2811,7 @@
                   <input
                     type="file"
                     @change="uploadMcImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2757,7 +2819,7 @@
             </div>
             <div
               v-if="marriage_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="marriage_certificate_file_name"
@@ -2817,9 +2879,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2828,6 +2890,7 @@
                   >
                   <select
                     v-model="dependent_birth_certificate_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2847,6 +2910,7 @@
                   <input
                     v-model="dependent_birth_certificate_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2858,6 +2922,7 @@
                   <input
                     v-model="dependent_birth_certificate_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2869,6 +2934,7 @@
                   <input
                     type="file"
                     @change="uploadDbcImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2876,7 +2942,7 @@
             </div>
             <div
               v-if="dependent_birth_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="dependent_birth_certificate_file_name"
@@ -2936,9 +3002,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -2947,6 +3013,7 @@
                   >
                   <select
                     v-model="scholastic_record_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2967,6 +3034,7 @@
                   <input
                     v-model="scholastic_record_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2978,6 +3046,7 @@
                   <input
                     v-model="scholastic_record_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2989,6 +3058,7 @@
                   <input
                     type="file"
                     @change="uploadSrImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2996,7 +3066,7 @@
             </div>
             <div
               v-if="scholastic_record_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="scholastic_record_file_name"
@@ -3056,9 +3126,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -3067,6 +3137,7 @@
                   >
                   <select
                     v-model="previous_employment_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -3089,6 +3160,7 @@
                   <input
                     v-model="previous_employment_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3100,6 +3172,7 @@
                   <input
                     v-model="previous_employment_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3111,6 +3184,7 @@
                   <input
                     type="file"
                     @change="uploadPeImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3118,7 +3192,7 @@
             </div>
             <div
               v-if="previous_employment_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="previous_employment_file_name"
@@ -3178,9 +3252,9 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-1/3">
+            <div class="w-full lg:w-2/3">
               <!-- Grid for Input Fields -->
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
                 <div>
                   <label
@@ -3189,6 +3263,7 @@
                   >
                   <select
                     v-model="supporting_documents_proof_type"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -3207,6 +3282,7 @@
                   <input
                     v-model="supporting_documents_submitted_date"
                     type="date"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3218,6 +3294,7 @@
                   <input
                     v-model="supporting_documents_remarks"
                     type="text"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3229,6 +3306,7 @@
                   <input
                     type="file"
                     @change="uploadSdImage"
+                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -3236,7 +3314,7 @@
             </div>
             <div
               v-if="supporting_documents_file_name"
-              class="flex items-center justify-center w-full lg:w-2/3"
+              class="flex items-center justify-center w-full lg:w-1/3"
             >
               <img
                 :src="supporting_documents_file_name"
@@ -3247,19 +3325,42 @@
           </div>
         </div>
       </div>
-    </form>
-
-    <!-- Sticky Save Button -->
-    <div class="sticky-save-button">
-      <button
-        v-if="isEditable"
-        type="submit"
-        class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-      >
-        Save Details
-      </button>
+      <div class="flex justify-between sticky-save-button">
+        <div class="flex space-x-2">
+          <button
+            type="button"
+            @click="expandAll"
+            class="px-4 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+          >
+            Expand All
+          </button>
+          <button
+            type="button"
+            @click="collapseAll"
+            class="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+          >
+            Collapse All
+          </button>
+          <button
+            type="button"
+            @click="toggleEdit"
+            class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            {{ isEditable ? "Cancel" : "Edit" }}
+          </button>
+        </div>
+        <div>
+          <button
+            v-if="isEditable"
+            type="submit"
+            class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          >
+            Save Details
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -3434,9 +3535,9 @@ export default {
       isBcInfo: false,
       isDbcInfo: false,
       isMcInfo: false,
-      isSrInfo: true,
-      isPeInfo: true,
-      isSdInfo: true,
+      isSrInfo: false,
+      isPeInfo: false,
+      isSdInfo: false,
       isEditable: false,
     };
   },
@@ -3920,6 +4021,54 @@ export default {
         console.error("Error fetching NBI data:", error);
       }
     },
+    expandAll() {
+      this.isWorkdayInfo = true;
+      this.isProgramInfo = true;
+      this.isNbiInfo = true;
+      this.isDtInfo = true;
+      this.isPemeInfo = true;
+      this.isSssInfo = true;
+      this.isPhicInfo = true;
+      this.isPagIbigInfo = true;
+      this.isTinInfo = true;
+      this.isHcInfo = true;
+      this.isOpInfo = true;
+      this.isOfacInfo = true;
+      this.isSamInfo = true;
+      this.isOigInfo = true;
+      this.isCibiInfo = true;
+      this.isBgcInfo = true;
+      this.isBcInfo = true;
+      this.isDbcInfo = true;
+      this.isMcInfo = true;
+      this.isSrInfo = true;
+      this.isPeInfo = true;
+      this.isSdInfo = true;
+    },
+    collapseAll() {
+      this.isWorkdayInfo = false;
+      this.isProgramInfo = false;
+      this.isNbiInfo = false;
+      this.isDtInfo = false;
+      this.isPemeInfo = false;
+      this.isSssInfo = false;
+      this.isPhicInfo = false;
+      this.isPagIbigInfo = false;
+      this.isTinInfo = false;
+      this.isHcInfo = false;
+      this.isOpInfo = false;
+      this.isOfacInfo = false;
+      this.isSamInfo = false;
+      this.isOigInfo = false;
+      this.isCibiInfo = false;
+      this.isBgcInfo = false;
+      this.isBcInfo = false;
+      this.isDbcInfo = false;
+      this.isMcInfo = false;
+      this.isSrInfo = false;
+      this.isPeInfo = false;
+      this.isSdInfo = false;
+    },
     toggleEmployeeInfo() {
       this.isEmployeeInfo = !this.isEmployeeInfo;
     },
@@ -4098,5 +4247,15 @@ export default {
   text-align: right;
   box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
   z-index: 1000; /* Ensure it stays on top of other content */
+}
+.sticky-edit-button {
+  position: fixed;
+  top: 1;
+  left: 0;
+  right: 0;
+  background-color: white; /* Optional: Add background color */
+  padding: 1rem;
+  text-align: right;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
 }
 </style>

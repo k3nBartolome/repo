@@ -1,25 +1,24 @@
 public function updateEmployeeInfo(Request $request, $id)
 {
 try {
-// Find the employee record by ID
-$employee = Employee::findOrFail($id);
 
-// Validate the incoming data
+
 $validatedData = $request->validate([
-'employee_info_first_name' => 'nullable|string|max:255',
-'employee_info_middle_name' => 'nullable|string|max:255',
-'employee_info_last_name' => 'nullable|string|max:255',
-'employee_info_position' => 'nullable|string|max:255',
-'employee_info_account_type' => 'nullable|string|max:255',
-'employee_info_employee_id' => 'required|string|max:255',
-'employee_info_contact_number' => 'nullable|string|max:15',
-'employee_info_email_address' => 'nullable|email|max:255',
-'employee_info_birth_date' => 'nullable|date',
-'employee_info_hired_date' => 'nullable|date',
-'employee_info_employee_status' => 'nullable|string|max:255',
-'employee_info_employment_status' => 'nullable|string|max:255',
-'employee_info_hired_month' => 'nullable|string|max:50',
-'employee_info_updated_by' => 'nullable|string|max:50',
+'first_name' => 'nullable|string|max:255',
+'middle_name' => 'nullable|string|max:255',
+'last_name' => 'nullable|string|max:255',
+'position' => 'nullable|string|max:255',
+'account_type' => 'nullable|string|max:255',
+'employee_id' => 'required|string|max:255',
+'contact_number' => 'nullable|string|max:15',
+'email_address' => 'nullable|email|max:255',
+'birth_date' => 'nullable|date',
+'hired_date' => 'nullable|date',
+
+'employee_status' => 'nullable|string|max:255',
+'employment_status' => 'nullable|string|max:255',
+'hired_month' => 'nullable|string|max:50',
+'updated_by' => 'nullable|string|max:50',
 'nbi_final_status' => 'nullable|string',
 'nbi_validity_date' => 'nullable|date',
 'nbi_submitted_date' => 'nullable|date',
@@ -48,25 +47,131 @@ $validatedData = $request->validate([
 'sss_proof_submitted_type' => 'nullable|string',
 'sss_updated_by' => 'nullable|integer',
 'sss_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'phic_submitted_date' => 'nullable|date',
+'phic_final_status' => 'nullable|string',
+'phic_proof_submitted_type' => 'nullable|string',
+'phic_remarks' => 'nullable|string',
+'phic_number' => 'nullable|string',
+'phic_updated_by' => 'nullable|integer',
+'phic_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'pagibig_submitted_date' => 'nullable|date',
+'pagibig_final_status' => 'nullable|string',
+'pagibig_proof_submitted_type' => 'nullable|string',
+'pagibig_remarks' => 'nullable|string',
+'pagibig_number' => 'nullable|string',
+'pagibig_updated_by' => 'nullable|integer',
+'pagibig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'tin_submitted_date' => 'nullable|date',
+'tin_final_status' => 'nullable|string',
+'tin_proof_submitted_type' => 'nullable|string',
+'tin_remarks' => 'nullable|string',
+'tin_number' => 'nullable|string',
+'tin_updated_by' => 'nullable|integer',
+'tin_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'health_certificate_validity_date' => 'nullable|date',
+'health_certificate_final_status' => 'nullable|string',
+'health_certificate_submitted_date' => 'nullable|date',
+'health_certificate_remarks' => 'nullable|string',
+'health_certificate_updated_by' => 'nullable|integer',
+'health_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'occupational_permit_validity_date' => 'nullable|date',
+'occupational_permit_submitted_date' => 'nullable|date',
+'occupational_permit_remarks' => 'nullable|string',
+'occupational_permit_final_status' => 'nullable|string',
+'occupational_permit_updated_by' => 'nullable|integer',
+'occupational_permit_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'ofac_checked_date' => 'nullable|date',
+'ofac_final_status' => 'nullable|string',
+'ofac_remarks' => 'nullable|string',
+'ofac_updated_by' => 'nullable|integer',
+'ofac_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'sam_checked_date' => 'nullable|date',
+'sam_final_status' => 'nullable|string',
+'sam_remarks' => 'nullable|string',
+'sam_updated_by' => 'nullable|integer',
+'sam_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'oig_checked_date' => 'nullable|date',
+'oig_final_status' => 'nullable|string',
+'oig_remarks' => 'nullable|string',
+'oig_updated_by' => 'nullable|integer',
+'oig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'cibi_checked_date' => 'nullable|date',
+'cibi_final_status' => 'nullable|string',
+'cibi_remarks' => 'nullable|string',
+'cibi_updated_by' => 'nullable|integer',
+'cibi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'bgc_endorsed_date' => 'nullable|date',
+'bgc_results_date' => 'nullable|date',
+'bgc_final_status' => 'nullable|string',
+'bgc_remarks' => 'nullable|string',
+'bgc_updated_by' => 'nullable|integer',
+'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'birth_certificate_submitted_date' => 'nullable|date',
+'birth_certificate_proof_type' => 'nullable|string',
+'birth_certificate_remarks' => 'nullable|string',
+'birth_certificate_updated_by' => 'nullable|integer',
+'birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'dependent_birth_certificate_submitted_date' => 'nullable|date',
+'dependent_birth_certificate_proof_type' => 'nullable|string',
+'dependent_birth_certificate_remarks' => 'nullable|string',
+'dependent_birth_certificate_updated_by' => 'nullable|integer',
+'dependent_birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'marriage_certificate_submitted_date' => 'nullable|date',
+'marriage_certificate_proof_type' => 'nullable|string',
+'marriage_certificate_remarks' => 'nullable|string',
+'marriage_certificate_updated_by' => 'nullable|integer',
+'marriage_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'scholastic_record_submitted_date' => 'nullable|date',
+'scholastic_record_proof_type' => 'nullable|string',
+'scholastic_record_remarks' => 'nullable|string',
+'scholastic_record_updated_by' => 'nullable|integer',
+'scholastic_record_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'previous_employment_submitted_date' => 'nullable|date',
+'previous_employment_proof_type' => 'nullable|string',
+'previous_employment_remarks' => 'nullable|string',
+'previous_employment_updated_by' => 'nullable|integer',
+'previous_employment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'supporting_documents_submitted_date' => 'nullable|date',
+'supporting_documents_proof_type' => 'nullable|string',
+'supporting_documents_remarks' => 'nullable|string',
+'supporting_documents_updated_by' => 'nullable|integer',
+'supporting_documents_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+'region' => 'nullable|string',
+'site' => 'nullable|integer',
+'lob' => 'nullable|string',
+'team_name' => 'nullable|string',
+'project_code' => 'nullable|string',
+'compliance_poc' => 'nullable|string',
+'updated_by' => 'required|integer',
+'employee_tbl_id' => 'nullable|integer',
+'workday_id' => 'nullable|string',
+'ro_feedback' => 'nullable|string',
+'per_findings' => 'nullable|string',
+'completion' => 'nullable|string',
+'contract_findings' => 'nullable|string',
+'contract_remarks' => 'nullable|string',
+'contract_status' => 'nullable|string',
+'updated_by' => 'required|integer',
 ]);
 
-// Update the employee information
+$employee = Employee::findOrFail($id);
+$requirement = Requirements::where('employee_tbl_id', $id)->first();
 
-$employee->first_name = $validatedData['employee_info_first_name'];
-$employee->middle_name = $validatedData['employee_info_middle_name'] ?? null;
-$employee->last_name = $validatedData['employee_info_last_name'];
-$employee->account_associate = $validatedData['employee_info_position'] ?? null;
-$employee->account_type = $validatedData['employee_info_account_type'] ?? null;
-$employee->employee_id = $validatedData['employee_info_employee_id'];
-$employee->contact_number = $validatedData['employee_info_contact_number'] ?? null;
-$employee->email = $validatedData['employee_info_email_address'] ?? null;
-$employee->birthdate = $validatedData['employee_info_birth_date'] ?? null;
-$employee->hired_date = $validatedData['employee_info_hired_date'] ?? null;
-$employee->employee_status = $validatedData['employee_info_employee_status'] ?? null;
-$employee->employment_status = $validatedData['employee_info_employment_status'] ?? null;
-$employee->hired_month = $validatedData['employee_info_hired_month'] ?? null;
+$employee->first_name = $validatedData['first_name'];
+$employee->middle_name = $validatedData['middle_name'] ?? null;
+$employee->last_name = $validatedData['last_name'];
+$employee->account_associate = $validatedData['position'] ?? null;
+$employee->account_type = $validatedData['account_type'] ?? null;
+$employee->employee_id = $validatedData['employee_id'];
+$employee->contact_number = $validatedData['contact_number'] ?? null;
+$employee->email = $validatedData['email_address'] ?? null;
+$employee->birthdate = $validatedData['birth_date'] ?? null;
+$employee->hired_date = $validatedData['hired_date'] ?? null;
+$employee->employee_status = $validatedData['employee_status'] ?? null;
+$employee->employment_status = $validatedData['employment_status'] ?? null;
+$employee->hired_month = $validatedData['hired_month'] ?? null;
 $employee->updated_at = now();
-$employee->updated_by = $validatedData['employee_info_updated_by'] ?? null;
+$employee->updated_by = $validatedData['updated_by'] ?? null;
 
 // Save the changes
 $employee->save();
@@ -88,12 +193,10 @@ public function updateNBI(Request $request, $id)
 Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
 
 // Validate input data
-$validatedData = Validator::make($request->all(), [
 
-])->validate();
 
 // Find the requirements record by employee_tbl_id
-$requirement = Requirements::where('employee_tbl_id', $id)->first();
+
 
 if (!$requirement) {
 Log::error('Requirement not found', ['id' => $id]);
@@ -148,9 +251,7 @@ public function updateDT(Request $request, $id)
 Log::info('Update DT Request Received', ['id' => $id, 'data' => $request->all()]);
 
 // Validate input data
-$validatedData = Validator::make($request->all(), [
 
-])->validate();
 
 // Find the requirements record by employee_tbl_id
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
@@ -208,9 +309,7 @@ public function updatePEME(Request $request, $id)
 Log::info('Update PEME Request Received', ['id' => $id, 'data' => $request->all()]);
 
 // Validate input data
-$validatedData = Validator::make($request->all(), [
 
-])->validate();
 
 // Find the requirements record by employee_tbl_id
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
@@ -266,15 +365,6 @@ public function updateSSS(Request $request, $id)
 Log::info('Update SSS Request Received', ['id' => $id, 'data' => $request->all()]);
 
 // Validate input data
-$validatedData = Validator::make($request->all(), [
-'sss_final_status' => 'nullable|string',
-'sss_submitted_date' => 'nullable|date',
-'sss_remarks' => 'nullable|string',
-'sss_number' => 'nullable|string',
-'sss_proof_submitted_type' => 'nullable|string',
-'sss_updated_by' => 'nullable|integer',
-'sss_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 // Find the requirements record by employee_tbl_id
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
@@ -329,15 +419,7 @@ public function updatePHIC(Request $request, $id)
 {
 Log::info('Update PHIC Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'phic_submitted_date' => 'nullable|date',
-'phic_final_status' => 'nullable|string',
-'phic_proof_submitted_type' => 'nullable|string',
-'phic_remarks' => 'nullable|string',
-'phic_number' => 'nullable|string',
-'phic_updated_by' => 'nullable|integer',
-'phic_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -383,15 +465,7 @@ public function updatePagibig(Request $request, $id)
 {
 Log::info('Update Pagibig Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'pagibig_submitted_date' => 'nullable|date',
-'pagibig_final_status' => 'nullable|string',
-'pagibig_proof_submitted_type' => 'nullable|string',
-'pagibig_remarks' => 'nullable|string',
-'pagibig_number' => 'nullable|string',
-'pagibig_updated_by' => 'nullable|integer',
-'pagibig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -437,15 +511,7 @@ public function updateTin(Request $request, $id)
 {
 Log::info('Update TIN Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'tin_submitted_date' => 'nullable|date',
-'tin_final_status' => 'nullable|string',
-'tin_proof_submitted_type' => 'nullable|string',
-'tin_remarks' => 'nullable|string',
-'tin_number' => 'nullable|string',
-'tin_updated_by' => 'nullable|integer',
-'tin_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -491,14 +557,7 @@ public function updateHealthCertificate(Request $request, $id)
 {
 Log::info('Update Health Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'health_certificate_validity_date' => 'nullable|date',
-'health_certificate_final_status' => 'nullable|string',
-'health_certificate_submitted_date' => 'nullable|date',
-'health_certificate_remarks' => 'nullable|string',
-'health_certificate_updated_by' => 'nullable|integer',
-'health_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -542,14 +601,7 @@ public function updateOccupationalPermit(Request $request, $id)
 {
 Log::info('Update Occupational Permit Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'occupational_permit_validity_date' => 'nullable|date',
-'occupational_permit_submitted_date' => 'nullable|date',
-'occupational_permit_remarks' => 'nullable|string',
-'occupational_permit_final_status' => 'nullable|string',
-'occupational_permit_updated_by' => 'nullable|integer',
-'occupational_permit_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -594,13 +646,8 @@ public function updateOFAC(Request $request, $id)
 {
 Log::info('Update OFAC Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'ofac_checked_date' => 'nullable|date',
-'ofac_final_status' => 'nullable|string',
-'ofac_remarks' => 'nullable|string',
-'ofac_updated_by' => 'nullable|integer',
-'ofac_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -644,13 +691,6 @@ public function updateSAM(Request $request, $id)
 {
 Log::info('Update SAM Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'sam_checked_date' => 'nullable|date',
-'sam_final_status' => 'nullable|string',
-'sam_remarks' => 'nullable|string',
-'sam_updated_by' => 'nullable|integer',
-'sam_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -694,13 +734,7 @@ public function updateOIG(Request $request, $id)
 {
 Log::info('Update OIG Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'oig_checked_date' => 'nullable|date',
-'oig_final_status' => 'nullable|string',
-'oig_remarks' => 'nullable|string',
-'oig_updated_by' => 'nullable|integer',
-'oig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -744,13 +778,6 @@ public function updateCIBI(Request $request, $id)
 {
 Log::info('Update CIBI Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'cibi_checked_date' => 'nullable|date',
-'cibi_final_status' => 'nullable|string',
-'cibi_remarks' => 'nullable|string',
-'cibi_updated_by' => 'nullable|integer',
-'cibi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -794,14 +821,7 @@ public function updateBGC(Request $request, $id)
 {
 Log::info('Update BGC Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'bgc_endorsed_date' => 'nullable|date',
-'bgc_results_date' => 'nullable|date',
-'bgc_final_status' => 'nullable|string',
-'bgc_remarks' => 'nullable|string',
-'bgc_updated_by' => 'nullable|integer',
-'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -846,13 +866,6 @@ public function updateBirthCertificate(Request $request, $id)
 {
 Log::info('Update Birth Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'birth_certificate_submitted_date' => 'nullable|date',
-'birth_certificate_proof_type' => 'nullable|string',
-'birth_certificate_remarks' => 'nullable|string',
-'birth_certificate_updated_by' => 'nullable|integer',
-'birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -896,13 +909,7 @@ public function updateDependentBirthCertificate(Request $request, $id)
 {
 Log::info('Update Dependent Birth Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'dependent_birth_certificate_submitted_date' => 'nullable|date',
-'dependent_birth_certificate_proof_type' => 'nullable|string',
-'dependent_birth_certificate_remarks' => 'nullable|string',
-'dependent_birth_certificate_updated_by' => 'nullable|integer',
-'dependent_birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -946,13 +953,6 @@ public function updateMarriageCertificate(Request $request, $id)
 {
 Log::info('Update Marriage Certificate Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'marriage_certificate_submitted_date' => 'nullable|date',
-'marriage_certificate_proof_type' => 'nullable|string',
-'marriage_certificate_remarks' => 'nullable|string',
-'marriage_certificate_updated_by' => 'nullable|integer',
-'marriage_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -996,13 +996,7 @@ public function updateScholasticRecord(Request $request, $id)
 {
 Log::info('Update Scholastic Record Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'scholastic_record_submitted_date' => 'nullable|date',
-'scholastic_record_proof_type' => 'nullable|string',
-'scholastic_record_remarks' => 'nullable|string',
-'scholastic_record_updated_by' => 'nullable|integer',
-'scholastic_record_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
+
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -1046,13 +1040,6 @@ public function updatePreviousEmployment(Request $request, $id)
 {
 Log::info('Update Previous Employment Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'previous_employment_submitted_date' => 'nullable|date',
-'previous_employment_proof_type' => 'nullable|string',
-'previous_employment_remarks' => 'nullable|string',
-'previous_employment_updated_by' => 'nullable|integer',
-'previous_employment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -1096,13 +1083,6 @@ public function updateSupportingDocuments(Request $request, $id)
 {
 Log::info('Update Supporting Documents Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'supporting_documents_submitted_date' => 'nullable|date',
-'supporting_documents_proof_type' => 'nullable|string',
-'supporting_documents_remarks' => 'nullable|string',
-'supporting_documents_updated_by' => 'nullable|integer',
-'supporting_documents_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-])->validate();
 
 $requirement = Requirements::where('employee_tbl_id', $id)->first();
 
@@ -1146,15 +1126,7 @@ public function updateLob(Request $request, $id)
 {
 Log::info('Update Lob Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'region' => 'nullable|string',
-'site' => 'nullable|integer',
-'lob' => 'nullable|string',
-'team_name' => 'nullable|string',
-'project_code' => 'nullable|string',
-'compliance_poc' => 'nullable|string',
-'updated_by' => 'required|integer', // Ensure `updated_by` is passed and is an integer
-])->validate();
+
 
 $lob = Lob::where('employee_tbl_id', $id)->first();
 
@@ -1191,17 +1163,6 @@ public function updateWorkday(Request $request, $id)
 {
 Log::info('Update Workday Request Received', ['id' => $id, 'data' => $request->all()]);
 
-$validatedData = Validator::make($request->all(), [
-'employee_tbl_id' => 'nullable|integer',
-'workday_id' => 'nullable|string',
-'ro_feedback' => 'nullable|string',
-'per_findings' => 'nullable|string',
-'completion' => 'nullable|string',
-'contract_findings' => 'nullable|string',
-'contract_remarks' => 'nullable|string',
-'contract_status' => 'nullable|string',
-'updated_by' => 'required|integer',
-])->validate();
 
 $workday = Workday::where('employee_tbl_id', $id)->first();
 
