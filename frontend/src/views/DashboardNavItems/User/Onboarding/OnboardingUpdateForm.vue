@@ -6,7 +6,7 @@
       <!-- Employee Details Section -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold">Employee Details</span>
+          <span class="text-lg font-semibold">EMPLOYEE DETAILS</span>
           <div class="flex items-center space-x-4">
             <button
               type="button"
@@ -263,7 +263,7 @@
       <!-- Workday Section -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold">Workday Details</span>
+          <span class="text-lg font-semibold">WORKDAY DETAILS</span>
           <button
             type="button"
             @click="toggleWorkdayInfo"
@@ -307,7 +307,7 @@
           class="px-4 py-4 border rounded-lg bg-gray-50"
         >
           <div
-            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-7"
+            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-5"
           >
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -397,13 +397,26 @@
                 <option value="PENDING">PENDING</option>
               </select>
             </div>
+
+            <!-- Last Updated At -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Last Updated At</label
+              >
+              <input
+                v-model="wd_updated_at"
+                type="text"
+                disabled
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
           </div>
         </div>
       </div>
       <!-- Programs Section -->
       <div class="mb-4">
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold">Programs</span>
+          <span class="text-lg font-semibold">PROGRAM DETAILS</span>
           <button
             type="button"
             @click="toggleProgramInfo"
@@ -448,7 +461,7 @@
           class="px-4 py-4 border rounded-lg bg-gray-50"
         >
           <div
-            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-6"
+            class="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-5"
           >
             <!-- Region -->
             <div>
@@ -534,6 +547,17 @@
                 class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
             </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Last Updated At</label
+              >
+              <input
+                v-model="lob_updated_at"
+                type="text"
+                disabled
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -541,7 +565,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">NBI Details</span>
+          <span class="text-lg font-semibold">NBI DETAILS</span>
           <button
             type="button"
             @click="toggleNbiInfo"
@@ -585,7 +609,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -681,13 +705,39 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <!-- Updated By -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="nbi_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="nbi_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
 
             <!-- Image Preview on the Right -->
             <div
               v-if="nbi_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="nbi_file_name"
@@ -701,7 +751,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">DT Details</span>
+          <span class="text-lg font-semibold">DT DETAILS</span>
           <button
             type="button"
             @click="toggleDtInfo"
@@ -745,7 +795,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -832,11 +882,37 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <!-- Updated By -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="dt_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="dt_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="dt_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="dt_file_name"
@@ -850,7 +926,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">PEME Details</span>
+          <span class="text-lg font-semibold">PEME DETAILS</span>
           <button
             type="button"
             @click="togglePemeInfo"
@@ -894,7 +970,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1008,11 +1084,37 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <!-- Updated By -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="peme_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="peme_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="peme_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="peme_file_name"
@@ -1026,7 +1128,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">SSS Details</span>
+          <span class="text-lg font-semibold">SSS DETAILS</span>
           <button
             type="button"
             @click="toggleSssInfo"
@@ -1070,7 +1172,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1176,11 +1278,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="sss_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="sss_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="sss_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="sss_file_name"
@@ -1194,7 +1321,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">PHIC Details</span>
+          <span class="text-lg font-semibold">PHIC DETAILS</span>
           <button
             type="button"
             @click="togglePhicInfo"
@@ -1238,7 +1365,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1272,7 +1399,6 @@
                     @input="formatPhicNumber"
                     @change="updatePhicData"
                   />
-                 
                 </div>
                 <div>
                   <label
@@ -1338,11 +1464,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="phic_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="phic_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="phic_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="phic_file_name"
@@ -1356,9 +1507,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >PAGIBIG Details</span
-          >
+          <span class="text-lg font-semibold">PAGIBIG DETAILS</span>
           <button
             type="button"
             @click="togglePagIbigInfo"
@@ -1402,7 +1551,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1505,11 +1654,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="pagibig_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="pagibig_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="pagibig_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="pagibig_file_name"
@@ -1523,7 +1697,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">TIN Details</span>
+          <span class="text-lg font-semibold">TIN DETAILS</span>
           <button
             type="button"
             @click="toggleTinInfo"
@@ -1567,7 +1741,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1666,11 +1840,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="tin_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="tin_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="tin_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="tin_file_name"
@@ -1684,9 +1883,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >HEALTH CERTIFICATE Details</span
-          >
+          <span class="text-lg font-semibold">HEALTH CERTIFICATE DETAILS</span>
           <button
             type="button"
             @click="toggleHcInfo"
@@ -1730,7 +1927,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1798,11 +1995,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="health_certificate_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="health_certificate_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="health_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="health_certificate_file_name"
@@ -1816,9 +2038,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >OCCUPATIONAL PERMIT Details</span
-          >
+          <span class="text-lg font-semibold">OCCUPATIONAL PERMIT DETAILS</span>
           <button
             type="button"
             @click="toggleOpInfo"
@@ -1862,7 +2082,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -1930,11 +2150,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="occupational_permit_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="occupational_permit_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="occupational_permit_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="occupational_permit_file_name"
@@ -1948,7 +2193,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">OFAC Details</span>
+          <span class="text-lg font-semibold">OFAC DETAILS</span>
           <button
             type="button"
             @click="toggleOfacInfo"
@@ -1992,7 +2237,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2053,11 +2298,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="ofac_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="ofac_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="ofac_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="ofac_file_name"
@@ -2071,7 +2341,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">SAM Details</span>
+          <span class="text-lg font-semibold">SAM DETAILS</span>
           <button
             type="button"
             @click="toggleSamInfo"
@@ -2115,7 +2385,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2176,11 +2446,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="sam_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="sam_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="sam_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="sam_file_name"
@@ -2194,7 +2489,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">OIG Details</span>
+          <span class="text-lg font-semibold">OIG DETAILS</span>
           <button
             type="button"
             @click="toggleOigInfo"
@@ -2238,7 +2533,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2299,11 +2594,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="oig_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="oig_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="oig_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="oig_file_name"
@@ -2317,7 +2637,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">CIBI Details</span>
+          <span class="text-lg font-semibold">CIBI DETAILS</span>
           <button
             type="button"
             @click="toggleCibiInfo"
@@ -2361,7 +2681,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2371,8 +2691,7 @@
                     >Final Status</label
                   >
                   <select
-                    v-model="bgc_final_status"
-                    :disabled="!isEditable"
+                    v-model="cibi_final_status"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   >
                     <option disabled>Please select one</option>
@@ -2389,24 +2708,11 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Date Endorsed</label
+                    >Date Checked</label
                   >
                   <input
-                    v-model="bgc_endorsed_date"
+                    v-model="cibi_checked_date"
                     type="date"
-                    :disabled="!isEditable"
-                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-                <div>
-                  <label
-                    class="block text-sm font-medium text-gray-700 truncate"
-                    >Result Date</label
-                  >
-                  <input
-                    v-model="bgc_results_date"
-                    type="date"
-                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2416,9 +2722,8 @@
                     >Remarks</label
                   >
                   <input
-                    v-model="bgc_remarks"
+                    v-model="cibi_remarks"
                     type="text"
-                    :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
@@ -2434,11 +2739,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="cibi_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="cibi_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="cibi_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="cibi_file_name"
@@ -2452,7 +2782,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800">BGC Details</span>
+          <span class="text-lg font-semibold">BGC DETAILS</span>
           <button
             type="button"
             @click="toggleBgcInfo"
@@ -2496,7 +2826,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2569,11 +2899,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="bgc_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="bgc_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="bgc_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="bgc_file_name"
@@ -2587,9 +2942,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >BIRTH CERTIFICATE Details</span
-          >
+          <span class="text-lg font-semibold">BIRTH CERTIFICATE DETAILS</span>
           <button
             type="button"
             @click="toggleBcInfo"
@@ -2633,7 +2986,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2692,11 +3045,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="birth_certificate_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="birth_certificate_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="birth_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="birth_certificate_file_name"
@@ -2710,8 +3088,8 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >MARRIAGE CERTIFICATE Details</span
+          <span class="text-lg font-semibold"
+            >MARRIAGE CERTIFICATE DETAILS</span
           >
           <button
             type="button"
@@ -2756,7 +3134,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2815,11 +3193,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="marriage_certificate_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="marriage_certificate_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="marriage_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="marriage_certificate_file_name"
@@ -2833,8 +3236,8 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >DEPENDENT BIRTH CERTIFICATE Details</span
+          <span class="text-lg font-semibold"
+            >DEPENDENT BIRTH CERTIFICATE DETAILS</span
           >
           <button
             type="button"
@@ -2879,7 +3282,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -2938,11 +3341,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="dependent_birth_certificate_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="dependent_birth_certificate_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="dependent_birth_certificate_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="dependent_birth_certificate_file_name"
@@ -2956,9 +3384,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >SCHOLASTIC RECORD Details</span
-          >
+          <span class="text-lg font-semibold">SCHOLASTIC RECORD DETAILS</span>
           <button
             type="button"
             @click="toggleSrInfo"
@@ -3002,7 +3428,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -3062,11 +3488,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="scholastic_record_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="scholastic_record_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="scholastic_record_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="scholastic_record_file_name"
@@ -3080,9 +3531,7 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >PREVIOUS EMPLOYMENT Details</span
-          >
+          <span class="text-lg font-semibold">PREVIOUS EMPLOYMENT DETAILS</span>
           <button
             type="button"
             @click="togglePeInfo"
@@ -3126,7 +3575,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -3188,11 +3637,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="previous_employment_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="previous_employment_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="previous_employment_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="previous_employment_file_name"
@@ -3206,8 +3680,8 @@
       <div class="mb-4">
         <!-- Header with Toggle Button -->
         <div class="flex items-center justify-between mb-2">
-          <span class="text-lg font-semibold text-gray-800"
-            >SUPPORTING DOCUMENTS Details</span
+          <span class="text-lg font-semibold"
+            >SUPPORTING DOCUMENTS DETAILS</span
           >
           <button
             type="button"
@@ -3252,7 +3726,7 @@
           <!-- Flex Container for Form and Image -->
           <div class="flex flex-col gap-4 lg:flex-row">
             <!-- Form Section on the Left -->
-            <div class="w-full lg:w-2/3">
+            <div class="w-full lg:w-3/5">
               <!-- Grid for Input Fields -->
               <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
                 <!-- Final Status -->
@@ -3310,11 +3784,36 @@
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Updated By</label
+                  >
+                  <input
+                    v-model="supporting_documents_updated_by"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <!-- Last Updated At -->
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >Last Updated At</label
+                  >
+                  <input
+                    v-model="supporting_documents_last_updated_at"
+                    type="text"
+                    disabled
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
               </div>
             </div>
             <div
               v-if="supporting_documents_file_name"
-              class="flex items-center justify-center w-full lg:w-1/3"
+              class="flex items-center justify-center w-full lg:w-2/5"
             >
               <img
                 :src="supporting_documents_file_name"
@@ -3515,6 +4014,48 @@ export default {
       supporting_documents_proof_type: "",
       supporting_documents_remarks: "",
       supporting_documents_proof: null,
+      nbi_updated_by: "",
+      dt_updated_by: "",
+      peme_updated_by: "",
+      sss_updated_by: "",
+      phic_updated_by: "",
+      pagibig_updated_by: "",
+      tin_updated_by: "",
+      health_certificate_updated_by: "",
+      occupational_permit_updated_by: "",
+      ofac_updated_by: "",
+      sam_updated_by: "",
+      oig_updated_by: "",
+      cibi_updated_by: "",
+      bgc_updated_by: "",
+      birth_certificate_updated_by: "",
+      dependent_birth_certificate_updated_by: "",
+      marriage_certificate_updated_by: "",
+      scholastic_record_updated_by: "",
+      previous_employment_updated_by: "",
+      supporting_documents_updated_by: "",
+      wd_updated_at: "",
+      lob_updated_at: "",
+      nbi_last_updated_at: "",
+      dt_last_updated_at: "",
+      peme_last_updated_at: "",
+      sss_last_updated_at: "",
+      phic_last_updated_at: "",
+      pagibig_last_updated_at: "",
+      tin_last_updated_at: "",
+      health_certificate_last_updated_at: "",
+      occupational_permit_last_updated_at: "",
+      ofac_last_updated_at: "",
+      sam_last_updated_at: "",
+      oig_last_updated_at: "",
+      cibi_last_updated_at: "",
+      bgc_last_updated_at: "",
+      birth_certificate_last_updated_at: "",
+      dependent_birth_certificate_last_updated_at: "",
+      marriage_certificate_last_updated_at: "",
+      scholastic_record_last_updated_at: "",
+      previous_employment_last_updated_at: "",
+      supporting_documents_last_updated_at: "",
       isEmployeeInfo: true,
       isWorkdayInfo: false,
       isProgramInfo: false,
@@ -4017,6 +4558,65 @@ export default {
           data.supporting_documents_remarks || null;
         this.supporting_documents_proof =
           data.supporting_documents_proof || null;
+        this.nbi_updated_by = data.nbi_updated_by || null;
+        this.dt_updated_by = data.dt_updated_by || null;
+        this.peme_updated_by = data.peme_updated_by || null;
+        this.sss_updated_by = data.sss_updated_by || null;
+        this.phic_updated_by = data.phic_updated_by || null;
+        this.pagibig_updated_by = data.pagibig_updated_by || null;
+        this.tin_updated_by = data.tin_updated_by || null;
+        this.health_certificate_updated_by =
+          data.health_certificate_updated_by || null;
+        this.occupational_permit_updated_by =
+          data.occupational_permit_updated_by || null;
+        this.ofac_updated_by = data.ofac_updated_by || null;
+        this.sam_updated_by = data.sam_updated_by || null;
+        this.oig_updated_by = data.oig_updated_by || null;
+        this.cibi_updated_by = data.cibi_updated_by || null;
+        this.bgc_updated_by = data.bgc_updated_by || null;
+        this.birth_certificate_updated_by =
+          data.birth_certificate_updated_by || null;
+        this.dependent_birth_certificate_updated_by =
+          data.dependent_birth_certificate_updated_by || null;
+        this.marriage_certificate_updated_by =
+          data.marriage_certificate_updated_by || null;
+        this.scholastic_record_updated_by =
+          data.scholastic_record_updated_by || null;
+        this.previous_employment_updated_by =
+          data.previous_employment_updated_by || null;
+        this.supporting_documents_updated_by =
+          data.supporting_documents_updated_by || null;
+        this.wd_updated_at = data.wd_updated_at || null;
+        this.lob_updated_at = data.lob_updated_at || null;
+        this.nbi_last_updated_at = data.nbi_last_updated_at || null;
+        this.nbi_last_updated_at = data.nbi_last_updated_at || null;
+        this.dt_last_updated_at = data.dt_last_updated_at || null;
+        this.peme_last_updated_at = data.peme_last_updated_at || null;
+        this.sss_last_updated_at = data.sss_last_updated_at || null;
+        this.phic_last_updated_at = data.phic_last_updated_at || null;
+        this.pagibig_last_updated_at = data.pagibig_last_updated_at || null;
+        this.tin_last_updated_at = data.tin_last_updated_at || null;
+        this.health_certificate_last_updated_at =
+          data.health_certificate_last_updated_at || null;
+        this.occupational_permit_last_updated_at =
+          data.occupational_permit_last_updated_at || null;
+        this.ofac_last_updated_at = data.ofac_last_updated_at || null;
+        this.sam_last_updated_at = data.sam_last_updated_at || null;
+        this.oig_last_updated_at = data.oig_last_updated_at || null;
+        this.cibi_last_updated_at = data.cibi_last_updated_at || null;
+        this.bgc_last_updated_at = data.bgc_last_updated_at || null;
+        this.birth_certificate_last_updated_at =
+          data.birth_certificate_last_updated_at || null;
+        this.dependent_birth_certificate_last_updated_at =
+          data.dependent_birth_certificate_last_updated_at || null;
+        this.marriage_certificate_last_updated_at =
+          data.marriage_certificate_last_updated_at || null;
+        this.scholastic_record_last_updated_at =
+          data.scholastic_record_last_updated_at || null;
+        this.previous_employment_last_updated_at =
+          data.previous_employment_last_updated_at || null;
+        this.supporting_documents_last_updated_at =
+          data.supporting_documents_last_updated_at || null;
       } catch (error) {
         console.error("Error fetching NBI data:", error);
       }
