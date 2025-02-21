@@ -4269,12 +4269,12 @@ class EmployeeController extends Controller
                 'first_name' => 'nullable|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
                 'last_name' => 'nullable|string|max:255',
-                'position' => 'nullable|string|max:255',
+                'account_associate' => 'nullable|string|max:255',
                 'account_type' => 'nullable|string|max:255',
                 'employee_id' => 'required|string|max:255',
                 'contact_number' => 'nullable|string|max:15',
-                'email_address' => 'nullable|email|max:255',
-                'birth_date' => 'nullable|date',
+                'email' => 'nullable|email|max:255',
+                'birthdate' => 'nullable|date',
                 'hired_date' => 'nullable|date',
                 'employee_status' => 'nullable|string|max:255',
                 'employment_status' => 'nullable|string|max:255',
@@ -4286,12 +4286,12 @@ class EmployeeController extends Controller
                 'first_name' => $validatedData['first_name'],
                 'middle_name' => $validatedData['middle_name'] ?? null,
                 'last_name' => $validatedData['last_name'],
-                'account_associate' => $validatedData['position'] ?? null,
+                'account_associate' => $validatedData['account_associate'] ?? null,
                 'account_type' => $validatedData['account_type'] ?? null,
                 'employee_id' => $validatedData['employee_id'],
                 'contact_number' => $validatedData['contact_number'] ?? null,
-                'email' => $validatedData['email_address'] ?? null,
-                'birthdate' => $validatedData['birth_date'] ?? null,
+                'email' => $validatedData['email'] ?? null,
+                'birthdate' => $validatedData['birthdate'] ?? null,
                 'hired_date' => $validatedData['hired_date'] ?? null,
                 'employee_status' => $validatedData['employee_status'] ?? null,
                 'employment_status' => $validatedData['employment_status'] ?? null,
@@ -4712,7 +4712,7 @@ class EmployeeController extends Controller
                 'team_name' => 'nullable',
                 'project_code' => 'nullable',
                 'compliance_poc' => 'nullable',
-                'updated_by' => 'required',
+                'lob_updated_by' => 'required',
             ]);
 
                 $lob->update([
@@ -4722,8 +4722,8 @@ class EmployeeController extends Controller
                 'team_name' => $validatedData['team_name'] ?? $lob->team_name,
                 'project_code' => $validatedData['project_code'] ?? $lob->project_code,
                 'compliance_poc' => $validatedData['compliance_poc'] ?? $lob->compliance_poc,
-                'updated_by' => $validatedData['updated_by'],
-                'lob_updated_at' => now(),
+                'lob_updated_by' => $validatedData['lob_updated_by'],
+                'updated_at' => now(),
             ]);
             }
             $workday = Workday::where('employee_tbl_id', $id)->first();
@@ -4745,8 +4745,9 @@ class EmployeeController extends Controller
                 'per_findings' => $validatedData['per_findings'] ?? $workday->per_findings,
                 'completion' => $validatedData['completion'] ?? $workday->completion,
                 'contract_status' => $validatedData['contract_status'] ?? $workday->contract_status,
-                'updated_by' => $validatedData['updated_by'],
-                'wd_updated_at' => now(),
+                'contract_remarks' => $validatedData['contract_remarks'] ?? $workday->contract_remarks,
+                'contract_findings' => $validatedData['contract_findings'] ?? $workday->contract_findings,
+                'updated_at' => now(),
             ]);
             }
 
