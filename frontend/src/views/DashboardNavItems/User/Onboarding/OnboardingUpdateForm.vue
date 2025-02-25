@@ -4631,22 +4631,14 @@ export default {
 
       try {
         const apiUrl = `http://127.0.0.1:8000/api/update/employee/${this.$route.params.id}`;
-
         const formData = new FormData();
 
-        if (!this.form || typeof this.form !== "object") {
-          console.error("Form data is undefined or not an object:", this.form);
-          alert("Form data is not initialized properly.");
-          this.isSubmitting = false;
-          return;
-        }
-
-        // General form data
+        // Append general form data
         Object.keys(this.form).forEach((key) => {
           formData.append(key, this.form[key] || "");
         });
 
-        // Append all other fields
+        // Append employee data
         formData.append("first_name", this.first_name || "");
         formData.append("middle_name", this.middle_name || "");
         formData.append("last_name", this.last_name || "");
@@ -4662,7 +4654,7 @@ export default {
         formData.append("hired_month", this.hired_month || "");
         formData.append("updated_by", this.$store.state.user_id);
 
-        // LOB Data
+        // Append LOB data
         formData.append("region", this.region || "");
         formData.append("site", this.site || "");
         formData.append("lob", this.lob || "");
@@ -4670,7 +4662,7 @@ export default {
         formData.append("project_code", this.project_code || "");
         formData.append("compliance_poc", this.compliance_poc || "");
 
-        // Workday Data
+        // Append Workday data
         formData.append("workday_id", this.workday_id || "");
         formData.append("ro_feedback", this.ro_feedback || "");
         formData.append("per_findings", this.per_findings || "");
@@ -4679,82 +4671,53 @@ export default {
         formData.append("contract_remarks", this.contract_remarks || "");
         formData.append("contract_status", this.contract_status || "");
 
-        formData.append(
-          "nbi_final_status",
-          this.nbi_final_status || "NO STATUS"
-        );
-        formData.append("dt_final_status", this.dt_final_status || "NO STATUS");
-        formData.append(
-          "peme_final_status",
-          this.peme_final_status || "NO STATUS"
-        );
-        formData.append(
-          "sss_final_status",
-          this.sss_final_status || "NO STATUS"
-        );
-        formData.append(
-          "phic_final_status",
-          this.phic_final_status || "NO STATUS"
-        );
+        // Append Requirements data
+        formData.append("nbi_final_status", this.nbi_final_status || "");
+        formData.append("dt_final_status", this.dt_final_status || "");
+        formData.append("peme_final_status", this.peme_final_status || "");
+        formData.append("sss_final_status", this.sss_final_status || "");
+        formData.append("phic_final_status", this.phic_final_status || "");
         formData.append(
           "pagibig_final_status",
-          this.pagibig_final_status || "NO STATUS"
+          this.pagibig_final_status || ""
         );
-        formData.append(
-          "tin_final_status",
-          this.tin_final_status || "NO STATUS"
-        );
+        formData.append("tin_final_status", this.tin_final_status || "");
         formData.append(
           "health_certificate_final_status",
-          this.health_certificate_final_status || "NO STATUS"
+          this.health_certificate_final_status || ""
         );
         formData.append(
           "occupational_permit_final_status",
-          this.occupational_permit_final_status || "NO STATUS"
+          this.occupational_permit_final_status || ""
         );
-        formData.append(
-          "ofac_final_status",
-          this.ofac_final_status || "NO STATUS"
-        );
-        formData.append(
-          "sam_final_status",
-          this.sam_final_status || "NO STATUS"
-        );
-        formData.append(
-          "oig_final_status",
-          this.oig_final_status || "NO STATUS"
-        );
-        formData.append(
-          "cibi_final_status",
-          this.cibi_final_status || "NO STATUS"
-        );
-        formData.append(
-          "bgc_final_status",
-          this.bgc_final_status || "NO STATUS"
-        );
+        formData.append("ofac_final_status", this.ofac_final_status || "");
+        formData.append("sam_final_status", this.sam_final_status || "");
+        formData.append("oig_final_status", this.oig_final_status || "");
+        formData.append("cibi_final_status", this.cibi_final_status || "");
+        formData.append("bgc_final_status", this.bgc_final_status || "");
         formData.append(
           "birth_certificate_final_status",
-          this.birth_certificate_final_status || "NO STATUS"
+          this.birth_certificate_final_status || ""
         );
         formData.append(
           "dependent_birth_certificate_final_status",
-          this.dependent_birth_certificate_final_status || "NO STATUS"
+          this.dependent_birth_certificate_final_status || ""
         );
         formData.append(
           "marriage_certificate_final_status",
-          this.marriage_certificate_final_status || "NO STATUS"
+          this.marriage_certificate_final_status || ""
         );
         formData.append(
           "scholastic_record_final_status",
-          this.scholastic_record_final_status || "NO STATUS"
+          this.scholastic_record_final_status || ""
         );
         formData.append(
           "previous_employment_final_status",
-          this.previous_employment_final_status || "NO STATUS"
+          this.previous_employment_final_status || ""
         );
         formData.append(
           "supporting_documents_final_status",
-          this.supporting_documents_final_status || "NO STATUS"
+          this.supporting_documents_final_status || ""
         );
 
         formData.append("nbi_final_status", this.nbi_final_status || "");
@@ -4762,13 +4725,13 @@ export default {
         formData.append("nbi_submitted_date", this.nbi_submitted_date || "");
         formData.append("nbi_printed_date", this.nbi_printed_date || "");
         formData.append("nbi_remarks", this.nbi_remarks || "");
-        formData.append("nbi_updated_by", this.nbi_updated_by || "");
+        formData.append("nbi_updated_by", this.$store.state.user_id || "");
         formData.append("dt_final_status", this.dt_final_status || "");
         formData.append("dt_results_date", this.dt_results_date || "");
         formData.append("dt_transaction_date", this.dt_transaction_date || "");
         formData.append("dt_endorsed_date", this.dt_endorsed_date || "");
         formData.append("dt_remarks", this.dt_remarks || "");
-        formData.append("dt_updated_by", this.dt_updated_by || "");
+        formData.append("dt_updated_by", this.$store.state.user_id || "");
         formData.append("peme_final_status", this.peme_final_status || "");
         formData.append("peme_results_date", this.peme_results_date || "");
         formData.append(
@@ -4777,7 +4740,7 @@ export default {
         );
         formData.append("peme_endorsed_date", this.peme_endorsed_date || "");
         formData.append("peme_remarks", this.peme_remarks || "");
-        formData.append("peme_updated_by", this.peme_updated_by || "");
+        formData.append("peme_updated_by", this.$store.state.user_id || "");
         formData.append("sss_final_status", this.sss_final_status || "");
         formData.append("sss_submitted_date", this.sss_submitted_date || "");
         formData.append("sss_remarks", this.sss_remarks || "");
@@ -4786,7 +4749,7 @@ export default {
           "sss_proof_submitted_type",
           this.sss_proof_submitted_type || ""
         );
-        formData.append("sss_updated_by", this.sss_updated_by || "");
+        formData.append("sss_updated_by", this.$store.state.user_id || "");
         formData.append("phic_submitted_date", this.phic_submitted_date || "");
         formData.append("phic_final_status", this.phic_final_status || "");
         formData.append(
@@ -4795,7 +4758,7 @@ export default {
         );
         formData.append("phic_remarks", this.phic_remarks || "");
         formData.append("phic_number", this.phic_number || "");
-        formData.append("phic_updated_by", this.phic_updated_by || "");
+        formData.append("phic_updated_by", this.$store.state.user_id || "");
         formData.append(
           "pagibig_submitted_date",
           this.pagibig_submitted_date || ""
@@ -4810,7 +4773,7 @@ export default {
         );
         formData.append("pagibig_remarks", this.pagibig_remarks || "");
         formData.append("pagibig_number", this.pagibig_number || "");
-        formData.append("pagibig_updated_by", this.pagibig_updated_by || "");
+        formData.append("pagibig_updated_by", this.$store.state.user_id || "");
         formData.append("tin_submitted_date", this.tin_submitted_date || "");
         formData.append("tin_final_status", this.tin_final_status || "");
         formData.append(
@@ -4819,7 +4782,7 @@ export default {
         );
         formData.append("tin_remarks", this.tin_remarks || "");
         formData.append("tin_number", this.tin_number || "");
-        formData.append("tin_updated_by", this.tin_updated_by || "");
+        formData.append("tin_updated_by", this.$store.state.user_id || "");
         formData.append(
           "health_certificate_validity_date",
           this.health_certificate_validity_date || ""
@@ -4838,7 +4801,7 @@ export default {
         );
         formData.append(
           "health_certificate_updated_by",
-          this.health_certificate_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "occupational_permit_validity_date",
@@ -4858,29 +4821,29 @@ export default {
         );
         formData.append(
           "occupational_permit_updated_by",
-          this.occupational_permit_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append("ofac_checked_date", this.ofac_checked_date || "");
         formData.append("ofac_final_status", this.ofac_final_status || "");
         formData.append("ofac_remarks", this.ofac_remarks || "");
-        formData.append("ofac_updated_by", this.ofac_updated_by || "");
+        formData.append("ofac_updated_by", this.$store.state.user_id || "");
         formData.append("sam_checked_date", this.sam_checked_date || "");
         formData.append("sam_final_status", this.sam_final_status || "");
         formData.append("sam_remarks", this.sam_remarks || "");
-        formData.append("sam_updated_by", this.sam_updated_by || "");
+        formData.append("sam_updated_by", this.$store.state.user_id || "");
         formData.append("oig_checked_date", this.oig_checked_date || "");
         formData.append("oig_final_status", this.oig_final_status || "");
         formData.append("oig_remarks", this.oig_remarks || "");
-        formData.append("oig_updated_by", this.oig_updated_by || "");
+        formData.append("oig_updated_by", this.$store.state.user_id || "");
         formData.append("cibi_checked_date", this.cibi_checked_date || "");
         formData.append("cibi_final_status", this.cibi_final_status || "");
         formData.append("cibi_remarks", this.cibi_remarks || "");
-        formData.append("cibi_updated_by", this.cibi_updated_by || "");
+        formData.append("cibi_updated_by", this.$store.state.user_id || "");
         formData.append("bgc_endorsed_date", this.bgc_endorsed_date || "");
         formData.append("bgc_results_date", this.bgc_results_date || "");
         formData.append("bgc_final_status", this.bgc_final_status || "");
         formData.append("bgc_remarks", this.bgc_remarks || "");
-        formData.append("bgc_updated_by", this.bgc_updated_by || "");
+        formData.append("bgc_updated_by", this.$store.state.user_id || "");
         formData.append(
           "birth_certificate_submitted_date",
           this.birth_certificate_submitted_date || ""
@@ -4895,7 +4858,7 @@ export default {
         );
         formData.append(
           "birth_certificate_updated_by",
-          this.birth_certificate_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "dependent_birth_certificate_submitted_date",
@@ -4911,7 +4874,7 @@ export default {
         );
         formData.append(
           "dependent_birth_certificate_updated_by",
-          this.dependent_birth_certificate_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "marriage_certificate_submitted_date",
@@ -4927,7 +4890,7 @@ export default {
         );
         formData.append(
           "marriage_certificate_updated_by",
-          this.marriage_certificate_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "scholastic_record_submitted_date",
@@ -4943,7 +4906,7 @@ export default {
         );
         formData.append(
           "scholastic_record_updated_by",
-          this.scholastic_record_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "previous_employment_submitted_date",
@@ -4959,7 +4922,7 @@ export default {
         );
         formData.append(
           "previous_employment_updated_by",
-          this.previous_employment_updated_by || ""
+          this.$store.state.user_id || ""
         );
         formData.append(
           "supporting_documents_submitted_date",
@@ -4975,66 +4938,7 @@ export default {
         );
         formData.append(
           "supporting_documents_updated_by",
-          this.supporting_documents_updated_by || ""
-        );
-        formData.append("nbi_last_updated_at", this.nbi_last_updated_at || "");
-        formData.append("dt_last_updated_at", this.dt_last_updated_at || "");
-        formData.append(
-          "peme_last_updated_at",
-          this.peme_last_updated_at || ""
-        );
-        formData.append("sss_last_updated_at", this.sss_last_updated_at || "");
-        formData.append(
-          "phic_last_updated_at",
-          this.phic_last_updated_at || ""
-        );
-        formData.append(
-          "pagibig_last_updated_at",
-          this.pagibig_last_updated_at || ""
-        );
-        formData.append("tin_last_updated_at", this.tin_last_updated_at || "");
-        formData.append(
-          "health_certificate_last_updated_at",
-          this.health_certificate_last_updated_at || ""
-        );
-        formData.append(
-          "occupational_permit_last_updated_at",
-          this.occupational_permit_last_updated_at || ""
-        );
-        formData.append(
-          "ofac_last_updated_at",
-          this.ofac_last_updated_at || ""
-        );
-        formData.append("sam_last_updated_at", this.sam_last_updated_at || "");
-        formData.append("oig_last_updated_at", this.oig_last_updated_at || "");
-        formData.append(
-          "cibi_last_updated_at",
-          this.cibi_last_updated_at || ""
-        );
-        formData.append("bgc_last_updated_at", this.bgc_last_updated_at || "");
-        formData.append(
-          "birth_certificate_last_updated_at",
-          this.birth_certificate_last_updated_at || ""
-        );
-        formData.append(
-          "dependent_birth_certificate_last_updated_at",
-          this.dependent_birth_certificate_last_updated_at || ""
-        );
-        formData.append(
-          "marriage_certificate_last_updated_at",
-          this.marriage_certificate_last_updated_at || ""
-        );
-        formData.append(
-          "scholastic_record_last_updated_at",
-          this.scholastic_record_last_updated_at || ""
-        );
-        formData.append(
-          "previous_employment_last_updated_at",
-          this.previous_employment_last_updated_at || ""
-        );
-        formData.append(
-          "supporting_documents_last_updated_at",
-          this.supporting_documents_last_updated_at || ""
+          this.$store.state.user_id || ""
         );
 
         if (this.nbi_proof instanceof File) {
@@ -5122,15 +5026,17 @@ export default {
           );
         }
 
+        const token = localStorage.getItem("token"); // Ensure you have the token
         const response = await axios.post(apiUrl, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         });
 
         alert(response.data.message || "Update successful!");
         this.$router.push({
-          name: "OnboardingUpdateSelection",
+          name: "OnboardingUpdateForm",
           params: { id: this.$route.params.id },
         });
       } catch (error) {
@@ -5138,7 +5044,9 @@ export default {
           "Error submitting form",
           error.response ? error.response.data : error.message
         );
-        alert("An error occurred while updating data.");
+        alert(
+          "An error occurred while updating data. Please check the console for details."
+        );
       } finally {
         this.isSubmitting = false;
       }
@@ -5315,44 +5223,6 @@ export default {
           3,
           6
         )}-${rawValue.slice(6, 9)}`;
-      }
-    },
-    async updateEmployee() {
-      try {
-        const token = this.$store.state.token;
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
-        const payload = {
-          employee_id: this.employee_id,
-          last_name: this.last_name,
-          first_name: this.first_name,
-          middle_name: this.middle_name,
-          employee_status: this.employee_status,
-          hired_date: this.hired_date,
-          hired_month: this.hired_month,
-          birthdate: this.birthdate,
-          contact_number: this.contact_number,
-          email: this.email,
-          account_associate: this.account_associate,
-        };
-
-        const response = await axios.put(
-          `http://127.0.0.1:8000/api/employees/${this.$route.params.id}`,
-          payload,
-          { headers }
-        );
-
-        if (response.status === 200) {
-          alert("Employee details updated successfully!");
-          this.isEditable = false; // Exit edit mode after saving
-        } else {
-          alert("Failed to update employee details.");
-        }
-      } catch (error) {
-        console.log(error);
-        alert("An error occurred while updating employee details.");
       }
     },
   },

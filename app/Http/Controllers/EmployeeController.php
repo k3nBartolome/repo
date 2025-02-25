@@ -34,7 +34,7 @@ class EmployeeController extends Controller
         $firstName = preg_replace('/[^A-Za-z0-9]/', '', $employee->first_name);
         $middleName = $employee->middle_name ? preg_replace('/[^A-Za-z0-9]/', '', $employee->middle_name) : '';
 
-        $zipFileName = "{$lastName}_{$firstName}".($middleName ? "_{$middleName}" : '').'_Requirements.zip';
+        $zipFileName = "{$lastName}_{$firstName}" . ($middleName ? "_{$middleName}" : '') . '_Requirements.zip';
         $zipFilePath = storage_path("app/public/$zipFileName");
 
         // Define the file mappings
@@ -169,7 +169,7 @@ class EmployeeController extends Controller
             'nbi_remarks' => $requirement->nbi_remarks,
             'nbi_updated_by' => $requirement->nbi_updated_by,
             'nbi_last_updated_at' => $requirement->nbi_last_updated_at,
-            'nbi_file_name' => $requirement->nbi_file_name ? asset('storage/nbi_files/'.$requirement->nbi_file_name) : null,
+            'nbi_file_name' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
         ];
 
         Log::info('NBI Data Retrieved Successfully', ['data' => $data]);
@@ -195,7 +195,7 @@ class EmployeeController extends Controller
             'dt_remarks' => $requirement->dt_remarks,
             'dt_updated_by' => $requirement->dt_updated_by,
             'dt_last_updated_at' => $requirement->dt_last_updated_at,
-            'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/'.$requirement->dt_file_name) : null,
+            'dt_file_name' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
         ];
 
         Log::info('DT Data Retrieved Successfully', ['data' => $data]);
@@ -221,7 +221,7 @@ class EmployeeController extends Controller
             'peme_remarks' => $requirement->peme_remarks,
             'peme_updated_by' => $requirement->peme_updated_by,
             'peme_last_updated_at' => $requirement->peme_last_updated_at,
-            'peme_file_name' => $requirement->peme_file_name ? asset('storage/peme_files/'.$requirement->peme_file_name) : null,
+            'peme_file_name' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
         ];
 
         Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
@@ -247,7 +247,7 @@ class EmployeeController extends Controller
             'sss_proof_submitted_type' => $requirement->sss_proof_submitted_type,
             'sss_updated_by' => $requirement->sss_updated_by,
             'sss_last_updated_at' => $requirement->sss_last_updated_at,
-            'sss_file_name' => $requirement->sss_file_name ? asset('storage/sss_files/'.$requirement->sss_file_name) : null,
+            'sss_file_name' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
         ];
 
         Log::info('PEME Data Retrieved Successfully', ['data' => $data]);
@@ -273,7 +273,7 @@ class EmployeeController extends Controller
             'phic_proof_submitted_type' => $requirement->phic_proof_submitted_type,
             'phic_updated_by' => $requirement->phic_updated_by,
             'phic_last_updated_at' => $requirement->phic_last_updated_at,
-            'phic_file_name' => $requirement->phic_file_name ? asset('storage/phic_files/'.$requirement->phic_file_name) : null,
+            'phic_file_name' => $requirement->phic_file_name ? asset('storage/phic_files/' . $requirement->phic_file_name) : null,
         ];
 
         Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
@@ -299,7 +299,7 @@ class EmployeeController extends Controller
             'pagibig_proof_submitted_type' => $requirement->pagibig_proof_submitted_type,
             'pagibig_updated_by' => $requirement->pagibig_updated_by,
             'pagibig_last_updated_at' => $requirement->pagibig_last_updated_at,
-            'pagibig_file_name' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/'.$requirement->pagibig_file_name) : null,
+            'pagibig_file_name' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/' . $requirement->pagibig_file_name) : null,
         ];
 
         Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
@@ -325,7 +325,7 @@ class EmployeeController extends Controller
             'tin_proof_submitted_type' => $requirement->tin_proof_submitted_type,
             'tin_updated_by' => $requirement->tin_updated_by,
             'tin_last_updated_at' => $requirement->tin_last_updated_at,
-            'tin_file_name' => $requirement->tin_file_name ? asset('storage/tin_files/'.$requirement->tin_file_name) : null,
+            'tin_file_name' => $requirement->tin_file_name ? asset('storage/tin_files/' . $requirement->tin_file_name) : null,
         ];
 
         Log::info('PHIC Data Retrieved Successfully', ['data' => $data]);
@@ -350,7 +350,7 @@ class EmployeeController extends Controller
             'health_certificate_remarks' => $requirement->health_certificate_remarks,
             'health_certificate_updated_by' => $requirement->health_certificate_updated_by,
             'health_certificate_last_updated_at' => $requirement->health_certificate_last_updated_at,
-            'health_certificate_file_name' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/'.$requirement->health_certificate_file_name) : null,
+            'health_certificate_file_name' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/' . $requirement->health_certificate_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -375,7 +375,7 @@ class EmployeeController extends Controller
             'occupational_permit_remarks' => $requirement->occupational_permit_remarks,
             'occupational_permit_updated_by' => $requirement->occupational_permit_updated_by,
             'occupational_permit_last_updated_at' => $requirement->occupational_permit_last_updated_at,
-            'occupational_permit_file_name' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/'.$requirement->occupational_permit_file_name) : null,
+            'occupational_permit_file_name' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/' . $requirement->occupational_permit_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -399,7 +399,7 @@ class EmployeeController extends Controller
             'ofac_remarks' => $requirement->ofac_remarks,
             'ofac_updated_by' => $requirement->ofac_updated_by,
             'ofac_last_updated_at' => $requirement->ofac_last_updated_at,
-            'ofac_file_name' => $requirement->ofac_file_name ? asset('storage/ofac_files/'.$requirement->ofac_file_name) : null,
+            'ofac_file_name' => $requirement->ofac_file_name ? asset('storage/ofac_files/' . $requirement->ofac_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -423,7 +423,7 @@ class EmployeeController extends Controller
             'sam_remarks' => $requirement->sam_remarks,
             'sam_updated_by' => $requirement->sam_updated_by,
             'sam_last_updated_at' => $requirement->sam_last_updated_at,
-            'sam_file_name' => $requirement->sam_file_name ? asset('storage/sam_files/'.$requirement->sam_file_name) : null,
+            'sam_file_name' => $requirement->sam_file_name ? asset('storage/sam_files/' . $requirement->sam_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -447,7 +447,7 @@ class EmployeeController extends Controller
             'oig_remarks' => $requirement->oig_remarks,
             'oig_updated_by' => $requirement->oig_updated_by,
             'oig_last_updated_at' => $requirement->oig_last_updated_at,
-            'oig_file_name' => $requirement->oig_file_name ? asset('storage/oig_files/'.$requirement->oig_file_name) : null,
+            'oig_file_name' => $requirement->oig_file_name ? asset('storage/oig_files/' . $requirement->oig_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -471,7 +471,7 @@ class EmployeeController extends Controller
             'cibi_remarks' => $requirement->cibi_remarks,
             'cibi_updated_by' => $requirement->cibi_updated_by,
             'cibi_last_updated_at' => $requirement->cibi_last_updated_at,
-            'cibi_file_name' => $requirement->cibi_file_name ? asset('storage/cibi_files/'.$requirement->cibi_file_name) : null,
+            'cibi_file_name' => $requirement->cibi_file_name ? asset('storage/cibi_files/' . $requirement->cibi_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -496,7 +496,7 @@ class EmployeeController extends Controller
             'bgc_remarks' => $requirement->bgc_remarks,
             'bgc_updated_by' => $requirement->bgc_updated_by,
             'bgc_last_updated_at' => $requirement->bgc_last_updated_at,
-            'bgc_file_name' => $requirement->bgc_file_name ? asset('storage/bgc_files/'.$requirement->bgc_file_name) : null,
+            'bgc_file_name' => $requirement->bgc_file_name ? asset('storage/bgc_files/' . $requirement->bgc_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -520,7 +520,7 @@ class EmployeeController extends Controller
             'birth_certificate_remarks' => $requirement->birth_certificate_remarks,
             'birth_certificate_updated_by' => $requirement->birth_certificate_updated_by,
             'birth_certificate_last_updated_at' => $requirement->birth_certificate_last_updated_at,
-            'birth_certificate_file_name' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/'.$requirement->birth_certificate_file_name) : null,
+            'birth_certificate_file_name' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/' . $requirement->birth_certificate_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -544,7 +544,7 @@ class EmployeeController extends Controller
             'dependent_birth_certificate_remarks' => $requirement->dependent_birth_certificate_remarks,
             'dependent_birth_certificate_updated_by' => $requirement->dependent_birth_certificate_updated_by,
             'dependent_birth_certificate_last_updated_at' => $requirement->dependent_birth_certificate_last_updated_at,
-            'dependent_birth_certificate_file_name' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/'.$requirement->dependent_birth_certificate_file_name) : null,
+            'dependent_birth_certificate_file_name' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/' . $requirement->dependent_birth_certificate_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -568,7 +568,7 @@ class EmployeeController extends Controller
             'marriage_certificate_remarks' => $requirement->marriage_certificate_remarks,
             'marriage_certificate_updated_by' => $requirement->marriage_certificate_updated_by,
             'marriage_certificate_last_updated_at' => $requirement->marriage_certificate_last_updated_at,
-            'marriage_certificate_file_name' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/'.$requirement->marriage_certificate_file_name) : null,
+            'marriage_certificate_file_name' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/' . $requirement->marriage_certificate_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -592,7 +592,7 @@ class EmployeeController extends Controller
             'scholastic_record_remarks' => $requirement->scholastic_record_remarks,
             'scholastic_record_updated_by' => $requirement->scholastic_record_updated_by,
             'scholastic_record_last_updated_at' => $requirement->scholastic_record_last_updated_at,
-            'scholastic_record_file_name' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/'.$requirement->scholastic_record_file_name) : null,
+            'scholastic_record_file_name' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/' . $requirement->scholastic_record_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -616,7 +616,7 @@ class EmployeeController extends Controller
             'previous_employment_remarks' => $requirement->previous_employment_remarks,
             'previous_employment_updated_by' => $requirement->previous_employment_updated_by,
             'previous_employment_last_updated_at' => $requirement->previous_employment_last_updated_at,
-            'previous_employment_file_name' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/'.$requirement->previous_employment_file_name) : null,
+            'previous_employment_file_name' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/' . $requirement->previous_employment_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -640,7 +640,7 @@ class EmployeeController extends Controller
             'supporting_documents_remarks' => $requirement->supporting_documents_remarks,
             'supporting_documents_updated_by' => $requirement->supporting_documents_updated_by,
             'supporting_documents_last_updated_at' => $requirement->supporting_documents_last_updated_at,
-            'supporting_documents_file_name' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/'.$requirement->supporting_documents_file_name) : null,
+            'supporting_documents_file_name' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/' . $requirement->supporting_documents_file_name) : null,
         ];
 
         Log::info('HC Data Retrieved Successfully', ['data' => $data]);
@@ -770,12 +770,12 @@ class EmployeeController extends Controller
         if ($request->has('search_term') && !empty($request->search_term)) {
             $searchTerm = $request->search_term;
             $employeeQuery->where(function ($query) use ($searchTerm) {
-                $query->where('first_name', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('email', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('contact_number', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('employee_id', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('middle_name', 'LIKE', '%'.$searchTerm.'%');
+                $query->where('first_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('contact_number', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('employee_id', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('middle_name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
         if ($request->filled('region')) {
@@ -785,7 +785,7 @@ class EmployeeController extends Controller
         }
         // Apply only site filter
         if ($request->filled('site')) {
-            \Log::info('Site filter applied: '.$request->site); // Debugging line
+            Log::info('Site filter applied: ' . $request->site); // Debugging line
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
                 $query->where('id', $request->site);
             });
@@ -871,7 +871,7 @@ class EmployeeController extends Controller
                 'nbi_submitted_date' => optional($employee->requirements->first())->nbi_submitted_date ?? 'N/A',
                 'nbi_printed_date' => optional($employee->requirements->first())->nbi_printed_date ?? 'N/A',
                 'nbi_remarks' => optional($employee->requirements->first())->nbi_remarks ?? 'N/A',
-                'nbi' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'nbi' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'nbi_last_updated_at' => optional($employee->requirements->first())->nbi_last_updated_at ?? 'N/A',
                 'nbi_updated_by' => optional(optional($employee->requirements->first())->nbiUpdatedBy)->name ?? 'N/A',
                 'dt_final_status' => optional($employee->requirements->first())->dt_final_status ?? 'N/A',
@@ -879,10 +879,10 @@ class EmployeeController extends Controller
                 'dt_transaction_date' => optional($employee->requirements->first())->dt_transaction_date ?? 'N/A',
                 'dt_endorsed_date' => optional($employee->requirements->first())->dt_endorsed_date ?? 'N/A',
                 'dt_remarks' => optional($employee->requirements->first())->dt_remarks ?? 'N/A',
-                'dt' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'dt' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'dt_last_updated_at' => optional($employee->requirements->first())->dt_last_updated_at ?? 'N/A',
                 'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? 'N/A',
-                'peme' => optional($employee->requirements->first())->peme_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'peme' => optional($employee->requirements->first())->peme_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'peme_remarks' => optional($employee->requirements->first())->peme_remarks ?? 'N/A',
                 'peme_endorsed_date' => optional($employee->requirements->first())->peme_endorsed_date ?? 'N/A',
                 'peme_results_date' => optional($employee->requirements->first())->peme_results_date ?? 'N/A',
@@ -895,7 +895,7 @@ class EmployeeController extends Controller
                 'sss_submitted_date' => optional($employee->requirements->first())->sss_submitted_date ?? 'N/A',
                 'sss_remarks' => optional($employee->requirements->first())->sss_remarks ?? 'N/A',
                 'sss_number' => optional($employee->requirements->first())->sss_number ?? 'N/A',
-                'sss' => optional($employee->requirements->first())->sss_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sss' => optional($employee->requirements->first())->sss_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sss_last_updated_at' => optional($employee->requirements->first())->sss_last_updated_at ?? 'N/A',
                 'sss_updated_by' => optional(optional($employee->requirements->first())->sssUpdatedBy)->name ?? 'N/A',
                 'phic_submitted_date' => optional($employee->requirements->first())->phic_submitted_date ?? 'N/A',
@@ -903,7 +903,7 @@ class EmployeeController extends Controller
                 'phic_proof_submitted_type' => optional($employee->requirements->first())->phic_proof_submitted_type ?? 'N/A',
                 'phic_remarks' => optional($employee->requirements->first())->phic_remarks ?? 'N/A',
                 'phic_number' => optional($employee->requirements->first())->phic_number ?? 'N/A',
-                'phic' => optional($employee->requirements->first())->phic_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'phic' => optional($employee->requirements->first())->phic_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ?? 'N/A',
                 'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A',
                 'pagibig_submitted_date' => optional($employee->requirements->first())->pagibig_submitted_date ?? 'N/A',
@@ -911,7 +911,7 @@ class EmployeeController extends Controller
                 'pagibig_proof_submitted_type' => optional($employee->requirements->first())->pagibig_proof_submitted_type ?? 'N/A',
                 'pagibig_remarks' => optional($employee->requirements->first())->pagibig_remarks ?? 'N/A',
                 'pagibig_number' => optional($employee->requirements->first())->pagibig_number ?? 'N/A',
-                'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ?? 'N/A',
                 'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A',
                 'tin_submitted_date' => optional($employee->requirements->first())->tin_submitted_date ?? 'N/A',
@@ -919,85 +919,85 @@ class EmployeeController extends Controller
                 'tin_proof_submitted_type' => optional($employee->requirements->first())->tin_proof_submitted_type ?? 'N/A',
                 'tin_remarks' => optional($employee->requirements->first())->tin_remarks ?? 'N/A',
                 'tin_number' => optional($employee->requirements->first())->tin_number ?? 'N/A',
-                'tin' => optional($employee->requirements->first())->tin_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'tin' => optional($employee->requirements->first())->tin_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'tin_last_updated_at' => optional($employee->requirements->first())->tin_last_updated_at ?? 'N/A',
                 'tin_updated_by' => optional(optional($employee->requirements->first())->tinUpdatedBy)->name ?? 'N/A',
                 'health_certificate_validity_date' => optional($employee->requirements->first())->health_certificate_validity_date ?? 'N/A',
                 'health_certificate_submitted_date' => optional($employee->requirements->first())->health_certificate_submitted_date ?? 'N/A',
                 'health_certificate_remarks' => optional($employee->requirements->first())->health_certificate_remarks ?? 'N/A',
-                'health_certificate' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'health_certificate' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'health_certificate_final_status' => optional($employee->requirements->first())->health_certificate_final_status ?? 'N/A',
                 'health_certificate_last_updated_at' => optional($employee->requirements->first())->health_certificate_last_updated_at ?? 'N/A',
                 'health_certificate_updated_by' => optional(optional($employee->requirements->first())->healthCertificateUpdatedBy)->name ?? 'N/A',
                 'occupational_permit_validity_date' => optional($employee->requirements->first())->occupational_permit_validity_date ?? 'N/A',
                 'occupational_permit_submitted_date' => optional($employee->requirements->first())->occupational_permit_submitted_date ?? 'N/A',
                 'occupational_permit_remarks' => optional($employee->requirements->first())->occupational_permit_remarks ?? 'N/A',
-                'occupational_permit' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'occupational_permit' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'occupational_permit_final_status' => optional($employee->requirements->first())->occupational_permit_final_status ?? 'N/A',
                 'occupational_permit_last_updated_at' => optional($employee->requirements->first())->occupational_permit_last_updated_at ?? 'N/A',
                 'occupational_permit_updated_by' => optional(optional($employee->requirements->first())->occupationalPermitUpdatedBy)->name ?? 'N/A',
                 'ofac_checked_date' => optional($employee->requirements->first())->ofac_checked_date ?? 'N/A',
                 'ofac_final_status' => optional($employee->requirements->first())->ofac_final_status ?? 'N/A',
                 'ofac_remarks' => optional($employee->requirements->first())->ofac_remarks ?? 'N/A',
-                'ofac' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'ofac' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'ofac_last_updated_at' => optional($employee->requirements->first())->ofac_last_updated_at ?? 'N/A',
                 'ofac_updated_by' => optional(optional($employee->requirements->first())->ofacUpdatedBy)->name ?? 'N/A',
                 'sam_checked_date' => optional($employee->requirements->first())->sam_checked_date ?? 'N/A',
                 'sam_final_status' => optional($employee->requirements->first())->sam_final_status ?? 'N/A',
                 'sam_remarks' => optional($employee->requirements->first())->sam_remarks ?? 'N/A',
-                'sam' => optional($employee->requirements->first())->sam_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sam' => optional($employee->requirements->first())->sam_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sam_last_updated_at' => optional($employee->requirements->first())->sam_last_updated_at ?? 'N/A',
                 'sam_updated_by' => optional(optional($employee->requirements->first())->samUpdatedBy)->name ?? 'N/A',
                 'oig_checked_date' => optional($employee->requirements->first())->oig_checked_date ?? 'N/A',
                 'oig_final_status' => optional($employee->requirements->first())->oig_final_status ?? 'N/A',
                 'oig_remarks' => optional($employee->requirements->first())->oig_remarks ?? 'N/A',
-                'oig' => optional($employee->requirements->first())->oig_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'oig' => optional($employee->requirements->first())->oig_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'oig_last_updated_at' => optional($employee->requirements->first())->oig_last_updated_at ?? 'N/A',
                 'oig_updated_by' => optional(optional($employee->requirements->first())->oigUpdatedBy)->name ?? 'N/A',
                 'cibi_checked_date' => optional($employee->requirements->first())->cibi_checked_date ?? 'N/A',
                 'cibi_final_status' => optional($employee->requirements->first())->cibi_final_status ?? 'N/A',
                 'cibi_remarks' => optional($employee->requirements->first())->cibi_remarks ?? 'N/A',
-                'cibi' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'cibi' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'cibi_last_updated_at' => optional($employee->requirements->first())->cibi_last_updated_at ?? 'N/A',
                 'cibi_updated_by' => optional(optional($employee->requirements->first())->cibiUpdatedBy)->name ?? 'N/A',
                 'bgc_endorsed_date' => optional($employee->requirements->first())->bgc_endorsed_date ?? 'N/A',
                 'bgc_results_date' => optional($employee->requirements->first())->bgc_results_date ?? 'N/A',
                 'bgc_final_status' => optional($employee->requirements->first())->bgc_final_status ?? 'N/A',
                 'bgc_remarks' => optional($employee->requirements->first())->bgc_remarks ?? 'N/A',
-                'bgc' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'bgc' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'bgc_last_updated_at' => optional($employee->requirements->first())->bgc_last_updated_at ?? 'N/A',
                 'bgc_updated_by' => optional(optional($employee->requirements->first())->bgcUpdatedBy)->name ?? 'N/A',
-                'bc' => optional($employee->requirements->first())->bc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'bc' => optional($employee->requirements->first())->bc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'bc_submitted_date' => optional($employee->requirements->first())->bc_submitted_date ?? 'N/A',
                 'bc_proof_type' => optional($employee->requirements->first())->bc_proof_type ?? 'N/A',
                 'bc_remarks' => optional($employee->requirements->first())->bc_remarks ?? 'N/A',
                 'bc_last_updated_at' => optional($employee->requirements->first())->bc_last_updated_at ?? 'N/A',
                 'bc_updated_by' => optional(optional($employee->requirements->first())->birthCertificateUpdatedBy)->name ?? 'N/A',
-                'dbc' => optional($employee->requirements->first())->dbc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'dbc' => optional($employee->requirements->first())->dbc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'dbc_submitted_date' => optional($employee->requirements->first())->dbc_submitted_date ?? 'N/A',
                 'dbc_proof_type' => optional($employee->requirements->first())->dbc_proof_type ?? 'N/A',
                 'dbc_remarks' => optional($employee->requirements->first())->dbc_remarks ?? 'N/A',
                 'dbc_last_updated_at' => optional($employee->requirements->first())->dbc_last_updated_at ?? 'N/A',
                 'dbc_updated_by' => optional(optional($employee->requirements->first())->dependentBirthCertificateUpdatedBy)->name ?? 'N/A',
-                'mc' => optional($employee->requirements->first())->mc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'mc' => optional($employee->requirements->first())->mc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'mc_submitted_date' => optional($employee->requirements->first())->mc_submitted_date ?? 'N/A',
                 'mc_proof_type' => optional($employee->requirements->first())->mc_proof_type ?? 'N/A',
                 'mc_remarks' => optional($employee->requirements->first())->mc_remarks ?? 'N/A',
                 'mc_last_updated_at' => optional($employee->requirements->first())->mc_last_updated_at ?? 'N/A',
                 'mc_updated_by' => optional(optional($employee->requirements->first())->marriageCertificateUpdatedBy)->name ?? 'N/A',
-                'sr' => optional($employee->requirements->first())->sr_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sr' => optional($employee->requirements->first())->sr_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sr_submitted_date' => optional($employee->requirements->first())->sr_submitted_date ?? 'N/A',
                 'sr_proof_type' => optional($employee->requirements->first())->sr_proof_type ?? 'N/A',
                 'sr_remarks' => optional($employee->requirements->first())->sr_remarks ?? 'N/A',
                 'sr_last_updated_at' => optional($employee->requirements->first())->sr_last_updated_at ?? 'N/A',
                 'sr_updated_by' => optional(optional($employee->requirements->first())->scholasticRecordUpdatedBy)->name ?? 'N/A',
-                'pe' => optional($employee->requirements->first())->pe_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'pe' => optional($employee->requirements->first())->pe_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'pe_submitted_date' => optional($employee->requirements->first())->pe_submitted_date ?? 'N/A',
                 'pe_proof_type' => optional($employee->requirements->first())->pe_proof_type ?? 'N/A',
                 'pe_remarks' => optional($employee->requirements->first())->pe_remarks ?? 'N/A',
                 'pe_last_updated_at' => optional($employee->requirements->first())->pe_last_updated_at ?? 'N/A',
                 'pe_updated_by' => optional(optional($employee->requirements->first())->previousEmploymentUpdatedBy)->name ?? 'N/A',
-                'sd' => optional($employee->requirements->first())->sd_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sd' => optional($employee->requirements->first())->sd_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sd_submitted_date' => optional($employee->requirements->first())->sd_submitted_date ?? 'N/A',
                 'sd_proof_type' => optional($employee->requirements->first())->sd_proof_type ?? 'N/A',
                 'sd_remarks' => optional($employee->requirements->first())->sd_remarks ?? 'N/A',
@@ -1136,7 +1136,7 @@ class EmployeeController extends Controller
                 'qr_code_path' => Storage::url($path), // Return the URL to access the file
             ], 200);
         } catch (\Exception $e) {
-            Log::error('QR Code save error: '.$e->getMessage());
+            Log::error('QR Code save error: ' . $e->getMessage());
 
             return response()->json([
                 'status' => 'error',
@@ -1235,7 +1235,7 @@ class EmployeeController extends Controller
             if ($employee->qr_code_path) {
                 // Generate the URL to the QR code image stored in the public directory
                 // Make sure to adjust the path if the storage is in another directory
-                $employee->qr_code_url = asset('storage/'.$employee->qr_code_path);
+                $employee->qr_code_url = asset('storage/' . $employee->qr_code_path);
             } else {
                 // If no QR code exists, set to null or default
                 $employee->qr_code_url = null;
@@ -1315,12 +1315,12 @@ class EmployeeController extends Controller
         if ($request->has('search_term') && !empty($request->search_term)) {
             $searchTerm = $request->search_term;
             $employeeQuery->where(function ($query) use ($searchTerm) {
-                $query->where('first_name', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('last_name', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('email', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('contact_number', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('employee_id', 'LIKE', '%'.$searchTerm.'%')
-                    ->orWhere('middle_name', 'LIKE', '%'.$searchTerm.'%');
+                $query->where('first_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('last_name', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('email', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('contact_number', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('employee_id', 'LIKE', '%' . $searchTerm . '%')
+                    ->orWhere('middle_name', 'LIKE', '%' . $searchTerm . '%');
             });
         }
         if ($request->filled('region')) {
@@ -1330,7 +1330,7 @@ class EmployeeController extends Controller
         }
         // Apply only site filter
         if ($request->filled('site')) {
-            \Log::info('Site filter applied: '.$request->site); // Debugging line
+            Log::info('Site filter applied: ' . $request->site); // Debugging line
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
                 $query->where('id', $request->site);
             });
@@ -1359,7 +1359,7 @@ class EmployeeController extends Controller
                 'contract_findings' => optional($employee->workday->first())->contract_findings ?? 'N/A',
                 'contract_remarks' => optional($employee->workday->first())->contract_remarks ?? 'N/A',
                 'contract_status' => optional($employee->workday->first())->contract_status ?? 'N/A',
-                'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/'.$employee->qr_code_path) : null,
+                'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
                 'employee_last_name' => $employee->last_name ?? 'N/A',
                 'employee_first_name' => $employee->first_name ?? 'N/A',
                 'employee_middle_name' => $employee->middle_name ?? 'N/A',
@@ -1394,7 +1394,7 @@ class EmployeeController extends Controller
                 'nbi_submitted_date' => optional($employee->requirements->first())->nbi_submitted_date ?? 'N/A',
                 'nbi_printed_date' => optional($employee->requirements->first())->nbi_printed_date ?? 'N/A',
                 'nbi_remarks' => optional($employee->requirements->first())->nbi_remarks ?? 'N/A',
-                'nbi' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'nbi' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'nbi_last_updated_at' => optional($employee->requirements->first())->nbi_last_updated_at ?? 'N/A',
                 'nbi_updated_by' => optional(optional($employee->requirements->first())->nbiUpdatedBy)->name ?? 'N/A',
                 'dt_final_status' => optional($employee->requirements->first())->dt_final_status ?? 'N/A',
@@ -1402,10 +1402,10 @@ class EmployeeController extends Controller
                 'dt_transaction_date' => optional($employee->requirements->first())->dt_transaction_date ?? 'N/A',
                 'dt_endorsed_date' => optional($employee->requirements->first())->dt_endorsed_date ?? 'N/A',
                 'dt_remarks' => optional($employee->requirements->first())->dt_remarks ?? 'N/A',
-                'dt' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'dt' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'dt_last_updated_at' => optional($employee->requirements->first())->dt_last_updated_at ?? 'N/A',
                 'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? 'N/A',
-                'peme' => optional($employee->requirements->first())->peme_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'peme' => optional($employee->requirements->first())->peme_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'peme_remarks' => optional($employee->requirements->first())->peme_remarks ?? 'N/A',
                 'peme_endorsed_date' => optional($employee->requirements->first())->peme_endorsed_date ?? 'N/A',
                 'peme_results_date' => optional($employee->requirements->first())->peme_results_date ?? 'N/A',
@@ -1418,7 +1418,7 @@ class EmployeeController extends Controller
                 'sss_submitted_date' => optional($employee->requirements->first())->sss_submitted_date ?? 'N/A',
                 'sss_remarks' => optional($employee->requirements->first())->sss_remarks ?? 'N/A',
                 'sss_number' => optional($employee->requirements->first())->sss_number ?? 'N/A',
-                'sss' => optional($employee->requirements->first())->sss_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sss' => optional($employee->requirements->first())->sss_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sss_last_updated_at' => optional($employee->requirements->first())->sss_last_updated_at ?? 'N/A',
                 'sss_updated_by' => optional(optional($employee->requirements->first())->sssUpdatedBy)->name ?? 'N/A',
                 'phic_submitted_date' => optional($employee->requirements->first())->phic_submitted_date ?? 'N/A',
@@ -1426,7 +1426,7 @@ class EmployeeController extends Controller
                 'phic_proof_submitted_type' => optional($employee->requirements->first())->phic_proof_submitted_type ?? 'N/A',
                 'phic_remarks' => optional($employee->requirements->first())->phic_remarks ?? 'N/A',
                 'phic_number' => optional($employee->requirements->first())->phic_number ?? 'N/A',
-                'phic' => optional($employee->requirements->first())->phic_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'phic' => optional($employee->requirements->first())->phic_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ?? 'N/A',
                 'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A',
                 'pagibig_submitted_date' => optional($employee->requirements->first())->pagibig_submitted_date ?? 'N/A',
@@ -1434,7 +1434,7 @@ class EmployeeController extends Controller
                 'pagibig_proof_submitted_type' => optional($employee->requirements->first())->pagibig_proof_submitted_type ?? 'N/A',
                 'pagibig_remarks' => optional($employee->requirements->first())->pagibig_remarks ?? 'N/A',
                 'pagibig_number' => optional($employee->requirements->first())->pagibig_number ?? 'N/A',
-                'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ?? 'N/A',
                 'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A',
                 'tin_submitted_date' => optional($employee->requirements->first())->tin_submitted_date ?? 'N/A',
@@ -1442,85 +1442,85 @@ class EmployeeController extends Controller
                 'tin_proof_submitted_type' => optional($employee->requirements->first())->tin_proof_submitted_type ?? 'N/A',
                 'tin_remarks' => optional($employee->requirements->first())->tin_remarks ?? 'N/A',
                 'tin_number' => optional($employee->requirements->first())->tin_number ?? 'N/A',
-                'tin' => optional($employee->requirements->first())->tin_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'tin' => optional($employee->requirements->first())->tin_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'tin_last_updated_at' => optional($employee->requirements->first())->tin_last_updated_at ?? 'N/A',
                 'tin_updated_by' => optional(optional($employee->requirements->first())->tinUpdatedBy)->name ?? 'N/A',
                 'health_certificate_validity_date' => optional($employee->requirements->first())->health_certificate_validity_date ?? 'N/A',
                 'health_certificate_submitted_date' => optional($employee->requirements->first())->health_certificate_submitted_date ?? 'N/A',
                 'health_certificate_remarks' => optional($employee->requirements->first())->health_certificate_remarks ?? 'N/A',
-                'health_certificate' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'health_certificate' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'health_certificate_final_status' => optional($employee->requirements->first())->health_certificate_final_status ?? 'N/A',
                 'health_certificate_last_updated_at' => optional($employee->requirements->first())->health_certificate_last_updated_at ?? 'N/A',
                 'health_certificate_updated_by' => optional(optional($employee->requirements->first())->healthCertificateUpdatedBy)->name ?? 'N/A',
                 'occupational_permit_validity_date' => optional($employee->requirements->first())->occupational_permit_validity_date ?? 'N/A',
                 'occupational_permit_submitted_date' => optional($employee->requirements->first())->occupational_permit_submitted_date ?? 'N/A',
                 'occupational_permit_remarks' => optional($employee->requirements->first())->occupational_permit_remarks ?? 'N/A',
-                'occupational_permit' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'occupational_permit' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'occupational_permit_final_status' => optional($employee->requirements->first())->occupational_permit_final_status ?? 'N/A',
                 'occupational_permit_last_updated_at' => optional($employee->requirements->first())->occupational_permit_last_updated_at ?? 'N/A',
                 'occupational_permit_updated_by' => optional(optional($employee->requirements->first())->occupationalPermitUpdatedBy)->name ?? 'N/A',
                 'ofac_checked_date' => optional($employee->requirements->first())->ofac_checked_date ?? 'N/A',
                 'ofac_final_status' => optional($employee->requirements->first())->ofac_final_status ?? 'N/A',
                 'ofac_remarks' => optional($employee->requirements->first())->ofac_remarks ?? 'N/A',
-                'ofac' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'ofac' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'ofac_last_updated_at' => optional($employee->requirements->first())->ofac_last_updated_at ?? 'N/A',
                 'ofac_updated_by' => optional(optional($employee->requirements->first())->ofacUpdatedBy)->name ?? 'N/A',
                 'sam_checked_date' => optional($employee->requirements->first())->sam_checked_date ?? 'N/A',
                 'sam_final_status' => optional($employee->requirements->first())->sam_final_status ?? 'N/A',
                 'sam_remarks' => optional($employee->requirements->first())->sam_remarks ?? 'N/A',
-                'sam' => optional($employee->requirements->first())->sam_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sam' => optional($employee->requirements->first())->sam_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sam_last_updated_at' => optional($employee->requirements->first())->sam_last_updated_at ?? 'N/A',
                 'sam_updated_by' => optional(optional($employee->requirements->first())->samUpdatedBy)->name ?? 'N/A',
                 'oig_checked_date' => optional($employee->requirements->first())->oig_checked_date ?? 'N/A',
                 'oig_final_status' => optional($employee->requirements->first())->oig_final_status ?? 'N/A',
                 'oig_remarks' => optional($employee->requirements->first())->oig_remarks ?? 'N/A',
-                'oig' => optional($employee->requirements->first())->oig_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'oig' => optional($employee->requirements->first())->oig_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'oig_last_updated_at' => optional($employee->requirements->first())->oig_last_updated_at ?? 'N/A',
                 'oig_updated_by' => optional(optional($employee->requirements->first())->oigUpdatedBy)->name ?? 'N/A',
                 'cibi_checked_date' => optional($employee->requirements->first())->cibi_checked_date ?? 'N/A',
                 'cibi_final_status' => optional($employee->requirements->first())->cibi_final_status ?? 'N/A',
                 'cibi_remarks' => optional($employee->requirements->first())->cibi_remarks ?? 'N/A',
-                'cibi' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'cibi' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'cibi_last_updated_at' => optional($employee->requirements->first())->cibi_last_updated_at ?? 'N/A',
                 'cibi_updated_by' => optional(optional($employee->requirements->first())->cibiUpdatedBy)->name ?? 'N/A',
                 'bgc_endorsed_date' => optional($employee->requirements->first())->bgc_endorsed_date ?? 'N/A',
                 'bgc_results_date' => optional($employee->requirements->first())->bgc_results_date ?? 'N/A',
                 'bgc_final_status' => optional($employee->requirements->first())->bgc_final_status ?? 'N/A',
                 'bgc_remarks' => optional($employee->requirements->first())->bgc_remarks ?? 'N/A',
-                'bgc' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'bgc' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'bgc_last_updated_at' => optional($employee->requirements->first())->bgc_last_updated_at ?? 'N/A',
                 'bgc_updated_by' => optional(optional($employee->requirements->first())->bgcUpdatedBy)->name ?? 'N/A',
-                'bc' => optional($employee->requirements->first())->bc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'bc' => optional($employee->requirements->first())->bc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'bc_submitted_date' => optional($employee->requirements->first())->bc_submitted_date ?? 'N/A',
                 'bc_proof_type' => optional($employee->requirements->first())->bc_proof_type ?? 'N/A',
                 'bc_remarks' => optional($employee->requirements->first())->bc_remarks ?? 'N/A',
                 'bc_last_updated_at' => optional($employee->requirements->first())->bc_last_updated_at ?? 'N/A',
                 'bc_updated_by' => optional(optional($employee->requirements->first())->birthCertificateUpdatedBy)->name ?? 'N/A',
-                'dbc' => optional($employee->requirements->first())->dbc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'dbc' => optional($employee->requirements->first())->dbc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'dbc_submitted_date' => optional($employee->requirements->first())->dbc_submitted_date ?? 'N/A',
                 'dbc_proof_type' => optional($employee->requirements->first())->dbc_proof_type ?? 'N/A',
                 'dbc_remarks' => optional($employee->requirements->first())->dbc_remarks ?? 'N/A',
                 'dbc_last_updated_at' => optional($employee->requirements->first())->dbc_last_updated_at ?? 'N/A',
                 'dbc_updated_by' => optional(optional($employee->requirements->first())->dependentBirthCertificateUpdatedBy)->name ?? 'N/A',
-                'mc' => optional($employee->requirements->first())->mc_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'mc' => optional($employee->requirements->first())->mc_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'mc_submitted_date' => optional($employee->requirements->first())->mc_submitted_date ?? 'N/A',
                 'mc_proof_type' => optional($employee->requirements->first())->mc_proof_type ?? 'N/A',
                 'mc_remarks' => optional($employee->requirements->first())->mc_remarks ?? 'N/A',
                 'mc_last_updated_at' => optional($employee->requirements->first())->mc_last_updated_at ?? 'N/A',
                 'mc_updated_by' => optional(optional($employee->requirements->first())->marriageCertificateUpdatedBy)->name ?? 'N/A',
-                'sr' => optional($employee->requirements->first())->sr_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sr' => optional($employee->requirements->first())->sr_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sr_submitted_date' => optional($employee->requirements->first())->sr_submitted_date ?? 'N/A',
                 'sr_proof_type' => optional($employee->requirements->first())->sr_proof_type ?? 'N/A',
                 'sr_remarks' => optional($employee->requirements->first())->sr_remarks ?? 'N/A',
                 'sr_last_updated_at' => optional($employee->requirements->first())->sr_last_updated_at ?? 'N/A',
                 'sr_updated_by' => optional(optional($employee->requirements->first())->scholasticRecordUpdatedBy)->name ?? 'N/A',
-                'pe' => optional($employee->requirements->first())->pe_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'pe' => optional($employee->requirements->first())->pe_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'pe_submitted_date' => optional($employee->requirements->first())->pe_submitted_date ?? 'N/A',
                 'pe_proof_type' => optional($employee->requirements->first())->pe_proof_type ?? 'N/A',
                 'pe_remarks' => optional($employee->requirements->first())->pe_remarks ?? 'N/A',
                 'pe_last_updated_at' => optional($employee->requirements->first())->pe_last_updated_at ?? 'N/A',
                 'pe_updated_by' => optional(optional($employee->requirements->first())->previousEmploymentUpdatedBy)->name ?? 'N/A',
-                'sd' => optional($employee->requirements->first())->sd_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
+                'sd' => optional($employee->requirements->first())->sd_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
                 'sd_submitted_date' => optional($employee->requirements->first())->sd_submitted_date ?? 'N/A',
                 'sd_proof_type' => optional($employee->requirements->first())->sd_proof_type ?? 'N/A',
                 'sd_remarks' => optional($employee->requirements->first())->sd_remarks ?? 'N/A',
@@ -1579,7 +1579,7 @@ class EmployeeController extends Controller
     {
         return [
             'employee_id' => $employee->employee_id ?? 'TBA',
-            'full_name' => $employee->last_name.','.$employee->first_name.' '.$employee->middle_name,
+            'full_name' => $employee->last_name . ',' . $employee->first_name . ' ' . $employee->middle_name,
             'status' => $employee->employee_status,
             'first_name' => $employee->first_name,
             'middle_name' => $employee->middle_name,
@@ -1594,7 +1594,7 @@ class EmployeeController extends Controller
             'employment_status' => $employee->employment_status,
             'updated_by' => $employee->userUpdatedBy ? $employee->userUpdatedBy->name : 'N/A',
             'updated_at' => $employee->updated_at->format('Y-m-d H:i'),
-            'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/'.$employee->qr_code_path) : null,
+            'employee_qr_code_url' => $employee->qr_code_path ? asset('storage/' . $employee->qr_code_path) : null,
         ];
     }
 
@@ -1623,7 +1623,7 @@ class EmployeeController extends Controller
                 'nbi_submitted_date' => $requirement->nbi_submitted_date,
                 'nbi_printed_date' => $requirement->nbi_printed_date,
                 'nbi_remarks' => $requirement->nbi_remarks,
-                'nbi_file_url' => $requirement->nbi_file_name ? asset('storage/nbi_files/'.$requirement->nbi_file_name) : null,
+                'nbi_file_url' => $requirement->nbi_file_name ? asset('storage/nbi_files/' . $requirement->nbi_file_name) : null,
                 'nbi_last_updated_at' => Carbon::parse($requirement->nbi_last_updated_at)->format('Y-m-d H:i'),
                 'nbi_updated_by' => $requirement->nbiUpdatedBy ? $requirement->nbiUpdatedBy->name : 'N/A',
 
@@ -1632,11 +1632,11 @@ class EmployeeController extends Controller
                 'dt_transaction_date' => $requirement->dt_transaction_date,
                 'dt_endorsed_date' => $requirement->dt_endorsed_date,
                 'dt_remarks' => $requirement->dt_remarks,
-                'dt_file_url' => $requirement->dt_file_name ? asset('storage/dt_files/'.$requirement->dt_file_name) : null,
+                'dt_file_url' => $requirement->dt_file_name ? asset('storage/dt_files/' . $requirement->dt_file_name) : null,
                 'dt_last_updated_at' => Carbon::parse($requirement->dt_last_updated_at)->format('Y-m-d H:i'),
                 'dt_updated_by' => $requirement->dtUpdatedBy ? $requirement->dtUpdatedBy->name : 'N/A',
 
-                'peme_file_url' => $requirement->peme_file_name ? asset('storage/peme_files/'.$requirement->peme_file_name) : null,
+                'peme_file_url' => $requirement->peme_file_name ? asset('storage/peme_files/' . $requirement->peme_file_name) : null,
                 'peme_remarks' => $requirement->peme_remarks,
                 'peme_endorsed_date' => $requirement->peme_endorsed_date,
                 'peme_results_date' => $requirement->peme_results_date,
@@ -1650,7 +1650,7 @@ class EmployeeController extends Controller
                 'sss_submitted_date' => $requirement->sss_submitted_date,
                 'sss_remarks' => $requirement->sss_remarks,
                 'sss_number' => $requirement->sss_number,
-                'sss_file_url' => $requirement->sss_file_name ? asset('storage/sss_files/'.$requirement->sss_file_name) : null,
+                'sss_file_url' => $requirement->sss_file_name ? asset('storage/sss_files/' . $requirement->sss_file_name) : null,
                 'sss_last_updated_at' => Carbon::parse($requirement->sss_last_updated_at)->format('Y-m-d H:i'),
                 'sss_updated_by' => $requirement->sssUpdatedBy ? $requirement->sssUpdatedBy->name : 'N/A',
 
@@ -1659,7 +1659,7 @@ class EmployeeController extends Controller
                 'phic_proof_submitted_type' => $requirement->phic_proof_submitted_type,
                 'phic_remarks' => $requirement->phic_remarks,
                 'phic_number' => $requirement->phic_number,
-                'phic_file_url' => $requirement->phic_file_name ? asset('storage/phic_files/'.$requirement->phic_file_name) : null,
+                'phic_file_url' => $requirement->phic_file_name ? asset('storage/phic_files/' . $requirement->phic_file_name) : null,
                 'phic_last_updated_at' => Carbon::parse($requirement->phic_last_updated_at)->format('Y-m-d H:i'),
                 'phic_updated_by' => $requirement->phicUpdatedBy ? $requirement->phicUpdatedBy->name : 'N/A',
 
@@ -1668,7 +1668,7 @@ class EmployeeController extends Controller
                 'pagibig_proof_submitted_type' => $requirement->pagibig_proof_submitted_type,
                 'pagibig_remarks' => $requirement->pagibig_remarks,
                 'pagibig_number' => $requirement->pagibig_number,
-                'pagibig_file_url' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/'.$requirement->pagibig_file_name) : null,
+                'pagibig_file_url' => $requirement->pagibig_file_name ? asset('storage/pagibig_files/' . $requirement->pagibig_file_name) : null,
                 'pagibig_last_updated_at' => Carbon::parse($requirement->pagibig_last_updated_at)->format('Y-m-d H:i'),
                 'pagibig_updated_by' => $requirement->pagibigUpdatedBy ? $requirement->pagibigUpdatedBy->name : 'N/A',
 
@@ -1677,14 +1677,14 @@ class EmployeeController extends Controller
                 'tin_proof_submitted_type' => $requirement->tin_proof_submitted_type,
                 'tin_remarks' => $requirement->tin_remarks,
                 'tin_number' => $requirement->tin_number,
-                'tin_file_url' => $requirement->tin_file_name ? asset('storage/tin_files/'.$requirement->tin_file_name) : null,
+                'tin_file_url' => $requirement->tin_file_name ? asset('storage/tin_files/' . $requirement->tin_file_name) : null,
                 'tin_last_updated_at' => Carbon::parse($requirement->tin_last_updated_at)->format('Y-m-d H:i'),
                 'tin_updated_by' => $requirement->tinUpdatedBy ? $requirement->tinUpdatedBy->name : 'N/A',
 
                 'health_certificate_validity_date' => $requirement->health_certificate_validity_date,
                 'health_certificate_submitted_date' => $requirement->health_certificate_submitted_date,
                 'health_certificate_remarks' => $requirement->health_certificate_remarks,
-                'health_certificate_file_url' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/'.$requirement->health_certificate_file_name) : null,
+                'health_certificate_file_url' => $requirement->health_certificate_file_name ? asset('storage/health_certificate_files/' . $requirement->health_certificate_file_name) : null,
                 'health_certificate_final_status' => $requirement->health_certificate_final_status,
                 'health_certificate_last_updated_at' => Carbon::parse($requirement->health_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'health_certificate_updated_by' => $requirement->healthCertificateUpdatedBy ? $requirement->healthCertificateUpdatedBy->name : 'N/A',
@@ -1692,7 +1692,7 @@ class EmployeeController extends Controller
                 'occupational_permit_validity_date' => $requirement->occupational_permit_validity_date,
                 'occupational_permit_submitted_date' => $requirement->occupational_permit_submitted_date,
                 'occupational_permit_remarks' => $requirement->occupational_permit_remarks,
-                'occupational_permit_file_url' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/'.$requirement->occupational_permit_file_name) : null,
+                'occupational_permit_file_url' => $requirement->occupational_permit_file_name ? asset('storage/occupational_permit_files/' . $requirement->occupational_permit_file_name) : null,
                 'occupational_permit_final_status' => $requirement->occupational_permit_final_status,
                 'occupational_permit_last_updated_at' => Carbon::parse($requirement->occupational_permit_last_updated_at)->format('Y-m-d H:i'),
                 'occupational_permit_updated_by' => $requirement->occupationalPermitUpdatedBy ? $requirement->occupationalPermitUpdatedBy->name : 'N/A',
@@ -1700,28 +1700,28 @@ class EmployeeController extends Controller
                 'ofac_checked_date' => $requirement->ofac_checked_date,
                 'ofac_final_status' => $requirement->ofac_final_status,
                 'ofac_remarks' => $requirement->ofac_remarks,
-                'ofac_file_url' => $requirement->ofac_file_name ? asset('storage/ofac_files/'.$requirement->ofac_file_name) : null,
+                'ofac_file_url' => $requirement->ofac_file_name ? asset('storage/ofac_files/' . $requirement->ofac_file_name) : null,
                 'ofac_last_updated_at' => Carbon::parse($requirement->ofac_last_updated_at)->format('Y-m-d H:i'),
                 'ofac_updated_by' => $requirement->ofacUpdatedBy ? $requirement->ofacUpdatedBy->name : 'N/A',
 
                 'sam_checked_date' => $requirement->sam_checked_date,
                 'sam_final_status' => $requirement->sam_final_status,
                 'sam_remarks' => $requirement->sam_remarks,
-                'sam_file_url' => $requirement->sam_file_name ? asset('storage/sam_files/'.$requirement->sam_file_name) : null,
+                'sam_file_url' => $requirement->sam_file_name ? asset('storage/sam_files/' . $requirement->sam_file_name) : null,
                 'sam_last_updated_at' => Carbon::parse($requirement->sam_last_updated_at)->format('Y-m-d H:i'),
                 'sam_updated_by' => $requirement->samUpdatedBy ? $requirement->samUpdatedBy->name : 'N/A',
 
                 'oig_checked_date' => $requirement->oig_checked_date,
                 'oig_final_status' => $requirement->oig_final_status,
                 'oig_remarks' => $requirement->oig_remarks,
-                'oig_file_url' => $requirement->oig_file_name ? asset('storage/oig_files/'.$requirement->oig_file_name) : null,
+                'oig_file_url' => $requirement->oig_file_name ? asset('storage/oig_files/' . $requirement->oig_file_name) : null,
                 'oig_last_updated_at' => Carbon::parse($requirement->oig_last_updated_at)->format('Y-m-d H:i'),
                 'oig_updated_by' => $requirement->oigUpdatedBy ? $requirement->oigUpdatedBy->name : 'N/A',
 
                 'cibi_checked_date' => $requirement->cibi_checked_date,
                 'cibi_final_status' => $requirement->cibi_final_status,
                 'cibi_remarks' => $requirement->cibi_remarks,
-                'cibi_file_url' => $requirement->cibi_file_name ? asset('storage/cibi_files/'.$requirement->cibi_file_name) : null,
+                'cibi_file_url' => $requirement->cibi_file_name ? asset('storage/cibi_files/' . $requirement->cibi_file_name) : null,
                 'cibi_last_updated_at' => Carbon::parse($requirement->cibi_last_updated_at)->format('Y-m-d H:i'),
                 'cibi_updated_by' => $requirement->cibiUpdatedBy ? $requirement->cibiUpdatedBy->name : 'N/A',
 
@@ -1729,46 +1729,46 @@ class EmployeeController extends Controller
                 'bgc_results_date' => $requirement->bgc_results_date,
                 'bgc_final_status' => $requirement->bgc_final_status,
                 'bgc_remarks' => $requirement->bgc_remarks,
-                'bgc_file_url' => $requirement->bgc_file_name ? asset('storage/bgc_files/'.$requirement->bgc_file_name) : null,
+                'bgc_file_url' => $requirement->bgc_file_name ? asset('storage/bgc_files/' . $requirement->bgc_file_name) : null,
                 'bgc_last_updated_at' => Carbon::parse($requirement->bgc_last_updated_at)->format('Y-m-d H:i'),
                 'bgc_updated_by' => $requirement->bgcUpdatedBy ? $requirement->bgcUpdatedBy->name : 'N/A',
 
-                'bc_file_url' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/'.$requirement->birth_certificate_file_name) : null,
+                'bc_file_url' => $requirement->birth_certificate_file_name ? asset('storage/birth_certificate_files/' . $requirement->birth_certificate_file_name) : null,
                 'bc_submitted_date' => $requirement->birth_certificate_submitted_date,
                 'bc_proof_type' => $requirement->birth_certificate_proof_type,
                 'bc_remarks' => $requirement->birth_certificate_remarks,
                 'bc_last_updated_at' => Carbon::parse($requirement->birth_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'bc_updated_by' => $requirement->birthCertificateUpdatedBy ? $requirement->birthCertificateUpdatedBy->name : 'N/A',
 
-                'dbc_file_url' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/'.$requirement->dependent_birth_certificate_file_name) : null,
+                'dbc_file_url' => $requirement->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/' . $requirement->dependent_birth_certificate_file_name) : null,
                 'dbc_submitted_date' => $requirement->dependent_birth_certificate_submitted_date,
                 'dbc_proof_type' => $requirement->dependent_birth_certificate_proof_type,
                 'dbc_remarks' => $requirement->dependent_birth_certificate_remarks,
                 'dbc_last_updated_at' => Carbon::parse($requirement->dependent_birth_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'dbc_updated_by' => $requirement->dependentBirthCertificateUpdatedBy ? $requirement->dependentBirthCertificateUpdatedBy->name : 'N/A',
 
-                'mc_file_url' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/'.$requirement->marriage_certificate_file_name) : null,
+                'mc_file_url' => $requirement->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/' . $requirement->marriage_certificate_file_name) : null,
                 'mc_submitted_date' => $requirement->marriage_certificate_submitted_date,
                 'mc_proof_type' => $requirement->marriage_certificate_proof_type,
                 'mc_remarks' => $requirement->marriage_certificate_remarks,
                 'mc_last_updated_at' => Carbon::parse($requirement->marriage_certificate_last_updated_at)->format('Y-m-d H:i'),
                 'mc_updated_by' => $requirement->marriageCertificateUpdatedBy ? $requirement->marriageCertificateUpdatedBy->name : 'N/A',
 
-                'sr_file_url' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/'.$requirement->scholastic_record_file_name) : null,
+                'sr_file_url' => $requirement->scholastic_record_file_name ? asset('storage/scholastic_record_files/' . $requirement->scholastic_record_file_name) : null,
                 'sr_submitted_date' => $requirement->scholastic_record_submitted_date,
                 'sr_proof_type' => $requirement->scholastic_record_proof_type,
                 'sr_remarks' => $requirement->scholastic_record_remarks,
                 'sr_last_updated_at' => Carbon::parse($requirement->scholastic_record_last_updated_at)->format('Y-m-d H:i'),
                 'sr_updated_by' => $requirement->scholasticRecordUpdatedBy ? $requirement->scholasticRecordUpdatedBy->name : 'N/A',
 
-                'pe_file_url' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/'.$requirement->previous_employment_file_name) : null,
+                'pe_file_url' => $requirement->previous_employment_file_name ? asset('storage/previous_employment_files/' . $requirement->previous_employment_file_name) : null,
                 'pe_submitted_date' => $requirement->previous_employment_submitted_date,
                 'pe_proof_type' => $requirement->previous_employment_proof_type,
                 'pe_remarks' => $requirement->previous_employment_remarks,
                 'pe_last_updated_at' => Carbon::parse($requirement->previous_employment_last_updated_at)->format('Y-m-d H:i'),
                 'pe_updated_by' => $requirement->previousEmploymentUpdatedBy ? $requirement->previousEmploymentUpdatedBy->name : 'N/A',
 
-                'sd_file_url' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/'.$requirement->supporting_documents_file_name) : null,
+                'sd_file_url' => $requirement->supporting_documents_file_name ? asset('storage/supporting_documents_files/' . $requirement->supporting_documents_file_name) : null,
                 'sd_submitted_date' => $requirement->supporting_documents_submitted_date,
                 'sd_proof_type' => $requirement->supporting_documents_proof_type,
                 'sd_remarks' => $requirement->supporting_documents_remarks,
@@ -2018,7 +2018,7 @@ class EmployeeController extends Controller
             'lob',
             'lob.siteName',
             'workday',
-    ])->find($id);
+        ])->find($id);
 
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
@@ -2026,181 +2026,181 @@ class EmployeeController extends Controller
 
         // Map all data in one go
         $mappedEmployee = [
-        // Employee
-        'employee_id' => $employee->employee_id,
-        'last_name' => $employee->last_name,
-        'first_name' => $employee->first_name,
-        'middle_name' => $employee->middle_name,
-        'employee_status' => $employee->employee_status,
-        'hired_date' => $employee->hired_date,
-        'hired_month' => $employee->hired_month,
-        'birthdate' => $employee->birthdate,
-        'contact_number' => $employee->contact_number,
-        'email' => $employee->email,
-        'account_associate' => $employee->account_associate,
-        'employment_status' => $employee->employment_status,
-        'employee_added_by' => $employee->employee_added_by,
-        'updated_by' => $employee->userUpdatedBy ? $employee->userUpdatedBy->name : 'N/A',
-        'created_at' => $employee->created_at ? Carbon::parse($employee->created_at)->format('Y-m-d H:i') : null,
-        'updated_at' => $employee->updated_at ? Carbon::parse($employee->updated_at)->format('Y-m-d H:i') : null,
-        'account_type' => $employee->account_type,
-        // Workday
-        'workday_id' => optional($employee->workday->first())->workday_id,
-        'contract_status' => optional($employee->workday->first())->contract_status,
-        'contract_remarks' => optional($employee->workday->first())->contract_remarks,
-        'contract_findings' => optional($employee->workday->first())->contract_findings,
-        'completion' => optional($employee->workday->first())->completion,
-        'per_findings' => optional($employee->workday->first())->per_findings,
-        'ro_feedback' => optional($employee->workday->first())->ro_feedback,
-        'wd_updated_at' => optional($employee->workday->first())->updated_at ? Carbon::parse(optional($employee->workday->first())->updated_at)->format('Y-m-d H:i') : '',
-        //Program
-        'region' => optional($employee->lob->first())->region,
-        'site' => optional($employee->lob->first())->id,
-        'site_name' => optional(optional($employee->lob->first())->siteName)->name,
-        'lob' => optional($employee->lob->first())->lob,
-        'team_name' => optional($employee->lob->first())->team_name,
-        'project_code' => optional($employee->lob->first())->project_code,
-        'compliance_poc' => optional($employee->lob->first())->compliance_poc,
-       'lob_updated_at' => optional($employee->workday->first())->updated_at ? Carbon::parse(optional($employee->workday->first())->updated_at)->format('Y-m-d H:i') : '',
+            // Employee
+            'employee_id' => $employee->employee_id,
+            'last_name' => $employee->last_name,
+            'first_name' => $employee->first_name,
+            'middle_name' => $employee->middle_name,
+            'employee_status' => $employee->employee_status,
+            'hired_date' => $employee->hired_date,
+            'hired_month' => $employee->hired_month,
+            'birthdate' => $employee->birthdate,
+            'contact_number' => $employee->contact_number,
+            'email' => $employee->email,
+            'account_associate' => $employee->account_associate,
+            'employment_status' => $employee->employment_status,
+            'employee_added_by' => $employee->employee_added_by,
+            'updated_by' => $employee->userUpdatedBy ? $employee->userUpdatedBy->name : "",
+            'created_at' => $employee->created_at ? Carbon::parse($employee->created_at)->format('Y-m-d H:i') : null,
+            'updated_at' => $employee->updated_at ? Carbon::parse($employee->updated_at)->format('Y-m-d H:i') : null,
+            'account_type' => $employee->account_type,
+            // Workday
+            'workday_id' => optional($employee->workday->first())->workday_id,
+            'contract_status' => optional($employee->workday->first())->contract_status,
+            'contract_remarks' => optional($employee->workday->first())->contract_remarks,
+            'contract_findings' => optional($employee->workday->first())->contract_findings,
+            'completion' => optional($employee->workday->first())->completion,
+            'per_findings' => optional($employee->workday->first())->per_findings,
+            'ro_feedback' => optional($employee->workday->first())->ro_feedback,
+            'wd_updated_at' => optional($employee->workday->first())->updated_at ? Carbon::parse(optional($employee->workday->first())->updated_at)->format('Y-m-d H:i') : '',
+            //Program
+            'region' => optional($employee->lob->first())->region,
+            'site' => optional($employee->lob->first())->site,
+            'site_name' => optional(optional($employee->lob->first())->siteName)->name,
+            'lob' => optional($employee->lob->first())->lob,
+            'team_name' => optional($employee->lob->first())->team_name,
+            'project_code' => optional($employee->lob->first())->project_code,
+            'compliance_poc' => optional($employee->lob->first())->compliance_poc,
+            'lob_updated_at' => optional($employee->workday->first())->updated_at ? Carbon::parse(optional($employee->workday->first())->updated_at)->format('Y-m-d H:i') : '',
             //Requirements
-        'nbi_final_status' => optional($employee->requirements->first())->nbi_final_status ?? 'N/A',
-        'nbi_validity_date' => optional($employee->requirements->first())->nbi_validity_date ?? 'N/A',
-        'nbi_submitted_date' => optional($employee->requirements->first())->nbi_submitted_date ?? 'N/A',
-        'nbi_printed_date' => optional($employee->requirements->first())->nbi_printed_date ?? 'N/A',
-        'nbi_remarks' => optional($employee->requirements->first())->nbi_remarks ?? 'N/A',
-        'nbi_file_name' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/nbi_files/'.optional($employee->requirements->first())->nbi_file_name) : 'N/A',
-        'nbi_last_updated_at' => optional($employee->requirements->first())->nbi_last_updated_at ? Carbon::parse($employee->requirements->first()->nbi_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'nbi_updated_by' => optional(optional($employee->requirements->first())->nbiUpdatedBy)->name ?? 'N/A',
-        'dt_final_status' => optional($employee->requirements->first())->dt_final_status ?? 'N/A',
-        'dt_results_date' => optional($employee->requirements->first())->dt_results_date ?? 'N/A',
-        'dt_transaction_date' => optional($employee->requirements->first())->dt_transaction_date ?? 'N/A',
-        'dt_endorsed_date' => optional($employee->requirements->first())->dt_endorsed_date ?? 'N/A',
-        'dt_remarks' => optional($employee->requirements->first())->dt_remarks ?? 'N/A',
-        'dt_file_name' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/'.optional($employee->requirements->first())->dt_file_name) : 'N/A',
-        'dt_last_updated_at' => optional($employee->requirements->first())->dt_last_updated_at ? Carbon::parse($employee->requirements->first()->dt_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? 'N/A',
-        'peme_file_name' => optional($employee->requirements->first())->peme_file_name ? asset('storage/peme_files/'.optional($employee->requirements->first())->peme_file_name) : 'N/A',
-        'peme_remarks' => optional($employee->requirements->first())->peme_remarks ?? 'N/A',
-        'peme_endorsed_date' => optional($employee->requirements->first())->peme_endorsed_date ?? 'N/A',
-        'peme_results_date' => optional($employee->requirements->first())->peme_results_date ?? 'N/A',
-        'peme_transaction_date' => optional($employee->requirements->first())->peme_transaction_date ?? 'N/A',
-        'peme_final_status' => optional($employee->requirements->first())->peme_final_status ?? 'N/A',
-        'peme_last_updated_at' => optional($employee->requirements->first())->peme_last_updated_at ? Carbon::parse($employee->requirements->first()->peme_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'peme_updated_by' => optional(optional($employee->requirements->first())->pemeUpdatedBy)->name ?? 'N/A',
-        'sss_proof_submitted_type' => optional($employee->requirements->first())->sss_proof_submitted_type ?? 'N/A',
-        'sss_final_status' => optional($employee->requirements->first())->sss_final_status ?? 'N/A',
-        'sss_submitted_date' => optional($employee->requirements->first())->sss_submitted_date ?? 'N/A',
-        'sss_remarks' => optional($employee->requirements->first())->sss_remarks ?? 'N/A',
-        'sss_number' => optional($employee->requirements->first())->sss_number ?? 'N/A',
-        'sss_file_name' => optional($employee->requirements->first())->sss_file_name ? asset('storage/sss_files/'.optional($employee->requirements->first())->sss_file_name) : 'N/A',
-        'sss_last_updated_at' => optional($employee->requirements->first())->sss_last_updated_at ? Carbon::parse($employee->requirements->first()->sss_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'sss_updated_by' => optional(optional($employee->requirements->first())->sssUpdatedBy)->name ?? 'N/A',
-        'phic_submitted_date' => optional($employee->requirements->first())->phic_submitted_date ?? 'N/A',
-        'phic_final_status' => optional($employee->requirements->first())->phic_final_status ?? 'N/A',
-        'phic_proof_submitted_type' => optional($employee->requirements->first())->phic_proof_submitted_type ?? 'N/A',
-        'phic_remarks' => optional($employee->requirements->first())->phic_remarks ?? 'N/A',
-        'phic_number' => optional($employee->requirements->first())->phic_number ?? 'N/A',
-        'phic_file_name' => optional($employee->requirements->first())->phic_file_name ? asset('storage/phic_files/'.optional($employee->requirements->first())->phic_file_name) : 'N/A',
-        'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ? Carbon::parse($employee->requirements->first()->phic_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A',
-        'pagibig_submitted_date' => optional($employee->requirements->first())->pagibig_submitted_date ?? 'N/A',
-        'pagibig_final_status' => optional($employee->requirements->first())->pagibig_final_status ?? 'N/A',
-        'pagibig_proof_submitted_type' => optional($employee->requirements->first())->pagibig_proof_submitted_type ?? 'N/A',
-        'pagibig_remarks' => optional($employee->requirements->first())->pagibig_remarks ?? 'N/A',
-        'pagibig_number' => optional($employee->requirements->first())->pagibig_number ?? 'N/A',
-        'pagibig_file_name' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/pagibig_files/'.optional($employee->requirements->first())->pagibig_file_name) : 'N/A',
-        'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ? Carbon::parse($employee->requirements->first()->pagibig_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A',
-        'tin_submitted_date' => optional($employee->requirements->first())->tin_submitted_date ?? 'N/A',
-        'tin_final_status' => optional($employee->requirements->first())->tin_final_status ?? 'N/A',
-        'tin_proof_submitted_type' => optional($employee->requirements->first())->tin_proof_submitted_type ?? 'N/A',
-        'tin_remarks' => optional($employee->requirements->first())->tin_remarks ?? 'N/A',
-        'tin_number' => optional($employee->requirements->first())->tin_number ?? 'N/A',
-        'tin_file_name' => optional($employee->requirements->first())->tin_file_name ? asset('storage/tin_files/'.optional($employee->requirements->first())->tin_file_name) : 'N/A',
-        'tin_last_updated_at' => optional($employee->requirements->first())->tin_last_updated_at ? Carbon::parse($employee->requirements->first()->tib_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'tin_updated_by' => optional(optional($employee->requirements->first())->tinUpdatedBy)->name ?? 'N/A',
-        'health_certificate_validity_date' => optional($employee->requirements->first())->health_certificate_validity_date ?? 'N/A',
-        'health_certificate_submitted_date' => optional($employee->requirements->first())->health_certificate_submitted_date ?? 'N/A',
-        'health_certificate_remarks' => optional($employee->requirements->first())->health_certificate_remarks ?? 'N/A',
-        'health_certificate_file_name' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/health_certificate_files/'.optional($employee->requirements->first())->health_certificate_file_name) : 'N/A',
-        'health_certificate_final_status' => optional($employee->requirements->first())->health_certificate_final_status ?? 'N/A',
-        'health_certificate_last_updated_at' => optional($employee->requirements->first())->health_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->health_certificate_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'health_certificate_updated_by' => optional(optional($employee->requirements->first())->healthCertificateUpdatedBy)->name ?? 'N/A',
-        'occupational_permit_validity_date' => optional($employee->requirements->first())->occupational_permit_validity_date ?? 'N/A',
-        'occupational_permit_submitted_date' => optional($employee->requirements->first())->occupational_permit_submitted_date ?? 'N/A',
-        'occupational_permit_remarks' => optional($employee->requirements->first())->occupational_permit_remarks ?? 'N/A',
-        'occupational_permit_file_name' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/occupational_permit_files/'.optional($employee->requirements->first())->occupational_permit_file_name) : 'N/A',
-        'occupational_permit_final_status' => optional($employee->requirements->first())->occupational_permit_final_status ?? 'N/A',
-        'occupational_permit_last_updated_at' => optional($employee->requirements->first())->occupational_permit_last_updated_at ? Carbon::parse($employee->requirements->first()->occupational_permit_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'occupational_permit_updated_by' => optional(optional($employee->requirements->first())->occupationalPermitUpdatedBy)->name ?? 'N/A',
-        'ofac_checked_date' => optional($employee->requirements->first())->ofac_checked_date ?? 'N/A',
-        'ofac_final_status' => optional($employee->requirements->first())->ofac_final_status ?? 'N/A',
-        'ofac_remarks' => optional($employee->requirements->first())->ofac_remarks ?? 'N/A',
-        'ofac_file_name' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/ofac_files/'.optional($employee->requirements->first())->ofac_file_name) : 'N/A',
-        'ofac_last_updated_at' => optional($employee->requirements->first())->ofac_last_updated_at ? Carbon::parse($employee->requirements->first()->ofac_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'ofac_updated_by' => optional(optional($employee->requirements->first())->ofacUpdatedBy)->name ?? 'N/A',
-        'sam_checked_date' => optional($employee->requirements->first())->sam_checked_date ?? 'N/A',
-        'sam_final_status' => optional($employee->requirements->first())->sam_final_status ?? 'N/A',
-        'sam_remarks' => optional($employee->requirements->first())->sam_remarks ?? 'N/A',
-        'sam_file_name' => optional($employee->requirements->first())->sam_file_name ? asset('storage/sam_files/'.optional($employee->requirements->first())->sam_file_name) : 'N/A',
-        'sam_last_updated_at' => optional($employee->requirements->first())->sam_last_updated_at ? Carbon::parse($employee->requirements->first()->sam_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'sam_updated_by' => optional(optional($employee->requirements->first())->samUpdatedBy)->name ?? 'N/A',
-        'oig_checked_date' => optional($employee->requirements->first())->oig_checked_date ?? 'N/A',
-        'oig_final_status' => optional($employee->requirements->first())->oig_final_status ?? 'N/A',
-        'oig_remarks' => optional($employee->requirements->first())->oig_remarks ?? 'N/A',
-        'oig_file_name' => optional($employee->requirements->first())->oig_file_name ? asset('storage/oig_files/'.optional($employee->requirements->first())->oig_file_name) : 'N/A',
-        'oig_last_updated_at' => optional($employee->requirements->first())->oig_last_updated_at ? Carbon::parse($employee->requirements->first()->oig_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'oig_updated_by' => optional(optional($employee->requirements->first())->oigUpdatedBy)->name ?? 'N/A',
-        'cibi_checked_date' => optional($employee->requirements->first())->cibi_checked_date ?? 'N/A',
-        'cibi_final_status' => optional($employee->requirements->first())->cibi_final_status ?? 'N/A',
-        'cibi_remarks' => optional($employee->requirements->first())->cibi_remarks ?? 'N/A',
-        'cibi_file_name' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/cibi_files/'.optional($employee->requirements->first())->cibi_file_name) : 'N/A',
-        'cibi_last_updated_at' => optional($employee->requirements->first())->cibi_last_updated_at ? Carbon::parse($employee->requirements->first()->cibi_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'cibi_updated_by' => optional(optional($employee->requirements->first())->cibiUpdatedBy)->name ?? 'N/A',
-        'bgc_endorsed_date' => optional($employee->requirements->first())->bgc_endorsed_date ?? 'N/A',
-        'bgc_results_date' => optional($employee->requirements->first())->bgc_results_date ?? 'N/A',
-        'bgc_final_status' => optional($employee->requirements->first())->bgc_final_status ?? 'N/A',
-        'bgc_remarks' => optional($employee->requirements->first())->bgc_remarks ?? 'N/A',
-        'bgc_file_name' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/bgc_files/'.optional($employee->requirements->first())->bgc_file_name) : 'N/A',
-        'bgc_last_updated_at' => optional($employee->requirements->first())->bgc_last_updated_at ? Carbon::parse($employee->requirements->first()->bgc_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'bgc_updated_by' => optional(optional($employee->requirements->first())->bgcUpdatedBy)->name ?? 'N/A',
-        'birth_certificate_file_name' => optional($employee->requirements->first())->birth_certificate_file_name ? asset('storage/birth_certificate_files/'.optional($employee->requirements->first())->birth_certificate_file_name) : 'N/A',
-        'birth_certificate_submitted_date' => optional($employee->requirements->first())->birth_certificate_submitted_date ?? 'N/A',
-        'birth_certificate_proof_type' => optional($employee->requirements->first())->birth_certificate_proof_type ?? 'N/A',
-        'birth_certificate_remarks' => optional($employee->requirements->first())->birth_certificate_remarks ?? 'N/A',
-        'birth_certificate_last_updated_at' => optional($employee->requirements->first())->birth_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->birth_certificate_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'birth_certificate_updated_by' => optional(optional($employee->requirements->first())->birthCertificateUpdatedBy)->name ?? 'N/A',
-        'dependent_birth_certificate_file_name' => optional($employee->requirements->first())->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/'.optional($employee->requirements->first())->dependent_birth_certificate_file_name) : 'N/A',
-        'dependent_birth_certificate_submitted_date' => optional($employee->requirements->first())->dependent_birth_certificate_submitted_date ?? 'N/A',
-        'dependent_birth_certificate_proof_type' => optional($employee->requirements->first())->dependent_birth_certificate_proof_type ?? 'N/A',
-        'dependent_birth_certificate_remarks' => optional($employee->requirements->first())->dependent_birth_certificate_remarks ?? 'N/A',
-        'dependent_birth_certificate_last_updated_at' => optional($employee->requirements->first())->dependent_birth_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->dependent_birth_certificate_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'dependent_birth_certificate_updated_by' => optional(optional($employee->requirements->first())->dependentBirthCertificateUpdatedBy)->name ?? 'N/A',
-        'marriage_certificate_file_name' => optional($employee->requirements->first())->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/'.optional($employee->requirements->first())->marriage_certificate_file_name) : 'N/A',
-        'marriage_certificate_submitted_date' => optional($employee->requirements->first())->marriage_certificate_submitted_date ?? 'N/A',
-        'marriage_certificate_proof_type' => optional($employee->requirements->first())->marriage_certificate_proof_type ?? 'N/A',
-        'marriage_certificate_remarks' => optional($employee->requirements->first())->marriage_certificate_remarks ?? 'N/A',
-        'marriage_certificate_last_updated_at' => optional($employee->requirements->first())->marriage_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->marriage_certificate_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'marriage_certificate_updated_by' => optional(optional($employee->requirements->first())->marriageCertificateUpdatedBy)->name ?? 'N/A',
-        'scholastic_record_file_name' => optional($employee->requirements->first())->scholastic_record_file_name ? asset('storage/scholastic_record_files/'.optional($employee->requirements->first())->scholastic_record_file_name) : 'N/A',
-        'scholastic_record_submitted_date' => optional($employee->requirements->first())->scholastic_record_submitted_date ?? 'N/A',
-        'scholastic_record_proof_type' => optional($employee->requirements->first())->scholastic_record_proof_type ?? 'N/A',
-        'scholastic_record_remarks' => optional($employee->requirements->first())->scholastic_record_remarks ?? 'N/A',
-        'scholastic_record_last_updated_at' => optional($employee->requirements->first())->scholastic_record_last_updated_at ? Carbon::parse($employee->requirements->first()->scholastic_record_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'scholastic_record_updated_by' => optional(optional($employee->requirements->first())->scholasticRecordUpdatedBy)->name ?? 'N/A',
-        'previous_employment_file_name' => optional($employee->requirements->first())->previous_employment_file_name ? asset('storage/previous_employment_files/'.optional($employee->requirements->first())->previous_employment_file_name) : 'N/A',
-        'previous_employment_submitted_date' => optional($employee->requirements->first())->previous_employment_submitted_date ?? 'N/A',
-        'previous_employment_proof_type' => optional($employee->requirements->first())->previous_employment_proof_type ?? 'N/A',
-        'previous_employment_remarks' => optional($employee->requirements->first())->previous_employment_remarks ?? 'N/A',
-        'previous_employment_last_updated_at' => optional($employee->requirements->first())->previous_employment_last_updated_at ? Carbon::parse($employee->requirements->first()->previous_employment_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'previous_employment_updated_by' => optional(optional($employee->requirements->first())->previousEmploymentUpdatedBy)->name ?? 'N/A',
-        'supporting_documents_file_name' => optional($employee->requirements->first())->supporting_documents_file_name ? asset('storage/supporting_documents_files/'.optional($employee->requirements->first())->supporting_documents_file_name) : 'N/A',
-        'supporting_documents_submitted_date' => optional($employee->requirements->first())->supporting_documents_submitted_date ?? 'N/A',
-        'supporting_documents_proof_type' => optional($employee->requirements->first())->supporting_documents_proof_type ?? 'N/A',
-        'supporting_documents_remarks' => optional($employee->requirements->first())->supporting_documents_remarks ?? 'N/A',
-        'supporting_documents_last_updated_at' => optional($employee->requirements->first())->supporting_documents_last_updated_at ? Carbon::parse($employee->requirements->first()->supporting_documents_last_updated_at)->format('Y-m-d H:i') : 'N/A',
-        'supporting_documents_updated_by' => optional(optional($employee->requirements->first())->supportingDocumentsUpdatedBy)->name ?? 'N/A',
-    ];
+            'nbi_final_status' => optional($employee->requirements->first())->nbi_final_status ?? "",
+            'nbi_validity_date' => optional($employee->requirements->first())->nbi_validity_date ?? "",
+            'nbi_submitted_date' => optional($employee->requirements->first())->nbi_submitted_date ?? "",
+            'nbi_printed_date' => optional($employee->requirements->first())->nbi_printed_date ?? "",
+            'nbi_remarks' => optional($employee->requirements->first())->nbi_remarks ?? "",
+            'nbi_file_name' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/nbi_files/' . optional($employee->requirements->first())->nbi_file_name) : "",
+            'nbi_last_updated_at' => optional($employee->requirements->first())->nbi_last_updated_at ? Carbon::parse($employee->requirements->first()->nbi_last_updated_at)->format('Y-m-d H:i') : "",
+            'nbi_updated_by' => optional(optional($employee->requirements->first())->nbiUpdatedBy)->name ?? "",
+            'dt_final_status' => optional($employee->requirements->first())->dt_final_status ?? "",
+            'dt_results_date' => optional($employee->requirements->first())->dt_results_date ?? "",
+            'dt_transaction_date' => optional($employee->requirements->first())->dt_transaction_date ?? "",
+            'dt_endorsed_date' => optional($employee->requirements->first())->dt_endorsed_date ?? "",
+            'dt_remarks' => optional($employee->requirements->first())->dt_remarks ?? "",
+            'dt_file_name' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : "",
+            'dt_last_updated_at' => optional($employee->requirements->first())->dt_last_updated_at ? Carbon::parse($employee->requirements->first()->dt_last_updated_at)->format('Y-m-d H:i') : "",
+            'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? "",
+            'peme_file_name' => optional($employee->requirements->first())->peme_file_name ? asset('storage/peme_files/' . optional($employee->requirements->first())->peme_file_name) : "",
+            'peme_remarks' => optional($employee->requirements->first())->peme_remarks ?? "",
+            'peme_endorsed_date' => optional($employee->requirements->first())->peme_endorsed_date ?? "",
+            'peme_results_date' => optional($employee->requirements->first())->peme_results_date ?? "",
+            'peme_transaction_date' => optional($employee->requirements->first())->peme_transaction_date ?? "",
+            'peme_final_status' => optional($employee->requirements->first())->peme_final_status ?? "",
+            'peme_last_updated_at' => optional($employee->requirements->first())->peme_last_updated_at ? Carbon::parse($employee->requirements->first()->peme_last_updated_at)->format('Y-m-d H:i') : "",
+            'peme_updated_by' => optional(optional($employee->requirements->first())->pemeUpdatedBy)->name ?? "",
+            'sss_proof_submitted_type' => optional($employee->requirements->first())->sss_proof_submitted_type ?? "",
+            'sss_final_status' => optional($employee->requirements->first())->sss_final_status ?? "",
+            'sss_submitted_date' => optional($employee->requirements->first())->sss_submitted_date ?? "",
+            'sss_remarks' => optional($employee->requirements->first())->sss_remarks ?? "",
+            'sss_number' => optional($employee->requirements->first())->sss_number ?? "",
+            'sss_file_name' => optional($employee->requirements->first())->sss_file_name ? asset('storage/sss_files/' . optional($employee->requirements->first())->sss_file_name) : "",
+            'sss_last_updated_at' => optional($employee->requirements->first())->sss_last_updated_at ? Carbon::parse($employee->requirements->first()->sss_last_updated_at)->format('Y-m-d H:i') : "",
+            'sss_updated_by' => optional(optional($employee->requirements->first())->sssUpdatedBy)->name ?? "",
+            'phic_submitted_date' => optional($employee->requirements->first())->phic_submitted_date ?? "",
+            'phic_final_status' => optional($employee->requirements->first())->phic_final_status ?? "",
+            'phic_proof_submitted_type' => optional($employee->requirements->first())->phic_proof_submitted_type ?? "",
+            'phic_remarks' => optional($employee->requirements->first())->phic_remarks ?? "",
+            'phic_number' => optional($employee->requirements->first())->phic_number ?? "",
+            'phic_file_name' => optional($employee->requirements->first())->phic_file_name ? asset('storage/phic_files/' . optional($employee->requirements->first())->phic_file_name) : "",
+            'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ? Carbon::parse($employee->requirements->first()->phic_last_updated_at)->format('Y-m-d H:i') : "",
+            'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? "",
+            'pagibig_submitted_date' => optional($employee->requirements->first())->pagibig_submitted_date ?? "",
+            'pagibig_final_status' => optional($employee->requirements->first())->pagibig_final_status ?? "",
+            'pagibig_proof_submitted_type' => optional($employee->requirements->first())->pagibig_proof_submitted_type ?? "",
+            'pagibig_remarks' => optional($employee->requirements->first())->pagibig_remarks ?? "",
+            'pagibig_number' => optional($employee->requirements->first())->pagibig_number ?? "",
+            'pagibig_file_name' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/pagibig_files/' . optional($employee->requirements->first())->pagibig_file_name) : "",
+            'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ? Carbon::parse($employee->requirements->first()->pagibig_last_updated_at)->format('Y-m-d H:i') : "",
+            'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? "",
+            'tin_submitted_date' => optional($employee->requirements->first())->tin_submitted_date ?? "",
+            'tin_final_status' => optional($employee->requirements->first())->tin_final_status ?? "",
+            'tin_proof_submitted_type' => optional($employee->requirements->first())->tin_proof_submitted_type ?? "",
+            'tin_remarks' => optional($employee->requirements->first())->tin_remarks ?? "",
+            'tin_number' => optional($employee->requirements->first())->tin_number ?? "",
+            'tin_file_name' => optional($employee->requirements->first())->tin_file_name ? asset('storage/tin_files/' . optional($employee->requirements->first())->tin_file_name) : "",
+            'tin_last_updated_at' => optional($employee->requirements->first())->tin_last_updated_at ? Carbon::parse($employee->requirements->first()->tin_last_updated_at)->format('Y-m-d H:i') : "",
+            'tin_updated_by' => optional(optional($employee->requirements->first())->tinUpdatedBy)->name ?? "",
+            'health_certificate_validity_date' => optional($employee->requirements->first())->health_certificate_validity_date ?? "",
+            'health_certificate_submitted_date' => optional($employee->requirements->first())->health_certificate_submitted_date ?? "",
+            'health_certificate_remarks' => optional($employee->requirements->first())->health_certificate_remarks ?? "",
+            'health_certificate_file_name' => optional($employee->requirements->first())->health_certificate_file_name ? asset('storage/health_certificate_files/' . optional($employee->requirements->first())->health_certificate_file_name) : "",
+            'health_certificate_final_status' => optional($employee->requirements->first())->health_certificate_final_status ?? "",
+            'health_certificate_last_updated_at' => optional($employee->requirements->first())->health_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->health_certificate_last_updated_at)->format('Y-m-d H:i') : "",
+            'health_certificate_updated_by' => optional(optional($employee->requirements->first())->healthCertificateUpdatedBy)->name ?? "",
+            'occupational_permit_validity_date' => optional($employee->requirements->first())->occupational_permit_validity_date ?? "",
+            'occupational_permit_submitted_date' => optional($employee->requirements->first())->occupational_permit_submitted_date ?? "",
+            'occupational_permit_remarks' => optional($employee->requirements->first())->occupational_permit_remarks ?? "",
+            'occupational_permit_file_name' => optional($employee->requirements->first())->occupational_permit_file_name ? asset('storage/occupational_permit_files/' . optional($employee->requirements->first())->occupational_permit_file_name) : "",
+            'occupational_permit_final_status' => optional($employee->requirements->first())->occupational_permit_final_status ?? "",
+            'occupational_permit_last_updated_at' => optional($employee->requirements->first())->occupational_permit_last_updated_at ? Carbon::parse($employee->requirements->first()->occupational_permit_last_updated_at)->format('Y-m-d H:i') : "",
+            'occupational_permit_updated_by' => optional(optional($employee->requirements->first())->occupationalPermitUpdatedBy)->name ?? "",
+            'ofac_checked_date' => optional($employee->requirements->first())->ofac_checked_date ?? "",
+            'ofac_final_status' => optional($employee->requirements->first())->ofac_final_status ?? "",
+            'ofac_remarks' => optional($employee->requirements->first())->ofac_remarks ?? "",
+            'ofac_file_name' => optional($employee->requirements->first())->ofac_file_name ? asset('storage/ofac_files/' . optional($employee->requirements->first())->ofac_file_name) : "",
+            'ofac_last_updated_at' => optional($employee->requirements->first())->ofac_last_updated_at ? Carbon::parse($employee->requirements->first()->ofac_last_updated_at)->format('Y-m-d H:i') : "",
+            'ofac_updated_by' => optional(optional($employee->requirements->first())->ofacUpdatedBy)->name ?? "",
+            'sam_checked_date' => optional($employee->requirements->first())->sam_checked_date ?? "",
+            'sam_final_status' => optional($employee->requirements->first())->sam_final_status ?? "",
+            'sam_remarks' => optional($employee->requirements->first())->sam_remarks ?? "",
+            'sam_file_name' => optional($employee->requirements->first())->sam_file_name ? asset('storage/sam_files/' . optional($employee->requirements->first())->sam_file_name) : "",
+            'sam_last_updated_at' => optional($employee->requirements->first())->sam_last_updated_at ? Carbon::parse($employee->requirements->first()->sam_last_updated_at)->format('Y-m-d H:i') : "",
+            'sam_updated_by' => optional(optional($employee->requirements->first())->samUpdatedBy)->name ?? "",
+            'oig_checked_date' => optional($employee->requirements->first())->oig_checked_date ?? "",
+            'oig_final_status' => optional($employee->requirements->first())->oig_final_status ?? "",
+            'oig_remarks' => optional($employee->requirements->first())->oig_remarks ?? "",
+            'oig_file_name' => optional($employee->requirements->first())->oig_file_name ? asset('storage/oig_files/' . optional($employee->requirements->first())->oig_file_name) : "",
+            'oig_last_updated_at' => optional($employee->requirements->first())->oig_last_updated_at ? Carbon::parse($employee->requirements->first()->oig_last_updated_at)->format('Y-m-d H:i') : "",
+            'oig_updated_by' => optional(optional($employee->requirements->first())->oigUpdatedBy)->name ?? "",
+            'cibi_checked_date' => optional($employee->requirements->first())->cibi_checked_date ?? "",
+            'cibi_final_status' => optional($employee->requirements->first())->cibi_final_status ?? "",
+            'cibi_remarks' => optional($employee->requirements->first())->cibi_remarks ?? "",
+            'cibi_file_name' => optional($employee->requirements->first())->cibi_file_name ? asset('storage/cibi_files/' . optional($employee->requirements->first())->cibi_file_name) : "",
+            'cibi_last_updated_at' => optional($employee->requirements->first())->cibi_last_updated_at ? Carbon::parse($employee->requirements->first()->cibi_last_updated_at)->format('Y-m-d H:i') : "",
+            'cibi_updated_by' => optional(optional($employee->requirements->first())->cibiUpdatedBy)->name ?? "",
+            'bgc_endorsed_date' => optional($employee->requirements->first())->bgc_endorsed_date ?? "",
+            'bgc_results_date' => optional($employee->requirements->first())->bgc_results_date ?? "",
+            'bgc_final_status' => optional($employee->requirements->first())->bgc_final_status ?? "",
+            'bgc_remarks' => optional($employee->requirements->first())->bgc_remarks ?? "",
+            'bgc_file_name' => optional($employee->requirements->first())->bgc_file_name ? asset('storage/bgc_files/' . optional($employee->requirements->first())->bgc_file_name) : "",
+            'bgc_last_updated_at' => optional($employee->requirements->first())->bgc_last_updated_at ? Carbon::parse($employee->requirements->first()->bgc_last_updated_at)->format('Y-m-d H:i') : "",
+            'bgc_updated_by' => optional(optional($employee->requirements->first())->bgcUpdatedBy)->name ?? "",
+            'birth_certificate_file_name' => optional($employee->requirements->first())->birth_certificate_file_name ? asset('storage/birth_certificate_files/' . optional($employee->requirements->first())->birth_certificate_file_name) : "",
+            'birth_certificate_submitted_date' => optional($employee->requirements->first())->birth_certificate_submitted_date ?? "",
+            'birth_certificate_proof_type' => optional($employee->requirements->first())->birth_certificate_proof_type ?? "",
+            'birth_certificate_remarks' => optional($employee->requirements->first())->birth_certificate_remarks ?? "",
+            'birth_certificate_last_updated_at' => optional($employee->requirements->first())->birth_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->birth_certificate_last_updated_at)->format('Y-m-d H:i') : "",
+            'birth_certificate_updated_by' => optional(optional($employee->requirements->first())->birthCertificateUpdatedBy)->name ?? "",
+            'dependent_birth_certificate_file_name' => optional($employee->requirements->first())->dependent_birth_certificate_file_name ? asset('storage/dependent_birth_certificate_files/' . optional($employee->requirements->first())->dependent_birth_certificate_file_name) : "",
+            'dependent_birth_certificate_submitted_date' => optional($employee->requirements->first())->dependent_birth_certificate_submitted_date ?? "",
+            'dependent_birth_certificate_proof_type' => optional($employee->requirements->first())->dependent_birth_certificate_proof_type ?? "",
+            'dependent_birth_certificate_remarks' => optional($employee->requirements->first())->dependent_birth_certificate_remarks ?? "",
+            'dependent_birth_certificate_last_updated_at' => optional($employee->requirements->first())->dependent_birth_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->dependent_birth_certificate_last_updated_at)->format('Y-m-d H:i') : "",
+            'dependent_birth_certificate_updated_by' => optional(optional($employee->requirements->first())->dependentBirthCertificateUpdatedBy)->name ?? "",
+            'marriage_certificate_file_name' => optional($employee->requirements->first())->marriage_certificate_file_name ? asset('storage/marriage_certificate_files/' . optional($employee->requirements->first())->marriage_certificate_file_name) : "",
+            'marriage_certificate_submitted_date' => optional($employee->requirements->first())->marriage_certificate_submitted_date ?? "",
+            'marriage_certificate_proof_type' => optional($employee->requirements->first())->marriage_certificate_proof_type ?? "",
+            'marriage_certificate_remarks' => optional($employee->requirements->first())->marriage_certificate_remarks ?? "",
+            'marriage_certificate_last_updated_at' => optional($employee->requirements->first())->marriage_certificate_last_updated_at ? Carbon::parse($employee->requirements->first()->marriage_certificate_last_updated_at)->format('Y-m-d H:i') : "",
+            'marriage_certificate_updated_by' => optional(optional($employee->requirements->first())->marriageCertificateUpdatedBy)->name ?? "",
+            'scholastic_record_file_name' => optional($employee->requirements->first())->scholastic_record_file_name ? asset('storage/scholastic_record_files/' . optional($employee->requirements->first())->scholastic_record_file_name) : "",
+            'scholastic_record_submitted_date' => optional($employee->requirements->first())->scholastic_record_submitted_date ?? "",
+            'scholastic_record_proof_type' => optional($employee->requirements->first())->scholastic_record_proof_type ?? "",
+            'scholastic_record_remarks' => optional($employee->requirements->first())->scholastic_record_remarks ?? "",
+            'scholastic_record_last_updated_at' => optional($employee->requirements->first())->scholastic_record_last_updated_at ? Carbon::parse($employee->requirements->first()->scholastic_record_last_updated_at)->format('Y-m-d H:i') : "",
+            'scholastic_record_updated_by' => optional(optional($employee->requirements->first())->scholasticRecordUpdatedBy)->name ?? "",
+            'previous_employment_file_name' => optional($employee->requirements->first())->previous_employment_file_name ? asset('storage/previous_employment_files/' . optional($employee->requirements->first())->previous_employment_file_name) : "",
+            'previous_employment_submitted_date' => optional($employee->requirements->first())->previous_employment_submitted_date ?? "",
+            'previous_employment_proof_type' => optional($employee->requirements->first())->previous_employment_proof_type ?? "",
+            'previous_employment_remarks' => optional($employee->requirements->first())->previous_employment_remarks ?? "",
+            'previous_employment_last_updated_at' => optional($employee->requirements->first())->previous_employment_last_updated_at ? Carbon::parse($employee->requirements->first()->previous_employment_last_updated_at)->format('Y-m-d H:i') : "",
+            'previous_employment_updated_by' => optional(optional($employee->requirements->first())->previousEmploymentUpdatedBy)->name ?? "",
+            'supporting_documents_file_name' => optional($employee->requirements->first())->supporting_documents_file_name ? asset('storage/supporting_documents_files/' . optional($employee->requirements->first())->supporting_documents_file_name) : "",
+            'supporting_documents_submitted_date' => optional($employee->requirements->first())->supporting_documents_submitted_date ?? "",
+            'supporting_documents_proof_type' => optional($employee->requirements->first())->supporting_documents_proof_type ?? "",
+            'supporting_documents_remarks' => optional($employee->requirements->first())->supporting_documents_remarks ?? "",
+            'supporting_documents_last_updated_at' => optional($employee->requirements->first())->supporting_documents_last_updated_at ? Carbon::parse($employee->requirements->first()->supporting_documents_last_updated_at)->format('Y-m-d H:i') : "",
+            'supporting_documents_updated_by' => optional(optional($employee->requirements->first())->supportingDocumentsUpdatedBy)->name ?? "",
+        ];
 
         return response()->json(['data' => $mappedEmployee]);
     }
@@ -2231,7 +2231,7 @@ class EmployeeController extends Controller
             'requirements.supportingDocumentsUpdatedBy',
             'lob',
             'lob.siteName',
-             'workday',
+            'workday',
         ])->find($id);
         if (!$employee) {
             return response()->json(['message' => 'Employee not found'], 404);
@@ -2320,7 +2320,7 @@ class EmployeeController extends Controller
             // Log any errors during the import process
             Log::error('Error importing employee', ['error' => $e->getMessage()]);
 
-            return response()->json(['error' => 'Error importing Employee: '.$e->getMessage()], 500);
+            return response()->json(['error' => 'Error importing Employee: ' . $e->getMessage()], 500);
         }
     }
 
@@ -2820,8 +2820,8 @@ class EmployeeController extends Controller
         foreach (['nbi', 'dt', 'peme', 'bgc', 'sss', 'phic', 'hdmf', 'tin', '', '1902', 'health_certificate', 'vaccination_card', 'two_by_two', 'form_2316', 'nso_birth_certificate', 'dependents_nso_birth_certificate', 'marriage_certificate'] as $field) {
             if ($request->hasFile($field)) {
                 $imagePath = $request->file($field)->store('uploads/requirements', 'public');
-                $validatedData[$field.'_path'] = $imagePath;
-                $validatedData[$field.'_file_name'] = $request->file($field)->getClientOriginalName();
+                $validatedData[$field . '_path'] = $imagePath;
+                $validatedData[$field . '_file_name'] = $request->file($field)->getClientOriginalName();
             }
         }
         $requirements = Requirements::create($validatedData);
@@ -3116,7 +3116,7 @@ class EmployeeController extends Controller
             $file = $request->file('nbi_proof');
 
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('nbi_files', $fileName, 'public'); // Store in 'public' disk
 
                 Log::info('File Uploaded', [
@@ -3183,7 +3183,7 @@ class EmployeeController extends Controller
 
             // Ensure the file is valid
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('dt_files', $fileName, 'public'); // Store in 'public' disk
 
                 Log::info('File Uploaded', [
@@ -3248,7 +3248,7 @@ class EmployeeController extends Controller
             $file = $request->file('peme_proof');
 
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('peme_files', $fileName, 'public');
 
                 Log::info('File Uploaded', [
@@ -3312,7 +3312,7 @@ class EmployeeController extends Controller
             $file = $request->file('sss_proof');
 
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('sss_files', $fileName, 'public');
 
                 Log::info('File Uploaded', [
@@ -3372,7 +3372,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('phic_proof')) {
             $file = $request->file('phic_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('phic_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3426,7 +3426,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('pagibig_proof')) {
             $file = $request->file('pagibig_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('pagibig_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3480,7 +3480,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('tin_proof')) {
             $file = $request->file('tin_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('tin_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3533,7 +3533,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('health_certificate_proof')) {
             $file = $request->file('health_certificate_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('health_certificate_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3584,7 +3584,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('occupational_permit_proof')) {
             $file = $request->file('occupational_permit_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('occupational_permit_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3635,7 +3635,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('ofac_proof')) {
             $file = $request->file('ofac_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('ofac_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3685,7 +3685,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('sam_proof')) {
             $file = $request->file('sam_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('sam_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3735,7 +3735,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('oig_proof')) {
             $file = $request->file('oig_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('oig_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3785,7 +3785,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('cibi_proof')) {
             $file = $request->file('cibi_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('cibi_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3836,7 +3836,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('bgc_proof')) {
             $file = $request->file('bgc_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('bgc_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3887,7 +3887,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('birth_certificate_proof')) {
             $file = $request->file('birth_certificate_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('birth_certificate_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3937,7 +3937,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('dependent_birth_certificate_proof')) {
             $file = $request->file('dependent_birth_certificate_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('dependent_birth_certificate_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -3987,7 +3987,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('marriage_certificate_proof')) {
             $file = $request->file('marriage_certificate_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('marriage_certificate_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -4037,7 +4037,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('scholastic_record_proof')) {
             $file = $request->file('scholastic_record_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('scholastic_record_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -4087,7 +4087,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('previous_employment_proof')) {
             $file = $request->file('previous_employment_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('previous_employment_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -4137,7 +4137,7 @@ class EmployeeController extends Controller
         if ($request->hasFile('supporting_documents_proof')) {
             $file = $request->file('supporting_documents_proof');
             if ($file->isValid()) {
-                $fileName = time().'_'.$file->getClientOriginalName();
+                $fileName = time() . '_' . $file->getClientOriginalName();
                 $filePath = $file->storeAs('supporting_documents_files', $fileName, 'public');
 
                 Log::info('File Uploaded', ['file' => $fileName, 'path' => $filePath]);
@@ -4257,15 +4257,20 @@ class EmployeeController extends Controller
         }
     }
 
-    public function updateEmployee(Request $request, $id)
+    /*     public function updateEmployee(Request $request, $id)
     {
         Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
 
         try {
-            // Attempt to find the Employee record
+            // Find the employee
             $employee = Employee::find($id);
-            if ($employee) {
-                $validatedData = $request->validate([
+            if (!$employee) {
+                Log::error('Employee not found', ['id' => $id]);
+                return response()->json(['error' => 'Employee not found'], 404);
+            }
+
+            // Validate and update employee data
+            $validatedData = $request->validate([
                 'first_name' => 'nullable|string|max:255',
                 'middle_name' => 'nullable|string|max:255',
                 'last_name' => 'nullable|string|max:255',
@@ -4282,150 +4287,138 @@ class EmployeeController extends Controller
                 'updated_by' => 'nullable|string|max:50',
             ]);
 
-                $employee->update([
-                'first_name' => $validatedData['first_name'],
-                'middle_name' => $validatedData['middle_name'] ?? null,
-                'last_name' => $validatedData['last_name'],
-                'account_associate' => $validatedData['account_associate'] ?? null,
-                'account_type' => $validatedData['account_type'] ?? null,
-                'employee_id' => $validatedData['employee_id'],
-                'contact_number' => $validatedData['contact_number'] ?? null,
-                'email' => $validatedData['email'] ?? null,
-                'birthdate' => $validatedData['birthdate'] ?? null,
-                'hired_date' => $validatedData['hired_date'] ?? null,
-                'employee_status' => $validatedData['employee_status'] ?? null,
-                'employment_status' => $validatedData['employment_status'] ?? null,
-                'hired_month' => $validatedData['hired_month'] ?? null,
-                'updated_by' => $validatedData['updated_by'] ?? null,
-                'updated_at' => now(),
-            ]);
-            }
+            $employee->update($validatedData);
+            Log::info('Employee updated successfully', ['employee' => $employee]);
+
+            // Update Requirements
             $requirement = Requirements::where('employee_tbl_id', $id)->first();
             if ($requirement) {
                 $validatedData = $request->validate([
-                'nbi_final_status' => 'nullable|string',
-                'nbi_validity_date' => 'nullable|date',
-                'nbi_submitted_date' => 'nullable|date',
-                'nbi_printed_date' => 'nullable|date',
-                'nbi_remarks' => 'nullable|string',
-                'nbi_updated_by' => 'nullable|integer',
-                'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Max file size: 2MB
-                'dt_final_status' => 'nullable|string',
-                'dt_results_date' => 'nullable|date',
-                'dt_transaction_date' => 'nullable|date',
-                'dt_endorsed_date' => 'nullable|date',
-                'dt_remarks' => 'nullable|string',
-                'dt_updated_by' => 'nullable|integer',
-                'dt_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'peme_final_status' => 'nullable|string',
-                'peme_results_date' => 'nullable|date',
-                'peme_transaction_date' => 'nullable|date',
-                'peme_endorsed_date' => 'nullable|date',
-                'peme_remarks' => 'nullable|string',
-                'peme_updated_by' => 'nullable|integer',
-                'peme_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'sss_final_status' => 'nullable|string',
-                'sss_submitted_date' => 'nullable|date',
-                'sss_remarks' => 'nullable|string',
-                'sss_number' => 'nullable|string',
-                'sss_proof_submitted_type' => 'nullable|string',
-                'sss_updated_by' => 'nullable|integer',
-                'sss_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'phic_submitted_date' => 'nullable|date',
-                'phic_final_status' => 'nullable|string',
-                'phic_proof_submitted_type' => 'nullable|string',
-                'phic_remarks' => 'nullable|string',
-                'phic_number' => 'nullable|string',
-                'phic_updated_by' => 'nullable|integer',
-                'phic_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'pagibig_submitted_date' => 'nullable|date',
-                'pagibig_final_status' => 'nullable|string',
-                'pagibig_proof_submitted_type' => 'nullable|string',
-                'pagibig_remarks' => 'nullable|string',
-                'pagibig_number' => 'nullable|string',
-                'pagibig_updated_by' => 'nullable|integer',
-                'pagibig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'tin_submitted_date' => 'nullable|date',
-                'tin_final_status' => 'nullable|string',
-                'tin_proof_submitted_type' => 'nullable|string',
-                'tin_remarks' => 'nullable|string',
-                'tin_number' => 'nullable|string',
-                'tin_updated_by' => 'nullable|integer',
-                'tin_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'health_certificate_validity_date' => 'nullable|date',
-                'health_certificate_final_status' => 'nullable|string',
-                'health_certificate_submitted_date' => 'nullable|date',
-                'health_certificate_remarks' => 'nullable|string',
-                'health_certificate_updated_by' => 'nullable|integer',
-                'health_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'occupational_permit_validity_date' => 'nullable|date',
-                'occupational_permit_submitted_date' => 'nullable|date',
-                'occupational_permit_remarks' => 'nullable|string',
-                'occupational_permit_final_status' => 'nullable|string',
-                'occupational_permit_updated_by' => 'nullable|integer',
-                'occupational_permit_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'ofac_checked_date' => 'nullable|date',
-                'ofac_final_status' => 'nullable|string',
-                'ofac_remarks' => 'nullable|string',
-                'ofac_updated_by' => 'nullable|integer',
-                'ofac_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'sam_checked_date' => 'nullable|date',
-                'sam_final_status' => 'nullable|string',
-                'sam_remarks' => 'nullable|string',
-                'sam_updated_by' => 'nullable|integer',
-                'sam_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'oig_checked_date' => 'nullable|date',
-                'oig_final_status' => 'nullable|string',
-                'oig_remarks' => 'nullable|string',
-                'oig_updated_by' => 'nullable|integer',
-                'oig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'cibi_checked_date' => 'nullable|date',
-                'cibi_final_status' => 'nullable|string',
-                'cibi_remarks' => 'nullable|string',
-                'cibi_updated_by' => 'nullable|integer',
-                'cibi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'bgc_endorsed_date' => 'nullable|date',
-                'bgc_results_date' => 'nullable|date',
-                'bgc_final_status' => 'nullable|string',
-                'bgc_remarks' => 'nullable|string',
-                'bgc_updated_by' => 'nullable|integer',
-                'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'birth_certificate_submitted_date' => 'nullable|date',
-                'birth_certificate_proof_type' => 'nullable|string',
-                'birth_certificate_remarks' => 'nullable|string',
-                'birth_certificate_updated_by' => 'nullable|integer',
-                'birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'dependent_birth_certificate_submitted_date' => 'nullable|date',
-                'dependent_birth_certificate_proof_type' => 'nullable|string',
-                'dependent_birth_certificate_remarks' => 'nullable|string',
-                'dependent_birth_certificate_updated_by' => 'nullable|integer',
-                'dependent_birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'marriage_certificate_submitted_date' => 'nullable|date',
-                'marriage_certificate_proof_type' => 'nullable|string',
-                'marriage_certificate_remarks' => 'nullable|string',
-                'marriage_certificate_updated_by' => 'nullable|integer',
-                'marriage_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'scholastic_record_submitted_date' => 'nullable|date',
-                'scholastic_record_proof_type' => 'nullable|string',
-                'scholastic_record_remarks' => 'nullable|string',
-                'scholastic_record_updated_by' => 'nullable|integer',
-                'scholastic_record_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'previous_employment_submitted_date' => 'nullable|date',
-                'previous_employment_proof_type' => 'nullable|string',
-                'previous_employment_remarks' => 'nullable|string',
-                'previous_employment_updated_by' => 'nullable|integer',
-                'previous_employment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-                'supporting_documents_submitted_date' => 'nullable|date',
-                'supporting_documents_proof_type' => 'nullable|string',
-                'supporting_documents_remarks' => 'nullable|string',
-                'supporting_documents_updated_by' => 'nullable|integer',
-                'supporting_documents_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
-            ]);
+                    'nbi_final_status' => 'nullable|string',
+                    'nbi_validity_date' => 'nullable|date',
+                    'nbi_submitted_date' => 'nullable|date',
+                    'nbi_printed_date' => 'nullable|date',
+                    'nbi_remarks' => 'nullable|string',
+                    'nbi_updated_by' => 'nullable|integer',
+                    'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048', // Max file size: 2MB
+                    'dt_final_status' => 'nullable|string',
+                    'dt_results_date' => 'nullable|date',
+                    'dt_transaction_date' => 'nullable|date',
+                    'dt_endorsed_date' => 'nullable|date',
+                    'dt_remarks' => 'nullable|string',
+                    'dt_updated_by' => 'nullable|integer',
+                    'dt_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'peme_final_status' => 'nullable|string',
+                    'peme_results_date' => 'nullable|date',
+                    'peme_transaction_date' => 'nullable|date',
+                    'peme_endorsed_date' => 'nullable|date',
+                    'peme_remarks' => 'nullable|string',
+                    'peme_updated_by' => 'nullable|integer',
+                    'peme_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'sss_final_status' => 'nullable|string',
+                    'sss_submitted_date' => 'nullable|date',
+                    'sss_remarks' => 'nullable|string',
+                    'sss_number' => 'nullable|string',
+                    'sss_proof_submitted_type' => 'nullable|string',
+                    'sss_updated_by' => 'nullable|integer',
+                    'sss_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'phic_submitted_date' => 'nullable|date',
+                    'phic_final_status' => 'nullable|string',
+                    'phic_proof_submitted_type' => 'nullable|string',
+                    'phic_remarks' => 'nullable|string',
+                    'phic_number' => 'nullable|string',
+                    'phic_updated_by' => 'nullable|integer',
+                    'phic_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'pagibig_submitted_date' => 'nullable|date',
+                    'pagibig_final_status' => 'nullable|string',
+                    'pagibig_proof_submitted_type' => 'nullable|string',
+                    'pagibig_remarks' => 'nullable|string',
+                    'pagibig_number' => 'nullable|string',
+                    'pagibig_updated_by' => 'nullable|integer',
+                    'pagibig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'tin_submitted_date' => 'nullable|date',
+                    'tin_final_status' => 'nullable|string',
+                    'tin_proof_submitted_type' => 'nullable|string',
+                    'tin_remarks' => 'nullable|string',
+                    'tin_number' => 'nullable|string',
+                    'tin_updated_by' => 'nullable|integer',
+                    'tin_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'health_certificate_validity_date' => 'nullable|date',
+                    'health_certificate_final_status' => 'nullable|string',
+                    'health_certificate_submitted_date' => 'nullable|date',
+                    'health_certificate_remarks' => 'nullable|string',
+                    'health_certificate_updated_by' => 'nullable|integer',
+                    'health_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'occupational_permit_validity_date' => 'nullable|date',
+                    'occupational_permit_submitted_date' => 'nullable|date',
+                    'occupational_permit_remarks' => 'nullable|string',
+                    'occupational_permit_final_status' => 'nullable|string',
+                    'occupational_permit_updated_by' => 'nullable|integer',
+                    'occupational_permit_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'ofac_checked_date' => 'nullable|date',
+                    'ofac_final_status' => 'nullable|string',
+                    'ofac_remarks' => 'nullable|string',
+                    'ofac_updated_by' => 'nullable|integer',
+                    'ofac_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'sam_checked_date' => 'nullable|date',
+                    'sam_final_status' => 'nullable|string',
+                    'sam_remarks' => 'nullable|string',
+                    'sam_updated_by' => 'nullable|integer',
+                    'sam_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'oig_checked_date' => 'nullable|date',
+                    'oig_final_status' => 'nullable|string',
+                    'oig_remarks' => 'nullable|string',
+                    'oig_updated_by' => 'nullable|integer',
+                    'oig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'cibi_checked_date' => 'nullable|date',
+                    'cibi_final_status' => 'nullable|string',
+                    'cibi_remarks' => 'nullable|string',
+                    'cibi_updated_by' => 'nullable|integer',
+                    'cibi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'bgc_endorsed_date' => 'nullable|date',
+                    'bgc_results_date' => 'nullable|date',
+                    'bgc_final_status' => 'nullable|string',
+                    'bgc_remarks' => 'nullable|string',
+                    'bgc_updated_by' => 'nullable|integer',
+                    'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'birth_certificate_submitted_date' => 'nullable|date',
+                    'birth_certificate_proof_type' => 'nullable|string',
+                    'birth_certificate_remarks' => 'nullable|string',
+                    'birth_certificate_updated_by' => 'nullable|integer',
+                    'birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'dependent_birth_certificate_submitted_date' => 'nullable|date',
+                    'dependent_birth_certificate_proof_type' => 'nullable|string',
+                    'dependent_birth_certificate_remarks' => 'nullable|string',
+                    'dependent_birth_certificate_updated_by' => 'nullable|integer',
+                    'dependent_birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'marriage_certificate_submitted_date' => 'nullable|date',
+                    'marriage_certificate_proof_type' => 'nullable|string',
+                    'marriage_certificate_remarks' => 'nullable|string',
+                    'marriage_certificate_updated_by' => 'nullable|integer',
+                    'marriage_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'scholastic_record_submitted_date' => 'nullable|date',
+                    'scholastic_record_proof_type' => 'nullable|string',
+                    'scholastic_record_remarks' => 'nullable|string',
+                    'scholastic_record_updated_by' => 'nullable|integer',
+                    'scholastic_record_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'previous_employment_submitted_date' => 'nullable|date',
+                    'previous_employment_proof_type' => 'nullable|string',
+                    'previous_employment_remarks' => 'nullable|string',
+                    'previous_employment_updated_by' => 'nullable|integer',
+                    'previous_employment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                    'supporting_documents_submitted_date' => 'nullable|date',
+                    'supporting_documents_proof_type' => 'nullable|string',
+                    'supporting_documents_remarks' => 'nullable|string',
+                    'supporting_documents_updated_by' => 'nullable|integer',
+                    'supporting_documents_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+
+                ]);
 
                 if ($request->hasFile('nbi_proof')) {
                     $file = $request->file('nbi_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('nbi_files', $fileName, 'public');
                         $requirement->nbi_file_name = $fileName;
                     }
@@ -4433,7 +4426,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('dt_proof')) {
                     $file = $request->file('dt_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('dt_files', $fileName, 'public');
                         $requirement->dt_file_name = $fileName;
                     }
@@ -4441,7 +4434,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('peme_proof')) {
                     $file = $request->file('peme_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('peme_files', $fileName, 'public');
                         $requirement->peme_file_name = $fileName;
                     }
@@ -4449,7 +4442,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('sss_proof')) {
                     $file = $request->file('sss_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('sss_files', $fileName, 'public');
                         $requirement->sss_file_name = $fileName;
                     }
@@ -4457,7 +4450,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('phic_proof')) {
                     $file = $request->file('phic_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('phic_files', $fileName, 'public');
                         $requirement->phic_file_name = $fileName;
                     }
@@ -4465,7 +4458,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('pagibig_proof')) {
                     $file = $request->file('pagibig_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('pagibig_files', $fileName, 'public');
                         $requirement->pagibig_file_name = $fileName;
                     }
@@ -4473,7 +4466,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('tin_proof')) {
                     $file = $request->file('tin_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('tin_files', $fileName, 'public');
                         $requirement->tin_file_name = $fileName;
                     }
@@ -4481,7 +4474,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('health_certificate_proof')) {
                     $file = $request->file('health_certificate_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('health_certificate_files', $fileName, 'public');
                         $requirement->health_certificate_file_name = $fileName;
                     }
@@ -4489,7 +4482,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('occupational_permit_proof')) {
                     $file = $request->file('occupational_permit_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('occupational_permit_files', $fileName, 'public');
                         $requirement->occupational_permit_file_name = $fileName;
                     }
@@ -4497,7 +4490,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('ofac_proof')) {
                     $file = $request->file('ofac_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('ofac_files', $fileName, 'public');
                         $requirement->ofac_file_name = $fileName;
                     }
@@ -4505,7 +4498,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('sam_proof')) {
                     $file = $request->file('sam_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('sam_files', $fileName, 'public');
                         $requirement->sam_file_name = $fileName;
                     }
@@ -4513,7 +4506,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('oig_proof')) {
                     $file = $request->file('oig_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('oig_files', $fileName, 'public');
                         $requirement->oig_file_name = $fileName;
                     }
@@ -4521,7 +4514,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('cibi_proof')) {
                     $file = $request->file('cibi_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('cibi_files', $fileName, 'public');
                         $requirement->cibi_file_name = $fileName;
                     }
@@ -4529,7 +4522,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('bgc_proof')) {
                     $file = $request->file('bgc_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('bgc_files', $fileName, 'public');
                         $requirement->bgc_file_name = $fileName;
                     }
@@ -4537,7 +4530,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('birth_certificate_proof')) {
                     $file = $request->file('birth_certificate_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('birth_certificate_files', $fileName, 'public');
                         $requirement->birth_certificate_file_name = $fileName;
                     }
@@ -4545,7 +4538,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('dependent_birth_certificate_proof')) {
                     $file = $request->file('dependent_birth_certificate_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('dependent_birth_certificate_files', $fileName, 'public');
                         $requirement->dependent_birth_certificate_file_name = $fileName;
                     }
@@ -4553,7 +4546,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('marriage_certificate_proof')) {
                     $file = $request->file('marriage_certificate_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('marriage_certificate_files', $fileName, 'public');
                         $requirement->marriage_certificate_file_name = $fileName;
                     }
@@ -4561,7 +4554,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('scholastic_record_proof')) {
                     $file = $request->file('scholastic_record_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('scholastic_record_files', $fileName, 'public');
                         $requirement->scholastic_record_file_name = $fileName;
                     }
@@ -4569,7 +4562,7 @@ class EmployeeController extends Controller
                 if ($request->hasFile('previous_employment_proof')) {
                     $file = $request->file('previous_employment_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('previous_employment_files', $fileName, 'public');
                         $requirement->previous_employment_file_name = $fileName;
                     }
@@ -4577,183 +4570,388 @@ class EmployeeController extends Controller
                 if ($request->hasFile('supporting_documents_proof')) {
                     $file = $request->file('supporting_documents_proof');
                     if ($file->isValid()) {
-                        $fileName = time().'_'.$file->getClientOriginalName();
+                        $fileName = time() . '_' . $file->getClientOriginalName();
                         $filePath = $file->storeAs('supporting_documents_files', $fileName, 'public');
                         $requirement->supporting_documents_file_name = $fileName;
                     }
                 }
 
-                $requirement->update([
-                'nbi_final_status'['nbi_final_status'] ?? null,
-                'nbi_validity_date' => $validateData['nbi_validity_date'] ?? null,
-                'nbi_submitted_date' => $validateData['nbi_submitted_date'] ?? null,
-                'nbi_printed_date' => $validateData['nbi_printed_date'] ?? null,
-                'nbi_remarks' => $validateData['nbi_remarks'] ?? null,
-                'nbi_updated_by' => $validateData['nbi_updated_by'] ?? null,
-                'dt_final_status' => $validateData['dt_final_status'] ?? null,
-                'dt_results_date' => $validateData['dt_results_date'] ?? null,
-                'dt_transaction_date' => $validateData['dt_transaction_date'] ?? null,
-                'dt_endorsed_date' => $validateData['dt_endorsed_date'] ?? null,
-                'dt_remarks' => $validateData['dt_remarks'] ?? null,
-                'dt_updated_by' => $validateData['dt_updated_by'] ?? null,
-                'peme_final_status' => $validateData['peme_final_status'] ?? null,
-                'peme_results_date' => $validateData['peme_results_date'] ?? null,
-                'peme_transaction_date' => $validateData['peme_transaction_date'] ?? null,
-                'peme_endorsed_date' => $validateData['peme_endorsed_date'] ?? null,
-                'peme_remarks' => $validateData['peme_remarks'] ?? null,
-                'peme_updated_by' => $validateData['peme_updated_by'] ?? null,
-                'sss_final_status' => $validateData['sss_final_status'] ?? null,
-                'sss_submitted_date' => $validateData['sss_submitted_date'] ?? null,
-                'sss_remarks' => $validateData['sss_remarks'] ?? null,
-                'sss_number' => $validateData['sss_number'] ?? null,
-                'sss_proof_submitted_type' => $validateData['sss_proof_submitted_type'] ?? null,
-                'sss_updated_by' => $validateData['sss_updated_by'] ?? null,
-                'phic_submitted_date' => $validateData['phic_submitted_date'] ?? null,
-                'phic_final_status' => $validateData['phic_final_status'] ?? null,
-                'phic_proof_submitted_type' => $validateData['phic_proof_submitted_type'] ?? null,
-                'phic_remarks' => $validateData['phic_remarks'] ?? null,
-                'phic_number' => $validateData['phic_number'] ?? null,
-                'phic_updated_by' => $validateData['phic_updated_by'] ?? null,
-                'pagibig_submitted_date' => $validateData['pagibig_submitted_date'] ?? null,
-                'pagibig_final_status' => $validateData['pagibig_final_status'] ?? null,
-                'pagibig_proof_submitted_type' => $validateData['pagibig_proof_submitted_type'] ?? null,
-                'pagibig_remarks' => $validateData['pagibig_remarks'] ?? null,
-                'pagibig_number' => $validateData['pagibig_number'] ?? null,
-                'pagibig_updated_by' => $validateData['pagibig_updated_by'] ?? null,
-                'tin_submitted_date' => $validateData['tin_submitted_date'] ?? null,
-                'tin_final_status' => $validateData['tin_final_status'] ?? null,
-                'tin_proof_submitted_type' => $validateData['tin_proof_submitted_type'] ?? null,
-                'tin_remarks' => $validateData['tin_remarks'] ?? null,
-                'tin_number' => $validateData['tin_number'] ?? null,
-                'tin_updated_by' => $validateData['tin_updated_by'] ?? null,
-                'health_certificate_validity_date' => $validateData['health_certificate_validity_date'] ?? null,
-                'health_certificate_final_status' => $validateData['health_certificate_final_status'] ?? null,
-                'health_certificate_submitted_date' => $validateData['health_certificate_submitted_date'] ?? null,
-                'health_certificate_remarks' => $validateData['health_certificate_remarks'] ?? null,
-                'health_certificate_updated_by' => $validateData['health_certificate_updated_by'] ?? null,
-                'occupational_permit_validity_date' => $validateData['occupational_permit_validity_date'] ?? null,
-                'occupational_permit_submitted_date' => $validateData['occupational_permit_submitted_date'] ?? null,
-                'occupational_permit_remarks' => $validateData['occupational_permit_remarks'] ?? null,
-                'occupational_permit_final_status' => $validateData['occupational_permit_final_status'] ?? null,
-                'occupational_permit_updated_by' => $validateData['occupational_permit_updated_by'] ?? null,
-                'ofac_checked_date' => $validateData['ofac_checked_date'] ?? null,
-                'ofac_final_status' => $validateData['ofac_final_status'] ?? null,
-                'ofac_remarks' => $validateData['ofac_remarks'] ?? null,
-                'ofac_updated_by' => $validateData['ofac_updated_by'] ?? null,
-                'sam_checked_date' => $validateData['sam_checked_date'] ?? null,
-                'sam_final_status' => $validateData['sam_final_status'] ?? null,
-                'sam_remarks' => $validateData['sam_remarks'] ?? null,
-                'sam_updated_by' => $validateData['sam_updated_by'] ?? null,
-                'oig_checked_date' => $validateData['oig_checked_date'] ?? null,
-                'oig_final_status' => $validateData['oig_final_status'] ?? null,
-                'oig_remarks' => $validateData['oig_remarks'] ?? null,
-                'oig_updated_by' => $validateData['oig_updated_by'] ?? null,
-                'cibi_checked_date' => $validateData['cibi_checked_date'] ?? null,
-                'cibi_final_status' => $validateData['cibi_final_status'] ?? null,
-                'cibi_remarks' => $validateData['cibi_remarks'] ?? null,
-                'cibi_updated_by' => $validateData['cibi_updated_by'] ?? null,
-                'bgc_endorsed_date' => $validateData['bgc_endorsed_date'] ?? null,
-                'bgc_results_date' => $validateData['bgc_results_date'] ?? null,
-                'bgc_final_status' => $validateData['bgc_final_status'] ?? null,
-                'bgc_remarks' => $validateData['bgc_remarks'] ?? null,
-                'bgc_updated_by' => $validateData['bgc_updated_by'] ?? null,
-                'birth_certificate_submitted_date' => $validateData['birth_certificate_submitted_date'] ?? null,
-                'birth_certificate_proof_type' => $validateData['birth_certificate_proof_type'] ?? null,
-                'birth_certificate_remarks' => $validateData['birth_certificate_remarks'] ?? null,
-                'birth_certificate_updated_by' => $validateData['birth_certificate_updated_by'] ?? null,
-                'dependent_birth_certificate_submitted_date' => $validateData['dependent_birth_certificate_submitted_date'] ?? null,
-                'dependent_birth_certificate_proof_type' => $validateData['dependent_birth_certificate_proof_type'] ?? null,
-                'dependent_birth_certificate_remarks' => $validateData['dependent_birth_certificate_remarks'] ?? null,
-                'dependent_birth_certificate_updated_by' => $validateData['dependent_birth_certificate_updated_by'] ?? null,
-                'marriage_certificate_submitted_date' => $validateData['marriage_certificate_submitted_date'] ?? null,
-                'marriage_certificate_proof_type' => $validateData['marriage_certificate_proof_type'] ?? null,
-                'marriage_certificate_remarks' => $validateData['marriage_certificate_remarks'] ?? null,
-                'marriage_certificate_updated_by' => $validateData['marriage_certificate_updated_by'] ?? null,
-                'scholastic_record_submitted_date' => $validateData['scholastic_record_submitted_date'] ?? null,
-                'scholastic_record_proof_type' => $validateData['scholastic_record_proof_type'] ?? null,
-                'scholastic_record_remarks' => $validateData['scholastic_record_remarks'] ?? null,
-                'scholastic_record_updated_by' => $validateData['scholastic_record_updated_by'] ?? null,
-                'previous_employment_submitted_date' => $validateData['previous_employment_submitted_date'] ?? null,
-                'previous_employment_proof_type' => $validateData['previous_employment_proof_type'] ?? null,
-                'previous_employment_remarks' => $validateData['previous_employment_remarks'] ?? null,
-                'previous_employment_updated_by' => $validateData['previous_employment_updated_by'] ?? null,
-                'supporting_documents_submitted_date' => $validateData['supporting_documents_submitted_date'] ?? null,
-                'supporting_documents_proof_type' => $validateData['supporting_documents_proof_type'] ?? null,
-                'supporting_documents_remarks' => $validateData['supporting_documents_remarks'] ?? null,
-                'supporting_documents_updated_by' => $validateData['supporting_documents_updated_by'] ?? null,
-                'nbi_last_updated_at' => now(),
-                'dt_last_updated_at' => now(),
-                'peme_last_updated_at' => now(),
-                'sss_last_updated_at' => now(),
-                'phic_last_updated_at' => now(),
-                'pagibig_last_updated_at' => now(),
-                'tin_last_updated_at' => now(),
-                'health_certificate_last_updated_at' => now(),
-                'occupational_permit_last_updated_at' => now(),
-                'ofac_last_updated_at' => now(),
-                'sam_last_updated_at' => now(),
-                'oig_last_updated_at' => now(),
-                'cibi_last_updated_at' => now(),
-                'bgc_last_updated_at' => now(),
-                'birth_certificate_last_updated_at' => now(),
-                'dependent_birth_certificate_last_updated_at' => now(),
-                'marriage_certificate_last_updated_at' => now(),
-                'scholastic_record_last_updated_at' => now(),
-                'previous_employment_last_updated_at' => now(),
-                'supporting_documents_last_updated_at' => now(),
+                $requirement->update($validatedData);
+                Log::info('Requirements updated successfully', ['requirement' => $requirement]);
+            } else {
+                Log::error('Requirements record not found', ['employee_tbl_id' => $id]);
+            }
+
+            // Update LOB
+            $lob = Lob::where('employee_tbl_id', $id)->first();
+            if ($lob) {
+                $validatedData = $request->validate([
+                    'region' => 'nullable',
+                    'site' => 'nullable',
+                    'lob' => 'nullable',
+                    'team_name' => 'nullable',
+                    'project_code' => 'nullable',
+                    'compliance_poc' => 'nullable',
+
+                ]);
+
+                $lob->update($validatedData);
+                Log::info('LOB updated successfully', ['lob' => $lob]);
+            } else {
+                Log::error('LOB record not found', ['employee_tbl_id' => $id]);
+            }
+
+            // Update Workday
+            $workday = Workday::where('employee_tbl_id', $id)->first();
+            if ($workday) {
+                $validatedData = $request->validate([
+                    'workday_id' => 'nullable',
+                    'ro_feedback' => 'nullable',
+                    'per_findings' => 'nullable',
+                    'completion' => 'nullable',
+                    'contract_findings' => 'nullable',
+                    'contract_remarks' => 'nullable',
+                    'contract_status' => 'nullable',
+                ]);
+
+                $workday->update($validatedData);
+                Log::info('Workday updated successfully', ['workday' => $workday]);
+            } else {
+                Log::error('Workday record not found', ['employee_tbl_id' => $id]);
+            }
+
+            return response()->json(['message' => 'Record(s) updated successfully'], 200);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Error', ['errors' => $e->errors()]);
+            return response()->json(['error' => 'Validation failed', 'messages' => $e->errors()], 422);
+        } catch (\Throwable $e) {
+            Log::error('Update Error', ['error' => $e->getMessage(), 'trace' => $e->getTrace()]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    } */
+    public function updateEmployee(Request $request, $id)
+    {
+        Log::info('Update Request Received', ['id' => $id, 'data' => $request->all()]);
+
+        try {
+            // Find the employee
+            $employee = Employee::find($id);
+            if (!$employee) {
+                Log::error('Employee not found', ['id' => $id]);
+                return response()->json(['error' => 'Employee not found'], 404);
+            }
+
+            // Validate and update employee data
+            $validatedData = $request->validate([
+                'first_name' => 'nullable|string|max:255',
+                'middle_name' => 'nullable|string|max:255',
+                'last_name' => 'nullable|string|max:255',
+                'account_associate' => 'nullable|string|max:255',
+                'account_type' => 'nullable|string|max:255',
+                'employee_id' => 'required|string|max:255',
+                'contact_number' => 'nullable|string|max:15',
+                'email' => 'nullable|email|max:255',
+                'birthdate' => 'nullable|date',
+                'hired_date' => 'nullable|date',
+                'employee_status' => 'nullable|string|max:255',
+                'employment_status' => 'nullable|string|max:255',
+                'hired_month' => 'nullable|string|max:50',
+                'updated_by' => 'nullable|string|max:50',
             ]);
+            $employeeChanged = false;
+            foreach ($validatedData as $field => $value) {
+                if ($employee->$field !== $value) {
+                    $employeeChanged = true;
+                    break;
+                }
+            }
+            if ($employeeChanged) {
+                $validatedData['updated_at'] = now();
+                $validatedData['updated_by'] = $request->input('updated_by');
+                $employee->update($validatedData);
+                Log::info('Employee updated successfully', ['employee' => $employee]);
+            } else {
+                Log::info('No changes detected for employee', ['employee' => $employee]);
+            }
+
+            // Update Requirements
+            $requirement = Requirements::where('employee_tbl_id', $id)->first();
+            if ($requirement) {
+                $validatedData = $request->validate([
+                    // NBI Fields
+                    'nbi_final_status' => 'nullable|string',
+                    'nbi_validity_date' => 'nullable|date',
+                    'nbi_submitted_date' => 'nullable|date',
+                    'nbi_printed_date' => 'nullable|date',
+                    'nbi_remarks' => 'nullable|string',
+                    'nbi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // DT Fields
+                    'dt_final_status' => 'nullable|string',
+                    'dt_results_date' => 'nullable|date',
+                    'dt_transaction_date' => 'nullable|date',
+                    'dt_endorsed_date' => 'nullable|date',
+                    'dt_remarks' => 'nullable|string',
+                    'dt_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // PEME Fields
+                    'peme_final_status' => 'nullable|string',
+                    'peme_results_date' => 'nullable|date',
+                    'peme_transaction_date' => 'nullable|date',
+                    'peme_endorsed_date' => 'nullable|date',
+                    'peme_remarks' => 'nullable|string',
+                    'peme_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // SSS Fields
+                    'sss_final_status' => 'nullable|string',
+                    'sss_submitted_date' => 'nullable|date',
+                    'sss_remarks' => 'nullable|string',
+                    'sss_number' => 'nullable|string',
+                    'sss_proof_submitted_type' => 'nullable|string',
+                    'sss_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // PHIC Fields
+                    'phic_submitted_date' => 'nullable|date',
+                    'phic_final_status' => 'nullable|string',
+                    'phic_proof_submitted_type' => 'nullable|string',
+                    'phic_remarks' => 'nullable|string',
+                    'phic_number' => 'nullable|string',
+                    'phic_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Pag-IBIG Fields
+                    'pagibig_submitted_date' => 'nullable|date',
+                    'pagibig_final_status' => 'nullable|string',
+                    'pagibig_proof_submitted_type' => 'nullable|string',
+                    'pagibig_remarks' => 'nullable|string',
+                    'pagibig_number' => 'nullable|string',
+                    'pagibig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // TIN Fields
+                    'tin_submitted_date' => 'nullable|date',
+                    'tin_final_status' => 'nullable|string',
+                    'tin_proof_submitted_type' => 'nullable|string',
+                    'tin_remarks' => 'nullable|string',
+                    'tin_number' => 'nullable|string',
+                    'tin_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Health Certificate Fields
+                    'health_certificate_validity_date' => 'nullable|date',
+                    'health_certificate_final_status' => 'nullable|string',
+                    'health_certificate_submitted_date' => 'nullable|date',
+                    'health_certificate_remarks' => 'nullable|string',
+                    'health_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Occupational Permit Fields
+                    'occupational_permit_validity_date' => 'nullable|date',
+                    'occupational_permit_submitted_date' => 'nullable|date',
+                    'occupational_permit_remarks' => 'nullable|string',
+                    'occupational_permit_final_status' => 'nullable|string',
+                    'occupational_permit_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // OFAC Fields
+                    'ofac_checked_date' => 'nullable|date',
+                    'ofac_final_status' => 'nullable|string',
+                    'ofac_remarks' => 'nullable|string',
+                    'ofac_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // SAM Fields
+                    'sam_checked_date' => 'nullable|date',
+                    'sam_final_status' => 'nullable|string',
+                    'sam_remarks' => 'nullable|string',
+                    'sam_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // OIG Fields
+                    'oig_checked_date' => 'nullable|date',
+                    'oig_final_status' => 'nullable|string',
+                    'oig_remarks' => 'nullable|string',
+                    'oig_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // CIBI Fields
+                    'cibi_checked_date' => 'nullable|date',
+                    'cibi_final_status' => 'nullable|string',
+                    'cibi_remarks' => 'nullable|string',
+                    'cibi_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // BGC Fields
+                    'bgc_endorsed_date' => 'nullable|date',
+                    'bgc_results_date' => 'nullable|date',
+                    'bgc_final_status' => 'nullable|string',
+                    'bgc_remarks' => 'nullable|string',
+                    'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Birth Certificate Fields
+                    'birth_certificate_submitted_date' => 'nullable|date',
+                    'birth_certificate_proof_type' => 'nullable|string',
+                    'birth_certificate_remarks' => 'nullable|string',
+                    'birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Dependent Birth Certificate Fields
+                    'dependent_birth_certificate_submitted_date' => 'nullable|date',
+                    'dependent_birth_certificate_proof_type' => 'nullable|string',
+                    'dependent_birth_certificate_remarks' => 'nullable|string',
+                    'dependent_birth_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Marriage Certificate Fields
+                    'marriage_certificate_submitted_date' => 'nullable|date',
+                    'marriage_certificate_proof_type' => 'nullable|string',
+                    'marriage_certificate_remarks' => 'nullable|string',
+                    'marriage_certificate_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Scholastic Record Fields
+                    'scholastic_record_submitted_date' => 'nullable|date',
+                    'scholastic_record_proof_type' => 'nullable|string',
+                    'scholastic_record_remarks' => 'nullable|string',
+                    'scholastic_record_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Previous Employment Fields
+                    'previous_employment_submitted_date' => 'nullable|date',
+                    'previous_employment_proof_type' => 'nullable|string',
+                    'previous_employment_remarks' => 'nullable|string',
+                    'previous_employment_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+
+                    // Supporting Documents Fields
+                    'supporting_documents_submitted_date' => 'nullable|date',
+                    'supporting_documents_proof_type' => 'nullable|string',
+                    'supporting_documents_remarks' => 'nullable|string',
+                    'supporting_documents_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
+                ]);
+
+                $updateAuditFields = function ($prefix, $fields, &$validatedData, $requirement, $request) {
+                    $changed = false;
+                    foreach ($fields as $field) {
+                        if ($requirement->$field !== $validatedData[$field]) {
+                            $changed = true;
+                            break;
+                        }
+                    }
+                    if ($changed) {
+                        $validatedData[$prefix . '_updated_by'] = $request->input($prefix . '_updated_by');
+                        $validatedData[$prefix . '_last_updated_at'] = now();
+                    } else {
+                        unset($validatedData[$prefix . '_updated_by']);
+                        unset($validatedData[$prefix . '_last_updated_at']);
+                    }
+                };
+                $updateAuditFields('nbi', ['nbi_final_status', 'nbi_validity_date', 'nbi_submitted_date', 'nbi_printed_date', 'nbi_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('dt', ['dt_final_status', 'dt_results_date', 'dt_transaction_date', 'dt_endorsed_date', 'dt_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('peme', ['peme_final_status', 'peme_results_date', 'peme_transaction_date', 'peme_endorsed_date', 'peme_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('sss', ['sss_final_status', 'sss_submitted_date', 'sss_remarks', 'sss_number', 'sss_proof_submitted_type'], $validatedData, $requirement, $request);
+                $updateAuditFields('phic', ['phic_submitted_date', 'phic_final_status', 'phic_proof_submitted_type', 'phic_remarks', 'phic_number'], $validatedData, $requirement, $request);
+                $updateAuditFields('pagibig', ['pagibig_submitted_date', 'pagibig_final_status', 'pagibig_proof_submitted_type', 'pagibig_remarks', 'pagibig_number'], $validatedData, $requirement, $request);
+                $updateAuditFields('tin', ['tin_submitted_date', 'tin_final_status', 'tin_proof_submitted_type', 'tin_remarks', 'tin_number'], $validatedData, $requirement, $request);
+                $updateAuditFields('health_certificate', ['health_certificate_validity_date', 'health_certificate_final_status', 'health_certificate_submitted_date', 'health_certificate_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('occupational_permit', ['occupational_permit_validity_date', 'occupational_permit_submitted_date', 'occupational_permit_remarks', 'occupational_permit_final_status'], $validatedData, $requirement, $request);
+                $updateAuditFields('ofac', ['ofac_checked_date', 'ofac_final_status', 'ofac_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('sam', ['sam_checked_date', 'sam_final_status', 'sam_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('oig', ['oig_checked_date', 'oig_final_status', 'oig_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('cibi', ['cibi_checked_date', 'cibi_final_status', 'cibi_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('bgc', ['bgc_endorsed_date', 'bgc_results_date', 'bgc_final_status', 'bgc_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('birth_certificate', ['birth_certificate_submitted_date', 'birth_certificate_proof_type', 'birth_certificate_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('dependent_birth_certificate', ['dependent_birth_certificate_submitted_date', 'dependent_birth_certificate_proof_type', 'dependent_birth_certificate_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('marriage_certificate', ['marriage_certificate_submitted_date', 'marriage_certificate_proof_type', 'marriage_certificate_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('scholastic_record', ['scholastic_record_submitted_date', 'scholastic_record_proof_type', 'scholastic_record_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('previous_employment', ['previous_employment_submitted_date', 'previous_employment_proof_type', 'previous_employment_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('supporting_documents', ['supporting_documents_submitted_date', 'supporting_documents_proof_type', 'supporting_documents_remarks'], $validatedData, $requirement, $request);
+
+                $handleFileUpload = function ($prefix, $request, &$requirement) {
+                    if ($request->hasFile($prefix . '_proof')) {
+                        $file = $request->file($prefix . '_proof');
+                        if ($file->isValid()) {
+                            $fileName = time() . '_' . $file->getClientOriginalName();
+                            $filePath = $file->storeAs($prefix . '_files', $fileName, 'public');
+                            $requirement->{$prefix . '_file_name'} = $fileName;
+                        }
+                    }
+                };
+                $handleFileUpload('nbi', $request, $requirement);
+                $handleFileUpload('dt', $request, $requirement);
+                $handleFileUpload('peme', $request, $requirement);
+                $handleFileUpload('sss', $request, $requirement);
+                $handleFileUpload('phic', $request, $requirement);
+                $handleFileUpload('pagibig', $request, $requirement);
+                $handleFileUpload('tin', $request, $requirement);
+                $handleFileUpload('health_certificate', $request, $requirement);
+                $handleFileUpload('occupational_permit', $request, $requirement);
+                $handleFileUpload('ofac', $request, $requirement);
+                $handleFileUpload('sam', $request, $requirement);
+                $handleFileUpload('oig', $request, $requirement);
+                $handleFileUpload('cibi', $request, $requirement);
+                $handleFileUpload('bgc', $request, $requirement);
+                $handleFileUpload('birth_certificate', $request, $requirement);
+                $handleFileUpload('dependent_birth_certificate', $request, $requirement);
+                $handleFileUpload('marriage_certificate', $request, $requirement);
+                $handleFileUpload('scholastic_record', $request, $requirement);
+                $handleFileUpload('previous_employment', $request, $requirement);
+                $handleFileUpload('supporting_documents', $request, $requirement);
+
+                $requirement->update($validatedData);
+                Log::info('Requirements updated successfully', ['requirement' => $requirement]);
+            } else {
+                Log::error('Requirements record not found', ['employee_tbl_id' => $id]);
             }
             $lob = Lob::where('employee_tbl_id', $id)->first();
             if ($lob) {
                 $validatedData = $request->validate([
-                'region' => 'nullable',
-                'site' => 'nullable',
-                'lob' => 'nullable',
-                'team_name' => 'nullable',
-                'project_code' => 'nullable',
-                'compliance_poc' => 'nullable',
-                'lob_updated_by' => 'required',
-            ]);
-
-                $lob->update([
-                'region' => $validatedData['region'] ?? $lob->region,
-                'site' => $validatedData['site'] ?? $lob->site,
-                'lob' => $validatedData['lob'] ?? $lob->lob,
-                'team_name' => $validatedData['team_name'] ?? $lob->team_name,
-                'project_code' => $validatedData['project_code'] ?? $lob->project_code,
-                'compliance_poc' => $validatedData['compliance_poc'] ?? $lob->compliance_poc,
-                'lob_updated_by' => $validatedData['lob_updated_by'],
-                'updated_at' => now(),
-            ]);
+                    'region' => 'nullable',
+                    'site' => 'nullable',
+                    'lob' => 'nullable',
+                    'team_name' => 'nullable',
+                    'project_code' => 'nullable',
+                    'compliance_poc' => 'nullable',
+                ]);
+                $lobChanged = false;
+                foreach ($validatedData as $field => $value) {
+                    if ($lob->$field !== $value) {
+                        $lobChanged = true;
+                        break;
+                    }
+                }
+                if ($lobChanged) {
+                    $validatedData['updated_at'] = now();
+                    $lob->update($validatedData);
+                    Log::info('LOB updated successfully', ['lob' => $lob]);
+                } else {
+                    Log::info('No changes detected for LOB', ['lob' => $lob]);
+                }
+            } else {
+                Log::error('LOB record not found', ['employee_tbl_id' => $id]);
             }
             $workday = Workday::where('employee_tbl_id', $id)->first();
             if ($workday) {
                 $validatedData = $request->validate([
-                'workday_id' => 'nullable',
-                'ro_feedback' => 'nullable',
-                'per_findings' => 'nullable',
-                'completion' => 'nullable',
-                'contract_findings' => 'nullable',
-                'contract_remarks' => 'nullable',
-                'contract_status' => 'nullable',
-                'updated_by' => 'required|integer',
-            ]);
-
-                $workday->update([
-                'workday_id' => $validatedData['workday_id'] ?? $workday->workday_id,
-                'ro_feedback' => $validatedData['ro_feedback'] ?? $workday->ro_feedback,
-                'per_findings' => $validatedData['per_findings'] ?? $workday->per_findings,
-                'completion' => $validatedData['completion'] ?? $workday->completion,
-                'contract_status' => $validatedData['contract_status'] ?? $workday->contract_status,
-                'contract_remarks' => $validatedData['contract_remarks'] ?? $workday->contract_remarks,
-                'contract_findings' => $validatedData['contract_findings'] ?? $workday->contract_findings,
-                'updated_at' => now(),
-            ]);
+                    'workday_id' => 'nullable',
+                    'ro_feedback' => 'nullable',
+                    'per_findings' => 'nullable',
+                    'completion' => 'nullable',
+                    'contract_findings' => 'nullable',
+                    'contract_remarks' => 'nullable',
+                    'contract_status' => 'nullable',
+                ]);
+                $workdayChanged = false;
+                foreach ($validatedData as $field => $value) {
+                    if ($workday->$field !== $value) {
+                        $workdayChanged = true;
+                        break;
+                    }
+                }
+                if ($workdayChanged) {
+                    $validatedData['updated_at'] = now();
+                    $workday->update($validatedData);
+                    Log::info('Workday updated successfully', ['workday' => $workday]);
+                } else {
+                    Log::info('No changes detected for Workday', ['workday' => $workday]);
+                }
+            } else {
+                Log::error('Workday record not found', ['employee_tbl_id' => $id]);
             }
 
             return response()->json(['message' => 'Record(s) updated successfully'], 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'Failed to update records', 'details' => $e->getMessage()], 500);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Error', ['errors' => $e->errors()]);
+            return response()->json(['error' => 'Validation failed', 'messages' => $e->errors()], 422);
+        } catch (\Throwable $e) {
+            Log::error('Update Error', ['error' => $e->getMessage(), 'trace' => $e->getTrace()]);
+            return response()->json(['error' => $e->getMessage()], 500);
         }
     }
 }
