@@ -2044,6 +2044,11 @@ class EmployeeController extends Controller
             'created_at' => $employee->created_at ? Carbon::parse($employee->created_at)->format('Y-m-d H:i') : null,
             'updated_at' => $employee->updated_at ? Carbon::parse($employee->updated_at)->format('Y-m-d H:i') : null,
             'account_type' => $employee->account_type,
+            'contract' => $employee->contract,
+            'with_findings' => $employee->with_findings,
+            'date_endorsed_to_compliance' => $employee->date_endorsed_to_compliance,
+            'return_to_hs_with_findings' => $employee->return_to_hs_with_findings,
+            'last_received_from_hs_with_findings' => $employee->last_received_from_hs_with_findings,
             // Workday
             'workday_id' => optional($employee->workday->first())->workday_id,
             'contract_status' => optional($employee->workday->first())->contract_status,
@@ -2081,6 +2086,7 @@ class EmployeeController extends Controller
             'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? "",
             'peme_file_name' => optional($employee->requirements->first())->peme_file_name ? asset('storage/peme_files/' . optional($employee->requirements->first())->peme_file_name) : "",
             'peme_remarks' => optional($employee->requirements->first())->peme_remarks ?? "",
+            'peme_vendor' => optional($employee->requirements->first())->peme_vendor ?? "",
             'peme_endorsed_date' => optional($employee->requirements->first())->peme_endorsed_date ?? "",
             'peme_results_date' => optional($employee->requirements->first())->peme_results_date ?? "",
             'peme_transaction_date' => optional($employee->requirements->first())->peme_transaction_date ?? "",
@@ -2158,6 +2164,7 @@ class EmployeeController extends Controller
             'cibi_last_updated_at' => optional($employee->requirements->first())->cibi_last_updated_at ? Carbon::parse($employee->requirements->first()->cibi_last_updated_at)->format('Y-m-d H:i') : "",
             'cibi_updated_by' => optional(optional($employee->requirements->first())->cibiUpdatedBy)->name ?? "",
             'bgc_endorsed_date' => optional($employee->requirements->first())->bgc_endorsed_date ?? "",
+            'bgc_vendor' => optional($employee->requirements->first())->bgc_vendor ?? "",
             'bgc_results_date' => optional($employee->requirements->first())->bgc_results_date ?? "",
             'bgc_final_status' => optional($employee->requirements->first())->bgc_final_status ?? "",
             'bgc_remarks' => optional($employee->requirements->first())->bgc_remarks ?? "",
@@ -4657,6 +4664,11 @@ class EmployeeController extends Controller
                 'employment_status' => 'nullable|string|max:255',
                 'hired_month' => 'nullable|string|max:50',
                 'updated_by' => 'nullable|string|max:50',
+                'contract' => 'nullable|string|max:50',
+                'with_findings' => 'nullable|string|max:50',
+                'date_endorsed_to_compliance' => 'nullable|date',
+                'return_to_hs_with_findings' => 'nullable|date',
+                'last_received_from_hs_with_findings' => 'nullable|date',
             ]);
             $employeeChanged = false;
             foreach ($validatedData as $field => $value) {
@@ -4696,6 +4708,7 @@ class EmployeeController extends Controller
 
                     // PEME Fields
                     'peme_final_status' => 'nullable|string',
+                    'peme_vendor' => 'nullable|string',
                     'peme_results_date' => 'nullable|date',
                     'peme_transaction_date' => 'nullable|date',
                     'peme_endorsed_date' => 'nullable|date',
@@ -4777,6 +4790,7 @@ class EmployeeController extends Controller
                     'bgc_results_date' => 'nullable|date',
                     'bgc_final_status' => 'nullable|string',
                     'bgc_remarks' => 'nullable|string',
+                    'bgc_vendor' => 'nullable|string',
                     'bgc_proof' => 'nullable|file|mimes:jpg,jpeg,png,pdf',
 
                     // Birth Certificate Fields
@@ -4834,7 +4848,7 @@ class EmployeeController extends Controller
                 };
                 $updateAuditFields('nbi', ['nbi_final_status', 'nbi_validity_date', 'nbi_submitted_date', 'nbi_printed_date', 'nbi_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('dt', ['dt_final_status', 'dt_results_date', 'dt_transaction_date', 'dt_endorsed_date', 'dt_remarks'], $validatedData, $requirement, $request);
-                $updateAuditFields('peme', ['peme_final_status', 'peme_results_date', 'peme_transaction_date', 'peme_endorsed_date', 'peme_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('peme', ['peme_final_status', 'peme_results_date', 'peme_transaction_date', 'peme_endorsed_date', 'peme_remarks', 'peme_vendor'], $validatedData, $requirement, $request);
                 $updateAuditFields('sss', ['sss_final_status', 'sss_submitted_date', 'sss_remarks', 'sss_number', 'sss_proof_submitted_type'], $validatedData, $requirement, $request);
                 $updateAuditFields('phic', ['phic_submitted_date', 'phic_final_status', 'phic_proof_submitted_type', 'phic_remarks', 'phic_number'], $validatedData, $requirement, $request);
                 $updateAuditFields('pagibig', ['pagibig_submitted_date', 'pagibig_final_status', 'pagibig_proof_submitted_type', 'pagibig_remarks', 'pagibig_number'], $validatedData, $requirement, $request);
@@ -4845,7 +4859,7 @@ class EmployeeController extends Controller
                 $updateAuditFields('sam', ['sam_checked_date', 'sam_final_status', 'sam_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('oig', ['oig_checked_date', 'oig_final_status', 'oig_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('cibi', ['cibi_checked_date', 'cibi_final_status', 'cibi_remarks'], $validatedData, $requirement, $request);
-                $updateAuditFields('bgc', ['bgc_endorsed_date', 'bgc_results_date', 'bgc_final_status', 'bgc_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('bgc', ['bgc_endorsed_date', 'bgc_results_date', 'bgc_final_status', 'bgc_remarks', 'bgc_vendor'], $validatedData, $requirement, $request);
                 $updateAuditFields('birth_certificate', ['birth_certificate_submitted_date', 'birth_certificate_proof_type', 'birth_certificate_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('dependent_birth_certificate', ['dependent_birth_certificate_submitted_date', 'dependent_birth_certificate_proof_type', 'dependent_birth_certificate_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('marriage_certificate', ['marriage_certificate_submitted_date', 'marriage_certificate_proof_type', 'marriage_certificate_remarks'], $validatedData, $requirement, $request);

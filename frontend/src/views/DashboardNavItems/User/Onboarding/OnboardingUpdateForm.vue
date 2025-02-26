@@ -233,6 +233,68 @@
                 <option value="Non-Agent">Non-Agent</option>
               </select>
             </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Contract</label
+              >
+              <select
+                v-model="contract"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option>Select one</option>
+                <option value="PHYSICAL">PHYSICAL</option>
+                <option value="WORKDAY">WORKDAY</option>
+                <option value="NO">NO</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >With Findings</label
+              >
+              <select
+                v-model="with_findings"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option>Select one</option>
+                <option value="WITH FINDINGS">WITH FINDINGS</option>
+                <option value="N/A">N/A</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Date Endorsed to Compliance</label
+              >
+              <input
+                v-model="date_endorsed_to_compliance"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Return to H&S(with findings)</label
+              >
+              <input
+                v-model="return_to_hs_with_findings"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Last Received from H&S (with findings)</label
+              >
+              <input
+                v-model="last_received_from_hs_with_findings"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
             <!-- Updated By -->
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -1025,6 +1087,19 @@
                     v-model="peme_endorsed_date"
                     @change="updatePemeData"
                     type="date"
+                    :disabled="!isEditable"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
+                    >PEME Vendor</label
+                  >
+                  <input
+                    v-model="peme_vendor"
+                    @change="updatePemeData"
+                    type="text"
                     :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                   />
@@ -2878,6 +2953,18 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
+                    >BGC Vendor</label
+                  >
+                  <input
+                    v-model="bgc_vendor"
+                    type="text"
+                    :disabled="!isEditable"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
                     >Remarks</label
                   >
                   <input
@@ -3886,6 +3973,11 @@ export default {
       updated_by: "",
       updated_at: "",
       hired_month: "",
+      contract: "",
+      with_findings: "",
+      date_endorsed_to_compliance: "",
+      return_to_hs_with_findings: "",
+      last_received_from_hs_with_findings: "",
       region: "",
       site: "",
       lob: "",
@@ -3919,6 +4011,7 @@ export default {
       peme_results_date: "",
       peme_transaction_date: "",
       peme_final_status: "",
+      peme_vendor: "",
       peme_proof: null,
       sss_proof_submitted_type: "",
       sss_final_status: "",
@@ -3984,6 +4077,7 @@ export default {
       bgc_results_date: "",
       bgc_final_status: "",
       bgc_remarks: "",
+      bgc_vendor: "",
       bgc_file_name: null,
       bgc_proof: null,
       birth_certificate_file_name: null,
@@ -4397,6 +4491,13 @@ export default {
         this.updated_by = data.updated_by || "";
         this.updated_at = data.updated_at || "";
         this.hired_month = data.hired_month || "";
+        this.contract = data.contract || "";
+        this.with_findings = data.with_findings || "";
+        this.date_endorsed_to_compliance =
+          data.date_endorsed_to_compliance || "";
+        this.return_to_hs_with_findings = data.return_to_hs_with_findings || "";
+        this.last_received_from_hs_with_findings =
+          data.last_received_from_hs_with_findings || "";
         this.region = data.region || "";
         this.site = data.site || "";
         this.lob = data.lob || "";
@@ -4429,6 +4530,7 @@ export default {
         this.peme_transaction_date = data.peme_transaction_date || null;
         this.peme_final_status = data.peme_final_status || null;
         this.peme_proof = data.peme_proof || null;
+        this.peme_vendor = data.peme_vendor || null;
         this.sss_proof_submitted_type = data.sss_proof_submitted_type || null;
         this.sss_final_status = data.sss_final_status || null;
         this.sss_submitted_date = data.sss_submitted_date || null;
@@ -4506,6 +4608,7 @@ export default {
         this.bgc_remarks = data.bgc_remarks || null;
         this.bgc_file_name = data.bgc_file_name || null;
         this.bgc_proof = data.bgc_proof || null;
+        this.bgc_vendor = data.bgc_vendor || null;
         this.birth_certificate_file_name =
           data.birth_certificate_file_name || null;
         this.birth_certificate_submitted_date =
@@ -4653,7 +4756,20 @@ export default {
         formData.append("employment_status", this.employment_status || "");
         formData.append("hired_month", this.hired_month || "");
         formData.append("updated_by", this.$store.state.user_id);
-
+        formData.append("contract", this.contract || "");
+        formData.append("with_findings", this.with_findings || "");
+        formData.append(
+          "date_endorsed_to_compliance",
+          this.date_endorsed_to_compliance || ""
+        );
+        formData.append(
+          "return_to_hs_with_findings",
+          this.return_to_hs_with_findings || ""
+        );
+        formData.append(
+          "last_received_from_hs_with_findings",
+          this.last_received_from_hs_with_findings || ""
+        );
         // Append LOB data
         formData.append("region", this.region || "");
         formData.append("site", this.site || "");
@@ -4740,6 +4856,7 @@ export default {
         );
         formData.append("peme_endorsed_date", this.peme_endorsed_date || "");
         formData.append("peme_remarks", this.peme_remarks || "");
+        formData.append("peme_vendor", this.peme_vendor || "");
         formData.append("peme_updated_by", this.$store.state.user_id || "");
         formData.append("sss_final_status", this.sss_final_status || "");
         formData.append("sss_submitted_date", this.sss_submitted_date || "");
@@ -4840,6 +4957,7 @@ export default {
         formData.append("cibi_remarks", this.cibi_remarks || "");
         formData.append("cibi_updated_by", this.$store.state.user_id || "");
         formData.append("bgc_endorsed_date", this.bgc_endorsed_date || "");
+        formData.append("bgc_vendor", this.bgc_vendor || "");
         formData.append("bgc_results_date", this.bgc_results_date || "");
         formData.append("bgc_final_status", this.bgc_final_status || "");
         formData.append("bgc_remarks", this.bgc_remarks || "");
