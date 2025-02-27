@@ -1,4 +1,4 @@
- 
+
 'region' => optional($employee->lob->first())->region ?? 'N/A',
 'month_milestone' => $day15Deadline instanceof Carbon ? $day15Deadline->format('F') : 'N/A',
 'saturday_after_deadline' => $saturdayAfterDeadline instanceof Carbon ? $saturdayAfterDeadline->format('Y-m-d') : 'N/A',
@@ -8,7 +8,7 @@
 'government_numbers' => $isComplete ? 'Complete' : 'Incomplete',
 'compliance_poc' => optional($employee->lob->first())->compliance_poc ?? 'N/A',
 'critical_reqs' => $finalStatusComplete ? 'Complete' : 'Incomplete',
-'employee_hired_month' => $employee->hired_month ?? 'N/A',               
+'employee_hired_month' => $employee->hired_month ?? 'N/A',
 'project_code' => optional($employee->lob->first())->project_code ?? 'N/A',
 'employee_account_type' => $employee->account_type ?? 'N/A',
 'employee_employee_status' => $employee->employee_status ?? 'N/A',
@@ -90,14 +90,15 @@
 'oig_final_status' => optional($employee->requirements->first())->oig_final_status ?? 'N/A',
 'oig_checked_date' => optional($employee->requirements->first())->oig_checked_date ?? 'N/A',
 'oig_remarks' => optional($employee->requirements->first())->oig_remarks ?? 'N/A',
-'contract' => $employee->contract 
+'contract' => $employee->contract
 'contract_remarks' => optional($employee->workday->first())->contract_remarks ?? 'N/A',
+'contract_findings' => optional($employee->workday->first())->contract_findings ?? 'N/A',
 'with_findings' $employee->with_findings ?? 'N/A',
 'date_endorsed_to_compliance' $employee->date_endorsed_to_compliance ?? 'N/A',
 'return_to_hs_with_findings' $employee->return_to_hs_with_findings ?? 'N/A',
 'last_received_from_hs_with_findings' $employee->last_received_from_hs_with_findings ?? 'N/A',
+'contract_status' => optional($employee->workday->first())->contract_status ?? 'N/A',
 'completion' => optional($employee->workday->first())->completion ?? 'N/A',
-
 'per_findings' => optional($employee->workday->first())->per_findings ?? 'N/A',
 'ro_feedback' => optional($employee->workday->first())->ro_feedback ?? 'N/A',
 'nbi' => optional($employee->requirements->first())->nbi_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
@@ -107,10 +108,10 @@
 'dt_remarks' => optional($employee->requirements->first())->dt_remarks ?? 'N/A',
 'dt' => optional($employee->requirements->first())->dt_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'dt_last_updated_at' => optional($employee->requirements->first())->dt_last_updated_at ?? 'N/A',
-'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? 'N/A',   
+'dt_updated_by' => optional(optional($employee->requirements->first())->dtUpdatedBy)->name ?? 'N/A',
 'peme' => optional($employee->requirements->first())->peme_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'peme_last_updated_at' => optional($employee->requirements->first())->peme_last_updated_at ?? 'N/A',
-'peme_updated_by' => optional(optional($employee->requirements->first())->pemeUpdatedBy)->name ?? 'N/A',  
+'peme_updated_by' => optional(optional($employee->requirements->first())->pemeUpdatedBy)->name ?? 'N/A',
 'sss' => optional($employee->requirements->first())->sss_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'sss_final_status' => optional($employee->requirements->first())->sss_final_status ?? 'N/A',
 'sss_last_updated_at' => optional($employee->requirements->first())->sss_last_updated_at ?? 'N/A',
@@ -118,11 +119,11 @@
 'phic_final_status' => optional($employee->requirements->first())->phic_final_status ?? 'N/A',
 'phic' => optional($employee->requirements->first())->phic_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ?? 'N/A',
-'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A', 
+'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A',
 'pagibig_final_status' => optional($employee->requirements->first())->pagibig_final_status ?? 'N/A',
 'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ?? 'N/A',
-'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A', 
+'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A',
 'tin_final_status' => optional($employee->requirements->first())->tin_final_status ?? 'N/A',
 'tin' => optional($employee->requirements->first())->tin_file_name ? asset('storage/dt_files/' . optional($employee->requirements->first())->dt_file_name) : 'N/A',
 'tin_last_updated_at' => optional($employee->requirements->first())->tin_last_updated_at ?? 'N/A',
@@ -177,20 +178,19 @@
 'employee_updated_at' => $employee->updated_at ? $employee->created_at->format('Y-m-d') : 'N/A',
 'updated_at' => $employee->created_at ? $employee->updated_at->format('Y-m-d') : 'N/A',
 
-                'contract_status' => optional($employee->workday->first())->contract_status ?? 'N/A',
-                
-                'contract_findings' => optional($employee->workday->first())->contract_findings ?? 'N/A',
-               
-                
-                
-                
-               
-              
-                
 
 
-                
-                
 
 
-                
+
+
+
+
+
+
+
+
+
+
+
+

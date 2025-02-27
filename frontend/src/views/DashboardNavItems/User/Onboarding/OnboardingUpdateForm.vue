@@ -2794,6 +2794,17 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
+                    >Date Search</label
+                  >
+                  <input
+                    v-model="cibi_search_date"
+                    type="date"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
                     >Remarks</label
                   >
                   <input
@@ -4069,6 +4080,7 @@ export default {
       oig_file_name: null,
       oig_proof: null,
       cibi_checked_date: "",
+      cibi_search_date: "",
       cibi_final_status: "",
       cibi_remarks: "",
       cibi_file_name: null,
@@ -4598,6 +4610,7 @@ export default {
         this.oig_file_name = data.oig_file_name || null;
         this.oig_proof = data.oig_proof || null;
         this.cibi_checked_date = data.cibi_checked_date || null;
+        this.cibi_search_date = data.cibi_search_date || null;
         this.cibi_final_status = data.cibi_final_status || null;
         this.cibi_remarks = data.cibi_remarks || null;
         this.cibi_file_name = data.cibi_file_name || null;
@@ -4953,6 +4966,8 @@ export default {
         formData.append("oig_remarks", this.oig_remarks || "");
         formData.append("oig_updated_by", this.$store.state.user_id || "");
         formData.append("cibi_checked_date", this.cibi_checked_date || "");
+
+        formData.append("cibi_search_date", this.cibi_search_date || "");
         formData.append("cibi_final_status", this.cibi_final_status || "");
         formData.append("cibi_remarks", this.cibi_remarks || "");
         formData.append("cibi_updated_by", this.$store.state.user_id || "");

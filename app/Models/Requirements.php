@@ -113,6 +113,7 @@ class Requirements extends Model
         'oig_updated_by',
         // CIBI Section
         'cibi_checked_date',
+        'cibi_search_date',
         'cibi_final_status',
         'cibi_remarks',
         'cibi_file_name',
