@@ -1012,8 +1012,8 @@ class EmployeeController extends Controller
             'employee_added_by' => optional($employee->userAddedBy)->name ?? 'N/A',
             'employee_created_at' => $employee->created_at ? $employee->created_at->format('Y-m-d') : 'N/A',
             'employee_updated_by' => optional($employee->userUpdatedBy)->name ?? 'N/A',
-            'employee_updated_at' => $employee->updated_at ? $employee->created_at->format('Y-m-d') : 'N/A',
-            'updated_at' => $employee->created_at ? $employee->updated_at->format('Y-m-d') : 'N/A',
+            'employee_updated_at' => $employee->updated_at ? $employee->updated_at->format('Y-m-d') : 'N/A',
+            'updated_at' => $employee->updated_at ? $employee->updated_at->format('Y-m-d') : 'N/A',
             ];
         });
 

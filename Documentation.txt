@@ -1,131 +1,271 @@
-**DOCUMENTATION**
-
-**Guide for Cloning the CFMS Tool**
-1. Upload the CFMS repository to `C:\inetpub\wwwroot`.
-2. Clone it to your local machine using `git clone + URL`.
-3. Open it in a code editor, then run `composer install` to install backend dependencies.
-4. Navigate to the frontend using `cd frontend`, then run `npm install` to install frontend dependencies.
-5. Create a `.env` file and update the details for your local environment.
-6. Run `php artisan migrate --seed`.
-7. Run `cd ..`, then run `php artisan serve` for the backend.
-8. Run `cd frontend`, then run `npm run serve` for the frontend.
-
-**Module Code Guide**
-- `API.php` -> Contains all functions routes.
-- `Router` -> Contains all frontend routes.
+DOCUMENTATION
+Table of Contents
+1.	Guide for Cloning the CFMS Tool
+2.	Code Guide
+3.	AuthController
+o	Login
+4.	Onboarding Tool
+o	EmployeeController
+5.	Site Management
+o	SiteController
+6.	User Management
+o	UserController
 
 
-**AuthController**
-### Login
-##### Backend Functions:
-- `login()` -> Creates a user session on the backend.
-- `logout()` -> Deletes a user session on both backend and frontend.
-##### Frontend Components:
-- `login` -> Frontend view for login, handling frontend logic.
-### Onboarding Tool
-#### Controller:
-**EmployeeController**
-##### Backend Functions:
-- `downloadEmployeeImages()` -> Downloads all employee attachments.
-- `getNbi()` -> Retrieves all NBI information.
-- `getDT()` -> Retrieves all DT information.
-- `getPEME()` -> Retrieves all PEME information.
-- `getSSS()` -> Retrieves all SSS information.
-- `getPhic()` -> Retrieves all PhilHealth information.
-- `getPagibig()` -> Retrieves all Pag-IBIG information.
-- `getTin()` -> Retrieves all TIN information.
-- `getHealthCertificate()` -> Retrieves all health certificate information.
-- `getOccupationalPermit()` -> Retrieves all occupational permit information.
-- `getOfac()` -> Retrieves all OFAC information.
-- `getSam()` -> Retrieves all SAM information.
-- `getOig()` -> Retrieves all OIG information.
-- `getCibi()` -> Retrieves all CIBI information.
-- `getBGC()` -> Retrieves all BGC information.
-- `getBirthCertificate()` -> Retrieves all birth certificate information.
-- `getDependentBirthCertificate()` -> Retrieves all dependent birth certificate information.
-- `getMarriageCertificate()` -> Retrieves all marriage certificate information.
-- `getScholasticRecord()` -> Retrieves all scholastic record information.
-- `getPreviousEmployment()` -> Retrieves all previous employment information.
-- `getSupportingDocuments()` -> Retrieves all supporting document information.
-- `getWorkday()` -> Retrieves all workday information.
-- `getEmployeeInfo()` -> Retrieves all employee information.
-- `getLob()` -> Retrieves all LOB information.
-- `ExportEmployee()` -> Exports all employee data to an Excel file.
-- `saveQRCode()` -> Generates and saves an employee QR code.
-- `storeEmployees()` -> Adds a single employee.
-- `storeBulkEmployees()` -> Adds multiple employees using an Excel file.
-- `indexEmployees()` -> Retrieves all employee data.
-- `showUpdate()` -> Retrieves employee data based on the employee ID.
-- `updateNbi()` -> Updates NBI data.
-- `updateDT()` -> Updates DT data.
-- `updatePEME()` -> Updates PEME data.
-- `updateSSS()` -> Updates SSS data.
-- `updatePhic()` -> Updates PhilHealth data.
-- `updatePagibig()` -> Updates Pag-IBIG data.
-- `updateTin()` -> Updates TIN data.
-- `updateHealthCertificate()` -> Updates health certificate data.
-- `updateOccupationalPermit()` -> Updates occupational permit data.
-- `updateOfac()` -> Updates OFAC data.
-- `updateSam()` -> Updates SAM data.
-- `updateOig()` -> Updates OIG data.
-- `updateCibi()` -> Updates CIBI data.
-- `updateBGC()` -> Updates BGC data.
-- `updateBirthCertificate()` -> Updates birth certificate data.
-- `updateDependentBirthCertificate()` -> Updates dependent birth certificate data.
-- `updateMarriageCertificate()` -> Updates marriage certificate data.
-- `updateScholasticRecord()` -> Updates scholastic record data.
-- `updatePreviousEmployment()` -> Updates previous employment data.
-- `updateSupportingDocuments()` -> Updates supporting document data.
-- `updateEmployeeInfo()` -> Updates employee information.
-- `updateWorkday()` -> Updates workday data.
-- `updateEmployee()` -> Updates all employee data.
-##### Frontend Components:
-- `OnboardingNbi` -> Frontend view for updating NBI.
-- `OnboardingDT` -> Frontend view for updating DT.
-- `OnboardingPEME` -> Frontend view for updating PEME.
-- `OnboardingSSS` -> Frontend view for updating SSS.
-- `OnboardingPhic` -> Frontend view for updating PhilHealth.
-- `OnboardingPagibig` -> Frontend view for updating Pag-IBIG.
-- `OnboardingTin` -> Frontend view for updating TIN.
-- `OnboardingHealthCertificate` -> Frontend view for updating health certificates.
-- `OnboardingOccupationalPermit` -> Frontend view for updating occupational permits.
-- `OnboardingOfac` -> Frontend view for updating OFAC.
-- `OnboardingSam` -> Frontend view for updating SAM.
-- `OnboardingOig` -> Frontend view for updating OIG.
-- `OnboardingCibi` -> Frontend view for updating CIBI.
-- `OnboardingBGC` -> Frontend view for updating BGC.
-- `OnboardingBirthCertificate` -> Frontend view for updating birth certificates.
-- `OnboardingDependentBirthCertificate` -> Frontend view for updating dependent birth certificates.
-- `OnboardingMarriageCertificate` -> Frontend view for updating marriage certificates.
-- `OnboardingScholasticRecord` -> Frontend view for updating scholastic records.
-- `OnboardingPreviousEmployment` -> Frontend view for updating previous employment.
-- `OnboardingSupportingDocuments` -> Frontend view for updating supporting documents.
-- `OnboardingEmployeeInfo` -> Frontend view for updating employee information.
-- `OnboardingWorkday` -> Frontend view for updating workdays.
-- `OnboardingMainPage` -> Main landing page of the old view.
-- `OnboardingMainPageNew` -> Main landing page of the new frontend.
-- `OnboardingForm` -> Old dashboard view.
-- `OnboardingForm` -> New dashboard view.
-- `OnboardingUpdateSelection` -> Update selection for the old view.
-- `OnboardingUpdateForm` -> Update view that includes all selections in one form.
-### Site Management
-**SiteController**
-##### Backend Functions:
-- `index()` -> Retrieves all sites.
-- `update()` -> Updates a site based on its ID.
-- `store()` -> Adds a single site.
-- `getRegions()` -> Retrieves all regions.
-##### Frontend Components:
-- `AppSiteDashboard` -> Frontend view for all sites.
-### User Management
-**UserController**
-##### Backend Functions:
-- `assignSites()` -> Assigns sites to onboarding users.
-- `store()` -> Adds users.
-- `indexAdded()` -> Retrieves all onboarding users.
-- `indexUser()` -> Retrieves all onboarding users for the user dashboard.
-- `index()` -> Retrieves all users.
-##### Frontend Components:
-- `UserManagement` -> Frontend view for all users.
-- `UserSiteManagement` -> Frontend view for onboarding tool users.
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________
+Guide for Cloning the CFMS Tool
+1.	Upload the CFMS repository from C:\inetpub\wwwroot.
+2.	Clone it to your local machine using git clone + URL.
+3.	Open it in a code editor, then run composer install to install backend dependencies.
+4.	Navigate to the frontend using cd frontend, then run npm install to install frontend dependencies.
+5.	Create a .env file and update the details for your local environment.
+6.	Run php artisan migrate --seed.
+7.	Run cd .., then run php artisan serve for the backend.
+8.	Run cd frontend, then run npm run serve for the frontend.
+9.	Run php artisan link:storage to create link to files inside public folder
+
+
+________________________________________
+Guide for Reopening the Application
+1.	Run cd frontend.
+2.	Run npm run serve.
+
+
+________________________________________
+Guide when Server you restart the server
+1.	Open the cfms folder  from C:\inetpub\wwwroot
+2.	Run cd frontend.
+3.	Run npm run serve.
+
+
+
+
+
+
+
+________________________________________
+Code Guide
+Folder path: C:\inetpub\wwwroot\cfms
+•	Export → Contains all logic to Export data to excel. (app\Exports)
+•	Import → Contains all logic to Import data from excel. (app\Imports)
+•	api.php → Contains all functions routes. (routes\api.php)
+•	router.js → Contains all frontend routes. (frontend\src\router\index.js)
+•	store.js → Contains all the frontend user sessions. (frontend\src\store\index.js)
+•	Usernav.js → Contains all the frontend navigations. (frontend\src\components\UserNav.vue)
+•	Public folder → Contains all the images and files. (public)
+________________________________________
+AuthController
+Login
+Table: Users, Sites , Roles
+Backend Functions: ( app\Http\Controllers\API\Auth\AuthController.php)
+•	login() → Creates a user session on the backend.
+•	logout() → Deletes a user session on both backend and frontend.
+Frontend Components: (frontend\src\views\AppLogin.vue)
+•	login → Frontend view for login, handling frontend logic.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________
+Onboarding Tool
+EmployeeController
+Table: Users, Sites , Roles , Employee, Requirements, Lob, Workday_Table
+Backend Functions: (app\Http\Controllers\EmployeeController.php)
+•	downloadEmployeeImages() → Downloads all employee attachments.
+•	getNbi() → Retrieves all NBI information.
+•	getDT() → Retrieves all DT information.
+•	getPEME() → Retrieves all PEME information.
+•	getSSS() → Retrieves all SSS information.
+•	getPhic() → Retrieves all PhilHealth information.
+•	getPagibig() → Retrieves all Pag-IBIG information.
+•	getTin() → Retrieves all TIN information.
+•	getHealthCertificate() → Retrieves all health certificate information.
+•	getOccupationalPermit() → Retrieves all occupational permit information.
+•	getOfac() → Retrieves all OFAC information.
+•	getSam() → Retrieves all SAM information.
+•	getOig() → Retrieves all OIG information.
+•	getCibi() → Retrieves all CIBI information.
+•	getBGC() → Retrieves all BGC information.
+•	getBirthCertificate() → Retrieves all birth certificate information.
+•	getDependentBirthCertificate() → Retrieves all dependent birth certificate information.
+•	getMarriageCertificate() → Retrieves all marriage certificate information.
+•	getScholasticRecord() → Retrieves all scholastic record information.
+•	getPreviousEmployment() → Retrieves all previous employment information.
+•	getSupportingDocuments() → Retrieves all supporting document information.
+•	getWorkday() → Retrieves all workday information.
+•	getEmployeeInfo() → Retrieves all employee information.
+•	getLob() → Retrieves all LOB information.
+•	ExportEmployee() → Exports all employee data to an Excel file.
+•	saveQRCode() → Generates and saves an employee QR code.
+•	storeEmployees() → Adds a single employee.
+•	storeBulkEmployees() → Adds multiple employees using an Excel file.
+•	indexEmployees() → Retrieves all employee data.
+•	showUpdate() → Retrieves employee data based on the employee ID.
+•	updateNbi() → Updates NBI data.
+•	updateDT() → Updates DT data.
+•	updatePEME() → Updates PEME data.
+•	updateSSS() → Updates SSS data.
+•	updatePhic() → Updates PhilHealth data.
+•	updatePagibig() → Updates Pag-IBIG data.
+•	updateTin() → Updates TIN data.
+•	updateHealthCertificate() → Updates health certificate data.
+•	updateOccupationalPermit() → Updates occupational permit data.
+•	updateOfac() → Updates OFAC data.
+•	updateSam() → Updates SAM data.
+•	updateOig() → Updates OIG data.
+•	updateCibi() → Updates CIBI data.
+•	updateBGC() → Updates BGC data.
+•	updateBirthCertificate() → Updates birth certificate data.
+•	updateDependentBirthCertificate() → Updates dependent birth certificate data.
+•	updateMarriageCertificate() → Updates marriage certificate data.
+•	updateScholasticRecord() → Updates scholastic record data.
+•	updatePreviousEmployment() → Updates previous employment data.
+•	updateSupportingDocuments() → Updates supporting document data.
+•	updateEmployeeInfo() → Updates employee information.
+•	updateWorkday() → Updates workday data.
+•	updateEmployee() → Updates all employee data.
+
+
+Frontend Components: (frontend\src\views\DashboardNavItems\User\Onboarding)
+•	OnboardingNbi → Frontend view for updating NBI.
+•	OnboardingDT → Frontend view for updating DT.
+•	OnboardingPEME → Frontend view for updating PEME.
+•	OnboardingSSS → Frontend view for updating SSS.
+•	OnboardingPhic → Frontend view for updating PhilHealth.
+•	OnboardingPagibig → Frontend view for updating Pag-IBIG.
+•	OnboardingTin → Frontend view for updating TIN.
+•	OnboardingHealthCertificate → Frontend view for updating health certificates.
+•	OnboardingOccupationalPermit → Frontend view for updating occupational permits.
+•	OnboardingOfac → Frontend view for updating OFAC.
+•	OnboardingSam → Frontend view for updating SAM.
+•	OnboardingOig → Frontend view for updating OIG.
+•	OnboardingCibi → Frontend view for updating CIBI.
+•	OnboardingBGC → Frontend view for updating BGC.
+•	OnboardingBirthCertificate → Frontend view for updating birth certificates.
+•	OnboardingDependentBirthCertificate → Frontend view for updating dependent birth certificates.
+•	OnboardingMarriageCertificate → Frontend view for updating marriage certificates.
+•	OnboardingScholasticRecord → Frontend view for updating scholastic records.
+•	OnboardingPreviousEmployment → Frontend view for updating previous employment.
+•	OnboardingSupportingDocuments → Frontend view for updating supporting documents.
+•	OnboardingEmployeeInfo → Frontend view for updating employee information.
+•	OnboardingWorkday → Frontend view for updating workdays.
+•	OnboardingMainPage → Main landing page of the old view.
+•	OnboardingMainPageNew → Main landing page of the new frontend.
+•	OnboardingForm → Old dashboard view.
+•	OnboardingForm → New dashboard view.
+•	OnboardingUpdateSelection → Update selection for the old view.
+•	OnboardingUpdateForm → Update view that includes all selections in one form.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________
+Site Management
+SiteController
+Table: Sites
+Backend Functions: (app\Http\Controllers\SiteController.php)
+•	index() → Retrieves all sites.
+•	update() → Updates a site based on its ID.
+•	store() → Adds a single site.
+•	getRegions() → Retrieves all regions.
+Frontend Components: (frontend\src\views\Dashboard\AppSiteDashboard.vue)
+•	AppSiteDashboard → Frontend view for all sites.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+________________________________________
+User Management
+UserController
+Table: Users, Sites , Roles
+Backend Functions: (app\Http\Controllers\API\User\UserController.php)
+•	assignSites() → Assigns sites to onboarding users.
+•	store() → Adds users.
+•	indexAdded() → Retrieves all onboarding users.
+•	indexUser() → Retrieves all onboarding users for the user dashboard.
+•	index() → Retrieves all users.
+Frontend Components:
+•	UserManagement → Frontend view for all users. (frontend\src\views\DashboardNavItems\Admin\UserManagement.vue)
+•	UserSiteManagement → Frontend view for onboarding tool users. (frontend\src\views\DashboardNavItems\Admin\UserSiteManagement.vue)
 
