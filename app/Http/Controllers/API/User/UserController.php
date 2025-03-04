@@ -10,53 +10,64 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-   // In UserController.php
+    // In UserController.php
 
-   public function assignSites(Request $request, User $user)
-   {
-       // Validate the incoming data
-       $request->validate([
-           'site_ids' => 'required|array',
-           'site_ids.*' => 'exists:sites,id',
-       ]);
-
-       // Sync the sites for the user (assign or remove as necessary)
-       $user->sites()->sync($request->site_ids);
-
-       // Return a success response
-       return response()->json(['message' => 'Sites successfully assigned to user.']);
-   }
-   
-
-    public function index()
+    public function assignSites(Request $request, User $user)
     {
-        $users = User::with('sites')->paginate(10); // Paginate 10 users per page
-    
+        // Validate the incoming data
+        $request->validate([
+            'site_ids' => 'required|array',
+            'site_ids.*' => 'exists:sites,id',
+        ]);
+
+        // Sync the sites for the user (assign or remove as necessary)
+        $user->sites()->sync($request->site_ids);
+
+        // Return a success response
+        return response()->json(['message' => 'Sites successfully assigned to user.']);
+    }
+
+
+    public function index(Request $request)
+    {
+        // Get query parameters
+        $searchQuery = $request->query('search', '');
+        $perPage = $request->query('perPage', 5);
+        $page = $request->query('page', 1);
+
+        // Query users with search and pagination
+        $users = User::with('sites')
+            ->when($searchQuery, function ($query) use ($searchQuery) {
+                return $query->where('name', 'like', "%{$searchQuery}%")
+                    ->orWhere('email', 'like', "%{$searchQuery}%");
+            })
+            ->paginate(5);
+
         return UserResource::collection($users);
     }
     public function indexUser(Request $request)
-{
-    $query = User::with('sites');
-    $query->whereHas('roles', function ($q) {
-        $q->where('name', 'Onboarding');
-    });
-    if ($request->has('search') && !empty($request->search)) {
-        $query->where('name', 'LIKE', '%' . $request->search . '%');
-    }
-    $users = $query->paginate(10);
-    return UserResource::collection($users);
-}
-
-public function indexAdded(Request $request)
-{
-    $query = User::with('sites')
-        ->whereHas('roles', function ($q) {
+    {
+        $query = User::with('sites');
+        $query->whereHas('roles', function ($q) {
             $q->where('name', 'Onboarding');
-        })
-        ->get(); // Execute the query to retrieve the collection
-    
-    return UserResource::collection($query);
-}
+        });
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('name', 'LIKE', '%' . $request->search . '%');
+        }
+        $users = $query->paginate(10);
+        return UserResource::collection($users);
+    }
+
+    public function indexAdded(Request $request)
+    {
+        $query = User::with('sites')
+            ->whereHas('roles', function ($q) {
+                $q->where('name', 'Onboarding');
+            })
+            ->get(); // Execute the query to retrieve the collection
+
+        return UserResource::collection($query);
+    }
 
     /**
      * Display a listing of the resource.
@@ -123,22 +134,33 @@ public function indexAdded(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,'.$id,
+            'email' => 'sometimes|email|unique:users,email,' . $id,
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|string|exists:roles,name',
+            'site_ids' => 'sometimes|array', // Add validation for site IDs
+            'site_ids.*' => 'exists:sites,id', // Ensure each site ID exists
         ]);
 
-        $user = User::FindOrFail($id);
+        $user = User::findOrFail($id);
+
+        // Update basic user details
         $user->update([
-            'name' => $validatedData['name'],
-            'email' => $validatedData['email'],
-            'password' => bcrypt($validatedData['password']),
+            'name' => $validatedData['name'] ?? $user->name,
+            'email' => $validatedData['email'] ?? $user->email,
+            'password' => isset($validatedData['password']) ? bcrypt($validatedData['password']) : $user->password,
         ]);
-        $user_role = ($validatedData['role']);
-        $role_permission = Role::findByName($validatedData['role'])->permissions;
-        if ($user_role) {
+
+        // Update roles and permissions
+        if (isset($validatedData['role'])) {
+            $user_role = $validatedData['role'];
+            $role_permission = Role::findByName($user_role)->permissions;
             $user->syncRoles($user_role);
             $user->syncPermissions($role_permission);
+        }
+
+        // Update assigned sites
+        if (isset($validatedData['site_ids'])) {
+            $user->sites()->sync($validatedData['site_ids']);
         }
 
         return new UserResource($user);
@@ -150,7 +172,7 @@ public function indexAdded(Request $request)
 
         $rules = [
             'name' => 'nullable|string',
-            'email' => 'sometimes|email|unique:users,email,'.$user->id,
+            'email' => 'sometimes|email|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8',
         ];
 
