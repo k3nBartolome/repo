@@ -1,153 +1,151 @@
 <template>
-  <div>
-    <!-- Header -->
-    <header class="w-full bg-white shadow">
-      <div
-        class="flex items-center w-full max-w-screen-xl py-4 sm:px-6 lg:px-8 mx-auto"
-      >
-        <h2 class="text-3xl font-bold tracking-tight text-gray-900">
-          User Manager
-        </h2>
-      </div>
-    </header>
 
-    <!-- Form Section -->
-    <div class="py-8">
-      <div
-        class="px-4 py-6 mx-auto bg-white border border-gray-200 rounded-lg shadow-sm max-w-7xl sm:px-6 lg:px-8"
-      >
-        <form
-          @submit.prevent="postUser"
-          class="grid grid-cols-1 gap-4 font-semibold sm:grid-cols-2 md:grid-cols-5"
-        >
-          <!-- Name Input -->
-          <label class="block">
-            Name
-            <input
-              v-model="name"
-              type="text"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </label>
 
-          <!-- Email Input -->
-          <label class="block">
-            Email
-            <input
-              v-model="email"
-              type="email"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </label>
 
-          <!-- Sites Dropdown -->
-          <label class="block">
-            Sites
-            <select
-              v-model="sites_selected"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-              @change="getSites"
+    <div class="px-4 py-4">
+      <form @submit.prevent="postUser">
+        <div class="mb-4">
+          <div class="px-4 py-4 border rounded-lg bg-gray-50">
+            <div
+              class="grid grid-cols-5 gap-4 mb-6 sm:grid-cols-2 md:grid-cols-6"
             >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="site in sites" :key="site.id" :value="site.id">
-                {{ site.name }}
-              </option>
-            </select>
-          </label>
+              <!-- Name Input -->
+              <div>
+                <label class="block mb-1 text-sm font-medium text-gray-600">
+                  Name
+                </label>
+                <input
+                  v-model="name"
+                  type="text"
+                  class="w-full p-2 text-sm font-medium text-gray-600 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  required
+                />
+              </div>
 
-          <!-- Roles Dropdown -->
-          <label class="block">
-            Roles
-            <select
-              v-model="roles_selected"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-              @change="getRoles"
-            >
-              <option disabled value="" selected>Please select one</option>
-              <option v-for="role in roles" :key="role.id" :value="role.name">
-                {{ role.name }}
-              </option>
-            </select>
-          </label>
+              <!-- Email Input -->
+              <div>
+                <label class="block mb-1 text-sm font-medium text-gray-600">
+                  Email
+                </label>
+                <input
+                  v-model="email"
+                  type="email"
+                  class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block mb-1 text-sm font-medium text-gray-600">
+                  Sites</label
+                >
 
-          <!-- Password Input -->
-          <label class="block">
-            Password
-            <input
-              v-model="password"
-              type="password"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              required
-            />
-          </label>
+                <select
+                  v-model="sites_selected"
+                  class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                  @change="getSites"
+                >
+                  <option disabled value="" selected>Please select one</option>
+                  <option v-for="site in sites" :key="site.id" :value="site.id">
+                    {{ site.name }}
+                  </option>
+                </select>
+              </div>
 
-          <!-- Submit Button -->
-          <button
-            type="submit"
-            class="flex items-center justify-center px-4 py-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-          >
-            <i class="fa fa-building mr-2"></i> Add User
-          </button>
-        </form>
-      </div>
-    </div>
+              <!-- Roles Dropdown -->
+              <div>
+                <label class="block mb-1 text-sm font-medium text-gray-600">
+                  Roles</label
+                >
+                <select
+                  v-model="roles_selected"
+                  class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                  @change="getRoles"
+                >
+                  <option disabled value="" selected>Please select one</option>
+                  <option
+                    v-for="role in roles"
+                    :key="role.id"
+                    :value="role.name"
+                  >
+                    {{ role.name }}
+                  </option>
+                </select>
+              </div>
 
-    <!-- Table Section -->
-    <div class="px-4 py-8 mx-auto max-w-7xl sm:px-6 lg:px-8">
-      <div
-        class="overflow-hidden bg-white border border-gray-200 rounded-lg shadow-sm"
-      >
-        <!-- Search Bar -->
-        <div class="p-4 border-b border-gray-200">
+              <!-- Password Input -->
+              <div>
+                <label class="block mb-1 text-sm font-medium text-gray-600">
+                  Password
+                </label>
+                <input
+                  v-model="password"
+                  type="password"
+                  class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  required
+                />
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                class="flex items-center justify-center px-2 py-2 font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+              >
+                <i class="mr-2 fa fa-building"></i> Add User
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+
+    <div class="">
+      <div class="flex justify-end mb-4">
           <input
             v-model="searchQuery"
             type="text"
             placeholder="Search users..."
-            class="block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            class="w-full max-w-sm px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
             @input="debouncedSearch"
           />
         </div>
-
-        <!-- User Table -->
-        <table class="w-full table-auto">
+        <div v-if="loading" class="flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-blue-500 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4V2m0 20v-2m8-8h2M4 12H2m16.24-7.76l-1.42-1.42M5.18 18.36l-1.42 1.42M18.36 18.36l1.42-1.42M5.18 5.18L3.76 3.76" />
+          </svg>
+          <span class="ml-2 text-blue-500">Loading...</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table v-if="!loading" class="min-w-full border border-collapse border-gray-200 table-auto">
           <thead class="bg-blue-50">
             <tr>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
-              >
-                ID
-              </th>
-              <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
                 Name
               </th>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
                 Email
               </th>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
-                Assigned Site
+                Roles
               </th>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
                 Created At
               </th>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
                 Updated At
               </th>
               <th
-                class="px-6 py-3 text-left text-sm font-semibold text-gray-700 uppercase tracking-wider"
+                class="px-6 py-3 text-sm font-semibold tracking-wider text-left text-gray-700 uppercase truncate"
               >
                 Actions
               </th>
@@ -159,21 +157,22 @@
               :key="user.user_id"
               class="hover:bg-gray-50"
             >
-              <td class="px-6 py-4 text-sm text-gray-700">
-                {{ user.user_id }}
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
+                {{ user.name }}
               </td>
-              <td class="px-6 py-4 text-sm text-gray-700">{{ user.name }}</td>
-              <td class="px-6 py-4 text-sm text-gray-700">{{ user.email }}</td>
-              <td class="px-6 py-4 text-sm text-gray-700">
-                {{ user.assigned_sites[0]?.name || "No site assigned" }}
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
+                {{ slicedEmail(user.email) }}
               </td>
-              <td class="px-6 py-4 text-sm text-gray-700">
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
+                {{ slicedRoles(user.roles) }}
+              </td>
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
                 {{ user.created_at }}
               </td>
-              <td class="px-6 py-4 text-sm text-gray-700">
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
                 {{ user.updated_at }}
               </td>
-              <td class="px-6 py-4 text-sm text-gray-700">
+              <td class="px-6 py-4 text-sm text-gray-700 truncate">
                 <button
                   @click="editUser(user)"
                   class="px-3 py-1 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
@@ -192,77 +191,71 @@
         </table>
 
         <!-- Pagination -->
-        <div
-          class="flex items-center justify-between p-4 border-t border-gray-200"
-        >
+        <div class="flex justify-between mt-4">
           <button
             @click="changePage(currentPage - 1)"
             :disabled="currentPage === 1"
-            class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg disabled:opacity-50"
           >
             Previous
           </button>
-          <span class="text-sm text-gray-700">
-            Page {{ currentPage }} of {{ totalPages }}
-          </span>
+          <span class="px-4 py-2 text-gray-700">Page {{ currentPage }} of {{ totalPages }}</span>
           <button
             @click="changePage(currentPage + 1)"
             :disabled="currentPage === totalPages"
-            class="px-4 py-2 text-sm font-semibold text-white bg-blue-500 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            class="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg disabled:opacity-50"
           >
             Next
           </button>
         </div>
       </div>
-    </div>
+  </div>
 
+</div>
     <!-- Edit User Modal -->
     <div
       v-if="showEditModal"
-      class="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50 z-50 p-4"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900 bg-opacity-50"
     >
-      <div class="bg-white p-6 rounded-lg w-full max-w-md">
-        <h3 class="text-lg font-semibold mb-4">Edit User</h3>
+      <div class="w-full max-w-md p-6 bg-white rounded-lg">
+        <h3 class="mb-4 text-lg font-semibold">Edit User</h3>
         <form @submit.prevent="saveEditedUser">
           <!-- Name Input -->
-          <label class="block">
-            Name
+          <div>
+            <label class="block mb-1 text-sm font-medium text-gray-600">
+              Name
+            </label>
             <input
               v-model="selectedUser.name"
               type="text"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
-          </label>
+          </div>
 
-          <!-- Email Input -->
-          <label class="block mt-4">
-            Email
+          <div>
+            <label class="block mt-4"> Email </label>
             <input
               v-model="selectedUser.email"
               type="email"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               required
             />
-          </label>
-
-          <!-- Password Input -->
-          <label class="block mt-4">
-            Password
+          </div>
+          <div>
+            <label class="block mt-4"> Password </label>
             <input
               v-model="selectedUser.password"
               type="password"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               placeholder="Leave blank to keep current password"
             />
-          </label>
-
-          <!-- Roles Dropdown -->
+          </div>
           <label class="block mt-4">
             Role
             <select
               v-model="selectedUser.role"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option disabled value="">Select a role</option>
               <option v-for="role in roles" :key="role.id" :value="role.name">
@@ -276,7 +269,7 @@
             Assigned Site
             <select
               v-model="selectedUser.site_id"
-              class="block w-full mt-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               <option disabled value="">Select a site</option>
               <option v-for="site in sites" :key="site.id" :value="site.id">
@@ -286,16 +279,16 @@
           </label>
 
           <!-- Save and Cancel Buttons -->
-          <div class="mt-4 flex justify-end">
+          <div class="flex justify-end mt-4">
             <button
               type="submit"
-              class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              class="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
               Save
             </button>
             <button
               @click="showEditModal = false"
-              class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md ml-2 hover:bg-gray-300"
+              class="px-4 py-2 ml-2 text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300"
             >
               Cancel
             </button>
@@ -303,7 +296,6 @@
         </form>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -338,7 +330,7 @@ export default {
         password: "",
         role: "",
         site_id: "", // Single site ID
-      }, // Stores the user being edited
+      },
     };
   },
   mounted() {
@@ -379,8 +371,12 @@ export default {
         this.loading = false;
       }
     },
-
-    // Debounced search to prevent too many requests
+    slicedRoles(roles) {
+      return roles.toString().toUpperCase();
+    },
+    slicedEmail(roles) {
+      return roles.toLowerCase();
+    },
     debouncedSearch: debounce(function () {
       this.getUsers(1); // Reset to page 1 on new search
     }, 300),

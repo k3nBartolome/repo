@@ -27,13 +27,10 @@ class UserController extends Controller
         return response()->json(['message' => 'Sites successfully assigned to user.']);
     }
 
-
     public function index(Request $request)
     {
         // Get query parameters
         $searchQuery = $request->query('search', '');
-        $perPage = $request->query('perPage', 5);
-        $page = $request->query('page', 1);
 
         // Query users with search and pagination
         $users = User::with('sites')
@@ -41,10 +38,11 @@ class UserController extends Controller
                 return $query->where('name', 'like', "%{$searchQuery}%")
                     ->orWhere('email', 'like', "%{$searchQuery}%");
             })
-            ->paginate(5);
+            ->paginate(10);
 
         return UserResource::collection($users);
     }
+
     public function indexUser(Request $request)
     {
         $query = User::with('sites');
@@ -52,9 +50,10 @@ class UserController extends Controller
             $q->where('name', 'Onboarding');
         });
         if ($request->has('search') && !empty($request->search)) {
-            $query->where('name', 'LIKE', '%' . $request->search . '%');
+            $query->where('name', 'LIKE', '%'.$request->search.'%');
         }
         $users = $query->paginate(10);
+
         return UserResource::collection($users);
     }
 
@@ -134,7 +133,7 @@ class UserController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'sometimes|string|max:255',
-            'email' => 'sometimes|email|unique:users,email,' . $id,
+            'email' => 'sometimes|email|unique:users,email,'.$id,
             'password' => 'sometimes|string|min:6',
             'role' => 'sometimes|string|exists:roles,name',
             'site_ids' => 'sometimes|array', // Add validation for site IDs
@@ -172,7 +171,7 @@ class UserController extends Controller
 
         $rules = [
             'name' => 'nullable|string',
-            'email' => 'sometimes|email|unique:users,email,' . $user->id,
+            'email' => 'sometimes|email|unique:users,email,'.$user->id,
             'password' => 'nullable|min:8',
         ];
 

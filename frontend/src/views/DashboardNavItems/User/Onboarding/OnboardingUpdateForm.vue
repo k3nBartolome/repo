@@ -233,68 +233,7 @@
                 <option value="Non-Agent">Non-Agent</option>
               </select>
             </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 truncate"
-                >Contract</label
-              >
-              <select
-                v-model="contract"
-                :disabled="!isEditable"
-                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option>Select one</option>
-                <option value="PHYSICAL">PHYSICAL</option>
-                <option value="WORKDAY">WORKDAY</option>
-                <option value="NO">NO</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 truncate"
-                >With Findings</label
-              >
-              <select
-                v-model="with_findings"
-                :disabled="!isEditable"
-                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              >
-                <option>Select one</option>
-                <option value="WITH FINDINGS">WITH FINDINGS</option>
-                <option value="N/A">N/A</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 truncate"
-                >Date Endorsed to Compliance</label
-              >
-              <input
-                v-model="date_endorsed_to_compliance"
-                type="date"
-                :disabled="!isEditable"
-                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 truncate"
-                >Return to H&S(with findings)</label
-              >
-              <input
-                v-model="return_to_hs_with_findings"
-                type="date"
-                :disabled="!isEditable"
-                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 truncate"
-                >Last Received from H&S (with findings)</label
-              >
-              <input
-                v-model="last_received_from_hs_with_findings"
-                type="date"
-                :disabled="!isEditable"
-                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
+          
             <!-- Updated By -->
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -459,7 +398,68 @@
                 <option value="PENDING">PENDING</option>
               </select>
             </div>
-
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Contract</label
+              >
+              <select
+                v-model="contract"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option>Select one</option>
+                <option value="PHYSICAL">PHYSICAL</option>
+                <option value="WORKDAY">WORKDAY</option>
+                <option value="NO">NO</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >With Findings</label
+              >
+              <select
+                v-model="with_findings"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option>Select one</option>
+                <option value="WITH FINDINGS">WITH FINDINGS</option>
+                <option value="N/A">N/A</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Date Endorsed to Compliance</label
+              >
+              <input
+                v-model="date_endorsed_to_compliance"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Return to H&S(with findings)</label
+              >
+              <input
+                v-model="return_to_hs_with_findings"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Last Received from H&S (with findings)</label
+              >
+              <input
+                v-model="last_received_from_hs_with_findings"
+                type="date"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              />
+            </div>
             <!-- Last Updated At -->
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -2174,6 +2174,7 @@
                     <option disabled>Please select one</option>
                     <option value="YES">YES</option>
                     <option value="NO">NO</option>
+                    <option value="N/A">N/A</option>
                   </select>
                 </div>
 

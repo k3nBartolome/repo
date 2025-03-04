@@ -209,90 +209,157 @@
         <thead class="bg-gray-50">
           <tr>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+         
+          >
               Action
-            </th>
+         
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('site')"
+          >
               Site
-            </th>
+            <span v-if="sortColumn === 'site'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('employee_id')"
+          >
               Employee ID
-            </th>
+            <span v-if="sortColumn === 'employee_id'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('workday_id')"
+          >
               Workday ID
-            </th>
+            <span v-if="sortColumn === 'workday_id'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
-              Last Name
-            </th>
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('last_name')"
+          >
+            Last Name
+            
+          <span v-if="sortColumn === 'last_name'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('first_name')"
+          >
               First Name
-            </th>
+            <span v-if="sortColumn === 'first_name'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('middle_name')"
+          >
               Middle Name
-            </th>
+            <span v-if="sortColumn === 'middle_name'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('birthdate')"
+          >
               Date of Birth
-            </th>
+            <span v-if="sortColumn === 'birthdate'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('contact_number')"
+          >
               Contact Number
-            </th>
+            <span v-if="sortColumn === 'contact_number'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('email')"
+          >
               Email
-            </th>
+            <span v-if="sortColumn === 'email'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('hired_date')"
+          >
               Hired Date
-            </th>
+            <span v-if="sortColumn === 'hired_date'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('hired_month')"
+          >
               Hired Month
-            </th>
+            <span v-if="sortColumn === 'hired_month'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('employee_status')"
+          >
               Employee Status
-            </th>
+            <span v-if="sortColumn === 'employee_status'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('employment_status')"
+          >
               Employment Status
-            </th>
+            <span v-if="sortColumn === 'employment_status'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('account_associate')"
+          >
               Position
-            </th>
+            <span v-if="sortColumn === 'last_name'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('account_associate')"
+          >
               Account Type
-            </th>
+            <span v-if="sortColumn === 'account_associate'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
             <th
-              class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate"
-            >
+            class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+            @click="sortTable('employee_added_by')"
+          >
               Added By
-            </th>
+            <span v-if="sortColumn === 'last_name'">
+              {{ sortOrder === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-100">
@@ -500,6 +567,8 @@ export default {
       filterContactError: "",
       earchQuery: "",
       debounceTimeout: null,
+      sortColumn: "hired_date", // Default sort column
+    sortOrder: "asc", // Default order
       pagination: {
         current_page: 1,
         total: 0,
@@ -517,6 +586,9 @@ export default {
     employee_added_by(newValue) {
       console.log("Selected employee_added_by:", newValue);
     },
+    sortOrder(newVal) {
+    console.log("Sort Order Updated:", newVal);
+  }
   },
 
   computed: {
@@ -533,6 +605,20 @@ export default {
     this.getUsers();
   },
   methods: {
+    sortTable(column) {
+  if (this.sortColumn === column) {
+    // Toggle between 'asc' and 'desc' if the same column is clicked
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    // If a different column is clicked, reset to 'asc'
+    this.sortColumn = column;
+    this.sortOrder = 'asc';
+  }
+
+  console.log(`Sorting ${this.sortColumn} in ${this.sortOrder} order`); // Debugging
+  this.getEmployees();
+},
+
     goToProfile(employeeId) {
       this.$router.push({
         name: "OnboardingEmployeeProfile",
@@ -643,7 +729,8 @@ export default {
             employment_status: this.employment_status,
             hired_date_from: this.hired_date_from,
             hired_date_to: this.hired_date_to,
-            employee_added_by: this.employee_added_by, // Make sure this is added
+            employee_added_by: this.employee_added_by,
+            sort_order: this.sortOrder,
             page: this.pagination.current_page,
           };
 

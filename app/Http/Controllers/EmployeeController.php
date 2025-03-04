@@ -937,7 +937,7 @@ class EmployeeController extends Controller
             'completion' => optional($employee->workday->first())->completion ?? 'N/A',
             'per_findings' => optional($employee->workday->first())->per_findings ?? 'N/A',
             'ro_feedback' => optional($employee->workday->first())->ro_feedback ?? 'N/A',
-            'nbi' =>optional($employee->requirements->first())->nbi_file_name ? 'Yes' : 'No',
+            'nbi' => optional($employee->requirements->first())->nbi_file_name ? 'Yes' : 'No',
             'nbi_last_updated_at' => optional($employee->requirements->first())->nbi_last_updated_at ?? 'N/A',
             'nbi_updated_by' => optional(optional($employee->requirements->first())->nbiUpdatedBy)->name ?? 'N/A',
             'dt_endorsed_date' => optional($employee->requirements->first())->dt_endorsed_date ?? 'N/A',
@@ -957,7 +957,7 @@ class EmployeeController extends Controller
             'phic_last_updated_at' => optional($employee->requirements->first())->phic_last_updated_at ?? 'N/A',
             'phic_updated_by' => optional(optional($employee->requirements->first())->phicUpdatedBy)->name ?? 'N/A',
             'pagibig_final_status' => optional($employee->requirements->first())->pagibig_final_status ?? 'N/A',
-            'pagibig' =>optional($employee->requirements->first())->pagibig_file_name ? 'Yes' : 'No',
+            'pagibig' => optional($employee->requirements->first())->pagibig_file_name ? 'Yes' : 'No',
             'pagibig_last_updated_at' => optional($employee->requirements->first())->pagibig_last_updated_at ?? 'N/A',
             'pagibig_updated_by' => optional(optional($employee->requirements->first())->pagibigUpdatedBy)->name ?? 'N/A',
             'tin_final_status' => optional($employee->requirements->first())->tin_final_status ?? 'N/A',
@@ -1002,7 +1002,7 @@ class EmployeeController extends Controller
             'scholastic_record_updated_by' => optional(optional($employee->requirements->first())->scholasticRecordUpdatedBy)->name ?? 'N/A',
             'previous_employment_last_updated_at' => optional($employee->requirements->first())->previous_employment_last_updated_at ?? 'N/A',
             'previous_employment_updated_by' => optional(optional($employee->requirements->first())->previousEmploymentUpdatedBy)->name ?? 'N/A',
-            'supporting_documents' =>optional($employee->requirements->first())->supporting_documents_file_name ? 'Yes' : 'No',
+            'supporting_documents' => optional($employee->requirements->first())->supporting_documents_file_name ? 'Yes' : 'No',
             'supporting_documents_submitted_date' => optional($employee->requirements->first())->supporting_documents_submitted_date ?? 'N/A',
             'supporting_documents_proof_type' => optional($employee->requirements->first())->supporting_documents_proof_type ?? 'N/A',
             'supporting_documents_remarks' => optional($employee->requirements->first())->supporting_documents_remarks ?? 'N/A',
@@ -1022,8 +1022,6 @@ class EmployeeController extends Controller
             'message' => $mappedEmployees,
         ], 201); */
     }
-
-
 
     public function generate(Request $request)
     {
@@ -1246,7 +1244,10 @@ class EmployeeController extends Controller
             'lob.siteName',
             'workday'
         );
+        $sortBy = $request->input('sort_by', 'hired_date'); // Default column
+        $sortOrder = strtolower($request->input('sort_order', 'asc')) === 'desc' ? 'desc' : 'asc';
 
+        \Log::info("Sorting by: $sortBy, Order: $sortOrder"); // Debugging
         // Apply filters based on the request
         if ($request->filled('employee_status')) {
             $employeeQuery->where('employee_status', $request->employee_status);
@@ -1276,12 +1277,12 @@ class EmployeeController extends Controller
                     ->orWhere('middle_name', 'LIKE', '%'.$searchTerm.'%');
             });
         }
+
         if ($request->filled('region')) {
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
                 $query->where('region', $request->region);
             });
         }
-        // Apply only site filter
         if ($request->filled('site')) {
             Log::info('Site filter applied: '.$request->site); // Debugging line
             $employeeQuery->whereHas('lob.siteName', function ($query) use ($request) {
@@ -1300,7 +1301,9 @@ class EmployeeController extends Controller
                 $query->where('id', $siteIds); // Handle single site_id
             });
         }
+        $employeeQuery->orderBy($sortBy, $sortOrder); // Apply sorting before pagination
         $employee_info = $employeeQuery->paginate(25);
+
         $mappedEmployees = collect($employee_info->items())->map(function ($employee) {
             return [
                 'id' => $employee->id ?? 'TBA',
@@ -1731,7 +1734,7 @@ class EmployeeController extends Controller
         });
     }
 
-    /*  public function showUpdate($id)
+    /*  public function wwwUpdate($id)
      {
          $employee = Employee::with([
              'userUpdatedBy',
@@ -2110,7 +2113,7 @@ class EmployeeController extends Controller
             'oig_file_name' => optional($employee->requirements->first())->oig_file_name ? asset('storage/oig_files/'.optional($employee->requirements->first())->oig_file_name) : '',
             'oig_last_updated_at' => optional($employee->requirements->first())->oig_last_updated_at ? Carbon::parse($employee->requirements->first()->oig_last_updated_at)->format('Y-m-d H:i') : '',
             'oig_updated_by' => optional(optional($employee->requirements->first())->oigUpdatedBy)->name ?? '',
-            'cibi_search_date' => optional($employee->requirements->first())->cibi_search_date ?? 'N/A',
+            'cibi_search_date' => optional($employee->requirements->first())->cibi_search_date ?? '',
             'cibi_checked_date' => optional($employee->requirements->first())->cibi_checked_date ?? '',
             'cibi_final_status' => optional($employee->requirements->first())->cibi_final_status ?? '',
             'cibi_remarks' => optional($employee->requirements->first())->cibi_remarks ?? '',
@@ -2284,6 +2287,7 @@ class EmployeeController extends Controller
             return response()->json(['error' => 'Error importing Employee: '.$e->getMessage()], 500);
         }
     }
+
     public function updateEmployeeInfo(Request $request, $id)
     {
         try {
@@ -3735,7 +3739,7 @@ class EmployeeController extends Controller
                 $updateAuditFields('ofac', ['ofac_checked_date', 'ofac_final_status', 'ofac_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('sam', ['sam_checked_date', 'sam_final_status', 'sam_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('oig', ['oig_checked_date', 'oig_final_status', 'oig_remarks'], $validatedData, $requirement, $request);
-                $updateAuditFields('cibi', ['cibi_checked_date','cibi_search_date', 'cibi_final_status', 'cibi_remarks'], $validatedData, $requirement, $request);
+                $updateAuditFields('cibi', ['cibi_checked_date', 'cibi_search_date', 'cibi_final_status', 'cibi_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('bgc', ['bgc_endorsed_date', 'bgc_results_date', 'bgc_final_status', 'bgc_remarks', 'bgc_vendor'], $validatedData, $requirement, $request);
                 $updateAuditFields('birth_certificate', ['birth_certificate_submitted_date', 'birth_certificate_proof_type', 'birth_certificate_remarks'], $validatedData, $requirement, $request);
                 $updateAuditFields('dependent_birth_certificate', ['dependent_birth_certificate_submitted_date', 'dependent_birth_certificate_proof_type', 'dependent_birth_certificate_remarks'], $validatedData, $requirement, $request);
