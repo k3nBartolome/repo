@@ -233,7 +233,7 @@
                 <option value="Non-Agent">Non-Agent</option>
               </select>
             </div>
-          
+
             <!-- Updated By -->
             <div>
               <label class="block text-sm font-medium text-gray-700 truncate"
@@ -459,6 +459,22 @@
                 :disabled="!isEditable"
                 class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 truncate"
+                >Compliance Remarks</label
+              >
+              <select
+                v-model="compliance_remarks"
+                :disabled="!isEditable"
+                class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option>Select one</option>
+                <option value="COMPLETE">COMPLETE</option>
+                <option value="INCOMPLETE-PERS">INCOMPLETE-PERS</option>
+                <option value="WITH FINDINGS">WITH FINDINGS</option>
+                <option value="ENDORSED TO HRIS">ENDORSED TO HRIS</option>
+              </select>
             </div>
             <!-- Last Updated At -->
             <div>
@@ -2965,6 +2981,24 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
+                    >Final Status</label
+                  >
+                  <select
+                    v-model="bgc_results"
+                    :disabled="!isEditable"
+                    class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="ENDORSED">ENDORSED</option>
+                    <option value="COMPLETE">COMPLETE</option>
+                    <option value="INCOMPLETE">INCOMPLETE</option>
+                    <option value="CLOSED">CLOSED</option>
+                    <option value="WITH FINDINGS">WITH FINDINGS</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="block text-sm font-medium text-gray-700 truncate"
                     >BGC Vendor</label
                   >
                   <input
@@ -2977,14 +3011,23 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Remarks</label
+                    >Final Status</label
                   >
-                  <input
+                  <select
                     v-model="bgc_remarks"
-                    type="text"
                     :disabled="!isEditable"
                     class="w-full p-2 mt-1 text-sm text-gray-600 bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
+                  >
+                    <option disabled>Please select one</option>
+                    <option value="PENDING RESULT">PENDING RESULT</option>
+                    <option value="FINAL REPORT">FINAL REPORT</option>
+                    <option value="SCHOOL">SCHOOL</option>
+                    <option value="EMPLOYMENT">EMPLOYMENT</option>
+                    <option value="SCHOOL;EMPLOYMENT">SCHOOL;EMPLOYMENT</option>
+                    <option value="VERIFICATION ONGOING">
+                      VERIFICATION ONGOING
+                    </option>
+                  </select>
                 </div>
                 <div>
                   <label
@@ -3985,11 +4028,6 @@ export default {
       updated_by: "",
       updated_at: "",
       hired_month: "",
-      contract: "",
-      with_findings: "",
-      date_endorsed_to_compliance: "",
-      return_to_hs_with_findings: "",
-      last_received_from_hs_with_findings: "",
       region: "",
       site: "",
       lob: "",
@@ -4003,6 +4041,12 @@ export default {
       contract_findings: "",
       contract_remarks: "",
       contract_status: "",
+      contract: "",
+      with_findings: "",
+      date_endorsed_to_compliance: "",
+      return_to_hs_with_findings: "",
+      last_received_from_hs_with_findings: "",
+      compliance_remarks: "",
       nbi_final_status: null,
       nbi_validity_date: "",
       nbi_submitted_date: "",
@@ -4091,6 +4135,7 @@ export default {
       bgc_final_status: "",
       bgc_remarks: "",
       bgc_vendor: "",
+      bgc_results: "",
       bgc_file_name: null,
       bgc_proof: null,
       birth_certificate_file_name: null,
@@ -4504,13 +4549,7 @@ export default {
         this.updated_by = data.updated_by || "";
         this.updated_at = data.updated_at || "";
         this.hired_month = data.hired_month || "";
-        this.contract = data.contract || "";
-        this.with_findings = data.with_findings || "";
-        this.date_endorsed_to_compliance =
-          data.date_endorsed_to_compliance || "";
-        this.return_to_hs_with_findings = data.return_to_hs_with_findings || "";
-        this.last_received_from_hs_with_findings =
-          data.last_received_from_hs_with_findings || "";
+
         this.region = data.region || "";
         this.site = data.site || "";
         this.lob = data.lob || "";
@@ -4524,6 +4563,14 @@ export default {
         this.contract_findings = data.contract_findings || "";
         this.contract_remarks = data.contract_remarks || "";
         this.contract_status = data.contract_status || "";
+        this.contract = data.contract || "";
+        this.with_findings = data.with_findings || "";
+        this.date_endorsed_to_compliance =
+          data.date_endorsed_to_compliance || "";
+        this.return_to_hs_with_findings = data.return_to_hs_with_findings || "";
+        this.last_received_from_hs_with_findings =
+          data.last_received_from_hs_with_findings || "";
+        this.compliance_remarks = data.compliance_remarks || "";
         this.nbi_final_status = data.nbi_final_status;
         this.nbi_validity_date = data.nbi_validity_date;
         this.nbi_submitted_date = data.nbi_submitted_date;
@@ -4618,6 +4665,7 @@ export default {
         this.cibi_proof = data.cibi_proof || null;
         this.bgc_endorsed_date = data.bgc_endorsed_date || null;
         this.bgc_results_date = data.bgc_results_date || null;
+        this.bgc_results = data.bgc_results || null;
         this.bgc_final_status = data.bgc_final_status || null;
         this.bgc_remarks = data.bgc_remarks || null;
         this.bgc_file_name = data.bgc_file_name || null;
@@ -4770,20 +4818,7 @@ export default {
         formData.append("employment_status", this.employment_status || "");
         formData.append("hired_month", this.hired_month || "");
         formData.append("updated_by", this.$store.state.user_id);
-        formData.append("contract", this.contract || "");
-        formData.append("with_findings", this.with_findings || "");
-        formData.append(
-          "date_endorsed_to_compliance",
-          this.date_endorsed_to_compliance || ""
-        );
-        formData.append(
-          "return_to_hs_with_findings",
-          this.return_to_hs_with_findings || ""
-        );
-        formData.append(
-          "last_received_from_hs_with_findings",
-          this.last_received_from_hs_with_findings || ""
-        );
+
         // Append LOB data
         formData.append("region", this.region || "");
         formData.append("site", this.site || "");
@@ -4800,6 +4835,21 @@ export default {
         formData.append("contract_findings", this.contract_findings || "");
         formData.append("contract_remarks", this.contract_remarks || "");
         formData.append("contract_status", this.contract_status || "");
+        formData.append("contract", this.contract || "");
+        formData.append("with_findings", this.with_findings || "");
+        formData.append(
+          "date_endorsed_to_compliance",
+          this.date_endorsed_to_compliance || ""
+        );
+        formData.append(
+          "return_to_hs_with_findings",
+          this.return_to_hs_with_findings || ""
+        );
+        formData.append(
+          "last_received_from_hs_with_findings",
+          this.last_received_from_hs_with_findings || ""
+        );
+        formData.append("compliance_remarks", this.compliance_remarks || "");
 
         // Append Requirements data
         formData.append("nbi_final_status", this.nbi_final_status || "");
@@ -4975,6 +5025,7 @@ export default {
         formData.append("bgc_endorsed_date", this.bgc_endorsed_date || "");
         formData.append("bgc_vendor", this.bgc_vendor || "");
         formData.append("bgc_results_date", this.bgc_results_date || "");
+        formData.append("bgc_results", this.bgc_results || "");
         formData.append("bgc_final_status", this.bgc_final_status || "");
         formData.append("bgc_remarks", this.bgc_remarks || "");
         formData.append("bgc_updated_by", this.$store.state.user_id || "");
