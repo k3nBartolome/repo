@@ -2981,7 +2981,7 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >BGC Results</label
                   >
                   <select
                     v-model="bgc_results"
@@ -3011,7 +3011,7 @@
                 <div>
                   <label
                     class="block text-sm font-medium text-gray-700 truncate"
-                    >Final Status</label
+                    >BGC Remarks</label
                   >
                   <select
                     v-model="bgc_remarks"
@@ -3989,6 +3989,13 @@
           >
             {{ isEditable ? "Cancel" : "Edit" }}
           </button>
+          <button
+            type="button"
+            @click="openEmployeeModal"
+            class="px-4 py-2 text-white bg-purple-500 rounded-lg hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+          >
+            Open Employee List
+          </button>
         </div>
         <div>
           <button
@@ -3999,6 +4006,398 @@
           >
             Save Details
           </button>
+        </div>
+      </div>
+    </div>
+    <div
+      v-if="isEmployeeModalOpen"
+      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+    >
+      <!-- Modal Container -->
+      <div
+        class="bg-white rounded-lg shadow-lg w-11/12 md:w-5/6 lg:w-4/5 xl:w-3/4 max-h-[90vh] overflow-y-auto"
+      >
+        <!-- Modal Header -->
+        <div class="p-4 border-b relative">
+          <h3 class="text-lg font-medium text-gray-900">Employee List</h3>
+          <button
+            type="button"
+            @click="closeEmployeeModal"
+            class="absolute top-2 right-2 p-2 text-gray-500 hover:text-gray-700 z-50"
+          >
+            &times;
+            <!-- Close icon -->
+          </button>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-4">
+          <!-- Search Bar -->
+          <div class="flex justify-end mb-4">
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="w-full max-w-sm px-4 py-2 text-sm font-medium transition duration-300 ease-in-out border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 hover:shadow-md"
+              placeholder="Search Employees"
+              @input="getEmployees"
+            />
+          </div>
+
+          <!-- Loading State -->
+          <div
+            v-if="loading"
+            class="flex items-center justify-center py-4 space-x-2"
+          >
+            <svg
+              class="w-5 h-5 text-blue-500 animate-spin"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 4V2m0 20v-2m8-8h2M4 12H2m16.24-7.76l-1.42-1.42M5.18 18.36l-1.42 1.42M18.36 18.36l1.42-1.42M5.18 5.18L3.76 3.76"
+              />
+            </svg>
+            <span class="text-gray-600">Loading...</span>
+          </div>
+
+          <!-- Employee Table -->
+          <div class="overflow-x-auto rounded-lg shadow-sm">
+            <table class="min-w-full bg-white">
+              <thead class="bg-gray-50">
+                <tr>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                  >
+                    Action
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('site')"
+                  >
+                    Site
+                    <span v-if="sortColumn === 'site'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('employee_id')"
+                  >
+                    Employee ID
+                    <span v-if="sortColumn === 'employee_id'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('workday_id')"
+                  >
+                    Workday ID
+                    <span v-if="sortColumn === 'workday_id'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('last_name')"
+                  >
+                    Last Name
+                    <span v-if="sortColumn === 'last_name'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('first_name')"
+                  >
+                    First Name
+                    <span v-if="sortColumn === 'first_name'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('middle_name')"
+                  >
+                    Middle Name
+                    <span v-if="sortColumn === 'middle_name'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('birthdate')"
+                  >
+                    Date of Birth
+                    <span v-if="sortColumn === 'birthdate'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('contact_number')"
+                  >
+                    Contact Number
+                    <span v-if="sortColumn === 'contact_number'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('email')"
+                  >
+                    Email
+                    <span v-if="sortColumn === 'email'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('hired_date')"
+                  >
+                    Hired Date
+                    <span v-if="sortColumn === 'hired_date'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('hired_month')"
+                  >
+                    Hired Month
+                    <span v-if="sortColumn === 'hired_month'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('employee_status')"
+                  >
+                    Employee Status
+                    <span v-if="sortColumn === 'employee_status'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('employment_status')"
+                  >
+                    Employment Status
+                    <span v-if="sortColumn === 'employment_status'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('account_associate')"
+                  >
+                    Position
+                    <span v-if="sortColumn === 'account_associate'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('account_associate')"
+                  >
+                    Account Type
+                    <span v-if="sortColumn === 'account_associate'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                  <th
+                    class="px-3 py-2 text-sm font-medium text-left text-gray-600 truncate cursor-pointer"
+                    @click="sortTable('employee_added_by')"
+                  >
+                    Added By
+                    <span v-if="sortColumn === 'employee_added_by'">
+                      {{ sortOrder === "asc" ? "↑" : "↓" }}
+                    </span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr
+                  v-for="employee in employees"
+                  :key="employee.id"
+                  class="transition-colors hover:bg-gray-50"
+                >
+                  <td class="px-3 py-2">
+                    <button
+                      @click="goToUpdate(employee.id)"
+                      class="text-blue-500 hover:text-blue-600"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.site }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_id }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.workday_id }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_last_name }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_first_name }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_middle_name }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_birth_date }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_contact_number }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_email }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_hired_date }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_hired_month }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_employee_status }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_employment_status }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_position }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_account_type }}
+                  </td>
+                  <td class="px-3 py-2 text-sm text-gray-700 truncate">
+                    {{ employee.employee_added_by || "N/A" }}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination -->
+          <div class="flex items-center justify-center mt-6 space-x-2">
+            <button
+              type="button"
+              @click="goToPage(pagination.first_page)"
+              :disabled="!pagination.prev_page"
+              class="p-2 text-gray-600 hover:text-blue-500 disabled:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              @click="goToPage(pagination.prev_page)"
+              :disabled="!pagination.prev_page"
+              class="p-2 text-gray-600 hover:text-blue-500 disabled:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+            </button>
+            <span class="text-sm text-gray-600"
+              >Page {{ pagination.current_page }} of
+              {{ pagination.total_pages }}</span
+            >
+            <button
+              type="button"
+              @click="goToPage(pagination.next_page)"
+              :disabled="!pagination.next_page"
+              class="p-2 text-gray-600 hover:text-blue-500 disabled:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+            <button
+              type="button"
+              @click="goToPage(pagination.last_page)"
+              :disabled="!pagination.next_page"
+              class="p-2 text-gray-600 hover:text-blue-500 disabled:text-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -4235,6 +4634,22 @@ export default {
       isSdInfo: false,
       isEditable: false,
       isSubmitting: false,
+      loading: false,
+      searchTerm: "",
+      employees: [],
+      isEmployeeModalOpen: false, // Controls modal visibility
+      sortColumn: "hired_date", // Default sort column
+      sortOrder: "asc", // Default order
+      pagination: {
+        current_page: 1,
+        total: 0,
+        first_page: null,
+        last_page: null,
+        next_page: null,
+        prev_page: null,
+        per_page: 10,
+        total_pages: 1,
+      },
     };
   },
 
@@ -4263,6 +4678,9 @@ export default {
         this.hired_month = "Select one"; // Reset if no date is selected
       }
     },
+    sortOrder(newVal) {
+      console.log("Sort Order Updated:", newVal);
+    },
   },
   mounted() {
     this.fetchEmployeeData();
@@ -4270,6 +4688,19 @@ export default {
     this.getRegion();
   },
   methods: {
+    sortTable(column) {
+      if (this.sortColumn === column) {
+        // Toggle between 'asc' and 'desc' if the same column is clicked
+        this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+      } else {
+        // If a different column is clicked, reset to 'asc'
+        this.sortColumn = column;
+        this.sortOrder = "asc";
+      }
+
+      console.log(`Sorting ${this.sortColumn} in ${this.sortOrder} order`); // Debugging
+      this.getEmployees();
+    },
     uploadNbiImage(event) {
       const file = event.target.files[0];
       if (file) {
@@ -5408,6 +5839,112 @@ export default {
           3,
           6
         )}-${rawValue.slice(6, 9)}`;
+      }
+    },
+    openEmployeeModal() {
+      this.isEmployeeModalOpen = true;
+    },
+
+    // Close the modal
+    closeEmployeeModal() {
+      this.isEmployeeModalOpen = false;
+      this.search_term = "";
+      this.employees = [];
+    },
+
+    // Fetch employees for the modal
+    async getEmployees() {
+      clearTimeout(this.debounceTimeout);
+      this.debounceTimeout = setTimeout(async () => {
+        this.loading = true;
+        try {
+          const token = this.$store.state.token;
+
+          // Prepare the params object
+          const params = {
+            region: this.selectedRegion,
+            site: this.selectedSites,
+            search_term: this.searchTerm,
+            employee_status: this.employee_status,
+            employment_status: this.employment_status,
+            hired_date_from: this.hired_date_from,
+            hired_date_to: this.hired_date_to,
+            sort_by: this.sortColumn, // Add sort_by parameter
+            sort_order: this.sortOrder, // Add sort_order parameter
+            page: this.pagination.current_page,
+          };
+
+          // Add employee_added_by to params if it has values
+          if (this.employee_added_by && this.employee_added_by.length > 0) {
+            params.employee_added_by = this.employee_added_by.join(","); // Convert array to comma-separated string
+          }
+
+          // Get site IDs from the store
+          const siteIds = this.$store.state.site_id.join(",");
+
+          // Make the API request
+          const response = await axios.get(
+            `http://127.0.0.1:8000/api/employees_modal_data/${siteIds}`,
+            {
+              params,
+              headers: { Authorization: `Bearer ${token}` },
+            }
+          );
+
+          // Handle the response
+          if (response.status === 200) {
+            this.employees = response.data.employees || [];
+            this.pagination = response.data.pagination || {};
+          } else {
+            console.error("Failed to fetch employees:", response.statusText);
+          }
+        } catch (error) {
+          console.error("Error fetching employees:", error);
+        } finally {
+          this.loading = false;
+        }
+      }, 500);
+    },
+
+    // Search employees in the modal
+    searchEmployees() {
+      this.modalPagination.current_page = 1; // Reset to first page
+      this.getEmployees();
+    },
+
+    // Navigate to onboarding_list/update/{id}
+    navigateToOnboarding(id) {
+      this.$router.push(`/onboarding_list/update/${id}`);
+    },
+
+    // Pagination: Previous page
+    prevPage() {
+      if (this.modalPagination.current_page > 1) {
+        this.modalPagination.current_page--;
+        this.getEmployees();
+      }
+    },
+    goToUpdate(employeeId) {
+      this.$router.push({
+        name: "OnboardingUpdateForm",
+        params: { id: employeeId },
+      });
+    },
+    goToPage(page) {
+      if (!page || page < 1 || page > this.pagination.total_pages) {
+        console.warn("Invalid page navigation:", page);
+        return;
+      }
+      this.pagination.current_page = page;
+      this.getEmployees();
+    },
+    // Pagination: Next page
+    nextPage() {
+      if (
+        this.modalPagination.current_page < this.modalPagination.total_pages
+      ) {
+        this.modalPagination.current_page++;
+        this.getEmployees();
       }
     },
   },
